@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+# Render markdown files with Glow.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local selection="$(fd --type f --hidden --extension md \
+--exclude Library \
+--exclude .git \
+--exclude .npm \
+--exclude .vscode \
+| fzf)"
+
+if [[ -z "$selection" ]]; then
+    echo -e "\nSearch cancelled."
+else
+    local term_width="$(tput cols)"
+    term_width=$((term_width-10))
+    glow -w "$term_width" "$selection"
+fi

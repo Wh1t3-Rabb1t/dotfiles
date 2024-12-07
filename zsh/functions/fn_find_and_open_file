@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+
+# Search for, and open selected file.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local selection="$(fd --color always --type f --hidden \
+--exclude Library \
+--exclude .git \
+--exclude .npm \
+--exclude .vscode \
+| fzf --ansi)"
+
+if [[ -z "$selection" ]]; then
+    echo -e "\nSearch cancelled."
+else
+    case "$selection" in
+        *.opus)  mpv "$selection"   ;;
+        *.mp3)   mpv "$selection"   ;;
+        *.mp4)   mpv "$selection"   ;;
+        *)       nvim "$selection"  ;;
+    esac
+fi

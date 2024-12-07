@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+
+# Download a series of opus files from a youtube playlist, then concatenate
+# into a single file with the desired name as the first arg and the url
+# as the second arg.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local playlist_dir="somePlaylist_$(date +"%Y%m%d_%H%M%S")"
+yt-dlp -x --audio-format opus --audio-quality 320K -o "$playlist_dir/%(autonumber)s %(title)s.%(ext)s" "$2"
+cd "$playlist_dir"
+ffmpeg -i "concat:$(printf "%s|" *.opus)" -c copy "../$1.opus"
+cd ..
+rm -r "$playlist_dir"
+
+
+# Cut from (-ss) / to (-t)
+# ffmpeg -i input.opus -ss 00:00:00 -t 00:16:45 -acodec copy output.opus
+#
+# To cut with frame accuracy use dot notation
+# ffmpeg -i input.opus -ss 00:00:00.00 -t 00:16:45.00 -acodec copy output.opus
+
+# Concat two files
+# The "filelist" must contain the name of the files
+# you want to concatenate formatted like so
+#
+#--filelist.txt---------
+# file 'inputFile1.opus'
+# file 'inputFile2.opus'
+#-----------------------
+#
+# ffmpeg -f concat -safe 0 -i filelist.txt -c copy output.opus

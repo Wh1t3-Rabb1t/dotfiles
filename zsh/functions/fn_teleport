@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+# FZF z jump list and cd to the selected directory.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+local selection="$(z | fzf --no-preview --tac)"
+
+# Remove z index number and leading whitespace
+selection=$(printf '%s' "$selection" | sed 's/^[^/]*//')
+
+if [[ "$selection" ]]; then
+    BUFFER="cd $selection"
+    zle accept-line
+fi

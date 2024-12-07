@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+# Search term in cwd, pipe it into fzf, and open selection in nvim.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+rg --smart-case --line-number "${*:-}" |
+    fzf \
+        --delimiter : \
+        --preview 'bat {1} --highlight-line {2}' \
+        --bind 'enter:become(nvim {1} +{2})'

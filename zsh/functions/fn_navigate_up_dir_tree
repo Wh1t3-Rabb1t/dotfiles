@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+# Jump up any number of directories.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+if [[ "$#" < 1 ]]; then
+    cd ..
+else
+    local rpt=$(printf "%${1}s")
+    local cdstr=${rpt// /..\/}
+    cd $cdstr
+fi

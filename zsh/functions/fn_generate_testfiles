@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+# Create multiple files (takes an integer as argument).
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+if [[ "$#" -eq 1 ]] && [[ "$1" =~ ^[0-9]+$ ]]; then
+    for ((i=1; i<=$1; i++)); do
+        touch "$(printf "%02d_testfile.txt" "$i")"
+    done
+else
+    echo -e "\nError: Argument must be a positive integer."
+    return 1
+fi

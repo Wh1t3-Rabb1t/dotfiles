@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+
+# Create new files (can create multiple files at once).
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local arrow="\e[0m\e[33m>\e[m"
+local green="\e[0m\e[33m"
+local grey="\e[38;5;245m"
+local color_end="\e[m"
+
+if [[ "$#" -eq 0 ]]; then
+    echo -e "\nNo argument given."
+    return
+fi
+
+local created_files=()
+for file in $@; do
+    if [[ -e $file ]]; then
+        echo "touch: $file: File exists"
+    else
+        touch $file && created_files+=($file)
+    fi
+done
+
+# If at least one file was successfully created
+if [[ ${#created_files[@]} -gt 0 ]]; then
+    echo ""
+    for file in ${created_files[@]}; do
+        echo -e "${arrow}  $file"
+    done
+    echo -e "\n${green}Created${color_end}."
+fi

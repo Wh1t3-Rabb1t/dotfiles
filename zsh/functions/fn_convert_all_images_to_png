@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+# Convert all images in cwd to png format.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+find "$(pwd)" -type f | while IFS= read -r FILE; do
+    ffmpeg -i "$FILE" "${FILE%.*}.png"
+done

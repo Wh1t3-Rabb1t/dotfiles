@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+# Download a youtube playlist without concatting.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+yt-dlp -x --audio-format opus --audio-quality 320K -o "${1}_%(autonumber)02d.%(ext)s" "${2}"

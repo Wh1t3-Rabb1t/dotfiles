@@ -1,0 +1,227 @@
+#                          /\\\
+#                          \/\\\
+#  /\\\\\\\\\\\ /\\\\\\\\\\ \/\\\
+#  \///////\\\/ \/\\\//////  \/\\\\\\\\\\\
+#        /\\\/   \/\\\\\\\\\\ \/\\\/////\\\
+#       /\\\/     \////////\\\ \/\\\   \/\\\
+#      /\\\\\\\\\\\ /\\\\\\\\\\ \/\\\   \/\\\
+#    . \/////////// \//////////  \///    \/// rc
+#==============================================================================#
+
+# See:
+    # https://thevaluable.dev/zsh-install-configure-mouseless/
+    # https://github.com/carpet-stain/dotfiles/tree/master/zsh
+    # https://htr3n.github.io/2018/07/faster-zsh/
+    # https://frederic-hemberger.de/notes/speeding-up-initial-zsh-startup-with-lazy-loading/
+    # https://grml.org/zsh/zsh-lovers.html
+    # ANSI escape codes:  https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+
+
+# ENV VARIABLES
+#------------------------------------------------------------------------------#
+export ZPLUGINDIR="${HOME}/.zsh-plugins"  # Set zsh plugin directory
+export ZFUNCDIR="${ZDOTDIR}/functions"    # User defined zsh functions
+export WORKSPACE="${HOME}/.Workspace"
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="/opt/homebrew/sbin:$PATH"
+export MANPAGER="nvim +Man!"
+export EDITOR="nvim"
+export VISUAL="nvim"
+
+# p10k config location
+export POWERLEVEL9K_CONFIG_FILE="${ZDOTDIR}/src/.p10k.zsh"
+
+# z jump chache location
+export _Z_DATA="${ZDOTDIR}/.zcompcache/.zjump_cache"
+
+# !! History cannot be set in ~/.zshenv because it will
+# be overwritten in /etc/.zshrc in favour of macOS defaults
+export HISTFILE="${ZDOTDIR}/.zcompcache/.zsh_history"
+export HISTORY_IGNORE='(cd *|mv *|rm *|nf *|nd *|dl*)'
+export HISTSIZE=10000
+export SAVEHIST=$HISTSIZE
+export DIRSTACKSIZE=1000
+
+
+# FZF DEFAULTS
+#------------------------------------------------------------------------------#
+FZF_KEY_BINDINGS="\
+page-up:preview-page-up,\
+page-down:preview-page-down,\
+shift-up:half-page-up+refresh-preview,\
+shift-down:half-page-down+refresh-preview,\
+alt-p:toggle-preview,\
+shift-right:change-preview-window(down|right),\
+shift-left:change-preview-window(up|left),\
+shift-delete:clear-query,\
+tab:toggle-sort,\
+;:jump,\
+alt-s:toggle,\
+alt-A:toggle-all,\
+alt-a:select-all"
+
+FZF_JUMP_LABELS="\
+ftdksleiwoacnvghyxmruqpFTDKSLEIWOACNVGHYXMRUQP+=-~[]{}()!&_|;:<>/?.,#@%1234567890"
+
+# Catppuccin colors
+FZF_COLORS="\
+fg:#7f849c,\
+gutter:#585b70,\
+current-bg:#585b70,\
+current-fg:#f38ba8,\
+hl:reverse:#f38ba8,\
+current-hl:reverse:#f38ba8,\
+prompt:#cdd6f4,\
+pointer:#cdd6f4,\
+spinner:#cdd6f4,\
+marker:#f9e2af,\
+border:#1e66f5,\
+preview-border:#1e66f5"
+
+FZF_PREVIEW="\
+([[ -f {} ]] && (bat {} || cat {})) || \
+([[ -d {} ]] && (lsd -A -v {} | less)) || \
+echo {} 2> /dev/null | head -200"
+
+export FZF_DEFAULT_COMMAND="\
+rg --files \
+--no-ignore \
+--no-line-number \
+--hidden \
+--follow \
+--glob '!Library' \
+--glob '!.git'"
+
+export FZF_DEFAULT_OPTS="\
+--bind='$FZF_KEY_BINDINGS' \
+--jump-labels='$FZF_JUMP_LABELS' \
+--color='$FZF_COLORS' \
+--preview='$FZF_PREVIEW' \
+--preview-window 'right,border-left,<55(down:50%,border-top)' \
+--height=100% \
+--layout=reverse \
+--prompt=' : ' \
+--pointer='▶' \
+--marker='+'"
+
+
+# OPTIONS
+#------------------------------------------------------------------------------#
+unsetopt BEEP                # Don't beep on errors
+setopt HIST_IGNORE_ALL_DUPS  # Don't add duplicate commands
+setopt HIST_SAVE_NO_DUPS     # Don't add duplicate consecutive commands
+setopt HIST_IGNORE_SPACE     # Don't add commands with leading whitespace
+setopt HIST_NO_FUNCTIONS     # Don't add function calls
+setopt HIST_REDUCE_BLANKS    # Don't add commands that differ only by whitespace
+setopt INC_APPEND_HISTORY    # Append commands to history upon execution
+setopt SHARE_HISTORY         # Share history between all sessions
+setopt AUTO_PUSHD            # Push the current directory visited on the stack
+setopt PUSHD_IGNORE_DUPS     # Do not store duplicates in the stack
+setopt PUSHD_SILENT          # Don't print the directory stack after pushd or popd
+setopt BSD_ECHO              # Require `-e` to interpret escape sequences in echo strings
+setopt PRINT_EXIT_VALUE      # Print exit code if command fails
+
+
+# p10k / SOURCE PLUGINS
+#------------------------------------------------------------------------------#
+# Ensure zsh plugin directory exists
+if [[ ! -d "$ZPLUGINDIR" ]]; then
+    echo -e "\nCreating ZPLUGINDIR: $ZPLUGINDIR"
+    mkdir -p "$ZPLUGINDIR"
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZPLUGINDIR}/powerlevel10k"
+    git clone https://github.com/romkatv/zsh-defer.git "${ZPLUGINDIR}/zsh-defer"
+fi
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/custom/.p10k.zsh.
+source "${ZPLUGINDIR}/powerlevel10k/powerlevel10k.zsh-theme"
+[[ ! -f ~/.config/zsh/src/.p10k.zsh ]] || source ~/.config/zsh/src/.p10k.zsh
+
+# !! Tab completion must be loaded before zplugins (specifically fzf-tab)
+source "${ZDOTDIR}/src/auto_cmds.zsh"
+source "${ZDOTDIR}/src/vi_bindings.zsh"
+source "${ZDOTDIR}/src/tab_completion.zsh"
+source "${ZDOTDIR}/src/zplugins.zsh"
+source "${HOME}/.config/broot/launcher/bash/br"
+
+
+# AUTOLOAD FUNCTIONS
+#------------------------------------------------------------------------------#
+for funcdir in $ZFUNCDIR $ZFUNCDIR/*(N/); do
+    fpath=($funcdir $fpath)
+    autoload -Uz $fpath[1]/*(.:t)
+done
+unset funcdir
+
+
+# ALIASES
+#------------------------------------------------------------------------------#
+alias h="cd ~"
+alias b="cd -"
+alias ls="echo ''; lsd -A -v"
+alias ll="echo ''; lsd -A --long"
+alias lt="echo ''; lsd -A --tree --depth"
+alias gnug="grep -H -n -i --color=auto"
+alias showAll="defaults write com.apple.finder AppleShowAllFiles True; killall Finder"
+alias hideAll="defaults write com.apple.finder AppleShowAllFiles False; killall Finder"
+alias dlv="yt-dlp -f mp4"
+alias dl720p="yt-dlp -S vcodec:h264,fps,res:720,acodec:m4a"
+alias dl1080p="yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a"
+alias syntaxTheme="fast-theme -l"
+alias getIP="ifconfig | grep inet"
+
+# Functions
+alias e="fn_open_with_nvim"
+alias f="fn_find_and_open_file"
+alias d="fn_find_and_cd_to_dir"
+alias up="fn_navigate_up_dir_tree"
+alias lg="fn_rg_fzf_and_open_with_nvim"
+alias md="fn_preview_markdown"
+alias vs="fn_find_vim_sessions"
+alias nf="fn_create_files"
+alias nd="fn_create_directories"
+alias rm="fn_move_to_trash"
+alias gg="fn_git_add_commit_push"
+alias dlm="fn_dl_audio"
+alias dlpl="fn_dl_and_concat_playlist_audio"
+alias dlfullpl="fn_dl_playlist_audio"
+alias ren="fn_rename_all_files_in_cwd"
+
+# Plugin managers
+alias bo="brew outdated"
+alias bu="brew upgrade"
+alias zpo="_zplugin_check_for_updates"
+alias zpu="_zplugin_update"
+alias zpa="_zplugin_add_new"
+alias zpd="_zplugin_delete"
+
+
+# Brewfile
+#------------------
+# kitty
+# p10k
+# fzf
+# nvim
+# broot
+# ripgrep
+# fd
+# lsd
+# bat
+# jq
+# gitui
+# delta
+# tealdeer
+# btop
+# shell check
+# luarocks
+# yt-dlp
+# ffmpeg
+# glow
+# mpv

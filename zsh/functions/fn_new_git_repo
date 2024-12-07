@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+# Create a git repo in the cwd.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local url="$1"
+if [[ -z "$url" ]]; then
+    echo -e "\nNo URL provided."
+else
+    git init
+    git add -A
+    git commit -m "first commit"
+    git branch -M main
+    git remote add origin "$url"
+    git push -u origin main
+fi

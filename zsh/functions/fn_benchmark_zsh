@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+# Benchmark zsh startup time.
+# https://stevenvanbael.com/profiling-zsh-startup
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+# for i in $(seq 1 10); do /usr/bin/time /bin/zsh -i -c exit; done;
+for i in {1..10}; do time zsh -i -c exit; done

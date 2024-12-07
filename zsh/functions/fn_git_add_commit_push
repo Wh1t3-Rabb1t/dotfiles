@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+# Git add, commit, push.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+git add .
+if [[ -n "$1" ]]; then
+    git commit -m "$1"
+else
+    git commit -m update
+fi
+git push -u origin main

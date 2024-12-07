@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+# FZF command history and append selection to buffer.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+# Use `tail -r` in place of `tac`
+local selection="$(tail -r ${ZDOTDIR}/.zcompcache/.zsh_history \
+    | awk '!a[$0]++ && $1 !~ /^:/' \
+    | fzf --no-preview)"
+
+[[ "$selection" ]] && BUFFER="$selection"

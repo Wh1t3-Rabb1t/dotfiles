@@ -1,0 +1,42 @@
+#!/usr/bin/env zsh
+
+# Create new directories.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local folder="\e[38;5;192m\e[m"
+local arrow="\e[0m\e[33m>\e[m"
+local green="\e[0m\e[33m"
+local grey="\e[38;5;245m"
+local color_end="\e[m"
+
+if [[ "$#" -eq 0 ]]; then
+    echo -e "\nNo argument given."
+    return
+fi
+
+# If only one argument was passed to the function
+if [[ "$#" -eq 1 ]]; then
+    mkdir $1 || return
+    cd $1
+    echo -e "\n${arrow}  ${folder} $1"
+    echo -e "\n${green}Created${color_end}."
+    echo -e "\ncwd changed to: ${folder} $1"
+else
+    local created_dirs=()
+
+    for dir in $@; do
+        if mkdir $dir; then
+            created_dirs+=("$dir")
+        fi
+    done
+
+    # If at least one dir was successfully created
+    if [[ ${#created_dirs[@]} -gt 0 ]]; then
+        echo " "
+        for dir in ${created_dirs[@]}; do
+            echo -e "${arrow}  ${folder} $dir"
+        done
+        echo -e "\n${green}Created${color_end}."
+    fi
+fi

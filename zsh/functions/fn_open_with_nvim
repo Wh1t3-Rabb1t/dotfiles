@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+# If `e` is called with no args, open Session.vim if it exists, else launch
+# nvim with Neotree open. If args are passed to 'e' the behavior is identical
+# to calling 'nvim' with arguments.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+if [[ "$#" -eq 0 ]]; then
+    if [[ -e "Session.vim" ]]; then
+        nvim -S
+    else
+        nvim -c "Neotree reveal"
+    fi
+else
+    nvim "$@"
+fi

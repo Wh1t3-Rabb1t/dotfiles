@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+# Search and cd to the selected directory.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local selection="$(fd --color=always --type=directory --hidden \
+--exclude Library \
+--exclude .git \
+--exclude .npm \
+--exclude .vscode \
+| fzf --ansi)"
+
+if [[ -z "$selection" ]]; then
+    echo -e "\nSearch cancelled."
+else
+    cd "$selection"
+    echo ''; lsd -A -v
+fi

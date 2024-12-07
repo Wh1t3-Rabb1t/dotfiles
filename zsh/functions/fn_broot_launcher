@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+# Launch broot in single dir view.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+BUFFER="br --sort-by-type --no-tree"
+zle accept-line

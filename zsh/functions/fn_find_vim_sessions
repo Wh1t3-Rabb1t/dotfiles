@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+# Search for, and open selected Vim session.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+local initial_dir="${0:A:h}"
+
+cd ~
+
+local selection="$(fd Session.vim \
+--format={//} \
+--fixed-strings \
+--extension=.vim \
+--hidden \
+--no-ignore \
+--exclude Library \
+--exclude .git \
+--exclude .cache \
+--exclude .npm \
+--exclude .vscode \
+| fzf --ansi)"
+
+if [[ -z "$selection" ]]; then
+    cd "$initial_dir"
+    echo -e "\nSearch cancelled."
+else
+    cd "$selection"
+    nvim -S
+fi

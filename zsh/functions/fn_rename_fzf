@@ -1,0 +1,29 @@
+#!/usr/bin/env zsh
+
+# FZF cwd and append `mv` and the chosen rename target (x2) to the buffer.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+local selection="$(lsd -A -v | fzf --no-preview --ansi)"
+
+if [[ -n "$selection" ]]; then
+    local quotes=\'
+
+    # Remove icons
+    selection="$(echo "$selection" | sed -E 's/^.{2}//')"
+
+    # Use double quotes if a single quote exists in the selection
+    [[ $selection == *\'* ]] && quotes=\"
+
+    # Add quotes
+    selection="$(echo "$selection" | sed -E "s/(.*)/$quotes\1$quotes/")"
+
+    # Append target to the command line
+    BUFFER="mv $selection $selection"
+
+    # Navigate to the start of the second name
+    zle -U "$quotes"
+    zle vi-cmd-mode
+    zle end-of-line
+    zle vi-backward-char
+    zle vi-find-prev-char-skip
+fi

@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+# Download an opus file with the desired name as the first arg,
+# and the url as the second arg.
+#------------------------------------------------------------------------------#
+emulate -L zsh
+
+yt-dlp -x --audio-format opus --audio-quality 320K -o "$1.%(ext)s" "$2"

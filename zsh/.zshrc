@@ -18,21 +18,21 @@
 
 
 
-# OPTIONS
-#------------------------------------------------------------------------------#
-unsetopt BEEP                # Don't beep on errors
-setopt HIST_IGNORE_ALL_DUPS  # Don't add duplicate commands
-setopt HIST_SAVE_NO_DUPS     # Don't add duplicate consecutive commands
-setopt HIST_IGNORE_SPACE     # Don't add commands with leading whitespace
-setopt HIST_NO_FUNCTIONS     # Don't add function calls
-setopt HIST_REDUCE_BLANKS    # Don't add commands that differ only by whitespace
-setopt INC_APPEND_HISTORY    # Append commands to history upon execution
-setopt SHARE_HISTORY         # Share history between all sessions
-setopt AUTO_PUSHD            # Push the current directory visited on the stack
-setopt PUSHD_IGNORE_DUPS     # Do not store duplicates in the stack
-setopt PUSHD_SILENT          # Don't print the directory stack after pushd or popd
-setopt BSD_ECHO              # Require `-e` to interpret escape sequences in echo strings
-setopt PRINT_EXIT_VALUE      # Print exit code if command fails
+# # OPTIONS
+# #------------------------------------------------------------------------------#
+# unsetopt BEEP                # Don't beep on errors
+# setopt HIST_IGNORE_ALL_DUPS  # Don't add duplicate commands
+# setopt HIST_SAVE_NO_DUPS     # Don't add duplicate consecutive commands
+# setopt HIST_IGNORE_SPACE     # Don't add commands with leading whitespace
+# setopt HIST_NO_FUNCTIONS     # Don't add function calls
+# setopt HIST_REDUCE_BLANKS    # Don't add commands that differ only by whitespace
+# setopt INC_APPEND_HISTORY    # Append commands to history upon execution
+# setopt SHARE_HISTORY         # Share history between all sessions
+# setopt AUTO_PUSHD            # Push the current directory visited on the stack
+# setopt PUSHD_IGNORE_DUPS     # Do not store duplicates in the stack
+# setopt PUSHD_SILENT          # Don't print the directory stack after pushd or popd
+# setopt BSD_ECHO              # Require `-e` to interpret escape sequences in echo strings
+# setopt PRINT_EXIT_VALUE      # Print exit code if command fails
 
 
 # p10k / SOURCE PLUGINS
@@ -60,7 +60,17 @@ source "${ZPLUGINDIR}/powerlevel10k/powerlevel10k.zsh-theme"
 source "${ZDOTDIR}/src/auto_cmds.zsh"
 source "${ZDOTDIR}/src/vi_bindings.zsh"
 source "${ZDOTDIR}/src/tab_completion.zsh"
-source "${ZDOTDIR}/src/zplugins.zsh"
+
+# source "${ZDOTDIR}/src/zplugins.zsh"
+
+
+# Aloxaf/fzf-tab
+# zsh-users/zsh-history-substring-search
+# zdharma-continuum/fast-syntax-highlighting
+# zsh-users/zsh-autosuggestions
+# rupa/z
+
+# !! add a command check to ensure broot is available
 source "${HOME}/.config/broot/launcher/bash/br"
 
 

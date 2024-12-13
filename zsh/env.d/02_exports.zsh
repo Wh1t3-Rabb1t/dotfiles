@@ -27,13 +27,17 @@ export GOPATH="${XDG_DATA_HOME}/go"
 export WORKSPACE="${HOME}/workspace"
 export MANPAGER="nvim +Man!"
 
-# !! History cannot be set in ~/.zshenv because it will
-# be overwritten in /etc/.zshrc in favour of macOS defaults
-export HISTFILE="${XDG_DATA_HOME}/zsh/history"
-export HISTORY_IGNORE='(cd *|mv *|rm *|nf *|nd *|dl*)'
-export HISTSIZE=10000
-export SAVEHIST=$HISTSIZE
+# # !! History cannot be set in ~/.zshenv because it will
+# # be overwritten in /etc/.zshrc in favour of macOS defaults
+# export HISTFILE="${XDG_DATA_HOME}/zsh/history"
+# export HISTORY_IGNORE='(cd *|mv *|rm *|nf *|nd *|dl*)'
+
 export DIRSTACKSIZE=1000
+
+
+
+# export HISTSIZE=10000
+# export SAVEHIST=$HISTSIZE
 
 
 

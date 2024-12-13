@@ -5,7 +5,6 @@
 #  |_|/___|_|
 #==============================================================================#
 
-# FZF Defaults
 FZF_KEY_BINDINGS="\
 page-up:preview-page-up,\
 page-down:preview-page-down,\
@@ -44,15 +43,6 @@ FZF_PREVIEW="\
 ([[ -d {} ]] && (lsd -A -v {} | less)) || \
 echo {} 2> /dev/null | head -200"
 
-export FZF_DEFAULT_COMMAND="\
-rg --files \
---no-ignore \
---no-line-number \
---hidden \
---follow \
---glob '!Library' \
---glob '!.git'"
-
 export FZF_DEFAULT_OPTS="\
 --bind='$FZF_KEY_BINDINGS' \
 --jump-labels='$FZF_JUMP_LABELS' \
@@ -64,3 +54,29 @@ export FZF_DEFAULT_OPTS="\
 --prompt=' : ' \
 --pointer='▶' \
 --marker='+'"
+
+RG_COMMAND="\
+rg --files \
+--no-ignore \
+--no-line-number \
+--hidden \
+--follow \
+--glob '!Library/*' \
+--glob '!.git/*'"
+
+FD_COMMAND="\
+fd --type file \
+--follow \
+--hidden \
+--exclude .git \
+--exclude Library \
+--color=always"
+
+# Try to use rg or fd, if available as default fzf command
+if (( ${+commands[rg]} )); then
+    export FZF_DEFAULT_COMMAND=$RG_COMMAND
+elif (( ${+commands[fd]} )); then
+    export FZF_DEFAULT_COMMAND=$FD_COMMAND
+fi
+
+# source "${DOTFILES}/tools/fzf/shell/key-bindings.zsh"

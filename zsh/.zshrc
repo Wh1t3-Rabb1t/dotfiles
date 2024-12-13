@@ -35,31 +35,31 @@
 # setopt PRINT_EXIT_VALUE      # Print exit code if command fails
 
 
-# p10k / SOURCE PLUGINS
-#------------------------------------------------------------------------------#
-# Ensure zsh plugin directory exists
-if [[ ! -d "$ZPLUGINDIR" ]]; then
-    echo -e "\nCreating ZPLUGINDIR: $ZPLUGINDIR"
-    mkdir -p "$ZPLUGINDIR"
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZPLUGINDIR}/powerlevel10k"
-    git clone https://github.com/romkatv/zsh-defer.git "${ZPLUGINDIR}/zsh-defer"
-fi
+# # p10k / SOURCE PLUGINS
+# #------------------------------------------------------------------------------#
+# # Ensure zsh plugin directory exists
+# if [[ ! -d "$ZPLUGINDIR" ]]; then
+#     echo -e "\nCreating ZPLUGINDIR: $ZPLUGINDIR"
+#     mkdir -p "$ZPLUGINDIR"
+#     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZPLUGINDIR}/powerlevel10k"
+#     git clone https://github.com/romkatv/zsh-defer.git "${ZPLUGINDIR}/zsh-defer"
+# fi
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# # Initialization code that may require console input (password prompts, [y/n]
+# # confirmations, etc.) must go above this block; everything else may go below.
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/custom/.p10k.zsh.
-source "${ZPLUGINDIR}/powerlevel10k/powerlevel10k.zsh-theme"
-[[ ! -f ~/.config/zsh/src/.p10k.zsh ]] || source ~/.config/zsh/src/.p10k.zsh
+# # To customize prompt, run `p10k configure` or edit ~/.config/zsh/custom/.p10k.zsh.
+# source "${ZPLUGINDIR}/powerlevel10k/powerlevel10k.zsh-theme"
+# [[ ! -f ~/.config/zsh/src/.p10k.zsh ]] || source ~/.config/zsh/src/.p10k.zsh
 
-# !! Tab completion must be loaded before zplugins (specifically fzf-tab)
-source "${ZDOTDIR}/src/auto_cmds.zsh"
-source "${ZDOTDIR}/src/vi_bindings.zsh"
-source "${ZDOTDIR}/src/tab_completion.zsh"
+# # !! Tab completion must be loaded before zplugins (specifically fzf-tab)
+# source "${ZDOTDIR}/src/auto_cmds.zsh"
+# source "${ZDOTDIR}/src/vi_bindings.zsh"
+# source "${ZDOTDIR}/src/tab_completion.zsh"
 
 # source "${ZDOTDIR}/src/zplugins.zsh"
 
@@ -74,55 +74,55 @@ source "${ZDOTDIR}/src/tab_completion.zsh"
 source "${HOME}/.config/broot/launcher/bash/br"
 
 
-# AUTOLOAD FUNCTIONS
-#------------------------------------------------------------------------------#
-for funcdir in $ZFUNCDIR $ZFUNCDIR/*(N/); do
-    fpath=($funcdir $fpath)
-    autoload -Uz $fpath[1]/*(.:t)
-done
-unset funcdir
+# # AUTOLOAD FUNCTIONS
+# #------------------------------------------------------------------------------#
+# for funcdir in $ZFUNCDIR $ZFUNCDIR/*(N/); do
+#     fpath=($funcdir $fpath)
+#     autoload -Uz $fpath[1]/*(.:t)
+# done
+# unset funcdir
 
 
 # ALIASES
 #------------------------------------------------------------------------------#
-alias h="cd ~"
-alias b="cd -"
-alias ls="echo ''; lsd -A -v"
-alias ll="echo ''; lsd -A --long"
-alias lt="echo ''; lsd -A --tree --depth"
-alias gnug="grep -H -n -i --color=auto"
-alias showAll="defaults write com.apple.finder AppleShowAllFiles True; killall Finder"
-alias hideAll="defaults write com.apple.finder AppleShowAllFiles False; killall Finder"
-alias dlv="yt-dlp -f mp4"
-alias dl720p="yt-dlp -S vcodec:h264,fps,res:720,acodec:m4a"
-alias dl1080p="yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a"
-alias syntaxTheme="fast-theme -l"
-alias getIP="ifconfig | grep inet"
+# alias h="cd ~"
+# alias b="cd -"
+# alias ls="echo ''; lsd -A -v"
+# alias ll="echo ''; lsd -A --long"
+# alias lt="echo ''; lsd -A --tree --depth"
+# alias gnug="grep -H -n -i --color=auto"
+# alias showAll="defaults write com.apple.finder AppleShowAllFiles True; killall Finder"
+# alias hideAll="defaults write com.apple.finder AppleShowAllFiles False; killall Finder"
+# alias dlv="yt-dlp -f mp4"
+# alias dl720p="yt-dlp -S vcodec:h264,fps,res:720,acodec:m4a"
+# alias dl1080p="yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a"
+# alias syntaxTheme="fast-theme -l"
+# alias getIP="ifconfig | grep inet"
 
-# Functions
-alias e="fn_open_with_nvim"
-alias f="fn_find_and_open_file"
-alias d="fn_find_and_cd_to_dir"
-alias up="fn_navigate_up_dir_tree"
-alias lg="fn_rg_fzf_and_open_with_nvim"
-alias md="fn_preview_markdown"
-alias vs="fn_find_vim_sessions"
-alias nf="fn_create_files"
-alias nd="fn_create_directories"
-alias rm="fn_move_to_trash"
-alias gg="fn_git_add_commit_push"
-alias dlm="fn_dl_audio"
-alias dlpl="fn_dl_and_concat_playlist_audio"
-alias dlfullpl="fn_dl_playlist_audio"
-alias ren="fn_rename_all_files_in_cwd"
+# # Functions
+# alias e="fn_open_with_nvim"
+# alias f="fn_find_and_open_file"
+# alias d="fn_find_and_cd_to_dir"
+# alias up="fn_navigate_up_dir_tree"
+# alias lg="fn_rg_fzf_and_open_with_nvim"
+# alias md="fn_preview_markdown"
+# alias vs="fn_find_vim_sessions"
+# alias nf="fn_create_files"
+# alias nd="fn_create_directories"
+# alias rm="fn_move_to_trash"
+# alias gg="fn_git_add_commit_push"
+# alias dlm="fn_dl_audio"
+# alias dlpl="fn_dl_and_concat_playlist_audio"
+# alias dlfullpl="fn_dl_playlist_audio"
+# alias ren="fn_rename_all_files_in_cwd"
 
-# Plugin managers
-alias bo="brew outdated"
-alias bu="brew upgrade"
-alias zpo="_zplugin_check_for_updates"
-alias zpu="_zplugin_update"
-alias zpa="_zplugin_add_new"
-alias zpd="_zplugin_delete"
+# # Plugin managers
+# alias bo="brew outdated"
+# alias bu="brew upgrade"
+# alias zpo="_zplugin_check_for_updates"
+# alias zpu="_zplugin_update"
+# alias zpa="_zplugin_add_new"
+# alias zpd="_zplugin_delete"
 
 
 # Brewfile

@@ -23,3 +23,25 @@ autoload -z lspath bag fgb fgd fgl fz ineachdir psg vpaste evalcache compdefcach
 # Enable wrapper, if original command is available
 (( ${+commands[man]} )) && autoload -z wrap-man
 (( ${+commands[sudo]} )) && autoload -z wrap-sudo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+for funcdir in $ZFUNCDIR $ZFUNCDIR/*(N/); do
+    fpath=($funcdir $fpath)
+    autoload -Uz $fpath[1]/*(.:t)
+done
+unset funcdir
+

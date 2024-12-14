@@ -8,6 +8,7 @@ zstyle ':fzf-tab:*' continuous-trigger ' '
 zstyle ':fzf-tab:*' fzf-flags --no-preview --color=hl:reverse:#f38ba8
 
 
+
 # zstyle ':fzf-tab:*' prefix ''
 
 # if [[ -v TMUX ]]; then

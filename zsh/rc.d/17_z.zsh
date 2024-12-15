@@ -5,4 +5,4 @@ ZSHZ_UNCOMMON=1
 # ignore case when lowercase, match case with uppercase
 ZSHZ_CASE=smart
 
-source "${ZDOTDIR}/plugins/z/zsh-z.plugin.zsh"
+source "${ZDOTDIR}/plugins/zsh-z/zsh-z.plugin.zsh"

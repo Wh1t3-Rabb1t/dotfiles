@@ -1,5 +1,5 @@
 # Autosuggestions plugin
-source "${ZDOTDIR}/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+source "${ZDOTDIR}/plugins/autosuggestions/zsh-autosuggestions.zsh"
 
 # source "${ZDOTDIR}/plugins/autosuggestions-abbreviations-strategy/zsh-autosuggestions-abbreviations-strategy.zsh"
 

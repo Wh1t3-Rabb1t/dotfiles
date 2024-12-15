@@ -1,4 +1,4 @@
-source "${ZDOTDIR}/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
+source "${ZDOTDIR}/plugins/history-substring-search/zsh-history-substring-search.plugin.zsh"
 
 # Cmd
 bindkey -M vicmd 'i' history-substring-search-up       # i

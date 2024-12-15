@@ -121,15 +121,15 @@ zle -N fn_rename_fzf
 bindkey -M viins "^[r" fn_rename_fzf       # Alt r = Rename files / dirs in cwd
 
 
-# ZSH-HISTORY-SUBSTRING-SEARCH PLUGIN
-#------------------------------------------------------------------------------#
-# Cmd
-bindkey -M vicmd 'i' history-substring-search-up       # i
-bindkey -M vicmd 'k' history-substring-search-down     # k
+# # ZSH-HISTORY-SUBSTRING-SEARCH PLUGIN
+# #------------------------------------------------------------------------------#
+# # Cmd
+# bindkey -M vicmd 'i' history-substring-search-up       # i
+# bindkey -M vicmd 'k' history-substring-search-down     # k
 
-# Vis
-bindkey -M viins '^[[A' history-substring-search-up    # Up
-bindkey -M viins '^[[B' history-substring-search-down  # Down
+# # Vis
+# bindkey -M viins '^[[A' history-substring-search-up    # Up
+# bindkey -M viins '^[[B' history-substring-search-down  # Down
 
 
 # MODE TOGGLING

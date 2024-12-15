@@ -106,14 +106,14 @@ print "#------------------------------------------------------------------------
 # zf_ln -sf ../../deploy.zsh .git/hooks/post-checkout
 # print "    ...done\n"
 
-print "#------------------------------------------------------------------------------#\n"
+# print "#------------------------------------------------------------------------------#\n"
 
 print "Installing fzf..."
 pushd zsh/plugins/fzf
 if ./install --bin > /dev/null; then
     zf_ln -sf "${SCRIPT_DIR}/zsh/plugins/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
     zf_ln -sf "${SCRIPT_DIR}/zsh/plugins/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
-    print "  ...done"
+    print "  ...done\n"
 else
     print "  ...failed. Probably unsupported architecture, please check fzf installation guide"
 fi

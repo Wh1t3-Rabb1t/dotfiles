@@ -84,16 +84,16 @@ print "    ...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
-# print "Compiling zsh plugins...\n"
-# {
-#     emulate -LR zsh
-#     setopt local_options extended_glob
-#     autoload -Uz zrecompile
-#     for plugin_file in ${SCRIPT_DIR}/zsh/plugins/**/*.zsh{-theme,}(#q.); do
-#         zrecompile -pq "${plugin_file}"
-#     done
-# }
-# print "    ...done\n"
+print "Compiling zsh plugins...\n"
+{
+    emulate -LR zsh
+    setopt local_options extended_glob
+    autoload -Uz zrecompile
+    for plugin_file in ${SCRIPT_DIR}/zsh/plugins/**/*.zsh{-theme,}(#q.); do
+        zrecompile -pq "${plugin_file}"
+    done
+}
+print "    ...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
@@ -107,10 +107,10 @@ print "#------------------------------------------------------------------------
 print "#------------------------------------------------------------------------------#\n"
 
 print "Installing fzf..."
-pushd tools/fzf
+pushd zsh/plugins/fzf
 if ./install --bin > /dev/null; then
-    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
-    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
+    zf_ln -sf "${SCRIPT_DIR}/zsh/plugins/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
+    zf_ln -sf "${SCRIPT_DIR}/zsh/plugins/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
     print "  ...done"
 else
     print "  ...failed. Probably unsupported architecture, please check fzf installation guide"

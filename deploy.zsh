@@ -47,22 +47,23 @@ print "\n    ...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
-# # Link zshenv if needed
-# print "Checking for ZDOTDIR env variable...\n"
-# if [[ "${ZDOTDIR}" = "${SCRIPT_DIR}/zsh" ]]; then
-#     print "    ...present and valid, skipping .zshenv symlink\n"
-# else
-#     ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${ZDOTDIR:-${HOME}}/.zshenv"
-#     print "    ...failed to match this script dir, symlinking .zshenv\n"
-# fi
+# Link zshenv if needed
+print "Checking for ZDOTDIR env variable...\n"
+if [[ "${ZDOTDIR}" = "${SCRIPT_DIR}/zsh" ]]; then
+    print "    ...present and valid, skipping .zshenv symlink\n"
+else
+    ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${ZDOTDIR:-${HOME}}/.zshenv"
+    print "    ...failed to match this script dir, symlinking .zshenv\n"
+fi
 
-zf_ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${HOME}/.zshenv"
+# zf_ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${HOME}/.zshenv"
 
 print "#------------------------------------------------------------------------------#\n"
 
 # Link config files
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
+# zf_ln -sf "${SCRIPT_DIR}/zsh" "${XDG_CONFIG_HOME}/zsh"
 
 # zf_ln -sf "${SCRIPT_DIR}/nvim/init.lua" "${XDG_CONFIG_HOME}/nvim/init.lua"
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/lua" "${XDG_CONFIG_HOME}/nvim/lua"

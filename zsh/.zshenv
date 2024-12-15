@@ -41,7 +41,7 @@ if [[ ! -v XDG_RUNTIME_DIR ]]; then
     export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-${USER}"
 fi
 
-export ZDOTDIR="${HOME}/.config/zsh"
+# export ZDOTDIR="${HOME}/.config/zsh"
 export ZSCRIPTDIR="${ZDOTDIR}/scripts"
 export GOPATH="${XDG_DATA_HOME}/go"
 export WORKSPACE="${HOME}/workspace"

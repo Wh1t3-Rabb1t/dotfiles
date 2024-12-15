@@ -106,12 +106,12 @@ print "#------------------------------------------------------------------------
 
 print "#------------------------------------------------------------------------------#\n"
 
-# Install hook to call deploy script after successful pull
-print "Installing git hooks...\n"
-zf_mkdir -p .git/hooks
-zf_ln -sf ../../deploy.zsh .git/hooks/post-merge
-zf_ln -sf ../../deploy.zsh .git/hooks/post-checkout
-print "    ...done\n"
+# # Install hook to call deploy script after successful pull
+# print "Installing git hooks...\n"
+# zf_mkdir -p .git/hooks
+# zf_ln -sf ../../deploy.zsh .git/hooks/post-merge
+# zf_ln -sf ../../deploy.zsh .git/hooks/post-checkout
+# print "    ...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 

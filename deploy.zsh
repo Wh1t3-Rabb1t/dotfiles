@@ -57,7 +57,7 @@ else
 fi
 
 # zf_ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${HOME}/.zshenv"
-zf_ln -sf "${SCRIPT_DIR}/zsh/.zshrc" "${XDG_CONFIG_HOME}/.zshrc"
+zf_ln -sf "${SCRIPT_DIR}/zsh/.zshrc" "${ZDOTDIR}/.zshrc"
 
 print "#------------------------------------------------------------------------------#\n"
 

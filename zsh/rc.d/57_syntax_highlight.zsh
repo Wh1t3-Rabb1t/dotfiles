@@ -1,5 +1,5 @@
 # Highlighting plugin
-source "${ZDOTDIR}/plugins/fast-syntax-highlighting.plugin.zsh"
+source "${ZDOTDIR}/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 
 
 # ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets regexp cursor)

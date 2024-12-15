@@ -112,7 +112,7 @@ print "    ...done\n"
 print "#------------------------------------------------------------------------------#\n"
 
 print "Installing fzf...\n"
-pushd tools/fzf
+pushd zsh/plugins/fzf
 if ./install --bin > /dev/null; then
     zf_ln -sf "${SCRIPT_DIR}/zsh/plugins/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
     zf_ln -sf "${SCRIPT_DIR}/zsh/plugins/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"

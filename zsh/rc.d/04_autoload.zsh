@@ -1,16 +1,16 @@
 
-# enable bracketed paste
+# Enable bracketed paste
 autoload -Uz bracketed-paste-url-magic
 zle -N bracketed-paste bracketed-paste-url-magic
 
-# enable url-quote-magic
+# Enable url-quote-magic
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
 # Use default provided history search widgets
 autoload -Uz up-line-or-beginning-search
-zle -N up-line-or-beginning-search
 autoload -Uz down-line-or-beginning-search
+zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
 
 # Ensure add-zsh-hook is loaded, as it's used in rc files
@@ -24,24 +24,9 @@ autoload -z lspath bag fgb fgd fgl fz ineachdir psg vpaste evalcache compdefcach
 (( ${+commands[man]} )) && autoload -z wrap-man
 (( ${+commands[sudo]} )) && autoload -z wrap-sudo
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-for funcdir in $ZFUNCDIR $ZFUNCDIR/*(N/); do
-    fpath=($funcdir $fpath)
+# User scripts
+for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/*(N/); do
+    fpath=($zscripts $fpath)
     autoload -Uz $fpath[1]/*(.:t)
 done
-unset funcdir
-
+unset zscripts

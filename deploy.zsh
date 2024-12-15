@@ -133,3 +133,8 @@ fi
 print "Downloading gitstatusd for powerlevel10k...\n"
 ${SHELL} -is <<<'' &> /dev/null
 print "    ...done\n"
+
+# Setting ZSH FSH theme
+print "Setting zsh fsh theme"
+fast-theme zdharma &>/dev/null
+print "  ...done"

@@ -43,7 +43,7 @@ zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"
 zf_mkdir -p "${HOME}"/.local/{bin,etc}
-print "\n    ...done\n"
+print "    ...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
@@ -57,6 +57,7 @@ else
 fi
 
 # zf_ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${HOME}/.zshenv"
+zf_ln -sf "${SCRIPT_DIR}/zsh/.zshrc" "${XDG_CONFIG_HOME}/.zshrc"
 
 print "#------------------------------------------------------------------------------#\n"
 

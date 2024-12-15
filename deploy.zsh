@@ -38,7 +38,7 @@ XDG_STATE_HOME="${HOME}/.local/state"
 print "\nCreating required directory tree...\n"
 # zf_mkdir -p "${XDG_CONFIG_HOME}"/{bat,broot/{skins,launcher/bash},btop/themes,git,gitui,karabiner/{automatic_backups,assets/complex_modifications},kitty/backgrounds,lsd,luacheck,mpv,nvim/{lua/conf/{editor,lang,tools,ui},plugins,user,util},vial,vim,zsh}
 
-zf_mkdir -p "${XDG_CONFIG_HOME}"/zsh
+zf_mkdir -p "${XDG_CONFIG_HOME}"/{zsh,tools}
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"
@@ -71,15 +71,6 @@ zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/after" "${XDG_CONFIG_HOME}/nvim/after"
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/plugins" "${XDG_DATA_HOME}/nvim/site/pack/plugins/start"
 
-# zf_ln -sfn "${SCRIPT_DIR}/tmux" "${XDG_CONFIG_HOME}/tmux"
-# zf_ln -sf "${SCRIPT_DIR}/configs/gitconfig" "${XDG_CONFIG_HOME}/git/config"
-# zf_ln -sf "${SCRIPT_DIR}/configs/gitattributes" "${XDG_CONFIG_HOME}/git/attributes"
-# zf_ln -sf "${SCRIPT_DIR}/configs/gitignore" "${XDG_CONFIG_HOME}/git/ignore"
-# zf_ln -sf "${SCRIPT_DIR}/configs/mc.ini" "${XDG_CONFIG_HOME}/mc/ini"
-# zf_ln -sf "${SCRIPT_DIR}/configs/htoprc" "${XDG_CONFIG_HOME}/htop/htoprc"
-# zf_ln -sf "${SCRIPT_DIR}/configs/ranger" "${XDG_CONFIG_HOME}/ranger/rc.conf"
-# zf_ln -sf "${SCRIPT_DIR}/configs/gemrc" "${XDG_CONFIG_HOME}/gem/gemrc"
-# zf_ln -snf "${SCRIPT_DIR}/configs/ranger-plugins" "${XDG_CONFIG_HOME}/ranger/plugins"
 print "    ...done\n"
 
 print "#------------------------------------------------------------------------------#\n"

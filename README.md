@@ -9,5 +9,5 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
 ```sh
-defaults write com.apple.finder AppleShowAllFiles True; killall Finder; git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "$HOME/.local/dotfiles"; chmod +x $HOME/.local/dotfiles/deploy.zsh; $HOME/.local/dotfiles/deploy.zsh
+defaults write com.apple.finder AppleShowAllFiles True; killall Finder; git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "$HOME/.local/dotfiles"; $HOME/.local/dotfiles/deploy.zsh
 ```

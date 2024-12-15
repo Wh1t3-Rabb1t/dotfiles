@@ -23,10 +23,3 @@ autoload -z lspath bag fgb fgd fgl fz ineachdir psg vpaste evalcache compdefcach
 # Enable wrapper, if original command is available
 (( ${+commands[man]} )) && autoload -z wrap-man
 (( ${+commands[sudo]} )) && autoload -z wrap-sudo
-
-# User scripts
-for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/*(N/); do
-    fpath=($zscripts $fpath)
-    autoload -Uz $fpath[1]/*(.:t)
-done
-unset zscripts

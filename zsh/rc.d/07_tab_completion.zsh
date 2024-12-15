@@ -38,10 +38,10 @@ fi
 
 # Additional completions
 # fpath=("${ZDOTDIR}/plugins/completions/src" ${fpath})
-fpath=("${ZDOTDIR}/plugins/git-completion/src" ${fpath})
+# fpath=("${ZDOTDIR}/plugins/git-completion/src" ${fpath})
 
 # Enable git-extras completions
-source "${DOTFILES}/tools/git-extras/etc/git-extras-completion.zsh"
+# source "${DOTFILES}/tools/git-extras/etc/git-extras-completion.zsh"
 
 # Make sure complist is loaded (should be called before compinit)
 zmodload zsh/complist

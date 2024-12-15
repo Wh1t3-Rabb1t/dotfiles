@@ -64,7 +64,7 @@ print "#------------------------------------------------------------------------
 # Link config files
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
-zf_ln -sf "${SCRIPT_DIR}/zsh" "${XDG_CONFIG_HOME}/zsh"
+# zf_ln -sf "${SCRIPT_DIR}/zsh" "${XDG_CONFIG_HOME}/zsh"
 
 # zf_ln -sf "${SCRIPT_DIR}/nvim/init.lua" "${XDG_CONFIG_HOME}/nvim/init.lua"
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/lua" "${XDG_CONFIG_HOME}/nvim/lua"

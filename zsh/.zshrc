@@ -17,6 +17,13 @@
     # ANSI escape codes:  https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 
 
+for conffile in "${ZDOTDIR}"/rc.d/*; do
+    source "${conffile}"
+done
+
+unset conffile
+
+
 
 # # OPTIONS
 # #------------------------------------------------------------------------------#
@@ -71,7 +78,7 @@
 # rupa/z
 
 # !! add a command check to ensure broot is available
-source "${HOME}/.config/broot/launcher/bash/br"
+# source "${HOME}/.config/broot/launcher/bash/br"
 
 
 # # AUTOLOAD FUNCTIONS

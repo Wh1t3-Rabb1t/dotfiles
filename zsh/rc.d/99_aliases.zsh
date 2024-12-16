@@ -68,15 +68,15 @@ alias clear=clear-screen-soft-bottom
     alias stmux="tmux new-session 'sudo --login'"
 }
 (( ${+commands[wget]} )) && alias wget="wget --hsts-file=${XDG_CACHE_HOME}/wget-hsts"
-(( ${+commands[ls]} )) && {
-    alias ls="ls --color=auto --hyperlink=auto --classify"
-    alias ll="LC_COLLATE=C ls -l -v --almost-all --human-readable"
-}
+# (( ${+commands[ls]} )) && {
+#     alias ls="ls --color=auto --hyperlink=auto --classify"
+#     alias ll="LC_COLLATE=C ls -l -v --almost-all --human-readable"
+# }
 
 # History suppression
-(( ${+commands[clear]} )) && alias clear=" clear"
-alias pwd=" pwd"
-alias exit=" exit"
+# (( ${+commands[clear]} )) && alias clear=" clear"
+# alias pwd=" pwd"
+# alias exit=" exit"
 
 # Safety
 # (( ${+commands[rm]} )) && alias rm="rm -I --preserve-root=all"

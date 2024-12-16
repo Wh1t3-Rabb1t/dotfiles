@@ -41,7 +41,7 @@ print "#########################################################################
 # Link config files
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
-zf_ln -sf "${SCRIPT_DIR}/lsd" "${XDG_CONFIG_HOME}/lsd"
+zf_ln -sfn "${SCRIPT_DIR}/lsd" "${XDG_CONFIG_HOME}/lsd"
 
 
 

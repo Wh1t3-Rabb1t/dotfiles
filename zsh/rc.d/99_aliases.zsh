@@ -82,7 +82,7 @@ alias clear=clear-screen-soft-bottom
 # (( ${+commands[rm]} )) && alias rm="rm -I --preserve-root=all"
 
 # Suppress suggestions and globbing, enable wrappers
-(( ${+commands[find]} )) && alias find="noglob find"
+# (( ${+commands[find]} )) && alias find="noglob find"
 (( ${+commands[touch]} )) && alias touch="nocorrect touch"
 (( ${+commands[mkdir]} )) && alias mkdir="nocorrect mkdir"
 (( ${+commands[cp]} )) && alias cp="nocorrect cp --verbose"

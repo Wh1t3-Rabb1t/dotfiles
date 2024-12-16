@@ -27,7 +27,8 @@ if [[ -z "$selection" ]]; then
     echo -e "\nSearch cancelled."
 else
     cd "$selection"
-    echo ''; lsd -A -v
+    # echo ''; lsd -A -v
+    echo ''; ls
 fi
 
 

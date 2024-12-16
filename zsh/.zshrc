@@ -16,6 +16,23 @@
     # https://grml.org/zsh/zsh-lovers.html
     # ANSI escape codes:  https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 
+
+#
+#
+#
+#
+# !! REQUIRED TO LAUNCH KITTY WITHIN A VM
+#
+#
+# DON'T USE IN REAL DEPLOY SCRIPT
+#
+#
+#
+#
+export MESA_GL_VERSION_OVERRIDE=4.5 export MESA_GLSL_VERSION_OVERRIDE=450
+
+
+
 # Configuration
 for conffile in "${ZDOTDIR}"/rc.d/*; do
     source "${conffile}"

@@ -62,7 +62,7 @@ print "Syncing submodules...\n"
 git submodule sync > /dev/null
 git submodule update --init --recursive > /dev/null
 git clean -ffd
-print "    ...done\n"
+print "\n    ...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 

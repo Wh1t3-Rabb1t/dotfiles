@@ -108,17 +108,17 @@ done
 
 # USER DEFINED FUNCTIONS
 #------------------------------------------------------------------------------#
-zle -N fn_broot_launcher
-bindkey -M viins "^[f" fn_broot_launcher   # Alt f = Launch broot
+zle -N bk_broot_launcher
+bindkey -M viins "^[f" bk_broot_launcher   # Alt f = Launch broot
 
-zle -N fn_cmd_history_fzf
-bindkey -M viins "^[p" fn_cmd_history_fzf  # Alt p = Command history fzf
+zle -N bk_cmd_history_fzf
+bindkey -M viins "^[p" bk_cmd_history_fzf  # Alt p = Command history fzf
 
-zle -N fn_teleport
-bindkey -M viins "^['" fn_teleport         # Alt ' = Z jump history fzf
+zle -N bk_teleport
+bindkey -M viins "^['" bk_teleport         # Alt ' = Z jump history fzf
 
-zle -N fn_rename_fzf
-bindkey -M viins "^[r" fn_rename_fzf       # Alt r = Rename files / dirs in cwd
+zle -N bk_rename_fzf
+bindkey -M viins "^[r" bk_rename_fzf       # Alt r = Rename files / dirs in cwd
 
 
 # # ZSH-HISTORY-SUBSTRING-SEARCH PLUGIN

@@ -1,0 +1,68 @@
+name:
+  .trash: "\e[38;5;117m\e[0m"
+  .gitconfig: "\e[38;5;77m\e[0m"
+  .gitignore: "\e[38;5;77m\e[0m"
+  .zshrc: "\e[38;5;1m\e[0m"
+  .ssh: "\e[38;5;192m\e[0m"
+  .rustup: "\e[38;5;192m\e[0m"
+  .npm: "\e[38;5;192m\e[0m"
+  .config: "\e[38;5;192m\e[0m"
+  .cargo: "\e[38;5;192m\e[0m"
+  .atom: "\e[38;5;192m\e[0m"
+  .git: "\e[38;5;192m\e[0m"
+  .vscode: "\e[38;5;192m\e[0m"
+  .vimrc: "\e[38;5;77m\e[0m"
+  .viminfo: "\e[38;5;77m\e[0m"
+  .vim: "\e[38;5;192m\e[0m"
+  vim: "\e[38;5;192m\e[0m"
+  nvim: "\e[38;5;192m\e[0m"
+  node_modules: "\e[38;5;192m\e[0m"
+  bin: "\e[38;5;192m\e[0m"
+  sbin: "\e[38;5;192m\e[0m"
+  desktop: "\e[38;5;192m\e[0m"
+  downloads: "\e[38;5;192m\e[0m"
+  documents: "\e[38;5;192m\e[0m"
+  music: "\e[38;5;192m\e[0m"
+  pictures: "\e[38;5;192m\e[0m"
+  public: "\e[38;5;192m\e[0m"
+  package.json: "\e[38;5;1m\e[0m"
+  package-lock.json: "\e[38;5;1m\e[0m"
+
+extension:
+  go: 
+  hs: 
+  rs: 🦀
+  md: "\e[38;5;14m\e[0m"
+  txt: "\e[38;5;14m\e[0m"
+  js: "\e[38;5;11m\e[0m"
+  py: "\e[38;5;11m\e[0m"
+  html: "\e[38;5;209m\e[0m"
+  css: "\e[38;5;33m\e[0m"
+  lua: "\e[38;5;33m\e[0m"
+  sh: "\e[38;5;1m\e[0m"
+  zsh: "\e[38;5;1m\e[0m"
+  vim: "\e[38;5;77m\e[0m"
+  mp3: "\e[38;5;81m\e[0m"
+  opus: "\e[38;5;81m\e[0m"
+  mp4: "\e[38;5;81m\e[0m"
+  webm: "\e[38;5;81m\e[0m"
+  jpg: "\e[38;5;126m\e[0m"
+  jpeg: "\e[38;5;126m\e[0m"
+  webp: "\e[38;5;126m\e[0m"
+  png: "\e[38;5;126m\e[0m"
+  svg: "\e[38;5;126m\e[0m"
+  pdf: "\e[38;5;128m\e[0m"
+
+filetype:
+  file: "\e[38;5;45m\e[0m"
+  dir: "\e[38;5;192m\e[0m"
+
+  # dir:         󰉖 󰝰
+  # pipe: 📩
+  # socket: 󰆨
+  # executable: 
+  # symlink-dir: 
+  # symlink-file: 
+  # device-char: 
+  # device-block: 󰜫
+  # special: 

@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+
+emulate -L zsh
+
+local initial_dir="${0:A:h}"
+
+cd "${ZSCRIPTDIR}"
+
+local selection="$(fd --type f | fzf --ansi)"
+
+cd "$initial_dir"
+
+if [[ "$selection" ]]; then
+    BUFFER="$selection"
+    CURSOR=${#BUFFER}
+fi

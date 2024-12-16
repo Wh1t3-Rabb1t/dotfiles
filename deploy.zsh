@@ -18,12 +18,12 @@ XDG_STATE_HOME="${HOME}/.local/state"
 print "\nCreating required directory tree...\n"
 # zf_mkdir -p "${XDG_CONFIG_HOME}"/{bat,broot/{skins,launcher/bash},btop/themes,git,gitui,karabiner/{automatic_backups,assets/complex_modifications},kitty/backgrounds,lsd,luacheck,mpv,nvim/{lua/conf/{editor,lang,tools,ui},plugins,user,util},vial,vim,zsh}
 
-zf_mkdir -p "${XDG_CONFIG_HOME}"/{zsh,tools}
+zf_mkdir -p "${XDG_CONFIG_HOME}"/{zsh,tools,vim}
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"
 zf_mkdir -p "${HOME}"/.local/{bin,etc}
-print "    ...done\n"
+print "...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
@@ -36,24 +36,18 @@ else
     print "    ...failed to match this script dir, symlinking .zshenv\n"
 fi
 
-# zf_ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${HOME}/.zshenv"
-# zf_ln -sf "${SCRIPT_DIR}/zsh/.zshrc" "${ZDOTDIR}/.zshrc"
-
 print "#------------------------------------------------------------------------------#\n"
 
 # Link config files
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
-# zf_ln -sf "${SCRIPT_DIR}/zsh" "${XDG_CONFIG_HOME}/zsh"
 
 # zf_ln -sf "${SCRIPT_DIR}/nvim/init.lua" "${XDG_CONFIG_HOME}/nvim/init.lua"
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/lua" "${XDG_CONFIG_HOME}/nvim/lua"
-
-
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/after" "${XDG_CONFIG_HOME}/nvim/after"
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/plugins" "${XDG_DATA_HOME}/nvim/site/pack/plugins/start"
 
-print "    ...done\n"
+print "...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
@@ -62,7 +56,7 @@ print "Syncing submodules...\n"
 git submodule sync > /dev/null
 git submodule update --init --recursive > /dev/null
 git clean -ffd
-print "\n    ...done\n"
+print "\n...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
@@ -75,7 +69,7 @@ print "Compiling zsh plugins...\n"
         zrecompile -pq "${plugin_file}"
     done
 }
-print "    ...done\n"
+print "...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
@@ -84,7 +78,7 @@ print "#------------------------------------------------------------------------
 # zf_mkdir -p .git/hooks
 # zf_ln -sf ../../deploy.zsh .git/hooks/post-merge
 # zf_ln -sf ../../deploy.zsh .git/hooks/post-checkout
-# print "    ...done\n"
+# print "...done\n"
 
 # print "#------------------------------------------------------------------------------#\n"
 
@@ -93,9 +87,9 @@ pushd tools/fzf
 if ./install --bin > /dev/null; then
     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
-    print "\n    ...done\n"
+    print "\n...done\n"
 else
-    print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
+    print "\n...failed. Probably unsupported architecture, please check fzf installation guide\n"
 fi
 popd
 
@@ -105,21 +99,21 @@ if (( ${+commands[vim]} )); then
     # Generate vim help tags
     print "Generating vim helptags...\n"
     command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &> /dev/null
-    print "    ...done\n"
+    print "...done\n"
     print "#------------------------------------------------------------------------------#\n"
 fi
 
 # Trigger zsh run with powerlevel10k prompt to download gitstatusd
 print "Downloading gitstatusd for powerlevel10k...\n"
 ${SHELL} -is <<<'' &> /dev/null
-print "    ...done\n"
+print "...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 
 # Set fast-syntax-highlighting theme
 print "Setting fast-syntax-highlighting theme\n"
 fast-theme zdharma &>/dev/null
-print "    ...done\n"
+print "...done\n"
 
 print "#------------------------------------------------------------------------------#\n"
 

@@ -40,7 +40,7 @@ preview-border:#1e66f5"
 
 FZF_PREVIEW="\
 ([[ -f {} ]] && (bat {} || cat {})) || \
-([[ -d {} ]] && (lsd -A -v {} | less)) || \
+([[ -d {} ]] && (lsd -A -v {} || ls -a {} | less)) || \
 echo {} 2> /dev/null | head -200"
 
 export FZF_DEFAULT_OPTS="\
@@ -79,4 +79,4 @@ elif (( ${+commands[fd]} )); then
     export FZF_DEFAULT_COMMAND=$FD_COMMAND
 fi
 
-source "${DOTFILES}/tools/fzf/shell/key-bindings.zsh"
+# source "${DOTFILES}/tools/fzf/shell/key-bindings.zsh"

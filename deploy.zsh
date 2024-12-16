@@ -18,7 +18,7 @@ XDG_STATE_HOME="${HOME}/.local/state"
 print "\nCreating required directory tree...\n"
 # zf_mkdir -p "${XDG_CONFIG_HOME}"/{bat,broot/{skins,launcher/bash},btop/themes,git,gitui,karabiner/{automatic_backups,assets/complex_modifications},kitty/backgrounds,lsd,luacheck,mpv,nvim/{lua/conf/{editor,lang,tools,ui},plugins,user,util},vial,vim,zsh}
 
-zf_mkdir -p "${XDG_CONFIG_HOME}"/{zsh,tools,vim}
+zf_mkdir -p "${XDG_CONFIG_HOME}"/{zsh,tools}
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"
@@ -41,6 +41,9 @@ print "#------------------------------------------------------------------------
 # Link config files
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
+
+
+
 
 # zf_ln -sf "${SCRIPT_DIR}/nvim/init.lua" "${XDG_CONFIG_HOME}/nvim/init.lua"
 # zf_ln -sfn "${SCRIPT_DIR}/nvim/lua" "${XDG_CONFIG_HOME}/nvim/lua"

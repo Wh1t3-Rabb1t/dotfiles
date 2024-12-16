@@ -5,8 +5,11 @@
 emulate -L zsh
 
 # Use `tail -r` in place of `tac`
-local selection="$(tail -r ${ZDOTDIR}/.zcompcache/.zsh_history \
+local selection="$(tail -r ${XDG_DATA_HOME}/zsh/history \
     | awk '!a[$0]++ && $1 !~ /^:/' \
     | fzf --no-preview)"
 
 [[ "$selection" ]] && BUFFER="$selection"
+
+
+# local selection="$(tail -r ${ZDOTDIR}/.zcompcache/.zsh_history \

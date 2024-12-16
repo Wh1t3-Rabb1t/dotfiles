@@ -4,26 +4,6 @@ set -e
 
 zmodload -m -F zsh/files b:zf_rm b:zf_ln b:zf_mkdir
 
-
-# 1: Install dev tools
-#
-#    xcode-select --install
-#
-# 2: Install brew
-#
-#    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-#    eval "$(/opt/homebrew/bin/brew shellenv)"
-#
-#
-#    (not needed as config will be pulled from gittub)
-#    echo >> /Users/${USER}/.zprofile
-#    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/${USER}/.zprofile
-
-
-# +----------------+
-# | XDG COMPLIANCE |
-# +----------------+
-
 # Get the current path
 SCRIPT_DIR="${0:A:h}"
 cd "${SCRIPT_DIR}"
@@ -108,14 +88,14 @@ print "#------------------------------------------------------------------------
 
 # print "#------------------------------------------------------------------------------#\n"
 
-print "Installing fzf..."
+print "Installing fzf...\n"
 pushd tools/fzf
 if ./install --bin > /dev/null; then
     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
-    print "  ...done\n"
+    print "\n  ...done\n"
 else
-    print "  ...failed. Probably unsupported architecture, please check fzf installation guide"
+    print "\n  ...failed. Probably unsupported architecture, please check fzf installation guide\n"
 fi
 popd
 
@@ -134,7 +114,9 @@ print "Downloading gitstatusd for powerlevel10k...\n"
 ${SHELL} -is <<<'' &> /dev/null
 print "    ...done\n"
 
-# Setting ZSH FSH theme
-print "Setting zsh fsh theme"
+print "#------------------------------------------------------------------------------#\n"
+
+# Set fast-syntax-highlighting theme
+print "Setting zsh fsh theme\n"
 fast-theme zdharma &>/dev/null
-print "  ...done"
+print "    ...done\n"

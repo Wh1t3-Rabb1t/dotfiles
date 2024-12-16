@@ -117,6 +117,6 @@ print "    ...done\n"
 print "#------------------------------------------------------------------------------#\n"
 
 # Set fast-syntax-highlighting theme
-print "Setting zsh fsh theme\n"
+print "Setting fast-syntax-highlighting theme\n"
 fast-theme zdharma &>/dev/null
 print "    ...done\n"

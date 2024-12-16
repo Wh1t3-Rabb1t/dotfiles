@@ -3,9 +3,13 @@
 
 alias h="cd ~"
 alias b="cd -"
-alias ls="echo ''; lsd -A -v"
-alias ll="echo ''; lsd -A --long"
-alias lt="echo ''; lsd -A --tree --depth"
+
+(( ${+commands[lsd]} )) && {
+    alias ls="echo ''; lsd -A -v"
+    alias ll="echo ''; lsd -A --long"
+    alias lt="echo ''; lsd -A --tree --depth"
+}
+
 alias gnug="grep -H -n -i --color=auto"
 alias showAll="defaults write com.apple.finder AppleShowAllFiles True; killall Finder"
 alias hideAll="defaults write com.apple.finder AppleShowAllFiles False; killall Finder"
@@ -16,29 +20,29 @@ alias syntaxTheme="fast-theme -l"
 alias getIP="ifconfig | grep inet"
 
 # Functions
-alias e="fn_open_with_nvim"
-alias f="fn_find_and_open_file"
-alias d="fn_find_and_cd_to_dir"
-alias up="fn_navigate_up_dir_tree"
-alias lg="fn_rg_fzf_and_open_with_nvim"
-alias md="fn_preview_markdown"
-alias vs="fn_find_vim_sessions"
-alias nf="fn_create_files"
-alias nd="fn_create_directories"
-alias rm="fn_move_to_trash"
-alias gg="fn_git_add_commit_push"
-alias dlm="fn_dl_audio"
-alias dlpl="fn_dl_and_concat_playlist_audio"
-alias dlfullpl="fn_dl_playlist_audio"
-alias ren="fn_rename_all_files_in_cwd"
+alias e="al_open_with_nvim"
+alias f="al_find_and_open_file"
+alias d="al_find_and_cd_to_dir"
+alias up="al_navigate_up_dir_tree"
+alias lg="al_rg_fzf_and_open_with_nvim"
+alias md="al_preview_markdown"
+alias vs="al_find_vim_sessions"
+alias nf="al_create_files"
+alias nd="al_create_directories"
+alias rm="al_move_to_trash"
+alias gg="al_git_add_commit_push"
+alias dlm="al_dl_audio"
+alias dlpl="al_dl_and_concat_playlist_audio"
+alias dlfullpl="al_dl_playlist_audio"
+alias ren="al_rename_all_files_in_cwd"
 
 # Plugin managers
 alias bo="brew outdated"
 alias bu="brew upgrade"
-alias zpo="_zplugin_check_for_updates"
-alias zpu="_zplugin_update"
-alias zpa="_zplugin_add_new"
-alias zpd="_zplugin_delete"
+# alias zpo="_zplugin_check_for_updates"
+# alias zpu="_zplugin_update"
+# alias zpa="_zplugin_add_new"
+# alias zpd="_zplugin_delete"
 
 
 

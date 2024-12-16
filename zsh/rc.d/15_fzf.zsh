@@ -79,4 +79,4 @@ elif (( ${+commands[fd]} )); then
     export FZF_DEFAULT_COMMAND=$FD_COMMAND
 fi
 
-# source "${DOTFILES}/tools/fzf/shell/key-bindings.zsh"
+source "${DOTFILES}/tools/fzf/shell/key-bindings.zsh"

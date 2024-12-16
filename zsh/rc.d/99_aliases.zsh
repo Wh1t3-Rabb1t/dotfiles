@@ -69,7 +69,7 @@ alias clear=clear-screen-soft-bottom
 }
 (( ${+commands[wget]} )) && alias wget="wget --hsts-file=${XDG_CACHE_HOME}/wget-hsts"
 (( ${+commands[ls]} )) && {
-    alias ls="ls --group-directories-first --color=auto --hyperlink=auto --classify"
+    alias ls="ls --color=auto --hyperlink=auto --classify"
     alias ll="LC_COLLATE=C ls -l -v --almost-all --human-readable"
 }
 
@@ -79,7 +79,7 @@ alias pwd=" pwd"
 alias exit=" exit"
 
 # Safety
-(( ${+commands[rm]} )) && alias rm="rm -I --preserve-root=all"
+# (( ${+commands[rm]} )) && alias rm="rm -I --preserve-root=all"
 
 # Suppress suggestions and globbing, enable wrappers
 (( ${+commands[find]} )) && alias find="noglob find"

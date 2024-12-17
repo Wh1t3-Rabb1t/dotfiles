@@ -50,6 +50,7 @@ print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
 zf_ln -sfn "${SCRIPT_DIR}/lsd" "${XDG_CONFIG_HOME}/lsd"
 zf_ln -sfn "${SCRIPT_DIR}/nvim" "${XDG_CONFIG_HOME}/nvim"
+zf_ln -sfn "${SCRIPT_DIR}/kitty" "${XDG_CONFIG_HOME}/kitty"
 
 
 

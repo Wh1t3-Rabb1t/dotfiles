@@ -1,4 +1,4 @@
 brew "lsd"
 brew "broot"
-brew "alacritty"
 brew "coreutils"
+cask "alacritty"

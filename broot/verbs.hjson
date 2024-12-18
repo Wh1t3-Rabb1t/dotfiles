@@ -1,0 +1,209 @@
+###############################################################
+# This file contains the verb definitions for broot
+#
+# Doc at https://dystroy.org/broot/verbs/
+###############################################################
+
+verbs: [
+    # Command input
+    ###########################################################
+    {
+        key: "alt-left"
+        internal: ":input_go_word_left"
+    }
+    {
+        key: "alt-right"
+        internal: ":input_go_word_right"
+    }
+    {
+        key: "alt-backspace"
+        internal: ":input_del_word_left"
+    }
+    {
+        key: "alt-delete"
+        internal: ":input_del_word_right"
+    }
+
+
+    # Open selection with nvim
+    ###########################################################
+    {
+        invocation: edit
+        shortcut: e
+        key: right
+        execution: "nvim +{line} {file}"
+        leave_broot: false
+    }
+
+
+    # Open selection with mpv
+    ###########################################################
+    {
+        invocation: mpv
+        shortcut: m
+        execution: "mpv {file}"
+        leave_broot: false
+    }
+
+
+    # Move/remove selection to/from the staging area
+    ############################################################
+    {
+        key: "alt-s"
+        internal: ":toggle_stage"
+    }
+    {
+        key: "alt-a"
+        internal: ":stage_all_files"
+    }
+    {
+        invocation: "ts"
+        key: "alt-n"
+        internal: ":toggle_staging_area"
+    }
+    {
+        invocation: "cs"
+        key: "alt-shift-a"
+        internal: ":clear_stage"
+    }
+
+
+    # Left moves up the file tree, shift+left goes back
+    ############################################################
+    {
+        key: "left"
+        internal: ":up_tree"
+    }
+    {
+        key: "shift-left"
+        internal: ":back"
+    }
+
+
+    # Jump between search matches
+    ############################################################
+    {
+       key: "shift-up"
+       internal: ":previous_match"
+    }
+    {
+        key: "shift-down"
+        internal: ":next_match"
+    }
+
+
+    # Focus/open left or right panel
+    ############################################################
+    {
+        key: "ctrl-pageup"
+        internal: ":panel_left_no_open"
+    }
+    {
+        key: "ctrl-pagedown"
+        internal: ":panel_right_no_open"
+    }
+
+
+    # Resize panels
+    ############################################################
+    {
+        key: "ctrl-shift-home"
+        internal: ":move_panel_divider 0 -1"
+    }
+    {
+        key: "ctrl-shift-end"
+        internal: ":move_panel_divider 0 1"
+    }
+
+
+    # Toggle preview
+    ############################################################
+    {
+        key: "alt-m"
+        internal: ":toggle_preview"
+    }
+
+
+    # Toggle tree/directories only view
+    ############################################################
+    {
+        invocation: "tree_view"
+        key: "alt-'"
+        internal: ":toggle_tree"
+    }
+    {
+        invocation: "directories_only"
+        key: "alt-j"
+        cmd: ":toggle_files"
+    }
+
+
+    # Cd to the focused dir (under the cursor) and Quit
+    ############################################################
+    {
+        key: "alt-f"
+        leave_broot: true
+        cmd: ":cd"
+    }
+
+
+    # Jump to directories
+    ############################################################
+    {
+        invocation: "config"
+        internal: ":focus ~/.config"
+    }
+    {
+        invocation: "notes"
+        internal: ":focus ~/.Notes"
+    }
+    {
+        invocation: "home"
+        internal: ":focus ~"
+    }
+    {
+        invocation: "trash"
+        internal: ":focus ~/.Trash"
+    }
+
+
+    # Create a file
+    ############################################################
+    {
+        invocation: "nf {new_file}"
+        execution: "touch {directory}/{new_file}"
+        leave_broot: false
+    }
+
+
+    # Create directory
+    ############################################################
+    {
+        invocation: "nd {subpath}"
+        cmd: ":mkdir {subpath}"
+        leave_broot: false
+    }
+
+
+    # Delete selection
+    ############################################################
+    {
+        invocation: "d"
+        cmd: ":mv ~/.Trash"
+    }
+
+
+    # Toggle hidden files
+    ############################################################
+    {
+        invocation: "hidden"
+        internal: ":toggle_hidden"
+    }
+
+    # Quit broot
+    ############################################################
+    {
+        key: "alt-q"
+        cmd: ":quit"
+    }
+]

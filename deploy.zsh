@@ -16,8 +16,6 @@ XDG_STATE_HOME="${HOME}/.local/state"
 
 # Create required directories
 print "\nCreating required directory tree...\n"
-# zf_mkdir -p "${XDG_CONFIG_HOME}"/{bat,broot/{skins,launcher/bash},btop/themes,git,gitui,karabiner/{automatic_backups,assets/complex_modifications},kitty/backgrounds,lsd,luacheck,mpv,nvim/{lua/conf/{editor,lang,tools,ui},plugins,user,util},vial,vim,zsh}
-
 # zf_mkdir -p "${XDG_CONFIG_HOME}"
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
@@ -38,30 +36,9 @@ fi
 
 print "################################################################################\n"
 
-
-# brew downloads that create directories in ~/.config/
-# - lsd
-#
-
-
-
-# Link config files
+# Link configs
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
-# zf_ln -sfn "${SCRIPT_DIR}/vim" "${XDG_CONFIG_HOME}/vim"
-# zf_ln -sfn "${SCRIPT_DIR}/lsd" "${XDG_CONFIG_HOME}/lsd"
-# zf_ln -sfn "${SCRIPT_DIR}/nvim" "${XDG_CONFIG_HOME}/nvim"
-# zf_ln -sfn "${SCRIPT_DIR}/kitty" "${XDG_CONFIG_HOME}/kitty"
-
-
-
-
-# zf_ln -sf "${SCRIPT_DIR}/nvim/init.lua" "${XDG_CONFIG_HOME}/nvim/init.lua"
-# zf_ln -sfn "${SCRIPT_DIR}/nvim/lua" "${XDG_CONFIG_HOME}/nvim/lua"
-
-# zf_ln -sfn "${SCRIPT_DIR}/nvim/after" "${XDG_CONFIG_HOME}/nvim/after"
-# zf_ln -sfn "${SCRIPT_DIR}/nvim/plugins" "${XDG_DATA_HOME}/nvim/site/pack/plugins/start"
-
 print "    ...done\n"
 
 print "################################################################################\n"
@@ -87,15 +64,6 @@ print "Compiling zsh plugins...\n"
 print "    ...done\n"
 
 print "################################################################################\n"
-
-# # Install hook to call deploy script after successful pull
-# print "Installing git hooks...\n"
-# zf_mkdir -p .git/hooks
-# zf_ln -sf ../../deploy.zsh .git/hooks/post-merge
-# zf_ln -sf ../../deploy.zsh .git/hooks/post-checkout
-# print "...done\n"
-
-# print "################################################################################\n"
 
 print "Installing fzf...\n"
 pushd tools/fzf
@@ -138,16 +106,16 @@ print " ██████╔╝█████╗  ███████║█�
 print " ██╔══██╗██╔══╝  ██╔══██║██║  ██║  ╚██╔╝   "
 print " ██║  ██║███████╗██║  ██║██████╔╝   ██║    "
 print " ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═════╝    ╚═╝    "
-print "            ████████╗ ██████╗              "
-print "            ╚══██╔══╝██╔═══██╗             "
-print "               ██║   ██║   ██║             "
-print "               ██║   ██║   ██║             "
-print "               ██║   ╚██████╔╝             "
-print "               ╚═╝    ╚═════╝              "
-print "     ██████╗  ██████╗  ██████╗██╗  ██╗     "
-print "     ██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝     "
-print "     ██████╔╝██║   ██║██║     █████╔╝      "
-print "     ██╔══██╗██║   ██║██║     ██╔═██╗      "
-print "     ██║  ██║╚██████╔╝╚██████╗██║  ██╗     "
-print "     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝     "
+print "           ████████╗ ██████╗               "
+print "           ╚══██╔══╝██╔═══██╗              "
+print "              ██║   ██║   ██║              "
+print "              ██║   ██║   ██║              "
+print "              ██║   ╚██████╔╝              "
+print "              ╚═╝    ╚═════╝               "
+print "    ██████╗  ██████╗  ██████╗██╗  ██╗      "
+print "    ██╔══██╗██╔═══██╗██╔════╝██║ ██╔╝      "
+print "    ██████╔╝██║   ██║██║     █████╔╝       "
+print "    ██╔══██╗██║   ██║██║     ██╔═██╗       "
+print "    ██║  ██║╚██████╔╝╚██████╗██║  ██╗      "
+print "    ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝      "
 print "\nType 'zsh' and press enter to restart the terminal\n"

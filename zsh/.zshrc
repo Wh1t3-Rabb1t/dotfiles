@@ -49,6 +49,10 @@ done
 unset zscripts
 
 
+if (( ${+commands[broot]} )); then
+    source "${HOME}/.config/broot/launcher/bash/br"
+fi
+
 
 # # OPTIONS
 # #------------------------------------------------------------------------------#

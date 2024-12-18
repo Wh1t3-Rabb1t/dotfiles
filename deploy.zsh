@@ -100,6 +100,13 @@ print "    ...done\n"
 
 print "################################################################################\n"
 
+# Download brew dependancies
+if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
+    cd ~/.local/dotfiles
+    brew bundle
+    cd ~
+fi
+
 print " ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗ "
 print " ██╔══██╗██╔════╝██╔══██╗██╔══██╗╚██╗ ██╔╝ "
 print " ██████╔╝█████╗  ███████║██║  ██║ ╚████╔╝  "

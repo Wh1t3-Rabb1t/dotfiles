@@ -93,13 +93,14 @@ print "    ...done\n"
 
 print "################################################################################\n"
 
-# Set fast-syntax-highlighting theme
-print "Setting fast-syntax-highlighting theme\n"
-fast-theme base16
-# fast-theme base16 &>/dev/null
-print "    ...done\n"
 
-print "################################################################################\n"
+# # Set fast-syntax-highlighting theme
+# print "Setting fast-syntax-highlighting theme\n"
+# fast-theme base16
+# # fast-theme base16 &>/dev/null
+# print "    ...done\n"
+# print "################################################################################\n"
+
 
 # Download brew dependancies
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then

@@ -105,9 +105,9 @@ print "#########################################################################
 # Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
     print "Installing homebrew dependancies...\n"
-    cd "${SCRIPT_DIR}/macos"
-    brew bundle
-    cd ~
+    # cd "${SCRIPT_DIR}/macos"
+    # brew bundle
+    # cd ~
     print "\n    ...done\n"
     print "################################################################################\n"
 fi

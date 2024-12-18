@@ -3,8 +3,8 @@
 source "${ZDOTDIR}/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 
 
-zstyle :plugin:fast-syntax-highlighting theme "zdharma"
-typeset -g FAST_THEME_NAME="zdharma"
+# zstyle :plugin:fast-syntax-highlighting theme "zdharma"
+# typeset -g FAST_THEME_NAME="zdharma"
 
 
 # ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets regexp cursor)

@@ -94,12 +94,14 @@ print "    ...done\n"
 print "################################################################################\n"
 
 
-# # Set fast-syntax-highlighting theme
-# print "Setting fast-syntax-highlighting theme\n"
+# Set fast-syntax-highlighting theme
+print "Setting fast-syntax-highlighting theme\n"
 # fast-theme zdharma
+${SHELL} -is <<<'fast-theme zdharma' &>/dev/null
+
 # # fast-theme base16 &>/dev/null
-# print "    ...done\n"
-# print "################################################################################\n"
+print "    ...done\n"
+print "################################################################################\n"
 
 
 # Download brew dependencies if deploying to a mac with brew enabled

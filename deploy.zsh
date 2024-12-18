@@ -95,7 +95,8 @@ print "#########################################################################
 
 # Set fast-syntax-highlighting theme
 print "Setting fast-syntax-highlighting theme\n"
-fast-theme base16 &>/dev/null
+fast-theme base16
+# fast-theme base16 &>/dev/null
 print "    ...done\n"
 
 print "################################################################################\n"

@@ -1,8 +1,8 @@
 
 # Highlighting plugin
-source "${ZDOTDIR}/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+# source "${ZDOTDIR}/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 
-FAST_HIGHLIGHT_THEME="zdharma"
+# FAST_HIGHLIGHT_THEME="zdharma"
 
 
 # zstyle :plugin:fast-syntax-highlighting theme "zdharma"

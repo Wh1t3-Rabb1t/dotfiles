@@ -47,7 +47,7 @@ M.config = function()
             ptoggleauto = "",     -- Toggle auto preview when cursor moves
             filter = "",          -- Create new list for signed items
             filterr = "",         -- Create new list for non-signed items
-            fzffilter = "<A-f>",  -- Enter fzf mode
+            fzffilter = "Y",  -- Enter fzf mode
         },
 
         preview = {

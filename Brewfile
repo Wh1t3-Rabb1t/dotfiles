@@ -1,6 +1,2 @@
-brew "lsd"
-brew "bat"
 brew "nvim"
-brew "gitui"
-brew "btop"
 brew "broot"

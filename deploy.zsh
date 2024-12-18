@@ -17,10 +17,10 @@ XDG_STATE_HOME="${HOME}/.local/state"
 # Create required directories
 print "\nCreating required directory tree...\n"
 # zf_mkdir -p "${XDG_CONFIG_HOME}"
-zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
-zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
+zf_mkdir -p "${XDG_CACHE_HOME}/{vim/{backup,swap,undo},zsh}"
+zf_mkdir -p "${XDG_DATA_HOME}/{zsh,man/man1,vim/spell}"
 zf_mkdir -p "${XDG_STATE_HOME}"
-zf_mkdir -p "${HOME}"/.local/{bin,etc}
+zf_mkdir -p "${HOME}/.local/{bin,etc}"
 print "    ...done\n"
 
 print "################################################################################\n"
@@ -96,7 +96,7 @@ print "#########################################################################
 
 # # Set fast-syntax-highlighting theme
 # print "Setting fast-syntax-highlighting theme\n"
-# fast-theme base16
+# fast-theme zdharma
 # # fast-theme base16 &>/dev/null
 # print "    ...done\n"
 # print "################################################################################\n"
@@ -105,8 +105,7 @@ print "#########################################################################
 # Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
     print "Installing homebrew dependancies...\n"
-    cd "${SCRIPT_DIR}"/macos
-    # cd ~/.local/dotfiles/macos
+    cd "${SCRIPT_DIR}/macos"
     brew bundle
     cd ~
     print "\n    ...done\n"
@@ -130,5 +129,4 @@ print "    ██╔══██╗██╔═══██╗██╔═══
 print "    ██████╔╝██║   ██║██║     █████╔╝       "
 print "    ██╔══██╗██║   ██║██║     ██╔═██╗       "
 print "    ██║  ██║╚██████╔╝╚██████╗██║  ██╗      "
-print "    ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝      "
-print "\nType 'zsh' and press enter to restart the terminal\n"
+print "    ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝    \n"

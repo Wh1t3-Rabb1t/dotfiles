@@ -9,8 +9,8 @@ SCRIPT_DIR="${0:A:h}"
 cd "${SCRIPT_DIR}"
 
 # Default XDG paths
-XDG_CACHE_HOME="${HOME}/.cache"
 XDG_CONFIG_HOME="${HOME}/.config"
+XDG_CACHE_HOME="${HOME}/.cache"
 XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
@@ -78,8 +78,8 @@ popd
 
 print "################################################################################\n"
 
+# Generate vim help tags
 if (( ${+commands[vim]} )); then
-    # Generate vim help tags
     print "Generating vim helptags...\n"
     command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &> /dev/null
     print "    ...done\n"
@@ -102,10 +102,11 @@ print "#########################################################################
 # print "################################################################################\n"
 
 
-# Download brew dependancies
+# Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
     print "Installing homebrew dependancies...\n"
-    cd ~/.local/dotfiles
+    # cd "${SCRIPT_DIR}"/macos
+    cd ~/.local/dotfiles/macos
     brew bundle
     cd ~
     print "\n    ...done\n"

@@ -1,2 +1,0 @@
-brew "lsd"
-brew "broot"

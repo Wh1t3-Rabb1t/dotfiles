@@ -1,9 +1,10 @@
-typeset -g FAST_THEME_NAME="base16"
 
 # Highlighting plugin
 source "${ZDOTDIR}/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 
+
 # zstyle :plugin:fast-syntax-highlighting theme "base16"
+# typeset -g FAST_THEME_NAME="base16"
 
 
 # ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets regexp cursor)

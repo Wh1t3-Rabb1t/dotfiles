@@ -1,2 +1,2 @@
-brew "nvim"
+brew "lsd"
 brew "broot"

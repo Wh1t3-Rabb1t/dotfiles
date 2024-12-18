@@ -102,9 +102,12 @@ print "#########################################################################
 
 # Download brew dependancies
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
+    print "Installing homebrew dependancies...\n"
     cd ~/.local/dotfiles
     brew bundle
     cd ~
+    print "\n    ...done\n"
+    print "################################################################################\n"
 fi
 
 print " ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗ "

@@ -18,7 +18,7 @@ XDG_STATE_HOME="${HOME}/.local/state"
 print "\nCreating required directory tree...\n"
 # zf_mkdir -p "${XDG_CONFIG_HOME}"/{bat,broot/{skins,launcher/bash},btop/themes,git,gitui,karabiner/{automatic_backups,assets/complex_modifications},kitty/backgrounds,lsd,luacheck,mpv,nvim/{lua/conf/{editor,lang,tools,ui},plugins,user,util},vial,vim,zsh}
 
-zf_mkdir -p "${XDG_CONFIG_HOME}"
+# zf_mkdir -p "${XDG_CONFIG_HOME}"
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"

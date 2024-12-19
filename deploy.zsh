@@ -97,7 +97,7 @@ print "#########################################################################
 # Set fast-syntax-highlighting theme
 print "Setting fast-syntax-highlighting theme\n"
 # fast-theme zdharma
-${SHELL} -is <<<'fast-theme zdharma' &>/dev/null
+${SHELL} -is <<<'fast-theme base16' &>/dev/null
 
 # # fast-theme base16 &>/dev/null
 print "    ...done\n"

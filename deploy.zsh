@@ -18,6 +18,8 @@ XDG_STATE_HOME="${HOME}/.local/state"
 # local term_width="$(tput cols)"
 # print "################################################################################\n"
 
+local term_width="$(tput cols)"
+print "$(printf '%*s' "$term_width" | tr ' ' '#')"
 
 # Create required directories
 print "\nCreating required directory tree...\n"

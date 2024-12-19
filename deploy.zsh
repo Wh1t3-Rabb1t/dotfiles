@@ -22,7 +22,6 @@ zf_mkdir -p "${XDG_DATA_HOME}/{zsh,man/man1,vim/spell}"
 zf_mkdir -p "${XDG_STATE_HOME}"
 zf_mkdir -p "${HOME}/.local/{bin,etc}"
 print "    ...done\n"
-
 print "################################################################################\n"
 
 # Link zshenv if needed
@@ -33,14 +32,12 @@ else
     ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${ZDOTDIR:-${HOME}}/.zshenv"
     print "    ...failed to match this script dir, symlinking .zshenv\n"
 fi
-
 print "################################################################################\n"
 
 # Link configs
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
 print "    ...done\n"
-
 print "################################################################################\n"
 
 # Make sure submodules are installed
@@ -49,7 +46,6 @@ git submodule sync > /dev/null
 git submodule update --init --recursive > /dev/null
 git clean -ffd
 print "\n    ...done\n"
-
 print "################################################################################\n"
 
 print "Compiling zsh plugins...\n"
@@ -62,7 +58,6 @@ print "Compiling zsh plugins...\n"
     done
 }
 print "    ...done\n"
-
 print "################################################################################\n"
 
 print "Installing fzf...\n"
@@ -75,7 +70,6 @@ else
     print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
 fi
 popd
-
 print "################################################################################\n"
 
 # Generate vim help tags
@@ -90,19 +84,13 @@ fi
 print "Downloading gitstatusd for powerlevel10k...\n"
 ${SHELL} -is <<<'' &> /dev/null
 print "    ...done\n"
-
 print "################################################################################\n"
-
 
 # Set fast-syntax-highlighting theme
 print "Setting fast-syntax-highlighting theme\n"
-# fast-theme zdharma
 ${SHELL} -is <<<'fast-theme base16' &>/dev/null
-
-# # fast-theme base16 &>/dev/null
 print "    ...done\n"
 print "################################################################################\n"
-
 
 # Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then

@@ -22,6 +22,11 @@ https://github.com/agkozak/zsh-z
 
 ## Misc
 
+cask "font-0xproto-nerd-font"
+cask "font-meslo-for-powerlevel10k"
+
+
+
 - Broot folder view binding needs to be changed from tab to something else
 - Rework upper / lower case, dot op bindings to match nvim
 - Look into implementing gnu privacy guard and wireguard

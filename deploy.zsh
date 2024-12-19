@@ -90,7 +90,7 @@ print "    ...done\n"
 print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
 # Set fast-syntax-highlighting theme
-print "Setting fast-syntax-highlighting theme\n"
+print "Setting fast-syntax-highlighting theme...\n"
 ${SHELL} -is <<<'fast-theme base16' &>/dev/null
 print "    ...done\n"
 print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"

@@ -14,6 +14,11 @@ XDG_CACHE_HOME="${HOME}/.cache"
 XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
+
+# local term_width="$(tput cols)"
+# print "################################################################################\n"
+
+
 # Create required directories
 print "\nCreating required directory tree...\n"
 # zf_mkdir -p "${XDG_CONFIG_HOME}"

@@ -23,7 +23,7 @@ color:
   # When to colorize the output.
   # When "classic" is set, this is set to "never".
   # Possible values: never, auto, always
-  when: always
+  when: auto
   # How to colorize the output.
   # When "classic" is set, this is set to "no-color".
   # Possible values: default, custom
@@ -53,7 +53,7 @@ icons:
   # When to use icons.
   # When "classic" is set, this is set to "never".
   # Possible values: always, auto, never
-  when: always
+  when: auto
   # Which icon theme to use.
   # Possible values: fancy, unicode
   theme: fancy

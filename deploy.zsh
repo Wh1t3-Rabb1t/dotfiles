@@ -18,8 +18,8 @@ XDG_STATE_HOME="${HOME}/.local/state"
 # local term_width="$(tput cols)"
 # print "################################################################################\n"
 
+# Retrieve terminal pane width
 local term_width="$(tput cols)"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')"
 
 # Create required directories
 print "\nCreating required directory tree...\n"
@@ -29,7 +29,8 @@ zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"
 zf_mkdir -p "${HOME}"/.local/{bin,etc}
 print "    ...done\n"
-print "################################################################################\n"
+print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# print "################################################################################\n"
 
 # Link zshenv if needed
 print "Checking for ZDOTDIR env variable...\n"

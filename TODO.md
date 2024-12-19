@@ -25,7 +25,7 @@ https://github.com/agkozak/zsh-z
 cask "font-0xproto-nerd-font"
 cask "font-meslo-for-powerlevel10k"
 
-
+update nerdfont repo brew install command in README `brew install --cask font-hack-nerd-font`
 
 - Broot folder view binding needs to be changed from tab to something else
 - Rework upper / lower case, dot op bindings to match nvim

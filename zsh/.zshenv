@@ -35,25 +35,15 @@ zmodload -F zsh/files b:zf_ln b:zf_mkdir b:zf_rm
 # ╭─────╮
 # │ XDG │
 # ╰─────╯
-if [[ ! -v XDG_CONFIG_HOME ]]; then
-    export XDG_CONFIG_HOME"=${HOME}/.config"
-fi
-if [[ ! -v XDG_CACHE_HOME ]]; then
-    export XDG_CACHE_HOME="${HOME}/.cache"
-fi
-if [[ ! -v XDG_DATA_HOME ]]; then
-    export XDG_DATA_HOME="${HOME}/.local/share"
-fi
-if [[ ! -v XDG_STATE_HOME ]]; then
-    export XDG_STATE_HOME="${HOME}/.local/state"
-fi
-if [[ ! -v XDG_RUNTIME_DIR ]]; then
-    export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-${USER}"
-fi
+[[ ! -v XDG_CONFIG_HOME ]]; && export XDG_CONFIG_HOME"=${HOME}/.config"
+[[ ! -v XDG_CACHE_HOME ]]; && export XDG_CACHE_HOME="${HOME}/.cache"
+[[ ! -v XDG_DATA_HOME ]]; && export XDG_DATA_HOME="${HOME}/.local/share"
+[[ ! -v XDG_STATE_HOME ]]; && export XDG_STATE_HOME="${HOME}/.local/state"
+[[ ! -v XDG_RUNTIME_DIR ]]; && export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-${USER}"
 
+export WORKSPACE="${HOME}/workspace"
 export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export GOPATH="${XDG_DATA_HOME}/go"
-export WORKSPACE="${HOME}/workspace"
 
 
 # ╭───────╮

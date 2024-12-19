@@ -20,7 +20,8 @@ print "\nCreating required directory tree...\n"
 zf_mkdir -p "${XDG_CACHE_HOME}/{vim/{backup,swap,undo},zsh}"
 zf_mkdir -p "${XDG_DATA_HOME}/{zsh,man/man1,vim/spell}"
 zf_mkdir -p "${XDG_STATE_HOME}"
-zf_mkdir -p "${HOME}/.local/{bin,etc}"
+zf_mkdir -p "${HOME}/.local/{bin/fzf,etc}"
+# zf_mkdir -p "${HOME}/.local/{bin,etc}"
 print "    ...done\n"
 print "################################################################################\n"
 
@@ -62,10 +63,8 @@ print "#########################################################################
 
 print "Installing fzf...\n"
 pushd tools/fzf
-# if ./install --bin > /dev/null; then
-if ./install --bin; then
-    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin" "${HOME}/.local/bin/fzf"
-    # zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
+if ./install --bin > /dev/null; then
+    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
     print "\n    ...done\n"
 else

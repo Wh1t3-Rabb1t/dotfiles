@@ -97,7 +97,7 @@ lines_after_match_in_preview: 1
 # (see https://dystroy.org/broot/icons for installation and
 # troubleshooting)
 #
-icon_theme: vscode
+icon_theme: "nerdfont"
 
 ###############################################################
 # Special paths

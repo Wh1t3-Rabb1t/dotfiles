@@ -87,10 +87,10 @@ print "    ...done\n"
 print "################################################################################\n"
 
 # Set fast-syntax-highlighting theme
-print "Setting fast-syntax-highlighting theme\n"
-${SHELL} -is <<<'fast-theme base16' &>/dev/null
-print "    ...done\n"
-print "################################################################################\n"
+# print "Setting fast-syntax-highlighting theme\n"
+# ${SHELL} -is <<<'fast-theme base16' &>/dev/null
+# print "    ...done\n"
+# print "################################################################################\n"
 
 # Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then

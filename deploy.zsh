@@ -97,9 +97,10 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
 # Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
-    print "Installing homebrew dependancies...\n"
+    print "Installing homebrew dependancies and setting macos defaults...\n"
     cd "${ZDOTDIR:h}/macos"
     brew bundle
+    macos_settings.sh
     cd ~
     print "\n    ...done\n"
     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"

@@ -40,6 +40,7 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 # Link configs
 print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
+zf_ln -sfn "${SCRIPT_DIR}/vim/vimrc" "${HOME}/vimrc"
 print "    ...done\n"
 print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 

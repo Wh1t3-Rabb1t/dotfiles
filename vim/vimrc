@@ -179,205 +179,327 @@ nnoremap w.   "_dt
 nnoremap w,   "_dT
 
 
+" Dot operator / undo / redo
+" ---------------------------------------------------------------------------- "
+nnoremap -          .
+nnoremap <A-y>      u
+nnoremap <A-S-y>    U
+
+
+" Upper / lower / swap case
+" ---------------------------------------------------------------------------- "
+nnoremap _    ~
+
+vnoremap _    mmU`m
+vnoremap -    mmu`m
+
+
+" Select in word / paragraph
+" ---------------------------------------------------------------------------- "
+nnoremap <A-Right>    viw
+
+vnoremap <A-Right>    ip
+
+
+" Select in surrounding
+" ---------------------------------------------------------------------------- "
+nnoremap '    msvi'
+nnoremap "    msvi"
+nnoremap `    msvi`
+nnoremap {    msvi{
+nnoremap (    msvi(
+nnoremap [    msvi[
+nnoremap <    msvi<
+
+
+" Select bracketed code blocks
+" ---------------------------------------------------------------------------- "
+nnoremap }    msva{V
+nnoremap )    msva(V
+nnoremap ]    msva[V
+nnoremap >    msva<V
+
+
+" Copy
+" ---------------------------------------------------------------------------- "
+" To system register
+vnoremap c    mm"*y`m
+
+" Word
+nnoremap ct    mm"*yiw`m
+nnoremap cu    mm"*yb`m
+nnoremap co    "*ye
+
+" Line
+nnoremap cl    "*yy
+nnoremap c;    "*y$
+nnoremap ch    mm"*y^`m
+
+" Paragraph
+nnoremap ci    mm"*y{`m
+nnoremap ck    "*y}
+nnoremap cp    mm"*yip`m
+
+" To char
+nnoremap c.    "*yt
+nnoremap c,    "*yT
+
+
+" Cut
+" ---------------------------------------------------------------------------- "
+" To system register
+vnoremap x    "*d
+
+" Word
+nnoremap xt    "*diw
+nnoremap xu    "*db
+nnoremap xo    "*de
+
+" Line
+nnoremap xl    "*dd
+nnoremap x;    "*d$
+nnoremap xh    "*d^
+
+" Paragraph
+nnoremap xi    "*d{
+nnoremap xk    "*d}
+nnoremap xp    "*dip
+
+" To char
+nnoremap x.    "*dt
+nnoremap x,    "*dT
+
+
+" Change (all changed text is sent to the black hole register)
+" ---------------------------------------------------------------------------- "
+vnoremap y     "_c
+
+" Word
+nnoremap yt    "_ciw
+nnoremap yu    "_cb
+nnoremap yo    "_ce
+
+" Line
+nnoremap yh    "_d^i
+nnoremap y;    "_C
+nnoremap yl    ^"_C
+
+" Paragraph
+nnoremap yi    "_c{
+nnoremap yk    "_c}
+nnoremap yp    "_cip
+
+" To char
+nnoremap y.    "_ct
+nnoremap y,    "_cT
 
 
 
 
 
 
-nnoremap <A-Right> e
-nnoremap <A-Left> b
-nnoremap <Tab> ;
-nnoremap . ,
-nnoremap c "*y
-nnoremap cl "*yy
-nnoremap co "*ye
-nnoremap cu "*yb
-nnoremap c' "*y$
-nnoremap ch "*y0
-nnoremap ci "*y{
-nnoremap ck "*y}
-nnoremap s v
-nnoremap S <C-v>
-nnoremap [ vi[
-nnoremap { vi{
-nnoremap ( vi(
-nnoremap ! vi'
-nnoremap $ vi"
-nnoremap ` vi`
-nnoremap \| vi<
-nnoremap + viw
-nnoremap q :q!<CR>
-
-" Visual
-vnoremap i <Up>
-vnoremap k <Down>
-vnoremap l <Right>
-vnoremap t <Left>
-vnoremap ; g_
-vnoremap h ^
-vnoremap E {
-vnoremap D }
-vnoremap e Hzz
-vnoremap d Lzz
-" vnoremap E gg
-" vnoremap D G
-vnoremap <A-Right> e
-vnoremap <A-Left> b
-vnoremap o e
-vnoremap u b
-vnoremap <Tab> ;
-vnoremap . ,
-vnoremap c "*y
-vnoremap s V
-vnoremap S <C-v>
-vnoremap q <Esc>:q!<CR>
-
-highlight Visual ctermbg=238
-
-set ignorecase
-set hlsearch
-highlight Search cterm=NONE ctermfg=11 ctermbg=27
-
-set virtualedit=block
-set viminfo+=<0
+" ---------------------------------------------------------------------------- "
+" ---------------------------------------------------------------------------- "
+" ---------------------------------------------------------------------------- "
+" ---------------------------------------------------------------------------- "
+" ---------------------------------------------------------------------------- "
 
 
+" nnoremap <A-Right> e
+" nnoremap <A-Left> b
+" nnoremap <Tab> ;
+" nnoremap . ,
+" nnoremap c "*y
+" nnoremap cl "*yy
+" nnoremap co "*ye
+" nnoremap cu "*yb
+" nnoremap c' "*y$
+" nnoremap ch "*y0
+" nnoremap ci "*y{
+" nnoremap ck "*y}
+" nnoremap s v
+" nnoremap S <C-v>
+" nnoremap [ vi[
+" nnoremap { vi{
+" nnoremap ( vi(
+" nnoremap ! vi'
+" nnoremap $ vi"
+" nnoremap ` vi`
+" nnoremap \| vi<
+" nnoremap + viw
+" nnoremap q :q!<CR>
 
+" " Visual
+" vnoremap i <Up>
+" vnoremap k <Down>
+" vnoremap l <Right>
+" vnoremap t <Left>
+" vnoremap ; g_
+" vnoremap h ^
+" vnoremap E {
+" vnoremap D }
+" vnoremap e Hzz
+" vnoremap d Lzz
+" " vnoremap E gg
+" " vnoremap D G
+" vnoremap <A-Right> e
+" vnoremap <A-Left> b
+" vnoremap o e
+" vnoremap u b
+" vnoremap <Tab> ;
+" vnoremap . ,
+" vnoremap c "*y
+" vnoremap s V
+" vnoremap S <C-v>
+" vnoremap q <Esc>:q!<CR>
 
-
-
-" set encoding=utf-8
-" scriptencoding utf-8
-
-" if v:version < 910
-"     " Set default 'runtimepath' without ~/.vim folders
-"     let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
-"     " What is the name of the directory containing this file?
-"     let s:portable=expand('<sfile>:p:h')
-"     " Add the directory to 'runtimepath'
-"     let &runtimepath=printf('%s,%s,%s/after', s:portable, &runtimepath, s:portable)
-"     let &packpath=&runtimepath
-" endif
-
-" Use sensible XDG paths
-set viminfo='1000,n$XDG_CACHE_HOME/vim/info
-set directory=$XDG_CACHE_HOME/vim/swap//
-set undodir=$XDG_CACHE_HOME/vim/undo//
-set backupdir=$XDG_CACHE_HOME/vim/backup//
-set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
-
-" Enable backups and undo
-set backup
-set undofile
-
-set shiftround " round indent to multiple shiftwidth
-set hlsearch " highlight search results
-set ignorecase " ignore case when searching
-set smartcase " when searching try to be smart about cases
-set nowrap " don't wrap lines
-set clipboard=unnamed,unnamedplus " merge clipboard with x11 and mac
-set list listchars=tab:>-,trail:·,extends:►,precedes:◄ " indicate various special chars
-set number " show line numbers ...
-set relativenumber " ...and use relative style numbers
-set cursorline " highlight line with cursor
-set shortmess+=c " shut off completion messages
-set whichwrap+=<,>,h,l,[,] " autowrap to next line for cursor movements
-set splitbelow " when splitting windows put new ones below ...
-set splitright " ...and to the right
-set path+=** " search subfolders recursively
-set fillchars=diff:\ , " set <space> as fill character for diffs on string removal (default is <minus> char)
-
-" Scrolling
-set scrolloff=8 " start scrolling when we're 8 lines away from margins
-set sidescroll=1 " enable sidescrolling too
-set sidescrolloff=8 " start sidescrolling 8 chars away from margins
-
-" Tabs, make them 4 spaces by default
-set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-
-
-
-
-highlight Visual ctermbg=238
+" highlight Visual ctermbg=238
 
 " set ignorecase
 " set hlsearch
-highlight Search cterm=NONE ctermfg=11 ctermbg=27
+" highlight Search cterm=NONE ctermfg=11 ctermbg=27
 
-set virtualedit=block
+" set virtualedit=block
 " set viminfo+=<0
 
 
 
-" Normal
-nnoremap i <Up>
-nnoremap k <Down>
-nnoremap l <Right>
-nnoremap t <Left>
-nnoremap ' g_
-nnoremap h ^
-nnoremap I {
-nnoremap K }
-nnoremap e Hzz
-nnoremap d Lzz
-nnoremap E gg
-nnoremap D G
-nnoremap <A-Right> e
-nnoremap <A-Left> b
-nnoremap o e
-nnoremap u b
-nnoremap <Tab> ;
-nnoremap . ,
-nnoremap c "*y
-nnoremap cl "*yy
-nnoremap co "*ye
-nnoremap cu "*yb
-nnoremap c' "*y$
-nnoremap ch "*y0
-nnoremap ci "*y{
-nnoremap ck "*y}
-nnoremap s v
-nnoremap S <C-v>
-nnoremap [ vi[
-nnoremap { vi{
-nnoremap ( vi(
-nnoremap ! vi'
-nnoremap $ vi"
-nnoremap ` vi`
-nnoremap \| vi<
-nnoremap + viw
-nnoremap q :q!<CR>
 
-" Visual
-vnoremap i <Up>
-vnoremap k <Down>
-vnoremap l <Right>
-vnoremap t <Left>
-vnoremap ' g_
-vnoremap h ^
-vnoremap I {
-vnoremap K }
-vnoremap e Hzz
-vnoremap d Lzz
-vnoremap E gg
-vnoremap D G
-vnoremap <A-Right> e
-vnoremap <A-Left> b
-vnoremap o e
-vnoremap u b
-vnoremap <Tab> ;
-vnoremap . ,
-vnoremap c "*y
-vnoremap s V
-vnoremap S <C-v>
-vnoremap q <Esc>:q!<CR>
+
+
+" " set encoding=utf-8
+" " scriptencoding utf-8
+
+" " if v:version < 910
+" "     " Set default 'runtimepath' without ~/.vim folders
+" "     let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
+" "     " What is the name of the directory containing this file?
+" "     let s:portable=expand('<sfile>:p:h')
+" "     " Add the directory to 'runtimepath'
+" "     let &runtimepath=printf('%s,%s,%s/after', s:portable, &runtimepath, s:portable)
+" "     let &packpath=&runtimepath
+" " endif
+
+" " Use sensible XDG paths
+" set viminfo='1000,n$XDG_CACHE_HOME/vim/info
+" set directory=$XDG_CACHE_HOME/vim/swap//
+" set undodir=$XDG_CACHE_HOME/vim/undo//
+" set backupdir=$XDG_CACHE_HOME/vim/backup//
+" set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
+
+" " Enable backups and undo
+" set backup
+" set undofile
+
+" set shiftround " round indent to multiple shiftwidth
+" set hlsearch " highlight search results
+" set ignorecase " ignore case when searching
+" set smartcase " when searching try to be smart about cases
+" set nowrap " don't wrap lines
+" set clipboard=unnamed,unnamedplus " merge clipboard with x11 and mac
+" set list listchars=tab:>-,trail:·,extends:►,precedes:◄ " indicate various special chars
+" set number " show line numbers ...
+" set relativenumber " ...and use relative style numbers
+" set cursorline " highlight line with cursor
+" set shortmess+=c " shut off completion messages
+" set whichwrap+=<,>,h,l,[,] " autowrap to next line for cursor movements
+" set splitbelow " when splitting windows put new ones below ...
+" set splitright " ...and to the right
+" set path+=** " search subfolders recursively
+" set fillchars=diff:\ , " set <space> as fill character for diffs on string removal (default is <minus> char)
+
+" " Scrolling
+" set scrolloff=8 " start scrolling when we're 8 lines away from margins
+" set sidescroll=1 " enable sidescrolling too
+" set sidescrolloff=8 " start sidescrolling 8 chars away from margins
+
+" " Tabs, make them 4 spaces by default
+" set expandtab
+" set tabstop=4
+" set softtabstop=4
+" set shiftwidth=4
 
 
 
 
-" Source local configuration
-" runtime vimrc.local
+" highlight Visual ctermbg=238
+
+" " set ignorecase
+" " set hlsearch
+" highlight Search cterm=NONE ctermfg=11 ctermbg=27
+
+" set virtualedit=block
+" " set viminfo+=<0
+
+
+
+" " Normal
+" nnoremap i <Up>
+" nnoremap k <Down>
+" nnoremap l <Right>
+" nnoremap t <Left>
+" nnoremap ' g_
+" nnoremap h ^
+" nnoremap I {
+" nnoremap K }
+" nnoremap e Hzz
+" nnoremap d Lzz
+" nnoremap E gg
+" nnoremap D G
+" nnoremap <A-Right> e
+" nnoremap <A-Left> b
+" nnoremap o e
+" nnoremap u b
+" nnoremap <Tab> ;
+" nnoremap . ,
+" nnoremap c "*y
+" nnoremap cl "*yy
+" nnoremap co "*ye
+" nnoremap cu "*yb
+" nnoremap c' "*y$
+" nnoremap ch "*y0
+" nnoremap ci "*y{
+" nnoremap ck "*y}
+" nnoremap s v
+" nnoremap S <C-v>
+" nnoremap [ vi[
+" nnoremap { vi{
+" nnoremap ( vi(
+" nnoremap ! vi'
+" nnoremap $ vi"
+" nnoremap ` vi`
+" nnoremap \| vi<
+" nnoremap + viw
+" nnoremap q :q!<CR>
+
+" " Visual
+" vnoremap i <Up>
+" vnoremap k <Down>
+" vnoremap l <Right>
+" vnoremap t <Left>
+" vnoremap ' g_
+" vnoremap h ^
+" vnoremap I {
+" vnoremap K }
+" vnoremap e Hzz
+" vnoremap d Lzz
+" vnoremap E gg
+" vnoremap D G
+" vnoremap <A-Right> e
+" vnoremap <A-Left> b
+" vnoremap o e
+" vnoremap u b
+" vnoremap <Tab> ;
+" vnoremap . ,
+" vnoremap c "*y
+" vnoremap s V
+" vnoremap S <C-v>
+" vnoremap q <Esc>:q!<CR>
+
+
+
+
+" " Source local configuration
+" " runtime vimrc.local
+
+

@@ -332,7 +332,6 @@ nmap("xh", '"*d^')                                -- Cut to line START
 
 -- Paragraph
 nmap("xi", '"*d{')                                -- Cut paragraph UP
-
 nmap("xk", '"*d}')                                -- Cut paragraph DOWN
 nmap("xp", '"*dip')                               -- Cut in paragraph
 

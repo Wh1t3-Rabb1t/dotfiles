@@ -8,7 +8,7 @@ defaults write -g InitialKeyRepeat -int 12
 defaults write -g KeyRepeat -int 2
 
 # Disable press and hold for special characters
-defaults write -g ApplePressAndHoldEnabled -bool false
+defaults write com.apple.finder AppleShowAllFiles True
 
 # Display hidden files in Finder
 defaults write -g com.apple.finder AppleShowAllFiles -bool true

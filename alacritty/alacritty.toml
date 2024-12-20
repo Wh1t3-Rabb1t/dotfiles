@@ -1,5 +1,5 @@
-# [font.normal]
-# family = "MesloLGS NF"
+[font.normal]
+family = "MesloLGS NF"
 
-[font]
-normal = { family = "Monaco" }
+# [font]
+# normal = { family = "Monaco" }

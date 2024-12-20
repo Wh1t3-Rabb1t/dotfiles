@@ -43,64 +43,64 @@ zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
 print "    ...done\n"
 print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
-# Make sure submodules are installed
-print "Syncing submodules...\n"
-git submodule sync > /dev/null
-git submodule update --init --recursive > /dev/null
-git clean -ffd
-print "\n    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# # Make sure submodules are installed
+# print "Syncing submodules...\n"
+# git submodule sync > /dev/null
+# git submodule update --init --recursive > /dev/null
+# git clean -ffd
+# print "\n    ...done\n"
+# print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
-print "Compiling zsh plugins...\n"
-{
-    emulate -LR zsh
-    setopt local_options extended_glob
-    autoload -Uz zrecompile
-    for plugin_file in ${SCRIPT_DIR}/zsh/plugins/**/*.zsh{-theme,}(#q.); do
-        zrecompile -pq "${plugin_file}"
-    done
-}
-print "    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# print "Compiling zsh plugins...\n"
+# {
+#     emulate -LR zsh
+#     setopt local_options extended_glob
+#     autoload -Uz zrecompile
+#     for plugin_file in ${SCRIPT_DIR}/zsh/plugins/**/*.zsh{-theme,}(#q.); do
+#         zrecompile -pq "${plugin_file}"
+#     done
+# }
+# print "    ...done\n"
+# print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
-print "Installing fzf...\n"
-pushd tools/fzf
-if ./install --bin > /dev/null; then
-    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
-    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
-    print "\n    ...done\n"
-else
-    print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
-fi
-popd
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# print "Installing fzf...\n"
+# pushd tools/fzf
+# if ./install --bin > /dev/null; then
+#     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
+#     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
+#     print "\n    ...done\n"
+# else
+#     print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
+# fi
+# popd
+# print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
-# Generate vim help tags
-if (( ${+commands[vim]} )); then
-    print "Generating vim helptags...\n"
-    command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &> /dev/null
-    print "    ...done\n"
-    print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
-fi
+# # Generate vim help tags
+# if (( ${+commands[vim]} )); then
+#     print "Generating vim helptags...\n"
+#     command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &> /dev/null
+#     print "    ...done\n"
+#     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# fi
 
-# Trigger zsh run with powerlevel10k prompt to download gitstatusd
-print "Downloading gitstatusd for powerlevel10k...\n"
-${SHELL} -is <<<'' &> /dev/null
-print "    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# # Trigger zsh run with powerlevel10k prompt to download gitstatusd
+# print "Downloading gitstatusd for powerlevel10k...\n"
+# ${SHELL} -is <<<'' &> /dev/null
+# print "    ...done\n"
+# print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
-# Set fast-syntax-highlighting theme
-print "Setting fast-syntax-highlighting theme...\n"
-${SHELL} -is <<<'fast-theme base16' &>/dev/null
-print "    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# # Set fast-syntax-highlighting theme
+# print "Setting fast-syntax-highlighting theme...\n"
+# ${SHELL} -is <<<'fast-theme base16' &>/dev/null
+# print "    ...done\n"
+# print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
 # Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
     print "Installing homebrew dependancies and setting MacOs defaults...\n"
     cd "${ZDOTDIR:h}/macos"
     # brew bundle
-    $HOME/.local/dotfiles/macos/macos_settings.sh
+    $HOME/.local/dotfiles/macos/macos_settings.zsh
     cd ~
     print "\n    ...done\n"
     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"

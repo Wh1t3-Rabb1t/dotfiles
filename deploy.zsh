@@ -95,16 +95,21 @@ ${SHELL} -is <<<'fast-theme base16' &>/dev/null
 print "    ...done\n"
 print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
-# Download brew dependencies if deploying to a mac with brew enabled
-if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
-    print "Installing homebrew dependancies and setting MacOs defaults...\n"
-    brew bundle install --verbose --no-lock --file "${ZDOTDIR:h}/macos/Brewfile"
-    "${ZDOTDIR:h}/macos/macos_settings.zsh"
+# Set MacOs defaults
+if [[ "${OSTYPE}" == darwin* ]]; then
+    print "Setting MacOs defaults...\n"
+    "${XDG_CONFIG_HOME}/macos/macos_settings.zsh"
     print "\n    ...done\n"
     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 fi
 
-# cd ~
+# Download brew dependencies if brew is installed
+if (( ${+commands[brew]} )); then
+    print "Installing homebrew dependancies...\n"
+    brew bundle install --verbose --no-lock --file "${XDG_CONFIG_HOME}/macos/Brewfile"
+    print "\n    ...done\n"
+    print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+fi
 
 print " ██████╗ ███████╗ █████╗ ██████╗ ██╗   ██╗ "
 print " ██╔══██╗██╔════╝██╔══██╗██╔══██╗╚██╗ ██╔╝ "

@@ -23,7 +23,7 @@ defaults write com.apple.finder ShowPathbar True
 chflags nohidden ~/Library
 
 # Hide the Dock
-defaults write com.apple.dock autohide True
+defaults write com.apple.dock autohide -bool true
 
 # Only show active apps in the Dock
 defaults write com.apple.dock static-only True

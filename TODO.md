@@ -25,7 +25,7 @@ https://github.com/agkozak/zsh-z
 cask "font-0xproto-nerd-font"
 cask "font-meslo-for-powerlevel10k"
 cask "font-hack-nerd-font"
-HOMEBREW_CASK_OPTS="--no-quarantine"
+
 
 
 update nerdfont repo brew install command in README `brew install --cask font-hack-nerd-font`

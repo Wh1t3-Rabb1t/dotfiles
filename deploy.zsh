@@ -98,7 +98,7 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 # Download brew dependencies if deploying to a mac with brew enabled
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
     print "Installing homebrew dependancies and setting MacOs defaults...\n"
-    brew bundle install --no-quarantine --verbose --no-lock --file "${ZDOTDIR:h}/macos/Brewfile"
+    brew bundle install --verbose --no-lock --file "${ZDOTDIR:h}/macos/Brewfile"
     "${ZDOTDIR:h}/macos/macos_settings.zsh"
     print "\n    ...done\n"
     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"

@@ -8,7 +8,7 @@ defaults write -g InitialKeyRepeat -int 12
 defaults write -g KeyRepeat -int 2
 
 # Disable press and hold for special characters
-defaults write com.apple.finder AppleShowAllFiles True
+defaults write -g com.apple.finder AppleShowAllFiles -bool true
 
 # Display hidden files in Finder
 defaults write -g com.apple.finder AppleShowAllFiles -bool true
@@ -32,7 +32,7 @@ defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock show-recents -bool true
 
 # Hide the "Now Playing" menu bar item
-defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" -bool false
+# defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" -bool false
 
 # Save screenshots in the Screncaps folder
 defaults write com.apple.screencapture location ~/Documents/Screencaps

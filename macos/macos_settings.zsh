@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # Quit System Preferences so it doesn't override settings
-osascript -e 'tell application "System Preferences" to quit'
+# osascript -e 'tell application "System Preferences" to quit'
 
 # Faster key repeat
 # defaults write -g InitialKeyRepeat -int 12
@@ -11,7 +11,9 @@ osascript -e 'tell application "System Preferences" to quit'
 # defaults write -g com.apple.finder AppleShowAllFiles -bool true
 
 # Display hidden files in Finder
-defaults write -g com.apple.finder AppleShowAllFiles -bool true
+# defaults write -g com.apple.finder AppleShowAllFiles -bool true
+
+defaults write com.apple.finder AppleShowAllFiles True
 
 # # Default to the list view in Finder
 # defaults write com.apple.finder FXPreferredViewStyle Nlsv

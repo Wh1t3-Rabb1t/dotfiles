@@ -99,8 +99,8 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 if [[ "${OSTYPE}" == darwin* && -n "${commands[brew]}" ]]; then
     print "Installing homebrew dependancies and setting MacOs defaults...\n"
     cd "${ZDOTDIR:h}/macos"
-    brew bundle
-    $HOME/.local/dotfiles/macos_settings.sh
+    # brew bundle
+    $HOME/.local/dotfiles/macos/macos_settings.sh
     cd ~
     print "\n    ...done\n"
     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"

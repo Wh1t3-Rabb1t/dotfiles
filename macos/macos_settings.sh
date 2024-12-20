@@ -7,31 +7,31 @@ osascript -e 'tell application "System Preferences" to quit'
 defaults write -g InitialKeyRepeat -int 12
 defaults write -g KeyRepeat -int 2
 
-# Disable press and hold for special characters
-defaults write -g com.apple.finder AppleShowAllFiles -bool true
+# # Disable press and hold for special characters
+# defaults write -g com.apple.finder AppleShowAllFiles -bool true
 
 # Display hidden files in Finder
 defaults write -g com.apple.finder AppleShowAllFiles -bool true
 
-# Default to the list view in Finder
-defaults write com.apple.finder FXPreferredViewStyle Nlsv
+# # Default to the list view in Finder
+# defaults write com.apple.finder FXPreferredViewStyle Nlsv
 
-# Show the full path at the bottom of Finder
-defaults write com.apple.finder ShowPathbar -bool true
+# # Show the full path at the bottom of Finder
+# defaults write com.apple.finder ShowPathbar -bool true
 
-# Show all file extensions
-defaults write -g AppleShowAllExtensions -bool true
+# # Show all file extensions
+# defaults write -g AppleShowAllExtensions -bool true
 
-# Unhide the ~/Library folder
-chflags nohidden ~/Library
+# # Unhide the ~/Library folder
+# chflags nohidden ~/Library
 
-# Hide the Dock
-defaults write com.apple.dock autohide -bool true
+# # Hide the Dock
+# defaults write com.apple.dock autohide -bool true
 
-# Don't show recent apps in the Dock
-defaults write com.apple.dock show-recents -bool true
+# # Don't show recent apps in the Dock
+# defaults write com.apple.dock show-recents -bool true
 
-# Hide the "Now Playing" menu bar item
+# # Hide the "Now Playing" menu bar item
 # defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" -bool false
 
 # Save screenshots in the Screncaps folder

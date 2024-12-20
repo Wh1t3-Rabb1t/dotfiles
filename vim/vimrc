@@ -1,3 +1,252 @@
+"   ,
+"  / \               _   /\
+"  \  \          ___(_) /  \        ____
+"   \  \        /  /__ |    \      /    |
+"    \  \      /  /|  ||     \    /     |
+"     \  \    /  / |  ||  |\  \  /  /|  |
+"      \  \  /  /  |  ||  | \  \/  / |  |
+"       \  \/  /   |  ||  |  \    /  |  |
+"        \    /    |  ||  |   \__/   |  |
+"         \  /     |__||__|           \ | rc
+" ======== \/ ======================== \| =================================== "
+
+
+" Leader
+" ---------------------------------------------------------------------------- "
+let mapleader = " "
+
+
+" Insert mode
+" ---------------------------------------------------------------------------- "
+nnoremap <Esc>      i
+nnoremap <S-Esc>    I
+
+vnoremap <S-Esc>    I
+
+
+" Visual mode
+" ---------------------------------------------------------------------------- "
+nnoremap s          v
+nnoremap S          V
+nnoremap <Leader>s  <C-v>
+nnoremap <A-v>      msgv
+
+vnoremap s          v
+vnoremap S          V
+vnoremap <Leader>s  <C-v>
+vnoremap <A-v>      msgv
+vnoremap a          o
+vnoremap <Leader>a  O
+
+
+" Command line mode
+" ---------------------------------------------------------------------------- "
+cnoremap <C-BS>     <C-u>
+cnoremap <A-BS>     <C-w>
+cnoremap <A-Del>    <S-Right><C-w>
+cnoremap <A-Left>   <S-Left>
+cnoremap <A-Right>  <S-Right>
+cnoremap <S-Up>     <Up>
+cnoremap <S-Down>   <Down>
+
+
+" Arrow navigation
+" ---------------------------------------------------------------------------- "
+nnoremap i          <Up>
+nnoremap k          <Down>
+nnoremap l          <Right>
+nnoremap t          <Left>
+
+vnoremap i          <Up>
+vnoremap k          <Down>
+vnoremap l          <Right>
+vnoremap t          <Left>
+
+onoremap i          <Up>
+onoremap k          <Down>
+onoremap l          <Right>
+onoremap t          <Left>
+
+
+" Move lines up / down
+" ---------------------------------------------------------------------------- "
+nnoremap I          :m .-2<CR>==
+nnoremap K          :m .+1<CR>==
+
+vnoremap I          :m '<-2<CR>gv=gv
+vnoremap K          :m '>+1<CR>gv=gv
+
+" Indent / outdent
+" ---------------------------------------------------------------------------- "
+nnoremap L   >>
+nnoremap T   <<
+
+vnoremap L   >gv^
+vnoremap T   <gv^
+
+
+" Jump backwards / forwards by word
+" ---------------------------------------------------------------------------- "
+nnoremap o          w
+nnoremap u          b
+nnoremap O          e
+nnoremap U          ge
+
+vnoremap o          w
+vnoremap u          b
+vnoremap O          e
+vnoremap U          ge
+
+
+" Jump to start / end of line
+" ---------------------------------------------------------------------------- "
+nnoremap ;          g_
+nnoremap h          ^
+
+
+" Jump 6 lines / between blocks
+" ---------------------------------------------------------------------------- "
+nnoremap e          6k
+nnoremap d          6j
+nnoremap E          mj{
+nnoremap D          mj}
+
+vnoremap e          6k
+vnoremap d          6j
+vnoremap E          mj{
+vnoremap D          mj}
+
+
+" Scroll page up / down
+" ---------------------------------------------------------------------------- "
+nnoremap <PageUp>     <C-u>zz
+nnoremap <PageDown>   <C-d>zz
+
+vnoremap <PageUp>     <C-u>zz
+vnoremap <PageDown>   <C-d>zz
+
+
+" Scroll to top / bottom of page
+" ---------------------------------------------------------------------------- "
+nnoremap <S-PageUp>   mjgg
+nnoremap <S-PageDown> mjG
+
+vnoremap <S-PageUp>   mjgg
+vnoremap <S-PageDown> mjG
+
+
+" Delete bindings (all deletions are sent to the black hole register)
+" ---------------------------------------------------------------------------- "
+" Char
+nnoremap <BS>          "_X
+nnoremap <Del>        "_x
+
+vnoremap <BS>          "_x
+vnoremap <Del>        "_x
+
+" Word
+nnoremap <Leader><BS>          "_diw
+nnoremap <A-BS>          "_db
+nnoremap <A-Del>          "_de
+
+" Line
+nnoremap <S-Del>          "_dd
+nnoremap <C-BS>          "_d^
+nnoremap <C-Del>          "_d$
+
+
+" Delete motions
+" ---------------------------------------------------------------------------- "
+vnoremap w    "_x
+
+" Word
+nnoremap wt   "_diw
+nnoremap wo   "_de
+nnoremap wu   "_db
+
+" Line
+nnoremap wl   "_dd
+nnoremap wh   "_d^
+nnoremap w;   "_d$
+
+" Paragraph
+nnoremap wi   "_d{
+nnoremap wk   "_d}
+nnoremap wp   "_dip
+
+" To char
+nnoremap w.   "_dt
+nnoremap w,   "_dT
+
+
+
+
+
+
+
+
+nnoremap <A-Right> e
+nnoremap <A-Left> b
+nnoremap <Tab> ;
+nnoremap . ,
+nnoremap c "*y
+nnoremap cl "*yy
+nnoremap co "*ye
+nnoremap cu "*yb
+nnoremap c' "*y$
+nnoremap ch "*y0
+nnoremap ci "*y{
+nnoremap ck "*y}
+nnoremap s v
+nnoremap S <C-v>
+nnoremap [ vi[
+nnoremap { vi{
+nnoremap ( vi(
+nnoremap ! vi'
+nnoremap $ vi"
+nnoremap ` vi`
+nnoremap \| vi<
+nnoremap + viw
+nnoremap q :q!<CR>
+
+" Visual
+vnoremap i <Up>
+vnoremap k <Down>
+vnoremap l <Right>
+vnoremap t <Left>
+vnoremap ; g_
+vnoremap h ^
+vnoremap E {
+vnoremap D }
+vnoremap e Hzz
+vnoremap d Lzz
+" vnoremap E gg
+" vnoremap D G
+vnoremap <A-Right> e
+vnoremap <A-Left> b
+vnoremap o e
+vnoremap u b
+vnoremap <Tab> ;
+vnoremap . ,
+vnoremap c "*y
+vnoremap s V
+vnoremap S <C-v>
+vnoremap q <Esc>:q!<CR>
+
+highlight Visual ctermbg=238
+
+set ignorecase
+set hlsearch
+highlight Search cterm=NONE ctermfg=11 ctermbg=27
+
+set virtualedit=block
+set viminfo+=<0
+
+
+
+
+
+
 " set encoding=utf-8
 " scriptencoding utf-8
 

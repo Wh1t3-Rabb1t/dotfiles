@@ -4,14 +4,14 @@
 osascript -e 'tell application "System Preferences" to quit'
 
 # Faster key repeat
-defaults write -g InitialKeyRepeat -int 12
-defaults write -g KeyRepeat -int 2
+# defaults write -g InitialKeyRepeat -int 12
+# defaults write -g KeyRepeat -int 2
 
 # # Disable press and hold for special characters
 # defaults write -g com.apple.finder AppleShowAllFiles -bool true
 
 # Display hidden files in Finder
-defaults write -g com.apple.finder AppleShowAllFiles True
+defaults write -g com.apple.finder AppleShowAllFiles -bool true
 
 # # Default to the list view in Finder
 # defaults write com.apple.finder FXPreferredViewStyle Nlsv
@@ -35,9 +35,9 @@ defaults write -g com.apple.finder AppleShowAllFiles True
 # defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" -bool false
 
 # Save screenshots in the Screncaps folder
-defaults write com.apple.screencapture location ~/Documents/Screencaps
+# defaults write com.apple.screencapture location ~/Documents/Screencaps
 
 # See the changes
-killall Dock
+# killall Dock
 killall Finder
-killall SystemUIServer
+# killall SystemUIServer

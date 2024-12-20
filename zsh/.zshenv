@@ -60,6 +60,7 @@ fi
 export WORKSPACE="${HOME}/workspace"
 export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export GOPATH="${XDG_DATA_HOME}/go"
+export MYVIMRC="${XDG_CONFIG_HOME}/vim/vimrc"
 
 
 # ╭───────╮

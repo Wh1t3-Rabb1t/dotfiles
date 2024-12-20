@@ -11,7 +11,7 @@ defaults write -g KeyRepeat -int 2
 # defaults write -g com.apple.finder AppleShowAllFiles -bool true
 
 # Display hidden files in Finder
-defaults write -g com.apple.finder AppleShowAllFiles -bool true
+defaults write -g com.apple.finder AppleShowAllFiles True
 
 # # Default to the list view in Finder
 # defaults write com.apple.finder FXPreferredViewStyle Nlsv

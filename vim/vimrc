@@ -7,114 +7,208 @@
 "      \  \  /  /  |  ||  | \  \/  / |  |
 "       \  \/  /   |  ||  |  \    /  |  |
 "        \    /    |  ||  |   \__/   |  |
-"         \  /     |__||__|           \ | rc
+" minimal \  /     |__||__|           \ | rc
 " ======== \/ ======================== \| =================================== "
 
 
-" Leader
+" ╭────────────╮
+" │ HIGHLIGHTS │
+" ╰────────────╯
+" ---------------------------------------------------------------------------- "
+" Syntax highlighting / colorscheme
+syntax on
+colorscheme pablo
+
+" Hack to display underline in insert mode only
+autocmd InsertEnter,InsertLeave * set cul!
+
+" Disable tildes at the end of the buffer
+hi! link EndOfBuffer Ignore
+
+" Highlight on yank
+augroup highlightYankedText
+autocmd!
+autocmd TextYankPost * call FlashYankedText()
+augroup END
+
+function! FlashYankedText()
+    if (!exists('g:yankedTextMatches'))
+        let g:yankedTextMatches = []
+    endif
+
+    let matchId = matchadd('IncSearch', ".\\%>'\\[\\_.*\\%<']..")
+    let windowId = winnr()
+
+    call add(g:yankedTextMatches, [windowId, matchId])
+    call timer_start(200, 'DeleteTemporaryMatch')
+endfunction
+
+function! DeleteTemporaryMatch(timerId)
+    while !empty(g:yankedTextMatches)
+        let match = remove(g:yankedTextMatches, 0)
+        let windowID = match[0]
+        let matchID = match[1]
+
+        try
+            call matchdelete(matchID, windowID)
+        endtry
+    endwhile
+endfunction
+
+
+" ╭─────────╮
+" │ OPTIONS │
+" ╰─────────╯
+" ---------------------------------------------------------------------------- "
+set virtualedit+=block,insert,onemore
+set viminfo+=<0
+set t_Co=256                " Set 256-color support
+set ruler                   " Show cursor column / line number
+set noshowmode              " Disable mode message
+set laststatus=2            " Always show the status line
+set showcmd                 " Show incomplete commands
+set cmdheight=1             " Command line height
+set backup                  " Enable backups
+set undofile                " Enable undo
+set shiftround              " Round indent to multiple shiftwidth
+set nowrap                  " Don't wrap lines
+set number                  " Show line numbers
+set relativenumber          " Use relative line numbers
+set shortmess+=c            " Shut off completion messages
+set whichwrap+=<,>,h,l,[,]  " Autowrap to next line for cursor movements
+set splitbelow              " When splitting windows put new ones below ...
+set splitright              " ...and to the right
+set path+=**                " Search subfolders recursively
+
+" Searching
+set hlsearch                " Highlight search results
+set incsearch               " Show search matches as you type
+set ignorecase              " Ignore case when searching
+set smartcase               " When searching try to be smart about cases
+
+" Scrolling
+set scrolloff=8             " Start scrolling when we're 8 lines away from margins
+set sidescroll=1            " Enable sidescrolling too
+set sidescrolloff=8         " Start sidescrolling 8 chars away from margins
+
+" Tabs, make them 4 spaces by default
+set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+" Use XDG paths
+set viminfo='1000,n$XDG_CACHE_HOME/vim/info
+set directory=$XDG_CACHE_HOME/vim/swap//
+set undodir=$XDG_CACHE_HOME/vim/undo//
+set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
+set backupdir=$XDG_CACHE_HOME/vim/backup//
+
+
+" ╭─────────╮
+" │ KEYMAPS │
+" ╰─────────╯
 " ---------------------------------------------------------------------------- "
 let mapleader = " "
 
 
 " Insert mode
 " ---------------------------------------------------------------------------- "
-nnoremap <Esc>      i
-nnoremap <S-Esc>    I
-
-vnoremap <S-Esc>    I
+nnoremap gi           i
+nnoremap GI           I
 
 
 " Visual mode
 " ---------------------------------------------------------------------------- "
-nnoremap s          v
-nnoremap S          V
-nnoremap <Leader>s  <C-v>
-nnoremap <A-v>      msgv
+nnoremap s            v
+nnoremap S            V
+nnoremap <Leader>s    <C-v>
+nnoremap <A-v>        msgv
 
-vnoremap s          v
-vnoremap S          V
-vnoremap <Leader>s  <C-v>
-vnoremap <A-v>      msgv
-vnoremap a          o
-vnoremap <Leader>a  O
+vnoremap s            v
+vnoremap S            V
+vnoremap <Leader>s    <C-v>
+vnoremap <A-v>        msgv
+vnoremap a            o
+vnoremap <Leader>a    O
 
 
 " Command line mode
 " ---------------------------------------------------------------------------- "
-cnoremap <C-BS>     <C-u>
-cnoremap <A-BS>     <C-w>
-cnoremap <A-Del>    <S-Right><C-w>
-cnoremap <A-Left>   <S-Left>
-cnoremap <A-Right>  <S-Right>
-cnoremap <S-Up>     <Up>
-cnoremap <S-Down>   <Down>
+cnoremap <C-BS>       <C-u>
+cnoremap <A-BS>       <C-w>
+cnoremap <A-Del>      <S-Right><C-w>
+cnoremap <A-Left>     <S-Left>
+cnoremap <A-Right>    <S-Right>
+cnoremap <S-Up>       <Up>
+cnoremap <S-Down>     <Down>
 
 
 " Arrow navigation
 " ---------------------------------------------------------------------------- "
-nnoremap i          <Up>
-nnoremap k          <Down>
-nnoremap l          <Right>
-nnoremap t          <Left>
+nnoremap i            <Up>
+nnoremap k            <Down>
+nnoremap l            <Right>
+nnoremap t            <Left>
 
-vnoremap i          <Up>
-vnoremap k          <Down>
-vnoremap l          <Right>
-vnoremap t          <Left>
+vnoremap i            <Up>
+vnoremap k            <Down>
+vnoremap l            <Right>
+vnoremap t            <Left>
 
-onoremap i          <Up>
-onoremap k          <Down>
-onoremap l          <Right>
-onoremap t          <Left>
+onoremap i            <Up>
+onoremap k            <Down>
+onoremap l            <Right>
+onoremap t            <Left>
 
 
 " Move lines up / down
 " ---------------------------------------------------------------------------- "
-nnoremap I          :m .-2<CR>==
-nnoremap K          :m .+1<CR>==
+nnoremap I            :m .-2<CR>==
+nnoremap K            :m .+1<CR>==
 
-vnoremap I          :m '<-2<CR>gv=gv
-vnoremap K          :m '>+1<CR>gv=gv
+vnoremap I            :m '<-2<CR>gv=gv
+vnoremap K            :m '>+1<CR>gv=gv
 
 " Indent / outdent
 " ---------------------------------------------------------------------------- "
-nnoremap L   >>
-nnoremap T   <<
+nnoremap L            >>
+nnoremap T            <<
 
-vnoremap L   >gv^
-vnoremap T   <gv^
+vnoremap L            >gv^
+vnoremap T            <gv^
 
 
 " Jump backwards / forwards by word
 " ---------------------------------------------------------------------------- "
-nnoremap o          w
-nnoremap u          b
-nnoremap O          e
-nnoremap U          ge
+nnoremap o            w
+nnoremap u            b
+nnoremap O            e
+nnoremap U            ge
 
-vnoremap o          w
-vnoremap u          b
-vnoremap O          e
-vnoremap U          ge
+vnoremap o            w
+vnoremap u            b
+vnoremap O            e
+vnoremap U            ge
 
 
 " Jump to start / end of line
 " ---------------------------------------------------------------------------- "
-nnoremap ;          g_
-nnoremap h          ^
+nnoremap ;            g_
+nnoremap h            ^
 
 
 " Jump 6 lines / between blocks
 " ---------------------------------------------------------------------------- "
-nnoremap e          6k
-nnoremap d          6j
-nnoremap E          mj{
-nnoremap D          mj}
+nnoremap e            6k
+nnoremap d            6j
+nnoremap E            mj{
+nnoremap D            mj}
 
-vnoremap e          6k
-vnoremap d          6j
-vnoremap E          mj{
-vnoremap D          mj}
+vnoremap e            6k
+vnoremap d            6j
+vnoremap E            mj{
+vnoremap D            mj}
 
 
 " Scroll page up / down
@@ -138,60 +232,59 @@ vnoremap <S-PageDown> mjG
 " Delete bindings (all deletions are sent to the black hole register)
 " ---------------------------------------------------------------------------- "
 " Char
-nnoremap <BS>          "_X
+nnoremap <BS>         "_X
 nnoremap <Del>        "_x
 
-vnoremap <BS>          "_x
+vnoremap <BS>         "_x
 vnoremap <Del>        "_x
 
 " Word
-nnoremap <Leader><BS>          "_diw
-nnoremap <A-BS>          "_db
-nnoremap <A-Del>          "_de
+nnoremap <A-BS>       "_db
+nnoremap <A-Del>      "_de
 
 " Line
-nnoremap <S-Del>          "_dd
-nnoremap <C-BS>          "_d^
-nnoremap <C-Del>          "_d$
+nnoremap <S-Del>      "_dd
+nnoremap <C-BS>       "_d^
+nnoremap <C-Del>      "_d$
 
 
 " Delete motions
 " ---------------------------------------------------------------------------- "
-vnoremap w    "_x
+vnoremap w            "_x
 
 " Word
-nnoremap wt   "_diw
-nnoremap wo   "_de
-nnoremap wu   "_db
+nnoremap wt           "_diw
+nnoremap wo           "_de
+nnoremap wu           "_db
 
 " Line
-nnoremap wl   "_dd
-nnoremap wh   "_d^
-nnoremap w;   "_d$
+nnoremap wl           "_dd
+nnoremap wh           "_d^
+nnoremap w;           "_d$
 
 " Paragraph
-nnoremap wi   "_d{
-nnoremap wk   "_d}
-nnoremap wp   "_dip
+nnoremap wi           "_d{
+nnoremap wk           "_d}
+nnoremap wp           "_dip
 
 " To char
-nnoremap w.   "_dt
-nnoremap w,   "_dT
+nnoremap w.           "_dt
+nnoremap w,           "_dT
 
 
 " Dot operator / undo / redo
 " ---------------------------------------------------------------------------- "
-nnoremap -          .
-nnoremap <A-y>      u
-nnoremap <A-S-y>    U
+nnoremap -            .
+nnoremap <A-y>        u
+nnoremap <A-S-y>      U
 
 
 " Upper / lower / swap case
 " ---------------------------------------------------------------------------- "
-nnoremap _    ~
+nnoremap _            ~
 
-vnoremap _    mmU`m
-vnoremap -    mmu`m
+vnoremap _            mmU`m
+vnoremap -            mmu`m
 
 
 " Select in word / paragraph
@@ -203,303 +296,132 @@ vnoremap <A-Right>    ip
 
 " Select in surrounding
 " ---------------------------------------------------------------------------- "
-nnoremap '    msvi'
-nnoremap "    msvi"
-nnoremap `    msvi`
-nnoremap {    msvi{
-nnoremap (    msvi(
-nnoremap [    msvi[
-nnoremap <    msvi<
+nnoremap '            msvi'
+nnoremap "            msvi"
+nnoremap `            msvi`
+nnoremap {            msvi{
+nnoremap (            msvi(
+nnoremap [            msvi[
+nnoremap <            msvi<
 
 
 " Select bracketed code blocks
 " ---------------------------------------------------------------------------- "
-nnoremap }    msva{V
-nnoremap )    msva(V
-nnoremap ]    msva[V
-nnoremap >    msva<V
+nnoremap }            msva{V
+nnoremap )            msva(V
+nnoremap ]            msva[V
+nnoremap >            msva<V
 
 
 " Copy
 " ---------------------------------------------------------------------------- "
 " To system register
-vnoremap c    mm"*y`m
+vnoremap c            mm"*y`m
 
 " Word
-nnoremap ct    mm"*yiw`m
-nnoremap cu    mm"*yb`m
-nnoremap co    "*ye
+nnoremap ct           mm"*yiw`m
+nnoremap cu           mm"*yb`m
+nnoremap co           "*ye
 
 " Line
-nnoremap cl    "*yy
-nnoremap c;    "*y$
-nnoremap ch    mm"*y^`m
+nnoremap cl           "*yy
+nnoremap c;           "*y$
+nnoremap ch           mm"*y^`m
 
 " Paragraph
-nnoremap ci    mm"*y{`m
-nnoremap ck    "*y}
-nnoremap cp    mm"*yip`m
+nnoremap ci           mm"*y{`m
+nnoremap ck           "*y}
+nnoremap cp           mm"*yip`m
 
 " To char
-nnoremap c.    "*yt
-nnoremap c,    "*yT
+nnoremap c.           "*yt
+nnoremap c,           "*yT
 
 
 " Cut
 " ---------------------------------------------------------------------------- "
 " To system register
-vnoremap x    "*d
+vnoremap x            "*d
 
 " Word
-nnoremap xt    "*diw
-nnoremap xu    "*db
-nnoremap xo    "*de
+nnoremap xt           "*diw
+nnoremap xu           "*db
+nnoremap xo           "*de
 
 " Line
-nnoremap xl    "*dd
-nnoremap x;    "*d$
-nnoremap xh    "*d^
+nnoremap xl           "*dd
+nnoremap x;           "*d$
+nnoremap xh           "*d^
 
 " Paragraph
-nnoremap xi    "*d{
-nnoremap xk    "*d}
-nnoremap xp    "*dip
+nnoremap xi           "*d{
+nnoremap xk           "*d}
+nnoremap xp           "*dip
 
 " To char
-nnoremap x.    "*dt
-nnoremap x,    "*dT
+nnoremap x.           "*dt
+nnoremap x,           "*dT
 
 
 " Change (all changed text is sent to the black hole register)
 " ---------------------------------------------------------------------------- "
-vnoremap y     "_c
+vnoremap y            "_c
 
 " Word
-nnoremap yt    "_ciw
-nnoremap yu    "_cb
-nnoremap yo    "_ce
+nnoremap yt           "_ciw
+nnoremap yu           "_cb
+nnoremap yo           "_ce
 
 " Line
-nnoremap yh    "_d^i
-nnoremap y;    "_C
-nnoremap yl    ^"_C
+nnoremap yh           "_d^i
+nnoremap y;           "_C
+nnoremap yl           ^"_C
 
 " Paragraph
-nnoremap yi    "_c{
-nnoremap yk    "_c}
-nnoremap yp    "_cip
+nnoremap yi           "_c{
+nnoremap yk           "_c}
+nnoremap yp           "_cip
 
 " To char
-nnoremap y.    "_ct
-nnoremap y,    "_cT
+nnoremap y.           "_ct
+nnoremap y,           "_cT
 
 
-
-
-
-
+" Paste
 " ---------------------------------------------------------------------------- "
+nnoremap v            "*]P'
+vnoremap v            "_d"*P'
+cnoremap <A-v>        <C-r>*
+
+
+" Open / join lines
 " ---------------------------------------------------------------------------- "
+" `<C-o>` in insert mode sends a single normal
+" mode cmd then returns back to insert
+nnoremap <CR>         o<C-o>mo<Esc>`o
+nnoremap <S-CR>       O<C-o>mo<Esc>`o
+nnoremap j            J
+
+vnoremap j            J
+
+
+" Navigate `f` and `/` search results
 " ---------------------------------------------------------------------------- "
+nnoremap .            ;
+nnoremap n            mnn
+nnoremap N            mnN
+nnoremap *            mn*
+nnoremap #            mn#
+
+vnoremap .            ;
+vnoremap n            mnn
+vnoremap N            mnN
+vnoremap *            mn*
+vnoremap #            mn#
+
+
+" Quit (never quit)
 " ---------------------------------------------------------------------------- "
-" ---------------------------------------------------------------------------- "
-
-
-" nnoremap <A-Right> e
-" nnoremap <A-Left> b
-" nnoremap <Tab> ;
-" nnoremap . ,
-" nnoremap c "*y
-" nnoremap cl "*yy
-" nnoremap co "*ye
-" nnoremap cu "*yb
-" nnoremap c' "*y$
-" nnoremap ch "*y0
-" nnoremap ci "*y{
-" nnoremap ck "*y}
-" nnoremap s v
-" nnoremap S <C-v>
-" nnoremap [ vi[
-" nnoremap { vi{
-" nnoremap ( vi(
-" nnoremap ! vi'
-" nnoremap $ vi"
-" nnoremap ` vi`
-" nnoremap \| vi<
-" nnoremap + viw
-" nnoremap q :q!<CR>
-
-" " Visual
-" vnoremap i <Up>
-" vnoremap k <Down>
-" vnoremap l <Right>
-" vnoremap t <Left>
-" vnoremap ; g_
-" vnoremap h ^
-" vnoremap E {
-" vnoremap D }
-" vnoremap e Hzz
-" vnoremap d Lzz
-" " vnoremap E gg
-" " vnoremap D G
-" vnoremap <A-Right> e
-" vnoremap <A-Left> b
-" vnoremap o e
-" vnoremap u b
-" vnoremap <Tab> ;
-" vnoremap . ,
-" vnoremap c "*y
-" vnoremap s V
-" vnoremap S <C-v>
-" vnoremap q <Esc>:q!<CR>
-
-" highlight Visual ctermbg=238
-
-" set ignorecase
-" set hlsearch
-" highlight Search cterm=NONE ctermfg=11 ctermbg=27
-
-" set virtualedit=block
-" set viminfo+=<0
-
-
-
-
-
-
-" " set encoding=utf-8
-" " scriptencoding utf-8
-
-" " if v:version < 910
-" "     " Set default 'runtimepath' without ~/.vim folders
-" "     let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
-" "     " What is the name of the directory containing this file?
-" "     let s:portable=expand('<sfile>:p:h')
-" "     " Add the directory to 'runtimepath'
-" "     let &runtimepath=printf('%s,%s,%s/after', s:portable, &runtimepath, s:portable)
-" "     let &packpath=&runtimepath
-" " endif
-
-" " Use sensible XDG paths
-" set viminfo='1000,n$XDG_CACHE_HOME/vim/info
-" set directory=$XDG_CACHE_HOME/vim/swap//
-" set undodir=$XDG_CACHE_HOME/vim/undo//
-" set backupdir=$XDG_CACHE_HOME/vim/backup//
-" set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
-
-" " Enable backups and undo
-" set backup
-" set undofile
-
-" set shiftround " round indent to multiple shiftwidth
-" set hlsearch " highlight search results
-" set ignorecase " ignore case when searching
-" set smartcase " when searching try to be smart about cases
-" set nowrap " don't wrap lines
-" set clipboard=unnamed,unnamedplus " merge clipboard with x11 and mac
-" set list listchars=tab:>-,trail:·,extends:►,precedes:◄ " indicate various special chars
-" set number " show line numbers ...
-" set relativenumber " ...and use relative style numbers
-" set cursorline " highlight line with cursor
-" set shortmess+=c " shut off completion messages
-" set whichwrap+=<,>,h,l,[,] " autowrap to next line for cursor movements
-" set splitbelow " when splitting windows put new ones below ...
-" set splitright " ...and to the right
-" set path+=** " search subfolders recursively
-" set fillchars=diff:\ , " set <space> as fill character for diffs on string removal (default is <minus> char)
-
-" " Scrolling
-" set scrolloff=8 " start scrolling when we're 8 lines away from margins
-" set sidescroll=1 " enable sidescrolling too
-" set sidescrolloff=8 " start sidescrolling 8 chars away from margins
-
-" " Tabs, make them 4 spaces by default
-" set expandtab
-" set tabstop=4
-" set softtabstop=4
-" set shiftwidth=4
-
-
-
-
-" highlight Visual ctermbg=238
-
-" " set ignorecase
-" " set hlsearch
-" highlight Search cterm=NONE ctermfg=11 ctermbg=27
-
-" set virtualedit=block
-" " set viminfo+=<0
-
-
-
-" " Normal
-" nnoremap i <Up>
-" nnoremap k <Down>
-" nnoremap l <Right>
-" nnoremap t <Left>
-" nnoremap ' g_
-" nnoremap h ^
-" nnoremap I {
-" nnoremap K }
-" nnoremap e Hzz
-" nnoremap d Lzz
-" nnoremap E gg
-" nnoremap D G
-" nnoremap <A-Right> e
-" nnoremap <A-Left> b
-" nnoremap o e
-" nnoremap u b
-" nnoremap <Tab> ;
-" nnoremap . ,
-" nnoremap c "*y
-" nnoremap cl "*yy
-" nnoremap co "*ye
-" nnoremap cu "*yb
-" nnoremap c' "*y$
-" nnoremap ch "*y0
-" nnoremap ci "*y{
-" nnoremap ck "*y}
-" nnoremap s v
-" nnoremap S <C-v>
-" nnoremap [ vi[
-" nnoremap { vi{
-" nnoremap ( vi(
-" nnoremap ! vi'
-" nnoremap $ vi"
-" nnoremap ` vi`
-" nnoremap \| vi<
-" nnoremap + viw
-" nnoremap q :q!<CR>
-
-" " Visual
-" vnoremap i <Up>
-" vnoremap k <Down>
-" vnoremap l <Right>
-" vnoremap t <Left>
-" vnoremap ' g_
-" vnoremap h ^
-" vnoremap I {
-" vnoremap K }
-" vnoremap e Hzz
-" vnoremap d Lzz
-" vnoremap E gg
-" vnoremap D G
-" vnoremap <A-Right> e
-" vnoremap <A-Left> b
-" vnoremap o e
-" vnoremap u b
-" vnoremap <Tab> ;
-" vnoremap . ,
-" vnoremap c "*y
-" vnoremap s V
-" vnoremap S <C-v>
-" vnoremap q <Esc>:q!<CR>
-
-
-
-
-" " Source local configuration
-" " runtime vimrc.local
-
+nnoremap <A-q>        :qa<CR>
+nnoremap QQ           :qa!<CR>
 

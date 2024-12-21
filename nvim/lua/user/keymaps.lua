@@ -192,7 +192,6 @@ vmap("<BS>",         '"_x')                       -- Delete visual selection
 nvmap("<Del>",       '"_x')                       -- Delete forwards
 
 -- Word
-nmap("<Leader><BS>", '"_diw')                     -- Delete in word
 nmap("<A-BS>",       '"_db')                      -- Delete word LEFT
 nmap("<A-Del>",      '"_de')                      -- Delete word RIGHT
 imap("<A-BS>", function()                         -- Delete word LEFT

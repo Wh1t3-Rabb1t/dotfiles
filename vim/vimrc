@@ -202,13 +202,13 @@ nnoremap h            ^
 " ---------------------------------------------------------------------------- "
 nnoremap e            6k
 nnoremap d            6j
-nnoremap E            mj{
-nnoremap D            mj}
+nnoremap E            ms{
+nnoremap D            ms}
 
-vnoremap e            6k
+vnoremap e            6j
 vnoremap d            6j
-vnoremap E            mj{
-vnoremap D            mj}
+vnoremap E            ms{
+vnoremap D            ms}
 
 
 " Scroll page up / down
@@ -222,11 +222,11 @@ vnoremap <PageDown>   <C-d>zz
 
 " Scroll to top / bottom of page
 " ---------------------------------------------------------------------------- "
-nnoremap <S-PageUp>   mjgg
-nnoremap <S-PageDown> mjG
+nnoremap <S-PageUp>   msgg
+nnoremap <S-PageDown> msG
 
-vnoremap <S-PageUp>   mjgg
-vnoremap <S-PageDown> mjG
+vnoremap <S-PageUp>   msgg
+vnoremap <S-PageDown> msG
 
 
 " Delete bindings (all deletions are sent to the black hole register)
@@ -412,6 +412,7 @@ nnoremap n            mnn
 nnoremap N            mnN
 nnoremap *            mn*
 nnoremap #            mn#
+nnoremap ?            :set hlsearch!<CR>
 
 vnoremap .            ;
 vnoremap n            mnn
@@ -420,8 +421,17 @@ vnoremap *            mn*
 vnoremap #            mn#
 
 
+" Jump to mark `s`
+" ---------------------------------------------------------------------------- "
+nnoremap b            `s
+
+
+" Save
+" ---------------------------------------------------------------------------- "
+nnoremap <A-s>        :w<CR>
+
+
 " Quit (never quit)
 " ---------------------------------------------------------------------------- "
 nnoremap <A-q>        :qa<CR>
 nnoremap QQ           :qa!<CR>
-

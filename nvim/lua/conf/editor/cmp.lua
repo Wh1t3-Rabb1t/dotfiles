@@ -6,6 +6,14 @@
 
 local M = {}
 
+-- CMP CMD LINE KEYS
+--------------------------------------------------------------------------------
+M.cmd_line_keys = {
+    "/",
+    ":",
+}
+
+
 -- CMD LINE CONFIG
 --------------------------------------------------------------------------------
 function M.cmd_line_config()
@@ -205,28 +213,28 @@ function M.config()
 
         -- Sources for autocompletion
         sources = require("cmp").config.sources({
-            {   ------------------------------------- Snippet engine
+            {   -- Snippet engine
                 name = "luasnip",
                 group_index = 1,
             },
-            {   ------------------------------------- LSP signatures
+            {   -- LSP signatures
                 name = "nvim_lsp_signature_help",
                 group_index = 2,
             },
-            {   ------------------------------------- LSP
+            {   -- LSP
                 name = "nvim_lsp",
                 group_index = 3,
             },
-            {   ------------------------------------- Vim api
+            {   -- Vim api
                 name = "nvim_lua",
                 group_index = 4,
             },
-            {   ------------------------------------- File system paths
+            {   -- File system paths
                 name = "path",
                 group_index = 5,
                 max_item_count = 10,
             },
-            {   ------------------------------------- Text within current buffer
+            {   -- Text within current buffer
                 name = "buffer",
                 group_index = 6,
                 max_item_count = 10,
@@ -240,14 +248,14 @@ function M.config()
                     end
                 }
             },
-            {   ------------------------------------- `rg` files in cwd
+            {   -- `rg` files in cwd
                 name = "rg",
                 group_index = 7,
                 max_item_count = 5,
                 keyword_length = 3,
                 dup = 0,
             },
-            {   ------------------------------------- Spelling (vim.o.spell must be `true` to work)
+            {   -- Spelling (vim.o.spell must be `true` to work)
                 name = "spell",
                 group_index = 8,
                 max_item_count = 10,

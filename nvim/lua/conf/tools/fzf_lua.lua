@@ -7,6 +7,54 @@
 
 local M = {}
 
+-- KEYS
+--------------------------------------------------------------------------------
+M.keys = {
+    {
+        mode = { "n" },
+        "<Leader>f",
+        "<cmd>FzfLua files<CR>",
+        desc = "Search files in cwd"
+    },
+    {
+        mode = { "n" },
+        "<A-f>",
+        function()
+            -- Use `blines` in place of rg when searching man pages
+            vim.cmd(vim.bo.filetype == "man" and
+                "FzfLua blines" or
+                "FzfLua lgrep_curbuf"
+            )
+        end,
+        desc = "Grep current buffer"
+    },
+    {
+        mode = { "n" },
+        "<A-g>",
+        "<cmd>FzfLua live_grep_native<CR>",
+        desc = "Grep cwd"
+    },
+    {
+        mode = { "v" },
+        "<A-f>",
+        "<cmd>FzfLua grep_visual<CR>",
+        desc = "Grep visual selection"
+    },
+    {
+        mode = { "n" },
+        "<A-S-f>",
+        "<cmd>FzfLua blines<CR>",
+        desc = "Fzy search current buffer"
+    },
+    {
+        mode = { "n" },
+        "<A-'>",
+        "<cmd>FzfLua buffers<CR>",
+        desc = "Search open buffers"
+    }
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()

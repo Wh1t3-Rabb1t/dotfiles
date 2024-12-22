@@ -7,6 +7,41 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    git_added = "",
+    git_modified = "M",
+    git_deleted = "",
+    git_renamed = "",
+    git_untracked = "U",
+    git_ignored = "I",
+    git_unstaged = "",
+    git_staged = "",
+    git_conflict = "",
+    dir_closed = "",
+    dir_open = "",
+    dir_empty = "",
+    modified = "",
+    vline = "│",
+    vline_bottom_left_corner = "└",
+    expander_closed = "› ",
+    expander_open = "⌄",
+}
+
+
+-- KEYS
+--------------------------------------------------------------------------------
+M.keys = {
+    {
+        mode = { "n" },
+        "<End>",
+        "<cmd>Neotree reveal<CR>",
+        desc = "Toggle Neotree"
+    }
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +49,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").neotree
     require("neo-tree").setup({
         close_if_last_window = true,
         popup_border_style = "rounded",

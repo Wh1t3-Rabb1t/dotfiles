@@ -14,15 +14,14 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").gitsigns
     require("gitsigns").setup({
         signs = {
-            add = { text = icons.add },
-            change = { text = icons.change },
-            delete = { text = icons.delete },
-            topdelete = { text = icons.topdelete },
-            changedelete = { text = icons.changedelete },
-            untracked = { text = icons.untracked },
+            add = { text = "+" },
+            change = { text = "~" },
+            delete = { text = "_" },
+            topdelete = { text = "‾" },
+            changedelete = { text = "~" },
+            untracked = { text = "┆" },
         },
 
         signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`

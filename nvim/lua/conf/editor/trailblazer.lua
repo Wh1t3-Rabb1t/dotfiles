@@ -7,6 +7,23 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    mark = "⚑",
+}
+
+
+-- KEYS
+--------------------------------------------------------------------------------
+M.keys = {
+    "<Leader>b",
+    "<A-b>",
+    "b",
+    "B",
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +31,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").trailblazer
     require("trailblazer").setup({
         lang = "en",
         auto_save_trailblazer_state_on_exit = false,

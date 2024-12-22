@@ -33,12 +33,8 @@ return {
     {
         "ibhagwan/fzf-lua",
         cmd = "FzfLua",
-        -- dependencies = "nvim-tree/nvim-web-devicons",
-        dependencies = {
-            "nvim-tree/nvim-web-devicons",
-            "MeanderingProgrammer/render-markdown.nvim",
-        },
-        keys = require("conf.keys").fzflua,
+        dependencies = "nvim-tree/nvim-web-devicons",
+        keys = require("conf.tools.fzf_lua").keys,
         config = require("conf.tools.fzf_lua").config,
     },
 
@@ -49,7 +45,7 @@ return {
         dependencies = "nvim-tree/nvim-web-devicons",
         opts = { scope = "git" },  -- Also try out "git_branch"
         cmd = "Grapple",
-        keys = require("conf.keys").grapple,
+        keys = require("conf.tools.grapple").keys,
         config = require("conf.tools.grapple").config,
     },
 
@@ -62,7 +58,7 @@ return {
             "ibhagwan/fzf-lua",
         },
         event = "UiEnter",
-        keys = require("conf.keys").legendary,
+        keys = require("conf.tools.legendary").keys,
         config = require("conf.tools.legendary").config,
     },
 
@@ -91,7 +87,7 @@ return {
     {
         "chrisgrieser/nvim-rip-substitute",
         cmd = "RipSubstitute",
-        keys = require("conf.keys").rip_substitute,
+        keys = require("conf.tools.rip_substitute").keys,
         config = require("conf.tools.rip_substitute").config,
     }
 }

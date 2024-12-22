@@ -16,7 +16,7 @@ return {
             "nvim-tree/nvim-web-devicons",
         },
         cmd = "AerialOpen",
-        init = require("conf.keys").aerial(),  -- Hack to simulate `keys` table
+        init = require("conf.ui.aerial").init,
         config = require("conf.ui.aerial").config,
     },
 
@@ -32,7 +32,7 @@ return {
                 return "VeryLazy"
             end
         end,
-        init = require("conf.keys").barbar(),  -- Hack to simulate `keys` table
+        init = require("conf.ui.barbar").init,
         config = require("conf.ui.barbar").config,
     },
 
@@ -52,7 +52,7 @@ return {
         "Bekaboo/dropbar.nvim",
         dependencies = "nvim-tree/nvim-web-devicons",
         event = "VeryLazy",
-        keys = require("conf.keys").dropbar,
+        keys = require("conf.ui.dropbar").keys,
         config = require("conf.ui.dropbar").config,
     },
 
@@ -117,7 +117,7 @@ return {
             "MunifTanjim/nui.nvim",
         },
         cmd = "Neotree",
-        keys = require("conf.keys").neotree,
+        keys = require("conf.ui.neotree").keys,
         config = require("conf.ui.neotree").config,
     },
 

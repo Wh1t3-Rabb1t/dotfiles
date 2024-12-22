@@ -19,7 +19,6 @@
 
 -- USER SETTINGS
 --------------------------------------------------------------------------------
-require("user.user_cmds")
 require("user.auto_cmds")
 require("user.keymaps")
 require("user.options")

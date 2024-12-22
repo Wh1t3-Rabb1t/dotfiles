@@ -7,6 +7,24 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    E = "󰅚 ",
+    W = "󰀪 ",
+    I = " ",
+    N = " ",
+    H = " ",
+    vert = "┃",
+    strong_header = "━",
+    strong_cross = "╋",
+    strong_end = "┫",
+    soft_header = "╌",
+    soft_cross = "╂",
+    soft_end = "┨",
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +32,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").quicker
     require("quicker").setup({
         -- Local options to set for quickfix
         opts = {

@@ -7,14 +7,95 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    separator = "│",
+    modified = "●",
+    pinned = "",
+}
+
+
+-- INIT
+--------------------------------------------------------------------------------
+local util = require("util.utils")
+local map = require("util.utils").map
+function M.init()
+    local tag = require("grapple")
+
+    -- Navigate tabs
+    map("n", "<C-PageDown>", function()
+        -- Prevent bug when tab switching with a single help page open
+        if vim.bo.filetype ~= "help" then
+            vim.cmd("BufferNext")
+        end
+    end, {
+        desc = "Next tab"
+    })
+    map("n", "<C-PageUp>", function()
+        -- Prevent bug when tab switching with a single help page open
+        if vim.bo.filetype ~= "help" then
+            vim.cmd("BufferPrevious")
+        end
+    end, {
+        desc = "Previous tab"
+    })
+
+    -- Rearrange tabs
+    map("n", "<C-S-PageDown>", function()
+        -- Prevent reordering of pinned tabs
+        if type(tag.name_or_index()) ~= "number" then
+            vim.cmd("BufferMoveNext")
+        end
+    end, {
+        desc = "Swap tab with next tab"
+    })
+    map("n", "<C-S-PageUp>", function()
+        -- Prevent reordering of pinned tabs
+        if type(tag.name_or_index()) ~= "number" then
+            vim.cmd("BufferMovePrevious")
+        end
+    end, {
+        desc = "Swap tab with previous tab"
+    })
+
+    -- Close tabs
+    map("n", "<A-w>", function()
+        if type(tag.name_or_index()) == "number" then
+            vim.cmd("Grapple toggle")
+            vim.cmd("BufferClose")
+            util.sync_grapple_and_barbar_indexes()
+        else
+            vim.cmd("BufferClose")
+        end
+    end, {
+        desc = "Close focused tab"
+    })
+end
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
     local status_ok = pcall(require, "barbar")
     if not status_ok then return end
 
+    -- Save barbar tab order in session file
+    vim.api.nvim_create_user_command(
+        "Mksession",
+        function(attr)
+            vim.api.nvim_exec_autocmds("User", { pattern = "SessionSavePre" })
+            vim.cmd.mksession { bang = attr.bang, args = attr.fargs }
+        end,
+        {
+            bang = true,
+            complete = "file",
+            desc = "Save barbar with :mksession",
+            nargs = "?"
+        }
+    )
+
     -- Setup
-    local icons = require("util.icons").barbar
     require("barbar").setup({
         animation = false,                     -- Enable/disable animations
         tabpages = true,                       -- Toggle tabpages indicator (top right corner)
@@ -50,7 +131,7 @@ function M.config()
             inactive = {
                 separator = {
                     left = "",
-                    right = "│",  -- 'required' icon doesn't load on UiEnter event
+                    right = icons.separator,
                 }
             }
         },

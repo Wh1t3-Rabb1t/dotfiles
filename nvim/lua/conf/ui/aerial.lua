@@ -7,6 +7,26 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    mid_item = "├─",
+    last_item = "└─",
+    nested_top = "│ ",
+    whitespace = "  ",
+}
+
+
+-- INIT
+--------------------------------------------------------------------------------
+local map = require("util.utils").map
+function M.init()
+    map("n", "<A-a>", "<cmd>AerialOpen<CR>", {
+        desc = "Toggle Aerial"
+    })
+end
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +34,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").aerial
     require("aerial").setup({
         -- Priority list of preferred backends for aerial
         backends = { "treesitter", "lsp", "markdown", "asciidoc", "man" },

@@ -7,6 +7,144 @@
 
 local M = {}
 
+-- KEYS
+--------------------------------------------------------------------------------
+M.keys = {
+
+    -- Change
+    {                                     -- ''
+        mode = { "n" },
+        "<Leader>'",
+        "<Plug>(nvim-surround-change)'",
+        desc = "Change SURROUNDING ''"
+    },
+    {                                     -- ""
+        mode = { "n" },
+        '<Leader>"',
+        '<Plug>(nvim-surround-change)"',
+        desc = 'Change SURROUNDING ""'
+    },
+    {                                     -- ``
+        mode = { "n" },
+        "<Leader>`",
+        "<Plug>(nvim-surround-change)`",
+        desc = "Change SURROUNDING ``"
+    },
+    {                                     -- {}
+        mode = { "n" },
+        "<Leader>{",
+        "<Plug>(nvim-surround-change){",
+        desc = "Change SURROUNDING {}"
+    },
+    {                                     -- ()
+        mode = { "n" },
+        "<Leader>(",
+        "<Plug>(nvim-surround-change)(",
+        desc = "Change SURROUNDING ()"
+    },
+    {                                     -- []
+        mode = { "n" },
+        "<Leader>[",
+        "<Plug>(nvim-surround-change)[",
+        desc = "Change SURROUNDING []"
+    },
+    {                                     -- <>
+        mode = { "n" },
+        "<Leader><",
+        "<Plug>(nvim-surround-change)<",
+        desc = "Change SURROUNDING <>"
+    },
+
+    -- Delete
+    {                                     -- ''
+        mode = { "n" },
+        "<Leader>''",
+        "<Plug>(nvim-surround-delete)'",
+        desc = "Delete SURROUNDING ''"
+    },
+    {                                     -- ""
+        mode = { "n" },
+        '<Leader>""',
+        '<Plug>(nvim-surround-delete)"',
+        desc = 'Delete SURROUNDING ""'
+    },
+    {                                     -- ``
+        mode = { "n" },
+        "<Leader>``",
+        "<Plug>(nvim-surround-delete)`",
+        desc = "Delete SURROUNDING ``"
+    },
+    {                                     -- {}
+        mode = { "n" },
+        "<Leader>{{",
+        "<Plug>(nvim-surround-delete){",
+        desc = "Delete SURROUNDING {}"
+    },
+    {                                     -- ()
+        mode = { "n" },
+        "<Leader>((",
+        "<Plug>(nvim-surround-delete)(",
+        desc = "Delete SURROUNDING ()"
+    },
+    {                                     -- []
+        mode = { "n" },
+        "<Leader>[[",
+        "<Plug>(nvim-surround-delete)[",
+        desc = "Delete SURROUNDING []"
+    },
+    {                                     -- <>
+        mode = { "n" },
+        "<Leader><<",
+        "<Plug>(nvim-surround-delete)<",
+        desc = "Delete SURROUNDING <>"
+    },
+
+    -- Add (visual mode)
+    {                                     -- ''
+        mode = { "v" },
+        "'",
+        "<Plug>(nvim-surround-visual)'",
+        desc = "Add SURROUNDING ''"
+    },
+    {                                     -- ""
+        mode = { "v" },
+        '"',
+        '<Plug>(nvim-surround-visual)"',
+        desc = 'Add SURROUNDING ""'
+    },
+    {                                     -- ``
+        mode = { "v" },
+        "`",
+        "<Plug>(nvim-surround-visual)`",
+        desc = "Add SURROUNDING ``"
+    },
+    {                                     -- {}
+        mode = { "v" },
+        "{",
+        "<Plug>(nvim-surround-visual){",
+        desc = "Add SURROUNDING {}"
+    },
+    {                                     -- ()
+        mode = { "v" },
+        "(",
+        "<Plug>(nvim-surround-visual)(",
+        desc = "Add SURROUNDING ()"
+    },
+    {                                     -- []
+        mode = { "v" },
+        "[",
+        "<Plug>(nvim-surround-visual)[",
+        desc = "Add SURROUNDING []"
+    },
+    {                                     -- <>
+        mode = { "v" },
+        "<",
+        "<Plug>(nvim-surround-visual)<",
+        desc = "Add SURROUNDING <>"
+    }
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()

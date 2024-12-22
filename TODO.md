@@ -6,7 +6,6 @@
 
 
 https://github.com/mafredri/zsh-async
-https://github.com/hlissner/zsh-autopair
 https://github.com/junegunn/fzf-git.sh
 https://github.com/rs/curlie
 https://github.com/davecheney/httpstat
@@ -31,16 +30,13 @@ cask "font-hack-nerd-font"
 update nerdfont repo brew install command in README `brew install --cask font-hack-nerd-font`
 
 
-- Broot folder view binding needs to be changed from tab to something else
 - Rework upper / lower case, dot op bindings to match nvim
 - Look into implementing gnu privacy guard and wireguard
 - Implement substitute binding
-- Implement zplugins as submodules in the main config dir
 - Fix mass rename function to work with regex (double quote param expansion of the sed line may be the problem)
 - Implement registers
 - Add checks in .zshrc to ensure certain directories and env variables exist to prevent bugs when initializing a new system
 
-- Create a dedicated git repo for backup files / deprecated code
 - Configure git in ~/.gitconfig
 - Set Rg search highlight colors
 - Set fzf env variables in ~/.config/fzf

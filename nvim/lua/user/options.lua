@@ -7,32 +7,31 @@
 
 -- See: `:help vim.o`
 
-local icons = require("util.icons").options
 local options = {
     -- A -----------------------------------------------------------------------
-    autoindent = true,  -- Match indentation level when opening new lines
+    autoindent = true,       -- Match indentation level when opening new lines
 
     -- B -----------------------------------------------------------------------
-    backup = false,      -- Make a persistent backup before overwriting a file
-    breakindent = true,  -- Wrapped lines match indentation level
+    backup = false,          -- Make a persistent backup before overwriting a file
+    breakindent = true,      -- Wrapped lines match indentation level
 
     -- C -----------------------------------------------------------------------
-    cmdheight = 1,         -- Command line height
-    conceallevel = 0,      -- Make `` is visible in markdown files
-    cursorline = true,     -- Highlight the current line
-    cursorcolumn = false,  -- Highlight the current column
+    cmdheight = 1,           -- Command line height
+    conceallevel = 0,        -- Make `` is visible in markdown files
+    cursorline = true,       -- Highlight the current line
+    cursorcolumn = false,    -- Highlight the current column
 
     -- E -----------------------------------------------------------------------
-    equalalways = false,  -- Prevent window resizing when closing splits
-    expandtab = true,     -- Convert tabs to spaces
+    equalalways = false,     -- Prevent window resizing when closing splits
+    expandtab = true,        -- Convert tabs to spaces
 
     -- F -----------------------------------------------------------------------
     fileencoding = "utf-8",  -- The encoding written to a file
     fillchars = {
         eob = " ",           -- Hide the tildes on empty lines
-        foldclose = icons.foldclose,
-        foldopen = icons.foldopen,
-        foldsep = icons.foldsep,
+        foldclose = "󰅂",
+        foldopen = "󰅀",
+        foldsep = "│",
     },
     fixendofline = false,    -- Add a line break to the EOF if missing
     foldclose = "all",       -- Automatically close folds when not under the cursor
@@ -40,27 +39,28 @@ local options = {
     foldmethod = "manual",   -- Must be "manual" or "marker" for fold motions to work
 
     -- H -----------------------------------------------------------------------
-    hlsearch = true,  -- Highlight all search pattern matches
+    hlsearch = true,         -- Highlight all search pattern matches
 
     -- I -----------------------------------------------------------------------
-    ignorecase = true,  -- Ignore case in search patterns
+    ignorecase = true,       -- Ignore case in search patterns
+    incsearch = true,        -- Highlight search matches as you type
 
     -- L -----------------------------------------------------------------------
-    linebreak = true,  -- Don't split words when wrapping lines
+    linebreak = true,        -- Don't split words when wrapping lines
 
     -- M -----------------------------------------------------------------------
-    matchpairs = "(:),{:},[:],<:>",  -- Add `<>` to pair matching motions
-    mouse = "nv",                    -- Enable mouse in normal & visual mode
+    matchpairs = "(:),{:},[:],<:>",
+    mouse = "nv",
 
     -- N -----------------------------------------------------------------------
-    number = true,    -- Set numbered lines
-    numberwidth = 4,  -- Set number column width to 4
+    number = true,           -- Set numbered lines
+    numberwidth = 4,         -- Set number column width to 4
 
     -- P -----------------------------------------------------------------------
-    pumheight = 10,  -- Pop up menu height
+    pumheight = 10,          -- Pop up menu height
 
     -- R -----------------------------------------------------------------------
-    relativenumber = true,  -- Set relative numbered lines
+    relativenumber = true,   -- Set relative numbered lines
 
     -- S -----------------------------------------------------------------------
     scrolloff = 8,           -- Number of lines to keep above and below the cursor
@@ -76,7 +76,7 @@ local options = {
         "help",              -- The help window
     },
     shiftwidth = 4,          -- The number of spaces inserted for each indentation
-    showbreak = icons.sb,    -- Icon shown at the beginning of wrapped lines
+    showbreak = "󰌑 ",        -- Icon shown at the beginning of wrapped lines
     showmode = false,        -- Hide current mode
     showtabline = 1,         -- Show tabline if there are at least two tab pages
     sidescrolloff = 8,       -- Number of columns either side of cursor if wrap is off
@@ -95,26 +95,26 @@ local options = {
     swapfile = false,        -- Disable swapfiles
 
     -- T -----------------------------------------------------------------------
-    tabstop = 4,           -- Insert 4 spaces for a tab
-    termguicolors = true,  -- Set term gui colors (most terminals support this)
-    timeout = true,        -- Cancel key sequence after "timeoutlen" if true
-    timeoutlen = 420,      -- Time to wait for a key sequence to complete (in ms)
+    tabstop = 4,             -- Insert 4 spaces for a tab
+    termguicolors = true,    -- Set term gui colors (most terminals support this)
+    timeout = true,          -- Cancel key sequence after "timeoutlen" if true
+    timeoutlen = 420,        -- Time to wait for a key sequence to complete (in ms)
 
     -- U -----------------------------------------------------------------------
-    undofile = false,   -- Disable persistent undo caching
-    updatetime = 4000,  -- If idle for this time write swap file (4000ms default)
+    undofile = false,        -- Disable persistent undo caching
+    updatetime = 4000,       -- If idle for this time write swap file (4000ms default)
 
     -- V -----------------------------------------------------------------------
     virtualedit = {
-        "onemore",  -- Allow cursor to sit on the end of the line
-        "block",    -- Allow cursor to move anywhere in visual block mode
-        "insert",   -- Allow cursor to move anywhere in insert mode
+        "onemore",           -- Allow cursor to sit on the end of the line
+        "block",             -- Allow cursor to move anywhere in visual block mode
+        "insert",            -- Allow cursor to move anywhere in insert mode
     },
 
     -- W -----------------------------------------------------------------------
-    whichwrap = "bshl",  -- Which "horizontal" keys can to travel to prev/next line
-    wrap = true,         -- Break lines that extend beyond the window boundary
-    writebackup = true,  -- Make a temporary backup before overwriting a file
+    whichwrap = "bshl",      -- Which "horizontal" keys can to travel to prev/next line
+    wrap = true,             -- Break lines that extend beyond the window boundary
+    writebackup = true,      -- Make a temporary backup before overwriting a file
 }
 
 for k, v in pairs(options) do

@@ -7,6 +7,15 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    fold_closed = "",
+    fold_open = "",
+    icon = "│",
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +23,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").glance
     local actions = require("glance").actions
     require("glance").setup({
         height = 18,  -- Height of the window

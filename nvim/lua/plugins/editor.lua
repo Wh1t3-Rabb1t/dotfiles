@@ -20,7 +20,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "numToStr/Comment.nvim",
-        keys = require("conf.keys").comment,
+        keys = require("conf.editor.comment").keys,
         opts = require("conf.editor.comment").opts,
     },
 
@@ -47,7 +47,7 @@ return {
             },
             {
                 "hrsh7th/cmp-cmdline",               -- Command line completion
-                keys = require("conf.keys").cmd_line_keys,
+                keys = require("conf.editor.cmp").cmd_line_keys,
                 config = require("conf.editor.cmp").cmd_line_config,
             }
         },
@@ -58,7 +58,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "monaqa/dial.nvim",
-        init = require("conf.keys").dial(),
+        init = require("conf.editor.dial").init,
         config = require("conf.editor.dial").config,
     },
 
@@ -67,7 +67,7 @@ return {
     {
         "smoka7/hop.nvim",
         version = "*",
-        keys = require("conf.keys").hop,
+        keys = require("conf.editor.hop").keys,
         config = require("conf.editor.hop").config,
     },
 
@@ -77,7 +77,7 @@ return {
         "ecthelionvi/NeoComposer.nvim",
         dependencies = "kkharji/sqlite.lua",
         cmd = "ClearNeoComposer",  -- Allow Legendary to call if not loaded
-        keys = require("conf.keys").neocomposer,
+        keys = require("conf.editor.neocomposer").keys,
         config = require("conf.editor.neocomposer").config,
     },
 
@@ -85,7 +85,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "chrisgrieser/nvim-spider",
-        keys = require("conf.keys").spider,
+        keys = require("conf.editor.spider").keys,
         config = true,
     },
 
@@ -94,7 +94,7 @@ return {
     {
         "kylechui/nvim-surround",
         version = "*",  -- Use for stability. Use 'main' branch for latest features
-        keys = require("conf.keys").surround,
+        keys = require("conf.editor.surround").keys,
         config = require("conf.editor.surround").config,
     },
 
@@ -102,7 +102,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "LeonHeidelbach/trailblazer.nvim",
-        keys = require("conf.keys").trailblazer,
+        keys = require("conf.editor.trailblazer").keys,
         config = require("conf.editor.trailblazer").config,
     }
 }

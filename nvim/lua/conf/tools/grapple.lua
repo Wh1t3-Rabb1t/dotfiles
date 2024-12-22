@@ -7,6 +7,82 @@
 
 local M = {}
 
+-- KEYS
+--------------------------------------------------------------------------------
+local util = require("util.utils")
+M.keys = {
+    {
+        mode = { "n" },
+        "<Leader>g",
+        function()
+            vim.cmd("Grapple toggle")
+            util.sync_grapple_and_barbar_indexes()
+        end,
+        desc = "󰛢 Toggle Grapple tag on current buffer"
+    },
+    {
+        mode = { "n" },
+        "G",
+        "<cmd>Grapple toggle_tags<CR>",
+        desc = "󰛢 Open Grapple tags window"
+    },
+    {
+        mode = { "n" },
+        "<Leader>1",
+        "<cmd>Grapple select index=1<CR>",
+        desc = "󰛢 Select Grapple tag #1"
+    },
+    {
+        mode = { "n" },
+        "<Leader>2",
+        "<cmd>Grapple select index=2<CR>",
+        desc = "󰛢 Select Grapple tag #2"
+    },
+    {
+        mode = { "n" },
+        "<Leader>3",
+        "<cmd>Grapple select index=3<CR>",
+        desc = "󰛢 Select Grapple tag #3"
+    },
+    {
+        mode = { "n" },
+        "<Leader>4",
+        "<cmd>Grapple select index=4<CR>",
+        desc = "󰛢 Select Grapple tag #4"
+    },
+    {
+        mode = { "n" },
+        "<Leader>5",
+        "<cmd>Grapple select index=5<CR>",
+        desc = "󰛢 Select Grapple tag #5"
+    },
+    {
+        mode = { "n" },
+        "<Leader>6",
+        "<cmd>Grapple select index=6<CR>",
+        desc = "󰛢 Select Grapple tag #6"
+    },
+    {
+        mode = { "n" },
+        "<Leader>7",
+        "<cmd>Grapple select index=7<CR>",
+        desc = "󰛢 Select Grapple tag #7"
+    },
+    {
+        mode = { "n" },
+        "<Leader>8",
+        "<cmd>Grapple select index=8<CR>",
+        desc = "󰛢 Select Grapple tag #8"
+    },
+    {
+        mode = { "n" },
+        "<Leader>9",
+        "<cmd>Grapple select index=9<CR>",
+        desc = "󰛢 Select Grapple tag #9"
+    }
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +90,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local util = require("util.utils")
     require("grapple").setup({
         scope = "git",               -- Default scope to use when managing Grapple tags
         scopes = {},                 -- User-defined scopes or overrides

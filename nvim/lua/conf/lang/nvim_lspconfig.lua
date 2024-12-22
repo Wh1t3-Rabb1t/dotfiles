@@ -14,24 +14,23 @@ function M.config()
     if not status_ok then return end
 
     local lsp = require("lspconfig")
-    local icons = require("util.icons").diagnostics
 
     -- Icons for diagnostic errors
     ----------------------------------------------------------------------------
     vim.fn.sign_define("DiagnosticSignError", {
-        text = icons.error,
+        text =  "",
         texthl = "DiagnosticSignError"
     })
     vim.fn.sign_define("DiagnosticSignWarn", {
-        text = icons.warn,
+        text = "",
         texthl = "DiagnosticSignWarn"
     })
     vim.fn.sign_define("DiagnosticSignInfo", {
-        text = icons.info,
+        text = "",
         texthl = "DiagnosticSignInfo"
     })
     vim.fn.sign_define("DiagnosticSignHint", {
-        text = icons.hint,
+        text = "",
         texthl = "DiagnosticSignHint"
     })
 

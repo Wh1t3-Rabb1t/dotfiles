@@ -16,7 +16,7 @@
 -- INSERT MODE
 -- VISUAL MODE
 -- COMMAND LINE MODE
--- IKLT NAVIGATION
+-- ARROW NAVIGATION
 -- MOVE LINES UP / DOWN
 -- INDENT / OUTDENT
 -- JUMP BACKWARDS / FORWARDS BY WORD
@@ -36,7 +36,7 @@
 -- CHANGE
 -- PASTE
 -- OPEN / JOIN LINES
--- NAVIGATING `f` and `/` SEARCH RESULTS
+-- NAVIGATE `f` and `/` SEARCH RESULTS
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
@@ -103,7 +103,7 @@ cmap("<S-Up>",    "<Up>")                         -- Scroll UP cmd history
 cmap("<S-Down>",  "<Down>")                       -- Scroll DOWN cmd history
 
 
--- IKLT NAVIGATION
+-- ARROW NAVIGATION
 --------------------------------------------------------------------------------
 nvomap("t", "h")                                  -- Move cursor LEFT
 nvomap("i", "v:count == 0 ? 'gk' : 'k'", {        -- Move cursor UP
@@ -383,7 +383,7 @@ nmap("<S-CR>", "O<C-o>mo<Esc>`o")                 -- New line ABOVE
 nvmap("j",     "J")                               -- Join lines
 
 
--- NAVIGATING `f` and `/` SEARCH RESULTS
+-- NAVIGATE `f` and `/` SEARCH RESULTS
 --------------------------------------------------------------------------------
 nvmap(".", ";")                                   -- Next f search result
 nvmap("n", "mnn")                                 -- Next / search result
@@ -503,7 +503,7 @@ nimap("<A-s>", function()                         -- Save changes
 end)
 
 
--- QUIT
+-- QUIT (never quit)
 --------------------------------------------------------------------------------
 nvmap("QQ", "<cmd>qa!<CR>")                       -- Force quit nvim
 nmap("<A-q>", function()                          -- Quit and save session

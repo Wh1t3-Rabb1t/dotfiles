@@ -7,6 +7,16 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    done_icon = "✔",
+    group_separator = "---",
+    icon_separator = " ",
+    moon = { "🌑", "🌘", "🌗", "🌖", "🌕", "🌔", "🌓", "🌒" },
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +24,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").fidget
     require("fidget").setup({
 
         -- Options related to LSP progress subsystem
@@ -44,7 +53,7 @@ function M.config()
                 progress_ttl = math.huge,        -- How long message's persist when in progress
                 progress_icon =                  -- Icon shown when LSP progress tasks are in progress
                 {
-                    pattern = { "🌑", "🌘", "🌗", "🌖", "🌕", "🌔", "🌓", "🌒" },
+                    pattern = icons.moon,
                     period = 1
                 },
 
@@ -96,11 +105,11 @@ function M.config()
 
             -- Options related to how notifications are rendered as text
             view = {
-                stack_upwards = true,                            -- Display notifications bottom to top
-                icon_separator = icons.icon_separator,           -- Separator between group name and icon
-                group_separator = icons.group_separator,         -- Separator between notification groups
-                group_separator_hl = "DiagnosticSignWarn",       -- Hl group used for group separator
-                render_message =                                 -- How to render notification messages
+                stack_upwards = true,                       -- Display notifications bottom to top
+                icon_separator = icons.icon_separator,      -- Separator between group name and icon
+                group_separator = icons.group_separator,    -- Separator between notification groups
+                group_separator_hl = "DiagnosticSignWarn",  -- Hl group used for group separator
+                render_message =                            -- How to render notification messages
                 function(msg, cnt)
                     return cnt == 1 and msg or string.format("(%dx) %s", cnt, msg)
                 end
@@ -124,12 +133,8 @@ function M.config()
         -- Options related to integrating with other plugins
         ------------------------------------------------------------------------
         integration = {
-            ["nvim-tree"] = {
-                enable = true  -- Integrate with nvim-tree/nvim-tree.lua (if installed)
-            },
-            ["xcodebuild-nvim"] = {
-                enable = true  -- Integrate with wojciech-kulik/xcodebuild.nvim (if installed)
-            }
+            ["nvim-tree"] = { enable = true },
+            ["xcodebuild-nvim"] = { enable = true }
         },
 
         -- Options related to logging

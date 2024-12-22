@@ -7,6 +7,35 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    prompt = "LGD  ",
+    col_separator_char = "│",
+    command = "",
+    fn = "󰡱",
+    itemgroup = "",
+}
+
+
+-- KEYS
+--------------------------------------------------------------------------------
+M.keys = {
+    {
+        mode = { "n", "v" },
+        "p",
+        "<cmd>Legendary<CR>",
+        desc = "Launch Legendary"
+    },
+    {
+        mode = { "n", "v" },
+        "<Leader>p",
+        "<cmd>LegendaryRepeat<CR>",
+        desc = "Repeat last Legendary command"
+    }
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +43,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").legendary
     local win = require("util.window")
     require("legendary").setup({
         keymaps = {
@@ -334,6 +362,17 @@ function M.config()
             {
                 "<cmd>windo wincmd K<CR>",
                 desc = " Set splits layout to HORIZONTAL"
+            },
+
+            -- Highlight cursor column
+            --------------------------------------------------------------------
+            {
+                "<cmd>set colorcolumn=80<CR>",
+                desc = "Set highlight at 80th column"
+            },
+            {
+                '<cmd>set colorcolumn=""<CR>',
+                desc = "Disable highlight at 80th column"
             },
 
             -- Misc

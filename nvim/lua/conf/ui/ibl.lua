@@ -13,7 +13,7 @@ function M.config()
     local status_ok = pcall(require, "ibl")
     if not status_ok then return end
 
-    local colors = require("util.colors").ibl
+    local colors = require("catppuccin.palettes").get_palette()
     local highlight = {
         "RainbowRed",
         "RainbowYellow",
@@ -28,13 +28,13 @@ function M.config()
     -- are reset every time the colorscheme changes.
     local hooks = require("ibl.hooks")
     hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-        vim.api.nvim_set_hl(0, "RainbowRed", { fg = colors.red })
+        vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#e78284" })
         vim.api.nvim_set_hl(0, "RainbowYellow", { fg = colors.yellow })
         vim.api.nvim_set_hl(0, "RainbowBlue", { fg = colors.blue })
-        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = colors.orange })
+        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = colors.peach })
         vim.api.nvim_set_hl(0, "RainbowGreen", { fg = colors.green })
-        vim.api.nvim_set_hl(0, "RainbowViolet", { fg = colors.violet })
-        vim.api.nvim_set_hl(0, "RainbowCyan", { fg = colors.cyan })
+        vim.api.nvim_set_hl(0, "RainbowViolet", { fg = colors.sapphire })
+        vim.api.nvim_set_hl(0, "RainbowCyan", { fg = colors.surface0 })
     end)
 
     vim.g.rainbow_delimiters = { highlight = highlight }

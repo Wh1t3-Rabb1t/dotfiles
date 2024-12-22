@@ -7,6 +7,15 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    package_installed = "✓",
+    package_pending = "➜",
+    package_uninstalled = "✗",
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
@@ -14,7 +23,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local icons = require("util.icons").mason
     require("mason").setup({
         ui = {
             check_outdated_packages_on_open = true,

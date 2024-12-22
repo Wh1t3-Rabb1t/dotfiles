@@ -7,13 +7,54 @@
 
 local M = {}
 
+-- ICONS
+--------------------------------------------------------------------------------
+local icons = {
+    heading1 = "󰉫 ",
+    heading2 = "󰉬 ",
+    heading3 = "󰉭 ",
+    heading4 = "󰉮 ",
+    heading5 = "󰉯 ",
+    heading6 = "󰉰 ",
+    signs = "󰫎 ",
+    above_heading = "▄",
+    below_heading = "▀",
+    above_code = "▄",
+    below_code = "▀",
+    bullet_circle_full = "●",
+    bullet_circle_empty = "○",
+    bullet_diamond_full = "◆",
+    bullet_diamond_empty = "◇",
+    checkbox_checked = "󰄱 ",
+    checkbox_unchecked = "󰱒 ",
+    todo_raw = "[-]",
+    todo_rendered = "󰥔 ",
+    block_quote = "▋",
+    border_chars = {
+        '┌', '┬', '┐',
+        '├', '┼', '┤',
+        '└', '┴', '┘',
+        '│', '─',
+    },
+    alignment_icon = "━",
+    callout_note = "󰋽 Note",
+    callout_tip = "󰌶 Tip",
+    callout_important = "󰅾 Important",
+    callout_warning = "󰀪 Warning",
+    callout_caution = "󰳦 Caution",
+    link_image = "󰥶 ",
+    link_email = "󰀓 ",
+    link_hyperlink = "󰌹 ",
+    link_wiki = "󱗖 ",
+    link_web = "󰖟 ",
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
     local status_ok = pcall(require, "render-markdown")
     if not status_ok then return end
-
-    local icons = require("util.icons").render_markdown
 
     -- Setup
     require("render-markdown").setup({

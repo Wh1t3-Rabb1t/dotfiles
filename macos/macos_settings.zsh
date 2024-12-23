@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-# Enable
-dsenableroot
-
 # Quit System Preferences so it doesn't override settings
 osascript -e 'tell application "System Preferences" to quit'
 
@@ -10,7 +7,7 @@ osascript -e 'tell application "System Preferences" to quit'
 defaults write -g InitialKeyRepeat -int 15
 defaults write -g KeyRepeat -int 2
 
-defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I am invincible!"
+sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I am invincible!"
 
 # Display hidden files in Finder
 defaults write com.apple.finder AppleShowAllFiles True
@@ -44,6 +41,3 @@ defaults write com.apple.screencapture location ~/Documents/screenshots
 killall Dock
 killall Finder
 killall SystemUIServer
-
-# Disable (Default)
-dsenableroot -d

@@ -1,5 +1,5 @@
 brew "lsd"
 brew "broot"
 brew "coreutils"
-cask "alacritty"
+cask "hammerspoon"
 cask "font-meslo-for-powerlevel10k"

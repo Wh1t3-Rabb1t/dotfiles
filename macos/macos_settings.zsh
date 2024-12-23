@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 
+# https://git.herrbischoff.com/awesome-macos-command-line/about/
+
 # Quit System Preferences so it doesn't override settings
 osascript -e 'tell application "System Preferences" to quit'
 
 # Fastest key repeat settings
 defaults write -g InitialKeyRepeat -int 15
 defaults write -g KeyRepeat -int 2
-
-sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I am invincible!"
 
 # Display hidden files in Finder
 defaults write com.apple.finder AppleShowAllFiles True
@@ -36,6 +36,12 @@ defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
 
 # Save screenshots in the "screenshots" folder
 defaults write com.apple.screencapture location ~/Documents/screenshots
+
+# Set lock screen message
+sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!"
+
+# Hammerspoon XDG compliance
+defaults write org.hammerspoon.Hammerspoon MJConfigFile "$HOME/.config/hammerspoon/init.lua"
 
 # See the changes
 killall Dock

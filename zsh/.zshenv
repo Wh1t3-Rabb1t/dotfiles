@@ -5,7 +5,6 @@
 #  /___|___/_| |_|\___|_| |_|\_/
 #==============================================================================#
 
-
 # Determine own path if ZDOTDIR isn't set or home symlink exists
 if [[ -z "${ZDOTDIR}" || -L "${HOME}/.zshenv" ]]; then
     local homezshenv="${HOME}/.zshenv"
@@ -50,12 +49,6 @@ fi
 if [[ ! -v XDG_RUNTIME_DIR ]]; then
     export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-${USER}"
 fi
-
-# [[ ! -v XDG_CONFIG_HOME ]]; && export XDG_CONFIG_HOME"=${HOME}/.config"
-# [[ ! -v XDG_CACHE_HOME ]]; && export XDG_CACHE_HOME="${HOME}/.cache"
-# [[ ! -v XDG_DATA_HOME ]]; && export XDG_DATA_HOME="${HOME}/.local/share"
-# [[ ! -v XDG_STATE_HOME ]]; && export XDG_STATE_HOME="${HOME}/.local/state"
-# [[ ! -v XDG_RUNTIME_DIR ]]; && export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-${USER}"
 
 export WORKSPACE="${HOME}/workspace"
 export ZSCRIPTDIR="${ZDOTDIR}/zscripts"

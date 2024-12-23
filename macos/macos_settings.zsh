@@ -4,7 +4,7 @@
 osascript -e 'tell application "System Preferences" to quit'
 
 # Faster key repeat
-defaults write -g InitialKeyRepeat -int 12
+defaults write -g InitialKeyRepeat -int 15
 defaults write -g KeyRepeat -int 2
 
 # Display hidden files in Finder
@@ -41,3 +41,4 @@ defaults write com.apple.screencapture location ~/Documents/Screencaps
 killall Dock
 killall Finder
 killall SystemUIServer
+killall -u $USER cfprefsd

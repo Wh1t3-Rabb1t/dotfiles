@@ -16,12 +16,6 @@ defaults write com.apple.finder FXPreferredViewStyle Nlsv
 # Show the full path at the bottom of Finder
 defaults write com.apple.finder ShowPathbar True
 
-# Show all file extensions
-# defaults write -g AppleShowAllExtensions -bool true
-
-# Unhide the ~/Library folder
-chflags nohidden ~/Library
-
 # Hide the Dock
 defaults write com.apple.dock autohide -bool true
 
@@ -29,7 +23,7 @@ defaults write com.apple.dock autohide -bool true
 defaults write com.apple.dock static-only True
 
 # Don't show recent apps in the Dock
-# defaults write com.apple.dock show-recents -bool true
+defaults write com.apple.dock show-recents -bool true
 
 # Hide the "Now Playing" menu bar item
 defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
@@ -41,4 +35,3 @@ defaults write com.apple.screencapture location ~/Documents/Screencaps
 killall Dock
 killall Finder
 killall SystemUIServer
-killall -u $USER cfprefsd

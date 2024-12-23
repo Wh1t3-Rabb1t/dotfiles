@@ -3,7 +3,7 @@
 #  |_  / __| '_ \ / _ \ '_ \ \ / /
 #   / /\__ \ | | |  __/ | | \ V /
 #  /___|___/_| |_|\___|_| |_|\_/
-#==============================================================================#
+# ============================================================================ #
 
 # Determine own path if ZDOTDIR isn't set or home symlink exists
 if [[ -z "${ZDOTDIR}" || -L "${HOME}/.zshenv" ]]; then
@@ -18,9 +18,8 @@ export DOTFILES="${ZDOTDIR:h}"
 unsetopt GLOBAL_RCS
 
 
-# ╭──────────╮
-# │ ZMODLOAD │
-# ╰──────────╯
+# ZMODLOAD
+# ---------------------------------------------------------------------------- #
 # Enable profiling, if requested via env var
 # do `ZSH_ZPROF_ENABLE=1 exec zsh`
 if [[ -v ZSH_ZPROF_ENABLE ]]; then
@@ -31,9 +30,8 @@ fi
 zmodload -F zsh/files b:zf_ln b:zf_mkdir b:zf_rm
 
 
-# ╭─────╮
-# │ XDG │
-# ╰─────╯
+# XDG
+# ---------------------------------------------------------------------------- #
 if [[ ! -v XDG_CONFIG_HOME ]]; then
     export XDG_CONFIG_HOME"=${HOME}/.config"
 fi
@@ -55,9 +53,8 @@ export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export GOPATH="${XDG_DATA_HOME}/go"
 
 
-# ╭───────╮
-# │ PATHS │
-# ╰───────╯
+# PATHS
+# ---------------------------------------------------------------------------- #
 # Add custom functions and completions
 fpath=(${ZDOTDIR}/fpath ${fpath})
 
@@ -99,9 +96,8 @@ MANPATH="${XDG_DATA_HOME}/man:${MANPATH}"
 path=(${GOPATH}/bin ${path})
 
 
-# ╭────────╮
-# │ EDITOR │
-# ╰────────╯
+# EDITOR
+# ---------------------------------------------------------------------------- #
 # Prefer nvim over vim
 if (( ${+commands[nvim]} )); then
     export EDITOR="nvim"

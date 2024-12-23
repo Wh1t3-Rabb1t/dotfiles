@@ -5,19 +5,30 @@
 # Quit System Preferences so it doesn't override settings
 osascript -e 'tell application "System Preferences" to quit'
 
+# KEYBOARD
+# ---------------------------------------------------------------------------- #
 # Fastest key repeat settings
-defaults write -g InitialKeyRepeat -int 15
+defaults write -g InitialKeyRepeat -int 10
 defaults write -g KeyRepeat -int 2
 
+# Disable press-and-hold for keys in favor of key repeat
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+
+
+# FINDER
+# ---------------------------------------------------------------------------- #
 # Display hidden files in Finder
 defaults write com.apple.finder AppleShowAllFiles True
-
-# Default to the list view in Finder
-defaults write com.apple.finder FXPreferredViewStyle Nlsv
 
 # Show the full path at the bottom of Finder
 defaults write com.apple.finder ShowPathbar True
 
+# Default to the list view in Finder
+defaults write com.apple.finder FXPreferredViewStyle Nlsv
+
+
+# DOCK
+# ---------------------------------------------------------------------------- #
 # Show Dock instantly on mouse-over
 defaults write com.apple.dock autohide-time-modifier -float 0.4
 defaults write com.apple.dock autohide-delay -float 0
@@ -31,11 +42,15 @@ defaults write com.apple.dock show-recents -bool true
 # Hide the Dock
 defaults write com.apple.dock autohide -bool true
 
+
+# MISC
+# ---------------------------------------------------------------------------- #
 # Hide the "Now Playing" menu bar item
 defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
 
 # Save screenshots in the "screenshots" folder
 defaults write com.apple.screencapture location ~/Documents/screenshots
+defaults write com.apple.screencapture type -string "png"
 
 # Set lock screen message
 sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!"
@@ -43,7 +58,14 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "
 # Hammerspoon XDG compliance
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "$HOME/.config/hammerspoon/init.lua"
 
+# Hide apple folders / unhide Library
+chflags hidden ~/{Movies,Music,Pictures,Public}
+chflags nohidden ~/Library
+
 # See the changes
 killall Dock
 killall Finder
 killall SystemUIServer
+
+# Launch Hammerspoon
+open -a "Hammerspoon"

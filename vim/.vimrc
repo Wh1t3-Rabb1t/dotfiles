@@ -20,7 +20,7 @@ syntax on
 colorscheme pablo
 
 " Hack to display underline in insert mode only
-autocmd InsertEnter,InsertLeave * set cul!
+" autocmd InsertEnter,InsertLeave * set cul!
 
 " Disable tildes at the end of the buffer
 hi! link EndOfBuffer Ignore
@@ -105,11 +105,11 @@ set softtabstop=4
 set shiftwidth=4
 
 " Use XDG paths
-set viminfo='1000,n$XDG_CACHE_HOME/vim/info
-set directory=$XDG_CACHE_HOME/vim/swap//
-set undodir=$XDG_CACHE_HOME/vim/undo//
-set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
-set backupdir=$XDG_CACHE_HOME/vim/backup//
+" set viminfo='1000,n$XDG_CACHE_HOME/vim/info
+" set directory=$XDG_CACHE_HOME/vim/swap//
+" set undodir=$XDG_CACHE_HOME/vim/undo//
+" set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
+" set backupdir=$XDG_CACHE_HOME/vim/backup//
 
 
 " ╭─────────╮
@@ -257,6 +257,9 @@ nnoremap <C-Del>      "_d$
 
 " Delete motions
 " ---------------------------------------------------------------------------- "
+nnoremap w            <Nop>
+
+" Visual selection
 vnoremap w            "_x
 
 " Word
@@ -322,6 +325,8 @@ nnoremap >            msva<V
 
 " Copy
 " ---------------------------------------------------------------------------- "
+nnoremap c            <Nop>
+
 " To system register
 vnoremap c            mm"*y`m
 
@@ -347,6 +352,8 @@ nnoremap c,           "*yT
 
 " Cut
 " ---------------------------------------------------------------------------- "
+nnoremap x            <Nop>
+
 " To system register
 vnoremap x            "*d
 
@@ -372,6 +379,9 @@ nnoremap x,           "*dT
 
 " Change (all changed text is sent to the black hole register)
 " ---------------------------------------------------------------------------- "
+nnoremap y            <Nop>
+
+" Visual selection
 vnoremap y            "_c
 
 " Word

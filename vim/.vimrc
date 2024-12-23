@@ -60,6 +60,13 @@ endfunction
 " │ OPTIONS │
 " ╰─────────╯
 " ---------------------------------------------------------------------------- "
+" Set cursor style based on current mode
+let &t_SI = "\e[5 q"
+let &t_EI = "\e[2 q"
+let &t_SR = "\e[3 q"
+let &t_ti .= "\e[2 q"
+let &t_te .= "\e[3 q"
+
 set virtualedit+=block,insert,onemore
 set viminfo+=<0
 set t_Co=256                " Set 256-color support

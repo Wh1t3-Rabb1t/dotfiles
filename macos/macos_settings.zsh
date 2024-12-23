@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 # https://git.herrbischoff.com/awesome-macos-command-line/about/
+# https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
 
 # Quit System Preferences so it doesn't override settings
 osascript -e 'tell application "System Preferences" to quit'
@@ -8,7 +9,7 @@ osascript -e 'tell application "System Preferences" to quit'
 # KEYBOARD
 # ---------------------------------------------------------------------------- #
 # Fastest key repeat settings
-defaults write -g InitialKeyRepeat -int 10
+defaults write -g InitialKeyRepeat -int 15
 defaults write -g KeyRepeat -int 2
 
 # Disable press-and-hold for keys in favor of key repeat
@@ -53,14 +54,13 @@ defaults write com.apple.screencapture location ~/Documents/screenshots
 defaults write com.apple.screencapture type -string "png"
 
 # Set lock screen message
-sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!"
+sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
 
 # Hammerspoon XDG compliance
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "$HOME/.config/hammerspoon/init.lua"
 
-# Hide apple folders / unhide Library
+# Hide apple folders
 chflags hidden ~/{Movies,Music,Pictures,Public}
-chflags nohidden ~/Library
 
 # See the changes
 killall Dock

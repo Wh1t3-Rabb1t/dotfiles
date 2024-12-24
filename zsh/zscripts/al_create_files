@@ -1,7 +1,11 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Create new files (can create multiple files at once).                        #
+# Create files. Pass multiple arguments to create multiple files.              #
+# ---------------------------------------------------------------------------- #
+# Arguments : File name / names                                                #
+# Globals   : None                                                             #
+# Outputs   : New file / files in cwd                                          #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

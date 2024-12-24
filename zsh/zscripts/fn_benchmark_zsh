@@ -4,6 +4,10 @@
 # Benchmark zsh startup time.                                                  #
 # https://stevenvanbael.com/profiling-zsh-startup                              #
 # ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : None                                                             #
+# Outputs   : List of 10 zsh start time benchmark results                      #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 

@@ -1,7 +1,11 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Jump up any number of directories.                                           #
+# Jump up any number of directories in the tree.                               #
+# ---------------------------------------------------------------------------- #
+# Arguments : Number of directories to traverse upwards in the tree / None     #
+# Globals   : None                                                             #
+# Outputs   : Change cwd to target directory                                   #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

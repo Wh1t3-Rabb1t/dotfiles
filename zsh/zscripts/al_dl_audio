@@ -1,8 +1,12 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Download an opus file with the desired name as the first arg,                #
-# and the url as the second arg.                                               #
+# Download an audio file in opus format from a youtube video.                  #
+# ---------------------------------------------------------------------------- #
+# Argument 1 : Newly created file name                                         #
+# Argument 2 : URL                                                             #
+# Globals    : None                                                            #
+# Outputs    : Standard yt-dlp output                                          #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

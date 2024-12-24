@@ -1,12 +1,17 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Create a git repo in the cwd.                                                #
+# Create a new git repo in the cwd.                                            #
+# ---------------------------------------------------------------------------- #
+# Arguments : URL of the target git repo                                       #
+# Globals   : None                                                             #
+# Outputs   : Initializes a new git repo in the cwd                            #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
 local url="$1"
+
 if [[ -z "$url" ]]; then
     echo -e "\nNo URL provided."
 else

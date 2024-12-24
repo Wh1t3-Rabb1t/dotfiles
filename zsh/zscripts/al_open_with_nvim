@@ -1,10 +1,17 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# If `e` is called with no args, open Session.vim if it exists, else launch    #
-# nvim with Neotree open. If args are passed to 'e' the behavior is identical  #
-# to calling 'nvim' with arguments.                                            #
+# Open file / session with nvim.                                               #
 # ---------------------------------------------------------------------------- #
+# Arguments : Files to open / None                                             #
+# Globals   : None                                                             #
+# Outputs   : Opens target files / session with nvim                           #
+# ---------------------------------------------------------------------------- #
+
+# If called without args and Session.vim exists in cwd, launch Session.vim.
+# If called without args and Session.vim does not exist in cwd, launch nvim
+# with Neotree open.
+# If called with args, open selected args (files) with nvim.
 
 emulate -L zsh
 

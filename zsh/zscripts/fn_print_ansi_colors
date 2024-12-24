@@ -1,7 +1,11 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Echo all ansi color codes.                                                   #
+# Print all ansi color codes.                                                  #
+# ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : None                                                             #
+# Outputs   : A highlighted list of all 255 ansi color codes                   #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

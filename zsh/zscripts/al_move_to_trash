@@ -3,6 +3,10 @@
 # ---------------------------------------------------------------------------- #
 # Move files to ~/.Trash when using rm.                                        #
 # ---------------------------------------------------------------------------- #
+# Arguments : Files / directories to remove                                    #
+# Globals   : HOME                                                             #
+# Outputs   : Confirmation of 'deleted' files / directories                    #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
@@ -13,11 +17,12 @@ local message
 local arg
 
 if [[ "$#" -eq 0 ]]; then
-    echo -e "\nNo argument given."
+    echo -e "\nNo arguments given."
     return 1
 fi
 
 echo " "
+
 for arg in "${@}"; do
     if [[ ${arg} == -* ]]; then continue; fi
 

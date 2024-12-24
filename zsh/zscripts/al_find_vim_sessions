@@ -3,6 +3,10 @@
 # ---------------------------------------------------------------------------- #
 # Search for, and open selected Vim session.                                   #
 # ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : None                                                             #
+# Outputs   : Open target Vim session and cd to parent directory               #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 

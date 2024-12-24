@@ -1,7 +1,11 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# FZF command history and append selection to buffer.                          #
+# FZF command history and append selected command to the buffer.               #
+# ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : BUFFER                                                           #
+# Outputs   : Selected command onto the buffer                                 #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

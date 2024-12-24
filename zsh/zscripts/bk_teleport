@@ -3,6 +3,10 @@
 # ---------------------------------------------------------------------------- #
 # FZF z jump list and cd to the selected directory.                            #
 # ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : BUFFER                                                           #
+# Outputs   : Pipe z jump list into FZF, and cd to the selected directory      #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 

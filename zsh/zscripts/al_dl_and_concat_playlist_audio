@@ -1,9 +1,13 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Download a series of opus files from a youtube playlist, then concatenate    #
-# into a single file with the desired name as the first arg and the url        #
-# as the second arg.                                                           #
+# Download a series of audio files from a youtube playlist in opus format,     #
+# then concatenate into a single audio file.                                   #
+# ---------------------------------------------------------------------------- #
+# Argument 1 : Newly created file name                                         #
+# Argument 2 : URL                                                             #
+# Globals    : None                                                            #
+# Outputs    : Standard yt-dlp output                                          #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

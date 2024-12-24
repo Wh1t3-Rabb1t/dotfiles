@@ -3,6 +3,10 @@
 # ---------------------------------------------------------------------------- #
 # FZF cwd and append `mv` and the chosen rename target (x2) to the buffer.     #
 # ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : BUFFER                                                           #
+# Outputs   : `mv` followed by rename target (x2)                              #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 

@@ -1,7 +1,11 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Create new directories.                                                      #
+# Create directories. Pass multiple arguments to create multiple directories.  #
+# ---------------------------------------------------------------------------- #
+# Arguments : Directory name / names                                           #
+# Globals   : None                                                             #
+# Outputs   : New directory / directories in cwd                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
@@ -17,7 +21,6 @@ if [[ "$#" -eq 0 ]]; then
     return
 fi
 
-# If only one argument was passed to the function
 if [[ "$#" -eq 1 ]]; then
     mkdir $1 || return
     cd $1

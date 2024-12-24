@@ -3,6 +3,10 @@
 # ---------------------------------------------------------------------------- #
 # Render markdown files with Glow.                                             #
 # ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : None                                                             #
+# Outputs   : Rendered markdown from target .md file in the scrollback         #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 

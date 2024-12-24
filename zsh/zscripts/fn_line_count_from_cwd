@@ -1,3 +1,9 @@
 #!/usr/bin/env zsh
 
+# ---------------------------------------------------------------------------- #
+# Print the line count for each file in the cwd and it's sub directories.      #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
 find . -type f -exec wc -l {} +

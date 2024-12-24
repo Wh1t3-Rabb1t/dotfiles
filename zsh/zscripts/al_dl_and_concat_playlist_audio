@@ -1,9 +1,11 @@
 #!/usr/bin/env zsh
 
-# Download a series of opus files from a youtube playlist, then concatenate
-# into a single file with the desired name as the first arg and the url
-# as the second arg.
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+# Download a series of opus files from a youtube playlist, then concatenate    #
+# into a single file with the desired name as the first arg and the url        #
+# as the second arg.                                                           #
+# ---------------------------------------------------------------------------- #
+
 emulate -L zsh
 
 local playlist_dir="somePlaylist_$(date +"%Y%m%d_%H%M%S")"

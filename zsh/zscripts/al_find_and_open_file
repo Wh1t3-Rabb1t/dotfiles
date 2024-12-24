@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
 
-# Search for, and open selected file.
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+# Search for, and open selected file.                                          #
+# ---------------------------------------------------------------------------- #
+
 emulate -L zsh
 
 local selection="$(fd --color always --type f --hidden \
 --exclude Library \
 --exclude .git \
---exclude .npm \
---exclude .vscode \
 | fzf --ansi)"
 
 if [[ -z "$selection" ]]; then

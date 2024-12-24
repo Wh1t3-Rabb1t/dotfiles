@@ -67,5 +67,7 @@ killall Dock
 killall Finder
 killall SystemUIServer
 
-# Launch Hammerspoon
+# Launch apps
 open -a "Hammerspoon"
+open -a "Rectangle"
+open -a "Karabiner-Elements"

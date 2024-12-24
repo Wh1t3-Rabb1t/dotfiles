@@ -1,7 +1,9 @@
 #!/usr/bin/env zsh
 
-# Search for, and open selected Vim session.
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+# Search for, and open selected Vim session.                                   #
+# ---------------------------------------------------------------------------- #
+
 emulate -L zsh
 
 local initial_dir="${0:A:h}"
@@ -17,8 +19,6 @@ local selection="$(fd Session.vim \
 --exclude Library \
 --exclude .git \
 --exclude .cache \
---exclude .npm \
---exclude .vscode \
 | fzf --ansi)"
 
 if [[ -z "$selection" ]]; then

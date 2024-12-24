@@ -1,7 +1,9 @@
 #!/usr/bin/env zsh
 
-# Create new files (can create multiple files at once).
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+# Create new files (can create multiple files at once).                        #
+# ---------------------------------------------------------------------------- #
+
 emulate -L zsh
 
 local arrow="\e[0m\e[33m>\e[m"

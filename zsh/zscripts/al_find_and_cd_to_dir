@@ -1,7 +1,9 @@
 #!/usr/bin/env zsh
 
-# Search and cd to the selected directory.
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+# Search and cd to the selected directory.                                     #
+# ---------------------------------------------------------------------------- #
+
 emulate -L zsh
 
 local selection
@@ -9,13 +11,11 @@ if (( ${+commands[fd]} )); then
     selection="$(fd --color=always --type=directory --hidden\
     --exclude Library\
     --exclude .git\
-    --exclude .npm\
     | fzf --ansi)"
 else
     selection="$(find . -type d \(\
     -path "./Library/*" -or\
     -path "./.git/*" -or\
-    -path "./.npm/*" -or\
     -path "./node_modules/*" \)\
     -prune -o -type d -print\
     | fzf --ansi)"

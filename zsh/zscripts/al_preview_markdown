@@ -1,15 +1,15 @@
 #!/usr/bin/env zsh
 
-# Render markdown files with Glow.
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
+# Render markdown files with Glow.                                             #
+# ---------------------------------------------------------------------------- #
+
 emulate -L zsh
 
 local selection="$(fd --type f --hidden --extension md \
 --exclude Library \
 --exclude .git \
---exclude .npm \
---exclude .vscode \
-| fzf)"
+| fzf --ansi)"
 
 if [[ -z "$selection" ]]; then
     echo -e "\nSearch cancelled."

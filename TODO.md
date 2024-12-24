@@ -27,6 +27,7 @@ cask "font-0xproto-nerd-font"
 cask "font-meslo-for-powerlevel10k"
 cask "font-hack-nerd-font"
 
+cask "font-meslo-for-powerlevel10k"
 kitty
 p10k
 fzf

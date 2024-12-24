@@ -8,7 +8,7 @@
 #       \  \/  /   |  |
 #        \    /    |  |
 #         \  /     |__| bindings
-#========= \/ =================================================================#
+# ======== \/ ================================================================ #
 
 # See: `man zshzle`
 
@@ -20,7 +20,7 @@ zle_highlight+=(paste:none)               # Prevent text highlight on paste
 zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
 # INDEX
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # USER DEFINED FUNCTIONS
 # ZSH-HISTORY-SUBSTRING-SEARCH PLUGIN
 # MODE TOGGLING
@@ -42,7 +42,7 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
 
 # REMOVE DEFAULT KEYMAPS
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 local _defaults
 _defaults=(
     'd'
@@ -107,7 +107,7 @@ done
 
 
 # USER DEFINED FUNCTIONS
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 zle -N bk_broot_launcher
 bindkey -M viins "^[f" bk_broot_launcher   # Alt f = Launch broot
 
@@ -121,26 +121,15 @@ zle -N bk_rename_fzf
 bindkey -M viins "^[r" bk_rename_fzf       # Alt r = Rename files / dirs in cwd
 
 
-# # ZSH-HISTORY-SUBSTRING-SEARCH PLUGIN
-# #------------------------------------------------------------------------------#
-# # Cmd
-# bindkey -M vicmd 'i' history-substring-search-up       # i
-# bindkey -M vicmd 'k' history-substring-search-down     # k
-
-# # Vis
-# bindkey -M viins '^[[A' history-substring-search-up    # Up
-# bindkey -M viins '^[[B' history-substring-search-down  # Down
-
-
 # MODE TOGGLING
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 bindkey -M vicmd '^[' vi-insert        # Esc = Insert/cmd mode
 bindkey -M vicmd 's' visual-mode       # s = Visual mode
 bindkey -M vicmd 'S' visual-line-mode  # S = Visual line mode
 
 
 # LINE NAVIGATION
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 bindkey -M vicmd 'l' vi-forward-char           # l = Right
 bindkey -M vicmd 't' vi-backward-char          # t = Left
@@ -177,7 +166,7 @@ bindkey -M viins '^[[1;3C' _jump_forward_word  # Alt Right = Jump forwards by WO
 
 
 # DELETE BINDINGS
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 bindkey -M vicmd '^?' backward-delete-char  # BS = Delete backwards
 bindkey -M vicmd '^[[3~' delete-char        # Del = Delete forwards
@@ -202,7 +191,7 @@ bindkey -M viins '^[[3;2~' kill-whole-line  # Shift Del = Delete whole line
 
 
 # DELETE MOTIONS
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 zmodload zsh/deltochar
 
 # Invoked by `_delete_motions`
@@ -274,9 +263,9 @@ bindkey -M visual 'w' kill-region  # w = Delete visual selection
 
 
 # UNDO / REDO / DOT OPERATOR
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '^I' vi-repeat-change  # Tab = Dot operator
+bindkey -M vicmd '\-' vi-repeat-change  # Tab = Dot operator
 bindkey -M vicmd '^[y' undo             # Alt y = Undo
 bindkey -M vicmd '^[Y' redo             # Alt Y = Redo
 
@@ -286,7 +275,7 @@ bindkey -M viins '^[Y' redo             # Alt Y = Redo
 
 
 # SELECT IN WORD / LINE
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 local function _select_in_word() {
     emulate -L zsh
@@ -301,7 +290,7 @@ bindkey -M visual '^[[1;3C' visual-line-mode  # Alt Right = Enter visual LINE mo
 
 
 # UPPER / LOWER / SWAP CASE
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 bindkey -M vicmd '_' vi-swap-case    # _ = Swap case
 
@@ -311,7 +300,7 @@ bindkey -M visual '\-' vi-down-case  # _ = Lowercase selection
 
 
 # COPY
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Invoked by copy, cut, and change motion functions
 bindkey -M vicmd 'TN' vi-find-next-char-skip
 bindkey -M vicmd 'TP' vi-find-prev-char-skip
@@ -395,7 +384,7 @@ bindkey -M visual 'c' _copy_to_clipboard  # c = Copy visual selection
 
 
 # CUT
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 local function _cut_motions() {
     emulate -L zsh
@@ -462,7 +451,7 @@ bindkey -M visual 'x' _cut_to_clipboard  # x = Cut visual selection
 
 
 # CHANGE
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 local function _change_motions() {
     emulate -L zsh
@@ -524,7 +513,7 @@ bindkey -M visual 'y' vi-change  # y = Change visual selection
 
 
 # PASTE
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd / Ins
 local function _paste_from_clipboard() {
     emulate -L zsh
@@ -547,7 +536,7 @@ bindkey -M visual 'v' _paste_from_clipboard_visual
 
 
 # INCREMENT / DECREMENT INTEGERS
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 autoload -Uz incarg
 zle -N incarg
 bindkey -M vicmd 'NU' incarg
@@ -570,7 +559,7 @@ bindkey -M vicmd '\x1bx' _decrement_integers  # Alt x = Decrement integers
 
 
 # SURROUND
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 autoload -Uz select-quoted select-bracketed surround
 zle -N select-quoted
 zle -N select-bracketed
@@ -580,7 +569,7 @@ zle -N change-surround surround
 
 
 # CHANGE / DELETE SURROUNDING
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 bindkey -M vicmd 'CS' change-surround
 bindkey -M vicmd 'DS' delete-surround
@@ -619,7 +608,7 @@ bindkey -M vicmd ' ' _manipulate_surrounding
 
 
 # SELECT INSIDE SURROUNDING
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 local function _select_in_surrounding() {
     emulate -L zsh
@@ -654,7 +643,7 @@ bindkey -M visual 'Q<' select-bracketed
 
 
 # ADD SURROUNDING
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 # Cmd
 local function _add_surrounding() {
     emulate -L zsh
@@ -688,7 +677,7 @@ bindkey -M visual 'M<' add-surround
 
 
 # UTIL FUNCTIONS
-#------------------------------------------------------------------------------#
+# ---------------------------------------------------------------------------- #
 local function _block_cursor() { echo -ne "\e[1 q" }
 zle -N _block_cursor
 

@@ -1,0 +1,266 @@
+#   _    _ _   _
+#  | | _(_) |_| |_ _   _
+#  | |/ / | __| __| | | |
+#  |   <| | |_| |_| |_| |
+#  |_|\_\_|\__|\__|\__, | temu
+#==================|___/=======================================================#
+
+# See:  https://sw.kovidgoyal.net/kitty/generated/rc
+# Restore kitty sessions:  https://github.com/dflock/kitty-save-session
+
+
+# STARTUP
+#------------------------------------------------------------------------------#
+startup_session ./session.conf
+hide_window_decorations titlebar-only
+
+# New windows will have a generic title
+shell_integration no-title
+
+# OS window size
+remember_window_size  yes
+initial_window_width  50
+initial_window_height 45
+
+
+# SCROLLBACK
+#------------------------------------------------------------------------------#
+scrollback_lines 5000
+scrollback_pager_history_size 100
+font_size 14.0
+# font_family MesloLGS NF
+
+# Underline (tweak for nvim ibl)
+modify_font underline_position 2
+
+# URL highlights
+underline_hyperlinks hover
+show_hyperlink_targets yes
+
+# Pager
+scrollback_pager nvim -c "setlocal nonumber nolist showtabline=0 foldcolumn=0|Man!" -
+
+
+# KEYBOARD SETTINGS
+#------------------------------------------------------------------------------#
+# Clear all default keyboard shortcuts
+clear_all_shortcuts yes
+
+# Allow the use of alt for key bindings
+macos_option_as_alt yes
+
+
+# KEYMAPS
+#------------------------------------------------------------------------------#
+# GitUi popup
+map alt+g launch --type=os-window --cwd=current gitui
+map --when-focus-on var:in_editor alt+g
+
+# Paste from system clipboard
+map alt+v paste_from_clipboard
+map --when-focus-on var:in_editor alt+v
+
+
+# ╭────────────╮
+# │ SCROLLBACK │
+# ╰────────────╯
+# Launch in nvim
+map alt+b show_last_command_output
+map alt+shift+b show_scrollback
+map --when-focus-on var:in_editor alt+b
+map --when-focus-on var:in_editor alt+shift+b
+
+# Page up / down
+map page_up scroll_page_up
+map page_down scroll_page_down
+
+# Up / down multiple lines at a time
+map shift+up combine : scroll_line_up : scroll_line_up : scroll_line_up : scroll_line_up
+map shift+down combine : scroll_line_down : scroll_line_down : scroll_line_down : scroll_line_down
+
+# Next / previous prompt
+map shift+page_up scroll_to_prompt -1
+map shift+page_down scroll_to_prompt 1
+
+# Move the contents of the screen into the scrollback
+map super+k clear_terminal to_cursor_scroll active
+
+# Clear the terminal scrollback by erasing it
+map super+shift+k clear_terminal scrollback active
+
+
+# ╭─────────╮
+# │ WINDOWS │
+# ╰─────────╯
+# Launch
+map super+ctrl+alt+m launch --location=split --cwd=current --window-title current
+map super+ctrl+alt+shift+m new_os_window
+
+# Navigate
+map ctrl+up neighboring_window top
+map ctrl+down neighboring_window bottom
+map ctrl+left neighboring_window left
+map ctrl+right neighboring_window right
+
+# Resize
+map ctrl+shift+up kitten relative_resize.py up
+map ctrl+shift+down kitten relative_resize.py down
+map ctrl+shift+left kitten relative_resize.py left
+map ctrl+shift+right kitten relative_resize.py right
+
+# Swap positions
+map super+ctrl+alt+shift+j swap_with_window
+visual_window_select_characters TKLIONDSFWECYHMVU
+
+# Close
+map super+ctrl+alt+w close_window_with_confirmation
+
+# Detach from parent os window
+map super+ctrl+alt+shift+w detach_window
+
+
+# ╭──────╮
+# │ TABS │
+# ╰──────╯
+# Launch
+map super+ctrl+alt+n new_tab
+
+# Rename
+map super+ctrl+alt+shift+n set_tab_title
+
+# Navigate
+map ctrl+end next_tab
+map ctrl+home previous_tab
+
+
+# ╭────────╮
+# │ LAYOUT │
+# ╰────────╯
+# Rotate the current split
+map super+ctrl+alt+r layout_action rotate
+
+# Cycle layouts
+map super+ctrl+alt+shift+r next_layout
+
+
+# ╭──────╮
+# │ ZOOM │
+# ╰──────╯
+# Window specific
+map super+equal change_font_size current +1.0
+map super+minus change_font_size current -1.0
+
+# Universal
+map super+shift+equal change_font_size all +1.0
+map super+shift+minus change_font_size all -1.0
+
+
+# WINDOWS
+#------------------------------------------------------------------------------#
+# Init layouts
+enabled_layouts splits:split_axis=vertical, horizontal
+
+# Window settings
+active_border_color #d5e2e2
+inactive_border_color #024949
+draw_minimal_borders no
+window_border_width 2px
+# single_window_margin_width 2
+# single_window_margin_height 2
+window_margin_width 2
+window_margin_height 2
+window_padding_height 4
+window_padding_width 4
+placement_strategy top-left
+
+
+# TABS
+#------------------------------------------------------------------------------#
+# Tab settings
+tab_title_template "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}{index}: {title}"
+tab_bar_style powerline
+tab_powerline_style slanted
+tab_bar_edge top
+active_tab_font_style bold
+inactive_tab_font_style italic
+tab_bar_align left
+
+
+# THEME & BACKGROUND
+#------------------------------------------------------------------------------#
+# Background image must be in PNG format
+# ! BUG: Placing a comment on the same line as the background image
+# causes an bug which prevents the image from loading consistently
+
+# SPACE
+# background_image ./backgrounds/space_planet_scene.png
+# background_image ./backgrounds/sc2_battle_cruiser.png
+# background_image ./backgrounds/sc2_battle_cruisers_planet.png
+
+# SHIPS
+# background_image ./backgrounds/storm_ship_sea.png
+# background_image ./backgrounds/thousand_sunny_one_piece_tablet.png
+
+# CITYSCAPES
+# background_image ./backgrounds/alley.png
+# background_image ./backgrounds/bat_signal.png
+# background_image ./backgrounds/gotham_city.png
+# background_image ./backgrounds/blade_runner.png
+background_image ./backgrounds/ff7_remake_midgar.png
+# background_image ./backgrounds/bleak_cityscape.png
+
+# BLOODBORNE
+# background_image ./backgrounds/bloodborne_amygdala.png
+# background_image ./backgrounds/bloodborne_crow.png
+# background_image ./backgrounds/bloodborne_loran_chalice.png
+# background_image ./backgrounds/yharnam.png
+# background_image ./backgrounds/yharnam_2.png
+
+# MOUNTAINS
+# background_image ./backgrounds/fuji.png
+# background_image ./backgrounds/starry_night_over_mountain.png
+# background_image ./backgrounds/snow_valley.png
+# background_image ./backgrounds/snow_covered_mountain_night.png
+# background_image ./backgrounds/reflection_of_snowy_mountains_on_lake.png
+# background_image ./backgrounds/mountains_winter_snow_lake.png
+
+# FORESTS
+# background_image ./backgrounds/orange_sunset_over_forest.png
+# background_image ./backgrounds/sunset_valley_light.png
+# background_image ./backgrounds/sunset_valley_dark.png
+
+background_image_layout cscaled
+background_tint 0.97
+
+# BEGIN_KITTY_THEME
+# Night Lion V1
+include current-theme.conf
+# END_KITTY_THEME
+
+# Nice themes
+#-------------
+# ENCOM
+# Dark Pastel
+# Default
+# Night Lion V1
+# Vibrant Ink
+# Wez
+
+
+# CURSOR
+#------------------------------------------------------------------------------#
+# !! cursor color must be set after the theme
+cursor #ffff00
+
+# Cursor jump animations
+cursor_trail 1
+cursor_trail_decay 0.1 0.2
+cursor_trail_start_threshold 10
+
+
+# BEGIN_KITTY_FONTS
+font_family      family="JetBrainsMono Nerd Font Mono"
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+# END_KITTY_FONTS

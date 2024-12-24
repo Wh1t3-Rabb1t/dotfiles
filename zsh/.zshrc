@@ -30,27 +30,3 @@ for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/*(N/); do
     autoload -Uz $fpath[1]/*(.:t)
 done
 unset zscripts
-
-
-# Brewfile
-#------------------
-# kitty
-# p10k
-# fzf
-# nvim
-# broot
-# ripgrep
-# fd
-# lsd
-# bat
-# jq
-# gitui
-# delta
-# tealdeer
-# btop
-# shell check
-# luarocks
-# yt-dlp
-# ffmpeg
-# glow
-# mpv

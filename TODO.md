@@ -21,9 +21,32 @@ https://github.com/agkozak/zsh-z
 
 ## Misc
 
+## Brewfile
+
 cask "font-0xproto-nerd-font"
 cask "font-meslo-for-powerlevel10k"
 cask "font-hack-nerd-font"
+
+kitty
+p10k
+fzf
+nvim
+broot
+ripgrep
+fd
+lsd
+bat
+jq
+gitui
+delta
+tealdeer
+btop
+shell check
+luarocks
+yt-dlp
+ffmpeg
+glow
+mpv
 
 
 

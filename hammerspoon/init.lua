@@ -230,10 +230,9 @@ hs.alert.show('🔨🥄')
 -- hsConfigWatcher = hs.pathwatcher.new(os.getenv('HOME') .. '/.hammerspoon/', reloadConfig):start()
 
 -- Announcer for Hammerspoon.
-speaker = hs.speech.new('Rocko')
--- speaker:speak('Ready to rock')
+speaker = hs.speech.new()
+speaker:speak('Ready to rock')
 
-speaker:speak('We now have direct confirmation of a disruptor in our midst, one who has acquired an almost messianic reputation in the minds of certain citizens. His figure is synonymous with the darkest urges of instinct, ignorance and decay. Some of the worst excesses of the Black Mesa Incident have been laid directly at his feet. And yet unsophisticated minds continue to imbue him with romantic power, giving him such dangerous poetic labels as the One Free Man, the Opener of the Way. Let me remind all citizens of the dangers of magical thinking. If you see this so-called, Free Man, report him. Civic deeds do not go unrewarded. And contrariwise, complicity with his cause will not go unpunished. Be wise. Be safe. Be aware.')
 
 
 

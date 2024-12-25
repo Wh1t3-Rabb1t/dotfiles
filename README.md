@@ -24,7 +24,10 @@ eval "$(/opt/homebrew/bin/brew shellenv)"; git clone https://github.com/Wh1t3-Ra
 
 ```sh
 $HOME/.local/dotfiles/macos/macos_settings.zsh
-$HOME/.local/dotfiles/macos/macos_kiybindings.zsh
+```
+
+```sh
+$HOME/.local/dotfiles/macos/macos_keybindings.zsh
 ```
 
 - Useful debugging commands

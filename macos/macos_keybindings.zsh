@@ -4,7 +4,7 @@
 # ^ Control (⌃)
 # $ Shift (⇧)
 
-sudo -v
+# sudo -v
 
-defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.brave.Browser"
-defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Tab" -string "^v"
+sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.brave.Browser"
+sudo defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Tab" -string "^v"

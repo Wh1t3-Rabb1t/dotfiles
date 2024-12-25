@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Print Apple bundle IDs for all currently installed apps.                     #
+# ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : None                                                             #
+# Outputs   : List of app bundle IDs                                           #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+for app in /Applications/*.app; do
+    echo -e "\nApp: $(basename "$app")"
+    mdls -name kMDItemCFBundleIdentifier "$app" | grep kMDItemCFBundleIdentifier
+done

@@ -23,31 +23,45 @@ https://github.com/agkozak/zsh-z
 
 ## Brewfile
 
-cask "font-0xproto-nerd-font"
-cask "font-meslo-for-powerlevel10k"
-cask "font-hack-nerd-font"
 
+cask "firefox"
+cask "firefox-developer-edition"
 cask "font-meslo-for-powerlevel10k"
-kitty
-p10k
-fzf
-nvim
-broot
-ripgrep
-fd
-lsd
-bat
-jq
-gitui
-delta
-tealdeer
-btop
-shell check
-luarocks
-yt-dlp
-ffmpeg
-glow
-mpv
+cask "hammerspoon"
+cask "karabiner-elements"
+cask "kitty"
+cask "rectangle"
+
+brew "bat"
+brew "blueutil"
+brew "broot"
+brew "btop"
+brew "coreutils"
+brew "curl"
+brew "fd"
+brew "ffmpeg"
+brew "git"
+brew "git-delta"
+brew "gitui"
+brew "glow"
+brew "gnu-sed"
+brew "gnu-tar"
+brew "go"
+brew "grep"
+brew "jq"
+brew "lsd"
+brew "luarocks"
+brew "mpv"
+brew "neovim"
+brew "ripgrep"
+brew "shellcheck"
+brew "tealdeer"
+brew "vim"
+brew "wget"
+brew "yt-dlp"
+brew "zsh"
+
+
 
 
 

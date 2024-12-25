@@ -54,7 +54,7 @@ defaults write com.apple.screencapture location ~/Documents/screenshots
 defaults write com.apple.screencapture type -string "png"
 
 # Set lock screen message
-sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
+# sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
 
 # Hammerspoon XDG compliance
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "$HOME/.config/hammerspoon/init.lua"

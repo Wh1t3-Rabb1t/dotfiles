@@ -44,16 +44,6 @@ defaults write com.apple.dock show-recents -bool true
 defaults write com.apple.dock autohide -bool true
 
 
-# @ Command (⌘)
-# ~ Option (⌥)
-# ^ Control (⌃)
-# $ Shift (⇧)
-
-sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.brave.Browser"
-sudo defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Tab" -string "^v"
-
-
-
 # MISC
 # ---------------------------------------------------------------------------- #
 # Hide the "Now Playing" menu bar item

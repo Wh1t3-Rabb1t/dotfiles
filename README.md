@@ -20,8 +20,15 @@ eval "$(/opt/homebrew/bin/brew shellenv)"; git clone https://github.com/Wh1t3-Ra
 
 ## Alternate testing commands
 
-- MacOs settings script
+- MacOs settings scripts
 
 ```sh
 $HOME/.local/dotfiles/macos/macos_settings.zsh
+$HOME/.local/dotfiles/macos/macos_kiybindings.zsh
+```
+
+- Useful debugging commands
+
+```sh
+defaults read com.brave.Browser NSUserKeyEquivalents
 ```

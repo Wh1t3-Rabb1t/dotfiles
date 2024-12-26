@@ -7,6 +7,10 @@
 # ~ Option (⌥)
 # @ Command (⌘)
 
+sudo defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ "InputSourceKind" = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'; && \
+defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
+
+killall SystemUIServer
 
 
 # sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.brave.Browser"; \

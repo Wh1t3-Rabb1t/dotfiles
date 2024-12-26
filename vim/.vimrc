@@ -201,8 +201,11 @@ vnoremap U            ge
 
 " Jump to start / end of line
 " ---------------------------------------------------------------------------- "
-nnoremap ;            g_
 nnoremap h            ^
+nnoremap ;            g_
+
+vnoremap h            ^
+vnoremap ;            g_
 
 
 " Jump 6 lines / between blocks

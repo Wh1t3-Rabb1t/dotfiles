@@ -7,7 +7,9 @@
 # ~ Option (⌥)
 # @ Command (⌘)
 
-sudo defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ "InputSourceKind" = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'; && \
+sudo -v
+
+defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '( { "Bundle ID" = "com.apple.PressAndHold"; InputSourceKind = "Non Keyboard Input Method"; }, { InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; })'
 defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
 
 killall SystemUIServer
@@ -49,3 +51,6 @@ killall SystemUIServer
 # defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Open Location..." -string "^~'"; \
 # defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Select All" -string "^~a"
 
+# ```sh
+# defaults read com.brave.Browser NSUserKeyEquivalents
+# ```

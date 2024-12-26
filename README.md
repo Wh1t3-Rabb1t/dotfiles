@@ -35,3 +35,8 @@ $HOME/.local/dotfiles/macos/macos_keybindings.zsh
 ```sh
 defaults read com.brave.Browser NSUserKeyEquivalents
 ```
+
+```sh
+defaults read com.apple.HIToolbox AppleSelectedInputSources
+
+```

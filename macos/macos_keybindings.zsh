@@ -9,7 +9,7 @@
 
 sudo -v
 
-defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '( { "Bundle ID" = "com.apple.PressAndHold"; InputSourceKind = "Non Keyboard Input Method"; }, { InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; })'
+defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ "Bundle ID" = "com.apple.PressAndHold"; InputSourceKind = "Non Keyboard Input Method"; }, { InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'
 defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
 
 killall SystemUIServer

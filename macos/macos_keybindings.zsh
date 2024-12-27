@@ -26,7 +26,7 @@
 
 
 
-SOURCE="${XDG_CONFIG_HOME}/macos/macos_key_overrides.dict"
+SOURCE="${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict"
 TARGET="${HOME}/Library/KeyBindings/DefaultKeyBinding.dict"
 
 if [[ ! -f "$SOURCE" ]]; then

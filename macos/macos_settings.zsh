@@ -15,10 +15,16 @@ defaults write -g KeyRepeat -int 2
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
-
-
-
+# Disable Apple's insane default alt key behaviour <3 <3 <3
 defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
+
+
+sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.apple.Safari"; \
+defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
+defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Copy" -string "~c"; \
+defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Cut" -string "~x"; \
+defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Paste" -string "~v"; \
+defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Undo" -string "~y"; \
 
 
 

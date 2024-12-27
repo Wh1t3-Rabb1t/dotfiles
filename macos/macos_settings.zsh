@@ -16,6 +16,13 @@ defaults write -g KeyRepeat -int 2
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 
+
+
+defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
+
+
+
+
 # FINDER
 # ---------------------------------------------------------------------------- #
 # Display hidden files in Finder

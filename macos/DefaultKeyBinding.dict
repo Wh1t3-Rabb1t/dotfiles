@@ -1,11 +1,18 @@
 /* ~/Library/KeyBindings/DefaultKeyBinding.dict */
 {
-    "~a" = "selectAll:";              /* Option-a selects all */
-    "~c" = "copy:";                   /* Option-c copies */
-    "~x" = "cut:";                    /* Option-x cuts */
-    "~v" = "paste:";                  /* Option-v pastes */
-    "~y" = "undo:";                   /* Option-y undoes */
-    "~\010" = "deleteWordBackward:";  /* Option-Backspace */
+    "~a" = "selectAll:";                       /* Alt + a */
+    "~c" = "copy:";                            /* Alt + c */
+    "~x" = "cut:";                             /* Alt + x */
+    "~v" = "paste:";                           /* Alt + v */
+    "~y" = "undo:";                            /* Alt + y */
+    "~\UF702" = "moveWordBackward:";           /* Alt + Left */
+    "~\UF703" = "moveWordForward:";            /* Alt + Right */
+    "~\010" = "deleteWordBackward:";           /* Alt + Backspace */
+    "~\177" = "deleteWordBackward:";           /* Alt + Delete */
+    "$\UF72B" = "moveToBeginningOfDocument:";  /* Shift + PageUp */
+    "$\UF72C" = "moveToEndOfDocument:";        /* Shift + PageDown */
+    "\UF729" = "moveToLeftEndOfLine";          /* Home */
+    "\UF72B" = "moveToRightEndOfLine";         /* End */
 }
 
 

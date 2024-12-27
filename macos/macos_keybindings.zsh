@@ -1,15 +1,18 @@
 #!/usr/bin/env zsh
 
 # https://apple.stackexchange.com/questions/398561/how-to-set-system-keyboard-shortcuts-via-command-line
+# https://stackoverflow.com/questions/11876485/how-to-disable-generating-special-characters-when-pressing-the-alta-optiona
+# https://stackoverflow.com/questions/60870113/mac-generating-%E2%88%86%CB%9A%C2%AC-characters-instead-of-executing-vscode-shortcuts-that-involve
 
 # ^ Control (⌃)
 # $ Shift (⇧)
 # ~ Option (⌥)
 # @ Command (⌘)
 
-sudo -v
 
-defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'
+# sudo -v
+
+# defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'
 
 # defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ \
 #     InputSourceKind = "Keyboard Layout"; \
@@ -17,9 +20,25 @@ defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ Input
 #     "KeyboardLayout Name" = "Unicode Hex Input"; \
 # }'
 
-defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
+# defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
 
-killall SystemUIServer
+# killall SystemUIServer
+
+
+
+SOURCE="${XDG_CONFIG_HOME}/macos/macos_key_overrides.dict"
+TARGET="${HOME}/Library/KeyBindings/DefaultKeyBinding.dict"
+
+if [[ ! -f "$SOURCE" ]]; then
+  echo "Error: Source file does not exist: $SOURCE" >&2
+  exit 1
+fi
+
+ln -sfn "$SOURCE" "$TARGET" || { echo "Error: Failed to create symlink"; exit 1; }
+killall SystemUIServer || { echo "Error: Failed to restart SystemUIServer"; exit 1; }
+
+echo "Key bindings updated successfully."
+
 
 
 # sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.brave.Browser"; \

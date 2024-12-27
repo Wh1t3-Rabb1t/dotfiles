@@ -1,0 +1,8 @@
+/* ~/Library/KeyBindings/DefaultKeyBinding.dict */
+{
+    "~a" = "selectAll:";              /* Option-a selects all */
+    "~c" = "copy:";                   /* Option-c copies */
+    "~v" = "paste:";                  /* Option-v pastes */
+    "~z" = "undo:";                   /* Option-z undoes */
+    "~\010" = "deleteWordBackward:";  /* Option-Backspace */
+}

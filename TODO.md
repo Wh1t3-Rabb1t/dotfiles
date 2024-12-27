@@ -24,6 +24,7 @@ https://github.com/agkozak/zsh-z
 ## Brewfile
 
 
+cask "brave-browser"
 cask "firefox"
 cask "firefox-developer-edition"
 cask "font-meslo-for-powerlevel10k"

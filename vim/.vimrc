@@ -60,6 +60,16 @@ endfunction
 " │ OPTIONS │
 " ╰─────────╯
 " ---------------------------------------------------------------------------- "
+" Leave insert mode instantly
+if ! has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=200
+    augroup END
+endif
+
 " Set cursor style based on current mode
 let &t_SI = "\e[5 q"
 let &t_EI = "\e[2 q"

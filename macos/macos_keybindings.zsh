@@ -30,8 +30,13 @@ SOURCE="${XDG_CONFIG_HOME}/macos/macos_key_overrides.dict"
 TARGET="${HOME}/Library/KeyBindings/DefaultKeyBinding.dict"
 
 if [[ ! -f "$SOURCE" ]]; then
-  echo "Error: Source file does not exist: $SOURCE" >&2
-  exit 1
+    echo "Error: Source file does not exist: $SOURCE" >&2
+    exit 1
+fi
+
+if [[ ! -f "$TARGET" ]]; then
+    echo "Creating required directory"
+    mkdir -p "${HOME}/Library/KeyBindings"
 fi
 
 ln -sfn "$SOURCE" "$TARGET" || { echo "Error: Failed to create symlink"; exit 1; }

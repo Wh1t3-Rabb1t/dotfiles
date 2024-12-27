@@ -19,16 +19,6 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
 
 
-sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.apple.Safari"; \
-defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
-defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Copy" -string "~c"; \
-defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Cut" -string "~x"; \
-defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Paste" -string "~v"; \
-defaults write com.apple.Safari NSUserKeyEquivalents -dict-add "Undo" -string "~y"; \
-
-
-
-
 # FINDER
 # ---------------------------------------------------------------------------- #
 # Display hidden files in Finder

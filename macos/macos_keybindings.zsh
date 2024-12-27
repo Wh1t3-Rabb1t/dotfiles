@@ -39,7 +39,7 @@ if [[ ! -f "$TARGET" ]]; then
     mkdir -p "${HOME}/Library/KeyBindings"
 fi
 
-ln -sfn "$SOURCE" "$TARGET" || { echo "Error: Failed to create symlink"; exit 1; }
+cp -f "$SOURCE" "$TARGET" || { echo "Error: Failed to create symlink"; exit 1; }
 killall SystemUIServer || { echo "Error: Failed to restart SystemUIServer"; exit 1; }
 
 echo "Key bindings updated successfully."

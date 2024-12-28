@@ -16,7 +16,20 @@ defaults write -g KeyRepeat -int 2
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Disable Apple's insane default alt key behaviour <3 <3 <3
-defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
+# defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
+
+
+mkdir -p "${HOME}/Library/KeyBindings"
+cp -f "${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict" "${HOME}/Library/KeyBindings/DefaultKeyBinding.dict"
+
+
+defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Window" -string "~n"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Private Window" -string "$~n"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Find in Page..." -string "~f"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"
+
 
 
 # FINDER
@@ -41,7 +54,7 @@ defaults write com.apple.dock autohide-delay -float 0
 # defaults write com.apple.dock static-only -bool true
 
 # Don't show recent apps in the Dock
-defaults write com.apple.dock show-recents -bool true
+defaults write com.apple.dock show-recents -bool false
 
 # Hide the Dock
 defaults write com.apple.dock autohide -bool true

@@ -25,7 +25,6 @@ https://github.com/agkozak/zsh-z
 
 
 cask "brave-browser"
-cask "firefox"
 cask "firefox-developer-edition"
 cask "font-meslo-for-powerlevel10k"
 cask "hammerspoon"

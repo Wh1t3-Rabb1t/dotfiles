@@ -9,10 +9,10 @@
 # ~ Option (⌥)
 # @ Command (⌘)
 
-sudo -v
+# sudo -v
 
-defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'
-defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
+# defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'
+# defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
 
 
 defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox"; \
@@ -22,7 +22,7 @@ defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Private W
 defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Find in Page..." -string "~f"; \
 defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"
 
-killall SystemUIServer
+# killall SystemUIServer
 
 
 # sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "com.brave.Browser"; \

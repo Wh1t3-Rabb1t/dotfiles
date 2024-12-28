@@ -58,7 +58,7 @@ killall SystemUIServer
 
 
 
-# SOURCE="${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict"
+# SOURCE="${XDG_CONFIG_HOME}/macos/KeyBindings/DefaultKeyBinding.dict"
 # TARGET="${HOME}/Library/KeyBindings/DefaultKeyBinding.dict"
 
 # if [[ ! -f "$SOURCE" ]]; then
@@ -160,4 +160,21 @@ killall SystemUIServer
 # _ moveWordRightAndModifySelection:
 # _deleteToBeginningOfLine:
 # _togglePlatformInputSyst */
+
+# /* ~/Library/KeyBindings/DefaultKeyBinding.dict */
+# {
+#     "~a" = "selectAll:";                       /* Alt + a */
+#     "~c" = "copy:";                            /* Alt + c */
+#     "~x" = "cut:";                             /* Alt + x */
+#     "~v" = "paste:";                           /* Alt + v */
+#     "~y" = "undo:";                            /* Alt + y */
+#     "~\UF702" = "moveWordBackward:";           /* Alt + Left */
+#     "~\UF703" = "moveWordForward:";            /* Alt + Right */
+#     "~\010" = "deleteWordBackward:";           /* Alt + Backspace */
+#     "~\177" = "deleteWordBackward:";           /* Alt + Delete */
+#     "$\UF72B" = "moveToBeginningOfDocument:";  /* Shift + PageUp */
+#     "$\UF72C" = "moveToEndOfDocument:";        /* Shift + PageDown */
+#     "\UF729" = "moveToLeftEndOfLine:";         /* Home */
+#     "\UF72B" = "moveToRightEndOfLine:";        /* End */
+# }
 

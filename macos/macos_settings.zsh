@@ -38,7 +38,7 @@ defaults write com.apple.dock autohide-time-modifier -float 0.4
 defaults write com.apple.dock autohide-delay -float 0
 
 # Only show active apps in the Dock
-defaults write com.apple.dock static-only -bool true
+# defaults write com.apple.dock static-only -bool true
 
 # Don't show recent apps in the Dock
 defaults write com.apple.dock show-recents -bool true

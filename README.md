@@ -32,12 +32,3 @@ $HOME/.local/dotfiles/macos/macos_keybindings.zsh
 
 - Useful debugging commands
 
-```sh
-defaults read com.apple.HIToolbox AppleSelectedInputSources
-```
-```sh
-defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ "InputSourceKind" = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'
-```
-```sh
-defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
-```

@@ -115,11 +115,11 @@ set softtabstop=4
 set shiftwidth=4
 
 " Use XDG paths
-" set viminfo='1000,n$XDG_CACHE_HOME/vim/info
-" set directory=$XDG_CACHE_HOME/vim/swap//
-" set undodir=$XDG_CACHE_HOME/vim/undo//
-" set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
-" set backupdir=$XDG_CACHE_HOME/vim/backup//
+set viminfo='1000,n$XDG_CACHE_HOME/vim/info
+set directory=$XDG_CACHE_HOME/vim/swap//
+set undodir=$XDG_CACHE_HOME/vim/undo//
+set spellfile=$XDG_DATA_HOME/vim/spell/en.utf-8.add
+set backupdir=$XDG_CACHE_HOME/vim/backup//
 
 
 " ╭─────────╮

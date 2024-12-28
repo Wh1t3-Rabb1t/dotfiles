@@ -1,5 +1,19 @@
 #!/usr/bin/env zsh
 
+# WARNING!!! Do not attempt to go down this route. There is only misery, madness,
+# malaise, and mental decay awaiting any naive enough to consider themselves
+# capable of elegantly wrangling Apple's default keybindings across multiple app's.
+
+# The Alt key requires unicode hex input to be enabled so that bindings won't be
+# overwritten by Apple's default special character input behaviour. But enabling
+# unicode hex input still doesn't enable Alt bindings in Brave, and although they
+# work in Firefox, it disables Alt + left / right bindings even if they are
+# redeclared in this file, yet other Alt bindings work without issue (wtf?).
+
+# I'm dropping this nonsense entirely and leaning on Karabiner for all
+# keystoke repurposing from here on out. You'd be wise to do the same.
+
+
 # https://apple.stackexchange.com/questions/398561/how-to-set-system-keyboard-shortcuts-via-command-line
 # https://stackoverflow.com/questions/11876485/how-to-disable-generating-special-characters-when-pressing-the-alta-optiona
 # https://stackoverflow.com/questions/60870113/mac-generating-%E2%88%86%CB%9A%C2%AC-characters-instead-of-executing-vscode-shortcuts-that-involve
@@ -11,7 +25,13 @@
 
 # sudo -v
 
-# defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ InputSourceKind = "Keyboard Layout"; "KeyboardLayout ID" = "-1"; "KeyboardLayout Name" = "Unicode Hex Input"; }'
+
+# defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ \
+#     InputSourceKind = "Keyboard Layout"; \
+#     "KeyboardLayout ID" = "-1"; \
+#     "KeyboardLayout Name" = "Unicode Hex Input"; \
+# }'
+
 # defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
 
 
@@ -47,11 +67,6 @@ defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -s
 
 
 
-# defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ \
-#     InputSourceKind = "Keyboard Layout"; \
-#     "KeyboardLayout ID" = "-1"; \
-#     "KeyboardLayout Name" = "Unicode Hex Input"; \
-# }'
 
 
 
@@ -185,5 +200,3 @@ defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -s
 # "\UF72D"   = "pageDown:";                                    /* PageDown                 */
 # "$\UF72D"  = "moveToEndOfDocument:";                         /* Shift + PageDown         */
 # "@$\UF72D" = "moveToEndOfDocumentAndModifySelection:";       /* Cmd + Shift + PageDown   */
-
-

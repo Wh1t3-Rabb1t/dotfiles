@@ -15,7 +15,7 @@ defaults write -g KeyRepeat -int 2
 # Disable press-and-hold for keys in favor of key repeat
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
-# Disable Apple's insane default alt key behaviour <3 <3 <3
+# Controls whether certain bindings can be triggered from within text input fields
 # defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
 
 
@@ -23,17 +23,17 @@ mkdir -p "${HOME}/Library/KeyBindings"
 cp -f "${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict" "${HOME}/Library/KeyBindings/DefaultKeyBinding.dict"
 
 
-sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Copy" -string "~c"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Cut" -string "~x"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Paste" -string "~v"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Undo" -string "~y"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Select All" -string "~a"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Window" -string "~n"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Private Window" -string "$~n"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Find in Page..." -string "~f"; \
-defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"
+# sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Copy" -string "~c"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Cut" -string "~x"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Paste" -string "~v"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Undo" -string "~y"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Select All" -string "~a"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Window" -string "~n"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Private Window" -string "$~n"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Find in Page..." -string "~f"; \
+# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"
 
 
 

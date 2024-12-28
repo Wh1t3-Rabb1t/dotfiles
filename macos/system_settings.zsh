@@ -3,8 +3,6 @@
 # https://git.herrbischoff.com/awesome-macos-command-line/about/
 # https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
 
-sudo -v
-
 # Quit System Preferences so it doesn't override settings
 osascript -e 'tell application "System Preferences" to quit'
 
@@ -25,7 +23,7 @@ mkdir -p "${HOME}/Library/KeyBindings"
 cp -f "${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict" "${HOME}/Library/KeyBindings/DefaultKeyBinding.dict"
 
 
-defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox"; \
+sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox"; \
 defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Copy" -string "~c"; \
 defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Cut" -string "~x"; \
 defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Paste" -string "~v"; \

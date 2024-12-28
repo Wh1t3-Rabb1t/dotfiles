@@ -178,3 +178,12 @@ defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -s
 #     "\UF72B" = "moveToRightEndOfLine:";        /* End */
 # }
 
+# "\UF72C"   = "pageUp:";                                      /* PageUp                   */
+# "$\UF72C"  = "moveToBeginningOfDocument:";                   /* Shift + PageUp           */
+# "@$\UF72C" = "moveToBeginningOfDocumentAndModifySelection:"; /* Cmd + Shift + PageUp     */
+
+# "\UF72D"   = "pageDown:";                                    /* PageDown                 */
+# "$\UF72D"  = "moveToEndOfDocument:";                         /* Shift + PageDown         */
+# "@$\UF72D" = "moveToEndOfDocumentAndModifySelection:";       /* Cmd + Shift + PageDown   */
+
+

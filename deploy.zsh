@@ -97,12 +97,12 @@ print "    ...done\n"
 print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 
 # Download brew dependencies if brew is installed
-if (( ${+commands[brew]} )); then
-    print "Installing homebrew dependancies...\n"
-    brew bundle install --verbose --no-lock --file "${XDG_CONFIG_HOME}/macos/Brewfile"
-    print "\n    ...done\n"
-    print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
-fi
+# if (( ${+commands[brew]} )); then
+#     print "Installing homebrew dependancies...\n"
+#     brew bundle install --verbose --no-lock --file "${XDG_CONFIG_HOME}/macos/Brewfile"
+#     print "\n    ...done\n"
+#     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+# fi
 
 # Set MacOs defaults
 if [[ "${OSTYPE}" == darwin* ]]; then

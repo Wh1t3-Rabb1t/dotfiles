@@ -38,26 +38,11 @@ which is completely different.
 */
 
 {
-    "\UF72C"   = "pageUp:";                                      /* PageUp                   */
-    "$\UF72C"  = "moveToBeginningOfDocument:";                   /* Shift + PageUp           */
-    "@$\UF72C" = "moveToBeginningOfDocumentAndModifySelection:"; /* Cmd + Shift + PageUp     */
-
-    "\UF72D"   = "pageDown:";                                    /* PageDown                 */
-    "$\UF72D"  = "moveToEndOfDocument:";                         /* Shift + PageDown         */
-    "@$\UF72D" = "moveToEndOfDocumentAndModifySelection:";       /* Cmd + Shift + PageDown   */
-
     "\UF729"   = "moveToBeginningOfLine:";                       /* Home                     */
     "$\UF729"  = "moveToBeginningOfLineAndModifySelection:";     /* Shift + Home             */
 
     "\UF72B"   = "moveToEndOfLine:";                             /* End                      */
     "$\UF72B"  = "moveToEndOfLineAndModifySelection:";           /* Shift + End              */
-
-    "~a"       = "selectAll:";                                   /* Alt + a                  */
-    "~c"       = "copy:";                                        /* Alt + c                  */
-    "~x"       = "cut:";                                         /* Alt + x                  */
-    "~v"       = "paste:";                                       /* Alt + v                  */
-    "-y"       = "undo:";                                        /* Alt + y                  */
-    "$-y"      = "redo:";                                        /* Alt + Shift + y          */
 
     "~\UF702"  = "moveWordBackward:";                            /* Alt + LeftArrow          */
     "$~\UF702" = "moveWordBackwardAndModifySelection:";          /* Alt + Shift + LeftArrow  */

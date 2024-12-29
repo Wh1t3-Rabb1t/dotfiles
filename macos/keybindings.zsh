@@ -17,7 +17,12 @@
 # or Brave. Whereas Alt + Del doesn't work anywhere regardless of explicit     #
 # declaration.                                                                 #
 #                                                                              #
-# I'm dropping this nonsense entirely and leaning on Karabiner for all         #
+# Mapping Home / End to start / end of line in text input fields is actually   #
+# kind of useful because the default Shift + End behaviour is to send a Home   #
+# keystroke :) but declaring mappings via Apple defaults is only really viable #
+# if I can declare them all like this.                                         #
+#                                                                              #
+# Anyway I'm dropping this nonsense entirely and leaning on Karabiner for all  #
 # keystoke repurposing from here on out. You'd be wise to do the same.         #
 # ---------------------------------------------------------------------------- #
 
@@ -83,110 +88,3 @@ defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Open Location..
 defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Select All" -string "~a"
 
 killall SystemUIServer
-
-
-
-
-
-
-
-# /* _deleteBackward:
-# _selectNextKeyView:
-# _ageDownAndMod ifySelection:
-# _insertLineBreak:
-# ^insertNewline:
-# _ makeBaseWritingDirectionNatural:
-# ZinsertTa b:
-# _$makeBaseWritingDirectionRightToLeft:
-# _$makeBaseWritingDirectionLeftToRight:
-# _oveToBegi nningOfParagraph:
-# ]moveBackward:
-# _cycleToNextInputKeyboardLayout:
-# ^deleteForward:
-# ^insertBac ktab:
-# _moveToEndOfParagraph:
-# _deleteWordBackward:
-# _selectPreviousKeyView:
-# _cancelOperation:
-# \ moveForward:
-# _deleteWordForward:
-# _deleteToEndOfParagraph:
-# _!insertNewlineIgnoringFieldEdito r:
-# _centerSelectionInVisibleArea:
-# WmoveUp:
-# YmoveDown:
-# WpageUp:
-# _,moveToBeginningOfDocumentAnd ModifySelection:
-# YmoveLeft:
-# ZmoveRight:
-# YpageDown:
-# _&insertDoubleQuoteIgnoringSubstitution:
-# _ &moveToEndOfDocumentAndModifySelection:
-# _pageUpAndModifySelection:
-# Ycomplete:
-# _insertTabI gnoringFieldEditor:
-# ]scrollPageUp:
-# _scrollPageDown:
-# _moveToLeftEndOfLine:
-# _&insertSingleQuot eIgnoringSubstitution:
-# Ztranspose:
-# _moveToRightEndOfLine:
-# Uyank:
-# _insertRightToLeftSlash:
-# _mo veWordBackward:
-# _-deleteBackwardByDecomposingPreviousCharacter:
-# _scrollToBeginningOfDocume nt:
-# _moveWordForward:
-# _scrollToEndOfDocument:
-# _cycleToNextInputScript:
-# _moveToBeginningOfDoc ument:
-# _ makeTextWritingDirectionNatural:
-# _moveToEndOfDocument:
-# _-moveToBeginningOfParag raphAndModifySelection:
-# _moveBackwardAndModifySelection:
-# Wdelete:
-# ]moveWordLeft:
-# ^moveWor dRight:
-# _$makeTextWritingDirectionRightToLeft:
-# _moveUpAndModifySelection:
-# _#moveWordBackwar dAndModifySelection:
-# _&moveToLeftEndOfLineAndModifySelection:
-# _'moveToEndOfParagraphAndMod ifySelection:
-# _oveDownAndModifySelection:
-# _moveForwardAndModifySelection:
-# _oveLeftAndModify Selection:
-# _'moveToRightEndOfLineAndModifySelection:
-# _moveRightAndModifySelection:
-# _$makeTe xtWritingDirectionLeftToRight:
-# _(moveParagraphBackwardAndModifySelection:
-# _'moveParagraphF orwardAndModifySelection:
-# _"moveWordForwardAndModifySelection:
-# _moveWordLeftAndModifySelec tion:
-# _ moveWordRightAndModifySelection:
-# _deleteToBeginningOfLine:
-# _togglePlatformInputSyst */
-
-# /* ~/Library/KeyBindings/DefaultKeyBinding.dict */
-# {
-#     "~a" = "selectAll:";                       /* Alt + a */
-#     "~c" = "copy:";                            /* Alt + c */
-#     "~x" = "cut:";                             /* Alt + x */
-#     "~v" = "paste:";                           /* Alt + v */
-#     "~y" = "undo:";                            /* Alt + y */
-#     "~\UF702" = "moveWordBackward:";           /* Alt + Left */
-#     "~\UF703" = "moveWordForward:";            /* Alt + Right */
-#     "~\010" = "deleteWordBackward:";           /* Alt + Backspace */
-#     "~\177" = "deleteWordBackward:";           /* Alt + Delete */
-#     "$\UF72B" = "moveToBeginningOfDocument:";  /* Shift + PageUp */
-#     "$\UF72C" = "moveToEndOfDocument:";        /* Shift + PageDown */
-#     "\UF729" = "moveToLeftEndOfLine:";         /* Home */
-#     "\UF72B" = "moveToRightEndOfLine:";        /* End */
-# }
-
-# "\UF72C"   = "pageUp:";                                      /* PageUp                   */
-# "$\UF72C"  = "moveToBeginningOfDocument:";                   /* Shift + PageUp           */
-# "@$\UF72C" = "moveToBeginningOfDocumentAndModifySelection:"; /* Cmd + Shift + PageUp     */
-
-# "\UF72D"   = "pageDown:";                                    /* PageDown                 */
-# "$\UF72D"  = "moveToEndOfDocument:";                         /* Shift + PageDown         */
-# "@$\UF72D" = "moveToEndOfDocumentAndModifySelection:";       /* Cmd + Shift + PageDown   */

@@ -27,9 +27,8 @@ Help:         \UF746
 
 OS X
 -------------------------------------------------------------------------------
-delete:       \U007F
+delete:       \U007F                                                         */
 
-*/
 
 {
     "\UF729"   = "moveToBeginningOfLine:";                   /* Home                     */
@@ -50,3 +49,85 @@ delete:       \U007F
     "@i"       = ("moveUp:","moveUp:","moveUp:","moveUp:","moveUp:","moveUp:",);
     "@k"       = ("moveDown:","moveDown:","moveDown:","moveDown:","moveDown:","moveDown:",);
 }
+
+
+/*  Some garbled actions obtained from 'StandardKeyBinding.dict'.
+    Not really sure where else to find all available actions as Apple documentation on
+    the Cocoa text system is pretty sparse but this is better than nothing.
+    $ cat /System/Library/Frameworks/AppKit.framework/Resources/StandardKeyBinding.dict
+
+_deleteBackward:
+_selectNextKeyView:
+_ageDownAndMod ifySelection:
+_insertLineBreak:
+^insertNewline:
+_ makeBaseWritingDirectionNatural:
+ZinsertTa b:
+_$makeBaseWritingDirectionRightToLeft:
+_$makeBaseWritingDirectionLeftToRight:
+_oveToBegi nningOfParagraph:
+]moveBackward:
+_cycleToNextInputKeyboardLayout:
+^deleteForward:
+^insertBac ktab:
+_moveToEndOfParagraph:
+_deleteWordBackward:
+_selectPreviousKeyView:
+_cancelOperation:
+\ moveForward:
+_deleteWordForward:
+_deleteToEndOfParagraph:
+_!insertNewlineIgnoringFieldEdito r:
+_centerSelectionInVisibleArea:
+WmoveUp:
+YmoveDown:
+WpageUp:
+_,moveToBeginningOfDocumentAnd ModifySelection:
+YmoveLeft:
+ZmoveRight:
+YpageDown:
+_&insertDoubleQuoteIgnoringSubstitution:
+_ &moveToEndOfDocumentAndModifySelection:
+_pageUpAndModifySelection:
+Ycomplete:
+_insertTabI gnoringFieldEditor:
+]scrollPageUp:
+_scrollPageDown:
+_moveToLeftEndOfLine:
+_&insertSingleQuot eIgnoringSubstitution:
+Ztranspose:
+_moveToRightEndOfLine:
+Uyank:
+_insertRightToLeftSlash:
+_mo veWordBackward:
+_-deleteBackwardByDecomposingPreviousCharacter:
+_scrollToBeginningOfDocume nt:
+_moveWordForward:
+_scrollToEndOfDocument:
+_cycleToNextInputScript:
+_moveToBeginningOfDoc ument:
+_ makeTextWritingDirectionNatural:
+_moveToEndOfDocument:
+_-moveToBeginningOfParag raphAndModifySelection:
+_moveBackwardAndModifySelection:
+Wdelete:
+]moveWordLeft:
+^moveWor dRight:
+_$makeTextWritingDirectionRightToLeft:
+_moveUpAndModifySelection:
+_#moveWordBackwar dAndModifySelection:
+_&moveToLeftEndOfLineAndModifySelection:
+_'moveToEndOfParagraphAndMod ifySelection:
+_oveDownAndModifySelection:
+_moveForwardAndModifySelection:
+_oveLeftAndModify Selection:
+_'moveToRightEndOfLineAndModifySelection:
+_moveRightAndModifySelection:
+_$makeTe xtWritingDirectionLeftToRight:
+_(moveParagraphBackwardAndModifySelection:
+_'moveParagraphF orwardAndModifySelection:
+_"moveWordForwardAndModifySelection:
+_moveWordLeftAndModifySelec tion:
+_ moveWordRightAndModifySelection:
+_deleteToBeginningOfLine:
+_togglePlatformInputSyst */

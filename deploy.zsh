@@ -108,6 +108,7 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 if [[ "${OSTYPE}" == darwin* ]]; then
     print "Setting MacOs defaults...\n"
     "${XDG_CONFIG_HOME}/macos/system_settings.zsh"
+    "${XDG_CONFIG_HOME}/macos/keybindins.zsh"
     print "\n    ...done\n"
     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 fi

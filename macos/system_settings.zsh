@@ -6,6 +6,7 @@
 # Quit System Preferences so it doesn't override settings
 osascript -e 'tell application "System Preferences" to quit'
 
+
 # KEYBOARD
 # ---------------------------------------------------------------------------- #
 # Fastest key repeat settings
@@ -17,6 +18,9 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 # Controls whether certain bindings can be triggered from within text input fields
 # defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
+
+# Disable spelling corrections
+defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 
 
 # FINDER
@@ -37,11 +41,6 @@ defaults write com.apple.finder FXPreferredViewStyle Nlsv
 defaults write com.apple.dock autohide-time-modifier -float 0.4
 defaults write com.apple.dock autohide-delay -float 0
 
-
-defaults write com.apple.dock persistent-apps -array-add '{"tile-data"={"file-data"={"_CFURLString"="/System/Applications/Terminal.app";"_CFURLStringType"=0;};};"tile-type"="file-tile";}'
-# defaults write com.apple.dock persistent-apps -array-add '{"tile-data"={"file-data"={"_CFURLString"="/Applications/Safari.app";"_CFURLStringType"=0;};};"tile-type"="file-tile";}'
-
-
 # Only show active apps in the Dock
 defaults write com.apple.dock static-only -bool true
 
@@ -50,8 +49,6 @@ defaults write com.apple.dock show-recents -bool false
 
 # Hide the Dock
 defaults write com.apple.dock autohide -bool true
-
-
 
 
 # MISC

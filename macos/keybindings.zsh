@@ -1,14 +1,5 @@
 #!/usr/bin/env zsh
 
-# https://apple.stackexchange.com/questions/398561/how-to-set-system-keyboard-shortcuts-via-command-line
-# https://stackoverflow.com/questions/11876485/how-to-disable-generating-special-characters-when-pressing-the-alta-optiona
-# https://stackoverflow.com/questions/60870113/mac-generating-%E2%88%86%CB%9A%C2%AC-characters-instead-of-executing-vscode-shortcuts-that-involve
-# https://apple.stackexchange.com/questions/422371/how-to-disable-cmdshifta-and-cmdshiftm-from-cli-in-macos
-# https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
-#
-# Hot reload symbolichotkey settings:
-# https://zameermanji.com/blog/2021/6/8/applying-com-apple-symbolichotkeys-changes-instantaneously/
-
 # ---------------------------------------------------------------------------- #
 # WARNING!!! Do not venture down this route. There is only misery, madness,    #
 # malaise, and mental decay awaiting any who attempt to elegantly wrangle      #
@@ -35,7 +26,16 @@
 # keystoke repurposing from here on out. You'd be wise to do the same.         #
 # ---------------------------------------------------------------------------- #
 
-# Set Apple system keybindings
+# https://apple.stackexchange.com/questions/398561/how-to-set-system-keyboard-shortcuts-via-command-line
+# https://stackoverflow.com/questions/11876485/how-to-disable-generating-special-characters-when-pressing-the-alta-optiona
+# https://stackoverflow.com/questions/60870113/mac-generating-%E2%88%86%CB%9A%C2%AC-characters-instead-of-executing-vscode-shortcuts-that-involve
+# https://apple.stackexchange.com/questions/422371/how-to-disable-cmdshifta-and-cmdshiftm-from-cli-in-macos
+# https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
+#
+# Hot reload 'symbolichotkey' settings:
+# https://zameermanji.com/blog/2021/6/8/applying-com-apple-symbolichotkeys-changes-instantaneously/
+
+# Set Apple core system keybindings
 # ---------------------------------------------------------------------------- #
 # DefaultKeyBinding.dict cannot be symlinked, I presume Apple's internal mechanisms
 # don't follow user defined symlinks in the Library folder.
@@ -65,7 +65,7 @@ defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ \
 defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
 
 
-# Add web browsers to the universalaccess array and set default keybindings
+# Add web browsers to the universalaccess array and set keybindings
 # ---------------------------------------------------------------------------- #
 sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox" "com.brave.Browser"; \
 defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \

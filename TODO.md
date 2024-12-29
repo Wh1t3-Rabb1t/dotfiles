@@ -1,20 +1,37 @@
 # TODO
 
+- Update kitty / ghostty navigate windows bindigs to ctrl + alt + arrows
+- Update vial mappings also
+- Test if setting fzf local path is causing issues with nvim fzf lua inside of vm
+- Sort zscripts into sub directories
+- Finish reworking 'd' alias (search and jump to dir)
+- Finish refactoring zsh config
+- Rewrite basic Rectangle features with Hammerspoon
+- Possibly auto quit Finder when system wakes up with Hammerspoon
+- App launcher / focuser with Hammerspoon
+
+
+- Set global ignore for rg and fd
+- Configure yazi
+- Configure ghostty
+- Configure sketchybar
+- Configure vimium-c
+- Configure rg
+
 ---
 
 ## Plugins
 
 
 https://github.com/mafredri/zsh-async
+https://github.com/MichaelAquilina/zsh-auto-notify
 https://github.com/junegunn/fzf-git.sh
 https://github.com/rs/curlie
 https://github.com/davecheney/httpstat
 https://github.com/direnv/direnv
 https://github.com/walles/moar
 https://github.com/maaslalani/slides
-https://github.com/MichaelAquilina/zsh-auto-notify
 https://github.com/catppuccin/bat
-https://github.com/agkozak/zsh-z
 
 
 ---

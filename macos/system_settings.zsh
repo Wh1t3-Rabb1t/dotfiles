@@ -1,4 +1,10 @@
 #!/usr/bin/env zsh
+#                                   _   _   _
+#   _ __ ___   __ _  ___   ___  ___| |_| |_(_)_ __   __ _ ___
+#  | '_ ` _ \ / _` |/ __| / __|/ _ \ __| __| | '_ \ / _` / __|
+#  | | | | | | (_| | (__  \__ \  __/ |_| |_| | | | | (_| \__ \
+#  |_| |_| |_|\__,_|\___| |___/\___|\__|\__|_|_| |_|\__, |___/
+# ==================================================|___/===================== #
 
 # https://git.herrbischoff.com/awesome-macos-command-line/about/
 # https://github.com/mathiasbynens/dotfiles/blob/main/.macos
@@ -52,8 +58,8 @@ defaults write -g AppleShowAllExtensions -bool true
 # Disable window animations and Get Info animations
 defaults write com.apple.finder DisableAllAnimations -bool true
 
-# Set Desktop as the default location for new Finder windows
-# For other paths, use `PfLo` and `file:///full/path/here/`
+# Set Desktop as the default location for new Finder windows. For
+# other paths, use `PfLo` and `file:///full/path/here/`.
 defaults write com.apple.finder NewWindowTarget -string "PfDe"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
 
@@ -82,7 +88,7 @@ defaults write com.apple.dock tilesize -int 70
 # Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.01
 
-# Disable Ctrl + Left / Right (Mission Control: Switch Desktops)
+# Disable Ctrl + left / right default bindings (Mission Control: Switch Desktops)
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 0;}"
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 0;}"
 

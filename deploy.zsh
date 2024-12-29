@@ -1,7 +1,12 @@
 #!/usr/bin/env zsh
+#       _            _
+#    __| | ___ _ __ | | ___  _   _
+#   / _` |/ _ \ '_ \| |/ _ \| | | |
+#  | (_| |  __/ |_) | | (_) | |_| |
+#   \__,_|\___| .__/|_|\___/ \__, |
+# ============|_|============|___/============================================ #
 
 set -e
-
 zmodload -m -F zsh/files b:zf_rm b:zf_ln b:zf_mkdir
 
 
@@ -19,15 +24,9 @@ XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
 
-# Retrieve terminal pane width for separator
-# ---------------------------------------------------------------------------- #
-# local term_width="$(tput cols)"
-
-
 # Create required directories
 # ---------------------------------------------------------------------------- #
 print "\nCreating required directory tree...\n"
-# zf_mkdir -p "${XDG_CONFIG_HOME}"
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"
@@ -125,19 +124,19 @@ print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 # Download brew dependencies if brew is installed
 # ---------------------------------------------------------------------------- #
-# if (( ${+commands[brew]} )); then
-#     print "Installing homebrew dependancies...\n"
-#     brew bundle install --verbose --no-lock --file "${XDG_CONFIG_HOME}/macos/Brewfile"
-#     print "\n    ...done\n"
-#     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-# fi
+if (( ${+commands[brew]} )); then
+    print "Installing homebrew dependancies...\n"
+    brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}/macos/Brewfile"
+    print "\n    ...done\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+fi
 
 
 # Set MacOs defaults
 # ---------------------------------------------------------------------------- #
 if [[ "${OSTYPE}" == darwin* ]]; then
     print "Setting MacOs defaults...\n"
-    "${XDG_CONFIG_HOME}/macos/system_settings.zsh"
+    "${SCRIPT_DIR}/macos/system_settings.zsh"
     print "\n    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi

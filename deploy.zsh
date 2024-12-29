@@ -21,19 +21,18 @@ XDG_STATE_HOME="${HOME}/.local/state"
 
 # Retrieve terminal pane width for separator
 # ---------------------------------------------------------------------------- #
-local term_width="$(tput cols)"
+# local term_width="$(tput cols)"
 
 
 # Create required directories
 # ---------------------------------------------------------------------------- #
 print "\nCreating required directory tree...\n"
-zf_mkdir -p "${XDG_CONFIG_HOME}"
+# zf_mkdir -p "${XDG_CONFIG_HOME}"
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{zsh,man/man1,vim/spell}
 zf_mkdir -p "${XDG_STATE_HOME}"
 zf_mkdir -p "${HOME}"/.local/{bin,etc}
 print "    ...done\n"
-# print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
@@ -46,7 +45,7 @@ else
     ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${ZDOTDIR:-${HOME}}/.zshenv"
     print "    ...failed to match this script dir, symlinking .zshenv\n"
 fi
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Link configs
@@ -55,7 +54,7 @@ print "Linking config files...\n"
 zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
 zf_ln -sfn "${SCRIPT_DIR}/vim/.vimrc" "${HOME}/.vimrc"
 print "    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Make sure submodules are installed
@@ -65,7 +64,7 @@ git submodule sync > /dev/null
 git submodule update --init --recursive > /dev/null
 git clean -ffd
 print "\n    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Compile compatible zsh plugin files
@@ -80,7 +79,7 @@ print "Compiling zsh plugins...\n"
     done
 }
 print "    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Install fzf binaries
@@ -95,7 +94,7 @@ else
     print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
 fi
 popd
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Generate vim help tags
@@ -104,7 +103,7 @@ if (( ${+commands[vim]} )); then
     print "Generating vim helptags...\n"
     command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &> /dev/null
     print "    ...done\n"
-    print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi
 
 
@@ -113,7 +112,7 @@ fi
 print "Downloading gitstatusd for powerlevel10k...\n"
 ${SHELL} -is <<<'' &> /dev/null
 print "    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Set fast-syntax-highlighting theme
@@ -121,7 +120,7 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 print "Setting fast-syntax-highlighting theme...\n"
 ${SHELL} -is <<<'fast-theme base16' &>/dev/null
 print "    ...done\n"
-print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Download brew dependencies if brew is installed
@@ -130,7 +129,7 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 #     print "Installing homebrew dependancies...\n"
 #     brew bundle install --verbose --no-lock --file "${XDG_CONFIG_HOME}/macos/Brewfile"
 #     print "\n    ...done\n"
-#     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+#     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 # fi
 
 
@@ -140,7 +139,7 @@ if [[ "${OSTYPE}" == darwin* ]]; then
     print "Setting MacOs defaults...\n"
     "${XDG_CONFIG_HOME}/macos/system_settings.zsh"
     print "\n    ...done\n"
-    print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi
 
 

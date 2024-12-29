@@ -7,43 +7,6 @@
 osascript -e 'tell application "System Preferences" to quit'
 
 
-
-
-# Set sidebar icon size to medium
-defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
-
-# Disable the over-the-top focus ring animation
-defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
-
-# Increase window resize speed for Cocoa applications
-defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
-
-# Disable the “Are you sure you want to open this application?” dialog
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-
-# Disable automatic capitalization as it’s annoying when typing code
-defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
-
-# Disable smart dashes as they’re annoying when typing code
-defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
-
-# Disable automatic period substitution as it’s annoying when typing code
-defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
-
-# Disable smart quotes as they’re annoying when typing code
-defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-
-
-
-# Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
-defaults write com.apple.finder QuitMenuItem -bool true
-
-# Finder: disable window animations and Get Info animations
-defaults write com.apple.finder DisableAllAnimations -bool true
-
-
-
-
 # KEYBOARD
 # ---------------------------------------------------------------------------- #
 # Fastest key repeat settings
@@ -51,28 +14,52 @@ defaults write -g InitialKeyRepeat -int 15
 defaults write -g KeyRepeat -int 2
 
 # Disable press-and-hold for keys in favor of key repeat
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+defaults write -g ApplePressAndHoldEnabled -bool false
 
 # Controls whether certain bindings can be triggered from within text input fields
-# defaults write NSGlobalDomain NSMnemonicsWorkInText -bool YES
+# defaults write -g NSMnemonicsWorkInText -bool YES
 
 # Disable spelling corrections
 defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 
+# Disable automatic capitalization
+defaults write -g NSAutomaticCapitalizationEnabled -bool false
+
+# Disable smart dashes
+defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
+
+# Disable automatic period
+defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
+
+# Disable smart quotes
+defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
+
+
+
+# Disable Ctrl + Left (Desktop Left) 79
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 0;}"
+
+# Disable Ctrl + Right (Desktop Right) 81
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 0;}"
+
+
 
 # FINDER
 # ---------------------------------------------------------------------------- #
+# Default to the list view in Finder
+defaults write com.apple.finder FXPreferredViewStyle Nlsv
+
 # Display hidden files in Finder
 defaults write com.apple.finder AppleShowAllFiles True
-
-# Show all filename extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 # Show the full path at the bottom of Finder
 defaults write com.apple.finder ShowPathbar True
 
-# Default to the list view in Finder
-defaults write com.apple.finder FXPreferredViewStyle Nlsv
+# Allow quitting via cmd + Q; doing so will also hide desktop icons
+defaults write com.apple.finder QuitMenuItem -bool true
+
+# Show all filename extensions
+defaults write -g AppleShowAllExtensions -bool true
 
 # Disable window animations and Get Info animations
 defaults write com.apple.finder DisableAllAnimations -bool true
@@ -85,8 +72,8 @@ defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desk
 
 # DOCK
 # ---------------------------------------------------------------------------- #
-# Show Dock instantly on mouse-over
-defaults write com.apple.dock autohide-time-modifier -float 0.4
+# Faster Dock popup on mouse-over
+defaults write com.apple.dock autohide-time-modifier -float 0.1
 defaults write com.apple.dock autohide-delay -float 0
 
 # Only show active apps in the Dock
@@ -105,31 +92,46 @@ defaults write com.apple.dock tilesize -int 80
 # MISSION CONTROL
 # ---------------------------------------------------------------------------- #
 # Speed up Mission Control animations
-defaults write com.apple.dock expose-animation-duration -float 0.1
+defaults write com.apple.dock expose-animation-duration -float 0.01
 
 # Don’t group windows by application in Mission Control
 # (i.e. use the old Exposé behavior instead)
-defaults write com.apple.dock expose-group-by-app -bool false
-
+# defaults write com.apple.dock expose-group-by-app -bool false
 
 
 # MISC
 # ---------------------------------------------------------------------------- #
-# Hide the "Now Playing" menu bar item
-# defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
+# Hammerspoon XDG compliance
+defaults write org.hammerspoon.Hammerspoon MJConfigFile "$HOME/.config/hammerspoon/init.lua"
+
+# Set sidebar icon size to medium
+defaults write -g NSTableViewDefaultSizeMode -int 2
+
+# Disable the over-the-top focus ring animation
+defaults write -g NSUseAnimatedFocusRing -bool false
+
+# Increase window resize speed for Cocoa applications
+defaults write -g NSWindowResizeTime -float 0.001
+
+# Disable the “Are you sure you want to open this application?” dialog
+defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # Save screenshots in the "screenshots" folder
-defaults write com.apple.screencapture location ~/Documents/screenshots
+defaults write com.apple.screencapture location ~/screenshots
+
+# Save screenshots in png format
 defaults write com.apple.screencapture type -string "png"
+
+# Hide apple folders
+chflags hidden ~/{Movies,Music,Pictures,Public}
 
 # Set lock screen message
 # sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
 
-# Hammerspoon XDG compliance
-defaults write org.hammerspoon.Hammerspoon MJConfigFile "$HOME/.config/hammerspoon/init.lua"
 
-# Hide apple folders
-chflags hidden ~/{Movies,Music,Pictures,Public}
+# Hide the "Now Playing" menu bar item
+# defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
+
 
 # See the changes
 killall Dock

@@ -25,29 +25,29 @@
 #   "$VALUE"
 
 
-# Disable Ctrl + Up (Mission Control) 32
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 32 "{enabled = 1;}"
+# # Disable Ctrl + Up (Mission Control) 32
+# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 32 "{enabled = 1;}"
 
-# Disable Ctrl + Down (Application Windows) 33
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 33 "{enabled = 1;}"
+# # Disable Ctrl + Down (Application Windows) 33
+# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 33 "{enabled = 1;}"
 
-# Disable Ctrl + Left (Desktop Left) 79
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 1;}"
+# # Disable Ctrl + Left (Desktop Left) 79
+# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 1;}"
 
-# Disable Ctrl + Right (Desktop Right) 81
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 1;}"
-
-
+# # Disable Ctrl + Right (Desktop Right) 81
+# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 1;}"
 
 
 
 
 
-# Disable Ctrl + Up (Mission Control) 32
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 32 "{enabled = 0;}"
 
-# Disable Ctrl + Down (Application Windows) 33
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 33 "{enabled = 0;}"
+
+# # Disable Ctrl + Up (Mission Control) 32
+# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 32 "{enabled = 0;}"
+
+# # Disable Ctrl + Down (Application Windows) 33
+# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 33 "{enabled = 0;}"
 
 # Disable Ctrl + Left (Desktop Left) 79
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 0;}"

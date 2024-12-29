@@ -35,6 +35,13 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
 
 
+# Finder: allow quitting via ⌘ + Q; doing so will also hide desktop icons
+defaults write com.apple.finder QuitMenuItem -bool true
+
+# Finder: disable window animations and Get Info animations
+defaults write com.apple.finder DisableAllAnimations -bool true
+
+
 
 
 # KEYBOARD
@@ -91,8 +98,8 @@ defaults write com.apple.dock show-recents -bool false
 # Autohide the Dock when unfocused
 defaults write com.apple.dock autohide -bool true
 
-# Set the icon size of Dock items to 36 pixels
-defaults write com.apple.dock tilesize -int 36
+# Set the icon size of Dock items to 80 pixels
+defaults write com.apple.dock tilesize -int 80
 
 
 # MISSION CONTROL

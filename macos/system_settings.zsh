@@ -105,7 +105,7 @@ defaults write -g NSWindowResizeTime -float 0.001
 defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # Save screenshots in the "screenshots" folder
-defaults write com.apple.screencapture location ~/screenshots
+defaults write com.apple.screencapture location ~/Pictures/
 
 # Save screenshots in png format
 defaults write com.apple.screencapture type -string "png"

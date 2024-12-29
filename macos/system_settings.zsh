@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # https://git.herrbischoff.com/awesome-macos-command-line/about/
-# https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
+# https://github.com/mathiasbynens/dotfiles/blob/main/.macos
 
 # Quit System Preferences so it doesn't override settings
 osascript -e 'tell application "System Preferences" to quit'
@@ -9,15 +9,12 @@ osascript -e 'tell application "System Preferences" to quit'
 
 # KEYBOARD
 # ---------------------------------------------------------------------------- #
-# Fastest key repeat settings
+# Faster key repeat settings
 defaults write -g InitialKeyRepeat -int 15
 defaults write -g KeyRepeat -int 2
 
 # Disable press-and-hold for keys in favor of key repeat
 defaults write -g ApplePressAndHoldEnabled -bool false
-
-# Controls whether certain bindings can be triggered from within text input fields
-# defaults write -g NSMnemonicsWorkInText -bool YES
 
 # Disable spelling corrections
 defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
@@ -25,23 +22,14 @@ defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 # Disable automatic capitalization
 defaults write -g NSAutomaticCapitalizationEnabled -bool false
 
-# Disable smart dashes
-defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
-
 # Disable automatic period
 defaults write -g NSAutomaticPeriodSubstitutionEnabled -bool false
 
+# Disable smart dashes
+defaults write -g NSAutomaticDashSubstitutionEnabled -bool false
+
 # Disable smart quotes
 defaults write -g NSAutomaticQuoteSubstitutionEnabled -bool false
-
-
-
-# Disable Ctrl + Left (Desktop Left) 79
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 0;}"
-
-# Disable Ctrl + Right (Desktop Right) 81
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 0;}"
-
 
 
 # FINDER
@@ -85,8 +73,8 @@ defaults write com.apple.dock show-recents -bool false
 # Autohide the Dock when unfocused
 defaults write com.apple.dock autohide -bool true
 
-# Set the icon size of Dock items to 80 pixels
-defaults write com.apple.dock tilesize -int 80
+# Set the icon size of Dock items to 70 pixels
+defaults write com.apple.dock tilesize -int 70
 
 
 # MISSION CONTROL
@@ -94,15 +82,15 @@ defaults write com.apple.dock tilesize -int 80
 # Speed up Mission Control animations
 defaults write com.apple.dock expose-animation-duration -float 0.01
 
-# Don’t group windows by application in Mission Control
-# (i.e. use the old Exposé behavior instead)
-# defaults write com.apple.dock expose-group-by-app -bool false
+# Disable Ctrl + Left / Right (Mission Control: Switch Desktops)
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 0;}"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 0;}"
 
 
 # MISC
 # ---------------------------------------------------------------------------- #
 # Hammerspoon XDG compliance
-defaults write org.hammerspoon.Hammerspoon MJConfigFile "$HOME/.config/hammerspoon/init.lua"
+defaults write org.hammerspoon.Hammerspoon MJConfigFile "${HOME}/.config/hammerspoon/init.lua"
 
 # Set sidebar icon size to medium
 defaults write -g NSTableViewDefaultSizeMode -int 2
@@ -126,14 +114,20 @@ defaults write com.apple.screencapture type -string "png"
 chflags hidden ~/{Movies,Music,Pictures,Public}
 
 # Set lock screen message
-# sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
-
-
-# Hide the "Now Playing" menu bar item
-# defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
-
+sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
 
 # See the changes
 killall Dock
 killall Finder
 killall SystemUIServer
+
+
+# Controls whether certain bindings can be triggered from within text input fields
+# defaults write -g NSMnemonicsWorkInText -bool YES
+
+# Don’t group windows by application in Mission Control
+# (i.e. use the old Exposé behavior instead)
+# defaults write com.apple.dock expose-group-by-app -bool false
+
+# Hide the "Now Playing" menu bar item
+# defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False

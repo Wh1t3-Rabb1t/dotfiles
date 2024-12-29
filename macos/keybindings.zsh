@@ -1,60 +1,13 @@
 #!/usr/bin/env zsh
 
-
-# When you disable these keyboard shortcuts via the UI, you're effectively adding the following key-value pair to the NSServicesStatus dictionary in the pbs domain:
-
-# "com.apple.Terminal - Search man Page Index in Terminal - searchManPages" = {
-#   "enabled_context_menu" = 0;
-#   "enabled_services_menu" = 0;
-#   "presentation_modes" = {
-#     ContextMenu = 0;
-#     ServicesMenu = 0;
-#   };
-# };
-# To do this via the CLI, you can write it in XML-encoded form using -dict-add:
-
-# VALUE='<dict><key>enabled_context_menu</key><false/><key>enabled_services_menu</key><false/><key>presentation_modes</key><dict><key>ContextMenu</key><false/><key>ServicesMenu</key><false/></dict></dict>'
-
-# defaults write pbs NSServicesStatus \
-#   -dict-add \
-#   'com.apple.Terminal - Open man Page in Terminal - openManPage' \
-#   "$VALUE"
-# defaults write pbs NSServicesStatus \
-#   -dict-add \
-#   'com.apple.Terminal - Search man Page Index in Terminal - searchManPages' \
-#   "$VALUE"
-
-
-# # Disable Ctrl + Up (Mission Control) 32
-# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 32 "{enabled = 1;}"
-
-# # Disable Ctrl + Down (Application Windows) 33
-# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 33 "{enabled = 1;}"
-
-# # Disable Ctrl + Left (Desktop Left) 79
-# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 1;}"
-
-# # Disable Ctrl + Right (Desktop Right) 81
-# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 1;}"
-
-
-
-
-
-
-
-# # Disable Ctrl + Up (Mission Control) 32
-# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 32 "{enabled = 0;}"
-
-# # Disable Ctrl + Down (Application Windows) 33
-# defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 33 "{enabled = 0;}"
-
-# Disable Ctrl + Left (Desktop Left) 79
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 "{enabled = 0;}"
-
-# Disable Ctrl + Right (Desktop Right) 81
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{enabled = 0;}"
-
+# https://apple.stackexchange.com/questions/398561/how-to-set-system-keyboard-shortcuts-via-command-line
+# https://stackoverflow.com/questions/11876485/how-to-disable-generating-special-characters-when-pressing-the-alta-optiona
+# https://stackoverflow.com/questions/60870113/mac-generating-%E2%88%86%CB%9A%C2%AC-characters-instead-of-executing-vscode-shortcuts-that-involve
+# https://apple.stackexchange.com/questions/422371/how-to-disable-cmdshifta-and-cmdshiftm-from-cli-in-macos
+# https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
+#
+# Hot reload symbolichotkey settings:
+# https://zameermanji.com/blog/2021/6/8/applying-com-apple-symbolichotkeys-changes-instantaneously/
 
 # ---------------------------------------------------------------------------- #
 # WARNING!!! Do not venture down this route. There is only misery, madness,    #
@@ -75,72 +28,66 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{ena
 #                                                                              #
 # Mapping Home / End to start / end of line in text input fields is actually   #
 # kind of useful because the default Shift + End behaviour is to send a Home   #
-# keystroke :) but declaring mappings via Apple defaults is only really viable #
-# if I can declare them all like this.                                         #
+# keystroke :) but declaring mappings via Apple defaults is only really        #
+# appealing if they can all be declared like this.                             #
 #                                                                              #
 # Anyway I'm dropping this nonsense entirely and leaning on Karabiner for all  #
 # keystoke repurposing from here on out. You'd be wise to do the same.         #
 # ---------------------------------------------------------------------------- #
 
-# https://apple.stackexchange.com/questions/398561/how-to-set-system-keyboard-shortcuts-via-command-line
-# https://stackoverflow.com/questions/11876485/how-to-disable-generating-special-characters-when-pressing-the-alta-optiona
-# https://stackoverflow.com/questions/60870113/mac-generating-%E2%88%86%CB%9A%C2%AC-characters-instead-of-executing-vscode-shortcuts-that-involve
+# Set Apple system keybindings
+# ---------------------------------------------------------------------------- #
+# DefaultKeyBinding.dict cannot be symlinked, I presume Apple's internal mechanisms
+# don't follow user defined symlinks in the Library folder.
+local SOURCE="${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict"
+local TARGET_DIR="${HOME}/Library/KeyBindings/"
 
-# sudo -v
+if [[ ! -f "$SOURCE" ]]; then
+    echo "Error: DefaultKeyBinding file does not exist." >&2
+    exit 1
+fi
 
-# # Set Apple system keybindings
-# # ---------------------------------------------------------------------------- #
-# # DefaultKeyBinding.dict cannot be symlinked, I presume Apple's internal mechanisms
-# # don't follow user defined symlinks in the Library folder.
-# local SOURCE="${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict"
-# local TARGET_DIR="${HOME}/Library/KeyBindings/"
+if [[ ! -d "$TARGET_DIR" ]]; then
+    echo "Creating required directory"
+    mkdir -p "${HOME}/Library/KeyBindings"
+fi
 
-# if [[ ! -f "$SOURCE" ]]; then
-#     echo "Error: DefaultKeyBinding file does not exist." >&2
-#     exit 1
-# fi
-
-# if [[ ! -d "$TARGET_DIR" ]]; then
-#     echo "Creating required directory"
-#     mkdir -p "${HOME}/Library/KeyBindings"
-# fi
-
-# cp -f "$SOURCE" "$TARGET_DIR" || { echo "Error: Failed to copy file"; exit 1; }
+cp -f "$SOURCE" "$TARGET_DIR" || { echo "Error: Failed to copy file"; exit 1; }
 
 
-# # Enable and set Unicode Hex Input source
-# # ---------------------------------------------------------------------------- #
-# defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ \
-#     "InputSourceKind" = "Keyboard Layout"; \
-#     "KeyboardLayout ID" = "-1"; \
-#     "KeyboardLayout Name" = "Unicode Hex Input"; \
-# }'
-# defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
+# Enable and set Unicode Hex Input source
+# ---------------------------------------------------------------------------- #
+defaults write com.apple.HIToolbox AppleSelectedInputSources -array-add '{ \
+    "InputSourceKind" = "Keyboard Layout"; \
+    "KeyboardLayout ID" = "-1"; \
+    "KeyboardLayout Name" = "Unicode Hex Input"; \
+}'
+defaults write com.apple.HIToolbox AppleCurrentKeyboardLayoutInputSourceID -string "com.apple.keylayout.UnicodeHexInput"
 
 
-# # Add web browsers to the universalaccess array and set default keybindings
-# # ---------------------------------------------------------------------------- #
-# defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox" "com.brave.Browser"; \
-# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
-# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Window" -string "~n"; \
-# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Private Window" -string "$~n"; \
-# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Find in Page..." -string "~f"; \
-# defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Reopen Closed Tab" -string "$~m"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Window" -string "~n"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Private Window" -string "$~n"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Find..." -string "~f"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Search Tabs..." -string "~p"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Quick Commands" -string "$~p"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Copy" -string "~c"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Cut" -string "~x"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Paste" -string "~v"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Undo" -string "~y"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Redo" -string "$~y"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Reload This Page" -string "~r"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Open Location..." -string "~'"; \
-# defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Select All" -string "~a"
+# Add web browsers to the universalaccess array and set default keybindings
+# ---------------------------------------------------------------------------- #
+sudo defaults write com.apple.universalaccess com.apple.custommenu.apps -array-add "org.mozilla.firefox" "com.brave.Browser"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Window" -string "~n"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "New Private Window" -string "$~n"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Find in Page..." -string "~f"; \
+defaults write org.mozilla.firefox NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Tab" -string "~m"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Reopen Closed Tab" -string "$~m"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Window" -string "~n"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "New Private Window" -string "$~n"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Find..." -string "~f"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Search Tabs..." -string "~p"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Quick Commands" -string "$~p"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Close Tab" -string "~w"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Copy" -string "~c"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Cut" -string "~x"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Paste" -string "~v"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Undo" -string "~y"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Redo" -string "$~y"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Reload This Page" -string "~r"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Open Location..." -string "~'"; \
+defaults write com.brave.Browser NSUserKeyEquivalents -dict-add "Select All" -string "~a"
 
-# killall SystemUIServer
+killall SystemUIServer

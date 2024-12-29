@@ -108,7 +108,6 @@ print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 if [[ "${OSTYPE}" == darwin* ]]; then
     print "Setting MacOs defaults...\n"
     "${XDG_CONFIG_HOME}/macos/system_settings.zsh"
-    # "${XDG_CONFIG_HOME}/macos/keybindings.zsh"
     print "\n    ...done\n"
     print "$(printf '%*s' "$term_width" | tr ' ' '#')\n"
 fi
@@ -131,4 +130,4 @@ print "    ██████╔╝██║   ██║██║     ███�
 print "    ██╔══██╗██║   ██║██║     ██╔═██╗       "
 print "    ██║  ██║╚██████╔╝╚██████╗██║  ██╗      "
 print "    ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝    \n"
-print "Log out to reflect updated MacOs key repeat settings\n"
+print "Log out/restart to reflect updated MacOs keyboard settings.\n"

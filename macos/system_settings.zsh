@@ -7,6 +7,36 @@
 osascript -e 'tell application "System Preferences" to quit'
 
 
+
+
+# Set sidebar icon size to medium
+defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+
+# Disable the over-the-top focus ring animation
+defaults write NSGlobalDomain NSUseAnimatedFocusRing -bool false
+
+# Increase window resize speed for Cocoa applications
+defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
+
+# Disable the “Are you sure you want to open this application?” dialog
+defaults write com.apple.LaunchServices LSQuarantine -bool false
+
+# Disable automatic capitalization as it’s annoying when typing code
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+# Disable smart dashes as they’re annoying when typing code
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# Disable automatic period substitution as it’s annoying when typing code
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+
+# Disable smart quotes as they’re annoying when typing code
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+
+
+
+
 # KEYBOARD
 # ---------------------------------------------------------------------------- #
 # Fastest key repeat settings
@@ -28,11 +58,22 @@ defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 # Display hidden files in Finder
 defaults write com.apple.finder AppleShowAllFiles True
 
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
 # Show the full path at the bottom of Finder
 defaults write com.apple.finder ShowPathbar True
 
 # Default to the list view in Finder
 defaults write com.apple.finder FXPreferredViewStyle Nlsv
+
+# Disable window animations and Get Info animations
+defaults write com.apple.finder DisableAllAnimations -bool true
+
+# Set Desktop as the default location for new Finder windows
+# For other paths, use `PfLo` and `file:///full/path/here/`
+defaults write com.apple.finder NewWindowTarget -string "PfDe"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/Desktop/"
 
 
 # DOCK
@@ -47,14 +88,28 @@ defaults write com.apple.dock static-only -bool true
 # Don't show recent apps in the Dock
 defaults write com.apple.dock show-recents -bool false
 
-# Hide the Dock
+# Autohide the Dock when unfocused
 defaults write com.apple.dock autohide -bool true
+
+# Set the icon size of Dock items to 36 pixels
+defaults write com.apple.dock tilesize -int 36
+
+
+# MISSION CONTROL
+# ---------------------------------------------------------------------------- #
+# Speed up Mission Control animations
+defaults write com.apple.dock expose-animation-duration -float 0.1
+
+# Don’t group windows by application in Mission Control
+# (i.e. use the old Exposé behavior instead)
+defaults write com.apple.dock expose-group-by-app -bool false
+
 
 
 # MISC
 # ---------------------------------------------------------------------------- #
 # Hide the "Now Playing" menu bar item
-defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
+# defaults write com.apple.controlcenter "NSStatusItem Visible NowPlaying" False
 
 # Save screenshots in the "screenshots" folder
 defaults write com.apple.screencapture location ~/Documents/screenshots

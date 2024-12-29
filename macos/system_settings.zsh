@@ -37,12 +37,13 @@ defaults write com.apple.finder FXPreferredViewStyle Nlsv
 defaults write com.apple.dock autohide-time-modifier -float 0.4
 defaults write com.apple.dock autohide-delay -float 0
 
-# defaults write com.apple.dock persistent-apps -array-add '{"tile-type"="spacer-tile";}'
 
-defaults write com.apple.dock persistent-apps -array-add '{"tile-data"={"file-label"="Launchpad";};"tile-type"="spacer-tile";}'
+defaults write com.apple.dock persistent-apps -array-add '{"tile-data"={"file-data"={"_CFURLString"="/System/Applications/Terminal.app";"_CFURLStringType"=0;};};"tile-type"="file-tile";}'
+# defaults write com.apple.dock persistent-apps -array-add '{"tile-data"={"file-data"={"_CFURLString"="/Applications/Safari.app";"_CFURLStringType"=0;};};"tile-type"="file-tile";}'
+
 
 # Only show active apps in the Dock
-# defaults write com.apple.dock static-only -bool true
+defaults write com.apple.dock static-only -bool true
 
 # Don't show recent apps in the Dock
 defaults write com.apple.dock show-recents -bool false

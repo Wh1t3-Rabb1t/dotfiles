@@ -16,16 +16,18 @@
 # ANSI escape codes:  https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
 
 
-# Configuration
-for conffile in "${ZDOTDIR}"/rc.d/*; do
-    source "${conffile}"
-done
-unset conffile
-
-
-# User scripts
+# ZSCRIPTS
+# ---------------------------------------------------------------------------- #
 for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/*(N/); do
     fpath=($zscripts $fpath)
     autoload -Uz $fpath[1]/*(.:t)
 done
 unset zscripts
+
+
+# RC
+# ---------------------------------------------------------------------------- #
+for conffile in "${ZDOTDIR}"/rc.d/*; do
+    source "${conffile}"
+done
+unset conffile

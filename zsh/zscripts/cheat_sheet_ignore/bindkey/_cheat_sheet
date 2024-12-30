@@ -6,10 +6,16 @@ local initial_dir="${0:A:h}"
 cd "${ZSCRIPTDIR}"
 
 # Use `fd` over `find` if available
+# if (( ${+commands[fd]} )); then
+#     local selection="$(fd --type f --exclude cheat_sheet_ignore | fzf --ansi)"
+# elif (( ${+commands[find]} )); then
+#     local selection="$(find . -type f | fzf --ansi)"
+# fi
+
 if (( ${+commands[fd]} )); then
-    local selection="$(fd --type f | fzf --ansi)"
+    local selection="$(fd --type f --exclude cheat_sheet_ignore | fzf --ansi)"
 elif (( ${+commands[find]} )); then
-    local selection="$(find . -type f | fzf --ansi)"
+    local selection="$(find . -type f -not -path './cheat_sheet_ignore/*' | fzf --ansi)"
 fi
 
 cd "$initial_dir"

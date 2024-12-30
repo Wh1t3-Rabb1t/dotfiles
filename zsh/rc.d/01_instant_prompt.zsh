@@ -10,8 +10,6 @@
 if ! [[ -v SSH_TTY || -v SUDO_USER ]]; then
     autoload -Uz .clear_screen_soft_bottom
     .clear_screen_soft_bottom
-    # autoload -Uz clear-screen-soft-bottom
-    # clear-screen-soft-bottom
 fi
 
 # powerlevel10k instant prompt stanza

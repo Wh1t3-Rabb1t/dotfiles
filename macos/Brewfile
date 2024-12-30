@@ -1,2 +1,2 @@
-tap "serie"
 cask "ghostty"
+brew "lusingander/tap/serie"

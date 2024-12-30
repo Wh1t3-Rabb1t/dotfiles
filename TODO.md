@@ -1,11 +1,9 @@
 # TODO
 
-- Update kitty / ghostty navigate windows bindigs to ctrl + alt + arrows
-- Update vial mappings also
-- Test if setting fzf local path is causing issues with nvim fzf lua inside of vm
 - Sort zscripts into sub directories
 - Finish reworking 'd' alias (search and jump to dir)
 - Finish refactoring zsh config
+- Test if setting fzf local path is causing issues with nvim fzf lua inside of vm
 - Rewrite basic Rectangle features with Hammerspoon
 - Possibly auto quit Finder when system wakes up with Hammerspoon
 - App launcher / focuser with Hammerspoon
@@ -17,6 +15,7 @@
 - Configure sketchybar
 - Configure vimium-c
 - Configure rg
+- Configure https://github.com/lusingander/serie
 
 ---
 
@@ -33,17 +32,29 @@ https://github.com/walles/moar
 https://github.com/maaslalani/slides
 https://github.com/catppuccin/bat
 
+- http client
+https://github.com/Julien-cpsn/ATAC
+
 
 ---
 
-## Misc
+## Some ambient dnb / future jungle on the horizon
+
+https://soundcloud.com/papazen
+https://soundcloud.com/zorrovian
+https://soundcloud.com/pizza_hotline
+https://soundcloud.com/neuralfold
+
+---
 
 ## Brewfile
 
 
 cask "brave-browser"
+cask "firefox"
 cask "firefox-developer-edition"
 cask "font-meslo-for-powerlevel10k"
+cask "ghostty"
 cask "hammerspoon"
 cask "karabiner-elements"
 cask "kitty"

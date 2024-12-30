@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Pass `True` or `False` to toggle displaying hidden files in the Finder.      #
+# ---------------------------------------------------------------------------- #
+# Arguments : True / False                                                     #
+# Globals   : None                                                             #
+# Outputs   : None                                                             #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+case "$#" in
+    0)
+        echo -e "\nNo args given. Pass 'True' or 'False'."
+        return
+        ;;
+    1)
+        case "$1" in
+            True|False)
+                defaults write com.apple.finder AppleShowAllFiles "$1"; killall Finder
+                ;;
+            *)
+                echo -e "\nInvalid argument. Pass only 'True' or 'False'."
+                return
+                ;;
+        esac
+        ;;
+    *)
+        echo -e "\nToo many args given. Pass only one, 'True' or 'False'."
+        return
+        ;;
+esac

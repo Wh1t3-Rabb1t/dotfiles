@@ -26,10 +26,12 @@
 # keystoke repurposing from here on out. You'd be wise to do the same.         #
 # ---------------------------------------------------------------------------- #
 
+# https://apple.stackexchange.com/questions/474553/defaultkeybinding-dict-no-longer-remaps-ctlarrow-windows-shortcuts-after-macos
 # https://apple.stackexchange.com/questions/398561/how-to-set-system-keyboard-shortcuts-via-command-line
+# https://apple.stackexchange.com/questions/422371/how-to-disable-cmdshifta-and-cmdshiftm-from-cli-in-macos
 # https://stackoverflow.com/questions/11876485/how-to-disable-generating-special-characters-when-pressing-the-alta-optiona
 # https://stackoverflow.com/questions/60870113/mac-generating-%E2%88%86%CB%9A%C2%AC-characters-instead-of-executing-vscode-shortcuts-that-involve
-# https://apple.stackexchange.com/questions/422371/how-to-disable-cmdshifta-and-cmdshiftm-from-cli-in-macos
+# https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/TextDefaultsBindings/TextDefaultsBindings.html
 # https://gist.github.com/trusktr/1e5e516df4e8032cbc3d
 #
 # Hot reload 'symbolichotkey' settings:

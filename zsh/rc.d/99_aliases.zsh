@@ -18,30 +18,35 @@ alias b="cd -"
 }
 
 alias gnug="grep -H -n -i --color=auto"
-alias showAll="defaults write com.apple.finder AppleShowAllFiles True; killall Finder"
-alias hideAll="defaults write com.apple.finder AppleShowAllFiles False; killall Finder"
 alias dlv="yt-dlp -f mp4"
 alias dl720p="yt-dlp -S vcodec:h264,fps,res:720,acodec:m4a"
 alias dl1080p="yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a"
-alias syntaxTheme="fast-theme -l"
 alias getIP="ifconfig | grep inet"
+# alias syntaxTheme="fast-theme -l"
+# alias showAll="defaults write com.apple.finder AppleShowAllFiles True; killall Finder"
+# alias hideAll="defaults write com.apple.finder AppleShowAllFiles False; killall Finder"
+
 
 # Functions
-alias e="al_open_with_nvim"
-alias f="al_find_and_open_file"
-alias d="al_find_and_cd_to_dir"
-alias up="al_navigate_up_dir_tree"
-alias lg="al_rg_fzf_and_open_with_nvim"
-alias md="al_preview_markdown"
-alias vs="al_find_vim_sessions"
-alias nf="al_create_files"
-alias nd="al_create_directories"
-alias rm="al_move_to_trash"
-alias gg="al_git_add_commit_push"
-alias dlm="al_dl_audio"
-alias dlpl="al_dl_and_concat_playlist_audio"
-alias dlfullpl="al_dl_playlist_audio"
-alias ren="al_rename_all_files_in_cwd"
+alias e="launch_nvim"
+alias f="find_and_open"
+alias d="find_and_goto"
+alias up="navigate_up_dir_tree"
+alias lg="rg_fzf_into_nvim"
+alias md="glow_markdown"
+alias vs="find_vim_sessions"
+alias nf="create_files"
+alias nd="create_dirs"
+alias rm="move_to_trash"
+
+# Git
+alias gg="add_commit_push"
+
+# yt-dlp
+alias dlm="audio_in_opus"
+alias dlpl="playlist_audio_and_concat"
+alias dlfullpl="playlist_audio_individually"
+
 
 # Plugin managers
 alias bo="brew outdated"

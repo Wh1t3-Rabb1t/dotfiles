@@ -37,6 +37,7 @@
 # Hot reload 'symbolichotkey' settings:
 # https://zameermanji.com/blog/2021/6/8/applying-com-apple-symbolichotkeys-changes-instantaneously/
 
+
 # Set Apple core system keybindings
 # ---------------------------------------------------------------------------- #
 # DefaultKeyBinding.dict cannot be symlinked, I presume Apple's internal mechanisms

@@ -1,6 +1,5 @@
 # TODO
 
-- Sort zscripts into sub directories
 - Finish reworking 'd' alias (search and jump to dir)
 - Finish refactoring zsh config
 - Test if setting fzf local path is causing issues with nvim fzf lua inside of vm

@@ -12,7 +12,7 @@ alias b="cd -"
 alias getip="ifconfig | grep inet"
 
 # Override regular 'clear' with custom one, that puts prompt at bottom
-alias clear=clear-screen-soft-bottom
+alias clear=".clear_screen_soft_bottom"
 
 
 # Git
@@ -54,18 +54,18 @@ alias clear=clear-screen-soft-bottom
 }
 
 
-# # zscripts
-# # ---------------------------------------------------------------------------- #
-# alias e="launch_nvim"
-# alias f="find_and_open"
-# alias d="find_and_goto"
-# alias up="navigate_up_dir_tree"
-# alias lg="rg_fzf_into_nvim"
-# alias md="glow_markdown"
-# alias vs="find_vim_sessions"
-# alias nf="create_files"
-# alias nd="create_dirs"
-# alias rm="move_to_trash"
+# zscripts
+# ---------------------------------------------------------------------------- #
+alias e="launch_nvim"
+alias f="find_and_open"
+alias d="find_and_goto"
+alias up="navigate_up_dir_tree"
+alias g="rg_fzf_into_nvim"
+alias md="glow_markdown"
+alias vs="find_vim_sessions"
+alias nf="create_files"
+alias nd="create_dirs"
+alias rm="move_to_trash"
 
 
 

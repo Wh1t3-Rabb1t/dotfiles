@@ -3,10 +3,14 @@
 emulate -L zsh
 
 local initial_dir="${0:A:h}"
-
 cd "${ZSCRIPTDIR}"
 
-local selection="$(fd --type f | fzf --ansi)"
+# Use `fd` over `find` if available
+if (( ${+commands[fd]} )); then
+    local selection="$(fd --type f | fzf --ansi)"
+elif (( ${+commands[find]} )); then
+    local selection="$(find . -type f | fzf --ansi)"
+fi
 
 cd "$initial_dir"
 

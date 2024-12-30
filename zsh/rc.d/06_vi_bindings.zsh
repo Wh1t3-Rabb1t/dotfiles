@@ -15,14 +15,13 @@
 bindkey -v
 export KEYTIMEOUT=1
 
-# Highlight color
+# Highlights
 zle_highlight+=(paste:none)               # Prevent text highlight on paste
 zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
+
 # INDEX
 # ---------------------------------------------------------------------------- #
-# USER DEFINED FUNCTIONS
-# ZSH-HISTORY-SUBSTRING-SEARCH PLUGIN
 # MODE TOGGLING
 # LINE NAVIGATION
 # DELETE BINDINGS
@@ -43,89 +42,23 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
 # REMOVE DEFAULT KEYMAPS
 # ---------------------------------------------------------------------------- #
-local _defaults
-_defaults=(
-    'd'
-    'D'
-    'e'
-    'E'
-    'b'
-    'B'
-    'c'
-    'C'
-    'x'
-    'X'
-    's'
-    'S'
-    'y'
-    'Y'
-    'v'
-    'V'
-    't'
-    'T'
-    'w'
-    'W'
-    'n'
-    'N'
-    'i'
-    'I'
-    'k'
-    'j'
-    'J'
-    'g'
-    'G'
-    'o'
-    'O'
-    'p'
-    'P'
-    'm'
-    'u'
-    'l'
-    'h'
-    '#'
-    '$'
-    "'"
-    '"'
-    '`'
-    '^'
-    '|'
-    ','
-    '.'
-    '+'
-    '?'
-    '~'
-    '<'
-    ':'
-    '\-'
-    '\t'
-)
+local default_keymaps=( 'd' 'D' 'e' 'E' 'b' 'B' 'c' 'C' 'x' 'X' 's' 'S' 'y' \
+'Y' 'v' 'V' 't' 'T' 'w' 'W' 'n' 'N' 'i' 'I' 'k' 'j' 'J' 'g' 'G' 'o' 'O' 'p' \
+'P' 'm' 'u' 'l' 'h' '#' '$' "'" '"' '`' '^' '|' ',' '.' '+' '?' '~' '<' ':' \
+'\-' '\t' )
+
 for m in vicmd visual viopp; do
-    for k in "$_defaults[@]"; do
+    for k in "$default_keymaps[@]"; do
         bindkey -rM $m $k
     done
 done
 
 
-# USER DEFINED FUNCTIONS
-# ---------------------------------------------------------------------------- #
-zle -N bk_broot_launcher
-bindkey -M viins "^[f" bk_broot_launcher   # Alt f = Launch broot
-
-zle -N bk_cmd_history_fzf
-bindkey -M viins "^[p" bk_cmd_history_fzf  # Alt p = Command history fzf
-
-zle -N bk_teleport
-bindkey -M viins "^['" bk_teleport         # Alt ' = Z jump history fzf
-
-zle -N bk_rename_fzf
-bindkey -M viins "^[r" bk_rename_fzf       # Alt r = Rename files / dirs in cwd
-
-
 # MODE TOGGLING
 # ---------------------------------------------------------------------------- #
 bindkey -M vicmd '^[' vi-insert        # Esc = Insert/cmd mode
-bindkey -M vicmd 's' visual-mode       # s = Visual mode
-bindkey -M vicmd 'S' visual-line-mode  # S = Visual line mode
+bindkey -M vicmd 's' visual-mode       # s   = Visual mode
+bindkey -M vicmd 'S' visual-line-mode  # S   = Visual line mode
 
 
 # LINE NAVIGATION
@@ -150,8 +83,8 @@ bindkey -M visual 'U' vi-backward-word-end     # U = Jump backwards to WORD end
 bindkey -M visual 'a' exchange-point-and-mark  # a = Other side of selection
 
 # Ins
-bindkey -M viins '^[[H' beginning-of-line      # Home = Jump LINE START
-bindkey -M viins '^[[F' end-of-line            # End = Jump LINE END
+bindkey -M viins '^[[H' beginning-of-line      # Home     = Jump LINE START
+bindkey -M viins '^[[F' end-of-line            # End      = Jump LINE END
 bindkey -M viins '^[[1;3D' vi-backward-word    # Alt Left = Jump backwards by WORD
 
 # A forward-char call is required to prevent
@@ -168,25 +101,25 @@ bindkey -M viins '^[[1;3C' _jump_forward_word  # Alt Right = Jump forwards by WO
 # DELETE BINDINGS
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '^?' backward-delete-char  # BS = Delete backwards
-bindkey -M vicmd '^[[3~' delete-char        # Del = Delete forwards
-bindkey -M vicmd '^[^?' backward-kill-word  # Alt BS = Delete WORD LEFT
-bindkey -M vicmd '^[[3;3~' kill-word        # Alt Del = Delete WORD RIGHT
-bindkey -M vicmd '^H' backward-kill-line    # Ctrl BS = Delete to LINE start
-bindkey -M vicmd '^[[3;5~' kill-line        # Ctrl Del = Delete to LINE end
+bindkey -M vicmd '^?' backward-delete-char  # BS        = Delete backwards
+bindkey -M vicmd '^[[3~' delete-char        # Del       = Delete forwards
+bindkey -M vicmd '^[^?' backward-kill-word  # Alt BS    = Delete WORD LEFT
+bindkey -M vicmd '^[[3;3~' kill-word        # Alt Del   = Delete WORD RIGHT
+bindkey -M vicmd '^H' backward-kill-line    # Ctrl BS   = Delete to LINE start
+bindkey -M vicmd '^[[3;5~' kill-line        # Ctrl Del  = Delete to LINE end
 bindkey -M vicmd '^[[3;2~' kill-whole-line  # Shift Del = Delete whole line
 
 # Vis
-bindkey -M visual '^?' kill-region          # BS = Delete selection
-bindkey -M visual '^[[3~' kill-region       # Del = Delete selection
+bindkey -M visual '^?' kill-region          # BS        = Delete selection
+bindkey -M visual '^[[3~' kill-region       # Del       = Delete selection
 
 # Ins
-bindkey -M viins '^?' backward-delete-char  # BS = Delete backwards
-bindkey -M viins '^[[3~' delete-char        # Del = Delete forwards
-bindkey -M viins '^[^?' backward-kill-word  # Alt BS = Delete WORD LEFT
-bindkey -M viins '^[[3;3~' kill-word        # Alt Del = Delete WORD RIGHT
-bindkey -M viins '^H' backward-kill-line    # Ctrl BS = Delete to LINE end
-bindkey -M viins '^[[3;5~' kill-line        # Ctrl Del = Delete to LINE start
+bindkey -M viins '^?' backward-delete-char  # BS        = Delete backwards
+bindkey -M viins '^[[3~' delete-char        # Del       = Delete forwards
+bindkey -M viins '^[^?' backward-kill-word  # Alt BS    = Delete WORD LEFT
+bindkey -M viins '^[[3;3~' kill-word        # Alt Del   = Delete WORD RIGHT
+bindkey -M viins '^H' backward-kill-line    # Ctrl BS   = Delete to LINE end
+bindkey -M viins '^[[3;5~' kill-line        # Ctrl Del  = Delete to LINE start
 bindkey -M viins '^[[3;2~' kill-whole-line  # Shift Del = Delete whole line
 
 
@@ -265,7 +198,7 @@ bindkey -M visual 'w' kill-region  # w = Delete visual selection
 # UNDO / REDO / DOT OPERATOR
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '\-' vi-repeat-change  # Tab = Dot operator
+bindkey -M vicmd '\-' vi-repeat-change  # Tab   = Dot operator
 bindkey -M vicmd '^[y' undo             # Alt y = Undo
 bindkey -M vicmd '^[Y' redo             # Alt Y = Redo
 
@@ -514,7 +447,7 @@ bindkey -M visual 'y' vi-change  # y = Change visual selection
 
 # PASTE
 # ---------------------------------------------------------------------------- #
-# Cmd / Ins
+# Cmd
 local function _paste_from_clipboard() {
     emulate -L zsh
     CUTBUFFER=$(pbpaste)
@@ -522,6 +455,8 @@ local function _paste_from_clipboard() {
 }
 zle -N _paste_from_clipboard
 bindkey -M vicmd 'v' _paste_from_clipboard
+
+# Ins
 bindkey -M viins '^[v' _paste_from_clipboard
 
 # Vis

@@ -9,6 +9,7 @@
 - App launcher / focuser with Hammerspoon
 
 
+- ReConfigure Lualine
 - Set global ignore for rg and fd
 - Configure yazi
 - Configure ghostty

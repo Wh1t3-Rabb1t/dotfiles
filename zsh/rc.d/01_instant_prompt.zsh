@@ -5,7 +5,7 @@
 #  |_|_| |_|___/\__\__,_|_| |_|\__| | .__/|_|  \___/|_| |_| |_| .__/ \__|
 # ==================================|_|=======================|_|============= #
 
-# clear screen, move cursor to the bottom
+# Clear screen, move cursor to the bottom
 # but don't do this under ssh or sudo sessions, as prompt already at the bottom
 if ! [[ -v SSH_TTY || -v SUDO_USER ]]; then
     autoload -Uz clear-screen-soft-bottom

@@ -5,14 +5,14 @@
 #   \__,_|_|_|\__,_|___/\___||___/
 # ============================================================================ #
 
-# Some handy suffix aliases
-# alias -s log=less
-
-
 # General
+# ---------------------------------------------------------------------------- #
 alias h="cd ~"
 alias b="cd -"
 alias getip="ifconfig | grep inet"
+
+# Override regular 'clear' with custom one, that puts prompt at bottom
+alias clear=clear-screen-soft-bottom
 
 
 # Git
@@ -54,45 +54,36 @@ alias getip="ifconfig | grep inet"
 }
 
 
-# zscripts
-# ---------------------------------------------------------------------------- #
-alias e="launch_nvim"
-alias f="find_and_open"
-alias d="find_and_goto"
-alias up="navigate_up_dir_tree"
-alias lg="rg_fzf_into_nvim"
-alias md="glow_markdown"
-alias vs="find_vim_sessions"
-alias nf="create_files"
-alias nd="create_dirs"
-alias rm="move_to_trash"
+# # zscripts
+# # ---------------------------------------------------------------------------- #
+# alias e="launch_nvim"
+# alias f="find_and_open"
+# alias d="find_and_goto"
+# alias up="navigate_up_dir_tree"
+# alias lg="rg_fzf_into_nvim"
+# alias md="glow_markdown"
+# alias vs="find_vim_sessions"
+# alias nf="create_files"
+# alias nd="create_dirs"
+# alias rm="move_to_trash"
 
 
 
-# Override regular 'clear' with custom one, that puts prompt at bottom
-alias clear=clear-screen-soft-bottom
 
+# # Human file sizes
+# (( ${+commands[df]} )) && alias df="df --human-readable --print-type"
+# (( ${+commands[du]} )) && alias du="du --human-readable --total"
 
-# Human file sizes
-(( ${+commands[df]} )) && alias df="df --human-readable --print-type"
-(( ${+commands[du]} )) && alias du="du --human-readable --total"
+# # Handy stuff and a bit of XDG compliance
+# (( ${+commands[grep]} )) && alias grep="grep --color=auto --binary-files=without-match --devices=skip"
+# (( ${+commands[quilt]} )) && alias quilt="quilt --quiltrc ${DOTFILES}/configs/quiltrc"
+# (( ${+commands[wget]} )) && alias wget="wget --hsts-file=${XDG_CACHE_HOME}/wget-hsts"
 
-# Handy stuff and a bit of XDG compliance
-(( ${+commands[grep]} )) && alias grep="grep --color=auto --binary-files=without-match --devices=skip"
-(( ${+commands[quilt]} )) && alias quilt="quilt --quiltrc ${DOTFILES}/configs/quiltrc"
-(( ${+commands[tmux]} )) && {
-    alias stmux="tmux new-session 'sudo --login'"
-}
-(( ${+commands[wget]} )) && alias wget="wget --hsts-file=${XDG_CACHE_HOME}/wget-hsts"
-# (( ${+commands[ls]} )) && {
-#     alias ls="ls --color=auto --hyperlink=auto --classify"
-#     alias ll="LC_COLLATE=C ls -l -v --almost-all --human-readable"
-# }
-# Suppress suggestions and globbing, enable wrappers
-(( ${+commands[touch]} )) && alias touch="nocorrect touch"
-(( ${+commands[mkdir]} )) && alias mkdir="nocorrect mkdir"
-(( ${+commands[cp]} )) && alias cp="nocorrect cp --verbose"
-(( ${+commands[ag]} )) && alias ag="noglob ag"
-(( ${+commands[fd]} )) && alias fd="noglob fd"
-(( ${+commands[man]} )) && alias man="nocorrect wrap-man"
-(( ${+commands[sudo]} )) && alias sudo="noglob wrap-sudo " # trailing space is needed to enable alias expansion
+# # Suppress suggestions and globbing, enable wrappers
+# (( ${+commands[touch]} )) && alias touch="nocorrect touch"
+# (( ${+commands[mkdir]} )) && alias mkdir="nocorrect mkdir"
+# (( ${+commands[cp]} )) && alias cp="nocorrect cp --verbose"
+# (( ${+commands[ag]} )) && alias ag="noglob ag"
+# (( ${+commands[fd]} )) && alias fd="noglob fd"
+# (( ${+commands[man]} )) && alias man="nocorrect wrap-man"
+# (( ${+commands[sudo]} )) && alias sudo="noglob wrap-sudo " # trailing space is needed to enable alias expansion

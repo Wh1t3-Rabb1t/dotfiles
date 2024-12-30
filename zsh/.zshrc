@@ -25,6 +25,15 @@ done
 unset zscripts
 
 
+# Traverse hidden dirs as well
+# for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/{*,.*}(N/); do
+#     fpath=($zscripts $fpath)
+#     autoload -Uz $fpath[1]/*(.:t)
+# done
+# unset zscripts
+
+
+
 # RC
 # ---------------------------------------------------------------------------- #
 for conffile in "${ZDOTDIR}"/rc.d/*; do

@@ -25,8 +25,7 @@
 # unset zscripts
 
 
-# Traverse hidden dirs as well
-for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/**/*(N/); do
+for zscripts in $ZSCRIPTDIR/**/*(N/); do
     fpath=($zscripts $fpath)
     autoload -Uz $zscripts/*(.:t)
 done

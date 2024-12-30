@@ -18,18 +18,18 @@
 
 # ZSCRIPTS
 # ---------------------------------------------------------------------------- #
-# for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/*(N/); do
-#     fpath=($zscripts $fpath)
-#     autoload -Uz $fpath[1]/*(.:t)
-# done
-# unset zscripts
-
-
-for zscripts in $ZSCRIPTDIR/**/*(N/); do
+for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/*(N/); do
     fpath=($zscripts $fpath)
-    autoload -Uz $zscripts/*(.:t)
+    autoload -Uz $fpath[1]/*(.:t)
 done
 unset zscripts
+
+
+# for zscripts in $ZSCRIPTDIR/**/*(N/); do
+#     fpath=($zscripts $fpath)
+#     autoload -Uz $zscripts/*(.:t)
+# done
+# unset zscripts
 
 
 

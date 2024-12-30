@@ -1,5 +1,7 @@
 # TODO
 
+- ! FIX ZSCRIPT PARENT DIR WITH NESTED DIRS BUT NO FILES
+
 - Finish reworking 'd' alias (search and jump to dir)
 - Finish refactoring zsh config
 - Test if setting fzf local path is causing issues with nvim fzf lua inside of vm

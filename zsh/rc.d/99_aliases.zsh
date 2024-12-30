@@ -11,14 +11,11 @@ alias h="cd ~"
 alias b="cd -"
 alias getip="ifconfig | grep inet"
 
-# Override regular 'clear' with custom one, that puts prompt at bottom
-alias clear=".clear_screen_soft_bottom"
-
 
 # Git
 # ---------------------------------------------------------------------------- #
 (( ${+commands[git]} )) && {
-    alias gg="add_commit_push"
+    alias gg="git_add_commit_push"
     alias gl="git log --all --graph --decorate --oneline"
 }
 
@@ -43,9 +40,9 @@ alias clear=".clear_screen_soft_bottom"
 # yt-dlp
 # ---------------------------------------------------------------------------- #
 (( ${+commands[yt-dlp]} )) && {
-    alias dlm="audio_in_opus"
-    alias dlpl="playlist_audio_and_concat"
-    alias dlfullpl="playlist_audio_individually"
+    alias dlm="dl_audio_as_opus"
+    alias dlpl="dl_playlist_audio_and_concat"
+    alias dlfullpl="dl_playlist_audio_individually"
     alias dlv="yt-dlp -f mp4"
     alias dl320p="yt-dlp -S vcodec:h264,fps,res:320,acodec:m4a"
     alias dl480p="yt-dlp -S vcodec:h264,fps,res:480,acodec:m4a"
@@ -57,15 +54,16 @@ alias clear=".clear_screen_soft_bottom"
 # zscripts
 # ---------------------------------------------------------------------------- #
 alias e="launch_nvim"
-alias f="find_and_open"
-alias d="find_and_goto"
+alias f="find_and_open_files"
+alias d="find_and_goto_dir"
 alias up="navigate_up_dir_tree"
 alias g="rg_fzf_into_nvim"
 alias md="glow_markdown"
 alias vs="find_vim_sessions"
-alias nf="create_files"
 alias nd="create_dirs"
+alias nf="create_files"
 alias rm="move_to_trash"
+alias clear="clear_screen_soft_bottom"
 
 
 

@@ -6,18 +6,10 @@
 # ======================|_|=================================================== #
 
 # See:
-    # https://thevaluable.dev/zsh-completion-guide-examples/
-    # man zshcompwid
-    # man zshcompsys
-    # man zshcompctl
-
-
-
-
-    # Use cache for commands
-    # zstyle ':completion:*' use-cache on
-    # zstyle ':completion:*' cache-path ${ZDOTDIR:-$HOME}/.zcompcache
-
+# https://thevaluable.dev/zsh-completion-guide-examples/
+# man zshcompwid
+# man zshcompsys
+# man zshcompctl
 
 
 # Completion tweaks
@@ -55,8 +47,7 @@ zmodload zsh/complist
 autoload -Uz compinit
 if [[ -n "${XDG_CACHE_HOME}/zsh/compdump"(#qN.mh+20) ]]; then
     compinit -i -u -d "${XDG_CACHE_HOME}/zsh/compdump"
-    # zrecompile fresh compdump in background
-    {
+    {   # zrecompile fresh compdump in background
         autoload -Uz zrecompile
         zrecompile -pq "${XDG_CACHE_HOME}/zsh/compdump"
     } &!
@@ -70,6 +61,7 @@ _comp_options+=(globdots)
 # Enable bash completions too
 autoload -Uz bashcompinit
 bashcompinit
+
 
 
 

@@ -25,14 +25,6 @@ done
 unset zscripts
 
 
-# for zscripts in $ZSCRIPTDIR/**/*(N/); do
-#     fpath=($zscripts $fpath)
-#     autoload -Uz $zscripts/*(.:t)
-# done
-# unset zscripts
-
-
-
 # RC
 # ---------------------------------------------------------------------------- #
 for conffile in "${ZDOTDIR}"/rc.d/*; do

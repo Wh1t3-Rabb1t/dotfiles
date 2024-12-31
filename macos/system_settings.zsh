@@ -52,11 +52,11 @@ defaults write com.apple.finder ShowPathbar True
 # Allow quitting via cmd + Q; doing so will also hide desktop icons
 defaults write com.apple.finder QuitMenuItem -bool true
 
-# Show all filename extensions
-defaults write -g AppleShowAllExtensions -bool true
-
 # Disable window animations and Get Info animations
 defaults write com.apple.finder DisableAllAnimations -bool true
+
+# Show all filename extensions
+defaults write -g AppleShowAllExtensions -bool true
 
 # Set Desktop as the default location for new Finder windows. For
 # other paths, use `PfLo` and `file:///full/path/here/`.

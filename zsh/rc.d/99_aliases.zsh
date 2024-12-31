@@ -53,7 +53,7 @@ alias getip="ifconfig | grep inet"
 
 # zscripts
 # ---------------------------------------------------------------------------- #
-[[ -v "$ZSCRIPTDIR"]] && {
+[[ -v ZSCRIPTDIR ]] && {
     alias e="_launch_nvim"
     alias f="_find_and_open_files"
     alias d="_find_and_goto_dir"

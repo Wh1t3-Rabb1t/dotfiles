@@ -15,7 +15,7 @@ alias getip="ifconfig | grep inet"
 # Git
 # ---------------------------------------------------------------------------- #
 (( ${+commands[git]} )) && {
-    alias gg="git_add_commit_push"
+    alias gg="_add_commit_push"
     alias gl="git log --all --graph --decorate --oneline"
 }
 
@@ -40,9 +40,9 @@ alias getip="ifconfig | grep inet"
 # yt-dlp
 # ---------------------------------------------------------------------------- #
 (( ${+commands[yt-dlp]} )) && {
-    alias dlm="dl_audio_as_opus"
-    alias dlpl="dl_playlist_audio_and_concat"
-    alias dlfullpl="dl_playlist_audio_individually"
+    alias dlm="_dl_audio_as_opus"
+    alias dlpl="_dl_playlist_audio_and_concat"
+    alias dlfullpl="_dl_playlist_audio_individually"
     alias dlv="yt-dlp -f mp4"
     alias dl320p="yt-dlp -S vcodec:h264,fps,res:320,acodec:m4a"
     alias dl480p="yt-dlp -S vcodec:h264,fps,res:480,acodec:m4a"
@@ -53,18 +53,25 @@ alias getip="ifconfig | grep inet"
 
 # zscripts
 # ---------------------------------------------------------------------------- #
-alias e="launch_nvim"
-alias f="find_and_open_files"
-alias d="find_and_goto_dir"
-alias up="navigate_up_dir_tree"
-alias g="rg_fzf_into_nvim"
-alias md="glow_markdown"
-alias vs="find_vim_sessions"
-alias nd="create_dirs"
-alias nf="create_files"
-alias rm="move_to_trash"
-alias clear="clear_screen_soft_bottom"
+alias e="_launch_nvim"
+alias f="_find_and_open_files"
+alias d="_find_and_goto_dir"
+alias up="_navigate_up_dir_tree"
+alias nf="_create_files"
+alias nd="_create_dirs"
+alias rm="_move_to_trash"
+alias g="_rg_fzf_into_nvim"
+alias md="_glow_markdown"
+alias vs="_find_vim_sessions"
+alias clear="_clear_screen_soft_bottom"
 
+
+
+
+# # Enable diff with colors
+# if (( ${+commands[colordiff]} )); then
+#     alias diff="colordiff --new-file --text --recursive -u --algorithm patience"
+# fi
 
 
 

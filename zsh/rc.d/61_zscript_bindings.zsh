@@ -13,26 +13,26 @@ bindkey -M viins "^[c" _cheat_sheet         # Alt c = Cheat sheet
 
 # COMMAND HISTORY FZF
 # ---------------------------------------------------------------------------- #
-zle -N cmd_history_fzf
-bindkey -M viins "^[p" cmd_history_fzf      # Alt p = Command history fzf
+zle -N _cmd_history_fzf
+bindkey -M viins "^[p" _cmd_history_fzf      # Alt p = Command history fzf
 
 
 # TELEPORT
 # ---------------------------------------------------------------------------- #
-zle -N teleport
-bindkey -M viins "^['" teleport             # Alt ' = Z jump history fzf
+zle -N _teleport
+bindkey -M viins "^['" _teleport             # Alt ' = Z jump history fzf
 
 
 # RENAME FZF
 # ---------------------------------------------------------------------------- #
-zle -N rename_fzf
-bindkey -M viins "^[r" rename_fzf           # Alt r = Rename files / dirs in cwd
+zle -N _rename_fzf
+bindkey -M viins "^[r" _rename_fzf           # Alt r = Rename files / dirs in cwd
 
 
 # BROOT
 # ---------------------------------------------------------------------------- #
 if (( ${+commands[broot]} )); then
     source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
-    zle -N broot_launcher
-    bindkey -M viins "^[f" broot_launcher   # Alt f = Launch broot
+    zle -N _broot_launcher
+    bindkey -M viins "^[f" _broot_launcher   # Alt f = Launch broot
 fi

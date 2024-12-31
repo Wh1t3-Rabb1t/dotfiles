@@ -8,8 +8,8 @@
 # Clear screen, move cursor to the bottom
 # but don't do this under ssh or sudo sessions, as prompt already at the bottom
 if ! [[ -v SSH_TTY || -v SUDO_USER ]]; then
-    autoload -Uz clear_screen_soft_bottom
-    clear_screen_soft_bottom
+    autoload -Uz _clear_screen_soft_bottom
+    _clear_screen_soft_bottom
 fi
 
 # powerlevel10k instant prompt stanza

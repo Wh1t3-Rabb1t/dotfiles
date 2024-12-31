@@ -10,7 +10,8 @@
 
 emulate -L zsh
 
-local selection="$(lsd -A -v | fzf --no-preview --ansi)"
+# local selection="$(lsd -A -v | fzf --no-preview --ansi)"
+local selection="$({ lsd -A -v || \ls -a } | fzf --no-preview --ansi)"
 
 if [[ -n "$selection" ]]; then
     local quotes=\'

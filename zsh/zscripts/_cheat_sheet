@@ -12,15 +12,20 @@ cd "${ZSCRIPTDIR}"
 #     local selection="$(find . -type f | fzf --ansi)"
 # fi
 
+# Search cheat sheet ignoring files with a leading underscore
 if (( ${+commands[fd]} )); then
-    local selection="$(fd --type f --exclude cheat_sheet_ignore | fzf --ansi)"
+    local selection="$(fd --type f --exclude '_*' | fzf --ansi)"
 elif (( ${+commands[find]} )); then
-    local selection="$(find . -type f -not -path './cheat_sheet_ignore/*' | fzf --ansi)"
+    local selection="$(find . -type f ! -name '_*' | fzf --ansi)"
 fi
+
+    # Ignores dirs with leadings underscore also
+    # local selection="$(find . -type f ! -path './_*/*' ! -name '_*' | fzf --ansi)"
 
 cd "$initial_dir"
 
 if [[ "$selection" ]]; then
     BUFFER="$selection"
+    # BUFFER="${selection:t}"
     CURSOR=${#BUFFER}
 fi

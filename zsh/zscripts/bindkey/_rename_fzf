@@ -10,10 +10,14 @@
 
 emulate -L zsh
 
-# local selection="$(lsd -A -v | fzf --no-preview --ansi)"
-# local selection="$({ lsd -A -v || ls -a } | fzf --no-preview --ansi)"
+local selection
 
-local selection="$(lsd -A -v 2>/dev/null || ls -a | fzf --no-preview --ansi)"
+# Use lsd over ls if available
+if (( ${+commands[lsd]} )); then
+    selection="$(lsd -A -v | fzf --no-preview --ansi)"
+elif (( ${+commands[ls]} )); then
+    selection="$(ls -a | fzf --no-preview --ansi)"
+fi
 
 if [[ -n "$selection" ]]; then
     local quotes=\'

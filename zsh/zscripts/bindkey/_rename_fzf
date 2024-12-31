@@ -11,13 +11,15 @@
 emulate -L zsh
 
 # local selection="$(lsd -A -v | fzf --no-preview --ansi)"
-local selection="$({ lsd -A -v || \ls -a } | fzf --no-preview --ansi)"
+# local selection="$({ lsd -A -v || ls -a } | fzf --no-preview --ansi)"
+
+local selection="$(lsd -A -v 2>/dev/null || ls -a | fzf --no-preview --ansi)"
 
 if [[ -n "$selection" ]]; then
     local quotes=\'
 
-    # Remove icons
-    selection="$(echo "$selection" | sed -E 's/^.{2}//')"
+    # Remove icons if lsd was used over ls
+    (( ${+commands[lsd]} )) && selection="$(echo "$selection" | sed -E 's/^.{2}//')"
 
     # Use double quotes if a single quote exists in the selection
     [[ $selection == *\'* ]] && quotes=\"

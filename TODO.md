@@ -1,7 +1,17 @@
 # TODO
 
-- ! FIX ZSCRIPT PARENT DIR WITH NESTED DIRS BUT NO FILES
 
+z0rc fpath commands to incorporate:
+bag
+fz
+ineachdir
+lspath
+fgb
+fgl
+
+
+- Write a script to check for zsh plugin updates
+- Tweak `f` open files to enable opening of multiple files (with nvim only mpv can't open playlists)
 - Finish reworking 'd' alias (search and jump to dir)
 - Finish refactoring zsh config
 - Test if setting fzf local path is causing issues with nvim fzf lua inside of vm
@@ -33,6 +43,7 @@ https://github.com/direnv/direnv
 https://github.com/walles/moar
 https://github.com/maaslalani/slides
 https://github.com/catppuccin/bat
+https://github.com/zsh-users/zsh-completions
 
 - http client
 https://github.com/Julien-cpsn/ATAC

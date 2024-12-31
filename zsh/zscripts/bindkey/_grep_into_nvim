@@ -1,0 +1,29 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Search term in cwd, pipe it into fzf, and open selection in nvim.            #
+# ---------------------------------------------------------------------------- #
+# Arguments : None                                                             #
+# Globals   : None                                                             #
+# Outputs   : Pipe grep results into fzf and pass selection to nvim            #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+# Use bat, if it's available...
+local preview_cmd
+if (( ${+commands[bat]} )); then
+    preview_cmd='bat --style=numbers --color=always --highlight-line=${2} ${1}'
+else
+    # ...otherwise just highlight line with match using sed replace
+    preview_cmd='sed -E "s/(.*'${*}'.*)/'$bg[grey]'\1'$reset_color'/gI;" < ${1}'
+fi
+
+# Prefer rg over grep
+if (( ${+commands[rg]} )); then
+    command rg --no-heading --line-number --smart-case --fixed-strings --color=always "${*}"
+else
+    command grep --line-number --recursive --ignore-case --color=always --no-messages "${*}"
+fi | fzf --no-sort --delimiter=: \
+    --preview=${preview_cmd} \
+    --bind='enter:become(${EDITOR} {1} +{2})'

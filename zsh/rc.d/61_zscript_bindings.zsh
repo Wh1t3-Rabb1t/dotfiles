@@ -14,19 +14,25 @@ bindkey -M viins "^[c" _cheat_sheet         # Alt c = Cheat sheet
 # COMMAND HISTORY FZF
 # ---------------------------------------------------------------------------- #
 zle -N _cmd_history_fzf
-bindkey -M viins "^[p" _cmd_history_fzf      # Alt p = Command history fzf
+bindkey -M viins "^[p" _cmd_history_fzf     # Alt p = Command history fzf
 
 
 # TELEPORT
 # ---------------------------------------------------------------------------- #
 zle -N _teleport
-bindkey -M viins "^['" _teleport             # Alt ' = Z jump history fzf
+bindkey -M viins "^['" _teleport            # Alt ' = Z jump history fzf
 
 
 # RENAME FZF
 # ---------------------------------------------------------------------------- #
 zle -N _rename_fzf
-bindkey -M viins "^[r" _rename_fzf           # Alt r = Rename files / dirs in cwd
+bindkey -M viins "^[r" _rename_fzf          # Alt r = Rename files / dirs in cwd
+
+
+# GREP NVIM
+# ---------------------------------------------------------------------------- #
+zle -N _grep_into_nvim
+bindkey -M viins "^[g" _grep_into_nvim      # Alt g = Grep term and open in nvim
 
 
 # BROOT
@@ -34,5 +40,5 @@ bindkey -M viins "^[r" _rename_fzf           # Alt r = Rename files / dirs in cw
 if (( ${+commands[broot]} )); then
     source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
     zle -N _broot_launcher
-    bindkey -M viins "^[f" _broot_launcher   # Alt f = Launch broot
+    bindkey -M viins "^[f" _broot_launcher  # Alt f = Launch broot
 fi

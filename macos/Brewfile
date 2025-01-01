@@ -1,1 +1,3 @@
-brew "serie"
+cask "ghostty"
+brew "nvim"
+brew "fzf"

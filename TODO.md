@@ -10,6 +10,7 @@ fgb
 fgl
 
 
+- Fix ghostty navigate split bindings
 - Write a script to check for zsh plugin updates
 - Tweak `f` open files to enable opening of multiple files (with nvim only mpv can't open playlists)
 - Finish reworking 'd' alias (search and jump to dir)
@@ -72,6 +73,9 @@ cask "hammerspoon"
 cask "karabiner-elements"
 cask "kitty"
 cask "rectangle"
+
+
+brew "serie"
 
 
 brew "bat"

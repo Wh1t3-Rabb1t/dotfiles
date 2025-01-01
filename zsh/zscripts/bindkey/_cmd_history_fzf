@@ -11,9 +11,12 @@
 emulate -L zsh
 
 # Use `tail -r` in place of `tac`
-local selection="$(tail -r ${XDG_DATA_HOME}/zsh/history \
-    | awk '!a[$0]++ && $1 !~ /^:/' \
-    | fzf --no-preview)"
+local selection="$("${XDG_DATA_HOME}"/zsh/history | fzf --no-preview)"
+
+# # Use `tail -r` in place of `tac`
+# local selection="$(tail -r ${XDG_DATA_HOME}/zsh/history \
+#     | awk '!a[$0]++ && $1 !~ /^:/' \
+#     | fzf --no-preview)"
 
 [[ "$selection" ]] && BUFFER="$selection"
 

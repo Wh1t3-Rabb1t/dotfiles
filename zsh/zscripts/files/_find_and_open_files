@@ -10,10 +10,23 @@
 
 emulate -L zsh
 
+# local selection
+# if (( ${+commands[fd]} )); then
+#     selection="$(fd --color always --type f --hidden \
+#     --exclude Library \
+#     --exclude .git \
+#     | fzf)"
+# else
+#     selection="$(fd --color always --type f --hidden \
+#     --exclude Library \
+#     --exclude .git \
+#     | fzf)"
+# fi
+
 local selection="$(fd --color always --type f --hidden \
 --exclude Library \
 --exclude .git \
-| fzf --ansi)"
+| fzf)"
 
 if [[ -z "$selection" ]]; then
     echo -e "\nSearch cancelled."

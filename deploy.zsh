@@ -86,17 +86,17 @@ print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 # Install fzf binaries
 # ---------------------------------------------------------------------------- #
-# print "Installing fzf...\n"
-# pushd tools/fzf
-# if ./install --bin > /dev/null; then
-#     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
-#     zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
-#     print "\n    ...done\n"
-# else
-#     print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
-# fi
-# popd
-# print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "Installing fzf...\n"
+pushd tools/fzf
+if ./install --bin > /dev/null; then
+    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
+    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
+    print "\n    ...done\n"
+else
+    print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
+fi
+popd
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Generate vim help tags

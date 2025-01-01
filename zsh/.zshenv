@@ -91,12 +91,12 @@ if [[ "${OSTYPE}" = darwin* ]]; then
     fi
 fi
 
-# # Enable local binaries and man pages
-# path=(${HOME}/.local/bin ${path})
-# MANPATH="${XDG_DATA_HOME}/man:${MANPATH}"
+# Enable local binaries and man pages
+path=(${HOME}/.local/bin ${path})
+MANPATH="${XDG_DATA_HOME}/man:${MANPATH}"
 
-# # Add go binaries to paths
-# path=(${GOPATH}/bin ${path})
+# Add go binaries to paths
+path=(${GOPATH}/bin ${path})
 
 
 # EDITOR

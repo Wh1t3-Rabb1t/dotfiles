@@ -50,7 +50,25 @@ print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 # Link configs
 # ---------------------------------------------------------------------------- #
 print "Linking config files...\n"
-zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
+# zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
+
+zf_ln -sfn "${SCRIPT_DIR}/bat" "${XDG_CONFIG_HOME}/bat"
+zf_ln -sfn "${SCRIPT_DIR}/broot" "${XDG_CONFIG_HOME}/broot"
+zf_ln -sfn "${SCRIPT_DIR}/btop" "${XDG_CONFIG_HOME}/btop"
+zf_ln -sfn "${SCRIPT_DIR}/ghostty" "${XDG_CONFIG_HOME}/ghostty"
+zf_ln -sfn "${SCRIPT_DIR}/git" "${XDG_CONFIG_HOME}/git"
+zf_ln -sfn "${SCRIPT_DIR}/gitui" "${XDG_CONFIG_HOME}/gitui"
+zf_ln -sfn "${SCRIPT_DIR}/hammerspoon" "${XDG_CONFIG_HOME}/hammerspoon"
+zf_ln -sfn "${SCRIPT_DIR}/karabiner" "${XDG_CONFIG_HOME}/karabiner"
+zf_ln -sfn "${SCRIPT_DIR}/kitty" "${XDG_CONFIG_HOME}/kitty"
+zf_ln -sfn "${SCRIPT_DIR}/lsd" "${XDG_CONFIG_HOME}/lsd"
+zf_ln -sfn "${SCRIPT_DIR}/luacheck" "${XDG_CONFIG_HOME}/luacheck"
+zf_ln -sfn "${SCRIPT_DIR}/mpv" "${XDG_CONFIG_HOME}/mpv"
+
+zf_ln -sf "${SCRIPT_DIR}/nvim/init.lua" "${XDG_CONFIG_HOME}/nvim/init.lua"
+zf_ln -sfn "${SCRIPT_DIR}/nvim/lua" "${XDG_CONFIG_HOME}/nvim/lua"
+zf_ln -sfn "${SCRIPT_DIR}/nvim/plugins" "${XDG_DATA_HOME}/nvim/site/pack/plugins/start"
+
 zf_ln -sfn "${SCRIPT_DIR}/vim/.vimrc" "${HOME}/.vimrc"
 print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"

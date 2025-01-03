@@ -40,8 +40,8 @@
 
 # Set Apple core system keybindings
 # ---------------------------------------------------------------------------- #
-# DefaultKeyBinding.dict cannot be symlinked, I presume Apple's internal mechanisms
-# don't follow user defined symlinks in the Library folder.
+# 'DefaultKeyBinding.dict' cannot be symlinked. I presume Apple's subsystem that
+# declares keybindings can't follow symlinks for security reasons.
 local SOURCE="${XDG_CONFIG_HOME}/macos/DefaultKeyBinding.dict"
 local TARGET_DIR="${HOME}/Library/KeyBindings/"
 

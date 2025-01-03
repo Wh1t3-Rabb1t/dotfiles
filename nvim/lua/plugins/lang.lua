@@ -35,28 +35,17 @@ return {
     ----------------------------------------------------------------------------
     {
         "williamboman/mason.nvim",
+        -- event = "BufEnter",
         lazy = false,
-        -- event = "VeryLazy",
-        -- dependencies = {
-        --     {
-        --         "WhoIsSethDaniel/mason-tool-installer.nvim",
-        --         config = require("conf.lang.mason_tool_installer").config,
-        --     }
-        -- },
         config = require("conf.lang.mason").config,
     },
-
-    -- {
-    --     "WhoIsSethDaniel/mason-tool-installer.nvim",
-    --     lazy = false,
-    --     config = require("conf.lang.mason_tool_installer").config,
-    -- },
 
     -- MASON LSP CONFIG
     ----------------------------------------------------------------------------
     {
         "williamboman/mason-lspconfig.nvim",
-        event = "BufEnter",
+        -- event = "BufEnter",
+        lazy = false,
         config = true,
     },
 
@@ -64,7 +53,8 @@ return {
     ----------------------------------------------------------------------------
     {
         "neovim/nvim-lspconfig",
-        event = "BufEnter",
+        -- event = "BufEnter",
+        lazy = false,
         config = require("conf.lang.nvim_lspconfig").config,
     },
 

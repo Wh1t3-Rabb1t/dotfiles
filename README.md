@@ -34,5 +34,5 @@ $HOME/.local/dotfiles/macos/system_settings.zsh
 - Useful debugging commands
 
 ```sh
-defaults write com.apple.Terminal "Window Settings" -dict-add "Basic" '{ KeyboardOptionKeyIsMeta = 1; }'; killall Terminal
+defaults write com.apple.finder FXPreferredViewStyle Nlsv; defaults write com.apple.finder AppleShowAllFiles True; killall Finder
 ```

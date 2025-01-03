@@ -12,10 +12,15 @@ xcode-select --install
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-- Clone dotfiles and execute deploy script
+- Clone dotfiles and execute deploy script (old)
 
 ```sh
 eval "$(/opt/homebrew/bin/brew shellenv)"; git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "$HOME/.local/dotfiles"; $HOME/.local/dotfiles/deploy.zsh
+```
+- New deploy
+
+```sh
+eval "$(/opt/homebrew/bin/brew shellenv)"; git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "$HOME/.config"; "$HOME/.config/deploy.zsh"
 ```
 
 ## Alternate testing commands

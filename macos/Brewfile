@@ -1,0 +1,4 @@
+cask "ghostty"
+brew "neovim"
+brew "broot"
+brew "coreutils"

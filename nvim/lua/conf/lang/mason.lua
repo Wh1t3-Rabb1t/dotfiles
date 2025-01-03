@@ -22,8 +22,87 @@ function M.config()
     local status_ok = pcall(require, "mason")
     if not status_ok then return end
 
+
+    -- ensure_installed = {
+    --     -- Lua
+    --     "lua-language-server",         -- Language server
+    --     "luacheck",                    -- Linter (maintainer passed away RIP)
+    --     "stylua",                      -- Formatter
+
+    --     -- Shell
+    --     "bash-language-server",        -- Language server
+    --     "shellcheck",                  -- Linter
+    --     "shfmt",                       -- Formatter
+
+    --     -- Go
+    --     "gopls",                       -- Language server
+    --     "golangci-lint",               -- Linter
+    --     "delve",                       -- Debugger
+
+    --     -- JS
+    --     "typescript-language-server",  -- Language server
+    --     "emmet-language-server",       -- Language server
+
+    --     -- CSS
+    --     "css-lsp",                     -- Language server
+
+    --     -- HTML
+    --     "html-lsp",                    -- Language server
+
+    --     -- JSON
+    --     "json-lsp",                    -- Language server
+
+    --     -- "prettier", -- formatter
+    --     -- "eslint-lsp", -- linter
+    --     -- "stylelint", -- linter
+    --     -- "editorconfig-checker",
+    --     -- "gofumpt",
+    --     -- "golines",
+    --     -- "gomodifytags",
+    --     -- "gotests",
+    --     -- "impl",
+    --     -- "json-to-struct",
+    --     -- "revive",
+    --     -- "staticcheck",
+    -- },
+    --
+
     -- Setup
     require("mason").setup({
+        ensure_installed = {
+            "lua-language-server",
+            "luacheck",                    -- Linter (maintainer passed away RIP)
+            "stylua",                      -- Formatter
+
+            -- -- Shell
+            -- "bash-language-server",        -- Language server
+            -- "shellcheck",                  -- Linter
+            -- "shfmt",                       -- Formatter
+
+            -- -- Go
+            -- "gopls",                       -- Language server
+            -- "golangci-lint",               -- Linter
+            -- "delve",                       -- Debugger
+
+            -- -- JS
+            -- "typescript-language-server",  -- Language server
+            -- "emmet-language-server",       -- Language server
+
+            -- -- CSS
+            -- "css-lsp",                     -- Language server
+
+            -- -- HTML
+            -- "html-lsp",                    -- Language server
+
+            -- -- JSON
+            -- "json-lsp",                    -- Language server
+
+            -- "emmet-ls",
+        },
+        max_concurrent_installers = 10,
+
+
+
         ui = {
             check_outdated_packages_on_open = true,
             border = "none",
@@ -49,6 +128,12 @@ function M.config()
             }
         }
     })
+
+    vim.api.nvim_create_user_command("MasonInstallAll", function()
+        vim.cmd("MasonInstall " .. table.concat(options.ensure_installed, " "))
+    end, {})
+
 end
 
 return M
+

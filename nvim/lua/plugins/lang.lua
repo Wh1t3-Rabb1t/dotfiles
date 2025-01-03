@@ -35,15 +35,22 @@ return {
     ----------------------------------------------------------------------------
     {
         "williamboman/mason.nvim",
-        event = "VeryLazy",
-        dependencies = {
-            {
-                "WhoIsSethDaniel/mason-tool-installer.nvim",
-                config = require("conf.lang.mason_tool_installer").config,
-            }
-        },
+        lazy = false,
+        -- event = "VeryLazy",
+        -- dependencies = {
+        --     {
+        --         "WhoIsSethDaniel/mason-tool-installer.nvim",
+        --         config = require("conf.lang.mason_tool_installer").config,
+        --     }
+        -- },
         config = require("conf.lang.mason").config,
     },
+
+    -- {
+    --     "WhoIsSethDaniel/mason-tool-installer.nvim",
+    --     lazy = false,
+    --     config = require("conf.lang.mason_tool_installer").config,
+    -- },
 
     -- MASON LSP CONFIG
     ----------------------------------------------------------------------------

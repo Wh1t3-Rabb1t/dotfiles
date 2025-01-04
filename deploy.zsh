@@ -199,7 +199,7 @@ if (( ${+commands[nvim]} )); then
     print "Installing LSP servers/tools...\n"
     # (Mason runs asynchronously so this command will cause
     # the terminal to hang if the process is not disowned)
-    command nvim --headless -c "MasonInstallAll" -c "qall" &!> /dev/null 2>&1
+    command nvim --headless -c "MasonInstallAll" -c "qall" &> /dev/null
     print "    ...done\n"
 fi
 

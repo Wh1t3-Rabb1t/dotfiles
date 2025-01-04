@@ -197,8 +197,8 @@ if (( ${+commands[nvim]} )); then
 
     # Launch nvim and install Mason dependancies
     print "Installing LSP servers/tools...\n"
-    # (Mason runs asynchronously so this command will cause
-    # the terminal to hang if the process is not disowned)
+    # `MasonInstallAll` isn't a neovim builtin. It's a user command declared in:
+    # ./nvim/lua/conf/lang/mason.lua
     command nvim --headless -c "MasonInstallAll" -c "qall" &> /dev/null
     print "    ...done\n"
 fi

@@ -1,6 +1,4 @@
-brew "coreutils"
 brew "npm"
 brew "luarocks"
 brew "go"
 brew "sqlite"
-brew "serie"

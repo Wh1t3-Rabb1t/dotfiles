@@ -190,15 +190,16 @@ fi
 
 if (( ${+commands[nvim]} )); then
     # Launch nvim to trigger Lazy and download plugins
-    print "Downloading Neovim plugins...\n"
-    command nvim --headless -c "qall" &> /dev/null
+    print "Downloading Neovim plugins and generating help tags...\n"
+    # command nvim --headless -c "qall" &> /dev/null
+    command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
     print "    ...done\n"
 
     # Launch nvim and install Mason dependancies
     print "Installing LSP servers/tools...\n"
     # (Mason runs asynchronously so this command will cause
     # the terminal to hang if the process is not disowned)
-    command nvim --headless -c "MasonInstallAll" &!
+    command nvim --headless -c "MasonInstallAll" -c "qall" &!> /dev/null 2>&1
     print "    ...done\n"
 fi
 

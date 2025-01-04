@@ -78,6 +78,8 @@ function M.config()
         }
     }
 
+    -- vim.system()
+
     require("mason").setup(options)
 
     vim.api.nvim_create_user_command("MasonInstallAll", function()

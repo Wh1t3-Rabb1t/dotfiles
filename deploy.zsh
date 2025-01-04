@@ -151,11 +151,54 @@ fi
 
 # Setup NeoVim
 # ---------------------------------------------------------------------------- #
-# if (( ${+commands[nvim]} )); then
-#     print "Downloading Neovim plugins and initializing lsp tools...\n"
-#     command nvim -c "qall" &>/dev/null
-#     print "    ...done\n"
-# fi
+if (( ${+commands[nvim]} )); then
+    print "Downloading Neovim plugins...\n"
+    # Launch nvim to trigger Lazy and download plugins
+    command nvim -c "qall" &>/dev/null
+    # print "    ...done\n"
+
+
+    print "Installing LSP servers/tools...\n"
+    # Launch nvim and install Mason dependancies
+    command nvim --headless -c '
+lua <<EOF
+local options = {
+    ensure_installed = {
+        "lua-language-server",
+        "luacheck",                    -- Linter (maintainer passed away RIP)
+        "stylua",                      -- Formatter
+
+        -- Shell
+        "bash-language-server",        -- Language server
+        "shellcheck",                  -- Linter
+        "shfmt",                       -- Formatter
+
+        -- Go
+        "gopls",                       -- Language server
+        "golangci-lint",               -- Linter
+        "delve",                       -- Debugger
+
+        -- JS
+        "typescript-language-server",  -- Language server
+        "emmet-language-server",       -- Language server
+
+        -- CSS
+        "css-lsp",                     -- Language server
+
+        -- HTML
+        "html-lsp",                    -- Language server
+
+        -- JSON
+        "json-lsp",                    -- Language server
+    }
+}
+require("mason").setup(options)
+vim.cmd("MasonInstall " .. table.concat(options.ensure_installed, " "))
+EOF
+' +qall &>/dev/null
+
+    print "    ...done\n"
+fi
 
 
 # Set MacOs defaults

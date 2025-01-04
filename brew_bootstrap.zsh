@@ -6,12 +6,12 @@ sudo -v
 eval "$(/opt/homebrew/bin/brew shellenv)"
 brew bundle install --verbose --no-lock --file "${HOME}"/.local/dotfiles/macos/Brewfile
 
-print "Brew dependancies successfully installed, press 'y' to continue to zsh initialization, any other key to abort."
-read -r choice
+# print "Brew dependancies successfully installed, press 'y' to continue to zsh initialization, any other key to abort."
+# read -r choice
 
-if [[ "$choice" == "y" ]]; then
-    print "Reloading the shell..."
-    exec zsh -c "${HOME}/.local/dotfiles/deploy.zsh"
-else
-    print "Aborting."
-fi
+# if [[ "$choice" == "y" ]]; then
+#     print "Reloading the shell..."
+#     exec zsh -c "${HOME}/.local/dotfiles/deploy.zsh"
+# else
+#     print "Aborting."
+# fi

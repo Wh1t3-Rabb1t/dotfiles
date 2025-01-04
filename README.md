@@ -20,7 +20,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"; git clone https://github.com/Wh1t3-Ra
 - New deploy
 
 ```sh
-git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "$HOME/.local/dotfiles"; "$HOME/.local/dotfiles/brew_bootstrap.zsh"
+git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "$HOME/.local/dotfiles"; "$HOME/.local/dotfiles/brew_bootstrap.zsh"; exec zsh; $HOME/.local/dotfiles/deploy.zsh
 ```
 
 ## Alternate testing commands

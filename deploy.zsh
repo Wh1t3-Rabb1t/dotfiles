@@ -98,31 +98,6 @@ print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
-# Install fzf binaries
-# ---------------------------------------------------------------------------- #
-print "Installing fzf...\n"
-pushd tools/fzf
-if ./install --bin > /dev/null; then
-    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/bin/fzf" "${HOME}/.local/bin/fzf"
-    zf_ln -sf "${SCRIPT_DIR}/tools/fzf/man/man1/fzf.1" "${XDG_DATA_HOME}/man/man1/fzf.1"
-    print "\n    ...done\n"
-else
-    print "\n    ...failed. Probably unsupported architecture, please check fzf installation guide\n"
-fi
-popd
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-
-
-# Generate vim help tags
-# ---------------------------------------------------------------------------- #
-if (( ${+commands[vim]} )); then
-    print "Generating vim helptags...\n"
-    command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &>/dev/null
-    print "    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-fi
-
-
 # Trigger zsh run with powerlevel10k prompt to download gitstatusd
 # ---------------------------------------------------------------------------- #
 print "Downloading gitstatusd for powerlevel10k...\n"
@@ -134,64 +109,36 @@ print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 # Set fast-syntax-highlighting theme
 # ---------------------------------------------------------------------------- #
 print "Setting fast-syntax-highlighting theme...\n"
-${SHELL} -is <<<'fast-theme base16' &>/dev/null
+${SHELL} -is <<<'fast-theme base16' &> /dev/null
 print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
-# Download brew dependencies if brew is installed
+# # Download brew dependencies if brew is installed
+# # ---------------------------------------------------------------------------- #
+# if (( ${+commands[brew]} )); then
+#     print "Installing homebrew dependancies...\n"
+#     command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}/macos/Brewfile"
+#     print "\n    ...done\n"
+#     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+# fi
+
+
+# Generate Vim help tags
 # ---------------------------------------------------------------------------- #
-if (( ${+commands[brew]} )); then
-    print "Installing homebrew dependancies...\n"
-    command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}/macos/Brewfile"
-    print "\n    ...done\n"
+if (( ${+commands[vim]} )); then
+    print "Generating Vim helptags...\n"
+    command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &> /dev/null
+    print "    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ${SHELL} -is <<<'' &> /dev/null
-
 # Setup NeoVim
 # ---------------------------------------------------------------------------- #
-
-# if (( ${+commands[nvim]} )); then
-#     command nvim --headless -c "qall" &>/dev/null
-#     # Generate nvim help tags
-#     print "Generating nvim helptags..."
-#     command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
-#     print "  ...done"
-#     # Update treesitter config
-#     print "Updating treesitter config..."
-#     command nvim --headless -c "TSUpdate" -c "qall" &> /dev/null
-#     print "  ...done"
-#     # Update mason registries
-#     print "Updating mason registries..."
-#     command nvim --headless -c "MasonUpdate" -c "qall" &> /dev/null
-#     print "  ...done"
-# fi
-
-
-
 if (( ${+commands[nvim]} )); then
     # Launch nvim to trigger Lazy and download plugins
-    print "Downloading Neovim plugins and generating help tags...\n"
-    # command nvim --headless -c "qall" &> /dev/null
+    print "Downloading NeoVim plugins and generating help tags...\n"
     command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
     print "    ...done\n"
 
@@ -201,6 +148,7 @@ if (( ${+commands[nvim]} )); then
     # ./nvim/lua/conf/lang/mason.lua
     command nvim --headless -c "MasonInstallAll" -c "qall" &> /dev/null
     print "    ...done\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi
 
 

@@ -1,6 +1,1 @@
-brew "npm"
-brew "luarocks"
-brew "go"
-brew "sqlite"
-brew "fzf"
-brew "neovim"
+brew "lsd"

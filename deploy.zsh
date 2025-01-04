@@ -6,16 +6,6 @@
 #   \__,_|\___| .__/|_|\___/ \__, |
 # ============|_|============|___/============================================ #
 
-
-
-sudo -v
-
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-eval "$(/opt/homebrew/bin/brew shellenv)"
-brew bundle install --verbose --no-lock --file "${HOME}"/.local/dotfiles/macos/Brewfile
-
-zsh
-
 set -e
 zmodload -m -F zsh/files b:zf_rm b:zf_ln b:zf_mkdir
 

@@ -65,6 +65,19 @@ https://soundcloud.com/neuralfold
 
 ## Brewfile
 
+- test nvim setup
+brew "npm"
+brew "luarocks"
+brew "go"
+brew "sqlite"
+brew "fzf"
+brew "neovim"
+
+
+
+
+
+
 
 cask "brave-browser"
 cask "firefox"

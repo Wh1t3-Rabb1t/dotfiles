@@ -170,65 +170,64 @@ fi
 # Setup NeoVim
 # ---------------------------------------------------------------------------- #
 
+# if (( ${+commands[nvim]} )); then
+#     command nvim --headless -c "qall" &>/dev/null
+#     # Generate nvim help tags
+#     print "Generating nvim helptags..."
+#     command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
+#     print "  ...done"
+#     # Update treesitter config
+#     print "Updating treesitter config..."
+#     command nvim --headless -c "TSUpdate" -c "qall" &> /dev/null
+#     print "  ...done"
+#     # Update mason registries
+#     print "Updating mason registries..."
+#     command nvim --headless -c "MasonUpdate" -c "qall" &> /dev/null
+#     print "  ...done"
+# fi
+
+
+
 if (( ${+commands[nvim]} )); then
-    command nvim --headless -c "qall" &>/dev/null
-    # Generate nvim help tags
-    print "Generating nvim helptags..."
-    command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
-    print "  ...done"
-    # Update treesitter config
-    print "Updating treesitter config..."
-    command nvim --headless -c "TSUpdate" -c "qall" &> /dev/null
-    print "  ...done"
-    # Update mason registries
-    print "Updating mason registries..."
-    command nvim --headless -c "MasonUpdate" -c "qall" &> /dev/null
-    print "  ...done"
+    print "Downloading Neovim plugins...\n"
+    # Launch nvim to trigger Lazy and download plugins
+    command nvim -c "qall" &>/dev/null
+    # print "    ...done\n"
+
+    print "Installing LSP servers/tools...\n"
+    # Launch nvim and install Mason dependancies
+    command nvim --headless -c '
+lua <<EOF
+local options = {
+    ensure_installed = {
+        "lua-language-server",
+        "luacheck",                    -- Linter (maintainer passed away RIP)
+        "stylua",                      -- Formatter
+        -- Shell
+        "bash-language-server",        -- Language server
+        "shellcheck",                  -- Linter
+        "shfmt",                       -- Formatter
+        -- Go
+        "gopls",                       -- Language server
+        "golangci-lint",               -- Linter
+        "delve",                       -- Debugger
+        -- JS
+        "typescript-language-server",  -- Language server
+        "emmet-language-server",       -- Language server
+        -- CSS
+        "css-lsp",                     -- Language server
+        -- HTML
+        "html-lsp",                    -- Language server
+        -- JSON
+        "json-lsp",                    -- Language server
+    }
+}
+require("mason").setup(options)
+vim.cmd("MasonInstall " .. table.concat(options.ensure_installed, " "))
+EOF
+' +qall &>/dev/null
+    print "    ...done\n"
 fi
-
-
-
-# # if (( ${+commands[nvim]} )); then
-# print "Downloading Neovim plugins...\n"
-# # Launch nvim to trigger Lazy and download plugins
-# command nvim -c "qall" &>/dev/null
-# # print "    ...done\n"
-
-
-# print "Installing LSP servers/tools...\n"
-# # Launch nvim and install Mason dependancies
-# command nvim --headless -c '
-# lua <<EOF
-# local options = {
-#     ensure_installed = {
-#         "lua-language-server",
-#         "luacheck",                    -- Linter (maintainer passed away RIP)
-#         "stylua",                      -- Formatter
-#         -- Shell
-#         "bash-language-server",        -- Language server
-#         "shellcheck",                  -- Linter
-#         "shfmt",                       -- Formatter
-#         -- Go
-#         "gopls",                       -- Language server
-#         "golangci-lint",               -- Linter
-#         "delve",                       -- Debugger
-#         -- JS
-#         "typescript-language-server",  -- Language server
-#         "emmet-language-server",       -- Language server
-#         -- CSS
-#         "css-lsp",                     -- Language server
-#         -- HTML
-#         "html-lsp",                    -- Language server
-#         -- JSON
-#         "json-lsp",                    -- Language server
-#     }
-# }
-# require("mason").setup(options)
-# vim.cmd("MasonInstall " .. table.concat(options.ensure_installed, " "))
-# EOF
-# ' +qall &>/dev/null
-# print "    ...done\n"
-
 
 
 # Set MacOs defaults

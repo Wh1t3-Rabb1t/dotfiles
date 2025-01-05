@@ -3,10 +3,9 @@
 # ---------------------------------------------------------------------------- #
 # Download an audio file in opus format from a youtube video.                  #
 # ---------------------------------------------------------------------------- #
-# Argument 1 : Newly created file name                                         #
-# Argument 2 : URL                                                             #
-# Globals    : None                                                            #
-# Outputs    : Standard yt-dlp output                                          #
+# Arg 1   : Desired file name                                                  #
+# Arg 2   : URL                                                                #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

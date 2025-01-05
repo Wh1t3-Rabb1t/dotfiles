@@ -3,11 +3,10 @@
 # ---------------------------------------------------------------------------- #
 # Download a youtube playlist without concatting.                              #
 # ---------------------------------------------------------------------------- #
-# Arguments : URL                                                              #
-# Globals   : None                                                             #
-# Outputs   : Standard yt-dlp output                                           #
+# Args    : URL                                                                #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
-yt-dlp -x --audio-format opus --audio-quality 320K -o "${1}_%(autonumber)02d.%(ext)s" "${2}"
+command yt-dlp -x --audio-format opus --audio-quality 320K -o "${1}_%(autonumber)02d.%(ext)s" "${2}"

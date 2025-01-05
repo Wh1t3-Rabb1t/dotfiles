@@ -1,11 +1,10 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Print Apple bundle IDs for all currently installed apps.                     #
+# List Apple bundle IDs for all currently installed apps.                      #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : None                                                             #
-# Outputs   : List of app bundle IDs                                           #
+# Args    : None                                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

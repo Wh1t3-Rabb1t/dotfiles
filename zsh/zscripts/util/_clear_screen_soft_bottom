@@ -1,11 +1,10 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Put the cursor at the bottom of the terminal.                                #
+# Put the cursor at the bottom of the terminal when clearing the scrollback.   #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : None                                                             #
-# Outputs   : None                                                             #
+# Args    : None                                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 # https://github.com/romkatv/powerlevel10k/issues/2442

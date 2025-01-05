@@ -2,16 +2,14 @@
 
 # ---------------------------------------------------------------------------- #
 # Open file / session with nvim.                                               #
+# - If called with args, open selected args (files) with nvim.                 #
+# - If called without args and Session.vim exists in cwd, launch Session.vim.  #
+# - If called without args and Session.vim does not exist in cwd, launch nvim  #
+# with Neotree open.                                                           #
 # ---------------------------------------------------------------------------- #
-# Arguments : Files to open / None                                             #
-# Globals   : None                                                             #
-# Outputs   : Opens target files / session with nvim                           #
+# Args    : Files to open / None                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
-
-# If called with args, open selected args (files) with nvim.
-# If called without args and Session.vim exists in cwd, launch Session.vim.
-# If called without args and Session.vim does not exist in cwd, launch nvim
-# with Neotree open.
 
 emulate -L zsh
 

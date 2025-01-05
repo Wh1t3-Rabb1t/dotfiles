@@ -1,11 +1,10 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Move files to ~/.Trash when using rm.                                        #
+# Move files to ~/.Trash when using `rm`.                                      #
 # ---------------------------------------------------------------------------- #
-# Arguments : Files / directories to remove                                    #
-# Globals   : HOME                                                             #
-# Outputs   : Confirmation of 'deleted' files / directories                    #
+# Args    : Files / directories to remove                                      #
+# Globals : HOME                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

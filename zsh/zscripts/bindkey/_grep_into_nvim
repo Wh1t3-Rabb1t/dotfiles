@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # Search term in cwd, pipe it into fzf, and open selection in nvim.            #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : None                                                             #
-# Outputs   : Pipe grep results into fzf and pass selection to nvim            #
+# Args    : None                                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

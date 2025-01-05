@@ -3,13 +3,12 @@
 # ---------------------------------------------------------------------------- #
 # Convert all images in cwd to png format.                                     #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : None                                                             #
-# Outputs   : Newly formatted images in the cwd                                #
+# Args    : None                                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
 find "$(pwd)" -type f | while IFS= read -r FILE; do
-    ffmpeg -i "$FILE" "${FILE%.*}.png"
+    command ffmpeg -i "$FILE" "${FILE%.*}.png"
 done

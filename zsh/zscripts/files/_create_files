@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # Create files. Pass multiple arguments to create multiple files.              #
 # ---------------------------------------------------------------------------- #
-# Arguments : File name / names                                                #
-# Globals   : None                                                             #
-# Outputs   : New file / files in cwd                                          #
+# Args    : File name / names                                                  #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
@@ -21,6 +20,7 @@ if [[ "$#" -eq 0 ]]; then
 fi
 
 local created_files=()
+
 for file in $@; do
     if [[ -e $file ]]; then
         echo "touch: $file: File exists"

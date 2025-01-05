@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # Print the line count for each file in the cwd and it's sub directories.      #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : None                                                             #
-# Outputs   : Line count for all files in cwd and it's sub directories         #
+# Args    : None                                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

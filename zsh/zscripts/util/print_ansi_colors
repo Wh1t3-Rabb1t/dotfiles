@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # Print all ansi color codes.                                                  #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : None                                                             #
-# Outputs   : A highlighted list of all 255 ansi color codes                   #
+# Args    : None                                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

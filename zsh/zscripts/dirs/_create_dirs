@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # Create directories. Pass multiple arguments to create multiple directories.  #
 # ---------------------------------------------------------------------------- #
-# Arguments : Directory name / names                                           #
-# Globals   : None                                                             #
-# Outputs   : New directory / directories in cwd                               #
+# Args    : Directory name / names                                             #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

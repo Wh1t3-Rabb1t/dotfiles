@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # Launch broot in single directory view.                                       #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : BUFFER                                                           #
-# Outputs   : Launch broot with tree view disabled by default                  #
+# Args    : None                                                               #
+# Globals : BUFFER                                                             #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

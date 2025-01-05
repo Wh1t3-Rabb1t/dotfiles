@@ -90,7 +90,6 @@ cask "kitty"
 cask "rectangle"
 
 
-brew "serie"
 
 
 brew "bat"
@@ -117,6 +116,7 @@ brew "neovim"
 brew "npm"
 brew "ripgrep"
 brew "serie"
+brew "sqlite"
 brew "shellcheck"
 brew "tealdeer"
 brew "vim"

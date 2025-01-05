@@ -3,26 +3,26 @@
 # ---------------------------------------------------------------------------- #
 # Search and cd to the selected directory.                                     #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : None                                                             #
-# Outputs   : None                                                             #
+# Args    : None                                                               #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
 local selection
+
 if (( ${+commands[fd]} )); then
     selection="$(fd --color=always --type=directory --hidden\
     --exclude Library\
     --exclude .git\
-    | fzf --ansi)"
+    | fzf)"
 else
     selection="$(find . -type d \(\
     -path "./Library/*" -or\
     -path "./.git/*" -or\
     -path "./node_modules/*" \)\
     -prune -o -type d -print\
-    | fzf --ansi)"
+    | fzf)"
 fi
 
 if [[ -z "$selection" ]]; then

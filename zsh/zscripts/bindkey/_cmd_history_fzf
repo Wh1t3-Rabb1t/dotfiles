@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # FZF command history and append selected command to the buffer.               #
 # ---------------------------------------------------------------------------- #
-# Arguments : None                                                             #
-# Globals   : BUFFER                                                           #
-# Outputs   : Selected command onto the buffer                                 #
+# Args    : None                                                               #
+# Globals : BUFFER                                                             #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

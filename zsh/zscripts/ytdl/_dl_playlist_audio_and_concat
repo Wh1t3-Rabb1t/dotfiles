@@ -4,18 +4,17 @@
 # Download a series of audio files from a youtube playlist in opus format,     #
 # then concatenate into a single audio file.                                   #
 # ---------------------------------------------------------------------------- #
-# Argument 1 : Newly created file name                                         #
-# Argument 2 : URL                                                             #
-# Globals    : None                                                            #
-# Outputs    : Standard yt-dlp output                                          #
+# Arg 1   : Newly created file name                                            #
+# Arg 2   : URL                                                                #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
 local playlist_dir="somePlaylist_$(date +"%Y%m%d_%H%M%S")"
-yt-dlp -x --audio-format opus --audio-quality 320K -o "$playlist_dir/%(autonumber)s %(title)s.%(ext)s" "$2"
+command yt-dlp -x --audio-format opus --audio-quality 320K -o "$playlist_dir/%(autonumber)s %(title)s.%(ext)s" "$2"
 cd "$playlist_dir"
-ffmpeg -i "concat:$(printf "%s|" *.opus)" -c copy "../$1.opus"
+command ffmpeg -i "concat:$(printf "%s|" *.opus)" -c copy "../$1.opus"
 cd ..
 rm -r "$playlist_dir"
 

@@ -3,9 +3,8 @@
 # ---------------------------------------------------------------------------- #
 # Pass `True` or `False` to toggle displaying hidden files in the Finder.      #
 # ---------------------------------------------------------------------------- #
-# Arguments : True / False                                                     #
-# Globals   : None                                                             #
-# Outputs   : None                                                             #
+# Args    : True / False                                                       #
+# Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh

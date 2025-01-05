@@ -124,6 +124,17 @@ print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 # fi
 
 
+# Set MacOs defaults
+# ---------------------------------------------------------------------------- #
+if [[ "${OSTYPE}" == darwin* ]]; then
+    print "Setting MacOs defaults...\n"
+    "${SCRIPT_DIR}/macos/system_settings.zsh"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    print "\n    ...done\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+fi
+
+
 # Generate Vim help tags
 # ---------------------------------------------------------------------------- #
 if (( ${+commands[vim]} )); then
@@ -148,16 +159,6 @@ if (( ${+commands[nvim]} )); then
     # ./nvim/lua/conf/lang/mason.lua
     command nvim --headless -c "MasonInstallAll" -c "qall" &> /dev/null
     print "    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-fi
-
-
-# Set MacOs defaults
-# ---------------------------------------------------------------------------- #
-if [[ "${OSTYPE}" == darwin* ]]; then
-    print "Setting MacOs defaults...\n"
-    "${SCRIPT_DIR}/macos/system_settings.zsh"
-    print "\n    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi
 

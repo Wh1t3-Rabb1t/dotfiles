@@ -6,7 +6,7 @@ sudo -v
 eval "$(/opt/homebrew/bin/brew shellenv)"
 brew bundle install --verbose --no-lock --file "${HOME}"/.local/dotfiles/macos/Brewfile
 
-ln -sf "${HOME}"/.local/dotfiles/zsh/.zshenv "${HOME}"/.zshenv
+# ln -sf "${HOME}"/.local/dotfiles/zsh/.zshenv "${HOME}"/.zshenv
 
 
 # print "Brew dependancies successfully installed, press 'y' to continue to zsh initialization, any other key to abort."

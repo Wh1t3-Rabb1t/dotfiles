@@ -120,7 +120,7 @@ defaults write com.apple.screencapture type -string "png"
 chflags hidden ~/{Movies,Music,Pictures,Public}
 
 # Set lock screen message
-sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
+# sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
 
 # See the changes
 killall Dock

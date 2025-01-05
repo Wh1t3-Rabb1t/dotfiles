@@ -24,26 +24,15 @@ XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
 
-# Create required directories
-# ---------------------------------------------------------------------------- #
-print "\nCreating required directory tree...\n"
-zf_mkdir -p "${XDG_CONFIG_HOME}"/nvim
-zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
-zf_mkdir -p "${XDG_DATA_HOME}"/{{goenv,jenv,luaenv,nodenv,phpenv,plenv,pyenv,rbenv}/plugins,zsh,man/man1,vim/spell,nvim/site/pack/plugins}
-zf_mkdir -p "${XDG_STATE_HOME}"
-zf_mkdir -p "${HOME}"/.local/{bin,etc}
-print "    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-
-
 # Install Homebrew and set MacOs defaults
 # ---------------------------------------------------------------------------- #
 if [[ "${OSTYPE}" == darwin* ]]; then
     # Install brew
-    print "Installing Homebrew...\n"
+    print "\nInstalling Homebrew...\n"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv)"
     print "    ...done\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
     # Install dependancies
     print "Installing Homebrew dependancies...\n"
@@ -57,6 +46,18 @@ if [[ "${OSTYPE}" == darwin* ]]; then
     print "    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi
+
+
+# Create required directories
+# ---------------------------------------------------------------------------- #
+print "Creating required directory tree...\n"
+zf_mkdir -p "${XDG_CONFIG_HOME}"/nvim
+zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
+zf_mkdir -p "${XDG_DATA_HOME}"/{{goenv,jenv,luaenv,nodenv,phpenv,plenv,pyenv,rbenv}/plugins,zsh,man/man1,vim/spell,nvim/site/pack/plugins}
+zf_mkdir -p "${XDG_STATE_HOME}"
+zf_mkdir -p "${HOME}"/.local/{bin,etc}
+print "    ...done\n"
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Link zshenv if needed
@@ -150,7 +151,6 @@ if (( ${+commands[nvim]} )); then
     # Launch nvim to trigger Lazy and download plugins
     print "Downloading NeoVim plugins and generating help tags...\n"
     command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
-    print "    ...done\n"
 
     # Launch nvim and install Mason dependancies
     print "Installing LSP servers/tools...\n"

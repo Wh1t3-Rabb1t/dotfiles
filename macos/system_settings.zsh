@@ -119,14 +119,15 @@ defaults write com.apple.screencapture type -string "png"
 # Hide apple folders
 chflags hidden ~/{Movies,Music,Pictures,Public}
 
-# Set lock screen message
-# sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
-
 # See the changes
 killall Dock
 killall Finder
 killall SystemUIServer
 
+
+
+# Set lock screen message
+# sudo defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText "I AM INVINCIBLE!!!"
 
 # Controls whether certain bindings can be triggered from within text input fields
 # defaults write -g NSMnemonicsWorkInText -bool YES

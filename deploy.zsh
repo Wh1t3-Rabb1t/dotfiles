@@ -24,24 +24,6 @@ XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
 
-# Set MacOs defaults
-# ---------------------------------------------------------------------------- #
-if [[ "${OSTYPE}" == darwin* ]]; then
-    print "Setting MacOs defaults...\n"
-
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    brew bundle install --verbose --no-lock --file "${HOME}"/.local/dotfiles/macos/Brewfile
-
-    "${SCRIPT_DIR}"/macos/system_settings.zsh
-
-    # Ensure nvim is available for setup
-    # eval "$(/opt/homebrew/bin/brew shellenv)"
-    print "    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-fi
-
-
 # Create required directories
 # ---------------------------------------------------------------------------- #
 print "Creating required directory tree...\n"
@@ -52,6 +34,28 @@ zf_mkdir -p "${XDG_STATE_HOME}"
 zf_mkdir -p "${HOME}"/.local/{bin,etc}
 print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+
+
+# Install Homebrew and set MacOs defaults
+# ---------------------------------------------------------------------------- #
+if [[ "${OSTYPE}" == darwin* ]]; then
+    # Install brew
+    print "Installing homebrew...\n"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    print "\n    ...done\n"
+
+    # Install dependancies
+    print "Installing dependancies...\n"
+    command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}"/macos/Brewfile
+    print "\n    ...done\n"
+
+    # Set MacOs defaults
+    print "Setting MacOs defaults...\n"
+    "${SCRIPT_DIR}"/macos/system_settings.zsh
+    print "    ...done\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+fi
 
 
 # Link zshenv if needed
@@ -69,8 +73,6 @@ print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 # Link configs
 # ---------------------------------------------------------------------------- #
 print "Linking config files...\n"
-# zf_ln -sfn "${SCRIPT_DIR}" "${XDG_CONFIG_HOME}"
-
 zf_ln -sfn "${SCRIPT_DIR}/bat" "${XDG_CONFIG_HOME}/bat"
 zf_ln -sfn "${SCRIPT_DIR}/broot" "${XDG_CONFIG_HOME}/broot"
 zf_ln -sfn "${SCRIPT_DIR}/btop" "${XDG_CONFIG_HOME}/btop"
@@ -85,7 +87,6 @@ zf_ln -sfn "${SCRIPT_DIR}/luacheck" "${XDG_CONFIG_HOME}/luacheck"
 zf_ln -sfn "${SCRIPT_DIR}/mpv" "${XDG_CONFIG_HOME}/mpv"
 zf_ln -sf "${SCRIPT_DIR}/nvim/init.lua" "${XDG_CONFIG_HOME}/nvim/init.lua"
 zf_ln -sfn "${SCRIPT_DIR}/nvim/lua" "${XDG_CONFIG_HOME}/nvim/lua"
-
 zf_ln -sfn "${SCRIPT_DIR}/vim/.vimrc" "${HOME}/.vimrc"
 print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"

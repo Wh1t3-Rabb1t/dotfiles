@@ -1,4 +1,4 @@
-# DOTFILES
+# PAUL ALLEN'S CONFIG
 
 - Download xcode developer tools
 
@@ -6,32 +6,8 @@
 xcode-select --install
 ```
 
-- Download homebrew
-
-```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-- New deploy
+- Clone dotfile repo and execute the deploy script
 
 ```sh
 git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "${HOME}"/.local/dotfiles; "${HOME}"/.local/dotfiles/deploy.zsh
-```
-
-```sh
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-## Alternate testing commands
-
-- MacOs settings scripts
-
-```sh
-$HOME/.local/dotfiles/macos/system_settings.zsh
-```
-
-- Useful debugging commands
-
-```sh
-defaults write com.apple.finder FXPreferredViewStyle Nlsv; defaults write com.apple.finder AppleShowAllFiles True; killall Finder
 ```

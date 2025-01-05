@@ -1,22 +1,36 @@
 #!/usr/bin/env zsh
 
+# ---------------------------------------------------------------------------- #
+# Terminal cheat sheet powered by fzf.                                         #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : BUFFER, CURSOR, ZSCRIPTDIR                                         #
+# ---------------------------------------------------------------------------- #
+
 emulate -L zsh
 
+local selection
 local initial_dir="${0:A:h}"
+
 cd "${ZSCRIPTDIR}"
 
-# Search cheat sheet ignoring files with a leading underscore
-# Use `fd` over `find` if available
+# Search cheat sheet, ignoring files with a leading underscore
 if (( ${+commands[fd]} )); then
-    local selection="$(fd --type f --exclude '_*' | fzf)"
+    selection="$(fd \
+    --type f \
+    --exclude '_*' \
+    --color always \
+    | fzf)"
 elif (( ${+commands[find]} )); then
-    local selection="$(find . -type f ! -name '_*' | fzf)"
+    selection="$(find .\
+    -type f\
+    ! -name '_*'\
+    | fzf)"
 fi
 
 cd "$initial_dir"
 
 if [[ "$selection" ]]; then
-    # Strip everything up to, and including the slash
-    BUFFER="${selection#*/}"
-    CURSOR=${#BUFFER}
+    BUFFER="${selection#*/}"  # Strip everything up to, and including the slash
+    CURSOR=${#BUFFER}         # Move the cursor to the end of the appended command
 fi

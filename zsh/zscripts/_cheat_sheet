@@ -5,27 +5,18 @@ emulate -L zsh
 local initial_dir="${0:A:h}"
 cd "${ZSCRIPTDIR}"
 
-# Use `fd` over `find` if available
-# if (( ${+commands[fd]} )); then
-#     local selection="$(fd --type f --exclude cheat_sheet_ignore | fzf --ansi)"
-# elif (( ${+commands[find]} )); then
-#     local selection="$(find . -type f | fzf --ansi)"
-# fi
-
 # Search cheat sheet ignoring files with a leading underscore
+# Use `fd` over `find` if available
 if (( ${+commands[fd]} )); then
-    local selection="$(fd --type f --exclude '_*' | fzf --ansi)"
+    local selection="$(fd --type f --exclude '_*' | fzf)"
 elif (( ${+commands[find]} )); then
-    local selection="$(find . -type f ! -name '_*' | fzf --ansi)"
+    local selection="$(find . -type f ! -name '_*' | fzf)"
 fi
-
-    # Ignores dirs with leadings underscore also
-    # local selection="$(find . -type f ! -path './_*/*' ! -name '_*' | fzf --ansi)"
 
 cd "$initial_dir"
 
 if [[ "$selection" ]]; then
-    BUFFER="$selection"
-    # BUFFER="${selection:t}"
+    # Strip everything up to, and including the slash
+    BUFFER="${selection#*/}"
     CURSOR=${#BUFFER}
 fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Search for, and open selected file.                                          #
+# Search for, and open selected file / files with nvim.                        #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -9,31 +9,30 @@
 
 emulate -L zsh
 
-# local selection
-# if (( ${+commands[fd]} )); then
-#     selection="$(fd --color always --type f --hidden \
-#     --exclude Library \
-#     --exclude .git \
-#     | fzf)"
-# else
-#     selection="$(fd --color always --type f --hidden \
-#     --exclude Library \
-#     --exclude .git \
-#     | fzf)"
-# fi
+local selection
 
-local selection="$(fd --color always --type f --hidden \
---exclude Library \
---exclude .git \
-| fzf)"
+# Use `fd` over `find` if available
+if (( ${+commands[fd]} )); then
+    selection="$(fd \
+    --type f \
+    --hidden \
+    --exclude Library \
+    --exclude .git \
+    --exclude '*.opus' \
+    --exclude '*.mp3' \
+    --exclude '*.mp4' \
+    --exclude '*.jpeg' \
+    --exclude '*.jpg' \
+    --exclude '*.png' \
+    --exclude '*.webp' \
+    --color always \
+    | fzf --multi)"
+else
+    selection="$(find . -type f ! -path '*/.git/*' | fzf --multi)"
+fi
 
 if [[ -z "$selection" ]]; then
     echo -e "\nSearch cancelled."
 else
-    case "$selection" in
-        *.opus)  mpv "$selection"   ;;
-        *.mp3)   mpv "$selection"   ;;
-        *.mp4)   mpv "$selection"   ;;
-        *)       nvim "$selection"  ;;
-    esac
+    nvim $(echo "$selection" | tr '\n' ' ')
 fi

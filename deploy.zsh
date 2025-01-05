@@ -24,9 +24,27 @@ XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
 
+# Set MacOs defaults
+# ---------------------------------------------------------------------------- #
+if [[ "${OSTYPE}" == darwin* ]]; then
+    print "Setting MacOs defaults...\n"
+
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    brew bundle install --verbose --no-lock --file "${HOME}"/.local/dotfiles/macos/Brewfile
+
+    "${SCRIPT_DIR}"/macos/system_settings.zsh
+
+    # Ensure nvim is available for setup
+    # eval "$(/opt/homebrew/bin/brew shellenv)"
+    print "    ...done\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+fi
+
+
 # Create required directories
 # ---------------------------------------------------------------------------- #
-print "\nCreating required directory tree...\n"
+print "Creating required directory tree...\n"
 zf_mkdir -p "${XDG_CONFIG_HOME}"/nvim
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{{goenv,jenv,luaenv,nodenv,phpenv,plenv,pyenv,rbenv}/plugins,zsh,man/man1,vim/spell,nvim/site/pack/plugins}
@@ -112,27 +130,6 @@ print "Setting fast-syntax-highlighting theme...\n"
 ${SHELL} -is <<<'fast-theme base16' &> /dev/null
 print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-
-
-# # Download brew dependencies if brew is installed
-# # ---------------------------------------------------------------------------- #
-# if (( ${+commands[brew]} )); then
-#     print "Installing homebrew dependancies...\n"
-#     command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}/macos/Brewfile"
-#     print "\n    ...done\n"
-#     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-# fi
-
-
-# Set MacOs defaults
-# ---------------------------------------------------------------------------- #
-if [[ "${OSTYPE}" == darwin* ]]; then
-    print "Setting MacOs defaults...\n"
-    "${SCRIPT_DIR}/macos/system_settings.zsh"
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    print "\n    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
-fi
 
 
 # Generate Vim help tags

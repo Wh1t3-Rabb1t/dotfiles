@@ -15,11 +15,11 @@ xcode-select --install
 - New deploy
 
 ```sh
-git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "${HOME}"/.local/dotfiles; "${HOME}"/.local/dotfiles/macos/brew_bootstrap.zsh
+git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "${HOME}"/.local/dotfiles; "${HOME}"/.local/dotfiles/deploy.zsh
 ```
 
 ```sh
-eval "$(/opt/homebrew/bin/brew shellenv)"; "${HOME}"/.local/dotfiles/deploy.zsh
+eval "$(/opt/homebrew/bin/brew shellenv)"
 ```
 
 ## Alternate testing commands

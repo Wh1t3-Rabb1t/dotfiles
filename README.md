@@ -1,4 +1,4 @@
-# PAUL ALLEN'S CONFIG
+# Paul Allen's config
 
 - Download xcode developer tools
 

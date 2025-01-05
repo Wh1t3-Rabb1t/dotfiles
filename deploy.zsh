@@ -26,7 +26,7 @@ XDG_STATE_HOME="${HOME}/.local/state"
 
 # Create required directories
 # ---------------------------------------------------------------------------- #
-print "Creating required directory tree...\n"
+print "\nCreating required directory tree...\n"
 zf_mkdir -p "${XDG_CONFIG_HOME}"/nvim
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{{goenv,jenv,luaenv,nodenv,phpenv,plenv,pyenv,rbenv}/plugins,zsh,man/man1,vim/spell,nvim/site/pack/plugins}
@@ -40,15 +40,16 @@ print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 # ---------------------------------------------------------------------------- #
 if [[ "${OSTYPE}" == darwin* ]]; then
     # Install brew
-    print "Installing homebrew...\n"
+    print "Installing Homebrew...\n"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    print "\n    ...done\n"
+    print "    ...done\n"
 
     # Install dependancies
-    print "Installing dependancies...\n"
+    print "Installing Homebrew dependancies...\n"
     command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}"/macos/Brewfile
     print "\n    ...done\n"
+    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
     # Set MacOs defaults
     print "Setting MacOs defaults...\n"

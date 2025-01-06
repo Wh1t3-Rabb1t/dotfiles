@@ -36,6 +36,7 @@ pointer:#cdd6f4,\
 spinner:#cdd6f4,\
 marker:#cdd6f4,\
 border:#1e66f5,\
+header:#df8e1d,\
 preview-border:#1e66f5"
 
 FZF_PREVIEW="\
@@ -50,7 +51,7 @@ export FZF_DEFAULT_OPTS="\
 --preview='$FZF_PREVIEW' \
 --preview-window='right,border-left,<88(up:50%,border-bottom)' \
 --height=100% \
---prompt=' : ' \
+--prompt=' ' \
 --pointer='▐' \
 --marker='▌' \
 --tac \

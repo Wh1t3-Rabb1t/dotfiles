@@ -9,12 +9,14 @@
 
 emulate -L zsh
 
+# Note: ls is escaped `\ls` so that the builtin is used in place of my alias
 local selection="$(\
     z -l \
     | sed 's/^[0-9. ]*//' \
     | fzf \
-        --no-sort \
+        --header='Select a directory to jump to.' \
         --filepath-word \
+        --no-sort \
         --query="$*" \
         --preview='\
             LC_COLLATE=C \

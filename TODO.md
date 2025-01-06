@@ -2,15 +2,10 @@
 
 
 z0rc fpath commands to incorporate:
-bag
-fz
-ineachdir
-lspath
 fgb
 fgl
 
 
-- The color highlights for the selection marker and the pointer in fzf are misaligned (white and yellow), change it
 - Finish configuring fzf tab
 
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.

@@ -1,11 +1,18 @@
-# do something in each subdirectory of current directory
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Perform a specified command in each subdirectory of current directory.       #
+# ---------------------------------------------------------------------------- #
+# Args    : Command to execute; i.e. `touch README.md`                         #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
 {
     setopt localoptions localtraps
 
-    # handle Ctrl+C interrupts
+    # Handle Ctrl+C interrupts
     TRAPINT () {
         echo ${fg[white]}"--- IED: Caught SIGINT, aborting."${fg[default]}
         return $(( 128 + $1 ))
@@ -67,5 +74,3 @@ EOH
     cd "${cwd}"
     unfunction TRAPINT
 }
-
-# vim: ft=zsh

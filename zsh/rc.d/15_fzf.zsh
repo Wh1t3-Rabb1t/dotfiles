@@ -34,7 +34,7 @@ current-hl:reverse:#f38ba8,\
 prompt:#cdd6f4,\
 pointer:#cdd6f4,\
 spinner:#cdd6f4,\
-marker:#f9e2af,\
+marker:#cdd6f4,\
 border:#1e66f5,\
 preview-border:#1e66f5"
 

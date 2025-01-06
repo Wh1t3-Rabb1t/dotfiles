@@ -24,7 +24,7 @@ autoload -Uz add-zsh-hook
 
 # Custom personal functions
 # Don't use -U as we need aliases here
-autoload -z bag fgb fgd fgl fz ineachdir psg vpaste evalcache compdefcache
+autoload -z bag fgb fgd fgl psg vpaste evalcache compdefcache
 
 # autoload -z lspath bag fgb fgd fgl fz ineachdir psg vpaste evalcache compdefcache
 

@@ -1,4 +1,11 @@
-# git diff by files with fzf
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Git diff by files with fzf.                                                  #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
@@ -24,6 +31,4 @@ repo="$(git rev-parse --show-toplevel)"
 preview_cmd="xargs -I% git --no-pager diff --color=always ${commit} -- '${repo}/%' <<< {} ${highlighter}"
 
 git --no-pager diff --name-only ${commit} -- ${files[*]} |
-    fzf --exit-0 --ansi --height=50% --preview-window=right:50% --no-sort --tac --layout=reverse-list --preview="${preview_cmd}"
-
-# vim: ft=zsh
+    fzf --exit-0 --no-sort --preview="${preview_cmd}"

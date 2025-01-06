@@ -63,7 +63,7 @@ alias getip="ifconfig | grep inet"
     alias rm="_move_to_trash"
     alias md="_glow_markdown"
     alias vs="_find_vim_sessions"
-    alias clear="_clear_screen_soft_bottom"
+    alias cl="_clear_screen_soft_bottom"
 }
 
 # alias g="_rg_fzf_into_nvim"

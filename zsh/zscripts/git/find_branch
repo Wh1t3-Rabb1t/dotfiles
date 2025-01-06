@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Git branch selector with fzf.                                                #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+git rev-parse --is-inside-work-tree &> /dev/null || return
+
+git checkout $(\
+    git branch \
+        --color=always \
+        --all \
+        --sort=committerdate \
+        --no-contains \
+    | fzf \
+        --no-sort \
+        --query="${@}" \
+        --header='Red are remote, white are local, green is current' \
+        --preview='git log --color=always --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -200' \
+    | sed 's/^..//' \
+    | sed 's#^remotes/origin/##' \
+)
+
+# git checkout $(git branch --color=always --all --sort=committerdate --no-contains |
+#                fzf --no-sort --query="${@}" \
+#                    --header='Red are remote, white are local, green is current' \
+#                    --preview='git log --color=always --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1) | head -200' |
+#                sed 's/^..//' | sed 's#^remotes/origin/##')

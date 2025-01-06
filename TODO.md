@@ -1,10 +1,6 @@
 # TODO
 
 
-z0rc fpath commands to incorporate:
-fgb
-fgl
-
 
 - Finish configuring fzf tab
 

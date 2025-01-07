@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Search for, cd to parent dir, and open selected Vim session.                 #
+# Open selected Vim session and cd to parent dir.                              #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -15,9 +15,9 @@ cd ~
 
 local selection="$( \
     fd Session.vim \
-        --format={//} \
+        --format {//} \
         --fixed-strings \
-        --extension=.vim \
+        --extension .vim \
         --hidden \
         --no-ignore \
         --exclude Library \

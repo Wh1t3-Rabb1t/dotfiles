@@ -9,7 +9,7 @@
 
 emulate -L zsh
 
-# Switch between Ripgrep mode and fzf filtering mode (ALT-F)
+# Switch between Ripgrep mode and Fzf filtering mode (ALT-F)
 rm -f /tmp/rg-fzf-{r,f}
 RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
 INITIAL_QUERY="${*:-}"

@@ -28,10 +28,10 @@ else
 fi
 
 repo="$(git rev-parse --show-toplevel)"
-preview_cmd="\
+preview_cmd=" \
     xargs -I% \
     git --no-pager diff --color=always \
-        ${commit} -- '${repo}/%' <<< {} ${highlighter}\
+        ${commit} -- '${repo}/%' <<< {} ${highlighter} \
 "
 
 git --no-pager diff --name-only \
@@ -39,5 +39,4 @@ git --no-pager diff --name-only \
 | fzf \
     --exit-0 \
     --no-sort \
-    --preview="${preview_cmd}\
-"
+    --preview="${preview_cmd}"

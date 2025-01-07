@@ -104,8 +104,10 @@ function M.config()
             title_pos = "center",  -- 'left', 'center' or 'right'
             fullscreen = false,    -- start fullscreen?
             preview = {
-                -- default = "bat",        -- override the default previewer?
-                border = "border",         -- border|noborder, applies only to
+                default = "bat",           -- override the default previewer?
+
+                -- Defaults are: border|noborder
+                border = { " ", " ", " ", " ", " ", " ", " ", " " },
                 wrap = "nowrap",           -- wrap|nowrap
                 hidden = "nohidden",       -- hidden|nohidden
                 vertical = "up:45%",       -- up|down:size

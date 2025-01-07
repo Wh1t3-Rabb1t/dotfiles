@@ -5,6 +5,7 @@
 - 3. Standardize Rg / Fzf colors
 - 4. Finish configuring fzf tab
 - 5. Rewrite move to Trash script
+- 6. Tweak p10k config
 
 - Store a note of these escape sequences somewhere
 ```sh
@@ -21,13 +22,11 @@
 
 - Fix ghostty navigate split bindings
 - Write a script to check for zsh plugin updates
-- Tweak `f` open files to enable opening of multiple files (with nvim only mpv can't open playlists)
 - Finish reworking 'd' alias (search and jump to dir)
 - Finish refactoring zsh config
-- Test if setting fzf local path is causing issues with nvim fzf lua inside of vm
 - Rewrite basic Rectangle features with Hammerspoon
-- Possibly auto quit Finder when system wakes up with Hammerspoon
 - App launcher / focuser with Hammerspoon
+- Possibly auto quit Finder when system wakes up with Hammerspoon
 
 
 - ReConfigure Lualine

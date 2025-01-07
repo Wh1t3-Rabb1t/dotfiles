@@ -24,7 +24,7 @@ XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
 
-# Install Homebrew and set MacOs defaults
+# Install Homebrew and set macOS defaults
 # ---------------------------------------------------------------------------- #
 if [[ "${OSTYPE}" == darwin* ]]; then
     # Install brew
@@ -40,8 +40,8 @@ if [[ "${OSTYPE}" == darwin* ]]; then
     print "\n    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
-    # Set MacOs defaults
-    print "Setting MacOs defaults...\n"
+    # Set macOS defaults
+    print "Setting macOS defaults...\n"
     "${SCRIPT_DIR}"/macos/system_settings.zsh
     print "    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
@@ -180,4 +180,4 @@ print "    ██████╔╝██║   ██║██║     ███�
 print "    ██╔══██╗██║   ██║██║     ██╔═██╗       "
 print "    ██║  ██║╚██████╔╝╚██████╗██║  ██╗      "
 print "    ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝    \n"
-print "Log out/restart to reflect updated MacOs keyboard settings.\n"
+print "Log out/restart to reflect updated macOS keyboard settings.\n"

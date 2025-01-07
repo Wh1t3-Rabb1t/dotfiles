@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Search and cd to the selected directory.                                     #
+# Search for, and cd to the selected directory.                                #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -12,20 +12,25 @@ emulate -L zsh
 local selection
 
 if (( ${+commands[fd]} )); then
-    selection="$(fd \
-    --type d \
-    --hidden \
-    --exclude Library \
-    --exclude .git \
-    --color always \
-    | fzf)"
+    selection=$( \
+        fd \
+            --type d \
+            --hidden \
+            --exclude Library \
+            --exclude .git \
+            --color always \
+        | fzf \
+    )
 else
-    selection="$(find . -type d \(\
-    -path "./Library/*" -or\
-    -path "./.git/*" -or\
-    -path "./node_modules/*" \)\
-    -prune -o -type d -print\
-    | fzf)"
+    selection=$( \
+        find . \
+            -type d \( \
+            -path "./Library/*" -or \
+            -path "./.git/*" -or \
+            -path "./node_modules/*" \) \
+            -prune -o -type d -print \
+        | fzf \
+    )
 fi
 
 if [[ -z "$selection" ]]; then

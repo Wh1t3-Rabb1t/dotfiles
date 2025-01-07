@@ -16,16 +16,20 @@ cd "${ZSCRIPTDIR}"
 
 # Search cheat sheet, ignoring files with a leading underscore
 if (( ${+commands[fd]} )); then
-    selection="$(fd \
-    --type f \
-    --exclude '_*' \
-    --color always \
-    | fzf)"
+    selection=$( \
+        fd \
+            --type f \
+            --exclude '_*' \
+            --color always \
+        | fzf \
+    )
 elif (( ${+commands[find]} )); then
-    selection="$(find .\
-    -type f\
-    ! -name '_*'\
-    | fzf)"
+    selection=$( \
+        find . \
+            -type f \
+            ! -name '_*' \
+        | fzf \
+    )
 fi
 
 cd "$initial_dir"

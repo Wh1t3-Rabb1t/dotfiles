@@ -13,16 +13,18 @@ local initial_dir="${0:A:h}"
 
 cd ~
 
-local selection="$(fd Session.vim \
---format={//} \
---fixed-strings \
---extension=.vim \
---hidden \
---no-ignore \
---exclude Library \
---exclude .git \
---exclude .cache \
-| fzf)"
+local selection="$( \
+    fd Session.vim \
+        --format={//} \
+        --fixed-strings \
+        --extension=.vim \
+        --hidden \
+        --no-ignore \
+        --exclude Library \
+        --exclude .git \
+        --exclude .cache \
+    | fzf \
+)"
 
 if [[ -z "$selection" ]]; then
     cd "$initial_dir"

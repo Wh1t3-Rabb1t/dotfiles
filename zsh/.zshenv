@@ -59,7 +59,7 @@ export GOPATH="${XDG_DATA_HOME}/go"
 # PATHS
 # ---------------------------------------------------------------------------- #
 # Add custom functions and completions
-fpath=(${ZDOTDIR}/fpath ${fpath})
+fpath=(${ZDOTDIR}/cache_utils ${fpath})
 
 # Ensure we have local paths enabled
 path=(/usr/local/bin /usr/local/sbin ${path})

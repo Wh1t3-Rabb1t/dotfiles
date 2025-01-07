@@ -1,13 +1,33 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Search term in cwd, pipe it into fzf, and open selection in nvim.            #
+# Toggle between Rg / Fzf, and open selection in Neovim.                       #
 # ---------------------------------------------------------------------------- #
-# Args    : Search term.                                                       #
+# Args    : Search term                                                        #
 # Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
+
+# Switch between Ripgrep mode and fzf filtering mode (ALT-F)
+rm -f /tmp/rg-fzf-{r,f}
+RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+INITIAL_QUERY="${*:-}"
+fzf --disabled --query "$INITIAL_QUERY" \
+    --bind "start:reload:$RG_PREFIX {q}" \
+    --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
+    --bind 'alt-f:transform:[[ ! $FZF_PROMPT =~ ripgrep ]] &&
+        echo "rebind(change)+change-prompt(1. ripgrep  )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
+        echo "unbind(change)+change-prompt(2. fzf  )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+    --color "hl:-1:underline,hl+:-1:underline:reverse" \
+    --prompt '1. ripgrep  ' \
+    --delimiter : \
+    --header 'alt-f: Toggle between Rg / Fzf.' \
+    --preview 'bat --color=always {1} --highlight-line {2}' \
+    --preview-window '+{2}+3/3,~3' \
+    --bind 'enter:become(${EDITOR} {1} +{2})'
+
+
 
 # # Use bat, if it's available...
 # local preview_cmd
@@ -39,29 +59,6 @@ emulate -L zsh
 # fi | fzf \
 #         --delimiter=: \
 #         --no-sort \
-#         --header='Open NeoVim at selected file/line.' \
+#         --header='Open Neovim at selected file/line.' \
 #         --preview=${preview_cmd} \
 #         --bind='enter:become(${EDITOR} {1} +{2})'
-
-
-
-
-# Switch between Ripgrep mode and fzf filtering mode (ALT-F).
-# When using the transform action, the placeholder (\{q}) should be escaped to prevent immediate evaluation.
-rm -f /tmp/rg-fzf-{r,f}
-RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
-INITIAL_QUERY="${*:-}"
-fzf --disabled --query "$INITIAL_QUERY" \
-    --bind "start:reload:$RG_PREFIX {q}" \
-    --bind "change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-    --bind 'alt-f:transform:[[ ! $FZF_PROMPT != ripgrep ]] &&
-      echo "rebind(change)+change-prompt(Rg  )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
-      echo "unbind(change)+change-prompt(Fzf  )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
-    --color "hl:-1:underline,hl+:-1:underline:reverse" \
-    --prompt 'Rg  ' \
-    --delimiter : \
-    --preview 'bat --color=always {1} --highlight-line {2}' \
-    --header 'alt-f: Switch from Rg to Fzf' \
-    --bind 'enter:become(${EDITOR} {1} +{2})'
-
-        # --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \

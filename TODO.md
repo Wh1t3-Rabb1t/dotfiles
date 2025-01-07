@@ -1,8 +1,21 @@
 # TODO
 
 
+- 2. Incorporate Rg / Fzf toggle into suitable scripts
+- 3. Standardize Rg / Fzf colors
+- 4. Finish configuring fzf tab
+- 5. Rewrite move to Trash script
 
-- Finish configuring fzf tab
+- Store a note of these escape sequences somewhere
+```sh
+# echo -e "\e[1mbold\e[0m"
+# echo -e "\e[3mitalic\e[0m"
+# echo -e "\e[4munderline\e[0m"
+# echo -e "\e[9mstrikethrough\e[0m"
+# echo -e "\e[31mHello World\e[0m"
+# echo -e "\x1B[31mHello World\e[0m"
+```
+
 
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
@@ -30,7 +43,8 @@
 
 ## Plugins
 
-
+https://github.com/sharkdp/vivid
+https://github.com/bootandy/dust
 https://github.com/mafredri/zsh-async
 https://github.com/MichaelAquilina/zsh-auto-notify
 https://github.com/junegunn/fzf-git.sh

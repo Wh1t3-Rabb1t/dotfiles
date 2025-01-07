@@ -145,11 +145,11 @@ if (( ${+commands[vim]} )); then
 fi
 
 
-# Setup NeoVim
+# Setup Neovim
 # ---------------------------------------------------------------------------- #
 if (( ${+commands[nvim]} )); then
     # Launch nvim to trigger Lazy and download plugins
-    print "Downloading NeoVim plugins and generating help tags...\n"
+    print "Downloading Neovim plugins and generating help tags...\n"
     command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
 
     # Launch nvim and install Mason dependancies

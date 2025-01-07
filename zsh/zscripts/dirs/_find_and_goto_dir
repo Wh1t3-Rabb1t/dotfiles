@@ -33,8 +33,6 @@ else
     )
 fi
 
-if [[ -z "$selection" ]]; then
-    echo -e "\nSearch cancelled."
-else
+if [[ "$selection" ]]; then
     cd "$selection"
 fi

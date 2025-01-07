@@ -38,7 +38,7 @@ pointer:#cdd6f4,\
 spinner:#cdd6f4,\
 marker:#cdd6f4,\
 border:#1e66f5,\
-header:#f9e2af,\
+header:#eed49f,\
 preview-border:#1e66f5"
 
 FZF_PREVIEW="\

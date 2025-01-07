@@ -38,7 +38,7 @@ fzf --disabled --query "$INITIAL_QUERY" \
 #         --highlight-line=${2} ${1}'
 # else
 #     # ...otherwise just highlight line with match using sed replace
-#     preview_cmd='sed -E "s/(.*'${*}'.*)/'$bg[grey]'\1'$reset_color'/gI;" < ${1}'
+    # preview_cmd='sed -E "s/(.*'${*}'.*)/'$bg[grey]'\1'$reset_color'/gI;" < ${1}'
 # fi
 
 # # Prefer rg over grep

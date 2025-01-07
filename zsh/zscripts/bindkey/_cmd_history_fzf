@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# FZF command history and append selected command to the buffer.               #
+# Fzf command history and append selected command to the buffer.               #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : BUFFER                                                             #
@@ -9,15 +9,20 @@
 
 emulate -L zsh
 
-# Use `tail -r` in place of `tac`
-local selection="$("${XDG_DATA_HOME}"/zsh/history | fzf --no-preview)"
+# The first awk line adds color to the second field (the commmand prefix).
+# The second removes the command's index and cleans up white space before
+# appending the command to the buffer.
+local selection=$( \
+    history 0 \
+    | awk '{$2="\033[1;32m"$2"\033[0m"; print}' \
+    | fzf \
+        --no-preview \
+        --header 'Command history.' \
+    | awk '{$1=""; sub(/^ +/, ""); print}' \
+)
 
-# # Use `tail -r` in place of `tac`
-# local selection="$(tail -r ${XDG_DATA_HOME}/zsh/history \
-#     | awk '!a[$0]++ && $1 !~ /^:/' \
-#     | fzf --no-preview)"
-
-[[ "$selection" ]] && BUFFER="$selection"
-
-
-# local selection="$(tail -r ${ZDOTDIR}/.zcompcache/.zsh_history \
+if [[ "$selection" ]]; then
+    BUFFER="$selection"
+    CURSOR=${#BUFFER}
+    zle redisplay
+fi

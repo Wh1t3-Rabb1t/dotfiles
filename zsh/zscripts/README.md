@@ -1,4 +1,4 @@
-## ZSCRIPTS
+# ZSCRIPTS
 
 `zscripts` are added to the fpath and autoloaded on first call.
 

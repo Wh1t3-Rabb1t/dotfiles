@@ -1,6 +1,6 @@
 # TODO
 
-
+- 1. Add headers to all Fzf scripts
 - 2. Incorporate Rg / Fzf toggle into suitable scripts
 - 3. Standardize Rg / Fzf colors
 - 4. Finish configuring fzf tab

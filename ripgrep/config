@@ -1,8 +1,8 @@
-# DOCS https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
+# https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
 # ---------------------------------------------------------------------------- #
 
 # Global ignore file
---ignore-file=/Users/tillcapel/.config/ripgrep/ignore
+--ignore-file=/Users/tillcappel/.config/ripgrep/ignore
 
 # Shorten long lines
 --max-columns=200
@@ -20,8 +20,9 @@
 --hyperlink-format=default
 
 # Colors
---colors=match:fg:magenta
+--colors=match:fg:cyan
+--colors=match:bg:red
 --colors=match:style:bold
 --colors=path:fg:blue
---colors=line:fg:green
+--colors=line:fg:yellow
 --colors=column:fg:green

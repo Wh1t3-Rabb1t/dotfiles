@@ -2,7 +2,16 @@
 
 # Mac Stuff
 # ---------------------------------------------------------------------------- #
+
+# Apple builtin databases in home folder
+Photos
+Pictures
+Music
+Tv
+Library
 .Trash
+.rustup
+.npm
 
 # Useless stuff inside pseudo-apps
 **/*.app/*
@@ -10,8 +19,6 @@
 # Pixalmator container files
 **/*.pxd/*
 
-# Apple builtin databases in home folder
-*.{photos,music,tv}library
 
 # Git isn't ignored by default
 .git/

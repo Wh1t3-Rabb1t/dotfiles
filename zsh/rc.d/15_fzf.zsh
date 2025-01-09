@@ -25,14 +25,13 @@ alt-a:select-all"
 FZF_JUMP_LABELS="\
 ftdksleiwoacnvghyxmruqpFTDKSLEIWOACNVGHYXMRUQP+=-~[]{}()!&_|;:<>/?.,#@%1234567890"
 
-# Catppuccin colors
 FZF_COLORS="\
-fg:#7f849c,\
-gutter:#585b70,\
-current-bg:#585b70,\
-current-fg:#f38ba8,\
-hl:reverse:#f38ba8,\
-current-hl:reverse:#f38ba8,\
+fg:#585b70,\
+gutter:#313244,\
+current-bg:#313244,\
+current-fg:#7f849c,\
+hl:reverse:#870005,\
+current-hl:#f38ba8,\
 prompt:#cdd6f4,\
 pointer:#cdd6f4,\
 spinner:#cdd6f4,\

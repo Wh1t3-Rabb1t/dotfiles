@@ -14,11 +14,18 @@ emulate -L zsh
 # appending the command to the buffer.
 local selection=$( \
     history 0 \
-    | awk '{$2="\033[1;32m"$2"\033[0m"; print}' \
+    | awk '{
+        $2="\033[38;5;35m"$2"\033[0m";
+        print
+    }' \
     | fzf \
         --no-preview \
-        --header 'Command history.' \
-    | awk '{$1=""; sub(/^ +/, ""); print}' \
+        --header='Command history.' \
+    | awk '{
+        $1="";
+        sub(/^ +/, "");
+        print
+    }' \
 )
 
 if [[ "$selection" ]]; then

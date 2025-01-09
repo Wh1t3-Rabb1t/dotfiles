@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Open selected Vim session and cd to parent dir.                              #
+# Search for Vim sessions, cd to parent dir, and open selection.               #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -9,11 +9,9 @@
 
 emulate -L zsh
 
-local initial_dir="${0:A:h}"
+pushd ~
 
-cd ~
-
-local selection="$( \
+local selection=$( \
     fd Session.vim \
         --format {//} \
         --fixed-strings \
@@ -24,11 +22,10 @@ local selection="$( \
         --exclude .git \
         --exclude .cache \
     | fzf \
-)"
+)
 
 if [[ -z "$selection" ]]; then
-    cd "$initial_dir"
-    echo -e "\nSearch cancelled."
+    popd
 else
     cd "$selection"
     command nvim -S

@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# FZF cwd and append `mv` and the chosen rename target (x2) to the cli.        #
+# Fzf cwd and append `mv` and the chosen rename target (x2) to the cli.        #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : BUFFER                                                             #
@@ -13,12 +13,12 @@ local selection
 
 # Use `lsd` over `ls` if available
 if (( ${+commands[lsd]} )); then
-    selection="$(lsd -A -v | fzf --no-preview --ansi)"
+    selection="$(lsd -A -v | fzf --no-preview)"
 elif (( ${+commands[ls]} )); then
-    selection="$(ls -a | fzf --no-preview --ansi)"
+    selection="$(ls -a | fzf --no-preview)"
 fi
 
-if [[ -n "$selection" ]]; then
+if [[ "$selection" ]]; then
     local quotes=\'
 
     # Remove icons if lsd was used over ls
@@ -28,7 +28,7 @@ if [[ -n "$selection" ]]; then
     [[ $selection == *\'* ]] && quotes=\"
 
     # Add quotes and update BUFFER
-    selection="$(echo "$selection" | sed -E "s/(.*)/$quotes\1$quotes/")"
+    selection=$(echo "$selection" | sed -E "s/(.*)/$quotes\1$quotes/")
     BUFFER="mv $selection $selection"
 
     # Navigate to the start of the second name

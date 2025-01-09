@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Search for, and open selected file / files with nvim.                        #
+# Search for, and open selected file / files with Neovim.                      #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -14,7 +14,7 @@ local selection
 if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
-            --type f \
+            --type file \
             --hidden \
             --exclude Library \
             --exclude .git \
@@ -37,9 +37,7 @@ else
     )
 fi
 
-if [[ -z "$selection" ]]; then
-    echo -e "\nSearch cancelled."
-else
+if [[ "$selection" ]]; then
     # Replace line breaks with spaces before passing the
     # output to nvim (enables opening of multiple files)
     nvim $(echo "$selection" | tr '\n' ' ')

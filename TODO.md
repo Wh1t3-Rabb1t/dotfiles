@@ -1,25 +1,45 @@
 # TODO
 
-- 1. Add headers to all Fzf scripts
-- 2. Incorporate Rg / Fzf toggle into suitable scripts
-- 3. Standardize Rg / Fzf colors
+- 1. Standardize Rg / Fzf colors
+- 2. Add headers to all Fzf scripts
+- 3. Incorporate Rg / Fzf toggle into suitable scripts
 - 4. Finish configuring fzf tab
 - 5. Rewrite move to Trash script
 - 6. Tweak p10k config
 
-- Store a note of these escape sequences somewhere
+- Store these somewhere
 ```sh
+# Text styling
 # echo -e "\e[1mbold\e[0m"
 # echo -e "\e[3mitalic\e[0m"
 # echo -e "\e[4munderline\e[0m"
 # echo -e "\e[9mstrikethrough\e[0m"
 # echo -e "\e[31mHello World\e[0m"
 # echo -e "\x1B[31mHello World\e[0m"
+
+# Ansi colors
+# 0;30 – Black
+# 0;31 – Red
+# 0;32 – Green
+# 0;33 – Yellow
+# 0;34 – Blue
+# 0;35 – Magenta
+# 0;36 – Cyan
+# 0;37 – White
+# 1;30 – Bright Black (Gray)
+# 1;31 – Bright Red
+# 1;32 – Bright Green
+# 1;33 – Bright Yellow
+# 1;34 – Bright Blue
+# 1;35 – Bright Magenta
+# 1;36 – Bright Cyan
+# 1;37 – Bright White
 ```
 
 
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
+- Look into dropping lsd in place of LS_COLORS
 - Fix ghostty navigate split bindings
 - Write a script to check for zsh plugin updates
 - Finish reworking 'd' alias (search and jump to dir)

@@ -14,7 +14,7 @@ local selection
 if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
-            --type d \
+            --type directory \
             --hidden \
             --exclude Library \
             --exclude .git \
@@ -24,11 +24,11 @@ if (( ${+commands[fd]} )); then
 else
     selection=$( \
         find . \
-            -type d \( \
+            -type directory \( \
             -path "./Library/*" -or \
             -path "./.git/*" -or \
             -path "./node_modules/*" \) \
-            -prune -o -type d -print \
+            -prune -o -type directory -print \
         | fzf \
     )
 fi

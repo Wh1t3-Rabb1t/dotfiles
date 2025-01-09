@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Terminal cheat sheet powered by fzf.                                         #
+# Terminal cheat sheet powered by Fzf.                                         #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : BUFFER, CURSOR, ZSCRIPTDIR                                         #

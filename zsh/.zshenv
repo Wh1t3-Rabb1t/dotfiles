@@ -54,6 +54,7 @@ fi
 export WORKSPACE="${HOME}/workspace"
 export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export GOPATH="${XDG_DATA_HOME}/go"
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
 
 
 # PATHS

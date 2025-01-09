@@ -1,0 +1,27 @@
+# DOCS https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
+# ---------------------------------------------------------------------------- #
+
+# Global ignore file
+--ignore-file=/Users/tillcapel/.config/ripgrep/ignore
+
+# Shorten long lines
+--max-columns=200
+--max-columns-preview
+
+# Shortened display
+--trim
+
+# Include hidden files, but not the git directory
+--hidden
+--glob=!.git/*
+
+# Behavior
+--smart-case
+--hyperlink-format=default
+
+# Colors
+--colors=match:fg:magenta
+--colors=match:style:bold
+--colors=path:fg:blue
+--colors=line:fg:green
+--colors=column:fg:green

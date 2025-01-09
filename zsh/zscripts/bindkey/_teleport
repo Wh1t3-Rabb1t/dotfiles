@@ -7,25 +7,29 @@
 # Globals : BUFFER                                                             #
 # ---------------------------------------------------------------------------- #
 
-# Helpful note on using delimiters in awk. (if you define your input file
-# separator to be ',' and you want to keep it, then you have to define your
-# output file separator as well).
+# Note on delimiters in awk:
+# If you define your input file separator to be ',' and you want to keep it,
+# then you have to define your output file separator as ',' also.
 #
 # https://unix.stackexchange.com/questions/427421/awk-unintentionally-removing-commas
 
 emulate -L zsh
 
-# Note: ls is escaped `\ls` so that the builtin is used in place of my alias
+# ls is escaped `\ls` so that the builtin is used in place of my alias
 local selection=$( \
     z -l \
     | sed 's/^[0-9. ]*//' \
-    | awk -F "/" '{OFS="/"; $NF="\033[1;34m"$NF"\033[0m"; print}' \
+    | awk -F "/" '{
+        OFS="/";
+        $NF="\033[38;5;69m"$NF"\033[0m";
+        print
+    }' \
     | fzf \
         --header='Teleport to selected directory.' \
         --filepath-word \
         --no-sort \
         --query="$*" \
-        --preview='\
+        --preview=' \
             LC_COLLATE=C \
             \ls -l -v \
             --almost-all \

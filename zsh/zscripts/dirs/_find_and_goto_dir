@@ -16,8 +16,6 @@ if (( ${+commands[fd]} )); then
         fd \
             --type directory \
             --hidden \
-            --exclude Library \
-            --exclude .git \
             --color always \
         | fzf \
     )

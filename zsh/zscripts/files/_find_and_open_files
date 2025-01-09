@@ -16,8 +16,6 @@ if (( ${+commands[fd]} )); then
         fd \
             --type file \
             --hidden \
-            --exclude Library \
-            --exclude .git \
             --exclude '*.opus' \
             --exclude '*.mp3' \
             --exclude '*.mp4' \

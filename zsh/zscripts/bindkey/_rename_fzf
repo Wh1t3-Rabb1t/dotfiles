@@ -11,18 +11,36 @@ emulate -L zsh
 
 local selection
 
-# Use `lsd` over `ls` if available
-if (( ${+commands[lsd]} )); then
-    selection="$(lsd -A -v | fzf --no-preview)"
-elif (( ${+commands[ls]} )); then
-    selection="$(ls -a | fzf --no-preview)"
+# Use `eza` over `gls` if available
+if (( ${+commands[eza]} )); then
+    selection=$( \
+        eza \
+            --almost-all \
+            --classify=always \
+            --icons=always \
+            --color=always \
+        | fzf \
+            --no-preview \
+            --header='Rename selected file / directory.' \
+    )
+elif (( ${+commands[gls]} )); then
+    selection=$( \
+        gls \
+            --almost-all \
+            --classify \
+            --group-directories-first \
+            --color \
+        | fzf \
+            --no-preview \
+            --header='Rename selected file / directory.' \
+    )
 fi
 
 if [[ "$selection" ]]; then
     local quotes=\'
 
-    # Remove icons if lsd was used over ls
-    (( ${+commands[lsd]} )) && selection="$(echo "$selection" | sed -E 's/^.{2}//')"
+    # Remove icons if `eza` was used
+    (( ${+commands[eza]} )) && selection="$(echo "$selection" | sed -E 's/^.{2}//')"
 
     # Use double quotes if a single quote exists in the selection
     [[ $selection == *\'* ]] && quotes=\"

@@ -29,9 +29,27 @@ for i in ${pathlist[@]}; do
 done
 allpaths=(${allpaths[@]} ${filepath})
 
-# Use `lsd` over `ls` if available
-if (( ${+commands[lsd]} )); then
-    lsd -A -d -U -l "${allpaths[@]}"
-else
-    ls -ld "${allpaths[@]}"
+# Use `eza` over `gls` if available
+if (( ${+commands[eza]} )); then
+    eza \
+        --long \
+        --list-dirs \
+        --sort=inode \
+        --group \
+        --git \
+        --git-repos \
+        --header \
+        --almost-all \
+        --icons=auto \
+        --color=auto \
+    "${allpaths[@]}"
+elif (( ${+commands[gls]} )); then
+    gls \
+        -l \
+        --directory \
+        --almost-all \
+        --classify \
+        --human-readable \
+        --color \
+    "${allpaths[@]}"
 fi

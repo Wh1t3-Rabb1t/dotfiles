@@ -13,6 +13,7 @@ if (( ${+commands[eza]} )); then
         --oneline \
         --almost-all \
         --group-directories-first \
+        --classify=auto \
         --icons=auto \
         --color=auto"
 
@@ -26,6 +27,7 @@ if (( ${+commands[eza]} )); then
         --no-user \
         --almost-all \
         --group-directories-first \
+        --classify=auto \
         --icons=auto \
         --color=auto"
 
@@ -35,16 +37,17 @@ if (( ${+commands[eza]} )); then
         --level=2 \
         --almost-all \
         --group-directories-first \
+        --classify=auto \
         --icons=auto \
         --color=auto"
-else
+elif (( ${+commands[gls]} )); then
     # Short list
     alias ls="gls \
         -1 \
         --almost-all \
-        --classify \
         --human-readable \
         --group-directories-first \
+        --classify \
         --color"
 
     # Long list
@@ -52,9 +55,9 @@ else
         -l \
         --time-style=locale \
         --almost-all \
-        --classify \
         --human-readable \
         --group-directories-first \
+        --classify \
         --color"
 fi
 
@@ -118,12 +121,6 @@ alias getip="ifconfig | grep inet"
 
 
 
-
-# (( ${+commands[lsd]} )) && {
-#     alias ls="echo ''; lsd -A -v"
-#     alias ll="echo ''; lsd -A --long"
-#     alias lt="echo ''; lsd -A --tree --depth"
-# }
 
 
 

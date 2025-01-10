@@ -109,7 +109,7 @@ bashcompinit
 # # # Set default FZF preview style for tab complete
 # # zstyle ':fzf-tab:complete:*' fzf-preview '\
 # #     ([[ -f ${realpath} ]] && (bat ${realpath} || cat ${realpath})) || \
-# #     ([[ -d ${realpath} ]] && (lsd -A -v ${realpath} | less)) || \
+# #     ([[ -d ${realpath} ]] && (ls -a --color ${realpath} | less)) || \
 # #     echo ${realpath} 2> /dev/null | head -200\
 # # '
 

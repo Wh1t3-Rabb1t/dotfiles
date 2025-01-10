@@ -53,15 +53,16 @@ FZF_PREVIEW="\
         --no-user \
         --almost-all \
         --group-directories-first \
+        --classify=always \
         --icons=always \
         --color=always {} \
     || ls \
         -l \
         --time-style=locale \
         --almost-all \
-        --classify \
         --human-readable \
         --group-directories-first \
+        --classify \
         --color {} \
     | less)) \
 || echo {} 2> /dev/null \

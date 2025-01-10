@@ -1,0 +1,56 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Add custom colors and icons to gnu ls.                                       #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+gls \
+    -l \
+    --almost-all \
+    --classify \
+    --color \
+    --human-readable \
+    --time-style=locale \
+    --group-directories-first \
+| awk '
+    BEGIN {
+        dir_icon = ""
+        file_icon = "󰈙"
+    }
+    {
+        if ($1 ~ /^d/) {
+            $9=" "$9
+        } else {
+            $9="󰈙 "$9
+        }
+        print
+    }'
+
+
+
+# gls \
+#     -l \
+#     --almost-all \
+#     --classify \
+#     --color \
+#     --human-readable \
+#     --time-style=locale \
+#     --group-directories-first \
+# | awk '
+#     BEGIN {
+#         # Define your icon mapping here, e.g., directories and other types
+#         dir_icon = ""
+#         # Add more mappings if needed
+#     }
+#     {
+#         if ($1 ~ /^d/) {
+#             print dir_icon, $0
+#         } else {
+#             print " ", $0
+#         }
+#     }'

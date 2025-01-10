@@ -20,13 +20,58 @@ alias getip="ifconfig | grep inet"
 }
 
 
-# Lsd
+# Eza / gnu ls
 # ---------------------------------------------------------------------------- #
-(( ${+commands[lsd]} )) && {
-    alias ls="echo ''; lsd -A -v"
-    alias ll="echo ''; lsd -A --long"
-    alias lt="echo ''; lsd -A --tree --depth"
-}
+if (( ${+commands[eza]} )); then
+    # Short list
+    alias ls="eza \
+        --almost-all \
+        --oneline \
+        --group-directories-first \
+        --icons=auto \
+        --color=auto"
+
+    # Long list
+    alias ll="eza \
+        --long \
+        --almost-all \
+        --group \
+        --git \
+        --git-repos \
+        --header \
+        --no-user \
+        --group-directories-first \
+        --icons=auto \
+        --color=auto"
+
+    # Tree view (default: 3 levels deep, pass `-L` to override depth)
+    alias lt="eza \
+        --tree \
+        --level=3 \
+        --almost-all \
+        --group-directories-first \
+        --icons=auto \
+        --color=auto"
+else
+    # Short list
+    alias ls="gls \
+        -1 \
+        --almost-all \
+        --classify \
+        --human-readable \
+        --group-directories-first \
+        --color"
+
+    # Long list
+    alias ll="gls \
+        -l \
+        --time-style=locale \
+        --almost-all \
+        --classify \
+        --human-readable \
+        --group-directories-first \
+        --color"
+fi
 
 
 # Homebrew
@@ -60,13 +105,22 @@ alias getip="ifconfig | grep inet"
     alias up="_navigate_up_dir_tree"
     alias nf="_create_files"
     alias nd="_create_dirs"
-    alias rm="_move_to_trash"
     alias md="_glow_markdown"
     alias vs="_find_vim_sessions"
     alias cl="_clear_screen_soft_bottom"
 }
 
+# alias rm="_move_to_trash"
 # alias g="_rg_fzf_into_nvim"
+
+
+
+# (( ${+commands[lsd]} )) && {
+#     alias ls="echo ''; lsd -A -v"
+#     alias ll="echo ''; lsd -A --long"
+#     alias lt="echo ''; lsd -A --tree --depth"
+# }
+
 
 
 

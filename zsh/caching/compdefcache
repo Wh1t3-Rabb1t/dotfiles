@@ -1,4 +1,4 @@
-# cache output of generated compdef
+# Cache output of generated compdef
 
 emulate -L zsh
 
@@ -13,7 +13,7 @@ if [[ -r "${cache_file}" ]] && ! whence ${1} > /dev/null; then
     echo "compdefcache ERROR: $1 isn't executable, removing cache file" >&2
     zf_rm -f "${cache_file}"
 elif [[ ! -e "${cache_file}" || -n "${cache_file}"(#qN.mh+20) ]]; then
-    # cache miss, create compdef file
+    # Cache miss, create compdef file
     if (( ${+commands[${1}]} )); then
         zf_mkdir -p "${cache_dir}"
         command "$@" > "${cache_file}"
@@ -21,7 +21,7 @@ elif [[ ! -e "${cache_file}" || -n "${cache_file}"(#qN.mh+20) ]]; then
         echo "compdefcache ERROR: $1 is not available in PATH" >&2
     fi
 else
-    # cache hit, do nothing
+    # Cache hit, do nothing
 fi
 
 # vim: ft=zsh

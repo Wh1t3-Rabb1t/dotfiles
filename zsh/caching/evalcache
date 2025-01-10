@@ -1,4 +1,4 @@
-# cache generated output for eval
+# Cache generated output for eval
 
 emulate -L zsh
 
@@ -13,7 +13,7 @@ if [[ -r "${cache_file}" ]] && ! whence ${1} > /dev/null; then
     zf_rm -f "${cache_file}*"
 elif [[ ! -e "${cache_file}" || -n "${cache_file}"(#qN.mh+20) ]]; then
     # Revalidate cache every 20 hours
-    # cache miss
+    # Cache miss
     if (( ${+commands[${1}]} )); then
         zf_mkdir -p "${cache_dir}"
         command "$@" > "${cache_file}"
@@ -27,7 +27,7 @@ elif [[ ! -e "${cache_file}" || -n "${cache_file}"(#qN.mh+20) ]]; then
         echo "evalcache ERROR: $1 is not available in PATH" >&2
     fi
 else
-    # cache hit
+    # Cache hit
     source "${cache_file}"
 fi
 

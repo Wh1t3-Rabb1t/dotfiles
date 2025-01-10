@@ -3,7 +3,7 @@
 - 1. Standardize Rg / Fzf colors
 - 2. Add headers to all Fzf scripts
 - 3. Incorporate Rg / Fzf toggle into suitable scripts
-- 4. Finish configuring fzf tab
+- 4. Finish configuring Fzf tab
 - 5. Rewrite move to Trash script
 - 6. Tweak p10k config
 
@@ -50,7 +50,6 @@
 
 
 - ReConfigure Lualine
-- Set global ignore for rg and fd
 - Configure yazi
 - Configure ghostty
 - Configure sketchybar

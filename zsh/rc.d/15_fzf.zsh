@@ -41,20 +41,42 @@ header:#eed49f,\
 preview-border:#1e66f5"
 
 FZF_PREVIEW="\
-([[ -f {} ]] && (bat {} || cat {})) || \
-([[ -d {} ]] && (lsd -A -v {} || ls -a {} | less)) || \
-echo {} 2> /dev/null | head -200"
+([[ -f {} ]] && ( \
+    bat {} || cat {})) \
+|| ([[ -d {} ]] && ( \
+    eza \
+        --long \
+        --group \
+        --git \
+        --git-repos \
+        --header \
+        --no-user \
+        --almost-all \
+        --group-directories-first \
+        --icons=always \
+        --color=always {} \
+    || ls \
+        -l \
+        --time-style=locale \
+        --almost-all \
+        --classify \
+        --human-readable \
+        --group-directories-first \
+        --color {} \
+    | less)) \
+|| echo {} 2> /dev/null \
+| head -200"
 
 export FZF_DEFAULT_OPTS="\
---bind '$FZF_KEY_BINDINGS' \
---jump-labels '$FZF_JUMP_LABELS' \
---color '$FZF_COLORS' \
---preview '$FZF_PREVIEW' \
---preview-window 'right,border-left,<88(up:50%,border-bottom)' \
---height 100% \
---prompt ' ' \
---pointer '▐' \
---marker '▌' \
+--bind='$FZF_KEY_BINDINGS' \
+--jump-labels='$FZF_JUMP_LABELS' \
+--color='$FZF_COLORS' \
+--preview='$FZF_PREVIEW' \
+--preview-window='right,border-left,<88(up:50%,border-bottom)' \
+--height=100% \
+--prompt=' ' \
+--pointer='▐' \
+--marker='▌' \
 --tac \
 --ansi"
 
@@ -63,16 +85,12 @@ RG_COMMAND="rg \
 --no-ignore \
 --no-line-number \
 --hidden \
---follow \
---glob '!Library/*' \
---glob '!.git/*'"
+--follow"
 
 FD_COMMAND="fd \
 --type file \
---follow \
 --hidden \
---exclude Library \
---exclude .git \
+--follow \
 --color=always"
 
 # Try to use Rg or Fd, if available as default Fzf command

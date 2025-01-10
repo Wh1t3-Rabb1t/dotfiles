@@ -5,28 +5,13 @@
 #   \__,_|_|_|\__,_|___/\___||___/
 # ============================================================================ #
 
-# General
-# ---------------------------------------------------------------------------- #
-alias h="cd ~"
-alias b="cd -"
-alias getip="ifconfig | grep inet"
-
-
-# Git
-# ---------------------------------------------------------------------------- #
-(( ${+commands[git]} )) && {
-    alias gg="_add_commit_push"
-    alias gl="git log --all --graph --decorate --oneline"
-}
-
-
 # Eza / gnu ls
 # ---------------------------------------------------------------------------- #
 if (( ${+commands[eza]} )); then
     # Short list
     alias ls="eza \
-        --almost-all \
         --oneline \
+        --almost-all \
         --group-directories-first \
         --icons=auto \
         --color=auto"
@@ -34,20 +19,20 @@ if (( ${+commands[eza]} )); then
     # Long list
     alias ll="eza \
         --long \
-        --almost-all \
         --group \
         --git \
         --git-repos \
         --header \
         --no-user \
+        --almost-all \
         --group-directories-first \
         --icons=auto \
         --color=auto"
 
-    # Tree view (default: 3 levels deep, pass `-L` to override depth)
+    # Tree view (default: 2 levels deep, pass `-L` to override depth)
     alias lt="eza \
         --tree \
-        --level=3 \
+        --level=2 \
         --almost-all \
         --group-directories-first \
         --icons=auto \
@@ -72,6 +57,21 @@ else
         --group-directories-first \
         --color"
 fi
+
+
+# General
+# ---------------------------------------------------------------------------- #
+alias h="cd ~"
+alias b="cd -"
+alias getip="ifconfig | grep inet"
+
+
+# Git
+# ---------------------------------------------------------------------------- #
+(( ${+commands[git]} )) && {
+    alias gg="_add_commit_push"
+    alias gl="git log --all --graph --decorate --oneline"
+}
 
 
 # Homebrew
@@ -112,6 +112,10 @@ fi
 
 # alias rm="_move_to_trash"
 # alias g="_rg_fzf_into_nvim"
+
+
+
+
 
 
 

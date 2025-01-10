@@ -1,5 +1,7 @@
 # TODO
 
+- Swap lsd calls out for eza
+
 - 1. Standardize Rg / Fzf colors
 - 2. Add headers to all Fzf scripts
 - 3. Incorporate Rg / Fzf toggle into suitable scripts

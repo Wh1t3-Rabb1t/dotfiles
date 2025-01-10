@@ -11,11 +11,10 @@ emulate -L zsh
 
 local selection=$( \
     fd \
-        --type f
+        --type file \
         --extension md \
-        --exclude Library \
-        --exclude .git \
-    | fzf \
+        --color=always \
+    | fzf --header='Render selected markdown file with Glow.' \
 )
 
 if [[ -z "$selection" ]]; then

@@ -16,23 +16,21 @@ if (( ${+commands[eza]} )); then
     selection=$( \
         eza \
             --almost-all \
-            --classify=always \
             --icons=always \
             --color=always \
         | fzf \
-            --no-preview \
             --header='Rename selected file / directory.' \
+            --no-preview \
     )
 elif (( ${+commands[gls]} )); then
     selection=$( \
         gls \
             --almost-all \
-            --classify \
             --group-directories-first \
             --color \
         | fzf \
-            --no-preview \
             --header='Rename selected file / directory.' \
+            --no-preview \
     )
 fi
 

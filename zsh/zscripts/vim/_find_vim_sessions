@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Search for Vim sessions, cd to parent dir, and open selection.               #
+# Search for Vim sessions, cd to parent dir, and open selected session.        #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -18,10 +18,8 @@ local selection=$( \
         --extension .vim \
         --hidden \
         --no-ignore \
-        --exclude Library \
-        --exclude .git \
         --exclude .cache \
-    | fzf \
+    | fzf --header='Launch selected Vim session and cd to parent directory.' \
 )
 
 if [[ -z "$selection" ]]; then

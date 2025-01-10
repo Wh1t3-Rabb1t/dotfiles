@@ -23,15 +23,19 @@ if (( ${+commands[fd]} )); then
             --exclude '*.jpg' \
             --exclude '*.png' \
             --exclude '*.webp' \
-            --color always \
-        | fzf --multi \
+            --color=always \
+        | fzf \
+            --header='Open selected file/s with Neovim.' \
+            --multi \
     )
 else
     selection=$( \
         find . \
             -type f \
             ! -path '*/.git/*' \
-        | fzf --multi \
+        | fzf \
+            --header='Open selected file/s with Neovim.' \
+            --multi \
     )
 fi
 

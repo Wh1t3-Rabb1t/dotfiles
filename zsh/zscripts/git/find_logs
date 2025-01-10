@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Git log browser with fzf.                                                    #
+# Git log browser with Fzf.                                                    #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -17,11 +17,11 @@ git log \
     --graph \
     --color=always \
 | fzf \
+    --header='Press CTRL-S to toggle sort' \
     --no-sort \
     --multi \
-    --bind 'ctrl-s:toggle-sort' \
-    --header 'Press CTRL-S to toggle sort' \
-    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} \
+    --bind='ctrl-s:toggle-sort' \
+    --preview='grep -o "[a-f0-9]\{7,\}" <<< {} \
         | xargs git show --color=always \
         | head -200' \
 | grep -o "[a-f0-9]\{7,\}"

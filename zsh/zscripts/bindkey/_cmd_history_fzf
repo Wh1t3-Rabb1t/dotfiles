@@ -19,8 +19,8 @@ local selection=$( \
         print
     }' \
     | fzf \
-        --no-preview \
         --header='Command history.' \
+        --no-preview \
     | awk '{
         $1="";
         sub(/^ +/, "");

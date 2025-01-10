@@ -40,6 +40,7 @@ if (( ${+commands[eza]} )); then
         --git-repos \
         --header \
         --almost-all \
+        --classify=auto \
         --icons=auto \
         --color=auto \
     "${allpaths[@]}"

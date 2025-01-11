@@ -107,5 +107,3 @@ if (( ${+commands[rg]} )); then
 elif (( ${+commands[fd]} )); then
     export FZF_DEFAULT_COMMAND=$FD_COMMAND
 fi
-
-# source "${DOTFILES}/tools/fzf/shell/key-bindings.zsh"

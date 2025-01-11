@@ -1,6 +1,7 @@
 # TODO
 
 - !! use a FIFO to implement vi mode registers that can be accessed across different shells!
+- use space as a leader if hit when BUFFER is empty
 
 - 3. Incorporate Rg / Fzf toggle into suitable scripts
 - 1. Standardize Rg / Fzf colors

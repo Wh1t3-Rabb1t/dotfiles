@@ -1,11 +1,12 @@
 # TODO
 
-- 1. Standardize Rg / Fzf colors
-- 2. Add headers to all Fzf scripts
+- !! use a FIFO to implement vi mode registers that can be accessed across different shells!
+
 - 3. Incorporate Rg / Fzf toggle into suitable scripts
-- 4. Finish configuring Fzf tab
+- 1. Standardize Rg / Fzf colors
 - 5. Rewrite move to Trash script
 - 6. Tweak p10k config
+- write a script to check for / download zsh plugin updates
 
 - Store these somewhere
 ```sh
@@ -39,13 +40,12 @@
 
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
-- Look into dropping lsd in place of LS_COLORS
 - Fix ghostty navigate split bindings
 - Write a script to check for zsh plugin updates
 - Finish reworking 'd' alias (search and jump to dir)
-- Finish refactoring zsh config
 - Rewrite basic Rectangle features with Hammerspoon
 - App launcher / focuser with Hammerspoon
+- Monitor brightness control with Hammerspoon
 - Possibly auto quit Finder when system wakes up with Hammerspoon
 
 
@@ -61,7 +61,6 @@
 
 ## Plugins
 
-https://github.com/sharkdp/vivid
 https://github.com/bootandy/dust
 https://github.com/mafredri/zsh-async
 https://github.com/MichaelAquilina/zsh-auto-notify
@@ -157,10 +156,11 @@ brew "zsh"
 update nerdfont repo brew install command in README `brew install --cask font-hack-nerd-font`
 
 
+
 - Rework upper / lower case, dot op bindings to match nvim
 - Look into implementing gnu privacy guard and wireguard
+- Implement pfblockerNG
 - Implement substitute binding
-- Fix mass rename function to work with regex (double quote param expansion of the sed line may be the problem)
 - Implement registers
 - Add checks in .zshrc to ensure certain directories and env variables exist to prevent bugs when initializing a new system
 

@@ -11,9 +11,9 @@
 # man zshcompsys
 # man zshcompctl
 
+
 # Completion tweaks
-# zstyle ':completion:*'              list-colors         false
-# zstyle ':completion:*'              list-colors         "${(s.:.)LS_COLORS}"
+zstyle ':completion:*'              list-colors         "${(s.:.)LS_COLORS}"
 zstyle ':completion:*'              list-dirs-first     true
 zstyle ':completion:*'              verbose             true
 zstyle ':completion:*'              menu                no
@@ -29,15 +29,19 @@ if [[ -d "${XDG_CACHE_HOME}/zsh/fpath" ]]; then
 fi
 
 
+# NOTE
+# look into:
+#
+# https://github.com/lincheney/fzf-tab-completion
+# https://formulae.brew.sh/formula/zsh-completions
+# https://www.reddit.com/r/zsh/comments/1cys810/zsh_completions_not_working/
 
 
 # Enable brew completions, if present
+# Brew stores completion files in: /opt/homebrew/share/zsh/site-functions
 if type brew &>/dev/null; then
-    # Brew stores completion files in: /opt/homebrew/share/zsh/site-functions
     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
-
-
 
 
 # Additional completions

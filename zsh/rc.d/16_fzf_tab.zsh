@@ -8,6 +8,10 @@
 # Use fzf for tab completions
 source "${ZDOTDIR}/plugins/fzf-tab/fzf-tab.zsh"
 
+# NOTE:
+# fzf-tab doesn't respect fzf defaults to prevent certain settings breaking the
+# plugin, so settings need to be redeclared here
+
 local FZF_TAB_KEY_BINDINGS="\
 shift-delete:clear-query,\
 ;:jump,\
@@ -36,7 +40,7 @@ preview-border:#1e66f5"
 
 # Set flags
 zstyle ':fzf-tab:*' fzf-flags \
-    --header='Switch group with `<` and `>`' \
+    --header='Switch group with <Tab> and <Btab>' \
     --bind=$FZF_TAB_KEY_BINDINGS \
     --jump-labels=$FZF_TAB_JUMP_LABELS \
     --color=$FZF_TAB_COLORS \
@@ -50,5 +54,68 @@ zstyle ':fzf-tab:*' fzf-flags \
 # Confirm selection and relaunch fzf-tab (space char)
 zstyle ':fzf-tab:*' continuous-trigger ' '
 
-# Switch group using `<` and `>`
-zstyle ':fzf-tab:*' switch-group '<' '>'
+# Switch groups
+zstyle ':fzf-tab:*' switch-group 'btab' 'tab'
+
+
+# `cd` specific completion options
+# ---------------------------------------------------------------------------- #
+# Preview settings
+if (( ${+commands[eza]} )); then
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview \
+        'eza \
+            --long \
+            --group \
+            --git \
+            --git-repos \
+            --header \
+            --no-user \
+            --almost-all \
+            --group-directories-first \
+            --classify=always \
+            --icons=always \
+            --color=always \
+            $realpath'
+elif (( ${+commands[gls]} )); then
+    zstyle ':fzf-tab:complete:cd:*' fzf-preview \
+        'ls \
+            -l \
+            --time-style=locale \
+            --almost-all \
+            --human-readable \
+            --group-directories-first \
+            --classify \
+            --color \
+            $realpath'
+fi
+
+# Set flags
+zstyle ':fzf-tab:complete:cd:*' fzf-flags \
+    --header='Change directory on <Enter>' \
+    --bind=$FZF_TAB_KEY_BINDINGS \
+    --color=$FZF_TAB_COLORS \
+    --preview-window='right,border-left,<88(up:50%,border-bottom)' \
+    --height=100% \
+    --prompt=' ' \
+    --pointer='▐' \
+    --marker='▌' \
+    --layout=default
+
+# Press enter to open fzf-tab cd completion menu if the command line is empty
+local function _cd_if_buffer_empty() {
+    if [[ "$BUFFER" == "cd " ]]; then
+        CURSOR=${#BUFFER}
+        fzf-tab-complete
+    elif [[ -z "$BUFFER" ]]; then
+        BUFFER="cd "
+        CURSOR=${#BUFFER}
+        fzf-tab-complete
+    else
+        zle accept-line
+    fi
+}
+zle -N _cd_if_buffer_empty
+bindkey -M viins "^M" _cd_if_buffer_empty
+
+# Change directory on selection when tab completing cd
+zstyle ':fzf-tab:complete:cd:*' accept-line enter

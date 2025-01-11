@@ -15,28 +15,19 @@
 
 emulate -L zsh
 
-# ls is escaped `\ls` so that the builtin is used in place of my alias
 local selection=$( \
     z -l \
     | sed 's/^[0-9. ]*//' \
     | awk -F "/" '{
-        OFS="/";
-        $NF="\033[38;5;69m"$NF"\033[0m";
-        print
-    }' \
+    OFS="/";
+    $NF="\033[38;5;69m"$NF"\033[0m";
+    print
+}' \
     | fzf \
-        --header='Teleport to selected directory.' \
-        --filepath-word \
-        --no-sort \
-        --query="$*" \
-        --preview=' \
-            LC_COLLATE=C \
-            \ls -l -v \
-            --almost-all \
-            --group-directories-first \
-            --classify \
-            --color=always \
-            --human-readable {}' \
+    --header='Teleport to selected directory.' \
+    --filepath-word \
+    --no-sort \
+    --query="$*" \
 )
 
 if [[ "$selection" ]]; then

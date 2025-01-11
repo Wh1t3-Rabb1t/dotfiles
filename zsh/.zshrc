@@ -9,7 +9,6 @@
 # ============================================================================ #
 
 # https://thevaluable.dev/zsh-install-configure-mouseless/
-# https://github.com/carpet-stain/dotfiles/tree/master/zsh
 # https://htr3n.github.io/2018/07/faster-zsh/
 # https://frederic-hemberger.de/notes/speeding-up-initial-zsh-startup-with-lazy-loading/
 # https://grml.org/zsh/zsh-lovers.html

@@ -5,8 +5,12 @@
 #  |_|/___|_|
 # ============================================================================ #
 
+# https://junegunn.github.io/fzf/
+# https://thevaluable.dev/practical-guide-fzf-example/
 # https://vitormv.github.io/fzf-themes/
 
+# Settings
+# ---------------------------------------------------------------------------- #
 local FZF_KEY_BINDINGS="\
 page-up:preview-page-up,\
 page-down:preview-page-down,\
@@ -81,6 +85,9 @@ export FZF_DEFAULT_OPTS="\
 --tac \
 --ansi"
 
+
+# Default command
+# ---------------------------------------------------------------------------- #
 local RG_COMMAND="rg \
 --files \
 --no-ignore \
@@ -94,7 +101,7 @@ local FD_COMMAND="fd \
 --follow \
 --color=always"
 
-# Try to use Rg or Fd, if available as default Fzf command
+# Try to use rg or fd, if available as default fzf command
 if (( ${+commands[rg]} )); then
     export FZF_DEFAULT_COMMAND=$RG_COMMAND
 elif (( ${+commands[fd]} )); then

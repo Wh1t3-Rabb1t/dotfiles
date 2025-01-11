@@ -291,8 +291,9 @@ function M.config()
             -- multiline      = 1,      -- Display as: PATH:LINE:COL\nTEXT
             -- multiline      = 2,      -- Display as: PATH:LINE:COL\nTEXT\n
             actions = {
-                ["alt-f"] = actions.grep_lgrep,
-                ["alt-i"] = actions.toggle_ignore,
+                -- ["alt-f"] = actions.grep_lgrep,
+                ["tab"] = actions.grep_lgrep,
+                ["alt-/"] = actions.toggle_ignore,
                 ["ctrl-g"] = false,
             },
             no_header = false,    -- Hide grep|cwd header?

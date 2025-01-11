@@ -7,7 +7,7 @@
 
 # https://vitormv.github.io/fzf-themes/
 
-FZF_KEY_BINDINGS="\
+local FZF_KEY_BINDINGS="\
 page-up:preview-page-up,\
 page-down:preview-page-down,\
 shift-up:half-page-up+refresh-preview,\
@@ -16,22 +16,22 @@ shift-right:change-preview-window(down|right),\
 shift-left:change-preview-window(up|left),\
 shift-delete:clear-query,\
 ;:jump,\
-tab:toggle-sort,\
+ctrl-s:toggle-sort,\
 alt-p:toggle-preview,\
 alt-s:toggle,\
 alt-A:toggle-all,\
 alt-a:select-all"
 
-FZF_JUMP_LABELS="\
+local FZF_JUMP_LABELS="\
 ftdksleiwoacnvghyxmruqpFTDKSLEIWOACNVGHYXMRUQP+=-~[]{}()!&_|;:<>/?.,#@%1234567890"
 
-FZF_COLORS="\
+local FZF_COLORS="\
 fg:#585b70,\
 gutter:#313244,\
 current-bg:#313244,\
 current-fg:#7f849c,\
 hl:reverse:#870005,\
-current-hl:#f38ba8,\
+current-hl:#f38ba8:underline,\
 prompt:#cdd6f4,\
 pointer:#cdd6f4,\
 spinner:#cdd6f4,\
@@ -40,7 +40,7 @@ border:#1e66f5,\
 header:#eed49f,\
 preview-border:#1e66f5"
 
-FZF_PREVIEW="\
+local FZF_PREVIEW="\
 ([[ -f {} ]] && ( \
     bat {} || cat {})) \
 || ([[ -d {} ]] && ( \
@@ -81,14 +81,14 @@ export FZF_DEFAULT_OPTS="\
 --tac \
 --ansi"
 
-RG_COMMAND="rg \
+local RG_COMMAND="rg \
 --files \
 --no-ignore \
 --no-line-number \
 --hidden \
 --follow"
 
-FD_COMMAND="fd \
+local FD_COMMAND="fd \
 --type file \
 --hidden \
 --follow \

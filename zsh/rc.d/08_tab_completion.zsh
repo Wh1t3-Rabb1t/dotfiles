@@ -11,9 +11,9 @@
 # man zshcompsys
 # man zshcompctl
 
-
 # Completion tweaks
-zstyle ':completion:*'              list-colors         "${(s.:.)LS_COLORS}"
+# zstyle ':completion:*'              list-colors         false
+# zstyle ':completion:*'              list-colors         "${(s.:.)LS_COLORS}"
 zstyle ':completion:*'              list-dirs-first     true
 zstyle ':completion:*'              verbose             true
 zstyle ':completion:*'              menu                no
@@ -27,6 +27,18 @@ zstyle ':completion:*:manuals'      separate-sections   true
 if [[ -d "${XDG_CACHE_HOME}/zsh/fpath" ]]; then
     fpath=("${XDG_CACHE_HOME}/zsh/fpath" ${fpath})
 fi
+
+
+
+
+# Enable brew completions, if present
+if type brew &>/dev/null; then
+    # Brew stores completion files in: /opt/homebrew/share/zsh/site-functions
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+
+
+
 
 # Additional completions
 # fpath=("${ZDOTDIR}/plugins/completions/src" ${fpath})
@@ -61,58 +73,3 @@ _comp_options+=(globdots)
 # Enable bash completions too
 autoload -Uz bashcompinit
 bashcompinit
-
-
-
-
-
-
-# # GENERAL
-# # ---------------------------------------------------------------------------- #
-# # Should be called before compinit
-# zmodload zsh/complist
-
-# # Load homebrew completions
-# if type brew &>/dev/null; then
-#     # Brew stores completion files in: /opt/homebrew/share/zsh/site-functions
-#     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-# fi
-
-# # Load custom completions
-# fpath=(${ZDOTDIR}/ext_completions $fpath)
-
-# # Only check compinit cache once per day. This prevents unnecessary regeneration
-# # of the completion sytem's config file, thus speeding up load times
-# autoload -Uz compinit
-# if [ $(date +'%j') != $(/usr/bin/stat -f '%Sm' -t '%j' ${ZDOTDIR}/.zcompcache/.zcompdump) ]; then
-#     compinit -d "${ZDOTDIR}/.zcompcache/.zcompdump"
-# else
-#     compinit -C -d "${ZDOTDIR}/.zcompcache/.zcompdump"
-# fi
-
-# # Include hidden files in autocomplete
-# _comp_options+=(globdots)
-
-
-# # ZSTYLES
-# # ---------------------------------------------------------------------------- #
-# # Use cache for commands
-# zstyle ':completion:*' use-cache on
-# zstyle ':completion:*' cache-path ${ZDOTDIR:-$HOME}/.zcompcache
-
-# # Confirm selection and relaunch fzf-tab (space char)
-# zstyle ':fzf-tab:*' continuous-trigger ' '
-
-# # Set flags
-# zstyle ':fzf-tab:*' fzf-flags --no-preview --color=hl:reverse:#f38ba8
-
-# # # Set default FZF preview style for tab complete
-# # zstyle ':fzf-tab:complete:*' fzf-preview '\
-# #     ([[ -f ${realpath} ]] && (bat ${realpath} || cat ${realpath})) || \
-# #     ([[ -d ${realpath} ]] && (ls -a --color ${realpath} | less)) || \
-# #     echo ${realpath} 2> /dev/null | head -200\
-# # '
-
-
-
-

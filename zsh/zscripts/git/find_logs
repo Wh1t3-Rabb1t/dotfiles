@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Git log browser with Fzf.                                                    #
+# Git log browser with fzf.                                                    #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -17,7 +17,7 @@ git log \
     --graph \
     --color=always \
 | fzf \
-    --header='Press CTRL-S to toggle sort' \
+    --header=' Find logs.' \
     --no-sort \
     --multi \
     --bind='ctrl-s:toggle-sort' \

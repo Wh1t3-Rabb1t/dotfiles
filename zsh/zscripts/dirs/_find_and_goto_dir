@@ -17,7 +17,7 @@ if (( ${+commands[fd]} )); then
             --type directory \
             --hidden \
             --color=always \
-        | fzf --header='Jump to selected directory.' \
+        | fzf --header=' Jump to selected directory.' \
     )
 else
     selection=$( \
@@ -27,7 +27,7 @@ else
             -path "./.git/*" -or \
             -path "./node_modules/*" \) \
             -prune -o -type directory -print \
-        | fzf --header='Jump to selected directory.' \
+        | fzf --header=' Jump to selected directory.' \
     )
 fi
 

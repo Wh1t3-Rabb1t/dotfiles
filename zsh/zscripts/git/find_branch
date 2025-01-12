@@ -20,7 +20,7 @@ git checkout $( \
     | fzf \
         --no-sort \
         --query="${@}" \
-        --header='Red are remote, white are local, green is current.' \
+        --header=' Find branch. Red=remote, White=local, Green=current.' \
         --preview='git log \
             --color=always \
             --oneline \

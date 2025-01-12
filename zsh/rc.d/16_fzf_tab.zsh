@@ -90,7 +90,7 @@ fi
 
 # Set flags
 zstyle ':fzf-tab:complete:cd:*' fzf-flags \
-    --header='<Enter> : cd to selected directory.' \
+    --header=' cd to selected directory.' \
     --bind=$FZF_TAB_KEY_BINDINGS \
     --color=$FZF_TAB_COLORS \
     --preview-window='right,border-left,<88(up:50%,border-bottom)' \

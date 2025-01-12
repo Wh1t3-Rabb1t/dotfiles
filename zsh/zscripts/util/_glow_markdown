@@ -14,12 +14,10 @@ local selection=$( \
         --type file \
         --extension md \
         --color=always \
-    | fzf --header='Render selected markdown file with Glow.' \
+    | fzf --header=' Render markdown file with Glow.' \
 )
 
-if [[ -z "$selection" ]]; then
-    echo -e "\nSearch cancelled."
-else
+if [[ "$selection" ]]; then
     local term_width="$(tput cols)"
     term_width=$((term_width-10))
     glow -w "$term_width" "$selection"

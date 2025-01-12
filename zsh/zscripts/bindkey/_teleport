@@ -24,7 +24,7 @@ local selection=$( \
         print
     }' \
     | fzf \
-        --header='Teleport to selected directory.' \
+        --header='󱃅 Teleport to selected directory.' \
         --filepath-word \
         --no-sort \
         --query="$*" \

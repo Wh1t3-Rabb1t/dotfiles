@@ -8,9 +8,16 @@
 # Eza / gnu ls
 # ---------------------------------------------------------------------------- #
 if (( ${+commands[eza]} )); then
-    # Short list
+    # Short list (using --long flag for git status in output)
     alias ls="eza \
-        --oneline \
+        --long \
+        --no-permissions \
+        --no-time \
+        --no-filesize \
+        --git \
+        --git-repos \
+        --header \
+        --no-user \
         --almost-all \
         --group-directories-first \
         --classify=auto \
@@ -102,10 +109,10 @@ alias getip="ifconfig | grep inet"
 # zscripts
 # ---------------------------------------------------------------------------- #
 [[ -v ZSCRIPTDIR ]] && {
-    alias e="_launch_nvim"
     alias f="_find_and_open_files"
     alias d="_find_and_goto_dir"
     alias up="_navigate_up_dir_tree"
+    alias e="_launch_nvim"
     alias nf="_create_files"
     alias nd="_create_dirs"
     alias md="_glow_markdown"

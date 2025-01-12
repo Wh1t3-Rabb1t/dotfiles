@@ -20,7 +20,7 @@ local selection=$( \
         print
     }' \
     | fzf \
-        --header='Command history.' \
+        --header=' Command history.' \
         --no-preview \
     | awk '{
         $1="";

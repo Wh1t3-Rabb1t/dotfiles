@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Git diff by files with Fzf.                                                  #
+# Git diff by files with fzf.                                                  #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -37,6 +37,7 @@ preview_cmd=" \
 git --no-pager diff --name-only \
     ${commit} -- ${files[*]} \
 | fzf \
+    --header=' Find diffs.' \
     --exit-0 \
     --no-sort \
     --preview="${preview_cmd}"

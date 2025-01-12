@@ -19,7 +19,7 @@ local selection=$( \
         --hidden \
         --no-ignore \
         --exclude .cache \
-    | fzf --header='Launch selected Vim session and cd to parent directory.' \
+    | fzf --header=' Launch Vim session and cd to parent directory.' \
 )
 
 if [[ -z "$selection" ]]; then

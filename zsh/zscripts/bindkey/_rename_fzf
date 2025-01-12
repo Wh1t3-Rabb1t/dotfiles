@@ -19,7 +19,7 @@ if (( ${+commands[eza]} )); then
             --icons=always \
             --color=always \
         | fzf \
-            --header='Rename selected file / directory.' \
+            --header=' Rename selected file / directory.' \
             --no-preview \
     )
 elif (( ${+commands[gls]} )); then
@@ -29,7 +29,7 @@ elif (( ${+commands[gls]} )); then
             --group-directories-first \
             --color \
         | fzf \
-            --header='Rename selected file / directory.' \
+            --header=' Rename selected file / directory.' \
             --no-preview \
     )
 fi

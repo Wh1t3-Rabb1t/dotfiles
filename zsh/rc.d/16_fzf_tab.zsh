@@ -5,7 +5,7 @@
 #  |_|/___|_|    \__\__,_|_.__/
 # ============================================================================ #
 
-# Use fzf for tab completions
+# Should be loaded after other plugins (e.g. zsh-autosuggestions binds Tab)
 source "${ZDOTDIR}/plugins/fzf-tab/fzf-tab.zsh"
 
 # NOTE: fzf-tab doesn't respect fzf defaults to prevent certain settings breaking

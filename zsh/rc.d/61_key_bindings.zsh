@@ -6,6 +6,27 @@
 # ===========|___/===============================|___/======================== #
 
 
+# LASTWIDGET (scalar)
+#        The name of the last widget that was executed; read-only.
+
+
+# killring (array)
+#        The array of previously killed items, with the most recently
+#        killed first.  This gives the items that would be retrieved by a
+#        yank-pop in the same order.  Note, however, that the most recently
+#        killed item is in $CUTBUFFER; $killring shows the array of
+#        previous entries.
+
+#        The default size for the kill ring is eight, however the length
+#        may be changed by normal array operations.  Any empty string in
+#        the kill ring is ignored by the yank-pop command, hence the size
+#        of the array effectively sets the maximum length of the kill ring,
+#        while the number of non-zero strings gives the current length,
+#        both as seen by the user at the command line.
+
+
+
+
 # ╭────────────────────────╮
 # │ ALT LAYER KEY BINDINGS │
 # ╰────────────────────────╯
@@ -26,8 +47,8 @@ bindkey -M viins "^[g" _grep_into_nvim
 # when the command line is empty. Otherwise they input the relevant key onto
 # the command line, or execute the relevant action.
 #
-# i.e. pressing slash '-' calls the `_zsh_cheat_sheet` widget when the command
-# line is empty, and inputs a slash character as normal otherwise.
+# i.e. pressing semicolon ';' calls the `_zsh_cheat_sheet` widget when the
+# command line is empty, and inputs a semicolon character as normal otherwise.
 #
 # NOTE: Certain keys like Tab, or comma, are bound by plugins (fzf-tab and
 # zsh-autopairs in this case), so rather than inputting say; a comma to the
@@ -50,25 +71,23 @@ local function _broot_launcher() {
     fi
 }
 zle -N _broot_launcher
-bindkey -M viins "^m" _broot_launcher
+bindkey -M viins "^M" _broot_launcher
 
 
-# CMD HISTORY
+# LAUNCH NEOVIM
 # ---------------------------------------------------------------------------- #
-# NOTE: The first awk line adds color to the second field (the commmand prefix).
-# The second removes the command's index and cleans up white space before
-# inserting the command onto the buffer.
-local function _cmd_history_fzf_wrapper() {
+local function _neovim_launcher() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
-        _cmd_history_fzf
+        _launch_nvim
     else
         fzf-tab-complete
+        zle redisplay     # Syntax highlighting on fzf-tab exit
     fi
 }
-zle -N _cmd_history_fzf_wrapper
-bindkey -M viins "^i" _cmd_history_fzf_wrapper
+zle -N _neovim_launcher
+bindkey -M viins "^I" _neovim_launcher
 
 
 # ZSH CHEAT SHEAT
@@ -84,6 +103,26 @@ local function _cheat_sheet_wrapper() {
 }
 zle -N _cheat_sheet_wrapper
 bindkey -M viins ";" _cheat_sheet_wrapper
+
+
+# CMD HISTORY
+# ---------------------------------------------------------------------------- #
+# NOTE: The first awk line adds color to the second field (the commmand prefix).
+# The second removes the command's index and cleans up white space before
+# inserting the command onto the buffer.
+local function _cmd_history_fzf_wrapper() {
+    emulate -L zsh
+
+    if [[ -z "$BUFFER" ]]; then
+        _cmd_history_fzf
+    else
+        # Use this in place of zsh `zle down-line-or-history` builtin
+        # to prevent functionality conflicts.
+        history-substring-search-down
+    fi
+}
+zle -N _cmd_history_fzf_wrapper
+bindkey -M viins "^[[B" _cmd_history_fzf_wrapper
 
 
 # DIRECTORY NAVIGATION
@@ -110,11 +149,11 @@ local function _cd_to_parent_dir() {
         BUFFER="cd ../"
         zle accept-line
     else
-        LBUFFER[CURSOR+1]+=","
+        zle vi-backward-char
     fi
 }
 zle -N _cd_to_parent_dir
-bindkey -M viins "," _cd_to_parent_dir
+bindkey -M viins "^[[D" _cd_to_parent_dir  # Left arrow
 
 
 # Cd to subdirectory of cwd
@@ -126,12 +165,14 @@ local function _cd_to_subdir() {
         CURSOR=${#BUFFER}
         fzf-tab-complete
     else
-        LBUFFER[CURSOR+1]+="."
+        zle vi-forward-char
     fi
 }
 zle -N _cd_to_subdir
-bindkey -M viins "." _cd_to_subdir
+bindkey -M viins "^[[C" _cd_to_subdir  # Right arrow
 
+
+# Fd and cd down dirtree
 local function _find_and_goto_dir_wrapper() {
     emulate -L zsh
 
@@ -149,11 +190,11 @@ bindkey -M viins "\-" _find_and_goto_dir_wrapper
 # available actions to map:
 #
 # ' Teleport
-# / find and cd to dir
-# . cd in cwd
-# , cd up dir tree
+# - find and cd to dir
+# Right cd in cwd
+# Left cd up dir tree
 #
-# - cheat sheet
+# ; zsh cheat sheet
 # <tab> cmd history fzf
 #
 # find and open files

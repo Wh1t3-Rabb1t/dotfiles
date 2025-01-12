@@ -33,4 +33,5 @@ fi
 
 if [[ "$selection" ]]; then
     cd "$selection"
+    zle accept-line
 fi

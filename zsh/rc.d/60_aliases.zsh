@@ -11,13 +11,13 @@ if (( ${+commands[eza]} )); then
     # Short list (using --long flag for git status in output)
     alias ls="eza \
         --long \
-        --no-permissions \
+        --no-user \
         --no-time \
         --no-filesize \
+        --no-permissions \
         --git \
         --git-repos \
         --header \
-        --no-user \
         --almost-all \
         --group-directories-first \
         --classify=auto \
@@ -27,11 +27,11 @@ if (( ${+commands[eza]} )); then
     # Long list
     alias ll="eza \
         --long \
+        --no-user \
         --group \
         --git \
         --git-repos \
         --header \
-        --no-user \
         --almost-all \
         --group-directories-first \
         --classify=auto \

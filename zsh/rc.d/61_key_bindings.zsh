@@ -6,27 +6,6 @@
 # ===========|___/===============================|___/======================== #
 
 
-# LASTWIDGET (scalar)
-#        The name of the last widget that was executed; read-only.
-
-
-# killring (array)
-#        The array of previously killed items, with the most recently
-#        killed first.  This gives the items that would be retrieved by a
-#        yank-pop in the same order.  Note, however, that the most recently
-#        killed item is in $CUTBUFFER; $killring shows the array of
-#        previous entries.
-
-#        The default size for the kill ring is eight, however the length
-#        may be changed by normal array operations.  Any empty string in
-#        the kill ring is ignored by the yank-pop command, hence the size
-#        of the array effectively sets the maximum length of the kill ring,
-#        while the number of non-zero strings gives the current length,
-#        both as seen by the user at the command line.
-
-
-
-
 # ╭────────────────────────╮
 # │ ALT LAYER KEY BINDINGS │
 # ╰────────────────────────╯
@@ -35,9 +14,9 @@
 zle -N _rename_fzf
 bindkey -M viins "^[r" _rename_fzf
 
-# Alt g: Grep term and open in nvim
-zle -N _grep_into_nvim
-bindkey -M viins "^[g" _grep_into_nvim
+# # Alt g: Grep term and open in nvim
+# zle -N _grep_into_nvim
+# bindkey -M viins "^[g" _grep_into_nvim
 
 
 # ╭──────────────────────╮
@@ -60,7 +39,7 @@ bindkey -M viins "^[g" _grep_into_nvim
 
 # BROOT
 # ---------------------------------------------------------------------------- #
-local function _broot_launcher() {
+local function _enter_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -70,13 +49,13 @@ local function _broot_launcher() {
         zle accept-line
     fi
 }
-zle -N _broot_launcher
-bindkey -M viins "^M" _broot_launcher
+zle -N _enter_wrapper
+bindkey -M viins "^M" _enter_wrapper
 
 
 # LAUNCH NEOVIM
 # ---------------------------------------------------------------------------- #
-local function _neovim_launcher() {
+local function _tab_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -86,23 +65,37 @@ local function _neovim_launcher() {
         zle redisplay     # Syntax highlighting on fzf-tab exit
     fi
 }
-zle -N _neovim_launcher
-bindkey -M viins "^I" _neovim_launcher
+zle -N _tab_wrapper
+bindkey -M viins "^I" _tab_wrapper
+
+
+local function _space_wrapper() {
+    emulate -L zsh
+
+    [[ -z "$BUFFER" ]] && _find_files || LBUFFER[CURSOR+1]+=" "
+}
+zle -N _space_wrapper
+bindkey -M viins " " _space_wrapper
+
+
+local function _slash_wrapper() {
+    emulate -L zsh
+
+    [[ -z "$BUFFER" ]] && _grep_into_nvim || LBUFFER[CURSOR+1]+="/"
+}
+zle -N _slash_wrapper
+bindkey -M viins "/" _slash_wrapper
 
 
 # ZSH CHEAT SHEAT
 # ---------------------------------------------------------------------------- #
-local function _cheat_sheet_wrapper() {
+local function _semicolon_wrapper() {
     emulate -L zsh
 
-    if [[ -z "$BUFFER" ]]; then
-        _zsh_cheat_sheet
-    else
-        LBUFFER[CURSOR+1]+=";"
-    fi
+    [[ -z "$BUFFER" ]] && _zsh_cheat_sheet || LBUFFER[CURSOR+1]+=";"
 }
-zle -N _cheat_sheet_wrapper
-bindkey -M viins ";" _cheat_sheet_wrapper
+zle -N _semicolon_wrapper
+bindkey -M viins ";" _semicolon_wrapper
 
 
 # CMD HISTORY
@@ -110,7 +103,7 @@ bindkey -M viins ";" _cheat_sheet_wrapper
 # NOTE: The first awk line adds color to the second field (the commmand prefix).
 # The second removes the command's index and cleans up white space before
 # inserting the command onto the buffer.
-local function _cmd_history_fzf_wrapper() {
+local function _down_key_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -121,8 +114,8 @@ local function _cmd_history_fzf_wrapper() {
         history-substring-search-down
     fi
 }
-zle -N _cmd_history_fzf_wrapper
-bindkey -M viins "^[[B" _cmd_history_fzf_wrapper
+zle -N _down_key_wrapper
+bindkey -M viins "^[[B" _down_key_wrapper
 
 
 # DIRECTORY NAVIGATION

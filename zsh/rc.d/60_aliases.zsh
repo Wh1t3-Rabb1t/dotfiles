@@ -109,16 +109,17 @@ alias getip="ifconfig | grep inet"
 # zscripts
 # ---------------------------------------------------------------------------- #
 [[ -v ZSCRIPTDIR ]] && {
-    alias f="_find_and_open_files"
-    alias d="_find_and_goto_dir"
-    alias up="_navigate_up_dir_tree"
-    alias e="_launch_nvim"
     alias nf="_create_files"
     alias nd="_create_dirs"
     alias md="_glow_markdown"
     alias vs="_find_vim_sessions"
     alias cl="_clear_screen_soft_bottom"
 }
+
+# alias f="_find_and_open_files"
+# alias d="_find_and_goto_dir"
+# alias up="_navigate_up_dir_tree"
+# alias e="_launch_nvim"
 
 # alias rm="_move_to_trash"
 # alias g="_rg_fzf_into_nvim"

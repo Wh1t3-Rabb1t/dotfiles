@@ -1,13 +1,21 @@
 # TODO
 
+
+- flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)
+- Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
+
+- account for quotes when filename has spaces in rename widget
+
 - !! use a FIFO to implement vi mode registers that can be accessed across different shells!
-- use space as a leader if hit when BUFFER is empty
+- implement a cheat sheet of all alt keybindings (can color fields with awk)
 
 - 3. Incorporate Rg / Fzf toggle into suitable scripts
 - 1. Standardize Rg / Fzf colors
 - 5. Rewrite move to Trash script
-- 6. Tweak p10k config
+- 6. Tweak p10k config (and set instant prompt to silent)
 - write a script to check for / download zsh plugin updates
+
+
 
 - Store these somewhere
 ```sh

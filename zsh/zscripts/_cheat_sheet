@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Terminal cheat sheet powered by Fzf.                                         #
+# Terminal cheat sheet powered by fzf.                                         #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : BUFFER, CURSOR, ZSCRIPTDIR                                         #
@@ -18,18 +18,18 @@ cd "${ZSCRIPTDIR}"
 if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
-            --type f \
+            --type file \
             --exclude '_*' \
             --exclude 'README.md' \
             --color always \
-        | fzf \
+        | fzf --header=' zsh cheat sheet.' \
     )
 elif (( ${+commands[find]} )); then
     selection=$( \
         find . \
             -type f \
             ! -name '_*' \
-        | fzf \
+        | fzf --header=' zsh cheat sheet.' \
     )
 fi
 

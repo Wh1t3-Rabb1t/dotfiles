@@ -1,17 +1,18 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Fzf command history and append selected command to the buffer.               #
+# Fzf zsh history and append selection to the command line.                    #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
-# Globals : BUFFER                                                             #
+# Globals : BUFFER, CURSOR                                                     #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
-# The first awk line adds color to the second field (the commmand prefix).
+# NOTE: The first awk line adds color to the second field (the commmand prefix).
 # The second removes the command's index and cleans up white space before
-# appending the command to the buffer.
+# inserting the command onto the buffer.
+
 local selection=$( \
     history 0 \
     | awk '{

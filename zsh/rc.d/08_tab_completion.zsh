@@ -28,6 +28,12 @@ if [[ -d "${XDG_CACHE_HOME}/zsh/fpath" ]]; then
     fpath=("${XDG_CACHE_HOME}/zsh/fpath" ${fpath})
 fi
 
+# Enable brew completions, if present
+if type brew &>/dev/null; then
+    # Brew stores completion files in: /opt/homebrew/share/zsh/site-functions
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+
 
 # NOTE
 # look into:
@@ -35,13 +41,6 @@ fi
 # https://github.com/lincheney/fzf-tab-completion
 # https://formulae.brew.sh/formula/zsh-completions
 # https://www.reddit.com/r/zsh/comments/1cys810/zsh_completions_not_working/
-
-
-# Enable brew completions, if present
-# Brew stores completion files in: /opt/homebrew/share/zsh/site-functions
-if type brew &>/dev/null; then
-    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-fi
 
 
 # Additional completions

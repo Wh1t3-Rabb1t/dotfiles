@@ -16,27 +16,27 @@ ZSHZ_UNCOMMON=1
 # Ignore case when lowercase, match case with uppercase
 ZSHZ_CASE=smart
 
-source "${ZDOTDIR}/plugins/zsh-z/zsh-z.plugin.zsh"
+source "${ZPLUGINDIR}/zsh-z/zsh-z.plugin.zsh"
 
 
 # AUTOSUGGESTIONS
 # ---------------------------------------------------------------------------- #
-source "${ZDOTDIR}/plugins/autosuggestions/zsh-autosuggestions.zsh"
+source "${ZPLUGINDIR}/autosuggestions/zsh-autosuggestions.zsh"
 
 
 # AUTOPAIR
 # ---------------------------------------------------------------------------- #
-source "${ZDOTDIR}/plugins/autopair/autopair.zsh"
+source "${ZPLUGINDIR}/autopair/autopair.zsh"
 
 
 # FAST SYNTAX HIGHLIGHTING
 # ---------------------------------------------------------------------------- #
-source "${ZDOTDIR}/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
+source "${ZPLUGINDIR}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 
 
 # HISTORY SUBSTRING SEARCH
 # ---------------------------------------------------------------------------- #
-source "${ZDOTDIR}/plugins/history-substring-search/zsh-history-substring-search.plugin.zsh"
+source "${ZPLUGINDIR}/history-substring-search/zsh-history-substring-search.plugin.zsh"
 
 # Cmd
 bindkey -M vicmd 'i' history-substring-search-up       # i
@@ -45,3 +45,10 @@ bindkey -M vicmd 'k' history-substring-search-down     # k
 # Vis
 bindkey -M viins '^[[A' history-substring-search-up    # Up
 bindkey -M viins '^[[B' history-substring-search-down  # Down
+
+
+# BROOT
+# ---------------------------------------------------------------------------- #
+if (( ${+commands[broot]} )); then
+    source "${XDG_CONFIG_HOME}/broot/launcher/bash/br"
+fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Fzf cwd and append `mv` and the chosen rename target (x2) to the cli.        #
+# Fzf cwd and append `mv` and the rename target (x2) to the command line.      #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : BUFFER                                                             #

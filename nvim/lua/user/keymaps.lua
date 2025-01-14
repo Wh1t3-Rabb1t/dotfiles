@@ -505,6 +505,7 @@ end)
 
 -- QUIT (never quit)
 --------------------------------------------------------------------------------
+nvmap("<Leader>q", "<cmd>qa<CR>")                 -- Quit nvim
 nvmap("QQ", "<cmd>qa!<CR>")                       -- Force quit nvim
 nmap("<A-q>", function()                          -- Quit and save session
     -- Save session if launched via session file
@@ -512,6 +513,5 @@ nmap("<A-q>", function()                          -- Quit and save session
         vim.cmd("Mksession!")
     end
 
-    -- Quit
     vim.cmd("qa")
 end)

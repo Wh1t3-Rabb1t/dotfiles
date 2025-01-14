@@ -37,7 +37,7 @@ bindkey -M viins "^[r" _rename_fzf
 # declaring these bindings for their widgets to work.
 
 
-# BROOT
+# BROOT LAUNCHER
 # ---------------------------------------------------------------------------- #
 local function _enter_wrapper() {
     emulate -L zsh
@@ -53,7 +53,7 @@ zle -N _enter_wrapper
 bindkey -M viins "^M" _enter_wrapper
 
 
-# LAUNCH NEOVIM
+# LAUNCH NEOVIM SESSION
 # ---------------------------------------------------------------------------- #
 local function _tab_wrapper() {
     emulate -L zsh
@@ -62,6 +62,7 @@ local function _tab_wrapper() {
         _launch_nvim
     else
         fzf-tab-complete
+        POSTDISPLAY=      # Clear zsh-autosuggestions if present
         zle redisplay     # Syntax highlighting on fzf-tab exit
     fi
 }
@@ -69,18 +70,20 @@ zle -N _tab_wrapper
 bindkey -M viins "^I" _tab_wrapper
 
 
+# FIND FILES
+# ---------------------------------------------------------------------------- #
 local function _space_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _find_files || LBUFFER[CURSOR+1]+=" "
 }
 zle -N _space_wrapper
 bindkey -M viins " " _space_wrapper
 
 
+# GREP INTO NVIM
+# ---------------------------------------------------------------------------- #
 local function _slash_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _grep_into_nvim || LBUFFER[CURSOR+1]+="/"
 }
 zle -N _slash_wrapper
@@ -91,7 +94,6 @@ bindkey -M viins "/" _slash_wrapper
 # ---------------------------------------------------------------------------- #
 local function _semicolon_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _zsh_cheat_sheet || LBUFFER[CURSOR+1]+=";"
 }
 zle -N _semicolon_wrapper
@@ -103,7 +105,7 @@ bindkey -M viins ";" _semicolon_wrapper
 # NOTE: The first awk line adds color to the second field (the commmand prefix).
 # The second removes the command's index and cleans up white space before
 # inserting the command onto the buffer.
-local function _down_key_wrapper() {
+local function _up_key_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -114,14 +116,13 @@ local function _down_key_wrapper() {
         history-substring-search-down
     fi
 }
-zle -N _down_key_wrapper
-bindkey -M viins "^[[B" _down_key_wrapper
+zle -N _up_key_wrapper
+bindkey -M viins "^[[A" _up_key_wrapper
 
 
-# DIRECTORY NAVIGATION
+# TELEPORT
 # ---------------------------------------------------------------------------- #
-# Teleport
-local function _teleport_wrapper() {
+local function _quote_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -130,12 +131,13 @@ local function _teleport_wrapper() {
         autopair-insert
     fi
 }
-zle -N _teleport_wrapper
-bindkey -M viins "'" _teleport_wrapper
+zle -N _quote_wrapper
+bindkey -M viins "'" _quote_wrapper
 
 
-# Cd to parent dir
-local function _cd_to_parent_dir() {
+# CD UP ONE DIR
+# ---------------------------------------------------------------------------- #
+local function _left_arrow_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -145,12 +147,13 @@ local function _cd_to_parent_dir() {
         zle vi-backward-char
     fi
 }
-zle -N _cd_to_parent_dir
-bindkey -M viins "^[[D" _cd_to_parent_dir  # Left arrow
+zle -N _left_arrow_wrapper
+bindkey -M viins "^[[D" _left_arrow_wrapper
 
 
-# Cd to subdirectory of cwd
-local function _cd_to_subdir() {
+# CD DOWN ONE DIR
+# ---------------------------------------------------------------------------- #
+local function _right_arrow_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -161,12 +164,13 @@ local function _cd_to_subdir() {
         zle vi-forward-char
     fi
 }
-zle -N _cd_to_subdir
-bindkey -M viins "^[[C" _cd_to_subdir  # Right arrow
+zle -N _right_arrow_wrapper
+bindkey -M viins "^[[C" _right_arrow_wrapper
 
 
-# Fd and cd down dirtree
-local function _find_and_goto_dir_wrapper() {
+# FD INTO CD
+# ---------------------------------------------------------------------------- #
+local function _hyphen_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
@@ -175,8 +179,8 @@ local function _find_and_goto_dir_wrapper() {
         LBUFFER[CURSOR+1]+="-"
     fi
 }
-zle -N _find_and_goto_dir_wrapper
-bindkey -M viins "\-" _find_and_goto_dir_wrapper
+zle -N _hyphen_wrapper
+bindkey -M viins "\-" _hyphen_wrapper
 
 
 # FIXME

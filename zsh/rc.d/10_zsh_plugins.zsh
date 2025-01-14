@@ -38,13 +38,17 @@ source "${ZPLUGINDIR}/fast-syntax-highlighting/fast-syntax-highlighting.plugin.z
 # ---------------------------------------------------------------------------- #
 source "${ZPLUGINDIR}/history-substring-search/zsh-history-substring-search.plugin.zsh"
 
+# NOTE: The bindings are declared in reverse order than is usual (Down initiates
+# history search rather than Up). This is so that I can bind the Up key to search
+# history via fzf on an empty cli.
+
 # Cmd
-bindkey -M vicmd 'i' history-substring-search-up       # i
-bindkey -M vicmd 'k' history-substring-search-down     # k
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'i' history-substring-search-down
 
 # Vis
-bindkey -M viins '^[[A' history-substring-search-up    # Up
-bindkey -M viins '^[[B' history-substring-search-down  # Down
+bindkey -M viins '^[[B' history-substring-search-up
+bindkey -M viins '^[[A' history-substring-search-down
 
 
 # BROOT

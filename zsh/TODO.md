@@ -10,7 +10,6 @@
 - !! use a FIFO to implement vi mode registers that can be accessed across different shells!
 - cheat sheet of all alt keybindings (can color fields with awk. implement as a oneshot binding bound to a question mark '?')
 
-- Separate vimode util functions into a different file
 - 3. Incorporate Rg / Fzf toggle into suitable scripts
 - 1. Standardize Rg / Fzf colors
 - 5. Rewrite move to Trash script
@@ -51,8 +50,6 @@
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
 - Fix ghostty navigate split bindings
-- Write a script to check for zsh plugin updates
-- Finish reworking 'd' alias (search and jump to dir)
 - Rewrite basic Rectangle features with Hammerspoon
 - App launcher / focuser with Hammerspoon
 - Monitor brightness control with Hammerspoon

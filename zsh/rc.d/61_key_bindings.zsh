@@ -14,25 +14,27 @@
 zle -N _rename_fzf
 bindkey -M viins "^[r" _rename_fzf
 
+
 # Alt f: Find and open file/s with neovim
 zle -N _find_files
 bindkey -M viins "^[f" _find_files
 
 
-# # Alt g: Grep term and open in nvim
-# zle -N _grep_into_nvim
-# bindkey -M viins "^[g" _grep_into_nvim
+# Alt g: Grep term and open with neovim
+zle -N _grep_into_nvim
+bindkey -M viins "^[g" _grep_into_nvim
 
 
 # ╭──────────────────────╮
 # │ ONESHOT KEY BINDINGS │
 # ╰──────────────────────╯
+#
 # The scripts these keys are bound to are executed on a single press, only
 # when the command line is empty. Otherwise they input the relevant key onto
 # the command line, or execute the relevant action.
 #
 # i.e. pressing semicolon ';' calls the `_zsh_cheat_sheet` widget when the
-# command line is empty, and inputs a semicolon character as normal otherwise.
+# command line is empty, but inputs a semicolon character as normal otherwise.
 #
 # NOTE: Certain keys like Tab, or comma, are bound by plugins (fzf-tab and
 # zsh-autopairs in this case), so rather than inputting say; a comma to the
@@ -91,16 +93,6 @@ zle -N _tab_wrapper
 bindkey -M viins "^I" _tab_wrapper
 
 
-# GREP INTO NVIM
-# ---------------------------------------------------------------------------- #
-local function _slash_wrapper() {
-    emulate -L zsh
-    [[ -z "$BUFFER" ]] && _grep_into_nvim || LBUFFER[CURSOR+1]+="/"
-}
-zle -N _slash_wrapper
-bindkey -M viins "/" _slash_wrapper
-
-
 # ZSH CHEAT SHEAT
 # ---------------------------------------------------------------------------- #
 local function _semicolon_wrapper() {
@@ -119,13 +111,9 @@ bindkey -M viins ";" _semicolon_wrapper
 local function _up_key_wrapper() {
     emulate -L zsh
 
-    if [[ -z "$BUFFER" ]]; then
-        _cmd_history_fzf
-    else
-        # Use this in place of zsh `zle down-line-or-history` builtin
-        # to prevent functionality conflicts.
-        history-substring-search-down
-    fi
+    # Use `history-substring-search-down` in place of zsh `down-line-or-history`
+    # builtin to prevent functionality conflicts.
+    [[ -z "$BUFFER" ]] && _cmd_history_fzf || history-substring-search-down
 }
 zle -N _up_key_wrapper
 bindkey -M viins "^[[A" _up_key_wrapper
@@ -135,15 +123,20 @@ bindkey -M viins "^[[A" _up_key_wrapper
 # ---------------------------------------------------------------------------- #
 local function _quote_wrapper() {
     emulate -L zsh
-
-    if [[ -z "$BUFFER" ]]; then
-        _teleport
-    else
-        autopair-insert
-    fi
+    [[ -z "$BUFFER" ]] && _teleport || autopair-insert
 }
 zle -N _quote_wrapper
 bindkey -M viins "'" _quote_wrapper
+
+
+# FD INTO CD
+# ---------------------------------------------------------------------------- #
+local function _hyphen_wrapper() {
+    emulate -L zsh
+    [[ -z "$BUFFER" ]] && _find_and_goto_dir || LBUFFER[CURSOR+1]+="-"
+}
+zle -N _hyphen_wrapper
+bindkey -M viins "\-" _hyphen_wrapper
 
 
 # CD UP ONE DIR
@@ -177,121 +170,3 @@ local function _right_arrow_wrapper() {
 }
 zle -N _right_arrow_wrapper
 bindkey -M viins "^[[C" _right_arrow_wrapper
-
-
-# FD INTO CD
-# ---------------------------------------------------------------------------- #
-local function _hyphen_wrapper() {
-    emulate -L zsh
-
-    if [[ -z "$BUFFER" ]]; then
-        _find_and_goto_dir
-    else
-        LBUFFER[CURSOR+1]+="-"
-    fi
-}
-zle -N _hyphen_wrapper
-bindkey -M viins "\-" _hyphen_wrapper
-
-
-# FIXME
-# available actions to map:
-#
-# ' Teleport
-# - find and cd to dir
-# Right cd in cwd
-# Left cd up dir tree
-#
-# ; zsh cheat sheet
-# <tab> cmd history fzf
-#
-# find and open files
-# broot
-# yazi
-
-# available keys:
-# space
-# tab
-# enter
-# ;
-# ,
-# .
-# /
-# -
-# =
-# ''
-# ""
-
-
-
-
-
-# # Press enter to open fzf-tab cd completion menu if the command line is empty
-# local function _cd_if_buffer_empty() {
-#     emulate -L zsh
-#     if [[ "$BUFFER" == "cd " ]]; then
-#         CURSOR=${#BUFFER}
-#         fzf-tab-complete
-#     elif [[ -z "$BUFFER" ]]; then
-#         BUFFER="cd "
-#         CURSOR=${#BUFFER}
-#         fzf-tab-complete
-#     else
-#         zle accept-line
-#     fi
-# }
-# zle -N _cd_if_buffer_empty
-# bindkey -M viins "^M" _cd_if_buffer_empty
-
-# local function _test_fn() {
-#     emulate -L zsh
-#     if [[ -z "$BUFFER" ]]; then
-#         BUFFER="cd "
-#     else
-#         LBUFFER[CURSOR+1]+="="
-#         #         # zle vi-forward-char
-#         #         # BUFFER+=" "
-#         #         # CURSOR=${#BUFFER}
-#     fi
-# }
-# zle -N _test_fn
-# bindkey -M viins "=" _test_fn
-
-
-
-# local function _tab_wrapper() {
-#     emulate -L zsh
-#     if [[ -z "$BUFFER" ]]; then
-#         BUFFER="cd "
-#         CURSOR=${#BUFFER}
-#         fzf-tab-complete
-#     else
-#         fzf-tab-complete
-#     fi
-# }
-# zle -N _tab_wrapper
-# bindkey -M viins "^I" _tab_wrapper
-
-
-
-# # Press space when the command line is empty to open 'leader' menu
-# local function _leader_key() {
-#     emulate -L zsh
-#     if [[ -z "$BUFFER" ]]; then
-#         BUFFER="cd "
-#         CURSOR=${#BUFFER}
-#         fzf-tab-complete
-#     else
-#         LBUFFER[CURSOR+1]+=" "
-#         # zle vi-forward-char
-#         # BUFFER+=" "
-#         # CURSOR=${#BUFFER}
-#     fi
-# }
-# zle -N _leader_key
-# bindkey -M viins " " _leader_key
-
-
-
-
-

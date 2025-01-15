@@ -9,6 +9,7 @@
 # https://thevaluable.dev/practical-guide-fzf-example/
 # https://vitormv.github.io/fzf-themes/
 
+
 # Settings
 # ---------------------------------------------------------------------------- #
 local FZF_KEY_BINDINGS="\

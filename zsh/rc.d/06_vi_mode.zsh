@@ -7,7 +7,7 @@
 #      \  \  /  /  |  |
 #       \  \/  /   |  |
 #        \    /    |  |
-#         \  /     |__| bindings
+#     zsh \  /     |__| mode
 # ======== \/ ================================================================ #
 
 # See: `man zshzle`
@@ -45,7 +45,7 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 local default_keymaps=( 'd' 'D' 'e' 'E' 'b' 'B' 'c' 'C' 'x' 'X' 's' 'S' 'y' \
 'Y' 'v' 'V' 't' 'T' 'w' 'W' 'n' 'N' 'i' 'I' 'k' 'j' 'J' 'g' 'G' 'o' 'O' 'p' \
 'P' 'm' 'u' 'l' 'h' '#' '$' "'" '"' '`' '^' '|' ',' '.' '+' '?' '~' '<' ':' \
-'\-' '\t' )
+'\-' '\t' '^[' )
 
 for m in vicmd visual viopp; do
     for k in "$default_keymaps[@]"; do
@@ -56,36 +56,36 @@ done
 
 # MODE TOGGLING
 # ---------------------------------------------------------------------------- #
-bindkey -M vicmd '^[' vi-insert        # Esc = Insert/cmd mode
-bindkey -M vicmd 's' visual-mode       # s   = Visual mode
-bindkey -M vicmd 'S' visual-line-mode  # S   = Visual line mode
+bindkey -M vicmd '^['       vi-insert                    # Esc = Insert/cmd mode
+bindkey -M vicmd 's'        visual-mode                  # s   = Visual mode
+bindkey -M vicmd 'S'        visual-line-mode             # S   = Visual line mode
 
 
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'l' vi-forward-char           # l = Right
-bindkey -M vicmd 't' vi-backward-char          # t = Left
-bindkey -M vicmd 'h' beginning-of-line         # h = Jump to LINE START
-bindkey -M vicmd ';' end-of-line               # ; = Jump to LINE END
-bindkey -M vicmd 'o' vi-forward-word           # o = Jump forwards by WORD
-bindkey -M vicmd 'u' vi-backward-word          # u = Jump backwards by WORD
-bindkey -M vicmd 'O' vi-forward-word-end       # O = Jump forwards to WORD end
-bindkey -M vicmd 'U' vi-backward-word-end      # U = Jump backwards to WORD end
-bindkey -M vicmd '.' vi-repeat-find            # . = Next `f` search result
-bindkey -M vicmd ',' vi-rev-repeat-find        # , = Previous `f` search result
+bindkey -M vicmd 'l'        vi-forward-char              # l = Right
+bindkey -M vicmd 't'        vi-backward-char             # t = Left
+bindkey -M vicmd 'h'        beginning-of-line            # h = Jump to LINE START
+bindkey -M vicmd ';'        end-of-line                  # ; = Jump to LINE END
+bindkey -M vicmd 'o'        vi-forward-word              # o = Jump forwards by WORD
+bindkey -M vicmd 'u'        vi-backward-word             # u = Jump backwards by WORD
+bindkey -M vicmd 'O'        vi-forward-word-end          # O = Jump forwards to WORD end
+bindkey -M vicmd 'U'        vi-backward-word-end         # U = Jump backwards to WORD end
+bindkey -M vicmd '.'        vi-repeat-find               # . = Next `f` search result
+bindkey -M vicmd ','        vi-rev-repeat-find           # , = Previous `f` search result
 
 # Vis
-bindkey -M visual 'o' vi-forward-word          # o = Jump forwards by WORD
-bindkey -M visual 'u' vi-backward-word         # u = Jump backwards by WORD
-bindkey -M visual 'O' vi-forward-word-end      # O = Jump forwards to WORD end
-bindkey -M visual 'U' vi-backward-word-end     # U = Jump backwards to WORD end
-bindkey -M visual 'a' exchange-point-and-mark  # a = Other side of selection
+bindkey -M visual 'o'       vi-forward-word              # o = Jump forwards by WORD
+bindkey -M visual 'u'       vi-backward-word             # u = Jump backwards by WORD
+bindkey -M visual 'O'       vi-forward-word-end          # O = Jump forwards to WORD end
+bindkey -M visual 'U'       vi-backward-word-end         # U = Jump backwards to WORD end
+bindkey -M visual 'a'       exchange-point-and-mark      # a = Other side of selection
 
 # Ins
-bindkey -M viins '^[[H' beginning-of-line      # Home     = Jump LINE START
-bindkey -M viins '^[[F' end-of-line            # End      = Jump LINE END
-bindkey -M viins '^[[1;3D' vi-backward-word    # Alt Left = Jump backwards by WORD
+bindkey -M viins '^[[H'     beginning-of-line            # Home     = Jump LINE START
+bindkey -M viins '^[[F'     end-of-line                  # End      = Jump LINE END
+bindkey -M viins '^[[1;3D'  vi-backward-word             # Alt Left = Jump backwards by WORD
 
 # A forward-char call is required to prevent
 # the cursor landing left of the final letter
@@ -95,32 +95,32 @@ local function _jump_forward_word() {
     zle vi-forward-char
 }
 zle -N _jump_forward_word
-bindkey -M viins '^[[1;3C' _jump_forward_word  # Alt Right = Jump forwards by WORD
+bindkey -M viins '^[[1;3C'  _jump_forward_word           # Alt Right = Jump forwards by WORD
 
 
 # DELETE BINDINGS
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '^?' backward-delete-char  # BS        = Delete backwards
-bindkey -M vicmd '^[[3~' delete-char        # Del       = Delete forwards
-bindkey -M vicmd '^[^?' backward-kill-word  # Alt BS    = Delete WORD LEFT
-bindkey -M vicmd '^[[3;3~' kill-word        # Alt Del   = Delete WORD RIGHT
-bindkey -M vicmd '^H' backward-kill-line    # Ctrl BS   = Delete to LINE start
-bindkey -M vicmd '^[[3;5~' kill-line        # Ctrl Del  = Delete to LINE end
-bindkey -M vicmd '^[[3;2~' kill-whole-line  # Shift Del = Delete whole line
+bindkey -M vicmd '^?'       backward-delete-char         # BS        = Delete backwards
+bindkey -M vicmd '^[[3~'    delete-char                  # Del       = Delete forwards
+bindkey -M vicmd '^[^?'     backward-kill-word           # Alt BS    = Delete WORD LEFT
+bindkey -M vicmd '^[[3;3~'  kill-word                    # Alt Del   = Delete WORD RIGHT
+bindkey -M vicmd '^H'       backward-kill-line           # Ctrl BS   = Delete to LINE start
+bindkey -M vicmd '^[[3;5~'  kill-line                    # Ctrl Del  = Delete to LINE end
+bindkey -M vicmd '^[[3;2~'  kill-whole-line              # Shift Del = Delete whole line
 
 # Vis
-bindkey -M visual '^?' kill-region          # BS        = Delete selection
-bindkey -M visual '^[[3~' kill-region       # Del       = Delete selection
+bindkey -M visual '^?'      kill-region                  # BS        = Delete selection
+bindkey -M visual '^[[3~'   kill-region                  # Del       = Delete selection
 
 # Ins
-bindkey -M viins '^?' backward-delete-char  # BS        = Delete backwards
-bindkey -M viins '^[[3~' delete-char        # Del       = Delete forwards
-bindkey -M viins '^[^?' backward-kill-word  # Alt BS    = Delete WORD LEFT
-bindkey -M viins '^[[3;3~' kill-word        # Alt Del   = Delete WORD RIGHT
-bindkey -M viins '^H' backward-kill-line    # Ctrl BS   = Delete to LINE end
-bindkey -M viins '^[[3;5~' kill-line        # Ctrl Del  = Delete to LINE start
-bindkey -M viins '^[[3;2~' kill-whole-line  # Shift Del = Delete whole line
+bindkey -M viins '^?'       backward-delete-char         # BS        = Delete backwards
+bindkey -M viins '^[[3~'    delete-char                  # Del       = Delete forwards
+bindkey -M viins '^[^?'     backward-kill-word           # Alt BS    = Delete WORD LEFT
+bindkey -M viins '^[[3;3~'  kill-word                    # Alt Del   = Delete WORD RIGHT
+bindkey -M viins '^H'       backward-kill-line           # Ctrl BS   = Delete to LINE end
+bindkey -M viins '^[[3;5~'  kill-line                    # Ctrl Del  = Delete to LINE start
+bindkey -M viins '^[[3;2~'  kill-whole-line              # Shift Del = Delete whole line
 
 
 # DELETE MOTIONS
@@ -189,22 +189,22 @@ local function _delete_motions() {
     _block_cursor
 }
 zle -N _delete_motions
-bindkey -M vicmd 'w' _delete_motions
+bindkey -M vicmd 'w'        _delete_motions              # w = Delete motions
 
 # Vis
-bindkey -M visual 'w' kill-region  # w = Delete visual selection
+bindkey -M visual 'w'       kill-region                  # w = Delete visual selection
 
 
 # UNDO / REDO / DOT OPERATOR
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '\-' vi-repeat-change  # Tab   = Dot operator
-bindkey -M vicmd '^[y' undo             # Alt y = Undo
-bindkey -M vicmd '^[Y' redo             # Alt Y = Redo
+bindkey -M vicmd '\-'       vi-repeat-change             # Tab   = Dot operator
+bindkey -M vicmd '^[y'      undo                         # Alt y = Undo
+bindkey -M vicmd '^[Y'      redo                         # Alt Y = Redo
 
 # Ins
-bindkey -M viins '^[y' undo             # Alt y = Undo
-bindkey -M viins '^[Y' redo             # Alt Y = Redo
+bindkey -M viins '^[y'      undo                         # Alt y = Undo
+bindkey -M viins '^[Y'      redo                         # Alt Y = Redo
 
 
 # SELECT IN WORD / LINE
@@ -216,20 +216,20 @@ local function _select_in_word() {
     zle select-in-word
 }
 zle -N _select_in_word
-bindkey -M vicmd '^[[1;3C' _select_in_word    # Alt Right = Select in WORD
+bindkey -M vicmd '^[[1;3C'  _select_in_word              # Alt Right = Select in WORD
 
 # Vis
-bindkey -M visual '^[[1;3C' visual-line-mode  # Alt Right = Enter visual LINE mode
+bindkey -M visual '^[[1;3C' visual-line-mode             # Alt Right = Enter visual LINE mode
 
 
 # UPPER / LOWER / SWAP CASE
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '_' vi-swap-case    # _ = Swap case
+bindkey -M vicmd '_'        vi-swap-case                 # _ = Swap case
 
 # Vis
-bindkey -M visual '_' vi-up-case     # - = Uppercase selection
-bindkey -M visual '\-' vi-down-case  # _ = Lowercase selection
+bindkey -M visual '_'       vi-up-case                   # - = Uppercase selection
+bindkey -M visual '\-'      vi-down-case                 # _ = Lowercase selection
 
 
 # COPY
@@ -304,7 +304,7 @@ local function _copy_motions() {
     _block_cursor
 }
 zle -N _copy_motions
-bindkey -M vicmd 'c' _copy_motions
+bindkey -M vicmd 'c'        _copy_motions
 
 # Vis
 function _copy_to_clipboard() {
@@ -313,7 +313,7 @@ function _copy_to_clipboard() {
     echo -n "$CUTBUFFER" | pbcopy -i
 }
 zle -N _copy_to_clipboard
-bindkey -M visual 'c' _copy_to_clipboard  # c = Copy visual selection
+bindkey -M visual 'c'       _copy_to_clipboard           # c = Copy visual selection
 
 
 # CUT
@@ -380,7 +380,7 @@ local function _cut_to_clipboard() {
     echo -n "$CUTBUFFER" | pbcopy -i
 }
 zle -N _cut_to_clipboard
-bindkey -M visual 'x' _cut_to_clipboard  # x = Cut visual selection
+bindkey -M visual 'x'       _cut_to_clipboard            # x = Cut visual selection
 
 
 # CHANGE
@@ -439,10 +439,10 @@ local function _change_motions() {
     esac
 }
 zle -N _change_motions
-bindkey -M vicmd 'y' _change_motions
+bindkey -M vicmd 'y'        _change_motions
 
 # Vis
-bindkey -M visual 'y' vi-change  # y = Change visual selection
+bindkey -M visual 'y'       vi-change                    # y = Change visual selection
 
 
 # PASTE
@@ -454,10 +454,10 @@ local function _paste_from_clipboard() {
     zle vi-put-before
 }
 zle -N _paste_from_clipboard
-bindkey -M vicmd 'v' _paste_from_clipboard
+bindkey -M vicmd 'v'        _paste_from_clipboard        # v
 
 # Ins
-bindkey -M viins '^[v' _paste_from_clipboard
+bindkey -M viins '^[v'      _paste_from_clipboard        # Alt v
 
 # Vis
 local function _paste_from_clipboard_visual() {
@@ -467,7 +467,7 @@ local function _paste_from_clipboard_visual() {
     zle vi-put-before
 }
 zle -N _paste_from_clipboard_visual
-bindkey -M visual 'v' _paste_from_clipboard_visual
+bindkey -M visual 'v'       _paste_from_clipboard_visual # v
 
 
 # INCREMENT / DECREMENT INTEGERS
@@ -482,7 +482,7 @@ local function _increment_integers() {
     zle -U 'NU'
 }
 zle -N _increment_integers
-bindkey -M vicmd '\x1bc' _increment_integers  # Alt c = Increment integers
+bindkey -M vicmd '\x1bc'    _increment_integers          # Alt c = Increment integers
 
 local function _decrement_integers() {
     emulate -L zsh
@@ -490,7 +490,7 @@ local function _decrement_integers() {
     zle -U 'NU'
 }
 zle -N _decrement_integers
-bindkey -M vicmd '\x1bx' _decrement_integers  # Alt x = Decrement integers
+bindkey -M vicmd '\x1bx'    _decrement_integers          # Alt x = Decrement integers
 
 
 # SURROUND
@@ -505,10 +505,11 @@ zle -N change-surround surround
 
 # CHANGE / DELETE SURROUNDING
 # ---------------------------------------------------------------------------- #
-# Cmd
+# Called by `_manipulate_surrounding` function
 bindkey -M vicmd 'CS' change-surround
 bindkey -M vicmd 'DS' delete-surround
 
+# Cmd
 local function _manipulate_surrounding() {
     emulate -L zsh
     local characters=(\' \" \` \{ \( \[ \<)
@@ -539,11 +540,20 @@ local function _manipulate_surrounding() {
     fi
 }
 zle -N _manipulate_surrounding
-bindkey -M vicmd ' ' _manipulate_surrounding
+bindkey -M vicmd ' '        _manipulate_surrounding      # Space
 
 
 # SELECT INSIDE SURROUNDING
 # ---------------------------------------------------------------------------- #
+# Called by `_select_in_surrounding` function
+bindkey -M visual "Q'" select-quoted
+bindkey -M visual 'Q"' select-quoted
+bindkey -M visual 'Q`' select-quoted
+bindkey -M visual 'Q{' select-bracketed
+bindkey -M visual 'Q(' select-bracketed
+bindkey -M visual 'Q[' select-bracketed
+bindkey -M visual 'Q<' select-bracketed
+
 # Cmd
 local function _select_in_surrounding() {
     emulate -L zsh
@@ -559,26 +569,26 @@ local function _select_in_surrounding() {
     esac
 }
 zle -N _select_in_surrounding
-bindkey -M vicmd "'" _select_in_surrounding
-bindkey -M vicmd '"' _select_in_surrounding
-bindkey -M vicmd '`' _select_in_surrounding
-bindkey -M vicmd '{' _select_in_surrounding
-bindkey -M vicmd '(' _select_in_surrounding
-bindkey -M vicmd '[' _select_in_surrounding
-bindkey -M vicmd '<' _select_in_surrounding
-
-# Called by `_select_in_surrounding` function
-bindkey -M visual "Q'" select-quoted
-bindkey -M visual 'Q"' select-quoted
-bindkey -M visual 'Q`' select-quoted
-bindkey -M visual 'Q{' select-bracketed
-bindkey -M visual 'Q(' select-bracketed
-bindkey -M visual 'Q[' select-bracketed
-bindkey -M visual 'Q<' select-bracketed
+bindkey -M vicmd "'"        _select_in_surrounding       # '
+bindkey -M vicmd '"'        _select_in_surrounding       # "
+bindkey -M vicmd '`'        _select_in_surrounding       # `
+bindkey -M vicmd '{'        _select_in_surrounding       # {
+bindkey -M vicmd '('        _select_in_surrounding       # (
+bindkey -M vicmd '['        _select_in_surrounding       # [
+bindkey -M vicmd '<'        _select_in_surrounding       # <
 
 
 # ADD SURROUNDING
 # ---------------------------------------------------------------------------- #
+# Called by `_add_surrounding` function
+bindkey -M visual "M'" add-surround
+bindkey -M visual 'M"' add-surround
+bindkey -M visual 'M`' add-surround
+bindkey -M visual 'M[' add-surround
+bindkey -M visual 'M(' add-surround
+bindkey -M visual 'M{' add-surround
+bindkey -M visual 'M<' add-surround
+
 # Cmd
 local function _add_surrounding() {
     emulate -L zsh
@@ -593,22 +603,14 @@ local function _add_surrounding() {
     esac
 }
 zle -N _add_surrounding
-bindkey -M visual "'" _add_surrounding
-bindkey -M visual '"' _add_surrounding
-bindkey -M visual '`' _add_surrounding
-bindkey -M visual '{' _add_surrounding
-bindkey -M visual '(' _add_surrounding
-bindkey -M visual '[' _add_surrounding
-bindkey -M visual '<' _add_surrounding
+bindkey -M visual "'"       _add_surrounding             # '
+bindkey -M visual '"'       _add_surrounding             # "
+bindkey -M visual '`'       _add_surrounding             # `
+bindkey -M visual '{'       _add_surrounding             # {
+bindkey -M visual '('       _add_surrounding             # (
+bindkey -M visual '['       _add_surrounding             # [
+bindkey -M visual '<'       _add_surrounding             # <
 
-# Called by `_add_surrounding` function
-bindkey -M visual "M'" add-surround
-bindkey -M visual 'M"' add-surround
-bindkey -M visual 'M`' add-surround
-bindkey -M visual 'M[' add-surround
-bindkey -M visual 'M(' add-surround
-bindkey -M visual 'M{' add-surround
-bindkey -M visual 'M<' add-surround
 
 
 # UTIL FUNCTIONS

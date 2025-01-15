@@ -43,7 +43,7 @@ if [[ "$selection" ]]; then
     # Use double quotes if a single quote exists in the selection
     [[ $selection == *\'* ]] && quotes=\"
 
-    # Add quotes and update BUFFER
+    # # Add quotes and update BUFFER
     selection=$(echo "$selection" | sed -E "s/(.*)/$quotes\1$quotes/")
     BUFFER="mv $selection $selection"
 

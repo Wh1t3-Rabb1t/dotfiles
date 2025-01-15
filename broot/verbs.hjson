@@ -25,14 +25,23 @@ verbs: [
     }
 
 
+    # Focus selected directory
+    ###########################################################
+    {
+        key: right
+        internal: ":focus"
+        apply_to: directory
+    }
+
+
     # Open selection with nvim
     ###########################################################
     {
         invocation: edit
-        shortcut: e
-        key: right
-        execution: "nvim +{line} {file}"
+        key: enter
+        execution: "$EDITOR +{line} {file}"
         leave_broot: false
+        apply_to: file
     }
 
 

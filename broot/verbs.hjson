@@ -29,7 +29,7 @@ verbs: [
     ###########################################################
     {
         key: right
-        internal: ":focus"
+        internal: ":open_stay"
         apply_to: directory
     }
 
@@ -38,7 +38,10 @@ verbs: [
     ###########################################################
     {
         invocation: edit
-        key: enter
+        keys: [
+            enter
+            right
+        ]
         execution: "$EDITOR +{line} {file}"
         leave_broot: false
         apply_to: file

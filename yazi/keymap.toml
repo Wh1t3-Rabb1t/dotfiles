@@ -86,7 +86,7 @@ keymap = [
     { on = [ "p", "c" ],    run = "shell --block --interactive", desc = "Run a shell command (block until finishes)" },
     { on = "h",             run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
     { on = "-",             run = "search --via=fd",             desc = "Search files by name via fd" },
-    { on = "/",             run = "search --via=rg",             desc = "Search files by content via ripgrep" },
+    { on = "g",             run = "search --via=rg",             desc = "Search files by content via ripgrep" },
     { on = "<C-s>",         run = "escape --search",             desc = "Cancel the ongoing search" },
     { on = ";",             run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 
@@ -108,7 +108,7 @@ keymap = [
 
     # Filter
     # -------------------------------------------------------------------------------------------- #
-    { on = "F", run = "filter --smart", desc = "Filter files" },
+    { on = "/", run = "filter --smart", desc = "Filter files" },
 
     # Find
     # -------------------------------------------------------------------------------------------- #

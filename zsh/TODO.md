@@ -60,11 +60,9 @@
 
 
 - ReConfigure Lualine
-- Configure yazi
 - Configure ghostty
 - Configure sketchybar
 - Configure vimium-c
-- Configure rg
 - Configure https://github.com/lusingander/serie
 
 ---

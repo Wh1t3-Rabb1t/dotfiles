@@ -14,6 +14,11 @@
 zle -N _rename_fzf
 bindkey -M viins "^[r" _rename_fzf
 
+# Alt f: Find and open file/s with neovim
+zle -N _find_files
+bindkey -M viins "^[f" _find_files
+
+
 # # Alt g: Grep term and open in nvim
 # zle -N _grep_into_nvim
 # bindkey -M viins "^[g" _grep_into_nvim
@@ -43,7 +48,7 @@ local function _enter_wrapper() {
     emulate -L zsh
 
     if [[ -z "$BUFFER" ]]; then
-        BUFFER="br --sort-by-type --no-tree"
+        BUFFER="br --sort-by-type"
         zle accept-line
     else
         zle accept-line
@@ -51,6 +56,22 @@ local function _enter_wrapper() {
 }
 zle -N _enter_wrapper
 bindkey -M viins "^M" _enter_wrapper
+
+
+# YAZI LAUNCHER
+# ---------------------------------------------------------------------------- #
+local function _space_wrapper() {
+    emulate -L zsh
+
+    if [[ -z "$BUFFER" ]]; then
+        BUFFER="yazi"
+        zle accept-line
+    else
+        LBUFFER[CURSOR+1]+=" "
+    fi
+}
+zle -N _space_wrapper
+bindkey -M viins " " _space_wrapper
 
 
 # LAUNCH NEOVIM SESSION
@@ -68,16 +89,6 @@ local function _tab_wrapper() {
 }
 zle -N _tab_wrapper
 bindkey -M viins "^I" _tab_wrapper
-
-
-# FIND FILES
-# ---------------------------------------------------------------------------- #
-local function _space_wrapper() {
-    emulate -L zsh
-    [[ -z "$BUFFER" ]] && _find_files || LBUFFER[CURSOR+1]+=" "
-}
-zle -N _space_wrapper
-bindkey -M viins " " _space_wrapper
 
 
 # GREP INTO NVIM

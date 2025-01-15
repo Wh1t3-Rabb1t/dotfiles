@@ -488,7 +488,6 @@ nimap("<A-s>", function()                         -- Save changes
         return
     end
 
-    -- Save changes
     vim.cmd("w")
 
     -- Return to normal mode if in insert mode

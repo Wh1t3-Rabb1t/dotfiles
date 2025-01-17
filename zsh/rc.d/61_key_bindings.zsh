@@ -173,10 +173,6 @@ zle -N _right_arrow_wrapper
 bindkey -M viins "^[[C" _right_arrow_wrapper
 
 
-
-
-
-
 # PRINT HELP DOCS
 # ---------------------------------------------------------------------------- #
 local function _question_mark_wrapper() {

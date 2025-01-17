@@ -25,7 +25,7 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 local default_keymaps=( 'd' 'D' 'e' 'E' 'b' 'B' 'c' 'C' 'x' 'X' 's' 'S' 'y' \
 'Y' 'v' 'V' 't' 'T' 'w' 'W' 'n' 'N' 'i' 'I' 'k' 'j' 'J' 'g' 'G' 'o' 'O' 'p' \
 'P' 'm' 'u' 'l' 'h' '#' '$' "'" '"' '`' '^' '|' ',' '.' '+' '?' '~' '<' ':' \
-'\-' '\t' '^[' )
+'\-' '\t' )
 
 for m in vicmd visual viopp; do
     for k in "$default_keymaps[@]"; do

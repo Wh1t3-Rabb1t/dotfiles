@@ -9,5 +9,5 @@ in a directory called Fzf, but that wouldn't be practical).
 Scripts with a leading underscore in their name are omitted from Fzf when
 invoking the cheat sheet widget (e.g. `_will_be_ignored`). I don't want to
 populate the cheat sheet with scripts bound to hotkeys, or aliased, which
-would only pollute results with commands that I perform frequently, and therefor
-don't need to look up.
+would only pollute results with commands that I perform frequently, and
+therefor don't need to look up.

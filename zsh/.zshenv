@@ -48,9 +48,9 @@ fi
 #     export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-${USER}"
 # fi
 
-export WORKSPACE="${HOME}/workspace"
 export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export ZPLUGINDIR="${ZDOTDIR}/.plugins"
+export WORKSPACE="${HOME}/workspace"
 export GOPATH="${XDG_DATA_HOME}/go"
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
 export GIT_CONFIG_GLOBAL="${XDG_CONFIG_HOME}/git/config"

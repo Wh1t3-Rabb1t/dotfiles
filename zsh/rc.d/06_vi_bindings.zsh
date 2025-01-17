@@ -112,7 +112,7 @@ bindkey -M visual 'w'       kill-region                  # w
 # UNDO / REDO / DOT OPERATOR
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '\-'       vi-repeat-change             # Tab
+bindkey -M vicmd '\-'       vi-repeat-change             # Hyphen
 bindkey -M vicmd '^[y'      undo                         # Alt y
 bindkey -M vicmd '^[Y'      redo                         # Alt Y
 
@@ -196,15 +196,16 @@ bindkey -M visual 'y'       vi-change                    # y
 # Cmd
 bindkey -M vicmd 'v'        _paste_from_clipboard        # v
 
-# Ins
-bindkey -M viins '^[v'      _paste_from_clipboard        # Alt v
-
 # Vis
 bindkey -M visual 'v'       _paste_from_clipboard_visual # v
+
+# Ins
+bindkey -M viins '^[v'      _paste_from_clipboard        # Alt v
 
 
 # INCREMENT / DECREMENT INTEGERS
 # ---------------------------------------------------------------------------- #
+# Cmd
 bindkey -M vicmd '\x1bc'    _increment_integers          # Alt c
 bindkey -M vicmd '\x1bx'    _decrement_integers          # Alt x
 

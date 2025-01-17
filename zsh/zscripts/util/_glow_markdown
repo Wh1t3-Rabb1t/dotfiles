@@ -13,7 +13,7 @@ local selection=$( \
     fd \
         --type file \
         --extension md \
-        --color=always \
+        --color always \
     | fzf --header=' Render markdown file with Glow.' \
 )
 

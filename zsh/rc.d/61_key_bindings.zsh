@@ -70,6 +70,7 @@ local function _space_wrapper() {
         zle accept-line
     else
         LBUFFER[CURSOR+1]+=" "
+        POSTDISPLAY=
     fi
 }
 zle -N _space_wrapper
@@ -170,3 +171,39 @@ local function _right_arrow_wrapper() {
 }
 zle -N _right_arrow_wrapper
 bindkey -M viins "^[[C" _right_arrow_wrapper
+
+
+
+
+
+
+# PRINT HELP DOCS
+# ---------------------------------------------------------------------------- #
+local function _question_mark_wrapper() {
+    emulate -L zsh
+
+    if [[ -z "$BUFFER" ]]; then
+        pushd "$ZDOTDIR"
+
+        local selection=$( \
+            fd \
+                --type file \
+                --extension md \
+                --color always \
+            | fzf --header=' zsh help pages.' \
+        )
+
+        if [[ "$selection" ]]; then
+            print "\n"
+            glow "$selection"
+            print "\n"
+        fi
+
+        popd
+        zle redisplay
+    else
+        LBUFFER[CURSOR+1]+="?"
+    fi
+}
+zle -N _question_mark_wrapper
+bindkey -M viins "?" _question_mark_wrapper

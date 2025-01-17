@@ -10,9 +10,8 @@
 emulate -L zsh
 
 local selection
-local initial_dir="${0:A:h}"
 
-cd "${ZSCRIPTDIR}"
+pushd "${ZSCRIPTDIR}"
 
 # Search cheat sheet, ignoring files with a leading underscore
 if (( ${+commands[fd]} )); then
@@ -33,7 +32,7 @@ elif (( ${+commands[find]} )); then
     )
 fi
 
-cd "$initial_dir"
+popd
 
 if [[ "$selection" ]]; then
     BUFFER="${selection#*/}"  # Strip everything up to, and including the slash

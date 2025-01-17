@@ -3,37 +3,37 @@
 ;     path = tools/fzf
 ;     url = https://github.com/junegunn/fzf.git
 
-; ; FZF TAB
-; [submodule "zsh/plugins/fzf-tab"]
-;     path = zsh/plugins/fzf-tab
-;     url = https://github.com/Aloxaf/fzf-tab.git
+; FZF TAB
+[submodule "zsh/.plugins/fzf-tab"]
+    path = zsh/.plugins/fzf-tab
+    url = https://github.com/Aloxaf/fzf-tab.git
 
-; ; POWERLEVEL10K
-; [submodule "zsh/plugins/powerlevel10k"]
-;     path = zsh/plugins/powerlevel10k
-;     url = https://github.com/romkatv/powerlevel10k.git
+; POWERLEVEL10K
+[submodule "zsh/.plugins/powerlevel10k"]
+    path = zsh/.plugins/powerlevel10k
+    url = https://github.com/romkatv/powerlevel10k.git
 
-; ; ZSH Z
-; [submodule "zsh/plugins/zsh-z"]
-;     path = zsh/plugins/zsh-z
-;     url = https://github.com/agkozak/zsh-z.git
+; ZSH Z
+[submodule "zsh/.plugins/zsh-z"]
+    path = zsh/.plugins/zsh-z
+    url = https://github.com/agkozak/zsh-z.git
 
-; ; FAST SYNTAX HIGHLIGHTING
-; [submodule "zsh/plugins/fast-syntax-highlighting"]
-;     path = zsh/plugins/fast-syntax-highlighting
-;     url = https://github.com/zdharma-continuum/fast-syntax-highlighting.git
+; FAST SYNTAX HIGHLIGHTING
+[submodule "zsh/.plugins/fast-syntax-highlighting"]
+    path = zsh/.plugins/fast-syntax-highlighting
+    url = https://github.com/zdharma-continuum/fast-syntax-highlighting.git
 
-; ; AUTOPAIR
-; [submodule "zsh/plugins/autopair"]
-;     path = zsh/plugins/autopair
-;     url = https://github.com/hlissner/zsh-autopair.git
+; AUTOPAIR
+[submodule "zsh/.plugins/autopair"]
+    path = zsh/.plugins/autopair
+    url = https://github.com/hlissner/zsh-autopair.git
 
-; ; AUTOSUGGESTIONS
-; [submodule "zsh/plugins/autosuggestions"]
-;     path = zsh/plugins/autosuggestions
-;     url = https://github.com/zsh-users/zsh-autosuggestions.git
+; AUTOSUGGESTIONS
+[submodule "zsh/.plugins/autosuggestions"]
+    path = zsh/.plugins/autosuggestions
+    url = https://github.com/zsh-users/zsh-autosuggestions.git
 
-; ; HISTORY SUBSTRING SEARCH
-; [submodule "zsh/plugins/history-substring-search"]
-;     path = zsh/plugins/history-substring-search
-;     url = https://github.com/zsh-users/zsh-history-substring-search.git
+; HISTORY SUBSTRING SEARCH
+[submodule "zsh/.plugins/history-substring-search"]
+    path = zsh/.plugins/history-substring-search
+    url = https://github.com/zsh-users/zsh-history-substring-search.git

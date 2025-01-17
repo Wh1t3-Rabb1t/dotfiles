@@ -8,10 +8,9 @@
 - account for quotes when filename has spaces in rename widget
 
 - !! use a FIFO to implement vi mode registers that can be accessed across different shells!
-- cheat sheet of all alt keybindings (can color fields with awk. implement as a oneshot binding bound to a question mark '?')
 
 - 3. Incorporate Rg / Fzf toggle into suitable scripts
-- 1. Standardize Rg / Fzf colors
+- 1. Standardize Rg / Fzf colors (only neovim remains)
 - 5. Rewrite move to Trash script
 - write a script to check for / download zsh plugin updates
 

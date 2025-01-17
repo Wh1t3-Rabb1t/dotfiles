@@ -38,12 +38,3 @@ setopt INTERACTIVE_COMMENTS  # Allow use of comments in interactive code
 setopt LONG_LIST_JOBS        # List jobs in the long format by default
 setopt AUTO_RESUME           # Attempt to resume existing job before creating a new process
 setopt NOTIFY                # Report status of background jobs immediately
-
-
-
-
-# setopt CORRECT_ALL # try to correct the spelling of all arguments in a line
-
-
-# A bit fancy than default
-# PROMPT_EOL_MARK='%K{red} %k'

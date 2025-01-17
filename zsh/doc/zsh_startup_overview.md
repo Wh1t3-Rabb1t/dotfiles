@@ -12,7 +12,7 @@ but are prefixed with a dot (hidden). Zsh looks for these files in the path
 stored in the `$ZDOTDIR` environment variable. However, if said variable is
 not defined, Zsh will use the user's home directory.
 
-## File Descriptions
+## FILE DESCRIPTIONS -----------------------------------------------------------
 
 The [configuration files][1] are read in the following order:
 
@@ -28,12 +28,12 @@ The [configuration files][1] are read in the following order:
 10. _`${ZDOTDIR:-$HOME}/.zlogout`_
 11. _`/etc/zlogout`_
 
-### zshenv
+## zshenv ----------------------------------------------------------------------
 
 This file is sourced by all instances of Zsh, and thus, it should be kept as
 small as possible and should only define environment variables.
 
-### zprofile
+## zprofile --------------------------------------------------------------------
 
 This file is similar to _zlogin_, but it is sourced before _zshrc_. It was added
 for [KornShell][2] fans. See the description of _zlogin_ below for what it may
@@ -41,12 +41,12 @@ contain.
 
 _zprofile_ and _zlogin_ are not meant to be used together but can be done so.
 
-### zshrc
+## zshrc -----------------------------------------------------------------------
 
 This file is sourced by interactive shells. It should define aliases, functions,
 shell options, and key bindings.
 
-### zlogin
+## zlogin -----------------------------------------------------------------------
 
 This file is sourced by login shells after _zshrc_. Thus, it should contain
 commands that need to execute at login. It is usually used for messages such as
@@ -55,13 +55,13 @@ commands that need to execute at login. It is usually used for messages such as
 This is not the file to define aliases, functions, shell options, and key
 bindings. It should not change the shell environment.
 
-### zlogout
+## zlogout ---------------------------------------------------------------------
 
 This file is sourced by login shells during logout. It should be used for
 displaying messages and for deletion of files.
 
 
-## Acknowledgement
+# Acknowledgement
 
 Everything in this write up was taken from [Prezto.](https://github.com/sorin-ionescu/prezto)
 

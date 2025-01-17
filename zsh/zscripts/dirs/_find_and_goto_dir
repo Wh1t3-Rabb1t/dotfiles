@@ -16,7 +16,7 @@ if (( ${+commands[fd]} )); then
         fd \
             --type directory \
             --hidden \
-            --color=always \
+            --color always \
         | fzf --header=' Jump to selected directory.' \
     )
 else

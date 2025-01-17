@@ -152,10 +152,10 @@ if (( ${+commands[nvim]} )); then
     print "Downloading Neovim plugins and generating help tags...\n"
     command nvim --headless -c "helptags ALL" -c "qall" &> /dev/null
 
-    # Launch nvim and install Mason dependancies
+    # Launch Neovim and install Mason dependancies
     print "Installing LSP servers/tools...\n"
-    # `MasonInstallAll` isn't a neovim builtin. It's a user command declared in:
-    # ./nvim/lua/conf/lang/mason.lua
+    # NOTE: `MasonInstallAll` isn't a neovim builtin.
+    # It's a user command declared in:  './nvim/lua/conf/lang/mason.lua'
     command nvim --headless -c "MasonInstallAll" -c "qall" &> /dev/null
     print "    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"

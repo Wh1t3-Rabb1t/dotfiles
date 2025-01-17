@@ -94,12 +94,12 @@ zle -N _tab_wrapper
 bindkey -M viins "^I" _tab_wrapper
 
 
-# ZSH CHEAT SHEAT
+# ZSCRIPTS FZF
 # ---------------------------------------------------------------------------- #
 local function _semicolon_wrapper() {
     emulate -L zsh
 
-    [[ -z "$BUFFER" ]] && _zsh_cheat_sheet || LBUFFER[CURSOR+1]+=";"
+    [[ -z "$BUFFER" ]] && _zscripts_fzf || LBUFFER[CURSOR+1]+=";"
 }
 zle -N _semicolon_wrapper
 bindkey -M viins ";" _semicolon_wrapper

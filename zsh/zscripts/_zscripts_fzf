@@ -19,7 +19,6 @@ if (( ${+commands[fd]} )); then
         fd \
             --type file \
             --exclude '_*' \
-            --exclude 'README.md' \
             --color always \
         | fzf --header=' Zsh cheat sheet.' \
     )

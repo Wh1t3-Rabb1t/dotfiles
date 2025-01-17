@@ -1,4 +1,4 @@
-# Configuration Files
+# Zsh Configuration Files
 
 Zsh has several system-wide and user-local configuration files.
 

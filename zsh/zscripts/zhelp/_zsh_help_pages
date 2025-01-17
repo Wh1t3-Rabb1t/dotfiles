@@ -1,0 +1,41 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Print zsh keybindings / help pages.                                          #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : ZDOTDIR                                                            #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+pushd "$ZDOTDIR"
+
+local selection=$( \
+    fd \
+        --type file \
+        --extension md \
+        --color always \
+    | fzf \
+        --header=' Zsh help pages. <Tab> : Toggle hidden.' \
+        --prompt 'Show .  ' \
+        --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Show ]] &&
+            echo "change-prompt(Show .  )+reload(fd --type file --extension md --color always)" ||
+            echo "change-prompt(Hide .  )+reload(fd --type file --hidden --extension md --color always)"' \
+)
+
+if [[ "$selection" ]]; then
+    if (( ${+commands[glow]} )); then
+        glow "$selection"
+        print "\n"
+    elif (( ${+commands[bat]} )); then
+        bat --line-range=10000 "$selection"
+        print "\n"
+    else
+        cat "$selection"
+        print "\n"
+    fi
+fi
+
+popd
+zle redisplay

@@ -25,9 +25,9 @@ zle -N _grep_into_nvim
 bindkey -M viins "^[g" _grep_into_nvim
 
 
-# ╭──────────────────────╮
-# │ ONESHOT KEY BINDINGS │
-# ╰──────────────────────╯
+# ╭─────────────────────────╮
+# │ EMPTY-LINE KEY BINDINGS │
+# ╰─────────────────────────╯
 #
 # The scripts these keys are bound to are executed on a single press, only
 # when the command line is empty. Otherwise they input the relevant key onto
@@ -38,10 +38,10 @@ bindkey -M viins "^[g" _grep_into_nvim
 #
 # NOTE: Certain keys like Tab, or comma, are bound by plugins (fzf-tab and
 # zsh-autopairs in this case), so rather than inputting say; a comma to the
-# command line if the conditions for executing a oneshot binding aren't met,
-# we instead call the relevant zsh-autopairs widget manually so that the desired
-# behaviour will be respected. As such, plugins must be sourced prior to
-# declaring these bindings for their widgets to work.
+# command line if the conditions for executing an 'empty-line'  binding aren't
+# met, we instead call the relevant zsh-autopairs widget manually so that the
+# desired behaviour will be respected. As such, plugins must be sourced prior
+# to declaring these bindings for their widgets to work.
 
 
 # BROOT LAUNCHER
@@ -98,23 +98,32 @@ bindkey -M viins "^I" _tab_wrapper
 # ---------------------------------------------------------------------------- #
 local function _semicolon_wrapper() {
     emulate -L zsh
+
     [[ -z "$BUFFER" ]] && _zsh_cheat_sheet || LBUFFER[CURSOR+1]+=";"
 }
 zle -N _semicolon_wrapper
 bindkey -M viins ";" _semicolon_wrapper
 
 
+# ZSH HELP PAGES
+# ---------------------------------------------------------------------------- #
+local function _question_mark_wrapper() {
+    emulate -L zsh
+
+    [[ -z "$BUFFER" ]] && _zsh_help_pages || LBUFFER[CURSOR+1]+="?"
+}
+zle -N _question_mark_wrapper
+bindkey -M viins "?" _question_mark_wrapper
+
+
 # CMD HISTORY
 # ---------------------------------------------------------------------------- #
-# NOTE: The first awk line adds color to the second field (the commmand prefix).
-# The second removes the command's index and cleans up white space before
-# inserting the command onto the buffer.
 local function _up_key_wrapper() {
     emulate -L zsh
 
     # Use `history-substring-search-down` in place of zsh `down-line-or-history`
     # builtin to prevent functionality conflicts.
-    [[ -z "$BUFFER" ]] && _cmd_history_fzf || history-substring-search-down
+    [[ -z "$BUFFER" ]] && _zsh_cmd_history || history-substring-search-down
 }
 zle -N _up_key_wrapper
 bindkey -M viins "^[[A" _up_key_wrapper
@@ -124,6 +133,7 @@ bindkey -M viins "^[[A" _up_key_wrapper
 # ---------------------------------------------------------------------------- #
 local function _quote_wrapper() {
     emulate -L zsh
+
     [[ -z "$BUFFER" ]] && _teleport || autopair-insert
 }
 zle -N _quote_wrapper
@@ -134,7 +144,13 @@ bindkey -M viins "'" _quote_wrapper
 # ---------------------------------------------------------------------------- #
 local function _hyphen_wrapper() {
     emulate -L zsh
-    [[ -z "$BUFFER" ]] && _find_and_goto_dir || LBUFFER[CURSOR+1]+="-"
+
+    if [[ -z "$BUFFER" ]]; then
+        _find_and_goto_dir
+    else
+        POSTDISPLAY=
+        LBUFFER[CURSOR+1]+="-"
+    fi
 }
 zle -N _hyphen_wrapper
 bindkey -M viins "\-" _hyphen_wrapper
@@ -171,35 +187,3 @@ local function _right_arrow_wrapper() {
 }
 zle -N _right_arrow_wrapper
 bindkey -M viins "^[[C" _right_arrow_wrapper
-
-
-# PRINT HELP DOCS
-# ---------------------------------------------------------------------------- #
-local function _question_mark_wrapper() {
-    emulate -L zsh
-
-    if [[ -z "$BUFFER" ]]; then
-        pushd "$ZDOTDIR"
-
-        local selection=$( \
-            fd \
-                --type file \
-                --extension md \
-                --color always \
-            | fzf --header=' zsh help pages.' \
-        )
-
-        if [[ "$selection" ]]; then
-            print "\n"
-            glow "$selection"
-            print "\n"
-        fi
-
-        popd
-        zle redisplay
-    else
-        LBUFFER[CURSOR+1]+="?"
-    fi
-}
-zle -N _question_mark_wrapper
-bindkey -M viins "?" _question_mark_wrapper

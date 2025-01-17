@@ -21,14 +21,14 @@ if (( ${+commands[fd]} )); then
             --exclude '_*' \
             --exclude 'README.md' \
             --color always \
-        | fzf --header=' zsh cheat sheet.' \
+        | fzf --header=' Zsh cheat sheet.' \
     )
 elif (( ${+commands[find]} )); then
     selection=$( \
         find . \
             -type f \
             ! -name '_*' \
-        | fzf --header=' zsh cheat sheet.' \
+        | fzf --header=' Zsh cheat sheet.' \
     )
 fi
 

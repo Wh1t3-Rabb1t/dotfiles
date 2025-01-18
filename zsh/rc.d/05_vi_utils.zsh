@@ -22,16 +22,29 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
 # REMOVE DEFAULT KEYMAPS
 # ---------------------------------------------------------------------------- #
-local default_keymaps=( 'd' 'D' 'e' 'E' 'b' 'B' 'c' 'C' 'x' 'X' 's' 'S' 'y' \
-'Y' 'v' 'V' 't' 'T' 'w' 'W' 'n' 'N' 'i' 'I' 'k' 'j' 'J' 'g' 'G' 'o' 'O' 'p' \
-'P' 'm' 'u' 'l' 'h' '#' '$' "'" '"' '`' '^' '|' ',' '.' '+' '?' '~' '<' ':' \
-'\-' '\t' )
+# NOTE: You can unbind all of the 'viins' keys too but it removes literally
+# every key; a-z, 0-9, everything... This wouldn't be a problem as they can be
+# explicitly redeclared like so:
+#
+# bindkey -R -M viins "a"-"z" self-insert
+#
+# But this approach causes fzf-tab to break and even manually redeclaring all
+# of the alphanumeric keys / special characters causes doesn't fix the issue.
+# (I'm assuming it relies on some zsh widgets being tied to bindings which are
+# getting wiped but this is a yacht problem and I'm eating porridge).
+bindkey -rp -M vicmd ''
+bindkey -rp -M visual ''
+bindkey -rp -M viopp ''
 
-for m in vicmd visual viopp; do
-    for k in "$default_keymaps[@]"; do
-        bindkey -rM $m $k
-    done
-done
+# Hack to disable ctrl + PageUp / PageDown. This combination isn't bound to
+# anything by default but causes zle to enter visual mode and temporarily
+# freeze when pressed in insert mode. (I use this binding for tab switching
+# in neovim and web browsers so it's easy to hit by accident).
+local function _noop() {return}; zle -N _noop
+bindkey -M viins '^[[6;5~' _noop
+bindkey -M viins '^[[5;5~' _noop
+bindkey -M vicmd '^[[6;5~' _noop
+bindkey -M vicmd '^[[5;5~' _noop
 
 
 # LINE NAVIGATION

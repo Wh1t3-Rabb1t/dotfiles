@@ -16,8 +16,8 @@ bindkey -M viins "^[r" _rename_fzf
 
 
 # Alt f: Find and open file/s with neovim
-zle -N _find_files
-bindkey -M viins "^[f" _find_files
+# zle -N _find_files
+# bindkey -M viins "^[f" _find_files
 
 
 # Alt g: Grep term and open with neovim
@@ -71,6 +71,7 @@ local function _space_wrapper() {
     else
         LBUFFER[CURSOR+1]+=" "
         POSTDISPLAY=
+        zle redisplay
     fi
 }
 zle -N _space_wrapper

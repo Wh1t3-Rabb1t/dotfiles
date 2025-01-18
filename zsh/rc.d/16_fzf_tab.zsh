@@ -8,8 +8,8 @@
 # Should be loaded after other plugins (e.g. zsh-autosuggestions binds Tab)
 source "${ZPLUGINDIR}/fzf-tab/fzf-tab.zsh"
 
-# NOTE: fzf-tab doesn't respect fzf defaults to prevent certain settings breaking
-# the plugin, so settings need to be redeclared here.
+# NOTE: fzf-tab doesn't respect fzf defaults to prevent certain settings
+# breaking the plugin, so settings need to be redeclared here.
 
 local FZF_TAB_KEY_BINDINGS="\
 shift-delete:clear-query,\
@@ -39,7 +39,7 @@ preview-border:#1e66f5"
 
 # Set flags
 zstyle ':fzf-tab:*' fzf-flags \
-    --header='Switch group with <Tab> and <Btab>.' \
+    --header='<Tab> / <Btab> : Switch group.' \
     --bind=$FZF_TAB_KEY_BINDINGS \
     --jump-labels=$FZF_TAB_JUMP_LABELS \
     --color=$FZF_TAB_COLORS \
@@ -102,3 +102,5 @@ zstyle ':fzf-tab:complete:cd:*' fzf-flags \
 
 # Change directory on selection when tab completing cd
 zstyle ':fzf-tab:complete:cd:*' accept-line enter
+
+bindkey -M viins "^I" fzf-tab-complete

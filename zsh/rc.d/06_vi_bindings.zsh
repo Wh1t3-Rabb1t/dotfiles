@@ -38,6 +38,13 @@ bindkey -M vicmd '^['       vi-insert                    # Esc
 bindkey -M vicmd 's'        visual-mode                  # s
 bindkey -M vicmd 'S'        visual-line-mode             # S
 
+bindkey -M viins '^[' vi-cmd-mode
+bindkey -M visual '^[' deactivate-region
+
+# bindkey -M viopp '^[' vi-cmd-mode
+# bindkey -M viopp '^[' vi-insert
+
+
 
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #

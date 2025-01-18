@@ -15,18 +15,27 @@ if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
             --type file \
-            --hidden \
-            --exclude '*.opus' \
-            --exclude '*.mp3' \
-            --exclude '*.mp4' \
-            --exclude '*.jpeg' \
-            --exclude '*.jpg' \
-            --exclude '*.png' \
-            --exclude '*.webp' \
-            --color=always \
+            --color always \
         | fzf \
-            --header=' Open selected file/s with Neovim.' \
+            --header=' Open file/s with Neovim. <Tab> : Toggle hidden.' \
             --multi \
+            --no-preview \
+            --prompt 'Show .  ' \
+            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Show ]] \
+                && echo \
+                    "change-prompt(Show .  )+reload( \
+                        fd \
+                            --type file \
+                            --color always \
+                    )" \
+                || echo \
+                    "change-prompt(Hide .  )+reload( \
+                        fd \
+                            --type file \
+                            --hidden \
+                            --color always \
+                    )"' \
+
     )
 else
     selection=$( \

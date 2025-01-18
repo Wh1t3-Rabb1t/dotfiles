@@ -15,9 +15,25 @@ if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
             --type directory \
-            --hidden \
             --color always \
-        | fzf --header=' Jump to selected directory.' \
+        | fzf \
+            --header=' Jump to directory. <Tab> : Toggle hidden.' \
+            --prompt 'Show .  ' \
+            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Show ]] \
+                && echo \
+                    "change-prompt(Show .  )+reload( \
+                        fd \
+                            --type directory \
+                            --color always \
+                    )" \
+                || echo \
+                    "change-prompt(Hide .  )+reload( \
+                        fd \
+                            --type directory \
+                            --hidden \
+                            --color always \
+                    )"' \
+
     )
 else
     selection=$( \
@@ -27,7 +43,7 @@ else
             -path "./.git/*" -or \
             -path "./node_modules/*" \) \
             -prune -o -type directory -print \
-        | fzf --header=' Jump to selected directory.' \
+        | fzf --header=' Jump to directory.' \
     )
 fi
 

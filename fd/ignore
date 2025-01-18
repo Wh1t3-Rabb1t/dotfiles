@@ -11,6 +11,15 @@ Library
 .rustup
 .npm
 
+# Ignore music
+*.opus
+*.mp3
+*.mp4
+*.jpeg
+*.jpg
+*.png
+*.webp
+
 # Git isn't ignored by default
 .git/
 

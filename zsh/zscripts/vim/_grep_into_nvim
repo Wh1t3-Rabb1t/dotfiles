@@ -16,9 +16,13 @@ INITIAL_QUERY="${*:-}"
 fzf --disabled --query "$INITIAL_QUERY" \
     --bind="start:reload:$RG_PREFIX {q}" \
     --bind="change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
-    --bind='tab:transform:[[ ! $FZF_PROMPT =~ Rg ]] &&
-        echo "rebind(change)+change-prompt(Rg  )+disable-search+transform-query:echo \{q} > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" ||
-        echo "unbind(change)+change-prompt(Fzf  )+enable-search+transform-query:echo \{q} > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+    --bind='tab:transform:[[ ! $FZF_PROMPT =~ Rg ]] \
+        && echo \
+            "rebind(change)+change-prompt(Rg  )+disable-search+transform-query:echo \{q} \
+                > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" \
+        || echo \
+            "unbind(change)+change-prompt(Fzf  )+enable-search+transform-query:echo \{q} \
+                > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
     --prompt='Rg  ' \
     --delimiter=: \
     --header=' Open line. <Tab> : Toggle between Rg / Fzf.' \

@@ -34,16 +34,16 @@
 
 # MODE TOGGLING
 # ---------------------------------------------------------------------------- #
+# Cmd
 bindkey -M vicmd '^['       vi-insert                    # Esc
 bindkey -M vicmd 's'        visual-mode                  # s
 bindkey -M vicmd 'S'        visual-line-mode             # S
 
-bindkey -M viins '^[' vi-cmd-mode
-bindkey -M visual '^[' deactivate-region
+# Vis
+bindkey -M visual '^['      deactivate-region            # Esc
 
-# bindkey -M viopp '^[' vi-cmd-mode
-# bindkey -M viopp '^[' vi-insert
-
+# Ins
+bindkey -M viins '^['       vi-cmd-mode                  # Esc
 
 
 # LINE NAVIGATION

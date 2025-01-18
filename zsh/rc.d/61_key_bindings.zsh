@@ -16,8 +16,8 @@ bindkey -M viins "^[r" _rename_fzf
 
 
 # Alt f: Find and open file/s with neovim
-# zle -N _find_files
-# bindkey -M viins "^[f" _find_files
+zle -N _find_files
+bindkey -M viins "^[f" _find_files
 
 
 # Alt g: Grep term and open with neovim
@@ -28,7 +28,7 @@ bindkey -M viins "^[g" _grep_into_nvim
 # ╭─────────────────────────╮
 # │ EMPTY-LINE KEY BINDINGS │
 # ╰─────────────────────────╯
-#
+
 # The scripts these keys are bound to are executed on a single press, only
 # when the command line is empty. Otherwise they input the relevant key onto
 # the command line, or execute the relevant action.
@@ -188,3 +188,21 @@ local function _right_arrow_wrapper() {
 }
 zle -N _right_arrow_wrapper
 bindkey -M viins "^[[C" _right_arrow_wrapper
+
+
+# TRASH FILES / DIRECTORIES
+# ---------------------------------------------------------------------------- #
+local function _alt_backspace_wrapper() {
+    emulate -L zsh
+
+    if [[ -z "$BUFFER" ]]; then
+        _move_to_trash
+        # BUFFER="cd "
+        # CURSOR=${#BUFFER}
+        # fzf-tab-complete
+    else
+        zle backward-kill-word
+    fi
+}
+zle -N _alt_backspace_wrapper
+bindkey -M viins "^[^?" _alt_backspace_wrapper

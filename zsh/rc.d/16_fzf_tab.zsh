@@ -102,5 +102,3 @@ zstyle ':fzf-tab:complete:cd:*' fzf-flags \
 
 # Change directory on selection when tab completing cd
 zstyle ':fzf-tab:complete:cd:*' accept-line enter
-
-bindkey -M viins "^I" fzf-tab-complete

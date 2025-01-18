@@ -1,0 +1,46 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Move files / directories to the Trash.                                       #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+local selection
+
+if (( ${+commands[fd]} )); then
+    selection=$( \
+        fd \
+            --max-depth 1 \
+            --hidden \
+            --color always \
+        | fzf \
+            --header=' Trash selection. <Tab> : Toggle cwd / full tree.' \
+            --prompt 'Cwd  ' \
+            --multi \
+            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Cwd ]] \
+                && echo \
+                    "change-prompt(Cwd  )+reload( \
+                        fd \
+                            --max-depth 1 \
+                            --hidden \
+                            --color always \
+                    )" \
+                || echo \
+                    "change-prompt(All  )+reload( \
+                        fd \
+                            --hidden \
+                            --color always \
+                    )"' \
+
+    )
+fi
+
+if [[ "$selection" ]]; then
+    mv $(echo "$selection" | tr '\n' ' ') ~/.Trash/
+    zle accept-line
+fi
+

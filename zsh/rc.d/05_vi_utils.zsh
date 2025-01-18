@@ -27,11 +27,12 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 # explicitly redeclared like so:
 #
 # bindkey -R -M viins "a"-"z" self-insert
+# etc...
 #
 # But this approach causes fzf-tab to break and even manually redeclaring all
 # of the alphanumeric keys / special characters causes doesn't fix the issue.
-# (I'm assuming it relies on some zsh widgets being tied to bindings which are
-# getting wiped but this is a yacht problem and I'm eating porridge).
+# (I'm assuming it relies on some zsh widgets being tied to default bindings
+# which are getting wiped but this is a yacht problem and I'm eating porridge).
 bindkey -rp -M vicmd ''
 bindkey -rp -M visual ''
 bindkey -rp -M viopp ''
@@ -81,26 +82,26 @@ local function _delete_motions() {
     local key
     read -k 1 key
     case $key in
-        't')                        # wt = Delete in word
+        't')                               # wt = Delete in word
             _select_in_word
             zle kill-region
             ;;
-        'u')                        # wu = Delete word left
+        'u')                               # wu = Delete word left
             zle backward-kill-word
             ;;
-        'o')                        # wo = Delete word right
+        'o')                               # wo = Delete word right
             zle kill-word
             ;;
-        'l')                        # wl = Delete whole line
+        'l')                               # wl = Delete whole line
             zle kill-whole-line
             ;;
-        'h')                        # wh = Delete to line start
+        'h')                               # wh = Delete to line start
             zle backward-kill-line
             ;;
-        ';')                        # w; = Delete to line end
+        ';')                               # w; = Delete to line end
             zle kill-line
             ;;
-        '.')                        # w. = Delete to next typed char
+        '.')                               # w. = Delete to next typed char
             local pos next_char
             pos="${BUFFER[$CURSOR+1]}"
             read -k 1 next_char
@@ -108,7 +109,7 @@ local function _delete_motions() {
                 zle delete-char
             zle -U ZF"$next_char"
             ;;
-        ',')                        # w, = Delete to previous typed char
+        ',')                               # w, = Delete to previous typed char
             local pos prev_char
             pos="${BUFFER[$CURSOR]}"
             read -k 1 prev_char
@@ -153,13 +154,13 @@ local function _copy_motions() {
     local key
     read -k 1 key
     case $key in
-        't')                         # ct = Copy in word
+        't')                               # ct = Copy in word
             _auto_mark_set
             _select_in_word
             _copy_to_clipboard
             _auto_mark_go
             ;;
-        'u')                         # cu = Copy word left
+        'u')                               # cu = Copy word left
             _auto_mark_set
             zle vi-backward-char
             zle visual-mode
@@ -167,33 +168,33 @@ local function _copy_motions() {
             _copy_to_clipboard
             _auto_mark_go
             ;;
-        'o')                         # co = Copy word right
+        'o')                               # co = Copy word right
             zle visual-mode
             zle vi-forward-word-end
             _copy_to_clipboard
             ;;
-        'l')                         # cl = Copy whole line
+        'l')                               # cl = Copy whole line
             zle vi-yank-whole-line
             _echo_to_sys_clipboard
             ;;
-        'h')                         # ch = Copy to line start
+        'h')                               # ch = Copy to line start
             _auto_mark_set
             zle visual-mode
             zle beginning-of-line
             _copy_to_clipboard
             _auto_mark_go
             ;;
-        ';')                         # c; = Copy to line end
+        ';')                               # c; = Copy to line end
             zle vi-yank-eol
             _echo_to_sys_clipboard
             ;;
-        '.')                         # c. = Copy to next typed char
+        '.')                               # c. = Copy to next typed char
             local next_char
             read -k 1 next_char
             zle -U "TN${next_char}"
             _copy_to_clipboard
             ;;
-        ',')                         # c, = Copy to previous typed char
+        ',')                               # c, = Copy to previous typed char
             local prev_char
             read -k 1 prev_char
             _auto_mark_set
@@ -231,37 +232,37 @@ local function _cut_motions() {
     local key
     read -k 1 key
     case $key in
-        't')                        # xt = Cut in word
+        't')                               # xt = Cut in word
             _select_in_word
             _cut_to_clipboard
             ;;
-        'u')                        # xu = Cut word left
+        'u')                               # xu = Cut word left
             zle backward-kill-word
             _echo_to_sys_clipboard
             ;;
-        'o')                        # xo = Cut word right
+        'o')                               # xo = Cut word right
             zle kill-word
             _echo_to_sys_clipboard
             ;;
-        'l')                        # xl = Cut whole line
+        'l')                               # xl = Cut whole line
             zle kill-whole-line
             _echo_to_sys_clipboard
             ;;
-        'h')                        # xh = Cut to line start
+        'h')                               # xh = Cut to line start
             zle backward-kill-line
             _echo_to_sys_clipboard
             ;;
-        ';')                        # x; = Cut to line end
+        ';')                               # x; = Cut to line end
             zle kill-line
             _echo_to_sys_clipboard
             ;;
-        '.')                        # x. = Cut to next typed char
+        '.')                               # x. = Cut to next typed char
             local next_char
             read -k 1 next_char
             zle -U "TN${next_char}"
             _cut_to_clipboard
             ;;
-        ',')                        # x, = Cut to previous typed char
+        ',')                               # x, = Cut to previous typed char
             local prev_char
             read -k 1 prev_char
             zle -U "TP${prev_char}"
@@ -296,29 +297,29 @@ local function _change_motions() {
     local key
     read -k 1 key
     case $key in
-        't')                          # yt = Change in word
+        't')                               # yt = Change in word
             _select_in_word
             zle vi-change
             ;;
-        'u')                          # yu = Change word left
+        'u')                               # yu = Change word left
             zle backward-kill-word
             zle vi-insert
             ;;
-        'o')                          # yo = Change word right
+        'o')                               # yo = Change word right
             zle kill-word
             zle vi-insert
             ;;
-        'l')                          # yl = Change whole line
+        'l')                               # yl = Change whole line
             zle vi-change-whole-line
             ;;
-        'h')                          # yh = Change to line start
+        'h')                               # yh = Change to line start
             zle backward-kill-line
             zle vi-insert
             ;;
-        ';')                          # y; = Change to line end
+        ';')                               # y; = Change to line end
             zle vi-change-eol
             ;;
-        '.')                          # y. = Change to next typed char
+        '.')                               # y. = Change to next typed char
             local next_char
             read -k 1 next_char
             zle -U "TN${next_char}"
@@ -326,7 +327,7 @@ local function _change_motions() {
             [[ $RBUFFER != *"$next_char"* ]] \
                 && _block_cursor
             ;;
-        ',')                          # y, = Change to previous typed char
+        ',')                               # y, = Change to previous typed char
             local prev_char
             read -k 1 prev_char
             zle -U "TP${prev_char}"

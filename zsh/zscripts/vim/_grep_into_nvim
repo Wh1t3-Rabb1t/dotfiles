@@ -25,7 +25,7 @@ fzf --disabled --query "$INITIAL_QUERY" \
                 > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
     --prompt='Rg  ' \
     --delimiter=: \
-    --header=' Open line. <Tab> : Toggle between Rg / Fzf.' \
+    --header=' Open Neovim to line. <Tab> : Toggle Rg / Fzf.' \
     --preview='bat --color=always {1} --highlight-line {2}' \
     --preview-window='+{2}+3/3,~3' \
     --bind='enter:become(${EDITOR} {1} +{2})'

@@ -9,7 +9,6 @@
 
 - !! use a FIFO to implement vi mode registers that can be accessed across different shells!
 
-- 3. Incorporate Rg / Fzf toggle into suitable scripts
 - 1. Standardize Rg / Fzf colors (only neovim remains)
 - 5. Rewrite move to Trash script
 - write a script to check for / download zsh plugin updates
@@ -60,6 +59,9 @@
 - Configure sketchybar
 - Configure vimium-c
 - Configure https://github.com/lusingander/serie
+
+- ? (Maybe) Put a file named '.hushlogin' into the home directory to prevent last login message when zsh loads.
+
 
 ---
 

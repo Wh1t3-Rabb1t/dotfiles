@@ -19,13 +19,15 @@ shift-up:half-page-up+refresh-preview,\
 shift-down:half-page-down+refresh-preview,\
 shift-right:change-preview-window(down|right),\
 shift-left:change-preview-window(up|left),\
-shift-delete:clear-query,\
+alt-right:forward-word,\
+alt-left:backward-word,\
 ;:jump,\
 ctrl-s:toggle-sort,\
 alt-p:toggle-preview,\
 alt-s:toggle,\
 alt-A:toggle-all,\
 alt-a:select-all,\
+shift-delete:clear-query,\
 esc:cancel,\
 alt-q:abort"
 

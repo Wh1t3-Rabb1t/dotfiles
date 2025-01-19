@@ -4,7 +4,7 @@
 # Fzf cwd and append `mv` and the rename target (x2) to the command line.      #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
-# Globals : BUFFER                                                             #
+# Globals : BUFFER, CURSOR                                                     #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
@@ -19,7 +19,7 @@ if (( ${+commands[eza]} )); then
             --icons=always \
             --color=always \
         | fzf \
-            --header=' Rename file / directory.' \
+            --header=' Rename target file / directory.' \
             --no-preview \
     )
 elif (( ${+commands[gls]} )); then
@@ -29,28 +29,18 @@ elif (( ${+commands[gls]} )); then
             --group-directories-first \
             --color \
         | fzf \
-            --header=' Rename file / directory.' \
+            --header=' Rename target file / directory.' \
             --no-preview \
     )
 fi
 
 if [[ "$selection" ]]; then
-    local quotes=\'
-
     # Remove icons if `eza` was used
     (( ${+commands[eza]} )) && selection="$(echo "$selection" | sed -E 's/^.{2}//')"
 
-    # Use double quotes if a single quote exists in the selection
-    [[ $selection == *\'* ]] && quotes=\"
-
-    # # Add quotes and update BUFFER
-    selection=$(echo "$selection" | sed -E "s/(.*)/$quotes\1$quotes/")
     BUFFER="mv $selection $selection"
 
     # Navigate to the start of the second name
-    zle -U "$quotes"
+    CURSOR=$(( ${#BUFFER} - ${#selection} + 1 ))
     zle vi-cmd-mode
-    zle end-of-line
-    zle vi-backward-char
-    zle vi-find-prev-char-skip
 fi

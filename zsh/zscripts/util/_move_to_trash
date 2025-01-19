@@ -18,19 +18,19 @@ if (( ${+commands[fd]} )); then
             --hidden \
             --color always \
         | fzf \
-            --header=' Trash selection. <Tab> : Toggle cwd / full tree.' \
+            --header=' Trash selection. <Tab> : Expand tree.' \
             --prompt 'Cwd  ' \
             --multi \
             --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Cwd ]] \
                 && echo \
-                    "change-prompt(Cwd  )+reload( \
+                    "change-prompt(Cwd  )+change-header( Trash selection. <Tab> : Expand tree.)+reload( \
                         fd \
                             --max-depth 1 \
                             --hidden \
                             --color always \
                     )" \
                 || echo \
-                    "change-prompt(All  )+reload( \
+                    "change-prompt(All  )+change-header( Trash selection. <Tab> : Cwd only.)+reload( \
                         fd \
                             --hidden \
                             --color always \
@@ -41,11 +41,6 @@ fi
 
 if [[ "$selection" ]]; then
     local target="$(echo "$selection" | tr '\n' ' ')"
-    BUFFER="mv -i "$target"~/.Trash/"
+    BUFFER="mv -i ${target}~/.Trash/"
     zle redisplay
 fi
-
-    # mv -i $(echo "$selection" | tr '\n' ' ') ~/.Trash/
-    # print "\n\n$selection"
-    # print "\nMoved to the \e[38;5;117m\e[m Trash.\n\n"
-

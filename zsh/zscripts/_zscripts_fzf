@@ -11,15 +11,15 @@ emulate -L zsh
 
 local selection
 
-pushd "${ZSCRIPTDIR}"
+pushd "$ZSCRIPTDIR"
 
 # Search cheat sheet, ignoring files with a leading underscore
 if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
-            --type file \
-            --exclude '_*' \
-            --color always \
+            --type=file \
+            --exclude='_*' \
+            --color=always \
         | fzf --header=' Zsh cheat sheet.' \
     )
 elif (( ${+commands[find]} )); then

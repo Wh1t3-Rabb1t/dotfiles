@@ -11,9 +11,9 @@ emulate -L zsh
 
 local selection=$( \
     fd \
-        --type file \
-        --extension md \
-        --color always \
+        --type=file \
+        --extension=md \
+        --color=always \
     | fzf --header=' Render markdown file with Glow.' \
 )
 

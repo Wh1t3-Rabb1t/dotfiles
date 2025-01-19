@@ -20,12 +20,12 @@ if (( ${+commands[fd]} )); then
         fd \
             --max-depth 1 \
             --hidden \
-            --color always \
+            --color=always \
         | fzf \
             --multi \
             --header=$HEADER_A \
             --prompt=$PROMPT_A \
-            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
+            --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
                 && echo \
                     "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
                         fd \

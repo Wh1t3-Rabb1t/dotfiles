@@ -195,14 +195,7 @@ bindkey -M viins "^[[C" _right_arrow_wrapper
 local function _alt_backspace_wrapper() {
     emulate -L zsh
 
-    if [[ -z "$BUFFER" ]]; then
-        _move_to_trash
-        # BUFFER="cd "
-        # CURSOR=${#BUFFER}
-        # fzf-tab-complete
-    else
-        zle backward-kill-word
-    fi
+    [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-kill-word
 }
 zle -N _alt_backspace_wrapper
 bindkey -M viins "^[^?" _alt_backspace_wrapper

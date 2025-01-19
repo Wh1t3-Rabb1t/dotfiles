@@ -10,6 +10,10 @@
 emulate -L zsh
 
 local selection
+local HEADER_A=" Jump to directory. <Tab> : Show dotfiles."
+local HEADER_B=" Jump to directory. <Tab> : Hide dotfiles."
+local PROMPT_A="Displaying .  "
+local PROMPT_B="Concealing .  "
 
 if (( ${+commands[fd]} )); then
     selection=$( \
@@ -17,17 +21,17 @@ if (( ${+commands[fd]} )); then
             --type directory \
             --color always \
         | fzf \
-            --header=' Jump to directory. <Tab> : Toggle hidden.' \
-            --prompt 'Show .  ' \
-            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Show ]] \
+            --header=$HEADER_A \
+            --prompt=$PROMPT_A \
+            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Displaying ]] \
                 && echo \
-                    "change-prompt(Show .  )+reload( \
+                    "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
                         fd \
                             --type directory \
                             --color always \
                     )" \
                 || echo \
-                    "change-prompt(Hide .  )+reload( \
+                    "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
                         fd \
                             --type directory \
                             --hidden \

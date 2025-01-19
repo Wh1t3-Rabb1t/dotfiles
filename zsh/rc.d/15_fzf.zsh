@@ -25,7 +25,9 @@ ctrl-s:toggle-sort,\
 alt-p:toggle-preview,\
 alt-s:toggle,\
 alt-A:toggle-all,\
-alt-a:select-all"
+alt-a:select-all,\
+esc:cancel,\
+alt-q:abort"
 
 local FZF_JUMP_LABELS="\
 ftdksleiwoacnvghyxmruqpFTDKSLEIWOACNVGHYXMRUQP+=-~[]{}()!&_|;:<>/?.,#@%1234567890"

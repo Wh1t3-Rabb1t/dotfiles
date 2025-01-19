@@ -22,15 +22,16 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
 # REMOVE DEFAULT KEYMAPS
 # ---------------------------------------------------------------------------- #
-# NOTE: You can unbind all of the 'viins' keys too but it removes literally
-# every key; a-z, 0-9, everything... This wouldn't be a problem as they can be
-# explicitly redeclared like so:
+# NOTE: You can unbind all of the 'viins' keys too (which is quite nice as it
+# effectively grants an entirely 'clean slate' to build upon), but it removes
+# literally every key; a-z, 0-9, everything... This wouldn't be a problem as
+# they can be explicitly redeclared like so:
 #
 # bindkey -R -M viins "a"-"z" self-insert
 # etc...
 #
-# But this approach causes fzf-tab to break and even manually redeclaring all
-# of the alphanumeric keys / special characters causes doesn't fix the issue.
+# But this approach causes fzf-tab to break, and even manually redeclaring all
+# of the alphanumeric keys / special characters still doesn't fix the issue.
 # (I'm assuming it relies on some zsh widgets being tied to default bindings
 # which are getting wiped but this is a yacht problem and I'm eating porridge).
 bindkey -rp -M vicmd ''

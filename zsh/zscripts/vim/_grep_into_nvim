@@ -9,6 +9,11 @@
 
 emulate -L zsh
 
+local HEADER_A=" Open line. <Tab> : Switch to Fzf."
+local HEADER_B=" Open line. <Tab> : Switch to Rg."
+local PROMPT_A="Rg  "
+local PROMPT_B="Fzf  "
+
 # Switch between Ripgrep mode and Fzf filtering mode with <Tab>
 rm -f /tmp/rg-fzf-{r,f}
 RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
@@ -18,14 +23,14 @@ fzf --disabled --query "$INITIAL_QUERY" \
     --bind="change:reload:sleep 0.1; $RG_PREFIX {q} || true" \
     --bind='tab:transform:[[ ! $FZF_PROMPT =~ Rg ]] \
         && echo \
-            "rebind(change)+change-prompt(Rg  )+disable-search+transform-query:echo \{q} \
+            "rebind(change)+change-prompt('$PROMPT_A')+change-header('$HEADER_A')+disable-search+transform-query:echo \{q} \
                 > /tmp/rg-fzf-f; cat /tmp/rg-fzf-r" \
         || echo \
-            "unbind(change)+change-prompt(Fzf  )+enable-search+transform-query:echo \{q} \
+            "unbind(change)+change-prompt('$PROMPT_B')+change-header('$HEADER_B')+enable-search+transform-query:echo \{q} \
                 > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
-    --prompt='Rg  ' \
+    --prompt=$PROMPT_A \
     --delimiter=: \
-    --header=' Open Neovim to line. <Tab> : Toggle Rg / Fzf.' \
+    --header=$HEADER_A \
     --preview='bat --color=always {1} --highlight-line {2}' \
     --preview-window='+{2}+3/3,~3' \
     --bind='enter:become(${EDITOR} {1} +{2})'

@@ -10,6 +10,10 @@
 emulate -L zsh
 
 local selection
+local HEADER_A=" Open file/s with Neovim. <Tab> : Show dotfiles."
+local HEADER_B=" Open file/s with Neovim. <Tab> : Hide dotfiles."
+local PROMPT_A="Displaying .  "
+local PROMPT_B="Concealing .  "
 
 if (( ${+commands[fd]} )); then
     selection=$( \
@@ -17,19 +21,19 @@ if (( ${+commands[fd]} )); then
             --type file \
             --color always \
         | fzf \
-            --header=' Open file/s with Neovim. <Tab> : Toggle hidden.' \
             --multi \
             --no-preview \
-            --prompt 'Show .  ' \
-            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Show ]] \
+            --header=$HEADER_A \
+            --prompt=$PROMPT_A \
+            --bind 'tab:transform:[[ ! $FZF_PROMPT =~ Displaying ]] \
                 && echo \
-                    "change-prompt(Show .  )+reload( \
+                    "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
                         fd \
                             --type file \
                             --color always \
                     )" \
                 || echo \
-                    "change-prompt(Hide .  )+reload( \
+                    "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
                         fd \
                             --type file \
                             --hidden \
@@ -43,7 +47,7 @@ else
             -type f \
             ! -path '*/.git/*' \
         | fzf \
-            --header=' Open selected file/s with Neovim.' \
+            --header=' Open file/s with Neovim.' \
             --multi \
     )
 fi

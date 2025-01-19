@@ -40,7 +40,12 @@ if (( ${+commands[fd]} )); then
 fi
 
 if [[ "$selection" ]]; then
-    mv $(echo "$selection" | tr '\n' ' ') ~/.Trash/
-    zle accept-line
+    local target="$(echo "$selection" | tr '\n' ' ')"
+    BUFFER="mv -i "$target"~/.Trash/"
+    zle redisplay
 fi
+
+    # mv -i $(echo "$selection" | tr '\n' ' ') ~/.Trash/
+    # print "\n\n$selection"
+    # print "\nMoved to the \e[38;5;117m\e[m Trash.\n\n"
 

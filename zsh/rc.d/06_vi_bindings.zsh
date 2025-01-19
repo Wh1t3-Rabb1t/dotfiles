@@ -36,6 +36,8 @@
 # ---------------------------------------------------------------------------- #
 # Cmd
 bindkey -M vicmd '^['       vi-insert                    # Esc
+bindkey -M vicmd 'a'        vi-add-next                  # a
+bindkey -M vicmd 'A'        vi-add-eol                   # A
 bindkey -M vicmd 's'        visual-mode                  # s
 bindkey -M vicmd 'S'        visual-line-mode             # S
 

@@ -1,0 +1,48 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Preview files with bat or cat.                                               #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+local HEADER_A="󰭟 Preview file with bat. <Tab> : Show dotfiles."
+local HEADER_B="󰭟 Preview file with bat. <Tab> : Hide dotfiles."
+local PROMPT_A="Concealing .  "
+local PROMPT_B="Displaying .  "
+
+local selection=$( \
+    fd \
+        --type=file \
+        --color=always \
+    | fzf \
+        --header=$HEADER_A \
+        --prompt=$PROMPT_A \
+        --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
+            && echo \
+                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
+                    fd \
+                        --type=file \
+                        --color=always \
+                )" \
+            || echo \
+                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
+                    fd \
+                        --type=file \
+                        --hidden \
+                        --color=always \
+                )"' \
+)
+
+if [[ "$selection" ]]; then
+    if (( ${+commands[bat]} )); then
+        print " "; bat --line-range=10000 "$selection"; print "\n"
+    else
+        print " "; cat "$selection"; print "\n"
+    fi
+
+    zle redisplay
+fi

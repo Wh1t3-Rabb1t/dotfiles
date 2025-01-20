@@ -3,56 +3,56 @@
 
 ## MODE TOGGLING -------------------------------------------
 
-- `Esc`       : Command mode
-- `s`         : Command mode
-- `S`         : Visual line mode
+- `Esc`                  : Command mode
+- `s`                    : Command mode
+- `S`                    : Visual line mode
 
 
 ## LINE NAVIGATION -----------------------------------------
 
-- `o`         : Forward word
-- `u`         : Backward word
-- `O`         : Forward word end
-- `U`         : Backward word end
-- `a`         : Exchange point and mark
+- `o`                    : Forward word
+- `u`                    : Backward word
+- `O`                    : Forward word end
+- `U`                    : Backward word end
+- `a`                    : Exchange point and mark
 
 
 ## DELETE BINDINGS -----------------------------------------
 
-- `BS`        : Kill region
-- `Del`       : Kill region
-- `w`         : Kill region
+- `BS`                   : Kill region
+- `Del`                  : Kill region
+- `w`                    : Kill region
 
 
 ## SELECT IN WORD / LINE -----------------------------------
 
-- `Alt Right` : Visual line mode
+- `Alt Right`            : Visual line mode
 
 
 ## UPPER / LOWER / SWAP CASE -------------------------------
 
-- `-`         : Up case
-- `_`         : Down case
+- `-`                    : Up case
+- `_`                    : Down case
 
 
 ## COPY ----------------------------------------------------
 
-- `c`         : Copy to clipboard
+- `c`                    : Copy to clipboard
 
 
 ## CUT -----------------------------------------------------
 
-- `x`         : Cut to clipboard
+- `x`                    : Cut to clipboard
 
 
 ## CHANGE --------------------------------------------------
 
-- `y`         : Change
+- `y`                    : Change
 
 
 ## PASTE ---------------------------------------------------
 
-- `v`         : Paste from clipboard
+- `v`                    : Paste from clipboard
 
 
 ## ADD SURROUNDING -----------------------------------------

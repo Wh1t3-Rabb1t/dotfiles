@@ -25,6 +25,11 @@ zle -N _grep_into_nvim
 bindkey -M viins "^[g" _grep_into_nvim
 
 
+# Alt p: Preview files with bat
+zle -N _preview_files
+bindkey -M viins "^[p" _preview_files
+
+
 # ╭─────────────────────────╮
 # │ EMPTY LINE KEY BINDINGS │
 # ╰─────────────────────────╯
@@ -41,7 +46,7 @@ bindkey -M viins "^[g" _grep_into_nvim
 # command line if the conditions for executing an 'empty-line'  binding aren't
 # met, we instead call the relevant zsh-autopairs widget manually so that the
 # desired behaviour will be respected. As such, plugins must be sourced prior
-# to declaring these bindings for their widgets to work.
+# to declaring these bindings for their associated widgets to work.
 
 
 # BROOT LAUNCHER
@@ -194,3 +199,14 @@ local function _backspace_wrapper() {
 }
 zle -N _backspace_wrapper
 bindkey -M viins "^?" _backspace_wrapper
+
+
+# CLEAR COMMAND LINE
+# ---------------------------------------------------------------------------- #
+local function _delete_wrapper() {
+    emulate -L zsh
+
+    [[ -z "$RBUFFER" ]] && BUFFER= || zle delete-char
+}
+zle -N _delete_wrapper
+bindkey -M viins "^[[3~" _delete_wrapper

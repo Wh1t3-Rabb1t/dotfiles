@@ -11,12 +11,14 @@
 - `Shift PageDown`       : Next prompt
 - `Shift Up`             : Page up
 - `Shift Down`           : Page down
-- `Super k`              : Clear scrollback
+- `Super k`              : Erase scrollback
 
 ## WINDOWS -------------------------------------------------
 
 - `Super Ctrl Alt m`     : New split
 - `Super Ctrl Alt M`     : New window
+- `Super Ctrl Alt w`     : Close split
+- `Super Ctrl Alt W`     : Detach split
 - `Ctrl Alt Up`          : Focus split above
 - `Ctrl Alt Down`        : Focus split below
 - `Ctrl Alt Left`        : Focus split left
@@ -26,8 +28,6 @@
 - `Ctrl Alt Shift Left`  : Resize split left
 - `Ctrl Alt Shift Right` : Resize split right
 - `Super Ctrl Alt J`     : Swap window positions
-- `Super Ctrl Alt w`     : Close split
-- `Super Ctrl Alt W`     : Detach split
 
 ## TABS ----------------------------------------------------
 

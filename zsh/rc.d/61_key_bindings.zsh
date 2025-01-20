@@ -26,7 +26,7 @@ bindkey -M viins "^[g" _grep_into_nvim
 
 
 # ╭─────────────────────────╮
-# │ EMPTY-LINE KEY BINDINGS │
+# │ EMPTY LINE KEY BINDINGS │
 # ╰─────────────────────────╯
 
 # The scripts these keys are bound to are executed on a single press, only
@@ -58,6 +58,7 @@ local function _enter_wrapper() {
 }
 zle -N _enter_wrapper
 bindkey -M viins "^M" _enter_wrapper
+bindkey -M vicmd "^M" _enter_wrapper
 
 
 # YAZI LAUNCHER
@@ -186,10 +187,10 @@ bindkey -M viins "^[[C" _right_arrow_wrapper
 
 # TRASH FILES / DIRECTORIES
 # ---------------------------------------------------------------------------- #
-local function _alt_backspace_wrapper() {
+local function _backspace_wrapper() {
     emulate -L zsh
 
     [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-kill-word
 }
-zle -N _alt_backspace_wrapper
-bindkey -M viins "^[^?" _alt_backspace_wrapper
+zle -N _backspace_wrapper
+bindkey -M viins "^?" _backspace_wrapper

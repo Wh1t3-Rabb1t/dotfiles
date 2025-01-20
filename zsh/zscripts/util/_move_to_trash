@@ -44,6 +44,6 @@ fi
 
 if [[ "$selection" ]]; then
     local target="$(echo "$selection" | tr '\n' ' ')"
-    BUFFER="mv -i ${target}~/.Trash/"
+    BUFFER="mv -i -v ${target}~/.Trash/"
     zle redisplay
 fi

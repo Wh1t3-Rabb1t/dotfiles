@@ -4,13 +4,10 @@
 - flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
 
-- Add a check to zsh cheat sheet widget to auto execute certain scripts on selection
-- account for quotes when filename has spaces in rename widget
 
 - !! use a FIFO to implement vi mode registers that can be accessed across different shells!
 
 - 1. Standardize Rg / Fzf colors (only neovim remains)
-- 5. Rewrite move to Trash script
 - write a script to check for / download zsh plugin updates
 
 

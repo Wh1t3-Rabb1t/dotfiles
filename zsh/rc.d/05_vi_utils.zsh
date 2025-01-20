@@ -48,6 +48,38 @@ bindkey -M viins '^[[5;5~' _noop
 bindkey -M vicmd '^[[6;5~' _noop
 bindkey -M vicmd '^[[5;5~' _noop
 
+bindkey -M viins '^[[1;2A' _noop
+bindkey -M viins '^[[1;2B' _noop
+bindkey -M viins '^[[1;2C' _noop
+bindkey -M viins '^[[1;2D' _noop
+
+
+
+bindkey -M viins '^[[1;5A' _noop
+bindkey -M viins '^[[1;5B' _noop
+bindkey -M viins '^[[1;5C' _noop
+bindkey -M viins '^[[1;5D' _noop
+bindkey -M viins '^[[1;6A' _noop
+bindkey -M viins '^[[1;6B' _noop
+bindkey -M viins '^[[1;6C' _noop
+bindkey -M viins '^[[1;6D' _noop
+bindkey -M viins '^[[1;7A' _noop
+bindkey -M viins '^[[1;7B' _noop
+bindkey -M viins '^[[1;7C' _noop
+bindkey -M viins '^[[1;7D' _noop
+bindkey -M viins '^[[1;8A' _noop
+bindkey -M viins '^[[1;8B' _noop
+bindkey -M viins '^[[1;8C' _noop
+bindkey -M viins '^[[1;8D' _noop
+bindkey -M viins '^[[1;3A' _noop
+bindkey -M viins '^[[1;3B' _noop
+bindkey -M viins '^[[1;3C' _noop
+bindkey -M viins '^[[1;3D' _noop
+bindkey -M viins '^[[1;4A' _noop
+bindkey -M viins '^[[1;4B' _noop
+bindkey -M viins '^[[1;4C' _noop
+bindkey -M viins '^[[1;4D' _noop
+
 
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #

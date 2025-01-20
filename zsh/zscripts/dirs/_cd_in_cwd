@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Search for, and cd to the selected directory.                                #
+# Cd into a child dir of the cwd.                                              #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -10,24 +10,28 @@
 emulate -L zsh
 
 local selection
-local HEADER_A=" Jump to directory. <Tab> : Show dotfiles."
-local HEADER_B=" Jump to directory. <Tab> : Hide dotfiles."
-local PROMPT_A="Concealing .  "
-local PROMPT_B="Displaying .  "
+local HEADER_A=" Cd into directory. <Tab> : Expand tree."
+local HEADER_B=" Cd into directory. <Tab> : Collapse tree."
+local PROMPT_A="Displaying cwd  "
+local PROMPT_B="Displaying all  "
 
 if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
+            --max-depth=1 \
             --type=directory \
+            --hidden \
             --color=always \
         | fzf \
             --header=$HEADER_A \
             --prompt=$PROMPT_A \
-            --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
+            --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
                 && echo \
                     "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
                         fd \
+                            --max-depth=1 \
                             --type=directory \
+                            --hidden \
                             --color=always \
                     )" \
                 || echo \
@@ -38,19 +42,10 @@ if (( ${+commands[fd]} )); then
                             --color=always \
                     )"' \
     )
-else
-    selection=$( \
-        find . \
-            -type directory \( \
-            -path "./Library/*" -or \
-            -path "./.git/*" -or \
-            -path "./node_modules/*" \) \
-            -prune -o -type directory -print \
-        | fzf --header=' Jump to directory.' \
-    )
 fi
 
 if [[ "$selection" ]]; then
     cd "$selection"
     zle accept-line
 fi
+

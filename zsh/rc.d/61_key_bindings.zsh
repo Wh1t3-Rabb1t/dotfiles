@@ -173,18 +173,12 @@ zle -N _left_arrow_wrapper
 bindkey -M viins "^[[D" _left_arrow_wrapper
 
 
-# CD DOWN ONE DIR
+# CD DOWN DIR TREE
 # ---------------------------------------------------------------------------- #
 local function _right_arrow_wrapper() {
     emulate -L zsh
 
-    if [[ -z "$BUFFER" ]]; then
-        BUFFER="cd "
-        CURSOR=${#BUFFER}
-        fzf-tab-complete
-    else
-        zle vi-forward-char
-    fi
+    [[ -z "$BUFFER" ]] && _cd_in_cwd || zle vi-forward-char
 }
 zle -N _right_arrow_wrapper
 bindkey -M viins "^[[C" _right_arrow_wrapper

@@ -27,7 +27,6 @@ local selection=$( \
         --header='󱃅 Teleport to selected directory.' \
         --filepath-word \
         --no-sort \
-        --query="$*" \
 )
 
 if [[ "$selection" ]]; then

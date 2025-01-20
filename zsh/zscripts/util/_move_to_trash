@@ -18,7 +18,7 @@ local PROMPT_B="Displaying all  "
 if (( ${+commands[fd]} )); then
     selection=$( \
         fd \
-            --max-depth 1 \
+            --max-depth=1 \
             --hidden \
             --color=always \
         | fzf \
@@ -29,17 +29,16 @@ if (( ${+commands[fd]} )); then
                 && echo \
                     "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
                         fd \
-                            --max-depth 1 \
+                            --max-depth=1 \
                             --hidden \
-                            --color always \
+                            --color=always \
                     )" \
                 || echo \
                     "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
                         fd \
                             --hidden \
-                            --color always \
+                            --color=always \
                     )"' \
-
     )
 fi
 

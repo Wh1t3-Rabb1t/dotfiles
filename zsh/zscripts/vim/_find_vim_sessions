@@ -13,13 +13,13 @@ pushd ~
 
 local selection=$( \
     fd Session.vim \
-        --format {//} \
+        --format={//} \
         --fixed-strings \
-        --extension .vim \
+        --extension=.vim \
         --hidden \
         --no-ignore \
-        --exclude .cache \
-    | fzf --header=' Launch Vim session and cd to parent directory.' \
+        --exclude=.cache \
+    | fzf --header=' Launch Vim session.' \
 )
 
 if [[ -z "$selection" ]]; then

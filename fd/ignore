@@ -19,6 +19,7 @@ Library
 *.jpg
 *.png
 *.webp
+*.webloc
 
 # Git isn't ignored by default
 .git/

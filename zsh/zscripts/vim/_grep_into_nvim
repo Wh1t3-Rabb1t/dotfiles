@@ -28,9 +28,9 @@ fzf --disabled --query "$INITIAL_QUERY" \
         || echo \
             "unbind(change)+change-prompt('$PROMPT_B')+change-header('$HEADER_B')+enable-search+transform-query:echo \{q} \
                 > /tmp/rg-fzf-r; cat /tmp/rg-fzf-f"' \
+    --header=$HEADER_A \
     --prompt=$PROMPT_A \
     --delimiter=: \
-    --header=$HEADER_A \
     --preview='bat --color=always {1} --highlight-line {2}' \
     --preview-window='+{2}+3/3,~3' \
     --bind='enter:become(${EDITOR} {1} +{2})'

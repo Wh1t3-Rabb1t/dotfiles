@@ -15,10 +15,10 @@
 local FZF_KEY_BINDINGS="\
 page-up:preview-page-up,\
 page-down:preview-page-down,\
-shift-up:half-page-up+refresh-preview,\
-shift-down:half-page-down+refresh-preview,\
 shift-right:change-preview-window(down|right),\
 shift-left:change-preview-window(up|left),\
+shift-up:half-page-up+refresh-preview,\
+shift-down:half-page-down+refresh-preview,\
 alt-right:forward-word,\
 alt-left:backward-word,\
 ;:jump,\

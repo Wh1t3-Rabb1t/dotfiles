@@ -34,51 +34,31 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 # of the alphanumeric keys / special characters still doesn't fix the issue.
 # (I'm assuming it relies on some zsh widgets being tied to default bindings
 # which are getting wiped but this is a yacht problem and I'm eating porridge).
+
 bindkey -rp -M vicmd ''
 bindkey -rp -M visual ''
 bindkey -rp -M viopp ''
 
-# Hack to disable ctrl + PageUp / PageDown. This combination isn't bound to
-# anything by default but causes zle to enter visual mode and temporarily
-# freeze when pressed in insert mode. (I use this binding for tab switching
-# in neovim and web browsers so it's easy to hit by accident).
+# Hack to disable ctrl + PageUp / PageDown and a bunch of modifier + arrow key
+# combinations. Most / all of these aren't bound to anything by default causing
+# the leading escape in the sequence '^[' to be interpreted literally (as an
+# escape key input) followed by whatever the rest of the sequence is. In other
+# words, scuffed inputs often result in a trainwreck.
+
 local function _noop() {return}; zle -N _noop
-bindkey -M viins '^[[6;5~' _noop
-bindkey -M viins '^[[5;5~' _noop
-bindkey -M vicmd '^[[6;5~' _noop
-bindkey -M vicmd '^[[5;5~' _noop
+local escape_sequences=( \
+    '^[[6;5~' '^[[5;5~' '^[[5;6~' '^[[6;6~' '^[[1;2A' '^[[1;2B' '^[[1;2C' \
+    '^[[1;2D' '^[[1;5A' '^[[1;5B' '^[[1;5C' '^[[1;5D' '^[[1;6A' '^[[1;6B' \
+    '^[[1;6C' '^[[1;6D' '^[[1;7A' '^[[1;7B' '^[[1;7C' '^[[1;7D' '^[[1;8A' \
+    '^[[1;8B' '^[[1;8C' '^[[1;8D' '^[[1;3A' '^[[1;3B' '^[[1;3C' '^[[1;3D' \
+    '^[[1;4A' '^[[1;4B' '^[[1;4C' '^[[1;4D' \
+)
 
-bindkey -M viins '^[[1;2A' _noop
-bindkey -M viins '^[[1;2B' _noop
-bindkey -M viins '^[[1;2C' _noop
-bindkey -M viins '^[[1;2D' _noop
-
-
-
-bindkey -M viins '^[[1;5A' _noop
-bindkey -M viins '^[[1;5B' _noop
-bindkey -M viins '^[[1;5C' _noop
-bindkey -M viins '^[[1;5D' _noop
-bindkey -M viins '^[[1;6A' _noop
-bindkey -M viins '^[[1;6B' _noop
-bindkey -M viins '^[[1;6C' _noop
-bindkey -M viins '^[[1;6D' _noop
-bindkey -M viins '^[[1;7A' _noop
-bindkey -M viins '^[[1;7B' _noop
-bindkey -M viins '^[[1;7C' _noop
-bindkey -M viins '^[[1;7D' _noop
-bindkey -M viins '^[[1;8A' _noop
-bindkey -M viins '^[[1;8B' _noop
-bindkey -M viins '^[[1;8C' _noop
-bindkey -M viins '^[[1;8D' _noop
-bindkey -M viins '^[[1;3A' _noop
-bindkey -M viins '^[[1;3B' _noop
-bindkey -M viins '^[[1;3C' _noop
-bindkey -M viins '^[[1;3D' _noop
-bindkey -M viins '^[[1;4A' _noop
-bindkey -M viins '^[[1;4B' _noop
-bindkey -M viins '^[[1;4C' _noop
-bindkey -M viins '^[[1;4D' _noop
+for m in viins vicmd visual viopp; do
+    for k in "$escape_sequences[@]"; do
+        bindkey -M $m $k _noop
+    done
+done
 
 
 # LINE NAVIGATION

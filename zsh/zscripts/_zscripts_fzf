@@ -34,7 +34,15 @@ fi
 popd
 
 if [[ "$selection" ]]; then
-    BUFFER="${selection#*/}"  # Strip everything up to, and including the slash
-    CURSOR=${#BUFFER}         # Move the cursor to the end of the appended command
-    zle redisplay
+    # Strip everything up to, and including the slash
+    BUFFER="${selection#*/}"
+
+    # Execute marked commands on selection
+    if [[ "${BUFFER: -2}" == "_x" ]]; then
+        zle accept-line
+    else
+        # Move the cursor to the end of the appended command
+        CURSOR=${#BUFFER}
+        zle redisplay
+    fi
 fi

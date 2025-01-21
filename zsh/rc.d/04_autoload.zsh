@@ -22,6 +22,3 @@ zle -N down-line-or-beginning-search
 # Custom caching functions
 # Don't use -U as we need aliases here
 autoload -z evalcache compdefcache
-
-# Ensure add-zsh-hook is loaded, as it's used in rc files
-# autoload -Uz add-zsh-hook

@@ -19,7 +19,7 @@
 # LINE NAVIGATION
 # DELETE BINDINGS
 # DELETE MOTIONS
-# UNDO / REDO / DOT OPERATOR
+# UNDO / REDO / DOT OPERATOR / REPLACE
 # SELECT IN WORD / LINE
 # UPPER / LOWER / SWAP CASE
 # COPY
@@ -61,6 +61,7 @@ bindkey -M vicmd 'o'        vi-forward-word              # o
 bindkey -M vicmd 'u'        vi-backward-word             # u
 bindkey -M vicmd 'O'        vi-forward-word-end          # O
 bindkey -M vicmd 'U'        vi-backward-word-end         # U
+bindkey -M vicmd 'f'        vi-find-next-char            # f
 bindkey -M vicmd '.'        vi-repeat-find               # .
 bindkey -M vicmd ','        vi-rev-repeat-find           # ,
 
@@ -120,9 +121,10 @@ bindkey -M vicmd 'w'        _delete_motions              # w...
 bindkey -M visual 'w'       kill-region                  # w
 
 
-# UNDO / REDO / DOT OPERATOR
+# UNDO / REDO / DOT OPERATOR / REPLACE
 # ---------------------------------------------------------------------------- #
 # Cmd
+bindkey -M vicmd 'r'        vi-replace                   # r
 bindkey -M vicmd '\-'       vi-repeat-change             # Hyphen
 bindkey -M vicmd '^[y'      undo                         # Alt y
 bindkey -M vicmd '^[Y'      redo                         # Alt Y
@@ -200,6 +202,7 @@ bindkey -M vicmd 'y'        _change_motions              # y...
 
 # Vis
 bindkey -M visual 'y'       vi-change                    # y
+
 
 
 # PASTE

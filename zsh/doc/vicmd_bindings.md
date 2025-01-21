@@ -18,6 +18,7 @@
 - `u`                    : Backward word
 - `O`                    : Forward word end
 - `U`                    : Backward word end
+- `f`                    : Find character
 - `.`                    : Repeat find
 - `,`                    : Rev repeat find
 

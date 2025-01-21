@@ -78,7 +78,7 @@ local function _up_line() {
     # NOTE: The 'in bounds' checks aren't really needed as
     # ZLE appears to handle cursor boundaries automatically,
     # but I'm leaving them in cause they make the functions
-    # look more refined.
+    # look more robust.
     (( new_cursor < 0 )) && new_cursor=0                     # Stay in bounds
     CURSOR=$new_cursor                                       # Move up one line
     zle -R                                                   # Refresh the display

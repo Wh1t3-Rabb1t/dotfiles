@@ -9,46 +9,33 @@
 
 emulate -L zsh
 
-local selection
 local HEADER_A=" Jump to directory. <Tab> : Show dotfiles."
 local HEADER_B=" Jump to directory. <Tab> : Hide dotfiles."
 local PROMPT_A="Concealing .  "
 local PROMPT_B="Displaying .  "
 
-if (( ${+commands[fd]} )); then
-    selection=$( \
-        fd \
-            --type=directory \
-            --color=always \
-        | fzf \
-            --header=$HEADER_A \
-            --prompt=$PROMPT_A \
-            --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
-                && echo \
-                    "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                        fd \
-                            --type=directory \
-                            --color=always \
-                    )" \
-                || echo \
-                    "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                        fd \
-                            --type=directory \
-                            --hidden \
-                            --color=always \
-                    )"' \
-    )
-else
-    selection=$( \
-        find . \
-            -type directory \( \
-            -path "./Library/*" -or \
-            -path "./.git/*" -or \
-            -path "./node_modules/*" \) \
-            -prune -o -type directory -print \
-        | fzf --header=' Jump to directory.' \
-    )
-fi
+local selection=$( \
+    fd \
+        --type=directory \
+        --color=always \
+    | fzf \
+        --header=$HEADER_A \
+        --prompt=$PROMPT_A \
+        --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
+            && echo \
+                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
+                    fd \
+                        --type=directory \
+                        --color=always \
+                )" \
+            || echo \
+                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
+                    fd \
+                        --type=directory \
+                        --hidden \
+                        --color=always \
+                )"' \
+)
 
 if [[ "$selection" ]]; then
     cd "$selection"

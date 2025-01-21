@@ -9,13 +9,12 @@
 
 emulate -L zsh
 
-local selection
 local HEADER_A=" Render markdown. <Tab> : Show dotfiles."
 local HEADER_B=" Render markdown. <Tab> : Hide dotfiles."
 local PROMPT_A="Concealing .  "
 local PROMPT_B="Displaying .  "
 
-selection=$( \
+local selection=$( \
     fd \
         --type=file \
         --extension=md \

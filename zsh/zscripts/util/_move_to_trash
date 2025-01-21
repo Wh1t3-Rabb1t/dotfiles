@@ -9,38 +9,35 @@
 
 emulate -L zsh
 
-local selection
 local HEADER_A=" Trash selection. <Tab> : Expand tree."
 local HEADER_B=" Trash selection. <Tab> : Collapse tree."
 local PROMPT_A="Displaying cwd  "
 local PROMPT_B="Displaying all  "
 
-if (( ${+commands[fd]} )); then
-    selection=$( \
-        fd \
-            --max-depth=1 \
-            --hidden \
-            --color=always \
-        | fzf \
-            --multi \
-            --header=$HEADER_A \
-            --prompt=$PROMPT_A \
-            --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
-                && echo \
-                    "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                        fd \
-                            --max-depth=1 \
-                            --hidden \
-                            --color=always \
-                    )" \
-                || echo \
-                    "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                        fd \
-                            --hidden \
-                            --color=always \
-                    )"' \
-    )
-fi
+local selection=$( \
+    fd \
+        --max-depth=1 \
+        --hidden \
+        --color=always \
+    | fzf \
+        --multi \
+        --header=$HEADER_A \
+        --prompt=$PROMPT_A \
+        --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
+            && echo \
+                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
+                    fd \
+                        --max-depth=1 \
+                        --hidden \
+                        --color=always \
+                )" \
+            || echo \
+                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
+                    fd \
+                        --hidden \
+                        --color=always \
+                )"' \
+)
 
 if [[ "$selection" ]]; then
     local target="$(echo "$selection" | tr '\n' ' ')"

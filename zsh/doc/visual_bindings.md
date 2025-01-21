@@ -10,10 +10,6 @@
 
 ## LINE NAVIGATION -----------------------------------------
 
-- `o`                    : Forward word
-- `u`                    : Backward word
-- `O`                    : Forward word end
-- `U`                    : Backward word end
 - `a`                    : Exchange point and mark
 
 

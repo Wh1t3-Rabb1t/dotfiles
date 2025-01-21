@@ -1,14 +1,17 @@
 # TODO
 
+- !! use a FIFO to implement vi mode registers that can be accessed across different shells!
+- write a script to check for / download zsh plugin updates
+- Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
+
+- 1. Standardize Rg / Fzf colors (only neovim remains)
 - flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)
+- ReConfigure Lualine
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
 
 
-- !! use a FIFO to implement vi mode registers that can be accessed across different shells!
 
-- 1. Standardize Rg / Fzf colors (only neovim remains)
-- write a script to check for / download zsh plugin updates
 
 
 
@@ -42,7 +45,6 @@
 ```
 
 
-- Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
 - Fix ghostty navigate split bindings
 - Rewrite basic Rectangle features with Hammerspoon
@@ -51,7 +53,6 @@
 - Possibly auto quit Finder when system wakes up with Hammerspoon
 
 
-- ReConfigure Lualine
 - Configure ghostty
 - Configure sketchybar
 - Configure vimium-c

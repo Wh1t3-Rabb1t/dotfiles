@@ -51,9 +51,14 @@ bindkey -M viins '^['       vi-cmd-mode                  # Esc
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #
 # Cmd
+bindkey -M vicmd 'i'        _up_line                     # i
+bindkey -M vicmd 'k'        _down_line                   # k
 bindkey -M vicmd 'l'        vi-forward-char              # l
 bindkey -M vicmd 't'        vi-backward-char             # t
-bindkey -M vicmd 'h'        beginning-of-line            # h
+
+bindkey -M vicmd 'h'        _line_start           # h
+# bindkey -M vicmd 'h'        beginning-of-line            # h
+
 bindkey -M vicmd ';'        end-of-line                  # ;
 bindkey -M vicmd 'o'        vi-forward-word              # o
 bindkey -M vicmd 'u'        vi-backward-word             # u

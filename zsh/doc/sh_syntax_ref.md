@@ -6,11 +6,11 @@
 
 ## Arithmetic Operators --------------------------------------------------------
 
-- `+` : Addition.
-- `-` : Subtraction.
-- `*` : Multiplication.
-- `/` : Division.
-- `%` : Modulus.
+- `+`  : Addition.
+- `-`  : Subtraction.
+- `*`  : Multiplication.
+- `/`  : Division.
+- `%`  : Modulus.
 - `++` : Increment.
 - `--` : Decrement.
 

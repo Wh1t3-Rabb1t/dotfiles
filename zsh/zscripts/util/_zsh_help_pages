@@ -44,14 +44,11 @@ local selection=$( \
 
 if [[ "$selection" ]]; then
     if (( ${+commands[glow]} )); then
-        glow "$selection"
-        print "\n"
+        glow "$selection"; print "\n"
     elif (( ${+commands[bat]} )); then
-        bat --line-range=10000 "$selection"
-        print "\n"
+        bat --line-range=10000 "$selection"; print "\n"
     else
-        cat "$selection"
-        print "\n"
+        cat "$selection"; print "\n"
     fi
 fi
 

@@ -42,10 +42,6 @@ source "${ZPLUGINDIR}/history-substring-search/zsh-history-substring-search.plug
 # history search rather than Up). This is so that I can bind the Up key to search
 # history via fzf on an empty cli.
 
-# Cmd
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'i' history-substring-search-down
-
 # Vis
 bindkey -M viins '^[[B' history-substring-search-up
 bindkey -M viins '^[[A' history-substring-search-down

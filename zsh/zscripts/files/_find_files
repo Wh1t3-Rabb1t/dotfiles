@@ -1,0 +1,45 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Search for, and open selected file/s with Neovim.                            #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+local HEADER_A=" Open file/s with Neovim. <Tab> : Show dotfiles."
+local HEADER_B=" Open file/s with Neovim. <Tab> : Hide dotfiles."
+local PROMPT_A="Concealing .  "
+local PROMPT_B="Displaying .  "
+
+local selection=$( \
+    fd \
+        --type=file \
+        --color=always \
+    | fzf \
+        --multi \
+        --header=$HEADER_A \
+        --prompt=$PROMPT_A \
+        --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
+            && echo \
+                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
+                    fd \
+                        --type=file \
+                        --color=always \
+                )" \
+            || echo \
+                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
+                    fd \
+                        --type=file \
+                        --hidden \
+                        --color=always \
+                )"' \
+)
+
+if [[ "$selection" ]]; then
+    # Replace line breaks with spaces before passing the
+    # output to nvim (enables opening of multiple files)
+    nvim $(echo "$selection" | tr '\n' ' ')
+fi

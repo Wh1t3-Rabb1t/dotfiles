@@ -9,27 +9,23 @@
 
 emulate -L zsh
 
-local selection
-
 pushd "$ZSCRIPTDIR"
 
 # Search cheat sheet, ignoring files with a leading underscore
-if (( ${+commands[fd]} )); then
-    selection=$( \
-        fd \
-            --type=file \
-            --exclude='_*' \
-            --color=always \
-        | fzf --header=' Zsh cheat sheet.' \
-    )
-elif (( ${+commands[find]} )); then
-    selection=$( \
-        find . \
-            -type f \
-            ! -name '_*' \
-        | fzf --header=' Zsh cheat sheet.' \
-    )
-fi
+local selection=$( \
+    fd \
+        --type=file \
+        --exclude='_*' \
+        --color=always \
+    | awk -F "_" '{
+        OFS="_";
+        if ($NF == "x") {
+            $NF="\033[38;5;41m"$NF"\033[0m";
+        }
+        print
+    }' \
+    | fzf --header=' Zsh cheat sheet. Green x : Immediate execution.' \
+)
 
 popd
 

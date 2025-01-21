@@ -6,38 +6,38 @@
 
 ## Arithmetic Operators --------------------------------------------------------
 
-- `+`  : Addition.
-- `-`  : Subtraction.
-- `*`  : Multiplication.
-- `/`  : Division.
-- `%`  : Modulus.
-- `++` : Increment.
-- `--` : Decrement.
+- `+`                    : Addition.
+- `-`                    : Subtraction.
+- `*`                    : Multiplication.
+- `/`                    : Division.
+- `%`                    : Modulus.
+- `++`                   : Increment.
+- `--`                   : Decrement.
 
 ## Comparison Operators --------------------------------------------------------
 
-- `-eq` : Equal to.
-- `-ne` : Not equal to.
-- `-lt` : Less than.
-- `-le` : Less than or equal to.
-- `-gt` : Greater than.
-- `-ge` : Greater than or equal to.
+- `-eq`                  : Equal to.
+- `-ne`                  : Not equal to.
+- `-lt`                  : Less than.
+- `-le`                  : Less than or equal to.
+- `-gt`                  : Greater than.
+- `-ge`                  : Greater than or equal to.
 
 ## Logical Operators -----------------------------------------------------------
 
-- `&&` : Logical AND.
-- `||` : Logical OR.
-- `!`  : Logical NOT.
+- `&&`                   : Logical AND.
+- `||`                   : Logical OR.
+- `!`                    : Logical NOT.
 
 ## File Test Operators ---------------------------------------------------------
 
-- `-e` : Checks if a file exists.
-- `-d` : Checks if a directory exists.
-- `-f` : Checks if a file is a regular file.
-- `-r` : Checks if a file is readable.
-- `-w` : Checks if a file is writable.
-- `-x` : Checks if a file is executable.
-- `-s` : Checks if a file is non-empty.
+- `-e`                   : Checks if a file exists.
+- `-d`                   : Checks if a directory exists.
+- `-f`                   : Checks if a file is a regular file.
+- `-r`                   : Checks if a file is readable.
+- `-w`                   : Checks if a file is writable.
+- `-x`                   : Checks if a file is executable.
+- `-s`                   : Checks if a file is non-empty.
 
 ---
 
@@ -59,14 +59,14 @@
 
 # Special Variables
 
-- `$0`: The name of the script.
-- `$1`, `$2`, `...`: Arguments passed to the script.
-- `$#`: Number of arguments.
-- `$?`: Exit status of the last command.
-- `$$`: Process ID of the current shell.
-- `$!`: Process ID of the last background command.
-- `$@`: All arguments passed to the script (individually quoted).
-- `$*`: All arguments passed to the script (as a single word).
+- `$0`                   : The name of the script.
+- `$1`, `$2`, `...`      : Arguments passed to the script.
+- `$#`                   : Number of arguments.
+- `$?`                   : Exit status of the last command.
+- `$$`                   : Process ID of the current shell.
+- `$!`                   : Process ID of the last background command.
+- `$@`                   : All args passed to the script (individually quoted).
+- `$*`                   : All args passed to the script (as single word).
 
 ---
 
@@ -75,14 +75,17 @@
 ## Single Quotes `'...'` -------------------------------------------------------
 
 - Treats everything inside as a literal string.
-- No variable expansion, special characters (like `$`, `*`, `\`) are taken literally.
+- No variable expansion, special chars (i.e `$`, `*`, `\`) are taken literally.
 - Useful for preserving the exact value of the string, including spaces.
 
 ## Double Quotes `"..."` -------------------------------------------------------
 
-- Allows variable expansion (e.g., `$var` will be replaced with the value of `var`).
-- Prevents word splitting (preserves spaces in variables) and globbing (wildcards `*` won't expand).
-- Useful for protecting strings while still allowing variables and commands to be evaluated.
+- Allows variable expansion (e.g., `$var` will be replaced with the value
+of `var`).
+- Prevents word splitting (preserves spaces in variables) and globbing
+(wildcards `*` won't expand).
+- Useful for protecting strings while still allowing variables and commands
+to be evaluated.
 
 ---
 
@@ -111,7 +114,7 @@
 
 # Pipelines
 
-- `command1 | command2`: Pipe output of `command1` to input of `command2`.
+- `command1 | command2`  : Pipe output of `command1` to input of `command2`.
 
 ---
 

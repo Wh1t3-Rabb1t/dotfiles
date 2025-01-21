@@ -36,13 +36,13 @@ if [[ "${OSTYPE}" == darwin* ]]; then
 
     # Install dependancies
     print "Installing Homebrew dependancies...\n"
-    command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}"/macos/Brewfile
+    command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}macos/Brewfile"
     print "\n    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
     # Set macOS defaults
     print "Setting macOS defaults...\n"
-    "${SCRIPT_DIR}"/macos/system_settings.zsh
+    "${SCRIPT_DIR}/macos/system_settings.zsh"
     print "    ...done\n"
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 fi

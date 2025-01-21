@@ -63,54 +63,51 @@ done
 
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #
-# A forward-char call is required to prevent
-# the cursor landing left of the final letter
 local function _jump_forward_word() {
     emulate -L zsh
     zle vi-forward-word-end
-    zle vi-forward-char
+    zle vi-forward-char  # Prevent the cursor landing left of the final letter
 }
 zle -N _jump_forward_word
 
-# NOTE: The 'in bounds' check isn't really needed as ZLE appears to handle it
-# automatically, but I'm leaving it cause it makes the function look refined.
+# NOTE: The 'in bounds' checks aren't really needed as ZLE appears to handle
+# cursor boundaries automatically, but I'm leaving them in cause they make the
+# functions look more refined.
 local function _up_line() {
     emulate -L zsh
-    local columns="$(tput cols)"
-    local lines=$(( ( ${#BUFFER} + columns - 1) / columns ))  # Total lines used
-    local current_line=$(( (CURSOR / columns) + 1 ))          # Current line number
-    local new_cursor=$(( CURSOR - columns ))                  # Pre-calculate position
-    (( new_cursor < 0 )) && new_cursor=0                      # Stay in bounds
-    CURSOR=$new_cursor                                        # Move up one line
-    zle -R                                                    # Refresh the display
+    local lines=$(( (${#BUFFER} + COLUMNS - 1) / COLUMNS ))  # Total lines used
+    local current_line=$(( (CURSOR / COLUMNS) + 1 ))         # Current line number
+    local new_cursor=$(( CURSOR - COLUMNS ))                 # Pre-calculate position
+    (( new_cursor < 0 )) && new_cursor=0                     # Stay in bounds
+    CURSOR=$new_cursor                                       # Move up one line
+    zle -R                                                   # Refresh the display
 }
 zle -N _up_line
 
 local function _down_line() {
     emulate -L zsh
-    local columns="$(tput cols)"
-    local lines=$(( ( ${#BUFFER} + columns - 1) / columns ))
-    local current_line=$(( (CURSOR / columns) + 1 ))
-    local new_cursor=$(( CURSOR + columns ))
+    local lines=$(( (${#BUFFER} + COLUMNS - 1) / COLUMNS ))
+    local current_line=$(( (CURSOR / COLUMNS) + 1 ))
+    local new_cursor=$(( CURSOR + COLUMNS ))
     (( new_cursor > ${#BUFFER} )) && new_cursor=${#BUFFER}
     CURSOR=$new_cursor
     zle -R
 }
 zle -N _down_line
 
-
 local function _line_start() {
     emulate -L zsh
-    local columns="$(tput cols)"
-    local current_line=$(( CURSOR / columns ))      # Current line number
-    local new_cursor=$(( current_line * columns ))  # Start of the current line
-
-    # Need to account for the 4 chars in the prompt
-    (( current_line != 0 )) && new_cursor=$(( new_cursor - 4 ))
-    CURSOR=$new_cursor
+    CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) ))
     zle -R
 }
 zle -N _line_start
+
+local function _line_end() {
+    emulate -L zsh
+    CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) + COLUMNS - 1 ))
+    zle -R
+}
+zle -N _line_end
 
 
 # DELETE MOTIONS

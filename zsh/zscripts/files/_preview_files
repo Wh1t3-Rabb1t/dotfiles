@@ -39,7 +39,7 @@ local selection=$( \
 
 if [[ "$selection" ]]; then
     if (( ${+commands[bat]} )); then
-        print " "; bat --line-range=10000 "$selection"; print "\n"
+        print " "; bat --line-range=0:10000 "$selection"; print "\n"
     else
         print " "; cat "$selection"; print "\n"
     fi

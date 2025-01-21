@@ -23,7 +23,7 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 # REMOVE DEFAULT KEYMAPS
 # ---------------------------------------------------------------------------- #
 # NOTE: You can unbind all of the 'viins' keys too (which is quite nice as it
-# effectively grants an entirely 'clean slate' to build upon), but it removes
+# effectively grants an entirely clean slate to build upon), but it removes
 # literally every key; a-z, 0-9, everything... This wouldn't be a problem as
 # they can be explicitly redeclared like so:
 #
@@ -34,7 +34,6 @@ zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 # of the alphanumeric keys / special characters still doesn't fix the issue.
 # (I'm assuming it relies on some zsh widgets being tied to default bindings
 # which are getting wiped but this is a yacht problem and I'm eating porridge).
-
 bindkey -rp -M vicmd ''
 bindkey -rp -M visual ''
 bindkey -rp -M viopp ''
@@ -44,7 +43,6 @@ bindkey -rp -M viopp ''
 # the leading escape in the sequence '^[' to be interpreted literally (as an
 # escape key input) followed by whatever the rest of the sequence is. In other
 # words, scuffed inputs often result in a trainwreck.
-
 local function _noop() {return}; zle -N _noop
 local escape_sequences=( \
     '^[[6;5~' '^[[5;5~' '^[[5;6~' '^[[6;6~' '^[[1;2A' '^[[1;2B' '^[[1;2C' \
@@ -70,14 +68,17 @@ local function _jump_forward_word() {
 }
 zle -N _jump_forward_word
 
-# NOTE: The 'in bounds' checks aren't really needed as ZLE appears to handle
-# cursor boundaries automatically, but I'm leaving them in cause they make the
-# functions look more refined.
+# Custom line navigation widgets to handle multiline commands properly
 local function _up_line() {
     emulate -L zsh
     local lines=$(( (${#BUFFER} + COLUMNS - 1) / COLUMNS ))  # Total lines used
     local current_line=$(( (CURSOR / COLUMNS) + 1 ))         # Current line number
     local new_cursor=$(( CURSOR - COLUMNS ))                 # Pre-calculate position
+
+    # NOTE: The 'in bounds' checks aren't really needed as
+    # ZLE appears to handle cursor boundaries automatically,
+    # but I'm leaving them in cause they make the functions
+    # look more refined.
     (( new_cursor < 0 )) && new_cursor=0                     # Stay in bounds
     CURSOR=$new_cursor                                       # Move up one line
     zle -R                                                   # Refresh the display

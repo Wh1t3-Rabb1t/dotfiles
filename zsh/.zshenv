@@ -44,17 +44,27 @@ fi
 if [[ ! -v XDG_STATE_HOME ]]; then
     export XDG_STATE_HOME="${HOME}/.local/state"
 fi
+
+# TODO: Find a fix for `XDG_RUNTIME_DIR` issues on macOS. Not really that
+# important, just nice to have.
+#
+# https://stackoverflow.com/questions/14237142/xdg-runtime-dir-on-mac-os-x
+# https://stackoverflow.com/questions/3373948/equivalents-of-xdg-config-home-and-xdg-data-home-on-mac-os-x
+# https://github.com/ibhagwan/fzf-lua/issues/1243
+# https://github.com/ibhagwan/fzf-lua/issues/1226
+# https://github.com/ibhagwan/fzf-lua/issues/716
+#
 # if [[ ! -v XDG_RUNTIME_DIR ]]; then
 #     export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/runtime-${USER}"
 # fi
 
+export WORKSPACE="${HOME}/workspace"
 export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export ZPLUGINDIR="${ZDOTDIR}/.plugins"
-export WORKSPACE="${HOME}/workspace"
+export RIPGREP_CONFIG_PATH="${DOTFILES}/ripgrep/config"
+export GIT_CONFIG_GLOBAL="${DOTFILES}/git/config"
+export EZA_CONFIG_DIR="${DOTFILES}/eza"
 export GOPATH="${XDG_DATA_HOME}/go"
-export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME}/ripgrep/config"
-export GIT_CONFIG_GLOBAL="${XDG_CONFIG_HOME}/git/config"
-export EZA_CONFIG_DIR="${XDG_CONFIG_HOME}/eza"
 
 
 # PATHS

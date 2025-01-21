@@ -105,7 +105,6 @@ bindkey -M viins "^I" _tab_wrapper
 # ---------------------------------------------------------------------------- #
 local function _semicolon_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _zscripts_fzf || LBUFFER[CURSOR+1]+=";"
 }
 zle -N _semicolon_wrapper
@@ -116,7 +115,6 @@ bindkey -M viins ";" _semicolon_wrapper
 # ---------------------------------------------------------------------------- #
 local function _question_mark_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _zsh_help_pages || LBUFFER[CURSOR+1]+="?"
 }
 zle -N _question_mark_wrapper
@@ -140,7 +138,6 @@ bindkey -M viins "^[[A" _up_key_wrapper
 # ---------------------------------------------------------------------------- #
 local function _quote_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _teleport || autopair-insert
 }
 zle -N _quote_wrapper
@@ -183,7 +180,6 @@ bindkey -M viins "^[[D" _left_arrow_wrapper
 # ---------------------------------------------------------------------------- #
 local function _right_arrow_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _cd_in_cwd || zle vi-forward-char
 }
 zle -N _right_arrow_wrapper
@@ -194,7 +190,6 @@ bindkey -M viins "^[[C" _right_arrow_wrapper
 # ---------------------------------------------------------------------------- #
 local function _backspace_wrapper() {
     emulate -L zsh
-
     [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-kill-word
 }
 zle -N _backspace_wrapper
@@ -205,7 +200,6 @@ bindkey -M viins "^?" _backspace_wrapper
 # ---------------------------------------------------------------------------- #
 local function _delete_wrapper() {
     emulate -L zsh
-
     [[ -z "$RBUFFER" ]] && BUFFER= || zle delete-char
 }
 zle -N _delete_wrapper

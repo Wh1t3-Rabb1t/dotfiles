@@ -7,12 +7,12 @@ setopt local_options extended_glob
 local cache_dir="${XDG_CACHE_HOME}/zsh/eval"
 local cache_file="${cache_dir}/${(j:_:)@:gs/\//_}.zsh"
 
+# Remove cache file when it's present, but arg isn't executable
 if [[ -r "${cache_file}" ]] && ! whence ${1} > /dev/null; then
-    # Remove cache file when it's present, but arg isn't executable
     echo "evalcache ERROR: $1 isn't executable, removing cache file" >&2
     zf_rm -f "${cache_file}*"
+# Revalidate cache every 20 hours
 elif [[ ! -e "${cache_file}" || -n "${cache_file}"(#qN.mh+20) ]]; then
-    # Revalidate cache every 20 hours
     # Cache miss
     if (( ${+commands[${1}]} )); then
         zf_mkdir -p "${cache_dir}"

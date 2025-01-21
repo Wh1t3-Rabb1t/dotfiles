@@ -7,10 +7,10 @@
 - `Alt B`                : Open entire scrollback with vim
 - `PageUp`               : Scroll up 6 lines
 - `PageDown`             : Scroll down 6 lines
-- `Shift PageUp`         : Previous prompt
-- `Shift PageDown`       : Next prompt
-- `Shift Up`             : Page up
-- `Shift Down`           : Page down
+- `Shift Up`             : Previous prompt
+- `Shift Down`           : Next prompt
+- `Shift PageUp`         : Page up
+- `Shift PageDown`       : Page down
 - `Super k`              : Erase scrollback
 
 ## WINDOWS -------------------------------------------------

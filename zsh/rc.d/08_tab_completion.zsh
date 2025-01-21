@@ -40,7 +40,6 @@ fi
 #
 # https://github.com/lincheney/fzf-tab-completion
 # https://formulae.brew.sh/formula/zsh-completions
-# https://www.reddit.com/r/zsh/comments/1cys810/zsh_completions_not_working/
 
 
 # Additional completions

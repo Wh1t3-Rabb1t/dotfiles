@@ -4,7 +4,7 @@
 # Render markdown files with Glow.                                             #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
-# Globals : None                                                               #
+# Globals : COLUMNS                                                            #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
@@ -42,6 +42,6 @@ selection=$( \
 )
 
 if [[ "$selection" ]]; then
-    local split_width="$(( $(tput cols) - 5 ))"
+    local split_width=$(( COLUMNS - 5 ))
     glow -w "$split_width" "$selection"
 fi

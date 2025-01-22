@@ -34,26 +34,38 @@ verbs: [
     }
 
 
-    # Open selection with nvim
+    # Open selection with mpv (must declare above neovim
+    # bindings to prevent clashing).
+    ###########################################################
+    {
+        invocation: mpv
+        shortcut: m
+        keys: [
+            enter
+            right
+        ]
+        execution: "mpv {file}"
+        apply_to: file
+        extensions: [
+            opus
+            mp3
+            mp4
+        ]
+        leave_broot: false
+    }
+
+
+    # Open selection with neovim
     ###########################################################
     {
         invocation: edit
+        shortcut: e
         keys: [
             enter
             right
         ]
         execution: "$EDITOR +{line} {file}"
-        leave_broot: false
         apply_to: file
-    }
-
-
-    # Open selection with mpv
-    ###########################################################
-    {
-        invocation: mpv
-        shortcut: m
-        execution: "mpv {file}"
         leave_broot: false
     }
 

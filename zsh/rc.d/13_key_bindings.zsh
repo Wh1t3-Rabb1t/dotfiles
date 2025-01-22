@@ -190,7 +190,7 @@ bindkey -M viins "^[[C" _right_arrow_wrapper
 # ---------------------------------------------------------------------------- #
 local function _backspace_wrapper() {
     emulate -L zsh
-    [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-kill-word
+    [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-delete-char
 }
 zle -N _backspace_wrapper
 bindkey -M viins "^?" _backspace_wrapper

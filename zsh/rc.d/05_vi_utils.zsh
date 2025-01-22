@@ -55,42 +55,30 @@ for m in viins vicmd visual viopp; do
 done
 
 
-
-
-# region The currently selected text. In emacs terminology, this is
-#        referred to as the region and is bounded by the cursor
-#        (point) and the mark. The region is only highlighted if it
-#        is active, which is the case after the mark is modified with
-#        set-mark-command or exchange-point-and-mark.  Note that
-#        whether or not the region is active has no effect on its use
-#        within emacs style widgets, it simply determines whether it
-#        is highlighted. In vi mode, the region corresponds to
-#        selected text in visual mode.
-
-
-# HIGHLIGHTS / CURSOR SHAPE
+# HIGHLIGHTS / CURSOR STYLE
 # ---------------------------------------------------------------------------- #
 zle_highlight+=(paste:none)               # Prevent text highlight on paste
 zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
 # Set cursor style (DECSCUSR), VT520.
 # See: https://ttssh2.osdn.jp/manual/4/en/usage/tips/vim.html
-# 0  ⇒  blinking block.
-# 1  ⇒  blinking block (default).
-# 2  ⇒  steady block.
-# 3  ⇒  blinking underline.
-# 4  ⇒  steady underline.
-# 5  ⇒  blinking bar, xterm.
-# 6  ⇒  steady bar, xterm.
+# 0  =  blinking block (slower).
+# 1  =  blinking block (faster).
+# 2  =  steady block.
+# 3  =  blinking underline.
+# 4  =  steady underline.
+# 5  =  blinking bar, xterm.
+# 6  =  steady bar, xterm.
 
 local block_cursor='\e[2 q'
-local beam_cursor='\e[6 q'
-local underline_cursor='\e[4 q'
+local underline_cursor='\e[3 q'
+local beam_cursor='\e[5 q'
 
-function zle-keymap-select {
+# Adjust cursor style on mode switch
+function zle-keymap-select() {
     case "${KEYMAP}" in
         viins|main)
-            # Hack to overwrite cursor shape in replace mode
+            # Overwrite cursor shape in replace mode
             if [[ "${ZLE_STATE}" == *overwrite* ]]; then
                 echo -ne $underline_cursor
             else

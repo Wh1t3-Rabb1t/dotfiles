@@ -431,6 +431,45 @@ local function _change_motions() {
 zle -N _change_motions
 
 
+# CLIPBOARD RING
+# ---------------------------------------------------------------------------- #
+export VI_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_vi"
+export VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard-ring"
+
+# Create required dir / file
+[[ ! -d "${VI_STATE_DIR}" ]] && mkdir -p "$VI_STATE_DIR"
+[[ ! -f "${VI_CLIPBOARD_RING}" ]] && touch "$VI_CLIPBOARD_RING"
+
+local _clipboard_ring_indexes=(
+    {a..z}
+    {A..Z}
+)
+local ring_index=1
+
+local function _clipboard_ring() {
+    emulate -L zsh
+
+    local key
+    read -k 1 key
+    case $key in
+        'c')
+            _copy_to_clipboard
+            ;;
+        'x')
+            _cut_to_clipboard
+            ;;
+        '*')
+            return
+            ;;
+    esac
+
+    echo "[;${_clipboard_ring_indexes[ring_index]}] ${CUTBUFFER}" >> "$VI_CLIPBOARD_RING"
+    ring_index=$(( ring_index + 1 ))
+}
+zle -N _clipboard_ring
+bindkey -M visual 'n' _clipboard_ring
+
+
 # PASTE
 # ---------------------------------------------------------------------------- #
 # Cmd

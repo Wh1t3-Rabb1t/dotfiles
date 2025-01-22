@@ -10,14 +10,10 @@
 #         \  /     |__| utils
 # ======== \/ ================================================================ #
 
+# See: `man zshzle`
+
 bindkey -v
 export KEYTIMEOUT=1
-
-
-# HIGHLIGHTS
-# ---------------------------------------------------------------------------- #
-zle_highlight+=(paste:none)               # Prevent text highlight on paste
-zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
 
 
 # REMOVE DEFAULT KEYMAPS
@@ -59,6 +55,56 @@ for m in viins vicmd visual viopp; do
 done
 
 
+
+
+# region The currently selected text. In emacs terminology, this is
+#        referred to as the region and is bounded by the cursor
+#        (point) and the mark. The region is only highlighted if it
+#        is active, which is the case after the mark is modified with
+#        set-mark-command or exchange-point-and-mark.  Note that
+#        whether or not the region is active has no effect on its use
+#        within emacs style widgets, it simply determines whether it
+#        is highlighted. In vi mode, the region corresponds to
+#        selected text in visual mode.
+
+
+# HIGHLIGHTS / CURSOR SHAPE
+# ---------------------------------------------------------------------------- #
+zle_highlight+=(paste:none)               # Prevent text highlight on paste
+zle_highlight+=(region:bg=blue,fg=white)  # Set highlight color in visual mode
+
+# Set cursor style (DECSCUSR), VT520.
+# See: https://ttssh2.osdn.jp/manual/4/en/usage/tips/vim.html
+# 0  ⇒  blinking block.
+# 1  ⇒  blinking block (default).
+# 2  ⇒  steady block.
+# 3  ⇒  blinking underline.
+# 4  ⇒  steady underline.
+# 5  ⇒  blinking bar, xterm.
+# 6  ⇒  steady bar, xterm.
+
+local block_cursor='\e[2 q'
+local beam_cursor='\e[6 q'
+local underline_cursor='\e[4 q'
+
+function zle-keymap-select {
+    case "${KEYMAP}" in
+        viins|main)
+            # Hack to overwrite cursor shape in replace mode
+            if [[ "${ZLE_STATE}" == *overwrite* ]]; then
+                echo -ne $underline_cursor
+            else
+                echo -ne $beam_cursor
+            fi
+            ;;
+        *)
+            echo -ne $block_cursor
+            ;;
+    esac
+}
+zle -N zle-keymap-select
+
+
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #
 local function _jump_forward_word() {
@@ -68,30 +114,21 @@ local function _jump_forward_word() {
 }
 zle -N _jump_forward_word
 
-# Custom line navigation widgets to handle multiline commands properly
+# Custom line navigation widgets to handle multiline commands properly.
+# NOTE: 'in bounds' checks aren't really needed as ZLE appears to handle
+# cursor boundaries automatically. e.g. Setting CURSOR to a value less
+# than 1 or greater than the number of characters held in BUFFER,
+# positions the cursor at the start, or end of BUFFER without issue.
 local function _up_line() {
     emulate -L zsh
-    local lines=$(( (${#BUFFER} + COLUMNS - 1) / COLUMNS ))  # Total lines used
-    local current_line=$(( (CURSOR / COLUMNS) + 1 ))         # Current line number
-    local new_cursor=$(( CURSOR - COLUMNS ))                 # Pre-calculate position
-
-    # NOTE: The 'in bounds' checks aren't really needed as
-    # ZLE appears to handle cursor boundaries automatically,
-    # but I'm leaving them in cause they make the functions
-    # look more robust.
-    (( new_cursor < 0 )) && new_cursor=0                     # Stay in bounds
-    CURSOR=$new_cursor                                       # Move up one line
-    zle -R                                                   # Refresh the display
+    CURSOR=$(( CURSOR - COLUMNS ))
+    zle -R
 }
 zle -N _up_line
 
 local function _down_line() {
     emulate -L zsh
-    local lines=$(( (${#BUFFER} + COLUMNS - 1) / COLUMNS ))
-    local current_line=$(( (CURSOR / COLUMNS) + 1 ))
-    local new_cursor=$(( CURSOR + COLUMNS ))
-    (( new_cursor > ${#BUFFER} )) && new_cursor=${#BUFFER}
-    CURSOR=$new_cursor
+    CURSOR=$(( CURSOR + COLUMNS ))
     zle -R
 }
 zle -N _down_line
@@ -124,7 +161,7 @@ bindkey -M vicmd 'ZF' zap-to-char
 # Cmd
 local function _delete_motions() {
     emulate -L zsh
-    _underline_cursor
+    echo -ne $underline_cursor
 
     # Make widget repeatable with the dot operator
     zle -f vichange
@@ -169,14 +206,25 @@ local function _delete_motions() {
             zle -U ZB"$prev_char"
             ;;
         *)
-            _block_cursor
+            echo -ne $block_cursor
             return
             ;;
     esac
 
-    _block_cursor
+    echo -ne $block_cursor
 }
 zle -N _delete_motions
+
+
+# REPLACE CHARS
+# ---------------------------------------------------------------------------- #
+# Cmd
+function _replace_chars() {
+    echo -ne $underline_cursor
+    zle vi-replace-chars
+    echo -ne $block_cursor
+}
+zle -N _replace_chars
 
 
 # SELECT IN WORD / LINE
@@ -199,7 +247,7 @@ bindkey -M vicmd 'TP' vi-find-prev-char-skip
 # Cmd
 local function _copy_motions() {
     emulate -L zsh
-    _underline_cursor
+    echo -ne $underline_cursor
 
     # Read next typed keystroke
     local key
@@ -254,12 +302,12 @@ local function _copy_motions() {
             _auto_mark_go
             ;;
         *)
-            _block_cursor
+            echo -ne $block_cursor
             return
             ;;
     esac
 
-    _block_cursor
+    echo -ne $block_cursor
 }
 zle -N _copy_motions
 
@@ -277,7 +325,7 @@ zle -N _copy_to_clipboard
 # Cmd
 local function _cut_motions() {
     emulate -L zsh
-    _underline_cursor
+    echo -ne $underline_cursor
 
     # Read next typed keystroke
     local key
@@ -320,12 +368,12 @@ local function _cut_motions() {
             _cut_to_clipboard
             ;;
         *)
-            _block_cursor
+            echo -ne $block_cursor
             return
             ;;
     esac
 
-    _block_cursor
+    echo -ne $block_cursor
 }
 zle -N _cut_motions
 
@@ -342,7 +390,7 @@ zle -N _cut_to_clipboard
 # Cmd
 local function _change_motions() {
     emulate -L zsh
-    _underline_cursor
+    echo -ne $underline_cursor
 
     # Read next typed keystroke
     local key
@@ -376,7 +424,7 @@ local function _change_motions() {
             zle -U "TN${next_char}"
             zle vi-change
             [[ $RBUFFER != *"$next_char"* ]] \
-                && _block_cursor
+                && echo -ne $block_cursor
             ;;
         ',')                               # y, = Change to previous typed char
             local prev_char
@@ -384,10 +432,10 @@ local function _change_motions() {
             zle -U "TP${prev_char}"
             zle vi-change
             [[ $LBUFFER != *"$prev_char"* ]] \
-                && _block_cursor
+                && echo -ne $block_cursor
             ;;
         *)
-            _block_cursor
+            echo -ne $block_cursor
             return
             ;;
     esac
@@ -542,15 +590,6 @@ zle -N _add_surrounding
 
 # UTIL FUNCTIONS
 # ---------------------------------------------------------------------------- #
-local function _block_cursor() { echo -ne "\e[1 q" }
-zle -N _block_cursor
-
-local function _beam_cursor() { echo -ne "\e[5 q" }
-zle -N _beam_cursor
-
-local function _underline_cursor() { echo -ne "\e[4 q" }
-zle -N _underline_cursor
-
 local function _echo_to_sys_clipboard() { echo -n "$CUTBUFFER" | pbcopy -i }
 zle -N _echo_to_sys_clipboard
 

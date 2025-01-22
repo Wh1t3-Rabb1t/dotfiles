@@ -10,8 +10,6 @@
 #         \  /     |__| bindings
 # ======== \/ ================================================================ #
 
-# See: `man zshzle`
-
 
 # INDEX
 # ---------------------------------------------------------------------------- #
@@ -124,7 +122,8 @@ bindkey -M visual 'w'       kill-region                  # w
 # UNDO / REDO / DOT OPERATOR / REPLACE
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'r'        vi-replace                   # r
+bindkey -M vicmd 'r'        _replace_chars               # r
+bindkey -M vicmd 'R'        vi-replace                   # R
 bindkey -M vicmd '\-'       vi-repeat-change             # Hyphen
 bindkey -M vicmd '^[y'      undo                         # Alt y
 bindkey -M vicmd '^[Y'      redo                         # Alt Y

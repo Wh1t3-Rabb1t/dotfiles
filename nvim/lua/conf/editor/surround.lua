@@ -170,6 +170,9 @@ function M.config()
 
         -- Wrap content without adding spaces
         surrounds = {
+            ["{"] = {
+                add = { "{", "}" }
+            },
             ["("] = {
                 add = { "(", ")" }
             },

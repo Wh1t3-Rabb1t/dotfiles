@@ -433,10 +433,11 @@ zle -N _change_motions
 
 # CLIPBOARD RING
 # ---------------------------------------------------------------------------- #
-export VI_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_vi"
-export VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard-ring"
+# TODO: Consider locking file on write to prevent race conditions
+local VI_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_vi"
+local VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard-ring"
 
-# Create required dir / file
+# Create required dir / files
 [[ ! -d "${VI_STATE_DIR}" ]] && mkdir -p "$VI_STATE_DIR"
 [[ ! -f "${VI_CLIPBOARD_RING}" ]] && touch "$VI_CLIPBOARD_RING"
 
@@ -444,11 +445,9 @@ local _clipboard_ring_indexes=(
     {a..z}
     {A..Z}
 )
-local ring_index=1
 
 local function _clipboard_ring() {
     emulate -L zsh
-
     local key
     read -k 1 key
     case $key in
@@ -458,16 +457,66 @@ local function _clipboard_ring() {
         'x')
             _cut_to_clipboard
             ;;
+        'r')
+            # TODO: Finish this by appying `_clipboard_ring_indexes` to each entry
+            tac "$VI_CLIPBOARD_RING" | awk -v prefix="TEST PREFIX: " '{print prefix $0}' | fzf
+            ;;
         '*')
             return
             ;;
     esac
 
-    echo "[;${_clipboard_ring_indexes[ring_index]}] ${CUTBUFFER}" >> "$VI_CLIPBOARD_RING"
-    ring_index=$(( ring_index + 1 ))
+    # Tac the file rather than worry about prepending to the array dumbass
+    echo "${CUTBUFFER}" >> "$VI_CLIPBOARD_RING"
+
+    # Prevent number of entries from exceeding `_clipboard_ring_indexes` count
+    if [[ $(wc -l < "$VI_CLIPBOARD_RING") -gt 51 ]]; then
+        # TODO: Add check to see if gnu sed is installed
+        # macOS-compatible (use `-i` without quotes on Linux)
+        # sed -i '' '1d' "$VI_CLIPBOARD_RING"
+
+        sed -i '1d' "$VI_CLIPBOARD_RING"
+    fi
 }
 zle -N _clipboard_ring
-bindkey -M visual 'n' _clipboard_ring
+
+# TODO: move to vi bindings file
+bindkey -M visual ' ' _clipboard_ring
+
+
+# tac "$file" | awk -v prefix="$prefix" '{print prefix $0}' | fzf
+
+
+
+# VI_CLIPBOARD_RING_ARRAY+=( "${CUTBUFFER}" )
+# VI_RING_INDEX=$(( VI_RING_INDEX + 1 ))
+
+# local VI_RING_INDEX="${VI_STATE_DIR}/ring-index"
+# [[ ! -f "${VI_RING_INDEX}" ]] && touch "$VI_RING_INDEX"
+# local VI_CLIPBOARD_RING_ARRAY=()
+# VI_CLIPBOARD_RING_ARRAY+=( "[;${_clipboard_ring_indexes[VI_RING_INDEX]}] ${CUTBUFFER}" )
+
+# local function _clipboard_ring() {
+#     emulate -L zsh
+#     local key
+#     read -k 1 key
+#     case $key in
+#         'c')
+#             _copy_to_clipboard
+#             ;;
+#         'x')
+#             _cut_to_clipboard
+#             ;;
+#         '*')
+#             return
+#             ;;
+#     esac
+
+#     echo "[;${_clipboard_ring_indexes[VI_RING_INDEX]}] ${CUTBUFFER}" >> "$VI_CLIPBOARD_RING"
+#     VI_RING_INDEX=$(( VI_RING_INDEX + 1 ))
+# }
+# zle -N _clipboard_ring
+# bindkey -M visual 'n' _clipboard_ring
 
 
 # PASTE

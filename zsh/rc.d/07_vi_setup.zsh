@@ -75,7 +75,8 @@ local underline_cursor='\e[3 q'
 local beam_cursor='\e[5 q'
 
 # Adjust cursor style on mode switch
-function zle-keymap-select() {
+local function zle-keymap-select() {
+    emulate -L zsh
     case "${KEYMAP}" in
         viins|main)
             # Overwrite cursor shape in replace mode
@@ -141,12 +142,15 @@ zle -N _line_end
 zmodload zsh/deltochar
 
 # Invoked by `_delete_motions`
-local function _zap_backwards() { zle zap-to-char -n -1 }
-zle -N _zap_backwards
 bindkey -M vicmd 'ZB' _zap_backwards
 bindkey -M vicmd 'ZF' zap-to-char
 
-# Cmd
+local function _zap_backwards() {
+    emulate -L zsh
+    zle zap-to-char -n -1
+}
+zle -N _zap_backwards
+
 local function _delete_motions() {
     emulate -L zsh
     echo -ne $underline_cursor
@@ -206,8 +210,8 @@ zle -N _delete_motions
 
 # REPLACE CHARS
 # ---------------------------------------------------------------------------- #
-# Cmd
-function _replace_chars() {
+local function _replace_chars() {
+    emulate -L zsh
     echo -ne $underline_cursor
     zle vi-replace-chars
     echo -ne $block_cursor
@@ -217,7 +221,6 @@ zle -N _replace_chars
 
 # SELECT IN WORD / LINE
 # ---------------------------------------------------------------------------- #
-# Cmd
 local function _select_in_word() {
     emulate -L zsh
     zle visual-mode
@@ -232,7 +235,19 @@ zle -N _select_in_word
 bindkey -M vicmd 'TN' vi-find-next-char-skip
 bindkey -M vicmd 'TP' vi-find-prev-char-skip
 
-# Cmd
+local function _echo_to_sys_clipboard() {
+    emulate -L zsh
+    echo -n "$CUTBUFFER" | pbcopy -i
+}
+zle -N _echo_to_sys_clipboard
+
+local function _copy_to_clipboard() {
+    emulate -L zsh
+    zle vi-yank
+    echo -n "$CUTBUFFER" | pbcopy -i
+}
+zle -N _copy_to_clipboard
+
 local function _copy_motions() {
     emulate -L zsh
     echo -ne $underline_cursor
@@ -242,18 +257,18 @@ local function _copy_motions() {
     read -k 1 key
     case $key in
         't')                               # ct = Copy in word
-            _auto_mark_set
+            local mark=$CURSOR
             _select_in_word
             _copy_to_clipboard
-            _auto_mark_go
+            CURSOR=$mark
             ;;
         'u')                               # cu = Copy word left
-            _auto_mark_set
+            local mark=$CURSOR
             zle vi-backward-char
             zle visual-mode
             zle vi-backward-word
             _copy_to_clipboard
-            _auto_mark_go
+            CURSOR=$mark
             ;;
         'o')                               # co = Copy word right
             zle visual-mode
@@ -265,11 +280,11 @@ local function _copy_motions() {
             _echo_to_sys_clipboard
             ;;
         'h')                               # ch = Copy to line start
-            _auto_mark_set
+            local mark=$CURSOR
             zle visual-mode
             zle beginning-of-line
             _copy_to_clipboard
-            _auto_mark_go
+            CURSOR=$mark
             ;;
         ';')                               # c; = Copy to line end
             zle vi-yank-eol
@@ -282,12 +297,12 @@ local function _copy_motions() {
             _copy_to_clipboard
             ;;
         ',')                               # c, = Copy to previous typed char
+            local mark=$CURSOR
             local prev_char
             read -k 1 prev_char
-            _auto_mark_set
             zle -U "TP${prev_char}"
             _copy_to_clipboard
-            _auto_mark_go
+            CURSOR=$mark
             ;;
         *)
             echo -ne $block_cursor
@@ -299,18 +314,15 @@ local function _copy_motions() {
 }
 zle -N _copy_motions
 
-# Vis
-function _copy_to_clipboard() {
-    emulate -L zsh
-    zle vi-yank
-    echo -n "$CUTBUFFER" | pbcopy -i
-}
-zle -N _copy_to_clipboard
-
 
 # CUT
 # ---------------------------------------------------------------------------- #
-# Cmd
+local function _cut_to_clipboard() {
+    zle vi-delete
+    echo -n "$CUTBUFFER" | pbcopy -i
+}
+zle -N _cut_to_clipboard
+
 local function _cut_motions() {
     emulate -L zsh
     echo -ne $underline_cursor
@@ -365,17 +377,9 @@ local function _cut_motions() {
 }
 zle -N _cut_motions
 
-# Vis
-local function _cut_to_clipboard() {
-    zle vi-delete
-    echo -n "$CUTBUFFER" | pbcopy -i
-}
-zle -N _cut_to_clipboard
-
 
 # CHANGE
 # ---------------------------------------------------------------------------- #
-# Cmd
 local function _change_motions() {
     emulate -L zsh
     echo -ne $underline_cursor
@@ -433,7 +437,6 @@ zle -N _change_motions
 
 # CLIPBOARD RING
 # ---------------------------------------------------------------------------- #
-# TODO: Consider locking file on write to prevent race conditions
 local VI_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_vi"
 local VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard-ring"
 
@@ -441,87 +444,65 @@ local VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard-ring"
 [[ ! -d "${VI_STATE_DIR}" ]] && mkdir -p "$VI_STATE_DIR"
 [[ ! -f "${VI_CLIPBOARD_RING}" ]] && touch "$VI_CLIPBOARD_RING"
 
-local _clipboard_ring_indexes=(
-    {a..z}
-    {A..Z}
-)
-
-local function _clipboard_ring() {
+local function _clipboard_ring_copy() {
     emulate -L zsh
-    local key
-    read -k 1 key
-    case $key in
-        'c')
-            _copy_to_clipboard
-            ;;
-        'x')
-            _cut_to_clipboard
-            ;;
-        'r')
-            # TODO: Finish this by appying `_clipboard_ring_indexes` to each entry
-            tac "$VI_CLIPBOARD_RING" | awk -v prefix="TEST PREFIX: " '{print prefix $0}' | fzf
-            ;;
-        '*')
-            return
-            ;;
-    esac
-
-    # Tac the file rather than worry about prepending to the array dumbass
+    _copy_to_clipboard
     echo "${CUTBUFFER}" >> "$VI_CLIPBOARD_RING"
-
-    # Prevent number of entries from exceeding `_clipboard_ring_indexes` count
-    if [[ $(wc -l < "$VI_CLIPBOARD_RING") -gt 51 ]]; then
-        # TODO: Add check to see if gnu sed is installed
-        # macOS-compatible (use `-i` without quotes on Linux)
-        # sed -i '' '1d' "$VI_CLIPBOARD_RING"
-
+    if [[ $(wc -l < "$VI_CLIPBOARD_RING") -gt 100 ]]; then
         sed -i '1d' "$VI_CLIPBOARD_RING"
     fi
 }
-zle -N _clipboard_ring
+zle -N _clipboard_ring_copy
 
-# TODO: move to vi bindings file
-bindkey -M visual ' ' _clipboard_ring
+local function _clipboard_ring_cut() {
+    emulate -L zsh
+    _cut_to_clipboard
+    echo "${CUTBUFFER}" >> "$VI_CLIPBOARD_RING"
+    if [[ $(wc -l < "$VI_CLIPBOARD_RING") -gt 100 ]]; then
+        sed -i '1d' "$VI_CLIPBOARD_RING"
+    fi
+}
+zle -N _clipboard_ring_cut
 
+local function _clipboard_ring_paste() {
+    emulate -L zsh
+    local selection=$( \
+        cat "$VI_CLIPBOARD_RING" \
+        | fzf \
+            --header='󱓦 Vi clipboard ring.' \
+            --no-preview
+    )
 
-# tac "$file" | awk -v prefix="$prefix" '{print prefix $0}' | fzf
+    if [[ "$selection" ]]; then
+        BUFFER[CURSOR]+="$selection"
+        CURSOR+=$(( ${#selection} - 1 ))
+        zle redisplay
+    fi
+}
+zle -N _clipboard_ring_paste
 
+local function _clipboard_ring_paste_over() {
+    emulate -L zsh
+    local selection=$( \
+        cat "$VI_CLIPBOARD_RING" \
+        | fzf \
+            --header='󱓦 Vi clipboard ring.' \
+            --no-preview
+    )
 
-
-# VI_CLIPBOARD_RING_ARRAY+=( "${CUTBUFFER}" )
-# VI_RING_INDEX=$(( VI_RING_INDEX + 1 ))
-
-# local VI_RING_INDEX="${VI_STATE_DIR}/ring-index"
-# [[ ! -f "${VI_RING_INDEX}" ]] && touch "$VI_RING_INDEX"
-# local VI_CLIPBOARD_RING_ARRAY=()
-# VI_CLIPBOARD_RING_ARRAY+=( "[;${_clipboard_ring_indexes[VI_RING_INDEX]}] ${CUTBUFFER}" )
-
-# local function _clipboard_ring() {
-#     emulate -L zsh
-#     local key
-#     read -k 1 key
-#     case $key in
-#         'c')
-#             _copy_to_clipboard
-#             ;;
-#         'x')
-#             _cut_to_clipboard
-#             ;;
-#         '*')
-#             return
-#             ;;
-#     esac
-
-#     echo "[;${_clipboard_ring_indexes[VI_RING_INDEX]}] ${CUTBUFFER}" >> "$VI_CLIPBOARD_RING"
-#     VI_RING_INDEX=$(( VI_RING_INDEX + 1 ))
-# }
-# zle -N _clipboard_ring
-# bindkey -M visual 'n' _clipboard_ring
+    if [[ "$selection" ]]; then
+        zle kill-region
+        BUFFER[CURSOR]+="$selection"
+        CURSOR+=$(( ${#selection} + 1 ))
+        POSTDISPLAY=
+        zle redisplay
+    fi
+}
+zle -N _clipboard_ring_paste_over
 
 
 # PASTE
 # ---------------------------------------------------------------------------- #
-# Cmd
 local function _paste_from_clipboard() {
     emulate -L zsh
     CUTBUFFER=$(pbpaste)
@@ -529,7 +510,6 @@ local function _paste_from_clipboard() {
 }
 zle -N _paste_from_clipboard
 
-# Vis
 local function _paste_from_clipboard_visual() {
     emulate -L zsh
     zle kill-region
@@ -576,7 +556,6 @@ zle -N change-surround surround
 bindkey -M vicmd 'CS' change-surround
 bindkey -M vicmd 'DS' delete-surround
 
-# Cmd
 local function _manipulate_surrounding() {
     emulate -L zsh
     local characters=(\' \" \` \{ \( \[ \<)
@@ -620,7 +599,6 @@ bindkey -M visual 'Q(' select-bracketed
 bindkey -M visual 'Q[' select-bracketed
 bindkey -M visual 'Q<' select-bracketed
 
-# Cmd
 local function _select_in_surrounding() {
     emulate -L zsh
     zle visual-mode
@@ -648,7 +626,6 @@ bindkey -M visual 'M(' add-surround
 bindkey -M visual 'M{' add-surround
 bindkey -M visual 'M<' add-surround
 
-# Vis
 local function _add_surrounding() {
     emulate -L zsh
     case "$KEYS" in
@@ -662,15 +639,3 @@ local function _add_surrounding() {
     esac
 }
 zle -N _add_surrounding
-
-
-# UTIL FUNCTIONS
-# ---------------------------------------------------------------------------- #
-local function _echo_to_sys_clipboard() { echo -n "$CUTBUFFER" | pbcopy -i }
-zle -N _echo_to_sys_clipboard
-
-local function _auto_mark_set() { zle -U 'j'; zle vi-set-mark }
-zle -N _auto_mark_set
-
-local function _auto_mark_go() { zle -U 'j'; zle vi-goto-mark }
-zle -N _auto_mark_go

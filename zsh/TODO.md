@@ -1,6 +1,8 @@
 # TODO
 
-- !! use a FIFO to implement vi mode registers that can be accessed across different shells!
+
+- need to add checks for os type when using `pbpaste` in scripts
+
 - write a script to check for / download zsh plugin updates
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 

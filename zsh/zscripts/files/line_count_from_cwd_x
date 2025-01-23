@@ -10,3 +10,4 @@
 emulate -L zsh
 
 find . -type f -exec wc -l {} +
+# fd --type=file --exec wc -l {}

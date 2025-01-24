@@ -50,7 +50,8 @@ if [[ "$selection" ]]; then
     else
         cat "$selection"; print "\n"
     fi
+
+    zle redisplay
 fi
 
 popd
-zle redisplay

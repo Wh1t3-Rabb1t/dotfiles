@@ -2,7 +2,7 @@
 
 [github](https://gist.github.com/morfikov/68facdb169c43a1e2ea4f5aaa62c1540)
 
-# FILE SPACING
+# File spacing
 
 - Double space a file.
 
@@ -33,7 +33,7 @@ contain no more than one blank line between lines of text.
 
 `sed '/regex/{x;p;x;G;}'`
 
-# NUMBERING
+# Numbering
 
 - Number each line of a file (simple left alignment). Using a tab (see note
 on '\t' at end of file) instead of space will preserve margins.
@@ -52,7 +52,7 @@ on '\t' at end of file) instead of space will preserve margins.
 
 `sed -n '$='`
 
-# TEXT CONVERSION AND SUBSTITUTION
+# Text conversion and substitution
 
 - IN UNIX ENVIRONMENT: convert DOS newlines (CR/LF) to Unix format.
 
@@ -169,7 +169,7 @@ replace the "=" with a single space.
 `gsed '0~5G'`         # GNU sed only
 `sed 'n;n;n;n;G;'`    # other seds
 
-# SELECTIVE PRINTING OF CERTAIN LINES
+# Selective printing of certain lines
 
 - Print first 10 lines of file (emulates behavior of "head").
 
@@ -283,7 +283,7 @@ v1.5 must insert a 'G;' after 'x;' in the next 3 scripts below.
 
 `sed -n '/Iowa/,/Montana/p'`    # case sensitive
 
-# SELECTIVE DELETION OF CERTAIN LINES
+# Selective deletion of certain lines
 
 - Print all of file EXCEPT section between 2 regular expressions.
 
@@ -357,7 +357,7 @@ all blank lines from top and end of file (emulates "cat -s").
 
 `sed -n '/^$/{p;h;};/./{x;/./p;}'`
 
-# SPECIAL APPLICATIONS
+# Special applications
 
 - Remove nroff overstrikes (char, backspace) from man pages. The 'echo'
 command may need an -e switch if you use Unix System V or bash shell.
@@ -421,7 +421,7 @@ the "dir /b" switch returns bare filenames in all caps).
 `echo @echo off >zipup.bat`
 `dir /b *.txt | sed "s/^\(.*\)\.TXT/pkzip -mo \1 \1.TXT/" >>zipup.bat`
 
-# TYPICAL USE
+# Typical use
 
 - Sed takes one or more editing commands and applies all of them, in sequence,
 to each line of input. After all the commands have been applied to the first
@@ -450,7 +450,7 @@ pages are notoriously difficult. They are not written to teach sed use or
 regexps to first-time users, but as a reference text for those already
 acquainted with these tools.
 
-# QUOTING SYNTAX
+# Quoting syntax
 
 - The preceding examples use single quotes '...' instead of double quotes
 "..." to enclose editing commands, since sed is typically used on a Unix
@@ -462,7 +462,7 @@ properly run the examples listed above, even within single quotes. Versions
 of sed written for DOS invariably require double quotes "..." instead of
 single quotes to enclose editing commands.
 
-# USE OF '\t' IN SED SCRIPTS
+# Use of '\t' in sed scripts
 
 - For clarity in documentation, we have used the expression '\t' to indicate
 a tab character (0x09) in the scripts. However, most versions of sed do not
@@ -471,7 +471,7 @@ command line, you should press the TAB key instead. '\t' is supported as a
 regular expression metacharacter in awk, perl, and HHsed, sedmod, and
 GNU sed v3.02.80.
 
-# VERSIONS OF SED
+# Versions of sed
 
 - Versions of sed do differ, and some slight syntax variation is to be
 expected. In particular, most do not support the use of labels (:name) or
@@ -491,7 +491,7 @@ When the reader sees a fairly long command such as this:
 like "/one/ s/RE1/RE2/", some do NOT allow "/one/! s/RE1/RE2/", which
 contains space before the 's'. Omit the space when typing the command.
 
-# OPTIMIZING FOR SPEED
+# Optimizing for speed
 
 - If execution speed needs to be increased (due to large input files or slow
 processors or hard disks), substitution will be executed more quickly if

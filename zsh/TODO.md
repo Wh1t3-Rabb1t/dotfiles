@@ -1,5 +1,6 @@
 # TODO
 
+- !! implement nvim dial functionality in zsh vi mode (will be easy just scan RBUFFER for matches `true` `false` etc and replace at search term index)
 
 - need to add checks for os type when using `pbpaste` in scripts
 
@@ -103,7 +104,6 @@ brew "go"
 brew "sqlite"
 brew "fzf"
 brew "neovim"
-
 
 
 

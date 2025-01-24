@@ -230,7 +230,7 @@ zle -N _select_in_word
 local VI_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_vi"
 local VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard-ring"
 
-# Create required dir / file
+# Ensure required dir / file exists
 [[ ! -d "${VI_STATE_DIR}" ]] && mkdir -p "${VI_STATE_DIR}"
 [[ ! -f "${VI_CLIPBOARD_RING}" ]] && touch "${VI_CLIPBOARD_RING}"
 

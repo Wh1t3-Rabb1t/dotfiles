@@ -217,8 +217,8 @@ bindkey -M visual 'V'       _clipboard_ring_paste_over   # V
 # INCREMENT / DECREMENT INTEGERS
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'C'      _increment_integers            # C
-bindkey -M vicmd 'X'      _decrement_integers            # X
+bindkey -M vicmd 'C'        _increment_integers          # C
+bindkey -M vicmd 'X'        _decrement_integers          # X
 
 
 # CHANGE / DELETE SURROUNDING

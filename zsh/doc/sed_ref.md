@@ -8,7 +8,8 @@
 
 `sed G`
 
-- Double space a file which already has blank lines in it. Output file should contain no more than one blank line between lines of text.
+- Double space a file which already has blank lines in it. Output file should
+contain no more than one blank line between lines of text.
 
 `sed '/^$/d;G'`
 
@@ -34,7 +35,8 @@
 
 # NUMBERING
 
-- Number each line of a file (simple left alignment). Using a tab (see note on '\t' at end of file) instead of space will preserve margins.
+- Number each line of a file (simple left alignment). Using a tab (see note
+on '\t' at end of file) instead of space will preserve margins.
 
 `sed = filename | sed 'N;s/\n/\t/'`
 
@@ -70,12 +72,17 @@
 `sed "s/$//"`    # method 1
 `sed -n p`       # method 2
 
-- IN DOS ENVIRONMENT: convert DOS newlines (CR/LF) to Unix format. Can only be done with UnxUtils sed, version 4.0.7 or higher. The UnxUtils version can be identified by the custom "--text" switch which appears when you use the "--help" switch. Otherwise, changing DOS newlines to Unix newlines cannot be done with sed in a DOS environment. Use "tr" instead.
+- IN DOS ENVIRONMENT: convert DOS newlines (CR/LF) to Unix format. Can only
+be done with UnxUtils sed, version 4.0.7 or higher. The UnxUtils version can
+be identified by the custom "--text" switch which appears when you use the
+"--help" switch. Otherwise, changing DOS newlines to Unix newlines cannot be
+done with sed in a DOS environment. Use "tr" instead.
 
 `sed "s/\r//" infile >outfile`    # UnxUtils sed v4.0.7 or higher
 `tr -d \r <infile >outfile`       # GNU tr version 1.22 or higher
 
-- Delete leading whitespace (spaces, tabs) from front of each line aligns all text flush left.
+- Delete leading whitespace (spaces, tabs) from front of each line aligns all
+text flush left.
 
 `sed 's/^[ \t]*//'`    # see note on '\t' at end of file
 
@@ -95,7 +102,11 @@
 
 `sed -e :a -e 's/^.\{1,78\}$/ &/;ta'`   # set at 78 plus 1 space
 
-- Center all text in the middle of 79-column width. In method 1, spaces at the beginning of the line are significant, and trailing spaces are appended at the end of the line. In method 2, spaces at the beginning of the line are discarded in centering the line, and no trailing spaces appear at the end of lines.
+- Center all text in the middle of 79-column width. In method 1, spaces at
+the beginning of the line are significant, and trailing spaces are appended
+at the end of the line. In method 2, spaces at the beginning of the line are
+discarded in centering the line, and no trailing spaces appear at the end of
+lines.
 
 `sed  -e :a -e 's/^.\{1,77\}$/ & /;ta'`                      # method 1
 `sed  -e :a -e 's/^.\{1,77\}$/ &/;ta' -e 's/\( *\)\1/\1/'`   # method 2
@@ -121,7 +132,8 @@
 `sed 's/scarlet/red/g;s/ruby/red/g;s/puce/red/g'`    # most seds
 `gsed 's/scarlet\|ruby\|puce/red/g'`                 # GNU sed only
 
-- Reverse order of lines (emulates "tac") bug/feature in HHsed v1.5 causes blank lines to be deleted.
+- Reverse order of lines (emulates "tac") bug/feature in HHsed v1.5 causes
+blank lines to be deleted.
 
 `sed '1!G;h;$!d'`      # method 1
 `sed -n '1!G;h;$p'`    # method 2
@@ -138,7 +150,8 @@
 
 `sed -e :a -e '/\\$/N; s/\\\n//; ta'`
 
-- If a line begins with an equal sign, append it to the previous line and replace the "=" with a single space.
+- If a line begins with an equal sign, append it to the previous line and
+replace the "=" with a single space.
 
 `sed -e :a -e '$!N;s/\n=/ /;ta' -e 'P;D'`
 
@@ -195,15 +208,18 @@
 `sed -n '/regexp/!p'`    # method 1, corresponds to above
 `sed '/regexp/d'`        # method 2, simpler syntax
 
-- Print the line immediately before a regexp, but not the line containing the regexp.
+- Print the line immediately before a regexp, but not the line containing
+the regexp.
 
 `sed -n '/regexp/{g;1!p;};h'`
 
-- Print the line immediately after a regexp, but not the line containing the regexp.
+- Print the line immediately after a regexp, but not the line containing
+the regexp.
 
 `sed -n '/regexp/{n;p;}'`
 
-- Print 1 line of context before and after regexp, with line number indicating where the regexp occurred (similar to "grep -A1 -B1").
+- Print 1 line of context before and after regexp, with line number
+indicating where the regexp occurred (similar to "grep -A1 -B1").
 
 `sed -n -e '/regexp/{=;x;1!p;g;$!N;p;D;}' -e h`
 
@@ -220,7 +236,8 @@
 `sed -e '/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d`    # most seds
 `gsed '/AAA\|BBB\|CCC/!d'`                        # GNU sed only
 
-- Print paragraph if it contains AAA (blank lines separate paragraphs) HHsed v1.5 must insert a 'G;' after 'x;' in the next 3 scripts below.
+- Print paragraph if it contains AAA (blank lines separate paragraphs) HHsed
+v1.5 must insert a 'G;' after 'x;' in the next 3 scripts below.
 
 `sed -e '/./{H;$!d;}' -e 'x;/AAA/!d;'`
 
@@ -272,11 +289,13 @@
 
 `sed '/Iowa/,/Montana/d'`
 
-- Delete duplicate, consecutive lines from a file (emulates "uniq"). First line in a set of duplicate lines is kept, rest are deleted.
+- Delete duplicate, consecutive lines from a file (emulates "uniq"). First
+line in a set of duplicate lines is kept, rest are deleted.
 
 `sed '$!N; /^\(.*\)\n\1$/!P; D'`
 
-- Delete duplicate, nonconsecutive lines from a file. Beware not to overflow the buffer size of the hold space, or else use GNU sed.
+- Delete duplicate, nonconsecutive lines from a file. Beware not to overflow
+the buffer size of the hold space, or else use GNU sed.
 
 `sed -n 'G; s/\n/&&/; /^\([ -~]*\n\).*\n\1/d; s/\n//; h; P'`
 
@@ -315,7 +334,8 @@
 `sed '/^$/d'`    # method 1
 `sed '/./!d'`    # method 2
 
-- Delete all CONSECUTIVE blank lines from file except the first; also deletes all blank lines from top and end of file (emulates "cat -s").
+- Delete all CONSECUTIVE blank lines from file except the first; also deletes
+all blank lines from top and end of file (emulates "cat -s").
 
 `sed '/./,/^$/!d'`      # method 1, allows 0 blanks at top, 1 at EOF
 `sed '/^$/N;/\n$/D'`    # method 2, allows 1 blank at top, 0 at EOF
@@ -339,7 +359,8 @@
 
 # SPECIAL APPLICATIONS
 
-- Remove nroff overstrikes (char, backspace) from man pages. The 'echo' command may need an -e switch if you use Unix System V or bash shell.
+- Remove nroff overstrikes (char, backspace) from man pages. The 'echo'
+command may need an -e switch if you use Unix System V or bash shell.
 
 ``sed "s/.`echo \\\b`//g"``    # double quotes required for Unix environment
 `sed 's/.^H//g'`             # in bash/tcsh, press Ctrl-V and then Ctrl-H
@@ -361,7 +382,8 @@
 
 `sed '/^Reply-To:/q; /^From:/h; /./d;g;q'`
 
-- Parse out the address proper. Pulls out the e-mail address by itself from the 1-line return address header (see preceding script).
+- Parse out the address proper. Pulls out the e-mail address by itself from
+the 1-line return address header (see preceding script).
 
 `sed 's/ *(.*)//; s/>.*//; s/.*[:<] *//'`
 
@@ -377,42 +399,86 @@
 
 `sed -e :a -e 's/<[^>]*>//g;/</N;//ba'`
 
-- Extract multi-part uuencoded binaries, removing extraneous header info, so that only the uuencoded portion remains. Files passed to sed must be passed in the proper order. Version 1 can be entered from the command line; version 2 can be made into an executable Unix shell script. (Modified from a script by Rahul Dhesi.).
+- Extract multi-part uuencoded binaries, removing extraneous header info, so
+that only the uuencoded portion remains. Files passed to sed must be passed
+in the proper order. Version 1 can be entered from the command line;
+version 2 can be made into an executable Unix shell script. (Modified from a
+script by Rahul Dhesi.).
 
 `sed '/^end/,/^begin/d' file1 file2 ... fileX | uudecode`    # vers. 1
 `sed '/^end/,/^begin/d' "$@" | uudecode`                     # vers. 2
 
-- Sort paragraphs of file alphabetically. Paragraphs are separated by blank lines. GNU sed uses \v for vertical tab, or any unique char will do.
+- Sort paragraphs of file alphabetically. Paragraphs are separated by blank
+lines. GNU sed uses \v for vertical tab, or any unique char will do.
 
 `sed '/./{H;d;};x;s/\n/={NL}=/g' file | sort | sed '1s/={NL}=//;s/={NL}=/\n/g'`
 `gsed '/./{H;d};x;y/\n/\v/' file | sort | sed '1s/\v//;y/\v/\n/'`
 
-- Zip up each .TXT file individually, deleting the source file and setting the name of each .ZIP file to the basename of the .TXT file (under DOS: the "dir /b" switch returns bare filenames in all caps).
+- Zip up each .TXT file individually, deleting the source file and setting
+the name of each .ZIP file to the basename of the .TXT file (under DOS:
+the "dir /b" switch returns bare filenames in all caps).
 
 `echo @echo off >zipup.bat`
 `dir /b *.txt | sed "s/^\(.*\)\.TXT/pkzip -mo \1 \1.TXT/" >>zipup.bat`
 
 # TYPICAL USE
 
-- Sed takes one or more editing commands and applies all of them, in sequence, to each line of input. After all the commands have been applied to the first input line, that line is output and a second input line is taken for processing, and the cycle repeats. The preceding examples assume that input comes from the standard input device (i.e, the console, normally this will be piped input). One or more filenames can be appended to the command line if the input does not come from stdin. Output is sent to stdout (the screen). Thus:
+- Sed takes one or more editing commands and applies all of them, in sequence,
+to each line of input. After all the commands have been applied to the first
+input line, that line is output and a second input line is taken for
+processing, and the cycle repeats. The preceding examples assume that input
+comes from the standard input device (i.e, the console, normally this will be
+piped input). One or more filenames can be appended to the command line if
+the input does not come from stdin. Output is sent to stdout (the screen).
+Thus:
 
 `cat filename | sed '10q'`        # uses piped input
 `sed '10q' filename`              # same effect, avoids a useless "cat"
 `sed '10q' filename > newfile`    # redirects output to disk
 
-- For additional syntax instructions, including the way to apply editing commands from a disk file instead of the command line, consult "sed & awk, 2nd Edition," by Dale Dougherty and Arnold Robbins (O'Reilly, 1997; http://www.ora.com), "UNIX Text Processing," by Dale Dougherty and Tim O'Reilly (Hayden Books, 1987) or the tutorials by Mike Arst distributed in U-SEDIT2.ZIP (many sites). To fully exploit the power of sed, one must understand "regular expressions." For this, see "Mastering Regular Expressions" by Jeffrey Friedl (O'Reilly, 1997). The manual ("man") pages on Unix systems may be helpful (try "man sed", "man regexp", or the subsection on regular expressions in "man ed"), but man pages are notoriously difficult. They are not written to teach sed use or regexps to first-time users, but as a reference text for those already acquainted with these tools.
+- For additional syntax instructions, including the way to apply editing
+commands from a disk file instead of the command line, consult "sed & awk,
+2nd Edition," by Dale Dougherty and Arnold Robbins
+(O'Reilly, 1997; http://www.ora.com), "UNIX Text Processing," by
+Dale Dougherty and Tim O'Reilly (Hayden Books, 1987) or the tutorials by
+Mike Arst distributed in U-SEDIT2.ZIP (many sites). To fully exploit the
+power of sed, one must understand "regular expressions." For this, see
+"Mastering Regular Expressions" by Jeffrey Friedl (O'Reilly, 1997). The
+manual ("man") pages on Unix systems may be helpful (try "man sed",
+"man regexp", or the subsection on regular expressions in "man ed"), but man
+pages are notoriously difficult. They are not written to teach sed use or
+regexps to first-time users, but as a reference text for those already
+acquainted with these tools.
 
 # QUOTING SYNTAX
 
-- The preceding examples use single quotes '...' instead of double quotes "..." to enclose editing commands, since sed is typically used on a Unix platform. Single quotes prevent the Unix shell from intrepreting the dollar sign ($) and backquotes \`...`, which are expanded by the shell if they are enclosed in double quotes. Users of the "csh" shell and derivatives will also need to quote the exclamation mark (!) with the backslash (i.e., \!) to properly run the examples listed above, even within single quotes. Versions of sed written for DOS invariably require double quotes "..." instead of single quotes to enclose editing commands.
+- The preceding examples use single quotes '...' instead of double quotes
+"..." to enclose editing commands, since sed is typically used on a Unix
+platform. Single quotes prevent the Unix shell from intrepreting the dollar
+sign ($) and backquotes \`...`, which are expanded by the shell if they are
+enclosed in double quotes. Users of the "csh" shell and derivatives will also
+need to quote the exclamation mark (!) with the backslash (i.e., \!) to
+properly run the examples listed above, even within single quotes. Versions
+of sed written for DOS invariably require double quotes "..." instead of
+single quotes to enclose editing commands.
 
 # USE OF '\t' IN SED SCRIPTS
 
-- For clarity in documentation, we have used the expression '\t' to indicate a tab character (0x09) in the scripts. However, most versions of sed do not recognize the '\t' abbreviation, so when typing these scripts from the command line, you should press the TAB key instead. '\t' is supported as a regular expression metacharacter in awk, perl, and HHsed, sedmod, and GNU sed v3.02.80.
+- For clarity in documentation, we have used the expression '\t' to indicate
+a tab character (0x09) in the scripts. However, most versions of sed do not
+recognize the '\t' abbreviation, so when typing these scripts from the
+command line, you should press the TAB key instead. '\t' is supported as a
+regular expression metacharacter in awk, perl, and HHsed, sedmod, and
+GNU sed v3.02.80.
 
 # VERSIONS OF SED
 
-- Versions of sed do differ, and some slight syntax variation is to be expected. In particular, most do not support the use of labels (:name) or branch instructions (b,t) within editing commands, except at the end of those commands. We have used the syntax which will be portable to most users of sed, even though the popular GNU versions of sed allow a more succinct syntax. When the reader sees a fairly long command such as this:
+- Versions of sed do differ, and some slight syntax variation is to be
+expected. In particular, most do not support the use of labels (:name) or
+branch instructions (b,t) within editing commands, except at the end of those
+commands. We have used the syntax which will be portable to most users of
+sed, even though the popular GNU versions of sed allow a more succinct syntax.
+When the reader sees a fairly long command such as this:
 
 `sed -e '/AAA/b' -e '/BBB/b' -e '/CCC/b' -e d`
 
@@ -421,17 +487,25 @@
 `sed '/AAA/b;/BBB/b;/CCC/b;d'`    # or even
 `sed '/AAA\|BBB\|CCC/b;d'`
 
-- In addition, remember that while many versions of sed accept a command like "/one/ s/RE1/RE2/", some do NOT allow "/one/! s/RE1/RE2/", which contains space before the 's'. Omit the space when typing the command.
+- In addition, remember that while many versions of sed accept a command
+like "/one/ s/RE1/RE2/", some do NOT allow "/one/! s/RE1/RE2/", which
+contains space before the 's'. Omit the space when typing the command.
 
 # OPTIMIZING FOR SPEED
 
-- If execution speed needs to be increased (due to large input files or slow processors or hard disks), substitution will be executed more quickly if the "find" expression is specified before giving the "s/.../.../" instruction. Thus:
+- If execution speed needs to be increased (due to large input files or slow
+processors or hard disks), substitution will be executed more quickly if
+the "find" expression is specified before giving the "s/.../.../" instruction.
+Thus:
 
 `sed 's/foo/bar/g' filename`          # standard replace command
 `sed '/foo/ s/foo/bar/g' filename`    # executes more quickly
 `sed '/foo/ s//bar/g' filename`       # shorthand sed syntax
 
-- On line selection or deletion in which you only need to output lines from the first part of the file, a "quit" command (q) in the script will drastically reduce processing time for large files. Thus:
+- On line selection or deletion in which you only need to output lines from
+the first part of the file, a "quit" command (q) in the script will
+drastically reduce processing time for large files.
+Thus:
 
 `sed -n '45,50p' filename`        # print line nos. 45-50 of a file
 `sed -n '51q;45,50p' filename`    # same, but executes much faster

@@ -17,6 +17,7 @@ local PROMPT_B="Displaying all  "
 local selection=$( \
     fd \
         --max-depth=1 \
+        --no-ignore \
         --hidden \
         --color=always \
     | fzf \
@@ -28,12 +29,14 @@ local selection=$( \
                 "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
                     fd \
                         --max-depth=1 \
+                        --no-ignore \
                         --hidden \
                         --color=always \
                 )" \
             || echo \
                 "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
                     fd \
+                        --no-ignore \
                         --hidden \
                         --color=always \
                 )"' \

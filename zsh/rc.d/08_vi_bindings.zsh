@@ -23,7 +23,6 @@
 # COPY
 # CUT
 # CHANGE
-# CLIPBOARD RING
 # PASTE
 # INCREMENT / DECREMENT INTEGERS
 # CHANGE / DELETE SURROUNDING
@@ -204,27 +203,15 @@ bindkey -M vicmd 'y'        _change_motions              # y...
 bindkey -M visual 'y'       vi-change                    # y
 
 
-# CLIPBOARD RING
-# ---------------------------------------------------------------------------- #
-# Cmd
-bindkey -M vicmd 'V'        _clipboard_ring_paste        # V
-
-# Vis
-bindkey -M visual 'C'       _clipboard_ring_copy         # C
-bindkey -M visual 'X'       _clipboard_ring_cut          # X
-bindkey -M visual 'V'       _clipboard_ring_paste_over   # V
-
-
 # PASTE
 # ---------------------------------------------------------------------------- #
 # Cmd
 bindkey -M vicmd 'v'        _paste_from_clipboard        # v
+bindkey -M vicmd 'V'        _clipboard_ring_paste        # V
 
 # Vis
 bindkey -M visual 'v'       _paste_from_clipboard_visual # v
-
-# Ins
-bindkey -M viins '^[v'      _paste_from_clipboard        # Alt v
+bindkey -M visual 'V'       _clipboard_ring_paste_over   # V
 
 
 # INCREMENT / DECREMENT INTEGERS

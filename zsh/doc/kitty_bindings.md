@@ -1,6 +1,6 @@
 # Kitty Bindings
 
-## SCROLLBACK ----------------------------------------------
+## SCROLLBACK ------------------------------------------------------------------
 
 - `Alt v`                : Paste from clipboard
 - `Alt b`                : Open last command output with vim
@@ -13,7 +13,7 @@
 - `Shift PageDown`       : Page down
 - `Super k`              : Erase scrollback
 
-## WINDOWS -------------------------------------------------
+## WINDOWS ---------------------------------------------------------------------
 
 - `Super Ctrl Alt m`     : New split
 - `Super Ctrl Alt M`     : New window
@@ -29,19 +29,19 @@
 - `Ctrl Alt Shift Right` : Resize split right
 - `Super Ctrl Alt J`     : Swap window positions
 
-## TABS ----------------------------------------------------
+## TABS ------------------------------------------------------------------------
 
 - `Super Ctrl Alt n`     : New tab
 - `Super Ctrl Alt N`     : Set tab title
 - `Ctrl End`             : Next tab
 - `Ctrl Home`            : Previous tab
 
-## LAYOUT --------------------------------------------------
+## LAYOUT ----------------------------------------------------------------------
 
 - `Super Ctrl Alt r`     : Rotate current split
 - `Super Ctrl Alt R`     : Cycle layouts
 
-## ZOOM ----------------------------------------------------
+## ZOOM ------------------------------------------------------------------------
 
 - `Super =`              : Zoom in (current window)
 - `Super -`              : Zoom out (current window)

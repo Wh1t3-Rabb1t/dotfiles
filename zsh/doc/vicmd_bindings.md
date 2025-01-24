@@ -1,14 +1,14 @@
 # Vicmd Bindings
 
 
-## MODE TOGGLING -------------------------------------------
+## MODE TOGGLING ---------------------------------------------------------------
 
 - `Esc`                  : Insert mode
 - `s`                    : Visual mode
 - `S`                    : Visual line mode
 
 
-## LINE NAVIGATION -----------------------------------------
+## LINE NAVIGATION -------------------------------------------------------------
 
 - `l`                    : Forward char
 - `t`                    : Backward char
@@ -23,7 +23,7 @@
 - `,`                    : Rev repeat find
 
 
-## DELETE BINDINGS -----------------------------------------
+## DELETE BINDINGS -------------------------------------------------------------
 
 - `BS`                   : Backward delete char
 - `Del`                  : Delete char
@@ -34,7 +34,7 @@
 - `Shift Del`            : Kill whole line
 
 
-## DELETE MOTIONS ------------------------------------------
+## DELETE MOTIONS --------------------------------------------------------------
 
 - `w...`                 : Delete motions
 - `wt`                   : In word
@@ -47,24 +47,24 @@
 - `w,`                   : Prev input char
 
 
-## UNDO / REDO / DOT OPERATOR ------------------------------
+## UNDO / REDO / DOT OPERATOR --------------------------------------------------
 
 - `Hyphen`               : Repeat change
 - `Alt y`                : Undo
 - `Alt Y`                : Redo
 
 
-## SELECT IN WORD / LINE -----------------------------------
+## SELECT IN WORD / LINE -------------------------------------------------------
 
 - `Alt Right`            : Select in word
 
 
-## UPPER / LOWER / SWAP CASE -------------------------------
+## UPPER / LOWER / SWAP CASE ---------------------------------------------------
 
 - `_`                    : Swap case
 
 
-## COPY ----------------------------------------------------
+## COPY ------------------------------------------------------------------------
 
 - `c...`                 : Copy motions
 - `ct`                   : In word
@@ -77,7 +77,7 @@
 - `c,`                   : Prev input char
 
 
-## CUT -----------------------------------------------------
+## CUT -------------------------------------------------------------------------
 
 - `x...`                 : Cut motions
 - `xt`                   : In word
@@ -90,7 +90,7 @@
 - `x,`                   : Prev input char
 
 
-## CHANGE --------------------------------------------------
+## CHANGE ----------------------------------------------------------------------
 
 - `y...`                 : Change motions
 - `yt`                   : In word
@@ -103,18 +103,19 @@
 - `y,`                   : Prev input char
 
 
-## PASTE ---------------------------------------------------
+## PASTE -----------------------------------------------------------------------
 
 - `v`                    : Paste from clipboard
+- `V`                    : Paste from clipboard ring
 
 
-## INCREMENT / DECREMENT INTEGERS --------------------------
+## INCREMENT / DECREMENT INTEGERS ----------------------------------------------
 
 - `Alt c`                : Increment integers
 - `Alt x`                : Decrement integers
 
 
-## CHANGE / DELETE SURROUNDING -----------------------------
+## CHANGE / DELETE SURROUNDING -------------------------------------------------
 
 - `Space...`             : Manipulate surrounding
 
@@ -123,7 +124,7 @@ char to change *FROM*, the second input specifies
 the char to change *TO*.
 
 
-## SELECT INSIDE SURROUNDING -------------------------------
+## SELECT INSIDE SURROUNDING ---------------------------------------------------
 
 Any quote or opening bracket character will
 enter visual mode and select the area between

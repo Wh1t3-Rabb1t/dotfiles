@@ -1,12 +1,12 @@
 # Viins Bindings
 
 
-## MODE TOGGLING -------------------------------------------
+## MODE TOGGLING ---------------------------------------------------------------
 
 - `Esc`                  : Command mode
 
 
-## LINE NAVIGATION -----------------------------------------
+## LINE NAVIGATION -------------------------------------------------------------
 
 - `Home`                 : Beginning of line
 - `End`                  : End of line
@@ -14,7 +14,7 @@
 - `Alt Right`            : Jump forward word
 
 
-## DELETE BINDINGS -----------------------------------------
+## DELETE BINDINGS -------------------------------------------------------------
 
 - `BS`                   : Backward delete char
 - `Del`                  : Delete char
@@ -25,13 +25,13 @@
 - `Shift Del`            : Kill whole line
 
 
-## UNDO / REDO ---------------------------------------------
+## UNDO / REDO -----------------------------------------------------------------
 
 - `Alt y`                : Undo
 - `Alt Y`                : Redo
 
 
-## PASTE ---------------------------------------------------
+## PASTE -----------------------------------------------------------------------
 
 - `Alt v`                : Paste from clipboard
 
@@ -40,13 +40,13 @@
 # Zscript Bindings
 
 
-## ALT LAYER -----------------------------------------------
+## ALT LAYER -------------------------------------------------------------------
 
 - `Alt r`                : Rename file / directory
 - `Alt f`                : Find files and open with neovim
 - `Alt g`                : Grep / fzf term open to line with neovim
 
-## EMPTY LINE ----------------------------------------------
+## EMPTY LINE ------------------------------------------------------------------
 
 Executed only when the command line is empty.
 

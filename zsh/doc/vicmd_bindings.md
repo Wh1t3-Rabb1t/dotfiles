@@ -12,15 +12,15 @@
 
 - `l`                    : Forward char
 - `t`                    : Backward char
-- `h`                    : Beginning of line
-- `;`                    : End of line
+- `,`                    : Beginning of line
+- `.`                    : End of line
 - `o`                    : Forward word
 - `u`                    : Backward word
 - `O`                    : Forward word end
 - `U`                    : Backward word end
 - `f`                    : Find character
-- `.`                    : Repeat find
-- `,`                    : Rev repeat find
+- `;`                    : Repeat find
+- `h`                    : Rev repeat find
 
 
 ## DELETE BINDINGS -------------------------------------------------------------
@@ -41,10 +41,10 @@
 - `wu`                   : Word left
 - `wo`                   : Word right
 - `wl`                   : Whole line
-- `wh`                   : To line start
-- `w;`                   : To line end
-- `w.`                   : Next input char
-- `w,`                   : Prev input char
+- `w,`                   : To line start
+- `w.`                   : To line end
+- `w;`                   : Next input char
+- `wh`                   : Prev input char
 
 
 ## UNDO / REDO / DOT OPERATOR --------------------------------------------------
@@ -71,10 +71,10 @@
 - `cu`                   : Word left
 - `co`                   : Word right
 - `cl`                   : Whole line
-- `ch`                   : To line start
-- `c;`                   : To line end
-- `c.`                   : Next input char
-- `c,`                   : Prev input char
+- `c,`                   : To line start
+- `c.`                   : To line end
+- `c;`                   : Next input char
+- `ch`                   : Prev input char
 
 
 ## CUT -------------------------------------------------------------------------
@@ -84,10 +84,10 @@
 - `xu`                   : Word left
 - `xo`                   : Word right
 - `xl`                   : Whole line
-- `xh`                   : To line start
-- `x;`                   : To line end
-- `x.`                   : Next input char
-- `x,`                   : Prev input char
+- `x,`                   : To line start
+- `x.`                   : To line end
+- `x;`                   : Next input char
+- `xh`                   : Prev input char
 
 
 ## CHANGE ----------------------------------------------------------------------
@@ -97,10 +97,10 @@
 - `yu`                   : Word left
 - `yo`                   : Word right
 - `yl`                   : Whole line
-- `yh`                   : To line start
-- `y;`                   : To line end
-- `y.`                   : Next input char
-- `y,`                   : Prev input char
+- `y,`                   : To line start
+- `y.`                   : To line end
+- `y;`                   : Next input char
+- `yh`                   : Prev input char
 
 
 ## PASTE -----------------------------------------------------------------------
@@ -111,8 +111,8 @@
 
 ## INCREMENT / DECREMENT INTEGERS ----------------------------------------------
 
-- `Alt c`                : Increment integers
-- `Alt x`                : Decrement integers
+- `C`                    : Increment integers
+- `X`                    : Decrement integers
 
 
 ## CHANGE / DELETE SURROUNDING -------------------------------------------------

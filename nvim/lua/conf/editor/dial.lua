@@ -11,16 +11,16 @@ local M = {}
 --------------------------------------------------------------------------------
 local map = require("util.utils").map
 function M.init()
-    map("n", "<A-c>", function()
+    map("n", "C", function()
         require("dial.map").manipulate("increment", "normal")
     end, { desc = "Increment" })
-    map("n", "<A-x>", function()
+    map("n", "X", function()
         require("dial.map").manipulate("decrement", "normal")
     end, { desc = "Decrement" })
-    map("v", "<A-c>", function()
+    map("v", "C", function()
         require("dial.map").manipulate("increment", "visual")
     end, { desc = "Increment" })
-    map("v", "<A-x>", function()
+    map("v", "X", function()
         require("dial.map").manipulate("decrement", "visual")
     end, { desc = "Decrement" })
 end

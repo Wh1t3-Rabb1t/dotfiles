@@ -138,10 +138,10 @@ vmap("T", "<gv^")                                 -- Outdent
 
 -- JUMP BACKWARDS / FORWARDS BY WORD
 --------------------------------------------------------------------------------
-imap("<A-Left>", function()                       -- Jump BACKWARDS by word
+imap("<A-Left>", function()                       -- Jump backwards by word
     vim.cmd([[ :execute "normal! b" ]])
 end)
-imap("<A-Right>", function()                      -- Jump FORWARDS by word
+imap("<A-Right>", function()                      -- Jump forwards by word
     vim.cmd([[ :execute "normal! el" ]])
 end)
 
@@ -149,11 +149,10 @@ end)
 -- JUMP TO START / END OF LINE
 --------------------------------------------------------------------------------
 -- Use expression to deal with line wrap
-nvmap("H", "0")                                   -- Jump to column 0
-nvmap("h", "v:count == 0 ? 'g^' : '^'",  {        -- Jump to line START
+nvmap(",", "v:count == 0 ? 'g^' : '^'",  {        -- Jump to line START
     expr = true
 })
-nvmap(";", "v:count == 0 ? 'g$h' : '$'", {        -- Jump to line END
+nvmap(".", "v:count == 0 ? 'g$h' : '$'", {        -- Jump to line END
     expr = true
 })
 imap("<Home>", function()                         -- Jump to line START
@@ -224,8 +223,8 @@ nmap("wu", '"_db')                                -- Delete word LEFT
 
 -- Line
 nmap("wl", '"_dd')                                -- Delete whole line
-nmap("wh", '"_d^')                                -- Delete line LEFT
-nmap("w;", '"_d$')                                -- Delete line RIGHT
+nmap("w,", '"_d^')                                -- Delete line LEFT
+nmap("w.", '"_d$')                                -- Delete line RIGHT
 
 -- Paragraph
 nmap("wi", '"_d{')                                -- Delete paragraph UP
@@ -233,8 +232,8 @@ nmap("wk", '"_d}')                                -- Delete paragraph DOWN
 nmap("wp", '"_dip')                               -- Delete in paragraph
 
 -- To char
-nmap("w.", '"_dt')                                -- Delete forwards to char
-nmap("w,", '"_dT')                                -- Delete backwards to char
+nmap("w;", '"_dt')                                -- Delete forwards to char
+nmap("wh", '"_dT')                                -- Delete backwards to char
 
 
 -- DOT OPERATOR / UNDO / REDO
@@ -297,8 +296,8 @@ nmap("co", '"*ye')                                -- Copy word RIGHT
 
 -- Line
 nmap("cl", '"*yy')                                -- Copy whole line
-nmap("c;", '"*y$')                                -- Copy to line END
-nmap("ch", 'mm"*y^`m')                            -- Copy to line START
+nmap("c,", 'mm"*y^`m')                            -- Copy to line START
+nmap("c.", '"*y$')                                -- Copy to line END
 
 -- Paragraph
 nmap("ci", 'mm"*y{`m')                            -- Copy paragraph UP
@@ -306,8 +305,8 @@ nmap("ck", '"*y}')                                -- Copy paragraph DOWN
 nmap("cp", 'mm"*yip`m')                           -- Copy in paragraph
 
 -- To char
-nmap("c.", '"*yt')                                -- Copy ahead to char
-nmap("c,", '"*yT')                                -- Copy back to char
+nmap("c;", '"*yt')                                -- Copy forwards to char
+nmap("ch", '"*yT')                                -- Copy backwards to char
 
 
 -- CUT
@@ -326,8 +325,8 @@ nmap("xo", '"*de')                                -- Cut word RIGHT
 
 -- Line
 nmap("xl", '"*dd')                                -- Cut whole line
-nmap("x;", '"*d$')                                -- Cut to line END
-nmap("xh", '"*d^')                                -- Cut to line START
+nmap("x,", '"*d^')                                -- Cut to line START
+nmap("x.", '"*d$')                                -- Cut to line END
 
 -- Paragraph
 nmap("xi", '"*d{')                                -- Cut paragraph UP
@@ -335,8 +334,8 @@ nmap("xk", '"*d}')                                -- Cut paragraph DOWN
 nmap("xp", '"*dip')                               -- Cut in paragraph
 
 -- To char
-nmap("x.", '"*dt')                                -- Cut ahead to char
-nmap("x,", '"*dT')                                -- Cut back to char
+nmap("x;", '"*dt')                                -- Cut forwards to char
+nmap("xh", '"*dT')                                -- Cut backwards to char
 
 
 -- CHANGE (all changed text is sent to the black hole register)
@@ -349,9 +348,9 @@ nmap("yu", '"_cb')                                -- Change word LEFT
 nmap("yo", '"_ce')                                -- Change word RIGHT
 
 -- Line
-nmap("yh", '"_d^i')                               -- Change to line START
-nmap("y;", '"_C')                                 -- Change to line END
 nmap("yl", '^"_C')                                -- Change whole line
+nmap("y,", '"_d^i')                               -- Change to line START
+nmap("y.", '"_C')                                 -- Change to line END
 
 -- Paragraph
 nmap("yi", '"_c{')                                -- Change paragraph UP
@@ -359,8 +358,8 @@ nmap("yk", '"_c}')                                -- Change paragraph DOWN
 nmap("yp", '"_cip')                               -- Change in paragraph
 
 -- To char
-nmap("y.", '"_ct')                                -- Change forwards to char
-nmap("y,", '"_cT')                                -- Change backwards to char
+nmap("y;", '"_ct')                                -- Change forwards to char
+nmap("yh", '"_cT')                                -- Change backwards to char
 
 
 -- PASTE
@@ -385,7 +384,7 @@ nvmap("j",     "J")                               -- Join lines
 
 -- NAVIGATE `f` and `/` SEARCH RESULTS
 --------------------------------------------------------------------------------
-nvmap(".", ";")                                   -- Next f search result
+nvmap("h", ",")                                   -- Prev f search result
 nvmap("n", "mnn")                                 -- Next / search result
 nvmap("N", "mnN")                                 -- Prev / search result
 nvmap("*", "mn*")                                 -- Next word under cursor

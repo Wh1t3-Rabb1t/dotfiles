@@ -53,15 +53,15 @@ bindkey -M vicmd 'i'        _up_line                     # i
 bindkey -M vicmd 'k'        _down_line                   # k
 bindkey -M vicmd 'l'        vi-forward-char              # l
 bindkey -M vicmd 't'        vi-backward-char             # t
-bindkey -M vicmd 'h'        _line_start                  # h
-bindkey -M vicmd ';'        _line_end                    # ;
+bindkey -M vicmd ','        _line_start                  # ,
+bindkey -M vicmd '.'        _line_end                    # .
 bindkey -M vicmd 'o'        vi-forward-word              # o
 bindkey -M vicmd 'u'        vi-backward-word             # u
 bindkey -M vicmd 'O'        vi-forward-word-end          # O
 bindkey -M vicmd 'U'        vi-backward-word-end         # U
 bindkey -M vicmd 'f'        vi-find-next-char            # f
-bindkey -M vicmd '.'        vi-repeat-find               # .
-bindkey -M vicmd ','        vi-rev-repeat-find           # ,
+bindkey -M vicmd ';'        vi-repeat-find               # ;
+bindkey -M vicmd 'h'        vi-rev-repeat-find           # h
 
 # Vis
 bindkey -M visual 'o'       vi-forward-word              # o
@@ -110,10 +110,10 @@ bindkey -M vicmd 'w'        _delete_motions              # w...
                                                          # wu = Word left
                                                          # wo = Word right
                                                          # wl = Whole line
-                                                         # wh = To line start
-                                                         # w; = To line end
-                                                         # w. = Next input char
-                                                         # w, = Prev input char
+                                                         # w, = To line start
+                                                         # w. = To line end
+                                                         # w; = Next input char
+                                                         # wh = Prev input char
 
 # Vis
 bindkey -M visual 'w'       kill-region                  # w
@@ -160,10 +160,10 @@ bindkey -M vicmd 'c'        _copy_motions                # c...
                                                          # cu = Word left
                                                          # co = Word right
                                                          # cl = Whole line
-                                                         # ch = To line start
-                                                         # c; = To line end
-                                                         # c. = Next input char
-                                                         # c, = Prev input char
+                                                         # c, = To line start
+                                                         # c. = To line end
+                                                         # c; = Next input char
+                                                         # ch = Prev input char
 
 # Vis
 bindkey -M visual 'c'       _copy_to_clipboard           # c
@@ -177,10 +177,10 @@ bindkey -M vicmd 'x'        _cut_motions                 # x...
                                                          # xu = Word left
                                                          # xo = Word right
                                                          # xl = Whole line
-                                                         # xh = To line start
-                                                         # x; = To line end
-                                                         # x. = Next input char
-                                                         # x, = Prev input char
+                                                         # x, = To line start
+                                                         # x. = To line end
+                                                         # x; = Next input char
+                                                         # xh = Prev input char
 
 # Vis
 bindkey -M visual 'x'       _cut_to_clipboard            # x
@@ -194,10 +194,10 @@ bindkey -M vicmd 'y'        _change_motions              # y...
                                                          # yu = Word left
                                                          # yo = Word right
                                                          # yl = Whole line
-                                                         # yh = To line start
-                                                         # y; = To line end
-                                                         # y. = Next input char
-                                                         # y, = Prev input char
+                                                         # y, = To line start
+                                                         # y. = To line end
+                                                         # y; = Next input char
+                                                         # yh = Prev input char
 
 # Vis
 bindkey -M visual 'y'       vi-change                    # y
@@ -217,8 +217,8 @@ bindkey -M visual 'V'       _clipboard_ring_paste_over   # V
 # INCREMENT / DECREMENT INTEGERS
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '\x1bc'    _increment_integers          # Alt c
-bindkey -M vicmd '\x1bx'    _decrement_integers          # Alt x
+bindkey -M vicmd 'C'      _increment_integers            # C
+bindkey -M vicmd 'X'      _decrement_integers            # X
 
 
 # CHANGE / DELETE SURROUNDING

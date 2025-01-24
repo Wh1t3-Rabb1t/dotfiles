@@ -49,7 +49,7 @@ local escape_sequences=( \
 )
 
 for m in viins vicmd visual viopp; do
-    for k in "$escape_sequences[@]"; do
+    for k in "${escape_sequences[@]}"; do
         bindkey -M $m $k _noop
     done
 done
@@ -157,7 +157,7 @@ local function _delete_motions() {
     # Read next typed keystroke
     local key
     read -k 1 key
-    case $key in
+    case "${key}" in
         't')                               # wt = Delete in word
             _select_in_word
             zle kill-region
@@ -171,13 +171,13 @@ local function _delete_motions() {
         'l')                               # wl = Delete whole line
             zle kill-whole-line
             ;;
-        'h')                               # wh = Delete to line start
+        ',')                               # w, = Delete to line start
             zle backward-kill-line
             ;;
-        ';')                               # w; = Delete to line end
+        '.')                               # w. = Delete to line end
             zle kill-line
             ;;
-        '.')                               # w. = Delete to next typed char
+        ';')                               # w; = Delete to next typed char
             local pos next_char
             pos="${BUFFER[$CURSOR+1]}"
             read -k 1 next_char
@@ -185,7 +185,7 @@ local function _delete_motions() {
                 zle delete-char
             zle -U ZF"$next_char"
             ;;
-        ',')                               # w, = Delete to previous typed char
+        'h')                               # wh = Delete to previous typed char
             local pos prev_char
             pos="${BUFFER[$CURSOR]}"
             read -k 1 prev_char
@@ -230,7 +230,7 @@ zle -N _select_in_word
 local VI_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh_vi"
 local VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard-ring"
 
-# Create required dir / files
+# Create required dir / file
 [[ ! -d "${VI_STATE_DIR}" ]] && mkdir -p "${VI_STATE_DIR}"
 [[ ! -f "${VI_CLIPBOARD_RING}" ]] && touch "${VI_CLIPBOARD_RING}"
 
@@ -270,10 +270,10 @@ local function _clipboard_ring_paste() {
     if [[ "${selection}" ]]; then
         if [[ "${CURSOR}" < 1 ]]; then
             LBUFFER+="${selection}"
-            CURSOR=$(( ${CURSOR} - 1 ))
+            CURSOR=$(( "${CURSOR}" - 1 ))
         else
             BUFFER[CURSOR]+="$selection"
-            CURSOR+=$(( ${#selection} - 1 ))
+            CURSOR+=$(( "${#selection}" - 1 ))
         fi
 
         POSTDISPLAY=
@@ -296,10 +296,10 @@ local function _clipboard_ring_paste_over() {
 
         if [[ "${CURSOR}" < 1 ]]; then
             LBUFFER+="${selection}"
-            CURSOR=$(( ${CURSOR} - 1 ))
+            CURSOR=$(( "${CURSOR}" - 1 ))
         else
             BUFFER[CURSOR]+="${selection}"
-            CURSOR+=$(( ${#selection} - 1 ))
+            CURSOR+=$(( "${#selection}" - 1 ))
         fi
 
         POSTDISPLAY=
@@ -322,7 +322,7 @@ local function _copy_motions() {
     # Read next typed keystroke
     local key
     read -k 1 key
-    case $key in
+    case "${key}" in
         't')                               # ct = Copy in word
             local mark=$CURSOR
             _select_in_word
@@ -346,7 +346,7 @@ local function _copy_motions() {
             zle visual-line-mode
             _copy_to_clipboard
             ;;
-        'h')                               # ch = Copy to line start
+        ',')                               # c, = Copy to line start
             local mark=$CURSOR
             zle vi-backward-char
             zle visual-mode
@@ -354,18 +354,18 @@ local function _copy_motions() {
             _copy_to_clipboard
             CURSOR=$mark
             ;;
-        ';')                               # c; = Copy to line end
+        '.')                               # c. = Copy to line end
             zle visual-mode
             _line_end
             _copy_to_clipboard
             ;;
-        '.')                               # c. = Copy to next typed char
+        ';')                               # c; = Copy to next typed char
             local next_char
             read -k 1 next_char
             zle -U "TN${next_char}"
             _copy_to_clipboard
             ;;
-        ',')                               # c, = Copy to previous typed char
+        'h')                               # ch = Copy to previous typed char
             local mark=$CURSOR
             local prev_char
             read -k 1 prev_char
@@ -393,7 +393,7 @@ local function _cut_motions() {
     # Read next typed keystroke
     local key
     read -k 1 key
-    case $key in
+    case "${key}" in
         't')                               # xt = Cut in word
             _select_in_word
             _cut_to_clipboard
@@ -413,23 +413,23 @@ local function _cut_motions() {
             zle visual-line-mode
             _cut_to_clipboard
             ;;
-        'h')                               # xh = Cut to line start
+        ',')                               # x, = Cut to line start
             zle visual-mode
             _line_start
             _cut_to_clipboard
             ;;
-        ';')                               # x; = Cut to line end
+        '.')                               # x. = Cut to line end
             zle visual-mode
             _line_end
             _cut_to_clipboard
             ;;
-        '.')                               # x. = Cut to next typed char
+        ';')                               # x; = Cut to next typed char
             local next_char
             read -k 1 next_char
             zle -U "TN${next_char}"
             _cut_to_clipboard
             ;;
-        ',')                               # x, = Cut to previous typed char
+        'h')                               # xh = Cut to previous typed char
             local prev_char
             read -k 1 prev_char
             zle -U "TP${prev_char}"
@@ -455,7 +455,7 @@ local function _change_motions() {
     # Read next typed keystroke
     local key
     read -k 1 key
-    case $key in
+    case "${key}" in
         't')                               # yt = Change in word
             _select_in_word
             zle vi-change
@@ -471,14 +471,14 @@ local function _change_motions() {
         'l')                               # yl = Change whole line
             zle vi-change-whole-line
             ;;
-        'h')                               # yh = Change to line start
+        ',')                               # y, = Change to line start
             zle backward-kill-line
             zle vi-insert
             ;;
-        ';')                               # y; = Change to line end
+        '.')                               # y. = Change to line end
             zle vi-change-eol
             ;;
-        '.')                               # y. = Change to next typed char
+        ';')                               # y; = Change to next typed char
             local next_char
             read -k 1 next_char
             zle -U "TN${next_char}"
@@ -486,7 +486,7 @@ local function _change_motions() {
             [[ $RBUFFER != *"$next_char"* ]] \
                 && echo -ne $block_cursor
             ;;
-        ',')                               # y, = Change to previous typed char
+        'h')                               # yh = Change to previous typed char
             local prev_char
             read -k 1 prev_char
             zle -U "TP${prev_char}"
@@ -569,7 +569,7 @@ local function _manipulate_surrounding() {
     read -k 1 key2
 
     # Check if both inputs exist in the characters array
-    for k in "$characters[@]"; do
+    for k in "${characters[@]}"; do
         [[ "$k" == "$key1" ]] && found_key1=true
         [[ "$k" == "$key2" ]] && found_key2=true
 
@@ -604,7 +604,7 @@ bindkey -M visual 'Q<' select-bracketed
 local function _select_in_surrounding() {
     emulate -L zsh
     zle visual-mode
-    case "$KEYS" in
+    case "${KEYS}" in
         "'") zle -U "Q'" ;;
         '"') zle -U 'Q"' ;;
         '`') zle -U 'Q`' ;;
@@ -630,7 +630,7 @@ bindkey -M visual 'M<' add-surround
 
 local function _add_surrounding() {
     emulate -L zsh
-    case "$KEYS" in
+    case "${KEYS}" in
         "'") zle -U "M''" ;;
         '"') zle -U 'M""' ;;
         '`') zle -U 'M``' ;;

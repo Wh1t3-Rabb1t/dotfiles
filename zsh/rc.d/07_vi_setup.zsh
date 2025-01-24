@@ -112,28 +112,24 @@ zle -N _jump_forward_word
 local function _up_line() {
     emulate -L zsh
     CURSOR=$(( CURSOR - COLUMNS ))
-    zle -R
 }
 zle -N _up_line
 
 local function _down_line() {
     emulate -L zsh
     CURSOR=$(( CURSOR + COLUMNS ))
-    zle -R
 }
 zle -N _down_line
 
 local function _line_start() {
     emulate -L zsh
     CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) ))
-    zle -R
 }
 zle -N _line_start
 
 local function _line_end() {
     emulate -L zsh
     CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) + COLUMNS - 1 ))
-    zle -R
 }
 zle -N _line_end
 
@@ -143,14 +139,13 @@ zle -N _line_end
 zmodload zsh/deltochar
 
 # Invoked by `_delete_motions`
-bindkey -M vicmd 'ZB' _zap_backwards
-bindkey -M vicmd 'ZF' zap-to-char
-
 local function _zap_backwards() {
     emulate -L zsh
     zle zap-to-char -n -1
 }
 zle -N _zap_backwards
+bindkey -M vicmd 'ZB' _zap_backwards
+bindkey -M vicmd 'ZF' zap-to-char
 
 local function _delete_motions() {
     emulate -L zsh
@@ -374,14 +369,6 @@ zle -N _copy_motions
 
 # CUT MOTIONS
 # ---------------------------------------------------------------------------- #
-
-local function _echo_to_sys_clipboard() {
-    emulate -L zsh
-    echo -n "$CUTBUFFER" | pbcopy -i
-}
-zle -N _echo_to_sys_clipboard
-
-
 local function _cut_motions() {
     emulate -L zsh
     echo -ne $underline_cursor
@@ -395,24 +382,29 @@ local function _cut_motions() {
             _cut_to_clipboard
             ;;
         'u')                               # xu = Cut word left
-            zle backward-kill-word
-            _echo_to_sys_clipboard
+            zle vi-backward-char
+            zle visual-mode
+            zle vi-backward-word
+            _cut_to_clipboard
             ;;
         'o')                               # xo = Cut word right
-            zle kill-word
-            _echo_to_sys_clipboard
+            zle visual-mode
+            zle vi-forward-word-end
+            _cut_to_clipboard
             ;;
         'l')                               # xl = Cut whole line
-            zle kill-whole-line
-            _echo_to_sys_clipboard
+            zle visual-line-mode
+            _cut_to_clipboard
             ;;
         'h')                               # xh = Cut to line start
-            zle backward-kill-line
-            _echo_to_sys_clipboard
+            zle visual-mode
+            _line_start
+            _cut_to_clipboard
             ;;
         ';')                               # x; = Cut to line end
-            zle kill-line
-            _echo_to_sys_clipboard
+            zle visual-mode
+            _line_end
+            _cut_to_clipboard
             ;;
         '.')                               # x. = Cut to next typed char
             local next_char

@@ -84,11 +84,11 @@ keymap = [
     { on = "r",             run = "rename --cursor=before_ext",  desc = "Rename selected file(s)" },
     { on = ":",             run = "shell --interactive",         desc = "Run a shell command" },
     { on = [ "p", "c" ],    run = "shell --block --interactive", desc = "Run a shell command (block until finishes)" },
-    { on = "h",             run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
+    { on = ".",             run = "hidden toggle",               desc = "Toggle the visibility of hidden files" },
     { on = "-",             run = "search --via=fd",             desc = "Search files by name via fd" },
     { on = "g",             run = "search --via=rg",             desc = "Search files by content via ripgrep" },
     { on = "<C-s>",         run = "escape --search",             desc = "Cancel the ongoing search" },
-    { on = ";",             run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
+    { on = "z",             run = "plugin fzf",                  desc = "Jump to a file/directory via fzf" },
 
     # Linemode
     # -------------------------------------------------------------------------------------------- #
@@ -157,12 +157,12 @@ keymap = [
     { on = "9", run = "tab_switch 8",             desc = "Switch to the ninth tab" },
 
     # Cycle
-    { on = ",", run = "tab_switch -1 --relative", desc = "Switch to the previous tab" },
-    { on = ".", run = "tab_switch 1 --relative",  desc = "Switch to the next tab" },
+    { on = "h", run = "tab_switch -1 --relative", desc = "Switch to the previous tab" },
+    { on = ";", run = "tab_switch 1 --relative",  desc = "Switch to the next tab" },
 
     # Swap
-    { on = "<", run = "tab_swap -1",              desc = "Swap current tab with previous tab" },
-    { on = ">", run = "tab_swap 1",               desc = "Swap current tab with next tab" },
+    { on = "<Home>", run = "tab_swap -1", desc = "Swap current tab with previous tab" },
+    { on = "<End>",  run = "tab_swap 1",  desc = "Swap current tab with next tab" },
 
     # Tasks
     # -------------------------------------------------------------------------------------------- #

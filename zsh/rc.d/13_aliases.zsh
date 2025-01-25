@@ -5,6 +5,13 @@
 #   \__,_|_|_|\__,_|___/\___||___/
 # ============================================================================ #
 
+
+alias h="cd ~"
+alias b="cd -"
+alias oa="open -a"
+alias getip="ifconfig | grep inet"
+
+
 # Eza / gnu ls
 # ---------------------------------------------------------------------------- #
 if (( ${+commands[eza]} )); then
@@ -67,13 +74,6 @@ elif (( ${+commands[gls]} )); then
         --classify \
         --color"
 fi
-
-
-# General
-# ---------------------------------------------------------------------------- #
-alias h="cd ~"
-alias b="cd -"
-alias getip="ifconfig | grep inet"
 
 
 # Git

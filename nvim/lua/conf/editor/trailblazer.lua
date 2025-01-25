@@ -19,7 +19,7 @@ local icons = {
 M.keys = {
     "<Leader>b",
     "<A-b>",
-    "b",
+    "N",
     "B",
 }
 
@@ -129,7 +129,7 @@ function M.config()
                 motions = {
                     new_trail_mark = "<Leader>b",
                     track_back = false,
-                    peek_move_next_down = "b",
+                    peek_move_next_down = "N",
                     peek_move_previous_up = "B",
                     move_to_nearest = false,
                     toggle_trail_mark_list = "<A-b>",

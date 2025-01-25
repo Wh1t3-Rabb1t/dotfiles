@@ -36,7 +36,7 @@
 -- CHANGE
 -- PASTE
 -- OPEN / JOIN LINES
--- NAVIGATE `f` and `/` SEARCH RESULTS
+-- NAVIGATE `/` and `f` SEARCH RESULTS
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
@@ -87,9 +87,6 @@ nvmap("<Leader>s", "<C-v>")                       -- Visual BLOCK mode
 nvmap("<A-v>",     "msgv")                        -- Restore visual selection
 vmap("a",          "o")                           -- Swap point & mark
 vmap("<Leader>a",  "O")                           -- Swap point & mark (vblock)
-vmap("/",          "<Esc>/\\%V", {                -- Search within selection
-    silent = false
-})
 
 
 -- COMMAND LINE MODE
@@ -382,17 +379,23 @@ nmap("<S-CR>", "O<C-o>mo<Esc>`o")                 -- New line ABOVE
 nvmap("j",     "J")                               -- Join lines
 
 
--- NAVIGATE `f` and `/` SEARCH RESULTS
+-- NAVIGATE `/` and `f` SEARCH RESULTS
 --------------------------------------------------------------------------------
-nvmap("h", ",")                                   -- Prev f search result
+nmap("?", function()                              -- Toggle search highlights
+    if vim.v.hlsearch == 1 then
+        vim.cmd("nohlsearch")
+    else
+        vim.cmd("set hls")
+    end
+end)
+vmap("/",  "<Esc>/\\%V", {                        -- Search within selection
+    silent = false
+})
 nvmap("n", "mnn")                                 -- Next / search result
-nvmap("N", "mnN")                                 -- Prev / search result
+nvmap("b", "mnN")                                 -- Prev / search result
 nvmap("*", "mn*")                                 -- Next word under cursor
 nvmap("#", "mn#")                                 -- Prev word under cursor
-nmap("?", function()                              -- Toggle search highlights
-    local hl_state = vim.o.hlsearch
-    vim.o.hlsearch = not hl_state
-end)
+nvmap("h", ",")                                   -- Prev f search result
 
 
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY

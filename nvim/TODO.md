@@ -4,6 +4,13 @@
 
 ## Bindings
 
+- possibly incorporate these somewhere:
+
+```lua
+vmap("L", [["zx"zpgvlolo]], { desc = "➡️ Move selection right" })
+vmap("T", [["zxhh"zpgvhoho]], { desc = "⬅ Move selection left" })
+```
+
 
 - Reinstall hammerspoon, monitor control, and rectangle via homebrew
 

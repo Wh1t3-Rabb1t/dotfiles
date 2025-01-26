@@ -94,6 +94,28 @@ local function zle-keymap-select() {
 zle -N zle-keymap-select
 
 
+# DEACTIVATE / REACTIVATE REGION
+# ---------------------------------------------------------------------------- #
+local point
+local mark
+
+local function _deactivate_region() {
+    emulate -L zsh
+    point="${CURSOR}"
+    mark="${MARK}"
+    zle deactivate-region
+}
+zle -N _deactivate_region
+
+local function _reactivate_region() {
+    emulate -L zsh
+    zle visual-mode
+    CURSOR="${point}"
+    MARK="${mark}"
+}
+zle -N _reactivate_region
+
+
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #
 local function _jump_forward_word() {

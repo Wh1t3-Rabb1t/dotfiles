@@ -277,11 +277,16 @@ function M.config()
             FoldColumn = { fg = colors.yellow },      -- Line next to folded section
             WinSeparator = { fg = colors.overlay0 },  -- Line between splits
             CursorColumn = { bg = colors.surface0 },  -- Vertical cursor column line
+            IncSearch = { bg = colors.red },          -- Search results (/)
+            Search = {
+                fg = colors.crust,
+                bg = colors.overlay1,
+            }
         },
 
         integrations = {
             aerial = false,
-            barbar = false,  -- Keep 'false' to enable transparent bg
+            barbar = false,         -- Keep 'false' to enable transparent bg
             cmp = true,
             dropbar = {
                 enabled = true,
@@ -292,7 +297,6 @@ function M.config()
             neotree = true,
             treesitter = true,
             notify = false,
-            -- telescope = { enabled = true },
             -- For more plugins integrations please scroll down
             -- (https://github.com/catppuccin/nvim#integrations)
         }

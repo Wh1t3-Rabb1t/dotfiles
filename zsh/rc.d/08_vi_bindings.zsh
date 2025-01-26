@@ -25,6 +25,7 @@
 # CHANGE
 # PASTE
 # INCREMENT / DECREMENT INTEGERS
+# MATCH BRACKETS
 # CHANGE / DELETE SURROUNDING
 # SELECT INSIDE SURROUNDING
 # ADD SURROUNDING
@@ -38,9 +39,10 @@ bindkey -M vicmd 'a'        vi-add-next                  # a
 bindkey -M vicmd 'A'        vi-add-eol                   # A
 bindkey -M vicmd 's'        visual-mode                  # s
 bindkey -M vicmd 'S'        visual-line-mode             # S
+bindkey -M vicmd 'G'        _reactivate_region           # G
 
 # Vis
-bindkey -M visual '^['      deactivate-region            # Esc
+bindkey -M visual '^['      _deactivate_region           # Esc
 
 # Ins
 bindkey -M viins '^['       vi-cmd-mode                  # Esc
@@ -219,6 +221,15 @@ bindkey -M visual 'V'       _clipboard_ring_paste_over   # V
 # Cmd
 bindkey -M vicmd 'C'        _increment_integers          # C
 bindkey -M vicmd 'X'        _decrement_integers          # X
+
+
+# MATCH BRACKETS
+# ---------------------------------------------------------------------------- #
+# Cmd
+bindkey -M vicmd '%'        vi-match-bracket             # %
+
+# Vis
+bindkey -M visual '%'       vi-match-bracket             # %
 
 
 # CHANGE / DELETE SURROUNDING

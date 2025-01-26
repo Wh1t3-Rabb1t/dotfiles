@@ -44,6 +44,8 @@ zstyle ':fzf-tab:*' fzf-flags \
     --jump-labels=$FZF_TAB_JUMP_LABELS \
     --color=$FZF_TAB_COLORS \
     --no-preview \
+    --header-border=top \
+    --info=inline-right \
     --height=100% \
     --prompt=' ' \
     --pointer='▐' \
@@ -94,6 +96,8 @@ zstyle ':fzf-tab:complete:cd:*' fzf-flags \
     --bind=$FZF_TAB_KEY_BINDINGS \
     --color=$FZF_TAB_COLORS \
     --preview-window='right,border-left,<88(up:50%,border-bottom)' \
+    --header-border=top \
+    --info=inline-right \
     --height=100% \
     --prompt=' ' \
     --pointer='▐' \

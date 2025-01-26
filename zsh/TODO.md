@@ -1,20 +1,14 @@
 # TODO
 
 
-- create motions to add / remove whitespace surrounding matching brackets
-i.e (add) ( remove )
-can be initiated from the opening or closing bracket
-
+- write a script to check for / download zsh plugin updates
 
 - consider binding up / down arrow to navigate `/` search results and left / right arrow to move selection left and right
 
 - nvim wrangle bindings C V X R (change to dial, registers, gv mode etc)
 
-- !! implement nvim dial functionality in zsh vi mode (will be easy just scan RBUFFER for matches `true` `false` etc and replace at search term index)
-
 - need to add checks for os type when using `pbpaste` in scripts
 
-- write a script to check for / download zsh plugin updates
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
 

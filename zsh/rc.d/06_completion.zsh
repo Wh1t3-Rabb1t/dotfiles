@@ -55,15 +55,20 @@ zmodload zsh/complist
 # Init completions, but regenerate compdump only once a day.
 # The globbing is a little complicated here:
 # - '#q' is an explicit glob qualifier that makes globbing work within zsh's [[ ]] construct.
-# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error)
+# - 'N' makes the glob pattern evaluate to nothing when it doesn't match (rather than throw a globbing error).
 # - '.' matches "regular files"
 # - 'mh+20' matches files (or directories or whatever) that are older than 20 hours.
 autoload -Uz compinit
 if [[ -n "${XDG_CACHE_HOME}/zsh/compdump"(#qN.mh+20) ]]; then
     compinit -i -u -d "${XDG_CACHE_HOME}/zsh/compdump"
-    {   # zrecompile fresh compdump in background
-        autoload -Uz zrecompile
-        zrecompile -pq "${XDG_CACHE_HOME}/zsh/compdump"
+    {
+        zcompdump="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/compdump"
+        if [[ -s "$zcompdump" && (! -s "${zcompdump}.zwc" || "$zcompdump" -nt "${zcompdump}.zwc") ]]; then
+            if command mkdir "${zcompdump}.zwc.lock" 2>/dev/null; then
+                zcompile "$zcompdump"
+                command rmdir "${zcompdump}.zwc.lock" 2>/dev/null
+            fi
+        fi
     } &!
 else
     compinit -i -u -C -d "${XDG_CACHE_HOME}/zsh/compdump"

@@ -111,22 +111,12 @@ local function _deactivate_region() {
 }
 zle -N _deactivate_region
 
+# Loosely emulate the functionality of a `gv` vim motion. Doesn't track point
+# and mark across line changes as that goes far beyond the scope of what I
+# need from command line vi mode.
 local function _reactivate_region() {
     emulate -L zsh
-
-    # save distance to zeroth column from cursor_point and cursor_mark
-    # save distance between cursor_point and cursor_mark
-
-    # NOTE: If LBUFFER hasn't changed then the first position (point or mark)
-    # won't have changed either.
-    # NOTE: If the distance between point and mark is the same, they can both
-    # be shifted up or down by the same value.
-    # NOTE: Distance to end of BUFFER is actually irrelevant, the only check
-    # that matters is the distance between point and mark.
-    #
-    # NOTE: This is a fucking waste of time, tracking point and mark across
-    # line changes goes so far beyond the scope of what I need from vi mode.
-
+    zle visual-mode
     CURSOR="${cursor_point}"
     MARK="${cursor_mark}"
 }
@@ -600,9 +590,9 @@ bindkey -M vicmd 'DS' delete-surround
 local function _manipulate_surrounding() {
     emulate -L zsh
     local characters=(\' \" \` \{ \( \[ \<)
+    local key1 key2
     local found_key1=false
     local found_key2=false
-    local key1 key2
 
     echo -ne $underline_cursor
     read -k 1 key1
@@ -668,15 +658,6 @@ bindkey -M visual 'M[' add-surround
 bindkey -M visual 'M(' add-surround
 bindkey -M visual 'M{' add-surround
 bindkey -M visual 'M<' add-surround
-
-local function _cleanup_surrounding_whitespace() {
-    emulate -L zsh
-    zle vi-match-bracket
-    zle backward-delete-char
-    zle vi-match-bracket
-    zle vi-forward-char
-    zle delete-char
-}
 
 local function _add_surrounding() {
     emulate -L zsh

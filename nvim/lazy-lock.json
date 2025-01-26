@@ -18,7 +18,7 @@
   "dial.nvim": { "branch": "master", "commit": "34bbd9c387c358190e61ce71017faad3dffa7a74" },
   "fidget.nvim": { "branch": "main", "commit": "a0abbf18084b77d28bc70e24752e4f4fd54aea17" },
   "friendly-snippets": { "branch": "main", "commit": "efff286dd74c22f731cdec26a70b46e5b203c619" },
-  "fzf": { "branch": "master", "commit": "7220d8233e81291db8bda3d4eb5286ca45f07be0" },
+  "fzf": { "branch": "master", "commit": "c13228f34623b856bd22a963959f4655cbfac947" },
   "fzf-lua": { "branch": "main", "commit": "e68d21bf23f27fae4bb395760e3eb10b8768ea2c" },
   "garbage-day.nvim": { "branch": "main", "commit": "750ef08ae6031ee3683014c5349144340c08ead6" },
   "gitsigns.nvim": { "branch": "main", "commit": "d8918f06624dd53b9a82bd0e29c31bcfd541b40d" },

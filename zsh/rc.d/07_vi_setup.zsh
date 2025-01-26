@@ -96,16 +96,16 @@ zle -N zle-keymap-select
 
 # DEACTIVATE / REACTIVATE REGION
 # ---------------------------------------------------------------------------- #
-local point
-local mark
+local cursor_point cursor_mark
 
 local function _deactivate_region() {
     emulate -L zsh
 
-    # Don't save region when exiting visual line mode
+    # TODO: move this to zle-keymap-select
+    # Don't save region coords when exiting visual line mode
     if (( "${REGION_ACTIVE}" == 1 )); then
-        point="${CURSOR}"
-        mark="${MARK}"
+        cursor_point="${CURSOR}"
+        cursor_mark="${MARK}"
     fi
     zle deactivate-region
 }
@@ -113,9 +113,22 @@ zle -N _deactivate_region
 
 local function _reactivate_region() {
     emulate -L zsh
-    zle visual-mode
-    CURSOR="${point}"
-    MARK="${mark}"
+
+    # save distance to zeroth column from cursor_point and cursor_mark
+    # save distance between cursor_point and cursor_mark
+
+    # NOTE: If LBUFFER hasn't changed then the first position (point or mark)
+    # won't have changed either.
+    # NOTE: If the distance between point and mark is the same, they can both
+    # be shifted up or down by the same value.
+    # NOTE: Distance to end of BUFFER is actually irrelevant, the only check
+    # that matters is the distance between point and mark.
+    #
+    # NOTE: This is a fucking waste of time, tracking point and mark across
+    # line changes goes so far beyond the scope of what I need from vi mode.
+
+    CURSOR="${cursor_point}"
+    MARK="${cursor_mark}"
 }
 zle -N _reactivate_region
 
@@ -509,7 +522,7 @@ local function _change_motions() {
             read -k 1 next_char
             zle -U "TN${next_char}"
             zle vi-change
-            [[ $RBUFFER != *"$next_char"* ]] \
+            [[ $RBUFFER != *"${next_char}"* ]] \
                 && echo -ne $block_cursor
             ;;
         'h')                               # yh = Change to previous typed char
@@ -517,7 +530,7 @@ local function _change_motions() {
             read -k 1 prev_char
             zle -U "TP${prev_char}"
             zle vi-change
-            [[ $LBUFFER != *"$prev_char"* ]] \
+            [[ $LBUFFER != *"${prev_char}"* ]] \
                 && echo -ne $block_cursor
             ;;
         *)
@@ -589,28 +602,30 @@ local function _manipulate_surrounding() {
     local characters=(\' \" \` \{ \( \[ \<)
     local found_key1=false
     local found_key2=false
-    local key1
-    local key2
+    local key1 key2
+
+    echo -ne $underline_cursor
     read -k 1 key1
     read -k 1 key2
+    echo -ne $block_cursor
 
     # Check if both inputs exist in the characters array
     for k in "${characters[@]}"; do
-        [[ "$k" == "$key1" ]] && found_key1=true
-        [[ "$k" == "$key2" ]] && found_key2=true
+        [[ "${k}" == "${key1}" ]] && found_key1=true
+        [[ "${k}" == "${key2}" ]] && found_key2=true
 
         # If both keys are found, break early
-        [[ "$found_key1" == true && "$found_key2" == true ]] && break
+        [[ "${found_key1}" == true && "${found_key2}" == true ]] && break
     done
 
     # If either key was not found in the array, return
-    [[ "$found_key1" == false || "$found_key2" == false ]] && return
+    [[ "${found_key1}" == false || "${found_key2}" == false ]] && return
 
     # If the same key was pressed twice `delete`, otherwise `change`
-    if [[ "$key1" == "$key2" ]]; then
-        zle -U DS"$key1"
+    if [[ "${key1}" == "${key2}" ]]; then
+        zle -U DS"${key1}"
     else
-        zle -U CS"$key1""$key2"
+        zle -U CS"${key1}""${key2}"
     fi
 }
 zle -N _manipulate_surrounding
@@ -654,6 +669,15 @@ bindkey -M visual 'M(' add-surround
 bindkey -M visual 'M{' add-surround
 bindkey -M visual 'M<' add-surround
 
+local function _cleanup_surrounding_whitespace() {
+    emulate -L zsh
+    zle vi-match-bracket
+    zle backward-delete-char
+    zle vi-match-bracket
+    zle vi-forward-char
+    zle delete-char
+}
+
 local function _add_surrounding() {
     emulate -L zsh
     case "${KEYS}" in
@@ -665,5 +689,9 @@ local function _add_surrounding() {
         '[') zle -U 'M[[' ;;
         '<') zle -U 'M<<' ;;
     esac
+
+    # Save the region coords for `_reactivate_region` widget
+    cursor_point="${CURSOR}"
+    cursor_mark="${MARK}"
 }
 zle -N _add_surrounding

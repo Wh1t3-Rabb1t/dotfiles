@@ -200,7 +200,12 @@ bindkey -M viins "^?" _backspace_wrapper
 # ---------------------------------------------------------------------------- #
 local function _delete_wrapper() {
     emulate -L zsh
-    [[ -z "$RBUFFER" ]] && BUFFER= || zle delete-char
+    if [[ -z "$RBUFFER" ]]; then
+        BUFFER=
+        POSTDISPLAY=
+    else
+        zle delete-char
+    fi
 }
 zle -N _delete_wrapper
 bindkey -M viins "^[[3~" _delete_wrapper

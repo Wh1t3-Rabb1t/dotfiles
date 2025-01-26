@@ -1,5 +1,13 @@
 # TODO
 
+
+- create motions to add / remove whitespace surrounding matching brackets
+i.e (add) ( remove )
+can be initiated from the opening or closing bracket
+
+
+- consider binding up / down arrow to navigate `/` search results and left / right arrow to move selection left and right
+
 - nvim wrangle bindings C V X R (change to dial, registers, gv mode etc)
 
 - !! implement nvim dial functionality in zsh vi mode (will be easy just scan RBUFFER for matches `true` `false` etc and replace at search term index)
@@ -14,8 +22,6 @@
 - flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)
 - ReConfigure Lualine
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
-
-
 
 
 

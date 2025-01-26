@@ -10,9 +10,9 @@
 -- https://gist.github.com/Starefossen/5957088
 -- https://learnvimscriptthehardway.stevelosh.com/
 
-
--- INDEX
---------------------------------------------------------------------------------
+-- ╭───────╮
+-- │ INDEX │
+-- ╰───────╯
 -- INSERT MODE
 -- VISUAL MODE
 -- COMMAND LINE MODE

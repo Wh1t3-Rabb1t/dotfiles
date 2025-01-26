@@ -101,8 +101,12 @@ local mark
 
 local function _deactivate_region() {
     emulate -L zsh
-    point="${CURSOR}"
-    mark="${MARK}"
+
+    # Don't save region when exiting visual line mode
+    if (( "${REGION_ACTIVE}" == 1 )); then
+        point="${CURSOR}"
+        mark="${MARK}"
+    fi
     zle deactivate-region
 }
 zle -N _deactivate_region

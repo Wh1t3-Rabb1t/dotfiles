@@ -6,15 +6,34 @@
 
 - possibly incorporate these somewhere:
 
+
 ```lua
-vmap("L", [["zx"zpgvlolo]], { desc = "➡️ Move selection right" })
-vmap("T", [["zxhh"zpgvhoho]], { desc = "⬅ Move selection left" })
+-- vmap("<Up>", [["zx"zpgvlolo]])                 -- Search selection up
+-- vmap("<Down>", [["zxhh"zpgvhoho]])               -- Search selection down
+
+
+-- -- makes * and # work on visual mode too.
+-- vim.api.nvim_exec(
+--   [[
+--   function! g:VSetSearch(cmdtype)
+--     let temp = @s
+--     norm! gv"sy
+--     let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+--     let @s = temp
+--   endfunction
+--   xnoremap * :<C-u>call g:VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+--   xnoremap # :<C-u>call g:VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+-- ]],
+--   false
+-- )
+
 ```
 
 
 - Reinstall hammerspoon, monitor control, and rectangle via homebrew
 
 
+- add user keybindings to legendary and sort keybindings together. (also move all bound functions to separate file)
 - 1. Standardize Rg / Fzf colors (only neovim remains)
 - flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)
 - ReConfigure Lualine

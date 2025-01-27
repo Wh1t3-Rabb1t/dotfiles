@@ -37,6 +37,7 @@
 -- PASTE
 -- OPEN / JOIN LINES
 -- NAVIGATE `/` and `f` SEARCH RESULTS
+-- MOVE SELECTION LEFT / RIGHT
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
@@ -395,7 +396,13 @@ nmap("<Down>",  "mnn")                            -- Next / search result
 nmap("<Up>",    "mnN")                            -- Prev / search result
 nmap("<Right>", "mn*")                            -- Next word under cursor
 nmap("<Left>",  "mn*NN")                          -- Prev word under cursor
-nvmap("h", ",")                                   -- Prev f search result
+nvmap("h",      ",")                              -- Prev f search result
+
+
+-- MOVE SELECTION LEFT / RIGHT
+--------------------------------------------------------------------------------
+vmap("<Right>", [["zx"zpgvlolo]])                 -- Move selection right
+vmap("<Left>",  [["zxhh"zpgvhoho]])               -- Move selection left
 
 
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
@@ -424,17 +431,17 @@ end)
 -- WINDOW
 --------------------------------------------------------------------------------
 -- Navigate
-nmap("<S-Left>", function()                         -- Focus split LEFT
-    win.navigate_horizontally("h")
-end)
-nmap("<S-Right>", function()                        -- Focus split RIGHT
-    win.navigate_horizontally("l")
-end)
-nmap("<S-Up>", function()                           -- Focus split ABOVE
+nmap("<S-Up>", function()                         -- Focus split ABOVE
     win.navigate_vertically("k")
 end)
-nmap("<S-Down>", function()                         -- Focus split BELOW
+nmap("<S-Down>", function()                       -- Focus split BELOW
     win.navigate_vertically("j")
+end)
+nmap("<S-Left>", function()                       -- Focus split LEFT
+    win.navigate_horizontally("h")
+end)
+nmap("<S-Right>", function()                      -- Focus split RIGHT
+    win.navigate_horizontally("l")
 end)
 
 -- Resize

@@ -1,7 +1,7 @@
 # TODO
 
 
-- write a script to check for / download zsh plugin updates
+- Finish refining git submodule scripts
 
 - consider binding up / down arrow to navigate `/` search results and left / right arrow to move selection left and right
 
@@ -17,6 +17,22 @@
 - ReConfigure Lualine
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
 
+
+
+
+
+
+# NOTE
+- look into:
+- https://github.com/lincheney/fzf-tab-completion
+- https://formulae.brew.sh/formula/zsh-completions
+-
+- Additional completions
+- fpath=("${ZDOTDIR}/plugins/completions/src" ${fpath})
+- fpath=("${ZDOTDIR}/plugins/git-completion/src" ${fpath})
+-
+- Enable git-extras completions
+- source "${DOTFILES}/tools/git-extras/etc/git-extras-completion.zsh"
 
 
 

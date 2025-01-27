@@ -34,21 +34,6 @@ if type brew &>/dev/null; then
     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
 
-
-# NOTE
-# look into:
-#
-# https://github.com/lincheney/fzf-tab-completion
-# https://formulae.brew.sh/formula/zsh-completions
-
-
-# Additional completions
-# fpath=("${ZDOTDIR}/plugins/completions/src" ${fpath})
-# fpath=("${ZDOTDIR}/plugins/git-completion/src" ${fpath})
-
-# Enable git-extras completions
-# source "${DOTFILES}/tools/git-extras/etc/git-extras-completion.zsh"
-
 # Make sure complist is loaded (should be called before compinit)
 zmodload zsh/complist
 
@@ -64,6 +49,10 @@ if [[ -n "${XDG_CACHE_HOME}/zsh/compdump"(#qN.mh+20) ]]; then
     {
         zcompdump="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/compdump"
         if [[ -s "$zcompdump" && (! -s "${zcompdump}.zwc" || "$zcompdump" -nt "${zcompdump}.zwc") ]]; then
+
+            # Use mkdir for the lock because directory creation on Unix systems is atomic.
+            # NOTE: An atomic operation is completed as a single, indivisible step,
+            # ensuring that only one process succeeds in acquiring the lock.
             if command mkdir "${zcompdump}.zwc.lock" 2>/dev/null; then
                 zcompile "$zcompdump"
                 command rmdir "${zcompdump}.zwc.lock" 2>/dev/null

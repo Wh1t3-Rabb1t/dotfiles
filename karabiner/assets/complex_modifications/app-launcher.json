@@ -66,7 +66,7 @@
                     },
                     "to": [
                         {
-                            "shell_command": "open -a 'UTM'"
+                            "shell_command": "open -a 'Vial'"
                         }
                     ]
                 }

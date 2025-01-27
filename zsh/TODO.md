@@ -3,19 +3,11 @@
 
 - Finish refining git submodule scripts
 
-- consider binding up / down arrow to navigate `/` search results and left / right arrow to move selection left and right
 
-- nvim wrangle bindings C V X R (change to dial, registers, gv mode etc)
 
 - need to add checks for os type when using `pbpaste` in scripts
-
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 
-
-- 1. Standardize Rg / Fzf colors (only neovim remains)
-- flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)
-- ReConfigure Lualine
-- Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
 
 
 
@@ -181,19 +173,13 @@ update nerdfont repo brew install command in README `brew install --cask font-ha
 
 
 
-- Rework upper / lower case, dot op bindings to match nvim
 - Look into implementing gnu privacy guard and wireguard
 - Implement pfblockerNG
 - Implement substitute binding
 - Implement registers
-- Add checks in .zshrc to ensure certain directories and env variables exist to prevent bugs when initializing a new system
 
 - Configure git in ~/.gitconfig
-- Set Rg search highlight colors
-- Set fzf env variables in ~/.config/fzf
-- Add copy and paste from registers to zsh vi mode
 - Add a check to ensure that luarocks is installed before initializing luacheck
-- Create bindings to launch nvim from zsh and broot
 
 - Learn Java: https://www.youtube.com/playlist?list=PLZPZq0r_RZOMhCAyywfnYLlrjiVOkdAI1
 - Git etc: https://www.youtube.com/@bootdotdev/videos

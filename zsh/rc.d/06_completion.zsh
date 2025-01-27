@@ -52,7 +52,7 @@ if [[ -n "${XDG_CACHE_HOME}/zsh/compdump"(#qN.mh+20) ]]; then
 
             # Use mkdir for the lock because directory creation on Unix systems is atomic.
             # NOTE: An atomic operation is completed as a single, indivisible step,
-            # ensuring that only one process succeeds in acquiring the lock.
+            # thus ensuring that only one process succeeds in acquiring the lock.
             if command mkdir "${zcompdump}.zwc.lock" 2>/dev/null; then
                 zcompile "$zcompdump"
                 command rmdir "${zcompdump}.zwc.lock" 2>/dev/null

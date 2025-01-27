@@ -391,10 +391,10 @@ end)
 vmap("/",  "<Esc>/\\%V", {                        -- Search within selection
     silent = false
 })
-nvmap("n", "mnn")                                 -- Next / search result
-nvmap("b", "mnN")                                 -- Prev / search result
-nvmap("*", "mn*")                                 -- Next word under cursor
-nvmap("#", "mn#")                                 -- Prev word under cursor
+nmap("<Down>",  "mnn")                            -- Next / search result
+nmap("<Up>",    "mnN")                            -- Prev / search result
+nmap("<Right>", "mn*")                            -- Next word under cursor
+nmap("<Left>",  "mn*NN")                          -- Prev word under cursor
 nvmap("h", ",")                                   -- Prev f search result
 
 
@@ -424,30 +424,30 @@ end)
 -- WINDOW
 --------------------------------------------------------------------------------
 -- Navigate
-nmap("<Left>", function()                         -- Focus split LEFT
+nmap("<S-Left>", function()                         -- Focus split LEFT
     win.navigate_horizontally("h")
 end)
-nmap("<Right>", function()                        -- Focus split RIGHT
+nmap("<S-Right>", function()                        -- Focus split RIGHT
     win.navigate_horizontally("l")
 end)
-nmap("<Up>", function()                           -- Focus split ABOVE
+nmap("<S-Up>", function()                           -- Focus split ABOVE
     win.navigate_vertically("k")
 end)
-nmap("<Down>", function()                         -- Focus split BELOW
+nmap("<S-Down>", function()                         -- Focus split BELOW
     win.navigate_vertically("j")
 end)
 
 -- Resize
-nmap("<S-Up>", function()                         -- Resize window UP
+vmap("<S-Up>", function()                         -- Resize window UP
     win.relative_resize("up")
 end)
-nmap("<S-Down>", function()                       -- Resize window DOWN
+vmap("<S-Down>", function()                       -- Resize window DOWN
     win.relative_resize("down")
 end)
-nmap("<S-Left>", function()                       -- Resize window LEFT
+vmap("<S-Left>", function()                       -- Resize window LEFT
     win.relative_resize("left")
 end)
-nmap("<S-Right>", function()                      -- Resize window RIGHT
+vmap("<S-Right>", function()                      -- Resize window RIGHT
     win.relative_resize("right")
 end)
 

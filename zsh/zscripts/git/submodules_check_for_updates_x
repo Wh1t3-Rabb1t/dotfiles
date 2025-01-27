@@ -9,4 +9,8 @@
 
 emulate -L zsh
 
+pushd "${DOTFILES}"
+
 git submodule foreach 'git fetch && git diff --stat origin/$(git rev-parse --abbrev-ref HEAD)'
+
+popd

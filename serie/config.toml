@@ -1,0 +1,90 @@
+[ui.list]
+# The minimum width of a subject in the commit list.
+# type: u16
+subject_min_width = 20
+# The date format of a author date in the commit list.
+# The format must be specified in strftime format.
+# https://docs.rs/chrono/latest/chrono/format/strftime/index.html
+# type: string
+date_format = "%Y-%m-%d"
+# The width of a author date in the commit list.
+# type: u16
+date_width = 10
+# Whether to show a author date in the commit list in local timezone.
+# type: boolean
+date_local = true
+# The width of a author name in the commit list.
+# type: u16
+name_width = 20
+
+[ui.detail]
+# The height of a commit detail area.
+# type: u16
+height = 20
+# The date format of a author/committer date in the commit detail.
+# The format must be specified in strftime format.
+# https://docs.rs/chrono/latest/chrono/format/strftime/index.html
+# type: string
+date_format = "%Y-%m-%d %H:%M:%S %z"
+# Whether to show a author/committer date in the commit list in local timezone.
+# type: boolean
+date_local = true
+
+[ui.refs]
+# The width of a refs list area.
+# type: u16
+width = 26
+
+[graph.color]
+# Colors should be specified in the format #RRGGBB or #RRGGBBAA.
+
+# Array of colors used for the commit graph.
+# type: array of strings
+branches = [
+  "#E06C76",
+  "#98C379",
+  "#E5C07B",
+  "#61AFEF",
+  "#C678DD",
+  "#56B6C2",
+]
+# Color of the edge surrounding the commit circles in the graph.
+# type: string
+edge = "#00000000"
+# Background color of the commit graph.
+# type: string
+background = "#00000000"
+
+[keybind]
+force_quit = ["ctrl-c"]
+quit = ["q"]
+help_toggle = ["?"]
+cancel = ["esc"]
+close = ["backspace"]
+
+navigate_up = ["i", "up"]
+navigate_down = ["k", "down"]
+navigate_right = ["l", "right"]
+navigate_left = ["t", "left"]
+
+go_to_top = ["g"]
+go_to_bottom = ["shift-g"]
+scroll_down = ["ctrl-e"]
+scroll_up = ["ctrl-y"]
+page_up = ["ctrl-b", "pageup"]
+page_down = ["ctrl-f", "pagedown", "space"]
+half_page_up = ["ctrl-u"]
+half_page_down = ["ctrl-d"]
+select_top = ["shift-h"]
+select_middle = ["shift-m"]
+select_bottom = ["shift-l"]
+
+go_to_next = ["n"]
+go_to_previous = ["shift-n"]
+confirm = ["enter"]
+ref_list_toggle = ["tab"]
+search = ["/"]
+
+# copy part of information, ex: copy the short commit hash not all
+short_copy = ["c"]
+full_copy = ["shift-c"]

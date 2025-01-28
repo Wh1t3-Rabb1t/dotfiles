@@ -125,7 +125,7 @@ fi
 # Use moar over less if available
 if (( ${+commands[moar]} )); then
     export PAGER="moar"
-    export MOAR="--colors=256 --no-statusbar"
+    export MOAR="--colors=256"
 else
     export PAGER="less"
 fi

@@ -2,22 +2,11 @@
 
 
 - Finish refining git submodule scripts
-
-
-
-- need to add checks for os type when using `pbpaste` in scripts
+- Add checks for os type when using `pbpaste` in scripts
 - Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
-
-
-
-
-
-
 
 # NOTE
 - look into:
-- https://github.com/lincheney/fzf-tab-completion
-- https://formulae.brew.sh/formula/zsh-completions
 -
 - Additional completions
 - fpath=("${ZDOTDIR}/plugins/completions/src" ${fpath})
@@ -78,6 +67,8 @@
 
 ## Plugins
 
+https://github.com/catppuccin/bat
+https://github.com/walles/moar
 https://github.com/bootandy/dust
 https://github.com/mafredri/zsh-async
 https://github.com/MichaelAquilina/zsh-auto-notify
@@ -85,10 +76,10 @@ https://github.com/junegunn/fzf-git.sh
 https://github.com/rs/curlie
 https://github.com/davecheney/httpstat
 https://github.com/direnv/direnv
-https://github.com/walles/moar
 https://github.com/maaslalani/slides
-https://github.com/catppuccin/bat
 https://github.com/zsh-users/zsh-completions
+https://github.com/lincheney/fzf-tab-completion
+
 
 - http client
 https://github.com/Julien-cpsn/ATAC
@@ -107,71 +98,7 @@ https://soundcloud.com/neuralfold
 
 ## Brewfile
 
-- test nvim setup
-brew "npm"
-brew "luarocks"
-brew "go"
-brew "sqlite"
-brew "fzf"
-brew "neovim"
-
-
-
-
-
-
-cask "brave-browser"
-cask "firefox"
-cask "firefox-developer-edition"
-cask "font-meslo-for-powerlevel10k"
-cask "ghostty"
-cask "hammerspoon"
-cask "karabiner-elements"
-cask "kitty"
-cask "rectangle"
-
-
-
-
-brew "bat"
-brew "blueutil"
-brew "broot"
-brew "btop"
-brew "coreutils"
-brew "curl"
-brew "fd"
-brew "ffmpeg"
-brew "git"
-brew "git-delta"
-brew "gitui"
-brew "glow"
-brew "gnu-sed"
-brew "gnu-tar"
-brew "go"
-brew "grep"
-brew "jq"
-brew "lsd"
-brew "luarocks"
-brew "mpv"
-brew "neovim"
-brew "npm"
-brew "ripgrep"
-brew "serie"
-brew "sqlite"
-brew "shellcheck"
-brew "tealdeer"
-brew "vim"
-brew "wget"
-brew "yt-dlp"
-brew "zsh"
-
-
-
-
-
 update nerdfont repo brew install command in README `brew install --cask font-hack-nerd-font`
-
-
 
 - Look into implementing gnu privacy guard and wireguard
 - Implement pfblockerNG

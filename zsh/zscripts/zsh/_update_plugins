@@ -7,13 +7,15 @@
 # Globals : None                                                               #
 # ---------------------------------------------------------------------------- #
 
+# https://stackoverflow.com/questions/5828324/update-git-submodule-to-latest-commit-on-origin
+
 emulate -L zsh
 
 pushd "${DOTFILES}"
 
-git submodule sync
-git submodule update --init --recursive
-
-# git submodule update --remote --merge
+git submodule update --remote --merge
+git add .
+git commit -m "update zplugins"
+git push -u origin main
 
 popd

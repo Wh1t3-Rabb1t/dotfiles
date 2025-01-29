@@ -1,16 +1,4 @@
-# Config
-
-- Download xcode developer tools if on macOS:
-
-```sh
-xcode-select --install
-```
-
-- Clone dotfile repo and execute the deploy script:
-
-```sh
-git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "${HOME}/.local/dotfiles"; "${HOME}/.local/dotfiles/deploy.zsh"
-```
+# The official dotfile repository of Master Wayne
 
 ```txt
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -22,12 +10,12 @@ git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "${HOME}/.local/dotfiles"
 :::::::::::::::::::::::::::::::::-'   /                     \  `::::::
 :::::::::::::::::::::::::::::::-' '  |                       |  ::::::
 :::::::::::::::::::::::::::::-'   '  |                       |  ::::::
-:::::::::::::::::::::::::::-'     `   \   ,_ _.     ._ _.   /  ,::::::
-::::::::::::::::::::::::::'        `   \ |  V  \   /  V  | /  _,::::::
-:::::::::::::::::::::::-'           `   `,      \ /      ,`  _,-::::::
+:::::::::::::::::::::::::::-'     `   \   ._ _.     ._ _.   /  ,::::::
+::::::::::::::::::::::::::'        `   \ |  v  \   /  v  | /  _,::::::
+:::::::::::::::::::::::-'           `   `.      \ /      .`  _,-::::::
 :::::::::::::::::::::-'               `          `        _,--::::::::
 :::::::::::::::::::-'                   ` .          _,--:::::::::::::
-:::::::::::::::::-'                         ` ...,--::::::::::::::::::
+:::::::::::::::::-'                         ` . .,--::::::::::::::::::
 :::::::::::::::-'                         _,,-::::::::::::::::::::::::
 :::::::::::::-'                      _,--:::::::::::::::::::::::::::::
 :::::::::::-'                  _.--::::::::::::::::::::::#####::::::::
@@ -45,4 +33,18 @@ git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "${HOME}/.local/dotfiles"
 ##########:::########################::###############################
 #####################################::###############################
 ######################################################################
+```
+
+## Setup
+
+- Download xcode developer tools if on macOS:
+
+```sh
+xcode-select --install
+```
+
+- Clone dotfile repo and execute the deploy script:
+
+```sh
+git clone https://github.com/Wh1t3-Rabb1t/dotfiles.git "${HOME}/.local/dotfiles"; "${HOME}/.local/dotfiles/deploy.zsh"
 ```

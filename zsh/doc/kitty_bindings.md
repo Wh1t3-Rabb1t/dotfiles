@@ -15,8 +15,8 @@
 
 ## WINDOWS ---------------------------------------------------------------------
 
-- `Super Ctrl Alt m`     : New split
-- `Super Ctrl Alt M`     : New window
+- `Super Ctrl Alt v`     : New split
+- `Super Ctrl Alt V`     : New window
 - `Super Ctrl Alt w`     : Close split
 - `Super Ctrl Alt W`     : Detach split
 - `Ctrl Alt Up`          : Focus split above
@@ -31,8 +31,8 @@
 
 ## TABS ------------------------------------------------------------------------
 
-- `Super Ctrl Alt n`     : New tab
-- `Super Ctrl Alt N`     : Set tab title
+- `Super Ctrl Alt b`     : New tab
+- `Super Ctrl Alt B`     : Set tab title
 - `Ctrl End`             : Next tab
 - `Ctrl Home`            : Previous tab
 

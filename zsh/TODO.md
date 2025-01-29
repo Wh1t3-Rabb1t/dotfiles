@@ -1,23 +1,25 @@
 # TODO
 
+- Dropping karabiner. Link no longer exists in deploy script
 
 - Finish refining git submodule scripts
 - Add checks for os type when using `pbpaste` in scripts
-- Ensure that local binary paths are declared via env variables and NOT ${HOME}/.local/ etc.
 - Add a check to ensure that luarocks is installed before initializing luacheck
-- Fix ghostty navigate split bindings
-- Rewrite basic Rectangle features with Hammerspoon
-- App launcher / focuser with Hammerspoon
-- Monitor brightness control with Hammerspoon
-- Possibly auto quit Finder when system wakes up with Hammerspoon
+
+- Hammerspoon:
+    Rewrite basic Rectangle features with Hammerspoon
+    App launcher / focuser with Hammerspoon
+    Monitor brightness control with Hammerspoon
+    Possibly auto quit Finder when system wakes up with Hammerspoon
+
 
 
 - Configure ghostty
-- Configure sketchybar
+- Fix ghostty navigate split bindings
+
 - Configure vimium-c
 
-- ? (Maybe) Put a file named '.hushlogin' into the home directory to prevent last login message when zsh loads.
-
+- Ascii art: https://emojicombos.com/batman-ascii-art
 
 ---
 
@@ -56,8 +58,11 @@ update nerdfont repo brew install command in README `brew install --cask font-ha
 - Learn Java: https://www.youtube.com/playlist?list=PLZPZq0r_RZOMhCAyywfnYLlrjiVOkdAI1
 - Git etc: https://www.youtube.com/@bootdotdev/videos
 
-- awk cheat sheet
-    https://github.com/gennaro-tedesco/dotfiles/blob/master/navi/awk.cheat
+- Useful dofile repos:
+    https://github.com/z0rc/dotfiles/
+    https://github.com/chrisgrieser/.config/
+    https://github.com/gennaro-tedesco/dotfiles/
+    https://github.com/Phantas0s/.dotfiles/
 
 - Rg globbing tips:
 The feature you’re talking about is one of my favorites and most used, it’s even turbo charged when you use live_grep_glob (or set rg_glob=true) and then search for a regex limited to specific files, I.e foo.*bar -- *.lua !*spec* which means search for a line that has both foo AND bar inside lua files excluding spec files (tests), then I ctrl-g to fuzzy for the fine tuning.

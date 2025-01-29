@@ -11,6 +11,10 @@ emulate -L zsh
 
 pushd "${DOTFILES}"
 
-git submodule foreach 'git fetch && git diff --stat origin/$(git rev-parse --abbrev-ref HEAD)'
+# Don't show diffs
+# git submodule foreach 'git fetch && git diff --stat origin/$(git rev-parse --abbrev-ref HEAD); echo'
+
+# Show diffs
+git submodule foreach 'git fetch && git diff origin/$(git rev-parse --abbrev-ref HEAD) && echo'
 
 popd

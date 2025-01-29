@@ -9,8 +9,8 @@
     email = 88162211+Wh1t3-Rabb1t@users.noreply.github.com
 
 [core]
-    pager = delta
     excludesfile = /Users/tillcappel/.config/git/ignore
+    pager = delta
 
 [interactive]
     diffFilter = delta --color-only

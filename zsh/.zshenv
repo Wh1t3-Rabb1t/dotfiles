@@ -110,8 +110,10 @@ MANPATH="${XDG_DATA_HOME}/man:${MANPATH}"
 path=(${GOPATH}/bin ${path})
 
 
-# EDITOR / PAGER
+# PAGER / EDITOR
 # ---------------------------------------------------------------------------- #
+export PAGER="less"
+
 # Use nvim over vim if available
 if (( ${+commands[nvim]} )); then
     export EDITOR="nvim"
@@ -120,12 +122,4 @@ if (( ${+commands[nvim]} )); then
 else
     export EDITOR="vim"
     export VISUAL="vim"
-fi
-
-# Use moar over less if available
-if (( ${+commands[moar]} )); then
-    export PAGER="moar"
-    export MOAR="--colors=256"
-else
-    export PAGER="less"
 fi

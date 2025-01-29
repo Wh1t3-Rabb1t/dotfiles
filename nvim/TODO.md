@@ -32,7 +32,7 @@
 
 - Reinstall hammerspoon, monitor control, and rectangle via homebrew
 
-
+- fix icon cutoff when using Monaco font in kitty
 - add user keybindings to legendary and sort keybindings together. (also move all bound functions to separate file)
 - 1. Standardize Rg / Fzf colors (only neovim remains)
 - flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)

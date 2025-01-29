@@ -1,5 +1,6 @@
 # TODO
 
+
 - Dropping karabiner. Link no longer exists in deploy script
 
 - Finish refining git submodule scripts

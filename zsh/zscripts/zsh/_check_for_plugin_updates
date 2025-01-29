@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Check all zsh plugins for updates and output diff if outdated.               #
+# Check all zsh plugins for updates and output diff stat if outdated.          #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : None                                                               #
@@ -11,10 +11,6 @@ emulate -L zsh
 
 pushd "${DOTFILES}"
 
-# Don't show diffs
-# git submodule foreach 'git fetch && git diff --stat origin/$(git rev-parse --abbrev-ref HEAD); echo'
-
-# Show diffs
-git submodule foreach 'git fetch && git diff origin/$(git rev-parse --abbrev-ref HEAD) && echo'
+git submodule foreach 'git fetch && git diff --stat origin/$(git rev-parse --abbrev-ref HEAD); echo'
 
 popd

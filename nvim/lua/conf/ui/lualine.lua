@@ -10,10 +10,10 @@ local M = {}
 -- ICONS
 --------------------------------------------------------------------------------
 local icons = {
-    component_separator_left = "│",
-    component_separator_right = "│",
-    section_separator_left = "",
-    section_separator_right = "",
+    component_separator_left = "╱",
+    component_separator_right = "╱",
+    section_separator_left = "",
+    section_separator_right = "",
     modified = function() return "●" end,
     vim_logo = function() return "" end,
     grapple_icon = function() return "󰛢" end,
@@ -37,6 +37,15 @@ local icons = {
     end
 }
 
+--       component_separators = { left = '╲', right = '╱' },
+-- disabled_filetypes = { 'alpha', 'neo-tree', 'snacks_dashboard' },
+-- section_separators = { left = '', right = '' },
+
+-- ""
+--  "
+-- icon = "",
+-- symbols = { added = " ", modified = " ", removed = " " },
+-- symbols = { error = " ", warn = " ", info = " ", hint = " " },
 
 -- CONFIG
 --------------------------------------------------------------------------------
@@ -95,12 +104,8 @@ function M.config()
             globalstatus = true,
             refresh = { tabline = 100000, },
             disabled_filetypes = {
-                sections = {
-                    lualine_x = {
-                        -- Prevent git signs from bugging out
-                        -- when neotree is focused
-                        "neo-tree"
-                    }
+                winbar = {
+                    "neo-tree"
                 }
             }
         },
@@ -135,6 +140,49 @@ function M.config()
             },
             lualine_y = { "branch" },
             lualine_z = { icons.get_cwd }
+        },
+
+        -- Focused window
+        winbar = {
+            lualine_a = {},
+            lualine_b = { icons.get_vim_mode },
+            lualine_c = {
+                {
+                    -- Omit the 'symbols' field for now as it crashes neovim if
+                    -- launched without any files open.
+                    "filename",
+                    file_status = true,
+                    newfile_status = false,
+                    path = 1,
+                    -- 0: Just the filename
+                    -- 1: Relative path
+                    -- 2: Absolute path
+                    -- 3: Absolute path, with tilde as the home directory
+                    -- 4: Filename and parent dir, with tilde as the home directory
+                }
+            },
+            lualine_x = {},
+            lualine_y = {},
+            lualine_z = {},
+        },
+
+        -- Unfocused window
+        inactive_winbar = {
+            lualine_a = {},
+            lualine_b = {},
+            lualine_c = {
+                {
+                    "filename",
+                    -- Displays file status (readonly status, modified status)
+                    file_status = true,
+                    -- Display new file status (new file means no write after created)
+                    newfile_status = false,
+                    path = 1,
+                }
+            },
+            lualine_x = {},
+            lualine_y = {},
+            lualine_z = {},
         },
 
         extensions = {},

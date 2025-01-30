@@ -10,6 +10,21 @@
 
 [core]
     excludesfile = /Users/tillcappel/.config/git/ignore
+    pager = delta
+
+[interactive]
+    diffFilter = delta
+
+[delta]
+    diff-so-fancy
+    navigate = true ; use n and N to move between diff sections
+    dark = true
+    hyperlinks = true
+    side-by-side = false
+    keep-plus-minus-markers = true
+    wrap-max-lines = 0
+    wrap-right-percent = 1
+    paging = never
 
 [merge]
     conflictstyle = zdiff3

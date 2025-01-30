@@ -58,7 +58,6 @@ function M.config()
         -- When opening files, don't use windows containing these file or buftypes
         open_files_do_not_replace_types = {
             "terminal",
-            "trouble",
             "qf",
         },
         sort_case_insensitive = false,  -- Used when sorting files and dirs in the tree

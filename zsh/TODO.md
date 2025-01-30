@@ -1,22 +1,7 @@
 # TODO
 
-
-pager = delta
-
-[interactive]
-diffFilter = delta --color-only
-
-[delta]
-navigate = true ; use n and N to move between diff sections
-dark = true
-hyperlinks = true
-side-by-side = true
-keep-plus-minus-markers = true
-
-
 - Dropping karabiner. Link no longer exists in deploy script
 
-- Finish refining git submodule scripts
 - Add checks for os type when using `pbpaste` in scripts
 - Add a check to ensure that luarocks is installed before initializing luacheck
 

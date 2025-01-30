@@ -10,6 +10,7 @@ local M = {}
 -- ICONS
 --------------------------------------------------------------------------------
 local icons = {
+    clock = "",
     component_separator_left = "╱",
     component_separator_right = "╱",
     section_separator_left = "",
@@ -57,30 +58,29 @@ function M.config()
     local lualine_theme = require("lualine.themes.powerline_dark")
     lualine_theme = {
         normal = {
-            a = { fg = colors.crust, bg = colors.text },
-            b = { fg = colors.crust, bg = colors.green },
-            -- b = { fg = colors.crust, bg = "#a6d189" },
+            a = { fg = colors.crust, bg = colors.sky },
+            b = { fg = colors.crust, bg = colors.sky },
             c = { fg = colors.peach, bg = colors.surface1 },
         },
         insert = {
-            a = { fg = colors.crust, bg = colors.text },
-            b = { fg = colors.crust, bg = colors.lavender },
+            a = { fg = colors.crust, bg = colors.sky },
+            b = { fg = colors.sky, bg = colors.surface1 },
             c = { fg = colors.peach, bg = colors.crust, gui = "italic" },
         },
         visual = {
-            a = { fg = colors.crust, bg = colors.text },
-            b = { fg = colors.text, bg = "#1e66f5" },
-            c = { fg = colors.crust, bg = "#8aadf4", gui = "italic" },
+            a = { fg = colors.crust, bg = colors.sky },
+            b = { fg = colors.sky, bg = "#125ef4" },
+            c = { fg = colors.peach, bg = "#06338d", gui = "italic" },
         },
         replace = {
-            a = { fg = colors.crust, bg = colors.text },
-            b = { fg = colors.crust, bg = colors.red },
-            c = { fg = colors.peach, bg = colors.base },
+            a = { fg = colors.crust, bg = colors.sky },
+            b = { fg = colors.crust, bg = "#8d0a26" },
+            c = { fg = colors.peach, bg = colors.crust },
         },
         command = {
-            a = { fg = colors.crust, bg = colors.text },
-            b = { fg = colors.text, bg = "#d20f39" },
-            c = { fg = colors.peach, bg = colors.base },
+            a = { fg = colors.crust, bg = colors.sky },
+            b = { fg = colors.sky, bg = "#d20f39" },
+            c = { fg = colors.peach, bg = "#4d0615" },
         },
         inactive = {
             c = { fg = colors.surface2, bg = colors.mantle, gui = "italic" },
@@ -124,7 +124,7 @@ function M.config()
                         align="left"
                     }
                 },
-                "progress"
+                "progress",
             },
             lualine_x = {
                 {
@@ -151,27 +151,31 @@ function M.config()
                 }
             },
             lualine_y = { icons.get_cwd },
-            lualine_z = {}
+            lualine_z = {},
         },
 
         -- Focused window
         winbar = {
             lualine_a = { icons.vim_logo },
             lualine_b = {},
-            -- lualine_b = { icons.get_vim_mode },
             lualine_c = {
                 {
                     -- Omit the 'symbols' field for now as it crashes neovim if
                     -- launched without any files open.
                     "filename",
+
+                    -- Displays file status (readonly status, modified status)
                     file_status = true,
+
+                    -- Display new file status (new file means no write after created)
                     newfile_status = false,
-                    path = 1,
+
                     -- 0: Just the filename
                     -- 1: Relative path
                     -- 2: Absolute path
                     -- 3: Absolute path, with tilde as the home directory
                     -- 4: Filename and parent dir, with tilde as the home directory
+                    path = 1,
                 },
                 {   -- Grapple
                     icons.grapple_icon,
@@ -180,7 +184,13 @@ function M.config()
                     end
                 }
             },
-            lualine_x = {},
+            lualine_x = {
+                {
+                    "datetime",
+                    icon = icons.clock,
+                    style = "%H:%M",
+                }
+            },
             lualine_y = {},
             lualine_z = {},
         },
@@ -192,9 +202,7 @@ function M.config()
             lualine_c = {
                 {
                     "filename",
-                    -- Displays file status (readonly status, modified status)
                     file_status = true,
-                    -- Display new file status (new file means no write after created)
                     newfile_status = false,
                     path = 1,
                 }

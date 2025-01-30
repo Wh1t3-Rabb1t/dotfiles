@@ -30,13 +30,13 @@
 ```
 
 
-- Reinstall hammerspoon, monitor control, and rectangle via homebrew
+- Reinstall hammerspoon via homebrew
+
+- Set up down left right bindings for visual mode.
 
 - fix icon cutoff when using Monaco font in kitty
 - add user keybindings to legendary and sort keybindings together. (also move all bound functions to separate file)
 - 1. Standardize Rg / Fzf colors (only neovim remains)
-- flushing nvim dropbar replace or reimplement lualine winbar. (it was consuming 10% cpu while idle)
-- ReConfigure Lualine
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
 - consider binding up / down arrow to navigate `/` search results and left / right arrow to move selection left and right
 - nvim wrangle bindings C V X R (change to dial, registers, gv mode etc)

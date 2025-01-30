@@ -18,19 +18,19 @@ function M.config()
     -- Icons for diagnostic errors
     ----------------------------------------------------------------------------
     vim.fn.sign_define("DiagnosticSignError", {
-        text =  "",
+        text =  " ",
         texthl = "DiagnosticSignError"
     })
     vim.fn.sign_define("DiagnosticSignWarn", {
-        text = "",
+        text = " ",
         texthl = "DiagnosticSignWarn"
     })
     vim.fn.sign_define("DiagnosticSignInfo", {
-        text = "",
+        text = " ",
         texthl = "DiagnosticSignInfo"
     })
     vim.fn.sign_define("DiagnosticSignHint", {
-        text = "",
+        text = " ",
         texthl = "DiagnosticSignHint"
     })
 

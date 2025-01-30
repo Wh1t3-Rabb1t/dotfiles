@@ -14,6 +14,14 @@ local icons = {
     component_separator_right = "╱",
     section_separator_left = "",
     section_separator_right = "",
+    location_icon = " ",
+    diagnostics_error = " ",
+    diagnostics_warn = " ",
+    diagnostics_info = " ",
+    diagnostics_hint = " ",
+    diff_added = " ",
+    diff_modified = " ",
+    diff_removed = "󰍷 ",
     modified = function() return "●" end,
     vim_logo = function() return "" end,
     grapple_icon = function() return "󰛢" end,
@@ -37,15 +45,6 @@ local icons = {
     end
 }
 
---       component_separators = { left = '╲', right = '╱' },
--- disabled_filetypes = { 'alpha', 'neo-tree', 'snacks_dashboard' },
--- section_separators = { left = '', right = '' },
-
--- ""
---  "
--- icon = "",
--- symbols = { added = " ", modified = " ", removed = " " },
--- symbols = { error = " ", warn = " ", info = " ", hint = " " },
 
 -- CONFIG
 --------------------------------------------------------------------------------
@@ -115,7 +114,15 @@ function M.config()
             lualine_a = { icons.vim_logo },
             lualine_b = { icons.get_vim_mode },
             lualine_c = {
-                "location",
+                {
+                    "location",
+                    separator = "",
+                    padding = 0,
+                    icon = {
+                        icons.location_icon,
+                        align="left"
+                    }
+                },
                 "progress",
                 {   -- Grapple
                     icons.grapple_icon,
@@ -135,8 +142,23 @@ function M.config()
                 }
             },
             lualine_x = {
-                "diagnostics",
-                "diff",
+                {
+                    "diagnostics",
+                    symbols = {
+                        error = icons.diagnostics_error,
+                        warn = icons.diagnostics_warn,
+                        info = icons.diagnostics_info,
+                        hint = icons.diagnostics_hint,
+                    }
+                },
+                {
+                    "diff",
+                    symbols = {
+                        added = icons.diff_added,
+                        modified = icons.diff_modified,
+                        removed = icons.diff_removed,
+                    }
+                }
             },
             lualine_y = { "branch" },
             lualine_z = { icons.get_cwd }

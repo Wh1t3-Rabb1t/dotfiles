@@ -10,14 +10,14 @@ local M = {}
 -- ICONS
 --------------------------------------------------------------------------------
 local icons = {
-    git_added = "",
+    git_added = "",
+    git_deleted = "󰍷",
     git_modified = "M",
-    git_deleted = "",
-    git_renamed = "",
+    git_renamed = "R",
     git_untracked = "U",
     git_ignored = "I",
-    git_unstaged = "",
-    git_staged = "",
+    git_unstaged = "",
+    git_staged = "",
     git_conflict = "",
     dir_closed = "",
     dir_open = "",

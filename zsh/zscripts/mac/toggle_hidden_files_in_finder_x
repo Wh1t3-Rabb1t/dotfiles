@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Toggle displaying hidden files in the Finder.                                #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+local option_state=$(defaults read com.apple.finder AppleShowAllFiles)
+
+if [[ "$option_state" == "True" ]]; then
+    defaults write com.apple.finder AppleShowAllFiles False
+else
+    defaults write com.apple.finder AppleShowAllFiles True
+fi
+
+killall Finder

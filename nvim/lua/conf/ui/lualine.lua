@@ -58,7 +58,8 @@ function M.config()
     lualine_theme = {
         normal = {
             a = { fg = colors.crust, bg = colors.text },
-            b = { fg = colors.crust, bg = "#a6d189" },
+            b = { fg = colors.crust, bg = colors.green },
+            -- b = { fg = colors.crust, bg = "#a6d189" },
             c = { fg = colors.peach, bg = colors.surface1 },
         },
         insert = {
@@ -111,7 +112,7 @@ function M.config()
 
         -- Status line
         sections = {
-            lualine_a = { icons.vim_logo },
+            lualine_a = {},
             lualine_b = { icons.get_vim_mode },
             lualine_c = {
                 {
@@ -123,23 +124,7 @@ function M.config()
                         align="left"
                     }
                 },
-                "progress",
-                {   -- Grapple
-                    icons.grapple_icon,
-                    cond = function()
-                        return require("grapple").exists()
-                    end
-                },
-                {   -- Modified icon
-                    icons.modified,
-                    cond = function()
-                        return vim.bo.modified
-                    end,
-                    color = {
-                        fg = "#ffffff",
-                        bg = false,
-                    }
-                }
+                "progress"
             },
             lualine_x = {
                 {
@@ -157,17 +142,23 @@ function M.config()
                         added = icons.diff_added,
                         modified = icons.diff_modified,
                         removed = icons.diff_removed,
-                    }
+                    },
+                    separator = "",
+                },
+                {
+                    "branch",
+                    padding = { left = 0, right = 1 },
                 }
             },
-            lualine_y = { "branch" },
-            lualine_z = { icons.get_cwd }
+            lualine_y = { icons.get_cwd },
+            lualine_z = {}
         },
 
         -- Focused window
         winbar = {
-            lualine_a = {},
-            lualine_b = { icons.get_vim_mode },
+            lualine_a = { icons.vim_logo },
+            lualine_b = {},
+            -- lualine_b = { icons.get_vim_mode },
             lualine_c = {
                 {
                     -- Omit the 'symbols' field for now as it crashes neovim if
@@ -181,6 +172,12 @@ function M.config()
                     -- 2: Absolute path
                     -- 3: Absolute path, with tilde as the home directory
                     -- 4: Filename and parent dir, with tilde as the home directory
+                },
+                {   -- Grapple
+                    icons.grapple_icon,
+                    cond = function()
+                        return require("grapple").exists()
+                    end
                 }
             },
             lualine_x = {},

@@ -19,7 +19,7 @@ local icons = {
     diagnostics_error = " ",
     diagnostics_warn = " ",
     diagnostics_info = " ",
-    diagnostics_hint = " ",
+    diagnostics_hint = "󱠂 ",
     diff_added = " ",
     diff_modified = " ",
     diff_removed = "󰍷 ",
@@ -144,10 +144,11 @@ function M.config()
                         removed = icons.diff_removed,
                     },
                     separator = "",
+                    padding = { left = 1, right = 0 },
                 },
                 {
                     "branch",
-                    padding = { left = 0, right = 1 },
+                    color = { fg = "#f9e2af" }
                 }
             },
             lualine_y = { icons.get_cwd },
@@ -179,6 +180,7 @@ function M.config()
                 },
                 {   -- Grapple
                     icons.grapple_icon,
+                    color = { fg = colors.sky },
                     cond = function()
                         return require("grapple").exists()
                     end

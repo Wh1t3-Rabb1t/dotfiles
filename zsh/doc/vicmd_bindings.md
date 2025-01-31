@@ -111,8 +111,8 @@
 
 ## INCREMENT / DECREMENT INTEGERS ----------------------------------------------
 
-- `C`                    : Increment integers
-- `X`                    : Decrement integers
+- `X`                    : Increment integers
+- `C`                    : Decrement integers
 
 
 ## CHANGE / DELETE SURROUNDING -------------------------------------------------

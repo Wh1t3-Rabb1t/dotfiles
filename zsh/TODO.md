@@ -7,7 +7,7 @@
 
 - Hammerspoon:
     Rewrite basic Rectangle features with Hammerspoon
-    App launcher / focuser with Hammerspoon
+    App launcher / focuser with Hammerspoon. Some good examples here: https://github.com/kovidgoyal/kitty/issues/45
     Monitor brightness control with Hammerspoon
     Possibly auto quit Finder when system wakes up with Hammerspoon
 

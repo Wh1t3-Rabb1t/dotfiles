@@ -188,12 +188,12 @@ bindkey -M viins "^[[C" _right_arrow_wrapper
 
 # TRASH FILES / DIRECTORIES
 # ---------------------------------------------------------------------------- #
-local function _backspace_wrapper() {
+local function _alt_backspace_wrapper() {
     emulate -L zsh
-    [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-delete-char
+    [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-kill-word
 }
-zle -N _backspace_wrapper
-bindkey -M viins "^?" _backspace_wrapper
+zle -N _alt_backspace_wrapper
+bindkey -M viins "^[^?" _alt_backspace_wrapper
 
 
 # CLEAR COMMAND LINE

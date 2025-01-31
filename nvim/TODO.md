@@ -29,16 +29,14 @@
 
 ```
 
+- Set up down left right bindings for visual mode.
 
 - Reinstall hammerspoon via homebrew
-
-- Set up down left right bindings for visual mode.
 
 - fix icon cutoff when using Monaco font in kitty
 - add user keybindings to legendary and sort keybindings together. (also move all bound functions to separate file)
 - 1. Standardize Rg / Fzf colors (only neovim remains)
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
-- consider binding up / down arrow to navigate `/` search results and left / right arrow to move selection left and right
 - nvim wrangle bindings C V X R (change to dial, registers, gv mode etc)
 
 
@@ -55,18 +53,8 @@
 -- the syntax highlight is completely broken in some code.
 
 
-gx in Normal mode calls vim.ui.open() on whatever is under the cursor, which shells out to your operating system’s “open” capability (e.g. open on macOS or xdg-open on Linux). For instance, pressing gx on a URL will open that URL in your browser.
-
 -- Nvim plugin framework:
     https://github.com/ldelossa/litee.nvim
-
-
--- Dreams of code go setup
-https://www.youtube.com/watch?v=i04sSQjd-qo
-
-
-
-- Keep an eye on: https://github.com/Saghen/blink.cmp
 
 
 - Consider creating an ignored filetypes module that sets ignore lists for different plugins to prevent plugins clashing

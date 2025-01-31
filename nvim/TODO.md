@@ -8,13 +8,13 @@
 - Set up down arrow to navigate menu when neotree or aerial is focused (split navigation otherwise)
 - Move all functions bound to keys out of 'keymaps.lua' to separate file
 - Move all keybindings declared in Legendary to 'keymaps.lua'
-- Bind 'P' to launch Legendary searching keymaps only
+- Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
 - Standardize Rg / Fzf colors
 
 - Send all copy / cut actions to the register stack
 
 rebind alt right (select in word / expand selection)
-rebind alt v (gv)
+rebind alt v (gv) bind to G
 
 - Bind
 W  :  Block up
@@ -31,9 +31,7 @@ R
 - Set up down left right bindings for visual mode
 - Wrangle bindings C V X R (change to dial, registers, gv mode etc)
 
-
 - Reinstall hammerspoon via homebrew
-
 
 
 ---
@@ -161,5 +159,3 @@ wiki: https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#l
 vmap("<Right>", [["zx"zpgvlolo]])                 -- Move selection right
 vmap("<Left>",  [["zxhh"zpgvhoho]])               -- Move selection left
 ```
-
-

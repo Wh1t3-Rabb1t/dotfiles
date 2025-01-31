@@ -13,30 +13,28 @@ function M.config()
     local status_ok = pcall(require, "lspconfig")
     if not status_ok then return end
 
-    local lsp = require("lspconfig")
-
     -- Icons for diagnostic errors
     ----------------------------------------------------------------------------
     vim.fn.sign_define("DiagnosticSignError", {
-        text =  " ",
+        text =  " ",
         texthl = "DiagnosticSignError"
     })
     vim.fn.sign_define("DiagnosticSignWarn", {
-        text = " ",
+        text = " ",
         texthl = "DiagnosticSignWarn"
     })
     vim.fn.sign_define("DiagnosticSignInfo", {
-        text = " ",
+        text = " ",
         texthl = "DiagnosticSignInfo"
     })
     vim.fn.sign_define("DiagnosticSignHint", {
-        text = "󱠂 ",
+        text = " ",
         texthl = "DiagnosticSignHint"
     })
 
     -- Bash
     ----------------------------------------------------------------------------
-    lsp.bashls.setup({
+    require("lspconfig").bashls.setup({
         filetypes = {
             "bash",
             "sh",
@@ -46,7 +44,7 @@ function M.config()
 
     -- Go
     ----------------------------------------------------------------------------
-    lsp.gopls.setup({
+    require("lspconfig").gopls.setup({
         -- Disable semanticTokens
         on_init = function(client, _)
             if client.supports_method "textDocument/semanticTokens" then
@@ -57,13 +55,13 @@ function M.config()
 
     -- JS / HTML / CSS
     ----------------------------------------------------------------------------
-    lsp.ts_ls.setup({})
-    lsp.cssls.setup({})
-    lsp.html.setup({})
+    require("lspconfig").ts_ls.setup({})
+    require("lspconfig").cssls.setup({})
+    require("lspconfig").html.setup({})
 
     -- JSON
     ----------------------------------------------------------------------------
-    lsp.jsonls.setup({
+    require("lspconfig").jsonls.setup({
         filetypes = {
             "json",
             "hjson",
@@ -72,7 +70,7 @@ function M.config()
 
     -- Emmet
     ----------------------------------------------------------------------------
-    lsp.emmet_language_server.setup({
+    require("lspconfig").emmet_language_server.setup({
         filetypes = {
             "html",
             "typescriptreact",
@@ -88,7 +86,7 @@ function M.config()
     -- Lua
     -- https://luals.github.io/wiki/settings/
     ----------------------------------------------------------------------------
-    lsp.lua_ls.setup({
+    require("lspconfig").lua_ls.setup({
         settings = {
             Lua = {
                 -- Make the language server recognize select undefined globals

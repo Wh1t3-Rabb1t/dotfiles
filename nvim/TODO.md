@@ -4,52 +4,35 @@
 
 ## Bindings
 
-- possibly incorporate these somewhere:
+- Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
+- Set up down arrow to navigate menu when neotree or aerial is focused (split navigation otherwise)
+- Move all functions bound to keys out of 'keymaps.lua' to separate file
+- Move all keybindings declared in Legendary to 'keymaps.lua'
+- Bind 'P' to launch Legendary searching keymaps only
+- Standardize Rg / Fzf colors
 
-```lua
--- vmap("<Up>", [["zx"zpgvlolo]])                 -- Search selection up
--- vmap("<Down>", [["zxhh"zpgvhoho]])               -- Search selection down
--- -- makes * and # work on visual mode too.
--- vim.api.nvim_exec(
---   [[
---   function! g:VSetSearch(cmdtype)
---     let temp = @s
---     norm! gv"sy
---     let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
---     let @s = temp
---   endfunction
---   xnoremap * :<C-u>call g:VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
---   xnoremap # :<C-u>call g:VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
--- ]],
---   false
--- )
+- Send all copy / cut actions to the register stack
 
--- MOVE SELECTION LEFT / RIGHT
---------------------------------------------------------------------------------
-vmap("<Right>", [["zx"zpgvlolo]])                 -- Move selection right
-vmap("<Left>",  [["zxhh"zpgvhoho]])               -- Move selection left
-```
-
+rebind alt right (select in word / expand selection)
+rebind alt v (gv)
 
 - Bind
-W  :  Select in word
+W  :  Block up
+V  :  Block down
 F  :  / search word under cursor
 E  :  / search up
 D  :  / search down
+B  :  Visual block mode
 Y
-V
-B
+G
+R
 
-- Set up down arrow to navigate menu when neotree or aerial is focused (split navigation otherwise)
 
-- Set up down left right bindings for visual mode.
+- Set up down left right bindings for visual mode
+- Wrangle bindings C V X R (change to dial, registers, gv mode etc)
+
 
 - Reinstall hammerspoon via homebrew
-
-- add user keybindings to legendary and sort keybindings together. (also move all bound functions to separate file)
-- 1. Standardize Rg / Fzf colors (only neovim remains)
-- Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
-- nvim wrangle bindings C V X R (change to dial, registers, gv mode etc)
 
 
 
@@ -150,3 +133,33 @@ also enable insertion of line separators from visual line mode e.g #------------
 - https://github.com/rcarriga/cmp-dap
 
 wiki: https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#lua
+
+
+
+- possibly incorporate these somewhere:
+
+```lua
+-- vmap("<Up>", [["zx"zpgvlolo]])                 -- Search selection up
+-- vmap("<Down>", [["zxhh"zpgvhoho]])               -- Search selection down
+-- -- makes * and # work on visual mode too.
+-- vim.api.nvim_exec(
+--   [[
+--   function! g:VSetSearch(cmdtype)
+--     let temp = @s
+--     norm! gv"sy
+--     let @/ = '\V' . substitute(escape(@s, a:cmdtype.'\'), '\n', '\\n', 'g')
+--     let @s = temp
+--   endfunction
+--   xnoremap * :<C-u>call g:VSetSearch('/')<CR>/<C-R>=@/<CR><CR>
+--   xnoremap # :<C-u>call g:VSetSearch('?')<CR>?<C-R>=@/<CR><CR>
+-- ]],
+--   false
+-- )
+
+-- MOVE SELECTION LEFT / RIGHT
+--------------------------------------------------------------------------------
+vmap("<Right>", [["zx"zpgvlolo]])                 -- Move selection right
+vmap("<Left>",  [["zxhh"zpgvhoho]])               -- Move selection left
+```
+
+

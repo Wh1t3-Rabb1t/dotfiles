@@ -46,17 +46,6 @@ return {
         config = require("conf.ui.catppuccin").config,
     },
 
-    -- DROPBAR
-    ----------------------------------------------------------------------------
-    -- {
-    --     "Bekaboo/dropbar.nvim",
-    --     dependencies = "nvim-tree/nvim-web-devicons",
-    --     enabled = false,
-    --     event = "VeryLazy",
-    --     keys = require("conf.ui.dropbar").keys,
-    --     config = require("conf.ui.dropbar").config,
-    -- },
-
     -- FIDGET
     ----------------------------------------------------------------------------
     {

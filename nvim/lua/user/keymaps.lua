@@ -23,7 +23,6 @@
 -- JUMP TO START / END OF LINE
 -- JUMP 6 LINES / BETWEEN BLOCKS
 -- SCROLL PAGE UP / DOWN
--- SCROLL TO TOP / BOTTOM OF PAGE
 -- DELETE BINDINGS
 -- DELETE MOTIONS
 -- DOT OPERATOR / UNDO / REDO
@@ -83,10 +82,10 @@ nvmap("<S-Esc>", "I")                             -- Insert mode at line start
 --------------------------------------------------------------------------------
 nvmap("s",         "v")                           -- Visual mode
 nvmap("S",         "V")                           -- Visual LINE mode
-nvmap("<Leader>s", "<C-v>")                       -- Visual BLOCK mode
+nvmap("B",         "<C-v>")                       -- Visual BLOCK mode
 nvmap("<A-v>",     "msgv")                        -- Restore visual selection
 vmap("a",          "o")                           -- Swap point & mark
-vmap("<Leader>a",  "O")                           -- Swap point & mark (vblock)
+vmap("A",          "O")                           -- Swap point & mark (vblock)
 
 
 -- COMMAND LINE MODE
@@ -164,20 +163,16 @@ end)
 --------------------------------------------------------------------------------
 nvmap("e",  "6k")                                 -- Jump 6 lines UP
 nvmap("d",  "6j")                                 -- Jump 6 lines DOWN
-nvmap("E", "mj{")                                 -- Jump block UP
-nvmap("D", "mj}")                                 -- Jump block DOWN
+nvmap("W", "mj{")                                 -- Jump block UP
+nvmap("V", "mj}")                                 -- Jump block DOWN
 
 
 -- SCROLL PAGE UP / DOWN
 --------------------------------------------------------------------------------
-nvmap("<PageUp>",   "<C-u>zz")                    -- Page UP
-nvmap("<PageDown>", "<C-d>zz")                    -- Page DOWN
-
-
--- SCROLL TO TOP / BOTTOM OF PAGE
---------------------------------------------------------------------------------
-nvmap("<S-PageUp>",   "mjgg")                     -- Jump to page TOP
-nvmap("<S-PageDown>", "mjG")                      -- Jump to page BOTTOM
+nvmap("<PageUp>",     "<C-u>zz")                  -- Page UP
+nvmap("<PageDown>",   "<C-d>zz")                  -- Page DOWN
+nvmap("<S-PageUp>",   "mjgg")                     -- Page TOP
+nvmap("<S-PageDown>", "mjG")                      -- Page BOTTOM
 
 
 -- DELETE BINDINGS (all deletions are sent to the black hole register)
@@ -255,7 +250,7 @@ vmap("-", "mmu`m")                                -- Lowercase visual selection
 
 -- SELECT IN WORD
 --------------------------------------------------------------------------------
-nmap("<A-Right>", "viw")                          -- Select in word
+-- nmap("<A-Right>", "viw")                          -- Select in word
 
 
 -- SELECT IN SURROUNDING
@@ -391,9 +386,9 @@ end)
 vmap("/",  "<Esc>/\\%V", {                        -- Search within selection
     silent = false
 })
+nmap("F",  "mn*")                                 -- Next word under cursor
 nmap("E",  "mnN")                                 -- Prev / search result
 nmap("D",  "mnn")                                 -- Next / search result
-nmap("F",  "mn*")                                 -- Next word under cursor
 nvmap("h", ",")                                   -- Prev f search result
 
 
@@ -437,16 +432,16 @@ nmap("<Right>", function()                        -- Focus split RIGHT
 end)
 
 -- Resize
-vmap("<S-Up>", function()                         -- Resize window UP
+nmap("<S-Up>", function()                         -- Resize window UP
     win.relative_resize("up")
 end)
-vmap("<S-Down>", function()                       -- Resize window DOWN
+nmap("<S-Down>", function()                       -- Resize window DOWN
     win.relative_resize("down")
 end)
-vmap("<S-Left>", function()                       -- Resize window LEFT
+nmap("<S-Left>", function()                       -- Resize window LEFT
     win.relative_resize("left")
 end)
-vmap("<S-Right>", function()                      -- Resize window RIGHT
+nmap("<S-Right>", function()                      -- Resize window RIGHT
     win.relative_resize("right")
 end)
 

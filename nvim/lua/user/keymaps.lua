@@ -37,7 +37,6 @@
 -- PASTE
 -- OPEN / JOIN LINES
 -- NAVIGATE `/` and `f` SEARCH RESULTS
--- MOVE SELECTION LEFT / RIGHT
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
@@ -392,17 +391,10 @@ end)
 vmap("/",  "<Esc>/\\%V", {                        -- Search within selection
     silent = false
 })
-nmap("<Down>",  "mnn")                            -- Next / search result
-nmap("<Up>",    "mnN")                            -- Prev / search result
-nmap("<Right>", "mn*")                            -- Next word under cursor
-nmap("<Left>",  "mn*NN")                          -- Prev word under cursor
-nvmap("h",      ",")                              -- Prev f search result
-
-
--- MOVE SELECTION LEFT / RIGHT
---------------------------------------------------------------------------------
-vmap("<Right>", [["zx"zpgvlolo]])                 -- Move selection right
-vmap("<Left>",  [["zxhh"zpgvhoho]])               -- Move selection left
+nmap("E",  "mnN")                                 -- Prev / search result
+nmap("D",  "mnn")                                 -- Next / search result
+nmap("F",  "mn*")                                 -- Next word under cursor
+nvmap("h", ",")                                   -- Prev f search result
 
 
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
@@ -413,7 +405,7 @@ vmap("=-", "g<C-x>gv")                            -- Decrement num sequentially
 
 -- QUICKFIX
 --------------------------------------------------------------------------------
-nmap("<A-Left>", function()                       -- Open quickfix / substitute
+nmap("<A-p>", function()                          -- Open quickfix / substitute
     if vim.bo.filetype == "qf" then
         -- Begin a substitute command
         vim.api.nvim_feedkeys(
@@ -431,16 +423,16 @@ end)
 -- WINDOW
 --------------------------------------------------------------------------------
 -- Navigate
-nmap("<S-Up>", function()                         -- Focus split ABOVE
+nmap("<Up>", function()                           -- Focus split ABOVE
     win.navigate_vertically("k")
 end)
-nmap("<S-Down>", function()                       -- Focus split BELOW
+nmap("<Down>", function()                         -- Focus split BELOW
     win.navigate_vertically("j")
 end)
-nmap("<S-Left>", function()                       -- Focus split LEFT
+nmap("<Left>", function()                         -- Focus split LEFT
     win.navigate_horizontally("h")
 end)
-nmap("<S-Right>", function()                      -- Focus split RIGHT
+nmap("<Right>", function()                        -- Focus split RIGHT
     win.navigate_horizontally("l")
 end)
 
@@ -475,8 +467,8 @@ nmap("<Leader>w", function()                      -- Close window
 end)
 nmap("<A-m>",       "<cmd>vsplit<CR>")            -- Split window VERTICALLY
 nmap("<A-n>",       "<cmd>split<CR>")             -- Split window HORIZONTALLY
-nmap("<A-S-Left>",  "zhzhzh")                     -- Scroll window LEFT
-nmap("<A-S-Right>", "zlzlzl")                     -- Scroll window RIGHT
+nmap("<Home>",      "zhzhzh")                     -- Scroll window LEFT
+nmap("<End>",       "zlzlzl")                     -- Scroll window RIGHT
 nmap("<D-[>",       "<C-w>r")                     -- Swap splits (2 splits max)
 
 

@@ -24,7 +24,7 @@ local icons = {
     diff_modified = " ",
     diff_removed = "󰍷 ",
     modified = function() return "●" end,
-    vim_logo = function() return "" end,
+    vim_logo = function() return "" end,
     grapple_icon = function() return "󰛢" end,
     get_vim_mode = function()
         local vim_mode = vim.fn.mode()
@@ -105,7 +105,8 @@ function M.config()
             refresh = { tabline = 100000, },
             disabled_filetypes = {
                 winbar = {
-                    "neo-tree"
+                    "neo-tree",
+                    "aerial"
                 }
             }
         },

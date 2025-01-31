@@ -21,7 +21,7 @@ local icons = {
 --------------------------------------------------------------------------------
 local map = require("util.utils").map
 function M.init()
-    map("n", "<A-a>", "<cmd>AerialOpen<CR>", {
+    map("n", "<A-Left>", "<cmd>AerialOpen<CR>", {
         desc = "Toggle Aerial"
     })
 end
@@ -79,7 +79,7 @@ function M.config()
             ["a"] = "actions.tree_open_all",
             ["A"] = "actions.tree_close_all",
             ["q"] = "actions.close",
-            ["<A-a>"] = "actions.close",  -- Toggle aerial open / closed
+            ["<A-Left>"] = "actions.close",  -- Toggle aerial open / closed
             ["<2-LeftMouse>"] = false,
             ["<C-v>"] = false,
             ["<C-s>"] = false,

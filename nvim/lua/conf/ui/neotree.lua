@@ -35,7 +35,7 @@ local icons = {
 M.keys = {
     {
         mode = { "n" },
-        "<End>",
+        "<A-Right>",
         "<cmd>Neotree reveal<CR>",
         desc = "Toggle Neotree"
     }
@@ -210,7 +210,7 @@ function M.config()
                 ["?"] = "show_help",
                 ["<C-PageDown>"] = "next_source",  -- Cycle view left
                 ["<C-PageUp>"] = "prev_source",    -- Cycle view right
-                ["<End>"] = "close_window",        -- Close neotree
+                ["<A-Right>"] = "close_window",    -- Close neotree
             }
         },
 

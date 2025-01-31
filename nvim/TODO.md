@@ -6,12 +6,9 @@
 
 - possibly incorporate these somewhere:
 
-
 ```lua
 -- vmap("<Up>", [["zx"zpgvlolo]])                 -- Search selection up
 -- vmap("<Down>", [["zxhh"zpgvhoho]])               -- Search selection down
-
-
 -- -- makes * and # work on visual mode too.
 -- vim.api.nvim_exec(
 --   [[
@@ -27,13 +24,28 @@
 --   false
 -- )
 
+-- MOVE SELECTION LEFT / RIGHT
+--------------------------------------------------------------------------------
+vmap("<Right>", [["zx"zpgvlolo]])                 -- Move selection right
+vmap("<Left>",  [["zxhh"zpgvhoho]])               -- Move selection left
 ```
+
+
+- Bind
+W  :  Select in word
+F  :  / search word under cursor
+E  :  / search up
+D  :  / search down
+Y
+V
+B
+
+- Set up down arrow to navigate menu when neotree or aerial is focused (split navigation otherwise)
 
 - Set up down left right bindings for visual mode.
 
 - Reinstall hammerspoon via homebrew
 
-- fix icon cutoff when using Monaco font in kitty
 - add user keybindings to legendary and sort keybindings together. (also move all bound functions to separate file)
 - 1. Standardize Rg / Fzf colors (only neovim remains)
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80

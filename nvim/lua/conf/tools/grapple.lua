@@ -22,7 +22,7 @@ M.keys = {
     },
     {
         mode = { "n" },
-        "G",
+        "<A-g>",
         "<cmd>Grapple toggle_tags<CR>",
         desc = "󰛢 Open Grapple tags window"
     },

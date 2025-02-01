@@ -30,7 +30,7 @@ M.keys = {
     },
     {
         mode = { "n" },
-        "<A-g>",
+        "<A-a>",
         "<cmd>FzfLua live_grep_native<CR>",
         desc = "Grep cwd"
     },
@@ -76,11 +76,10 @@ function M.config()
     require("fzf-lua").register_ui_select()
     require("fzf-lua").setup({
         fzf_opts = {
-            -- !!
-            -- Required to preserve correct formatting with Legendary
+            -- NOTE: Required to preserve correct formatting with Legendary...
             ["--with-nth"] = "2..",
             ["--no-hscroll"] = true,
-            -- !!
+            -- ...
             ["--margin"] = "1%",
             ["--cycle"] = "",
         },

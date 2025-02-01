@@ -132,6 +132,18 @@ end
 -- NAVIGATE WINDOWS VERTICALLY
 --------------------------------------------------------------------------------
 function M.navigate_vertically(direction)
+
+    local excluded_ft = { "grapple", "lazy", "mason", "neo-tree", "aerial" }
+    local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
+
+    if vim.tbl_contains(excluded_ft, vim.bo.filetype) then
+        vim.api.nvim_feedkeys(vim.keycode(keys[direction]), "n", true)
+    end
+
+
+
+
+
     if M.open_win_count() == 1 then return end
 
     local function qf_len()

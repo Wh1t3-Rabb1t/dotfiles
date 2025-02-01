@@ -19,15 +19,7 @@ M.cmd_line_keys = {
 function M.cmd_line_config()
     local cmp = require("cmp")
     local map = require("cmp").mapping
-
-    -- Send a keycode to nvim as if it were a keystroke invoked by the user
-    local send_keystroke = function(key)
-        vim.api.nvim_feedkeys(
-            vim.api.nvim_replace_termcodes(
-                key, true, true, true
-            ), "n", true
-        )
-    end
+    local sendkey = vim.api.nvim_feedkeys
 
     -- `/` cmdline setup
     ----------------------------------------------------------------------------
@@ -40,7 +32,7 @@ function M.cmd_line_config()
                             behavior = cmp.SelectBehavior.Select
                         })
                     else
-                        send_keystroke("<Down>")
+                        sendkey(vim.keycode("<Down>"), "n", true)
                     end
                 end
             }),
@@ -51,7 +43,7 @@ function M.cmd_line_config()
                             behavior = cmp.SelectBehavior.Select
                         })
                     else
-                        send_keystroke("<Up>")
+                        sendkey(vim.keycode("<Up>"), "n", true)
                     end
                 end
             }),
@@ -59,9 +51,9 @@ function M.cmd_line_config()
                 c = function()
                     if cmp.visible() then
                         cmp.confirm({})
-                        send_keystroke("<CR>")
+                        sendkey(vim.keycode("<CR>"), "n", true)
                     else
-                        send_keystroke("<CR>")
+                        sendkey(vim.keycode("<CR>"), "n", true)
                     end
                 end
             }),
@@ -70,7 +62,7 @@ function M.cmd_line_config()
                     if cmp.visible() then
                         cmp.confirm({})
                     else
-                        send_keystroke("<Tab>")
+                        sendkey(vim.keycode("<Tab>"), "n", true)
                     end
                 end
             })
@@ -94,7 +86,7 @@ function M.cmd_line_config()
                             behavior = cmp.SelectBehavior.Select
                         })
                     else
-                        send_keystroke("<Down>")
+                        sendkey(vim.keycode("<Down>"), "n", true)
                     end
                 end
             }),
@@ -105,7 +97,7 @@ function M.cmd_line_config()
                             behavior = cmp.SelectBehavior.Select
                         })
                     else
-                        send_keystroke("<Up>")
+                        sendkey(vim.keycode("<Up>"), "n", true)
                     end
                 end
             }),
@@ -113,9 +105,9 @@ function M.cmd_line_config()
                 c = function()
                     if cmp.visible() then
                         cmp.confirm({})
-                        send_keystroke("<CR>")
+                        sendkey(vim.keycode("<CR>"), "n", true)
                     else
-                        send_keystroke("<CR>")
+                        sendkey(vim.keycode("<CR>"), "n", true)
                     end
                 end
             }),
@@ -124,7 +116,7 @@ function M.cmd_line_config()
                     if cmp.visible() then
                         cmp.confirm({})
                     else
-                        send_keystroke("<Tab>")
+                        sendkey(vim.keycode("<Tab>"), "n", true)
                     end
                 end
             })

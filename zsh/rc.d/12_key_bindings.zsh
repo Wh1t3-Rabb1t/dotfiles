@@ -22,7 +22,7 @@ bindkey -M viins "^[f" _find_files
 
 # Alt g: Grep term and open with neovim
 zle -N _grep_into_nvim
-bindkey -M viins "^[g" _grep_into_nvim
+bindkey -M viins "^[a" _grep_into_nvim
 
 
 # Alt p: Preview files with bat

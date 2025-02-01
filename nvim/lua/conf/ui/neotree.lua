@@ -163,7 +163,7 @@ function M.config()
             },
 
             mappings = {
-                ["<space>"] = false,
+                ["<Space>"] = false,
                 ["<Esc>"] = "cancel",  -- Close preview or floating neo-tree window
                 ["<CR>"] = "open",
 
@@ -173,7 +173,7 @@ function M.config()
                     config = {
                         use_float = true,
                         use_image_nvim = true,
-                    },
+                    }
                 },
                 ["P"] = "focus_preview",
                 ["<2-LeftMouse>"] = false,
@@ -291,8 +291,8 @@ function M.config()
 
                 -- Keymaps for filter popup window in fuzzy_finder_mode
                 fuzzy_finder_mappings = {
-                    ["<up>"] = "move_cursor_up",
-                    ["<down>"] = "move_cursor_down",
+                    ["<Up>"] = "move_cursor_up",
+                    ["<Down>"] = "move_cursor_down",
                 }
             },
 

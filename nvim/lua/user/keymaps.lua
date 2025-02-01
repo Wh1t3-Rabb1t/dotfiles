@@ -83,7 +83,7 @@ nvmap("<S-Esc>", "I")                             -- Insert mode at line start
 nvmap("s",         "v")                           -- Visual mode
 nvmap("S",         "V")                           -- Visual LINE mode
 nvmap("B",         "<C-v>")                       -- Visual BLOCK mode
-nvmap("<A-v>",     "msgv")                        -- Restore visual selection
+nvmap("G",         "msgv")                        -- Restore visual selection
 vmap("a",          "o")                           -- Swap point & mark
 vmap("A",          "O")                           -- Swap point & mark (vblock)
 
@@ -402,13 +402,9 @@ vmap("=-", "g<C-x>gv")                            -- Decrement num sequentially
 --------------------------------------------------------------------------------
 nmap("<A-p>", function()                          -- Open quickfix / substitute
     if vim.bo.filetype == "qf" then
+
         -- Begin a substitute command
-        vim.api.nvim_feedkeys(
-            vim.api.nvim_replace_termcodes(
-                ":%s/", true, false, true
-            ),
-            "n", true
-        )
+        vim.api.nvim_feedkeys(vim.keycode(":s%/"), "n", true)
     else
         vim.cmd("bo copen")
     end
@@ -420,10 +416,12 @@ end)
 -- Navigate
 nmap("<Up>", function()                           -- Focus split ABOVE
     win.navigate_vertically("k")
-end)
+end, { silent = false })
 nmap("<Down>", function()                         -- Focus split BELOW
     win.navigate_vertically("j")
-end)
+end, { silent = false })
+
+
 nmap("<Left>", function()                         -- Focus split LEFT
     win.navigate_horizontally("h")
 end)
@@ -488,12 +486,7 @@ nimap("<A-s>", function()                         -- Save changes
 
     -- Return to normal mode if in insert mode
     if vim.fn.mode() == "i" then
-        vim.api.nvim_feedkeys(
-            vim.api.nvim_replace_termcodes(
-                "<Esc>", true, false, true
-            ),
-            "n", true
-        )
+        vim.api.nvim_feedkeys(vim.keycode("<Esc>"), "n", true)
     end
 end)
 
@@ -503,6 +496,7 @@ end)
 nvmap("<Leader>q", "<cmd>qa<CR>")                 -- Quit nvim
 nvmap("QQ", "<cmd>qa!<CR>")                       -- Force quit nvim
 nmap("<A-q>", function()                          -- Quit and save session
+
     -- Save session if launched via session file
     if vim.tbl_contains(vim.v.argv, "-S") then
         vim.cmd("Mksession!")

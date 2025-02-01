@@ -24,7 +24,7 @@ E  :  / search up
 D  :  / search down
 B  :  Visual block mode
 Y
-G
+G  : Restore selection
 R
 
 

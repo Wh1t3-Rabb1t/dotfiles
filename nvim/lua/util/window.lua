@@ -129,23 +129,15 @@ function M.navigate_horizontally(direction)
 end
 
 
+
+
+
+
 -- NAVIGATE WINDOWS VERTICALLY
 --------------------------------------------------------------------------------
+
+
 function M.navigate_vertically(direction)
-
-    local excluded_ft = { "grapple", "lazy", "mason", "neo-tree", "aerial" }
-    local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
-
-    if vim.tbl_contains(excluded_ft, vim.bo.filetype) then
-        vim.api.nvim_feedkeys(vim.keycode(keys[direction]), "n", true)
-    end
-
-
-
-
-
-    if M.open_win_count() == 1 then return end
-
     local function qf_len()
         local len = #vim.fn.getqflist()
         return len > 10 and len or 10
@@ -164,10 +156,19 @@ function M.navigate_vertically(direction)
         return height
     end
 
+    -- Enable arrow key navigation in certain buffers
+    local excluded_ft = { "lazy", "mason", "neo-tree", "aerial", "grapple" }
+    local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
+
+    if vim.tbl_contains(excluded_ft, vim.bo.filetype) then
+        vim.api.nvim_feedkeys(vim.keycode(keys[direction]), "n", true)
+        return
+    end
+
+    if M.open_win_count() == 1 then return end
+
     local initial_win = vim.fn.winnr()
-    local win_height = vim.api.nvim_win_get_height(0)
-    local pre_calc_height = vim.o.lines - vim.o.cmdheight
-    local editor_height = calculate_win_height(pre_calc_height)
+    local initial_win_height = vim.api.nvim_win_get_height(0)
 
     -- Move to target split
     vim.cmd("wincmd " .. direction)
@@ -175,30 +176,97 @@ function M.navigate_vertically(direction)
     -- Return if moving into quickfix window to prevent pointless resizing
     if vim.bo.filetype == "qf" then return end
 
-    -- Check if the target split is minimized
-    local fullscreen
-    if win_height >= percent(70, editor_height) then
-        fullscreen = "resize " .. win_height
+    if vim.fn.winnr() == initial_win then
+        local pre_calc_height = vim.o.lines - vim.o.cmdheight
+        local win_height = (calculate_win_height(pre_calc_height) - 10)
+        vim.cmd("resize " .. win_height)
     end
 
-    -- Maximize newly focused split if moving from a maximized split
-    if vim.fn.winnr() ~= initial_win then
-        if fullscreen then
-            vim.cmd(fullscreen)
-        end
-    else
-        -- Toggle 95% and 65% split resizing by moving in a
-        -- direction where there is no neighboring split
-        if win_height ~= percent(95, editor_height) then
-            vim.cmd("resize " .. percent(95, editor_height))
-        else
-            vim.cmd("resize " .. percent(65, editor_height))
-        end
+    if vim.api.nvim_win_get_height(0) <= 12 then
+        vim.cmd("resize " .. initial_win_height)
     end
 
     -- Fix cmdline height when resizing windows
     if vim.o.cmdheight ~= 1 then vim.o.cmdheight = 1 end
 end
+
+
+
+
+
+
+
+-- -- NAVIGATE WINDOWS VERTICALLY
+-- --------------------------------------------------------------------------------
+-- function M.navigate_vertically(direction)
+--     local function qf_len()
+--         local len = #vim.fn.getqflist()
+--         return len > 10 and len or 10
+--     end
+
+--     local function calculate_win_height(height)
+--         for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+--             local bufnr = vim.api.nvim_win_get_buf(winid)
+
+--             if vim.bo[bufnr].filetype == "qf" then
+--                 height = height - qf_len()
+--                 break
+--             end
+--         end
+
+--         return height
+--     end
+
+--     local excluded_ft = { "lazy", "mason", "neo-tree", "aerial", "grapple" }
+--     local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
+
+--     -- Enable arrow key navigation in certain buffers
+--     if vim.tbl_contains(excluded_ft, vim.bo.filetype) then
+--         vim.api.nvim_feedkeys(vim.keycode(keys[direction]), "n", true)
+--         return
+--     end
+
+--     if M.open_win_count() == 1 then return end
+
+--     local initial_win = vim.fn.winnr()
+--     local win_height = vim.api.nvim_win_get_height(0)
+--     local pre_calc_height = vim.o.lines - vim.o.cmdheight
+--     local editor_height = calculate_win_height(pre_calc_height)
+
+--     -- Move to target split
+--     vim.cmd("wincmd " .. direction)
+
+--     -- Return if moving into quickfix window to prevent pointless resizing
+--     if vim.bo.filetype == "qf" then return end
+
+--     -- Check if the target split is minimized
+--     local fullscreen
+--     if win_height >= percent(70, editor_height) then
+--         fullscreen = "resize " .. win_height
+--     end
+
+--     -- Maximize newly focused split if moving from a maximized split
+--     if vim.fn.winnr() ~= initial_win then
+--         if fullscreen then
+--             vim.cmd(fullscreen)
+--         end
+--     else
+--         -- Toggle 95% and 65% split resizing by moving in a
+--         -- direction where there is no neighboring split
+--         if win_height ~= percent(95, editor_height) then
+--             vim.cmd("resize " .. percent(95, editor_height))
+--         else
+--             vim.cmd("resize " .. percent(65, editor_height))
+--         end
+--     end
+
+--     -- Fix cmdline height when resizing windows
+--     if vim.o.cmdheight ~= 1 then vim.o.cmdheight = 1 end
+-- end
+
+
+
+
 
 
 -- RESIZE WINDOWS

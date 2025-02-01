@@ -5,7 +5,6 @@
 ## Bindings
 
 - Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
-- Set up down arrow to navigate menu when neotree or aerial is focused (split navigation otherwise)
 - Move all functions bound to keys out of 'keymaps.lua' to separate file
 - Move all keybindings declared in Legendary to 'keymaps.lua'
 - Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
@@ -13,8 +12,7 @@
 
 - Send all copy / cut actions to the register stack
 
-rebind alt right (select in word / expand selection)
-rebind alt v (gv) bind to G
+rebind alt right (select in word / expand selection) bind to Y
 
 - Bind
 W  :  Block up

@@ -416,12 +416,10 @@ end)
 -- Navigate
 nmap("<Up>", function()                           -- Focus split ABOVE
     win.navigate_vertically("k")
-end, { silent = false })
+end)
 nmap("<Down>", function()                         -- Focus split BELOW
     win.navigate_vertically("j")
-end, { silent = false })
-
-
+end)
 nmap("<Left>", function()                         -- Focus split LEFT
     win.navigate_horizontally("h")
 end)

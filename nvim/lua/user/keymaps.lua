@@ -85,7 +85,6 @@ nvmap("S",         "V")                           -- Visual LINE mode
 nvmap("B",         "<C-v>")                       -- Visual BLOCK mode
 nvmap("G",         "msgv")                        -- Restore visual selection
 vmap("a",          "o")                           -- Swap point & mark
-vmap("A",          "O")                           -- Swap point & mark (vblock)
 
 
 -- COMMAND LINE MODE

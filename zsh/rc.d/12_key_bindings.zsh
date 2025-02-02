@@ -58,12 +58,13 @@ local function _broot_launcher() {
         BUFFER="br --sort-by-type"
         zle accept-line
     else
-        zle accept-line
+        LBUFFER[CURSOR+1]+=" "
+        POSTDISPLAY=
+        zle redisplay
     fi
 }
 zle -N _broot_launcher
 bindkey -M viins " " _broot_launcher                                 # Space
-bindkey -M vicmd " " _broot_launcher
 
 
 # YAZI LAUNCHER
@@ -75,9 +76,9 @@ local function _yazi_launcher() {
         BUFFER="yazi"
         zle accept-line
     else
-        LBUFFER[CURSOR+1]+=" "
-        POSTDISPLAY=
-        zle redisplay
+        fzf-tab-complete
+        POSTDISPLAY=      # Clear zsh-autosuggestions if present
+        zle redisplay     # Syntax highlighting on fzf-tab exit
     fi
 }
 zle -N _yazi_launcher
@@ -92,13 +93,12 @@ local function _launch_nvim_wrapper() {
     if [[ -z "$BUFFER" ]]; then
         _launch_nvim
     else
-        fzf-tab-complete
-        POSTDISPLAY=      # Clear zsh-autosuggestions if present
-        zle redisplay     # Syntax highlighting on fzf-tab exit
+        zle accept-line
     fi
 }
 zle -N _launch_nvim_wrapper
 bindkey -M viins "^M" _launch_nvim_wrapper                           # Enter
+bindkey -M vicmd "^M" _launch_nvim_wrapper
 
 
 # ZSCRIPTS FZF

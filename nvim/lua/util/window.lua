@@ -7,13 +7,6 @@
 
 local M = {}
 
-local function percent(dividend, divisor)
-    local percentage = (dividend / 100)
-    local result = (math.floor(divisor * percentage))
-    return result
-end
-
-
 -- WINDOW COUNT
 --------------------------------------------------------------------------------
 function M.open_win_count()
@@ -55,82 +48,70 @@ end
 
 -- NAVIGATE WINDOWS HORIZONTALLY
 --------------------------------------------------------------------------------
+local cached_win_width
+
 function M.navigate_horizontally(direction)
     if M.open_win_count() == 1 then return end
 
-    local neotree_win_id = nil
-    local aerial_win_id = nil
+    local neotree_id
+    local aerial_id
+    local width = vim.o.columns
 
-    local function calculate_win_width(width)
-        for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-            local bufnr = vim.api.nvim_win_get_buf(winid)
-            local ft = vim.bo[bufnr].filetype
+    for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local bufnr = vim.api.nvim_win_get_buf(winid)
+        local ft = vim.bo[bufnr].filetype
 
-            if ft == "neo-tree" then
-                neotree_win_id = winid
-                width = width - 35
-            end
-
-            if ft == "aerial" then
-                aerial_win_id = winid
-                width = width - 30
-            end
-
-            if neotree_win_id and aerial_win_id then
-                break
-            end
+        if ft == "neo-tree" then
+            neotree_id = winid
+            width = width - 35
+        elseif ft == "aerial" then
+            aerial_id = winid
+            width = width - 30
         end
 
-        return width
+        if neotree_id and aerial_id then
+            break
+        end
     end
 
     local initial_win = vim.fn.winnr()
-    local win_width = vim.api.nvim_win_get_width(0)
-    local editor_width = calculate_win_width(vim.o.columns)
+    local initial_win_width = vim.api.nvim_win_get_width(0)
 
-    -- Check if the target split is minimized
-    local fullscreen
-    if win_width >= percent(70, editor_width) then
-        fullscreen = "vertical resize " .. win_width
-    end
-
-    -- Move to target split
     vim.cmd("wincmd " .. direction)
 
-    -- Maximize newly focused split if moving from a maximized split
-    if vim.fn.winnr() ~= initial_win then
-        if fullscreen then
-            vim.cmd("wincmd _")
-            vim.cmd(fullscreen)
+    local moving_onto_screen_edge = vim.fn.winnr() == initial_win
+    local current_win_width = vim.api.nvim_win_get_width(0)
+    local maximized_win_width = width - 12
+
+    if moving_onto_screen_edge then
+        if current_win_width < maximized_win_width then
+            cached_win_width = current_win_width
+            vim.cmd("vertical resize " .. maximized_win_width)
+        else
+            if cached_win_width then
+                vim.cmd("vertical resize " .. cached_win_width)
+            end
         end
     else
-        -- Toggle 95% and 65% split resizing by moving in a
-        -- direction where there is no neighboring split
-        if win_width ~= percent(95, editor_width) then
-            vim.cmd("vertical resize " .. percent(95, editor_width))
-        else
-            vim.cmd("vertical resize " .. percent(65, editor_width))
+        if current_win_width <= 24 then
+            vim.cmd("vertical resize " .. initial_win_width)
         end
     end
 
     -- Fix sidebar sizes when resizing windows
-    if neotree_win_id then vim.api.nvim_win_set_width(neotree_win_id, 35) end
-    if aerial_win_id then vim.api.nvim_win_set_width(aerial_win_id, 30) end
+    if neotree_id then vim.api.nvim_win_set_width(neotree_id, 35) end
+    if aerial_id then vim.api.nvim_win_set_width(aerial_id, 30) end
 
     -- Disable line wrap on minimized vertical splits
     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         local buf_width = vim.api.nvim_win_get_width(winid)
-        if buf_width < 40 then
+        if buf_width < 80 then
             vim.wo[winid].wrap = false
         else
             vim.wo[winid].wrap = true
         end
     end
 end
-
-
-
-
 
 
 -- NAVIGATE WINDOWS VERTICALLY
@@ -151,9 +132,9 @@ function M.navigate_vertically(direction)
 
     local qf_id
     local qf_length = 0
-    for _, win in ipairs(vim.fn.getwininfo()) do
 
-        -- If quickfix window is open...
+    -- If quickfix window is open...
+    for _, win in ipairs(vim.fn.getwininfo()) do
         if win.quickfix == 1 then
             local num = #vim.fn.getqflist()
             if num == 0 then qf_length = 10 else qf_length = num end
@@ -178,7 +159,9 @@ function M.navigate_vertically(direction)
             cached_win_height = current_win_height
             vim.cmd("resize " .. maximized_win_height)
         else
-            vim.cmd("resize " .. cached_win_height)
+            if cached_win_height then
+                vim.cmd("resize " .. cached_win_height)
+            end
         end
     else
         if current_win_height <= 10 then

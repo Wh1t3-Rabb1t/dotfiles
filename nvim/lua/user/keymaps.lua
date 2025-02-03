@@ -85,6 +85,15 @@ nvmap("S",         "V")                           -- Visual LINE mode
 nvmap("B",         "<C-v>")                       -- Visual BLOCK mode
 nvmap("G",         "msgv")                        -- Restore visual selection
 vmap("a",          "o")                           -- Swap point & mark
+vmap("A", function()
+    local mode = vim.fn.mode()
+    if mode == "v" or mode == "V" then
+        vim.cmd([[ :execute "normal! O" ]])
+    else
+        -- Default behaviour in vblock mode
+        vim.api.nvim_feedkeys("A", "n", true)
+    end
+end)                                              -- Swap point & mark
 
 
 -- COMMAND LINE MODE
@@ -162,8 +171,8 @@ end)
 --------------------------------------------------------------------------------
 nvmap("e",  "6k")                                 -- Jump 6 lines UP
 nvmap("d",  "6j")                                 -- Jump 6 lines DOWN
-nvmap("W", "mj{")                                 -- Jump block UP
-nvmap("V", "mj}")                                 -- Jump block DOWN
+nvmap("E", "mj{")                                 -- Jump block UP
+nvmap("D", "mj}")                                 -- Jump block DOWN
 
 
 -- SCROLL PAGE UP / DOWN
@@ -249,7 +258,7 @@ vmap("-", "mmu`m")                                -- Lowercase visual selection
 
 -- SELECT IN WORD
 --------------------------------------------------------------------------------
--- nmap("<A-Right>", "viw")                          -- Select in word
+nmap("W", "viw")                                  -- Select in word
 
 
 -- SELECT IN SURROUNDING
@@ -386,8 +395,8 @@ vmap("/",  "<Esc>/\\%V", {                        -- Search within selection
     silent = false
 })
 nmap("F",  "mn*")                                 -- Next word under cursor
-nmap("E",  "mnN")                                 -- Prev / search result
-nmap("D",  "mnn")                                 -- Next / search result
+nmap("Y",  "mnN")                                 -- Prev / search result
+nmap("V",  "mnn")                                 -- Next / search result
 nvmap("h", ",")                                   -- Prev f search result
 
 
@@ -403,7 +412,7 @@ nmap("<A-p>", function()                          -- Open quickfix / substitute
     if vim.bo.filetype == "qf" then
 
         -- Begin a substitute command
-        vim.api.nvim_feedkeys(vim.keycode(":s%/"), "n", true)
+        vim.api.nvim_feedkeys(":s%/", "n", true)
     else
         vim.cmd("bo copen")
     end

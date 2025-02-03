@@ -14,6 +14,11 @@
 
 rebind alt right (select in word / expand selection) bind to Y
 
+- Fix:
+qf binding to toggle (alt p) use alt r to begin sub if qf is focused
+inc nums sequentially bindings
+expand selection bindings (treesitter)
+
 - Bind
 W  :  Block up
 V  :  Block down

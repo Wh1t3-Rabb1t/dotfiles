@@ -50,9 +50,9 @@ function M.config()
         -- Expand selection
         textsubjects = {
             enable = true,
-            prev_selection = "<A-Left>",
+            prev_selection = "J",
             keymaps = {
-                ["<A-Right>"] = "textsubjects-smart",
+                ["W"] = "textsubjects-smart",
             }
         }
     })

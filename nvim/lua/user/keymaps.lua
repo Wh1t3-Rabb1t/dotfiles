@@ -100,15 +100,11 @@ cmap("<S-Down>",  "<Down>")                       -- Scroll DOWN cmd history
 
 -- ARROW NAVIGATION
 --------------------------------------------------------------------------------
-nvomap("t", "h")                                  -- Move cursor LEFT
-nvomap("i", "v:count == 0 ? 'gk' : 'k'", {        -- Move cursor UP
-    expr = true
-})
-nvomap("k", "v:count == 0 ? 'gj' : 'j'", {        -- Move cursor DOWN
-    expr = true
-})
-imap("<Up>",   km.cursor_up)                      -- Move cursor UP
-imap("<Down>", km.cursor_down)                    -- Move cursor DOWN
+nvomap("t",    "h")                               -- Move cursor LEFT
+nvomap("i",    km.cursor_up_cmd)                  -- Move cursor UP
+nvomap("k",    km.cursor_down_cmd)                -- Move cursor DOWN
+imap("<Up>",   km.cursor_up_ins)                  -- Move cursor UP
+imap("<Down>", km.cursor_down_ins)                -- Move cursor DOWN
 
 
 -- MOVE LINES UP / DOWN
@@ -131,22 +127,16 @@ vmap("T", "<gv^")                                 -- Outdent
 --------------------------------------------------------------------------------
 imap("<A-Left>",  km.forwards_word)               -- Jump backwards by word
 imap("<A-Right>", km.backwards_word)              -- Jump backwards by word
-
--- Use expression to deal with line wrap
-nvmap(",", "v:count == 0 ? 'g^' : '^'",  {        -- Jump to line START
-    expr = true
-})
-nvmap(".", "v:count == 0 ? 'g$h' : '$'", {        -- Jump to line END
-    expr = true
-})
-imap("<Home>",    km.line_start)                  -- Jump to line START
-imap("<End>",     km.line_end)                    -- Jump to line END
+imap("<Home>",    km.line_start_ins)              -- Jump to line START
+imap("<End>",     km.line_end_ins)                -- Jump to line END
+nvmap(",",        km.line_start_cmd)              -- Jump to line START
+nvmap(".",        km.line_end_cmd)                -- Jump to line END
 
 
 -- JUMP 6 LINES / BETWEEN BLOCKS
 --------------------------------------------------------------------------------
-nvmap("e",  "6k")                                 -- Jump 6 lines UP
-nvmap("d",  "6j")                                 -- Jump 6 lines DOWN
+nvmap("e", "6k")                                  -- Jump 6 lines UP
+nvmap("d", "6j")                                  -- Jump 6 lines DOWN
 nvmap("E", "mj{")                                 -- Jump block UP
 nvmap("D", "mj}")                                 -- Jump block DOWN
 
@@ -162,23 +152,23 @@ nvmap("<S-PageDown>", "mjG")                      -- Page BOTTOM
 -- DELETE BINDINGS (all deletions are sent to the black hole register)
 --------------------------------------------------------------------------------
 -- Char
-nmap("<BS>",         '"_X')                       -- Delete backwards
-vmap("<BS>",         '"_x')                       -- Delete visual selection
-nvmap("<Del>",       '"_x')                       -- Delete forwards
+nmap("<BS>",    '"_X')                            -- Delete backwards
+vmap("<BS>",    '"_x')                            -- Delete visual selection
+nvmap("<Del>",  '"_x')                            -- Delete forwards
 
 -- Word
-nmap("<A-BS>",       '"_db')                      -- Delete word LEFT
-nmap("<A-Del>",      '"_de')                      -- Delete word RIGHT
-imap("<A-BS>",       km.del_word_left)            -- Delete word LEFT
-imap("<A-Del>",      km.del_word_right)           -- Delete word RIGHT
+nmap("<A-BS>",  '"_db')                           -- Delete word LEFT
+nmap("<A-Del>", '"_de')                           -- Delete word RIGHT
+imap("<A-BS>",  km.del_word_left)                 -- Delete word LEFT
+imap("<A-Del>", km.del_word_right)                -- Delete word RIGHT
 
 -- Line
-nmap("<S-Del>",      '"_dd')                      -- Delete whole line
-nmap("<C-BS>",       '"_d^')                      -- Delete line LEFT
-nmap("<C-Del>",      '"_d$')                      -- Delete line RIGHT
+nmap("<S-Del>", '"_dd')                           -- Delete whole line
+nmap("<C-BS>",  '"_d^')                           -- Delete line LEFT
+nmap("<C-Del>", '"_d$')                           -- Delete line RIGHT
 
-imap("<C-BS>",       km.del_line_left)            -- Delete line LEFT
-imap("<C-Del>",      km.del_line_right)           -- Delete line RIGHT
+imap("<C-BS>",  km.del_line_left)                 -- Delete line LEFT
+imap("<C-Del>", km.del_line_right)                -- Delete line RIGHT
 
 
 -- DELETE MOTIONS
@@ -405,39 +395,10 @@ nmap("<D-[>",       "<C-w>r")                     -- Swap splits (2 splits max)
 
 -- SAVE CHANGES
 --------------------------------------------------------------------------------
-nimap("<A-s>", function()                         -- Save changes
-    local current_ft = vim.o.filetype
-    local excluded_ft = {
-        "diff",
-        "lazy",
-        "mason",
-        "neo-tree",
-        "aerial",
-    }
-
-    -- Don't save when certain filetypes are focused
-    if vim.tbl_contains(excluded_ft, current_ft) or vim.o.binary then
-        return
-    end
-
-    vim.cmd("w")
-
-    -- Return to normal mode if in insert mode
-    if vim.fn.mode() == "i" then
-        vim.api.nvim_feedkeys(vim.keycode("<Esc>"), "n", true)
-    end
-end)
+nimap("<A-s>", km.save_changes)                   -- Save changes
 
 
 -- QUIT (never quit)
 --------------------------------------------------------------------------------
 nvmap("<Leader>QQ", "<cmd>qa!<CR>")               -- Force quit nvim
-nmap("<A-q>", function()                          -- Quit and save session
-
-    -- Save session if launched via session file
-    if vim.tbl_contains(vim.v.argv, "-S") then
-        vim.cmd("Mksession!")
-    end
-
-    vim.cmd("qa")
-end)
+nmap("<A-q>",       km.quit_session)              -- Quit and save session

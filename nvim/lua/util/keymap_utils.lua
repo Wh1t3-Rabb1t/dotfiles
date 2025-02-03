@@ -22,13 +22,22 @@ end
 
 -- ARROW NAVIGATION
 --------------------------------------------------------------------------------
-function M.cursor_up()
+function M.cursor_up_ins()
     vim.cmd([[ :execute "normal! g\<Up>" ]])
 end
 
-function M.cursor_down()
+function M.cursor_down_ins()
     vim.cmd([[ :execute "normal! g\<Down>" ]])
 end
+
+function M.cursor_up_cmd()
+    vim.cmd([[ :execute v:count == 0 ? "normal! gk" : "normal! k" ]])
+end
+
+function M.cursor_down_cmd()
+    vim.cmd([[ :execute v:count == 0 ? "normal! gj" : "normal! j" ]])
+end
+
 
 
 -- JUMP BACKWARDS / FORWARDS BY WORD / LINE
@@ -41,12 +50,20 @@ function M.backwards_word()
     vim.cmd([[ :execute "normal! el" ]])
 end
 
-function M.line_start()
+function M.line_start_ins()
     vim.cmd([[ :execute "normal! g^" ]])
 end
 
-function M.line_end()
+function M.line_end_ins()
     vim.cmd([[ :execute "normal! g$" ]])
+end
+
+function M.line_start_cmd()
+    vim.cmd([[ :execute v:count == 0 ? "normal! g^" : "normal! ^" ]])
+end
+
+function M.line_end_cmd()
+    vim.cmd([[ :execute v:count == 0 ? "normal! g$h" : "normal! $" ]])
 end
 
 
@@ -122,6 +139,38 @@ function M.toggle_quickfix_window()
     else
         vim.cmd("bo copen")
     end
+end
+
+
+-- SAVE CHANGES
+--------------------------------------------------------------------------------
+function M.save_changes()
+    local current_ft = vim.o.filetype
+    local excluded_ft = { "diff", "lazy", "mason", "neo-tree", "aerial" }
+
+    -- Don't save when certain filetypes are focused
+    if vim.tbl_contains(excluded_ft, current_ft) or vim.o.binary then
+        return
+    end
+
+    vim.cmd("w")
+
+    -- Return to normal mode if in insert mode
+    if vim.fn.mode() == "i" then
+        vim.api.nvim_feedkeys(vim.keycode("<Esc>"), "n", true)
+    end
+end
+
+
+-- QUIT (never quit)
+--------------------------------------------------------------------------------
+function M.quit_session()
+    -- Save session if launched via session file
+    if vim.tbl_contains(vim.v.argv, "-S") then
+        vim.cmd("Mksession!")
+    end
+
+    vim.cmd("qa")
 end
 
 return M

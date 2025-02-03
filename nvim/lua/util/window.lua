@@ -26,6 +26,24 @@ function M.open_win_count()
 end
 
 
+-- CLOSE WINDOW
+--------------------------------------------------------------------------------
+function M.close_window()
+    if vim.bo.filetype == "checkhealth" then
+        vim.api.nvim_buf_delete(
+            vim.api.nvim_get_current_buf(), {
+                force = true
+            }
+        )
+    end
+
+    -- Don't quit if only one window is open
+    if M.open_win_count() ~= 1 then
+        vim.cmd("q")
+    end
+end
+
+
 -- CLEANUP WINDOWS
 --------------------------------------------------------------------------------
 function M.cleanup_windows()

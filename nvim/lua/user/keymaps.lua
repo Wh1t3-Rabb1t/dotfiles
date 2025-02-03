@@ -30,7 +30,7 @@
 -- CHANGE
 -- PASTE
 -- OPEN / JOIN LINES
--- NAVIGATE `/` and `f` SEARCH RESULTS
+-- NAVIGATE `f` and `/` SEARCH RESULTS
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
@@ -139,8 +139,8 @@ nvmap(",", "v:count == 0 ? 'g^' : '^'",  {        -- Jump to line START
 nvmap(".", "v:count == 0 ? 'g$h' : '$'", {        -- Jump to line END
     expr = true
 })
-imap("<Home>", km.line_start)                     -- Jump to line START
-imap("<End>",  km.line_end)                       -- Jump to line END
+imap("<Home>",    km.line_start)                  -- Jump to line START
+imap("<End>",     km.line_end)                    -- Jump to line END
 
 
 -- JUMP 6 LINES / BETWEEN BLOCKS
@@ -169,23 +169,16 @@ nvmap("<Del>",       '"_x')                       -- Delete forwards
 -- Word
 nmap("<A-BS>",       '"_db')                      -- Delete word LEFT
 nmap("<A-Del>",      '"_de')                      -- Delete word RIGHT
-imap("<A-BS>", function()                         -- Delete word LEFT
-    vim.cmd([[ :execute 'normal! "_db']])
-end)
-imap("<A-Del>", function()                        -- Delete word RIGHT
-    vim.cmd([[ :execute 'normal! "_de']])
-end)
+imap("<A-BS>",       km.del_word_left)            -- Delete word LEFT
+imap("<A-Del>",      km.del_word_right)           -- Delete word RIGHT
 
 -- Line
 nmap("<S-Del>",      '"_dd')                      -- Delete whole line
 nmap("<C-BS>",       '"_d^')                      -- Delete line LEFT
 nmap("<C-Del>",      '"_d$')                      -- Delete line RIGHT
-imap("<C-BS>", function()                         -- Delete line LEFT
-    vim.cmd([[ :execute 'normal! "_d^' ]])
-end)
-imap("<C-Del>", function()                        -- Delete line RIGHT
-    vim.cmd([[ :execute 'normal! "_d$' ]])
-end)
+
+imap("<C-BS>",       km.del_line_left)            -- Delete line LEFT
+imap("<C-Del>",      km.del_line_right)           -- Delete line RIGHT
 
 
 -- DELETE MOTIONS
@@ -217,12 +210,8 @@ nmap("wh", '"_dT')                                -- Delete backwards to char
 nmap("-",       ".")                              -- Dot operator
 nmap("<A-y>",   "u")                              -- Undo
 nmap("<A-S-y>", "U")                              -- Redo
-imap("<A-y>", function()                          -- Undo
-    vim.cmd([[ :execute "normal! u" ]])
-end)
-imap("<A-S-y>", function()                        -- Redo
-    vim.cmd([[ :execute "normal! U" ]])
-end)
+imap("<A-y>",   km.undo)                          -- Undo
+imap("<A-S-y>", km.redo)                          -- Redo
 
 
 -- SWAP CASE
@@ -339,10 +328,7 @@ nmap("yh", '"_cT')                                -- Change backwards to char
 nmap("v",     '"*]P')                             -- Paste from system register
 vmap("v",     '"_d"*P')                           -- Paste over selection
 cmap("<A-v>", "<C-r>*")                           -- Paste from system register
-imap("<A-v>", function()                          -- Paste from system register
-    -- Make paste respect indentation in insert
-    vim.cmd([[ :execute 'normal! "*]Pl' ]])
-end)
+imap("<A-v>", km.paste)                           -- Paste from system register
 
 
 -- OPEN / JOIN LINES
@@ -354,36 +340,17 @@ nmap("<S-CR>", "O<C-o>mo<Esc>`o")                 -- New line ABOVE
 nvmap("j",     "J")                               -- Join lines
 
 
--- NAVIGATE `/` and `f` SEARCH RESULTS
+-- NAVIGATE `f` and `/` SEARCH RESULTS
 --------------------------------------------------------------------------------
-nmap("?", function()                              -- Toggle search highlights
-    if vim.v.hlsearch == 1 then
-        vim.cmd("nohlsearch")
-    else
-        vim.cmd("set hls")
-    end
-end)
+nvmap("h", ",")                                   -- Prev f search result
+nvmap("Y", "mnN")                                 -- Prev / search result
+nvmap("V", "mnn")                                 -- Next / search result
+nmap("?",  km.toggle_search_hl)                   -- Toggle search highlights
+nmap("F",  "mn*")                                 -- Search for inner word
+vmap("F",  km.search_for_selection)               -- Search for selected area
 vmap("/",  "<Esc>/\\%V", {                        -- Search within selection
     silent = false
 })
-nvmap("h", ",")                                   -- Prev f search result
-nvmap("Y",  "mnN")                                -- Prev / search result
-nvmap("V",  "mnn")                                -- Next / search result
-nmap("F",   "mn*")                                -- Search for inner word
-vmap("F", function()                              -- Search for selected area
-    vim.cmd('normal! "9y')
-    local selection = vim.fn.getreg('9')
-    local escaped_selection = vim.fn.escape(selection, "\\/.*$^~[]")
-
-    -- Replace newlines with literal "\n" so multi-line searches work
-    escaped_selection = escaped_selection:gsub("\n", "\\n")
-
-    -- Build the search command and feed it as keypresses
-    local search_cmd = "/" .. escaped_selection .. "\n"
-    local keys = vim.api.nvim_replace_termcodes(search_cmd, true, false, true)
-    vim.api.nvim_feedkeys(keys, 'n', false)
-    vim.fn.setreg('9', '')
-end)
 
 
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
@@ -394,13 +361,7 @@ vmap("=-", "g<C-x>gv")                            -- Decrement num sequentially
 
 -- QUICKFIX
 --------------------------------------------------------------------------------
-nmap("<A-p>", function()                          -- Toggle quickfix list
-    if vim.bo.filetype == "qf" then
-        vim.cmd("bo cclose")
-    else
-        vim.cmd("bo copen")
-    end
-end)
+nmap("<A-p>", km.toggle_quickfix_window)          -- Toggle quickfix list
 
 
 -- WINDOW
@@ -434,20 +395,7 @@ nmap("<S-Right>", function()                      -- Resize window RIGHT
 end)
 
 -- Cmds
-nmap("<Leader>w", function()                      -- Close window
-    if vim.bo.filetype == "checkhealth" then
-        vim.api.nvim_buf_delete(
-            vim.api.nvim_get_current_buf(), {
-                force = true
-            }
-        )
-    end
-
-    -- Don't quit if only one window is open
-    if win.open_win_count() ~= 1 then
-        vim.cmd("q")
-    end
-end)
+nmap("<Leader>w",   win.close_window)             -- Close window
 nmap("<A-m>",       "<cmd>vsplit<CR>")            -- Split window VERTICALLY
 nmap("<A-n>",       "<cmd>split<CR>")             -- Split window HORIZONTALLY
 nmap("<Home>",      "zhzhzh")                     -- Scroll window LEFT

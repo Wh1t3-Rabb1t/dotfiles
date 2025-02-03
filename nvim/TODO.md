@@ -10,7 +10,7 @@
 
 - Finish configuring fzf lua
 
-- Send all copy / cut actions to the register stack (create an autocommand tied to yank events)
+- Send all copy / cut actions to the register stack (create an autocommand tied to yank events). Also need to cleanup the current copy bindings to remove `shift_up_register_stack` etc.
 
 
 - Set up down left right bindings for visual mode

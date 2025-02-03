@@ -61,6 +61,8 @@ function M.init()
 
     -- Close tabs
     map("n", "<A-w>", function()
+        if vim.bo.filetype == "qf" then return end
+
         if type(tag.name_or_index()) == "number" then
             vim.cmd("Grapple toggle")
             vim.cmd("BufferClose")

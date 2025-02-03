@@ -4,36 +4,16 @@
 
 ## Bindings
 
-- Rework nvim window resize logic to either keep column count above 80, or turn wrap off when it falls below 80
-- Move all functions bound to keys out of 'keymaps.lua' to separate file
+- Move all functions bound to keys out of 'keymaps.lua' to separate file 'keymap_utils.lua'
 - Move all keybindings declared in Legendary to 'keymaps.lua'
+
 - Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
 - Standardize Rg / Fzf colors
 
-- Send all copy / cut actions to the register stack
-
-rebind alt right (select in word / expand selection) bind to Y
-
-- Fix:
-qf binding to toggle (alt p) use alt r to begin sub if qf is focused
-inc nums sequentially bindings
-expand selection bindings (treesitter)
-
-- Bind
-W  :  Block up
-V  :  Block down
-F  :  / search word under cursor
-E  :  / search up
-D  :  / search down
-B  :  Visual block mode
-Y
-G  : Restore selection
-R
+- Send all copy / cut actions to the register stack (create an autocommand tied to yank events)
 
 
 - Set up down left right bindings for visual mode
-- Wrangle bindings C V X R (change to dial, registers, gv mode etc)
-
 - Reinstall hammerspoon via homebrew
 
 

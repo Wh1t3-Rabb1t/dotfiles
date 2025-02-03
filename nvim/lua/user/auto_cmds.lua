@@ -18,13 +18,13 @@ autocmd({ "VimEnter", "VimResume" }, {
     group = augroup("KittySetVarVimEnter", { clear = true }),
     callback = function()
         io.stdout:write("\x1b]1337;SetUserVar=in_editor=MQo\007")
-    end,
+    end
 })
 autocmd({ "VimLeave", "VimSuspend" }, {
     group = augroup("KittyUnsetVarVimLeave", { clear = true }),
     callback = function()
         io.stdout:write("\x1b]1337;SetUserVar=in_editor\007")
-    end,
+    end
 })
 
 
@@ -87,7 +87,6 @@ autocmd("InsertLeave", {
 
 -- HIGHLIGHT ON YANK
 --------------------------------------------------------------------------------
--- local hl_group = augroup("YankHighlight", { clear = true })
 autocmd("TextYankPost", {
     group = augroup("YankHighlight", { clear = true }),
     pattern = "*",

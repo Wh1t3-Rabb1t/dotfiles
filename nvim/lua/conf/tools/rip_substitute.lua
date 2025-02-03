@@ -13,7 +13,14 @@ M.keys = {
     {
         mode = { "n", "x" },
         "<A-r>",
-        function() require("rip-substitute").sub() end,
+        function()
+            if vim.bo.filetype == "qf" then
+                -- Begin a vim substitute command if quickfix is focused
+                vim.api.nvim_feedkeys(":%s/", "n", true)
+            else
+                require("rip-substitute").sub()
+            end
+        end,
         desc = "Rip Substitute",
     }
 }

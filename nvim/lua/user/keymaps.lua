@@ -5,8 +5,6 @@
 --  |_|\_\___|\__, |_| |_| |_|\__,_| .__/|___/
 -- ===========|___/================|_|==========================================
 
--- See:
--- ':help vim.keymap.set()'
 -- https://gist.github.com/Starefossen/5957088
 -- https://learnvimscriptthehardway.stevelosh.com/
 
@@ -26,10 +24,8 @@
 -- DELETE BINDINGS
 -- DELETE MOTIONS
 -- DOT OPERATOR / UNDO / REDO
--- UPPER / LOWER / SWAP CASE
--- SELECT IN WORD
--- SELECT IN SURROUNDING
--- SELECT BRACKETED CODE BLOCKS
+-- SWAP CASE
+-- SELECT IN / AROUND
 -- COPY
 -- CUT
 -- CHANGE
@@ -249,20 +245,18 @@ imap("<A-S-y>", function()                        -- Redo
 end)
 
 
--- UPPER / LOWER / SWAP CASE
+-- SWAP CASE
 --------------------------------------------------------------------------------
 nmap("_", "~")                                    -- Swap case
 vmap("_", "mmU`m")                                -- Uppercase visual selection
 vmap("-", "mmu`m")                                -- Lowercase visual selection
 
 
--- SELECT IN WORD
+-- SELECT IN / AROUND
 --------------------------------------------------------------------------------
 nmap("W", "viw")                                  -- Select in word
 
-
--- SELECT IN SURROUNDING
---------------------------------------------------------------------------------
+-- In surrounding
 nmap("'", "msvi'")                                -- Select inside ''
 nmap('"', 'msvi"')                                -- Select inside ""
 nmap("`", "msvi`")                                -- Select inside ``
@@ -271,9 +265,7 @@ nmap("(", "msvi(")                                -- Select inside ()
 nmap("[", "msvi[")                                -- Select inside []
 nmap("<", "msvi<")                                -- Select inside <>
 
-
--- SELECT BRACKETED CODE BLOCKS
---------------------------------------------------------------------------------
+-- Around bracketed code blocks
 nmap("}", "msva{V")                               -- Select around {} block
 nmap(")", "msva(V")                               -- Select around () block
 nmap("]", "msva[V")                               -- Select around [] block
@@ -394,10 +386,24 @@ end)
 vmap("/",  "<Esc>/\\%V", {                        -- Search within selection
     silent = false
 })
-nmap("F",  "mn*")                                 -- Next word under cursor
-nmap("Y",  "mnN")                                 -- Prev / search result
-nmap("V",  "mnn")                                 -- Next / search result
 nvmap("h", ",")                                   -- Prev f search result
+nvmap("Y",  "mnN")                                -- Prev / search result
+nvmap("V",  "mnn")                                -- Next / search result
+nmap("F",   "mn*")                                -- Search for inner word
+vmap("F", function()                              -- Search for selected area
+    vim.cmd('normal! "9y')
+    local selection = vim.fn.getreg('9')
+    local escaped_selection = vim.fn.escape(selection, "\\/.*$^~[]")
+
+    -- Replace newlines with literal "\n" so multi-line searches work
+    escaped_selection = escaped_selection:gsub("\n", "\\n")
+
+    -- Build the search command and feed it as keypresses
+    local search_cmd = "/" .. escaped_selection .. "\n"
+    local keys = vim.api.nvim_replace_termcodes(search_cmd, true, false, true)
+    vim.api.nvim_feedkeys(keys, 'n', false)
+    vim.fn.setreg('9', '')
+end)
 
 
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
@@ -408,11 +414,9 @@ vmap("=-", "g<C-x>gv")                            -- Decrement num sequentially
 
 -- QUICKFIX
 --------------------------------------------------------------------------------
-nmap("<A-p>", function()                          -- Open quickfix / substitute
+nmap("<A-p>", function()                          -- Toggle quickfix list
     if vim.bo.filetype == "qf" then
-
-        -- Begin a substitute command
-        vim.api.nvim_feedkeys(":s%/", "n", true)
+        vim.cmd("bo cclose")
     else
         vim.cmd("bo copen")
     end
@@ -499,8 +503,7 @@ end)
 
 -- QUIT (never quit)
 --------------------------------------------------------------------------------
-nvmap("<Leader>q", "<cmd>qa<CR>")                 -- Quit nvim
-nvmap("QQ", "<cmd>qa!<CR>")                       -- Force quit nvim
+nvmap("<Leader>QQ", "<cmd>qa!<CR>")               -- Force quit nvim
 nmap("<A-q>", function()                          -- Quit and save session
 
     -- Save session if launched via session file

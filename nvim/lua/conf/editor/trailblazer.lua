@@ -7,18 +7,11 @@
 
 local M = {}
 
--- ICONS
---------------------------------------------------------------------------------
-local icons = {
-    mark = "⚑",
-}
-
-
 -- KEYS
 --------------------------------------------------------------------------------
 M.keys = {
-    "<Leader>b",
-    "<A-b>",
+    "m",
+    "M",
     "n",
     "b",
 }
@@ -63,11 +56,11 @@ function M.config()
             current_trail_mark_list_type = "quickfix",  -- Currently only quickfix lists are supported
             trail_mark_list_rows = 10,                  -- Number of rows to show in the trail mark list
             verbose_trail_mark_select = true,           -- Print current mode notification on mode change
-            mark_symbol = icons.mark,                   -- Only used if trail_mark_symbol_line_indicators_enabled
-            newest_mark_symbol = icons.mark,            -- Disable by setting to ""
-            cursor_mark_symbol = icons.mark,            -- Disable by setting to ""
-            next_mark_symbol = icons.mark,              -- Disable by setting to ""
-            previous_mark_symbol = icons.mark,          -- Disable by setting to ""
+            mark_symbol = "⚑",                          -- Only used if trail_mark_symbol_line_indicators_enabled
+            newest_mark_symbol = "⚑",                   -- Disable by setting to ""
+            cursor_mark_symbol = "⚑",                   -- Disable by setting to ""
+            next_mark_symbol = "⚑",                     -- Disable by setting to ""
+            previous_mark_symbol = "⚑",                 -- Disable by setting to ""
             multiple_mark_symbol_counters_enabled = true,
             number_line_color_enabled = true,
             trail_mark_in_text_highlights_enabled = true,
@@ -127,12 +120,12 @@ function M.config()
             -- Mode union: normal & visual mode. Can be extended by adding i, x, ...
             nv = {
                 motions = {
-                    new_trail_mark = "<Leader>b",
+                    new_trail_mark = "m",
                     track_back = false,
                     peek_move_next_down = "n",
                     peek_move_previous_up = "b",
                     move_to_nearest = false,
-                    toggle_trail_mark_list = "<A-b>",
+                    toggle_trail_mark_list = "M",
                 },
                 actions = {
                     delete_all_trail_marks = false,

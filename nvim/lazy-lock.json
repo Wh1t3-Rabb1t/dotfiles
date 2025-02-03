@@ -48,7 +48,7 @@
   "nvim-web-devicons": { "branch": "master", "commit": "402377242b04be3f4f0f3720bd952df86e946c30" },
   "plenary.nvim": { "branch": "master", "commit": "3707cdb1e43f5cea73afb6037e6494e7ce847a66" },
   "quicker.nvim": { "branch": "master", "commit": "92e0f61a5d6422424cf7728ad323d2a06e3ab2d5" },
-  "render-markdown.nvim": { "branch": "main", "commit": "46b0d4125fa5ef6d93a867d540f7c422c339ecc2" },
+  "render-markdown.nvim": { "branch": "main", "commit": "2a9e0ab6043bfb4996ce6a6a35594ab357e5d299" },
   "sqlite.lua": { "branch": "master", "commit": "b487fcc8937b683942a1f7d9662fcf50ca5acd58" },
   "stcursorword": { "branch": "main", "commit": "f6810ed5001eeee6061fdce77b292a5565823ded" },
   "trailblazer.nvim": { "branch": "main", "commit": "674bb6254a376a234d0d243366224122fc064eab" }

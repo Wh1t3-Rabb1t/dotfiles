@@ -11,8 +11,8 @@ local M = {}
 --------------------------------------------------------------------------------
 M.keys = {
     "q",
-    "m",
-    "M",
+    "Q",
+    "<Leader>q",
 }
 
 
@@ -23,7 +23,6 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    local colors = require("catppuccin.palettes").get_palette()
     require("NeoComposer").setup({
         notify = true,
         delay_timer = 0,
@@ -33,21 +32,13 @@ function M.config()
             width = 60,
             height = 10,
             border = "none",
-            winhl = { Normal = "ComposerNormal", }
-        },
-
-        colors = {
-            bg = colors.base,
-            fg = colors.peach,
-            red = "#d20f39",  -- Latte red
-            blue = colors.blue,
-            green = colors.green,
+            winhl = { Normal = "ComposerNormal" }
         },
 
         keymaps = {
             toggle_record = "q",
-            play_macro = "m",
-            toggle_macro_menu = "M",
+            play_macro = "Q",
+            toggle_macro_menu = "<Leader>q",
             yank_macro = false,
             stop_macro = false,
             cycle_next = false,

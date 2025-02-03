@@ -39,8 +39,7 @@ function M.cursor_down_cmd()
 end
 
 
-
--- JUMP BACKWARDS / FORWARDS BY WORD / LINE
+-- JUMP TO START / END OF WORD / LINE
 --------------------------------------------------------------------------------
 function M.forwards_word()
     vim.cmd([[ :execute "normal! b" ]])
@@ -105,7 +104,7 @@ function M.paste()
 end
 
 
--- NAVIGATE `/` and `f` SEARCH RESULTS
+-- NAVIGATE `f` and `/` SEARCH RESULTS
 --------------------------------------------------------------------------------
 function M.toggle_search_hl()
     if vim.v.hlsearch == 1 then
@@ -133,7 +132,7 @@ end
 
 -- QUICKFIX
 --------------------------------------------------------------------------------
-function M.toggle_quickfix_window()
+function M.toggle_quickfix_win()
     if vim.bo.filetype == "qf" then
         vim.cmd("bo cclose")
     else
@@ -165,7 +164,7 @@ end
 -- QUIT (never quit)
 --------------------------------------------------------------------------------
 function M.quit_session()
-    -- Save session if launched via session file
+    -- Save session if nvim was launched via session file
     if vim.tbl_contains(vim.v.argv, "-S") then
         vim.cmd("Mksession!")
     end

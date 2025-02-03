@@ -4,13 +4,36 @@
 
 ## Bindings
 
-- Move all functions bound to keys out of 'keymaps.lua' to separate file 'keymap_utils.lua'
+- Fix `quicker` lsp icons (sync with lsp config icons)
+
 - Move all keybindings declared in Legendary to 'keymaps.lua'
 - Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
 
 - Finish configuring fzf lua
 
 - Send all copy / cut actions to the register stack (create an autocommand tied to yank events). Also need to cleanup the current copy bindings to remove `shift_up_register_stack` etc.
+
+- Possibly convert this to util function: (not important)
+```lua
+vmap("/",              "<Esc>/\\%V", {           -- Search within selection
+    silent = false
+})
+```
+
+```lua
+vmap("<Leader>c", function()                      -- Copy to register stack
+    util.shift_up_register_stack()
+    vim.cmd([[ :execute 'normal! mm"ay`m' ]])
+end)
+
+vmap("<Leader>x", function()
+    util.shift_up_register_stack()                -- Cut to register stack
+    vim.cmd([[ :execute 'normal! "ad' ]])
+end)
+```
+
+
+
 
 
 - Set up down left right bindings for visual mode

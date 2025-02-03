@@ -87,6 +87,8 @@ function M.navigate_horizontally(direction)
             width = width - 30
         end
 
+        -- Prevent catastrophic performance tanking
+        -- when iterating the loop 4-5 times :)
         if neotree_id and aerial_id then
             break
         end
@@ -140,7 +142,7 @@ function M.navigate_vertically(direction)
     local excluded_ft = { "lazy", "mason", "neo-tree", "aerial", "grapple" }
     local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
 
-    -- Enable arrow key navigation in certain buffers
+    -- Enable arrow key navigation in desired buffers
     if vim.tbl_contains(excluded_ft, vim.bo.filetype) then
         vim.api.nvim_feedkeys(vim.keycode(keys[direction]), "n", true)
         return

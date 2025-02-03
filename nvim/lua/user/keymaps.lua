@@ -17,8 +17,7 @@
 -- ARROW NAVIGATION
 -- MOVE LINES UP / DOWN
 -- INDENT / OUTDENT
--- JUMP BACKWARDS / FORWARDS BY WORD
--- JUMP TO START / END OF LINE
+-- JUMP BACKWARDS / FORWARDS BY WORD / LINE
 -- JUMP 6 LINES / BETWEEN BLOCKS
 -- SCROLL PAGE UP / DOWN
 -- DELETE BINDINGS
@@ -38,9 +37,9 @@
 -- SAVE CHANGES
 -- QUIT
 
-
 local util = require("util.utils")
 local win = require("util.window")
+local km = require("util.keymap_utils")
 local nmap = function (...) util.map("n", ...) end
 local vmap = function (...) util.map("v", ...) end
 local imap = function (...) util.map("i", ...) end
@@ -48,6 +47,10 @@ local cmap = function (...) util.map("c", ...) end
 local nvmap = function (...) util.map({ "n", "v" }, ...) end
 local nimap = function (...) util.map({ "n", "i" }, ...) end
 local nvomap = function (...) util.map({ "n", "v", "o" }, ...) end
+
+-- NOTE: If a module bound to a key needs an argument, it must be wrapped
+-- in a function. Neovim’s keymaps don’t support calling functions with
+-- predefined arguments directly.
 
 
 -- LEADER
@@ -81,15 +84,7 @@ nvmap("S",         "V")                           -- Visual LINE mode
 nvmap("B",         "<C-v>")                       -- Visual BLOCK mode
 nvmap("G",         "msgv")                        -- Restore visual selection
 vmap("a",          "o")                           -- Swap point & mark
-vmap("A", function()
-    local mode = vim.fn.mode()
-    if mode == "v" or mode == "V" then
-        vim.cmd([[ :execute "normal! O" ]])
-    else
-        -- Default behaviour in vblock mode
-        vim.api.nvim_feedkeys("A", "n", true)
-    end
-end)                                              -- Swap point & mark
+vmap("A",          km.swap_point_and_mark)        -- Swap point & mark
 
 
 -- COMMAND LINE MODE
@@ -112,12 +107,8 @@ nvomap("i", "v:count == 0 ? 'gk' : 'k'", {        -- Move cursor UP
 nvomap("k", "v:count == 0 ? 'gj' : 'j'", {        -- Move cursor DOWN
     expr = true
 })
-imap("<Up>", function()                           -- Move cursor UP
-    vim.cmd([[ :execute "normal! g\<Up>" ]])
-end)
-imap("<Down>", function()                         -- Move cursor DOWN
-    vim.cmd([[ :execute "normal! g\<Down>" ]])
-end)
+imap("<Up>",   km.cursor_up)                      -- Move cursor UP
+imap("<Down>", km.cursor_down)                    -- Move cursor DOWN
 
 
 -- MOVE LINES UP / DOWN
@@ -136,18 +127,11 @@ vmap("L", ">gv^")                                 -- Indent
 vmap("T", "<gv^")                                 -- Outdent
 
 
--- JUMP BACKWARDS / FORWARDS BY WORD
+-- JUMP BACKWARDS / FORWARDS BY WORD / LINE
 --------------------------------------------------------------------------------
-imap("<A-Left>", function()                       -- Jump backwards by word
-    vim.cmd([[ :execute "normal! b" ]])
-end)
-imap("<A-Right>", function()                      -- Jump forwards by word
-    vim.cmd([[ :execute "normal! el" ]])
-end)
+imap("<A-Left>",  km.forwards_word)               -- Jump backwards by word
+imap("<A-Right>", km.backwards_word)              -- Jump backwards by word
 
-
--- JUMP TO START / END OF LINE
---------------------------------------------------------------------------------
 -- Use expression to deal with line wrap
 nvmap(",", "v:count == 0 ? 'g^' : '^'",  {        -- Jump to line START
     expr = true
@@ -155,12 +139,8 @@ nvmap(",", "v:count == 0 ? 'g^' : '^'",  {        -- Jump to line START
 nvmap(".", "v:count == 0 ? 'g$h' : '$'", {        -- Jump to line END
     expr = true
 })
-imap("<Home>", function()                         -- Jump to line START
-    vim.cmd([[ :execute "normal! g^" ]])
-end)
-imap("<End>", function()                          -- Jump to line END
-    vim.cmd([[ :execute "normal! g$" ]])
-end)
+imap("<Home>", km.line_start)                     -- Jump to line START
+imap("<End>",  km.line_end)                       -- Jump to line END
 
 
 -- JUMP 6 LINES / BETWEEN BLOCKS
@@ -234,7 +214,7 @@ nmap("wh", '"_dT')                                -- Delete backwards to char
 
 -- DOT OPERATOR / UNDO / REDO
 --------------------------------------------------------------------------------
-nmap("-",   ".")                                  -- Dot operator
+nmap("-",       ".")                              -- Dot operator
 nmap("<A-y>",   "u")                              -- Undo
 nmap("<A-S-y>", "U")                              -- Redo
 imap("<A-y>", function()                          -- Undo

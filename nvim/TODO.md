@@ -6,9 +6,9 @@
 
 - Move all functions bound to keys out of 'keymaps.lua' to separate file 'keymap_utils.lua'
 - Move all keybindings declared in Legendary to 'keymaps.lua'
-
 - Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
-- Standardize Rg / Fzf colors
+
+- Finish configuring fzf lua
 
 - Send all copy / cut actions to the register stack (create an autocommand tied to yank events)
 

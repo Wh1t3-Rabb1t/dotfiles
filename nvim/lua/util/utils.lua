@@ -28,11 +28,12 @@ end
 function M.shift_up_register_stack()
     local contents = {}
 
-    -- Cache registers
-    for i = 97, 122 do  -- ASCII values for 'a' (97) to 'z' (122)
+    -- ASCII values for 'a' (97) to 'z' (122)
+    for i = 97, 122 do
         local reg = string.char(i)
         local selection = vim.fn.getreg(reg)
 
+        -- Cache registers
         if selection ~= "" then
             contents[reg] = selection
         else
@@ -57,7 +58,7 @@ end
 --------------------------------------------------------------------------------
 function M.cleanup_registers()
     -- Alphabetical
-    for char = 97, 122 do  -- ASCII values for 'a' to 'z'
+    for char = 97, 122 do
         vim.fn.setreg(string.char(char), {})
         vim.fn.setreg(string.char(char):upper(), {})
     end

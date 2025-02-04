@@ -4,13 +4,15 @@
 
 ## Bindings
 
-- Fix `quicker` lsp icons (sync with lsp config icons)
+- Set broot jump between results binding
+
 
 - Move all keybindings declared in Legendary to 'keymaps.lua'
 - Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
 
 - Finish configuring fzf lua
 
+- Set clipboard ring binding for nvim and zsh
 - Send all copy / cut actions to the register stack (create an autocommand tied to yank events). Also need to cleanup the current copy bindings to remove `shift_up_register_stack` etc.
 
 - Possibly convert this to util function: (not important)

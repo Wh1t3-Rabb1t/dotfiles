@@ -12,10 +12,6 @@
     Possibly auto quit Finder when system wakes up with Hammerspoon
 
 
-
-- Configure ghostty
-- Fix ghostty navigate split bindings
-
 - Configure vimium-c
 
 - Ascii art: https://emojicombos.com/batman-ascii-art

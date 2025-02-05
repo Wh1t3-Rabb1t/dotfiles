@@ -138,10 +138,10 @@ bindkey -M viins '^[Y'      redo                         # Alt Y
 # SELECT IN WORD / LINE
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '^[[1;3C'  _select_in_word              # Alt Right
+bindkey -M vicmd 'W'        _select_in_word              # W
 
 # Vis
-bindkey -M visual '^[[1;3C' visual-line-mode             # Alt Right
+bindkey -M visual 'W'       visual-line-mode             # W
 
 
 # UPPER / LOWER / SWAP CASE

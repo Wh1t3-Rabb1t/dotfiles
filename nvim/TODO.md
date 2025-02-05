@@ -6,6 +6,7 @@
 
 - Set broot jump between results binding
 
+- Look into enabling italic and bold in kitty Monaco font
 
 - Move all keybindings declared in Legendary to 'keymaps.lua'
 - Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)

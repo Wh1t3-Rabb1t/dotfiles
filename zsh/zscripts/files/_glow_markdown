@@ -21,6 +21,7 @@ local selection=$( \
         --color=always \
     | fzf \
         --header=$HEADER_A \
+        --header-border=top \
         --prompt=$PROMPT_A \
         --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
             && echo \

@@ -38,6 +38,7 @@ git --no-pager diff --name-only \
     ${commit} -- ${files[*]} \
 | fzf \
     --header=' Find diffs.' \
+    --header-border=top \
     --exit-0 \
     --no-sort \
     --preview="${preview_cmd}"

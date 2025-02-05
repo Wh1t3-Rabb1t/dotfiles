@@ -23,6 +23,7 @@ local selection=$( \
     | fzf \
         --multi \
         --header=$HEADER_A \
+        --header-border=top \
         --prompt=$PROMPT_A \
         --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
             && echo \

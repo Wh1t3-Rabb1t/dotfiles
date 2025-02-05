@@ -24,7 +24,9 @@ local selection=$( \
         }
         print
     }' \
-    | fzf --header=' Zsh cheat sheet. Green x : Immediate execution.' \
+    | fzf \
+        --header=' Zsh cheat sheet. Green x : Immediate execution.' \
+        --header-border=top \
 )
 
 popd

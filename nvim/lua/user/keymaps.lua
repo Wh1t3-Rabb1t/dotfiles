@@ -38,7 +38,8 @@
 
 -- NOTE: If a module bound to a key needs an argument, it must be wrapped
 -- in a function. Neovim’s keymaps don’t support calling functions with
--- predefined arguments directly.
+-- predefined arguments directly. Functions without arguments passed in
+-- don't require wrapping though.
 
 local util = require("util.utils")
 local win = require("util.window")
@@ -60,23 +61,6 @@ vim.g.maplocalleader = " "
 nvmap("<Space>", "<Nop>")
 
 
-
-
-vmap("G", function()                      -- Copy to register stack
-    util.shift_up_register_stack()
-    vim.cmd([[ :execute 'normal! mm"ay`m' ]])
-end)
-
--- vmap("<Leader>x", function()
---     util.shift_up_register_stack()                -- Cut to register stack
---     vim.cmd([[ :execute 'normal! "ad' ]])
--- end)
-
-
-
-
-
-
 -- INSERT MODE
 --------------------------------------------------------------------------------
 nmap("<Esc>",          "i")                      -- Insert mode
@@ -88,14 +72,7 @@ nvmap("<S-Esc>",       "I")                      -- Insert mode at line start
 nvmap("s",             "v")                      -- Visual mode
 nvmap("S",             "V")                      -- Visual LINE mode
 nvmap("B",             "<C-v>")                  -- Visual BLOCK mode
-
-
-
-
-nmap("G",             "msgv")                   -- Restore visual selection
-
-
-
+nvmap("G",             "msgv")                   -- Restore visual selection
 vmap("a",              "o")                      -- Swap point & mark
 vmap("A",              km.swap_point_and_mark)   -- Swap point & mark
 

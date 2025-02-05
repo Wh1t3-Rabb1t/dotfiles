@@ -25,6 +25,7 @@ local selection=$( \
     }' \
     | fzf \
         --header='󱃅 Teleport to selected directory.' \
+        --header-border=top \
         --filepath-word \
         --no-sort \
 )

@@ -19,7 +19,9 @@ local selection=$( \
         --hidden \
         --no-ignore \
         --exclude=.cache \
-    | fzf --header=' Launch Vim session.' \
+    | fzf \
+        --header=' Launch Vim session.' \
+        --header-border=top \
 )
 
 if [[ -z "$selection" ]]; then

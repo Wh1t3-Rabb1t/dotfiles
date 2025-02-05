@@ -5,6 +5,7 @@
 ## Bindings
 
 - Set broot jump between results binding
+- Set up macOS mission control navigation bindings and increase animation speed via cli os settings
 
 - Look into enabling italic and bold in kitty Monaco font
 
@@ -15,6 +16,8 @@
 
 - Set clipboard ring binding for nvim and zsh
 - Send all copy / cut actions to the register stack (create an autocommand tied to yank events). Also need to cleanup the current copy bindings to remove `shift_up_register_stack` etc.
+- 0 Yank register for the last yank command. Last yanked text (not overwritten by deletes).
+- Use autocmd to copy contents of the 0 register to the alphabetical register stack on yank event if the contents are different (prevent duplicates)
 
 - Possibly convert this to util function: (not important)
 ```lua

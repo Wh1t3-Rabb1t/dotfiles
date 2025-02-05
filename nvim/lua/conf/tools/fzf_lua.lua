@@ -66,9 +66,9 @@ function M.config()
     vim.keymap.set("t", "<A-v>", function()
         vim.api.nvim_paste(vim.fn.getreg("*"), true, -1)
     end, {
-        desc = "Paste from system register into FzfLua",
         noremap = true,
         silent = false,
+        desc = "Paste from system register into FzfLua",
     })
 
     -- Setup
@@ -82,6 +82,13 @@ function M.config()
             -- ...
             ["--margin"] = "1%",
             ["--cycle"] = "",
+
+            ["--ansi"]           = true,
+            ["--info"]           = "inline-right", -- fzf < v0.42 = "inline"
+            ["--height"]         = "100%",
+            ["--layout"]         = "reverse",
+            ["--border"]         = "none",
+            ["--highlight-line"] = true,           -- fzf >= v0.53
         },
 
         -- Window options

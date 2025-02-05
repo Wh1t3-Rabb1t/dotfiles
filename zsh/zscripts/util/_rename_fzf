@@ -20,6 +20,7 @@ if (( ${+commands[eza]} )); then
             --color=always \
         | fzf \
             --header=' Rename target file / directory.' \
+            --header-border=top \
             --no-preview \
     )
 elif (( ${+commands[gls]} )); then
@@ -30,6 +31,7 @@ elif (( ${+commands[gls]} )); then
             --color \
         | fzf \
             --header=' Rename target file / directory.' \
+            --header-border=top \
             --no-preview \
     )
 fi

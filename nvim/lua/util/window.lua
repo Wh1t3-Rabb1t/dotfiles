@@ -159,12 +159,13 @@ function M.navigate_vertically(direction)
     local qf_id
     local qf_length = 0
     local get_height = vim.api.nvim_win_get_height
+    local set_height = vim.api.nvim_win_set_height
 
     -- If quickfix window is open...
     for _, win in ipairs(vim.fn.getwininfo()) do
         if win.quickfix == 1 then
             local num = #vim.fn.getqflist()
-            if num == 0 then qf_length = 10 else qf_length = num end
+            if num < 10 then qf_length = 10 else qf_length = num end
             qf_id = win.winid
             break
         end
@@ -197,9 +198,7 @@ function M.navigate_vertically(direction)
     end
 
     -- Prevent miscalculations because I'm an idiot
-    if qf_id then
-        vim.api.nvim_win_set_height(qf_id, qf_length)
-    end
+    if qf_id then set_height(qf_id, qf_length) end
 end
 
 

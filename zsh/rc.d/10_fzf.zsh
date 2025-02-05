@@ -83,7 +83,6 @@ export FZF_DEFAULT_OPTS="\
 --color='$FZF_COLORS' \
 --preview='$FZF_PREVIEW' \
 --preview-window='right,border-left,<88(up:50%,border-bottom)' \
---header-border=top \
 --info=inline-right \
 --height=100% \
 --prompt=' ' \

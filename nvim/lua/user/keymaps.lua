@@ -5,7 +5,6 @@
 --  |_|\_\___|\__, |_| |_| |_|\__,_| .__/|___/
 -- ===========|___/================|_|==========================================
 
--- https://gist.github.com/Starefossen/5957088
 -- https://learnvimscriptthehardway.stevelosh.com/
 
 -- ╭───────╮
@@ -61,14 +60,21 @@ vim.g.maplocalleader = " "
 nvmap("<Space>", "<Nop>")
 
 
--- UNMAPPED
---------------------------------------------------------------------------------
-nvmap("Q",             "<Nop>")
-nvmap("g",             "<Nop>")
-nmap("w",              "<Nop>")
-nmap("c",              "<Nop>")
-nmap("y",              "<Nop>")
-nmap("x",              "<Nop>")
+
+
+vmap("G", function()                      -- Copy to register stack
+    util.shift_up_register_stack()
+    vim.cmd([[ :execute 'normal! mm"ay`m' ]])
+end)
+
+-- vmap("<Leader>x", function()
+--     util.shift_up_register_stack()                -- Cut to register stack
+--     vim.cmd([[ :execute 'normal! "ad' ]])
+-- end)
+
+
+
+
 
 
 -- INSERT MODE
@@ -82,7 +88,14 @@ nvmap("<S-Esc>",       "I")                      -- Insert mode at line start
 nvmap("s",             "v")                      -- Visual mode
 nvmap("S",             "V")                      -- Visual LINE mode
 nvmap("B",             "<C-v>")                  -- Visual BLOCK mode
-nvmap("G",             "msgv")                   -- Restore visual selection
+
+
+
+
+nmap("G",             "msgv")                   -- Restore visual selection
+
+
+
 vmap("a",              "o")                      -- Swap point & mark
 vmap("A",              km.swap_point_and_mark)   -- Swap point & mark
 
@@ -175,6 +188,7 @@ imap("<C-Del>",        km.del_line_right)        -- Delete line RIGHT
 vmap("w",              '"_x')                    -- Delete visual selection
 
 -- Word
+nmap("w",              "<Nop>")
 nmap("wt",             '"_diw')                  -- Delete in word
 nmap("wo",             '"_de')                   -- Delete word RIGHT
 nmap("wu",             '"_db')                   -- Delete word LEFT
@@ -185,9 +199,9 @@ nmap("w,",             '"_d^')                   -- Delete line LEFT
 nmap("w.",             '"_d$')                   -- Delete line RIGHT
 
 -- Paragraph
+nmap("wp",             '"_dip')                  -- Delete in paragraph
 nmap("wi",             '"_d{')                   -- Delete paragraph UP
 nmap("wk",             '"_d}')                   -- Delete paragraph DOWN
-nmap("wp",             '"_dip')                  -- Delete in paragraph
 
 -- To char
 nmap("w;",             '"_dt')                   -- Delete forwards to char
@@ -236,6 +250,7 @@ nmap(">",              "msva<V")                 -- Select around <> block
 vmap("c",              'mm"*y`m')                -- Copy to system register
 
 -- Word
+nmap("c",              "<Nop>")
 nmap("ct",             'mm"*yiw`m')              -- Copy in word
 nmap("cu",             'mm"*yb`m')               -- Copy word LEFT
 nmap("co",             '"*ye')                   -- Copy word RIGHT
@@ -246,9 +261,9 @@ nmap("c,",             'mm"*y^`m')               -- Copy to line START
 nmap("c.",             '"*y$')                   -- Copy to line END
 
 -- Paragraph
+nmap("cp",             'mm"*yip`m')              -- Copy in paragraph
 nmap("ci",             'mm"*y{`m')               -- Copy paragraph UP
 nmap("ck",             '"*y}')                   -- Copy paragraph DOWN
-nmap("cp",             'mm"*yip`m')              -- Copy in paragraph
 
 -- To char
 nmap("c;",             '"*yt')                   -- Copy forwards to char
@@ -261,6 +276,7 @@ nmap("ch",             '"*yT')                   -- Copy backwards to char
 vmap("x",              '"*d')                    -- Cut to system register
 
 -- Word
+nmap("x",              "<Nop>")
 nmap("xt",             '"*diw')                  -- Cut in word
 nmap("xu",             '"*db')                   -- Cut word LEFT
 nmap("xo",             '"*de')                   -- Cut word RIGHT
@@ -271,9 +287,9 @@ nmap("x,",             '"*d^')                   -- Cut to line START
 nmap("x.",             '"*d$')                   -- Cut to line END
 
 -- Paragraph
+nmap("xp",             '"*dip')                  -- Cut in paragraph
 nmap("xi",             '"*d{')                   -- Cut paragraph UP
 nmap("xk",             '"*d}')                   -- Cut paragraph DOWN
-nmap("xp",             '"*dip')                  -- Cut in paragraph
 
 -- To char
 nmap("x;",             '"*dt')                   -- Cut forwards to char
@@ -285,6 +301,7 @@ nmap("xh",             '"*dT')                   -- Cut backwards to char
 vmap("y",              '"_c')                    -- Change visual selection
 
 -- Word
+nmap("y",              "<Nop>")
 nmap("yt",             '"_ciw')                  -- Change in word
 nmap("yu",             '"_cb')                   -- Change word LEFT
 nmap("yo",             '"_ce')                   -- Change word RIGHT
@@ -295,9 +312,9 @@ nmap("y,",             '"_d^i')                  -- Change to line START
 nmap("y.",             '"_C')                    -- Change to line END
 
 -- Paragraph
+nmap("yp",             '"_cip')                  -- Change in paragraph
 nmap("yi",             '"_c{')                   -- Change paragraph UP
 nmap("yk",             '"_c}')                   -- Change paragraph DOWN
-nmap("yp",             '"_cip')                  -- Change in paragraph
 
 -- To char
 nmap("y;",             '"_ct')                   -- Change forwards to char

@@ -368,11 +368,11 @@ function M.config()
             --------------------------------------------------------------------
             {
                 "<cmd>set colorcolumn=80<CR>",
-                desc = "Set highlight at 80th column"
+                desc = " Set highlight at 80th column"
             },
             {
                 '<cmd>set colorcolumn=""<CR>',
-                desc = "Disable highlight at 80th column"
+                desc = " Disable highlight at 80th column"
             },
 
             -- Misc

@@ -56,7 +56,7 @@
 
 ## SELECT IN WORD / LINE -------------------------------------------------------
 
-- `Alt Right`            : Select in word
+- `W`                    : Select in word
 
 
 ## UPPER / LOWER / SWAP CASE ---------------------------------------------------

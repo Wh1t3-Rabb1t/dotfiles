@@ -5,6 +5,8 @@
 --    \_/\_/ |_|_| |_|\__,_|\___/ \_/\_/
 -- =============================================================================
 
+-- https://gist.github.com/Starefossen/5957088
+
 local M = {}
 
 -- WINDOW COUNT
@@ -72,8 +74,12 @@ function M.navigate_horizontally(direction)
     if M.open_win_count() == 1 then return end
 
     local neotree_id
+    local neotree_width
     local aerial_id
+    local aerial_width
     local width = vim.o.columns
+    local get_width = vim.api.nvim_win_get_width
+    local set_width = vim.api.nvim_win_set_width
 
     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         local bufnr = vim.api.nvim_win_get_buf(winid)
@@ -81,26 +87,26 @@ function M.navigate_horizontally(direction)
 
         if ft == "neo-tree" then
             neotree_id = winid
-            width = width - 35
+            neotree_width = get_width(winid)
+            width = width - neotree_width
         elseif ft == "aerial" then
             aerial_id = winid
-            width = width - 30
+            aerial_width = get_width(winid)
+            width = width - aerial_width
         end
 
         -- Prevent catastrophic performance tanking
         -- when iterating the loop 4-5 times :)
-        if neotree_id and aerial_id then
-            break
-        end
+        if neotree_id and aerial_id then break end
     end
 
     local initial_win = vim.fn.winnr()
-    local initial_win_width = vim.api.nvim_win_get_width(0)
+    local initial_win_width = get_width(0)
 
     vim.cmd("wincmd " .. direction)
 
     local moving_onto_screen_edge = vim.fn.winnr() == initial_win
-    local current_win_width = vim.api.nvim_win_get_width(0)
+    local current_win_width = get_width(0)
     local maximized_win_width = width - 12
 
     if moving_onto_screen_edge then
@@ -119,12 +125,12 @@ function M.navigate_horizontally(direction)
     end
 
     -- Fix sidebar sizes when resizing windows
-    if neotree_id then vim.api.nvim_win_set_width(neotree_id, 35) end
-    if aerial_id then vim.api.nvim_win_set_width(aerial_id, 30) end
+    if neotree_id then set_width(neotree_id, neotree_width) end
+    if aerial_id then set_width(aerial_id, aerial_width) end
 
     -- Disable line wrap on minimized vertical splits
     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-        local buf_width = vim.api.nvim_win_get_width(winid)
+        local buf_width = get_width(winid)
         if buf_width < 80 then
             vim.wo[winid].wrap = false
         else
@@ -152,6 +158,7 @@ function M.navigate_vertically(direction)
 
     local qf_id
     local qf_length = 0
+    local get_height = vim.api.nvim_win_get_height
 
     -- If quickfix window is open...
     for _, win in ipairs(vim.fn.getwininfo()) do
@@ -164,14 +171,14 @@ function M.navigate_vertically(direction)
     end
 
     local initial_win = vim.fn.winnr()
-    local initial_win_height = vim.api.nvim_win_get_height(0)
+    local initial_win_height = get_height(0)
 
     vim.cmd("wincmd " .. direction)
 
     if vim.bo.filetype == "qf" then return end
 
     local moving_onto_screen_edge = vim.fn.winnr() == initial_win
-    local current_win_height = vim.api.nvim_win_get_height(0)
+    local current_win_height = get_height(0)
     local maximized_win_height = (vim.o.lines - vim.o.cmdheight - qf_length) - 6
 
     if moving_onto_screen_edge then

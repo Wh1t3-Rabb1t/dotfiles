@@ -92,7 +92,9 @@ autocmd("TextYankPost", {
     pattern = "*",
     callback = function()
         vim.highlight.on_yank()
-        vim.fn.setreg("1", {})  -- Prevent numbered register pollution
+
+        -- Prevent numbered register pollution when deleting text
+        vim.fn.setreg("1", {})
     end
 })
 

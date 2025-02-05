@@ -22,7 +22,7 @@
 
 ## SELECT IN WORD / LINE -------------------------------------------------------
 
-- `Alt Right`            : Visual line mode
+- `W`                    : Visual line mode
 
 
 ## UPPER / LOWER / SWAP CASE ---------------------------------------------------

@@ -39,7 +39,7 @@ end)
 
 
 
-- Set up down left right bindings for visual mode
+- (maybe) Set up down left right bindings for visual mode
 - Reinstall hammerspoon via homebrew
 
 

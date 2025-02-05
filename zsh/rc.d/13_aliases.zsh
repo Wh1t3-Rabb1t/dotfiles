@@ -117,44 +117,7 @@ fi
     alias pu="_update_plugins"
 }
 
-# alias f="_find_and_open_files"
-# alias d="_find_and_goto_dir"
-# alias up="_navigate_up_dir_tree"
-# alias e="_launch_nvim"
-
-# alias rm="_move_to_trash"
-# alias g="_rg_fzf_into_nvim"
-
-
-
-
-
-
-
-
-
-
-# # Enable diff with colors
-# if (( ${+commands[colordiff]} )); then
-#     alias diff="colordiff --new-file --text --recursive -u --algorithm patience"
-# fi
-
-
-
-# # Human file sizes
-# (( ${+commands[df]} )) && alias df="df --human-readable --print-type"
-# (( ${+commands[du]} )) && alias du="du --human-readable --total"
-
-# # Handy stuff and a bit of XDG compliance
-# (( ${+commands[grep]} )) && alias grep="grep --color=auto --binary-files=without-match --devices=skip"
-# (( ${+commands[quilt]} )) && alias quilt="quilt --quiltrc ${DOTFILES}/configs/quiltrc"
-# (( ${+commands[wget]} )) && alias wget="wget --hsts-file=${XDG_CACHE_HOME}/wget-hsts"
-
-# # Suppress suggestions and globbing, enable wrappers
-# (( ${+commands[touch]} )) && alias touch="nocorrect touch"
-# (( ${+commands[mkdir]} )) && alias mkdir="nocorrect mkdir"
-# (( ${+commands[cp]} )) && alias cp="nocorrect cp --verbose"
-# (( ${+commands[ag]} )) && alias ag="noglob ag"
-# (( ${+commands[fd]} )) && alias fd="noglob fd"
-# (( ${+commands[man]} )) && alias man="nocorrect wrap-man"
-# (( ${+commands[sudo]} )) && alias sudo="noglob wrap-sudo " # trailing space is needed to enable alias expansion
+# Needs some testing...
+#
+# # Trailing whitespace is needed here to enable alias expansion
+# (( ${+commands[sudo]} )) && alias sudo="noglob enhanced_sudo "

@@ -1,6 +1,7 @@
-# OPTIONS
-# ############################################################################ #
-# ghostty +show-config
+########################
+# OPTIONS              #
+# ghostty +show-config #
+########################
 
 # Font
 # ---------------------------------------------------------------------------- #
@@ -39,17 +40,24 @@ confirm-close-surface = true
 auto-update = off
 desktop-notifications = false
 macos-option-as-alt = true
+clipboard-read = ask
 
 # Hide macOS style titlebar
 macos-titlebar-style = tabs
 
 
-# KEYBINDINGS
-# ############################################################################ #
-# ghostty +list-actions
+#########################
+# KEYBINDINGS           #
+# ghostty +list-actions #
+#########################
 
 # Remove all default bindings
 keybind = clear
+
+# BUG: The 'unconsumed' prefix is buggy right now (Feb 4th 2025). It works
+# properly while inside terminal apps but I think it's considering zsh zle as
+# a tui which is causing scrollback bindings to be ignored on follow up inputs.
+# Not trouble shooting, kitty is still the king.
 
 
 # Scrollback

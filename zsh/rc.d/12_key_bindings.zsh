@@ -53,7 +53,6 @@ bindkey -M viins "^[p" _preview_files                                # Alt p
 # ---------------------------------------------------------------------------- #
 local function _broot_launcher() {
     emulate -L zsh
-
     if [[ -z "$BUFFER" ]]; then
         BUFFER="br --sort-by-type"
         zle accept-line
@@ -71,7 +70,6 @@ bindkey -M viins " " _broot_launcher                                 # Space
 # ---------------------------------------------------------------------------- #
 local function _yazi_launcher() {
     emulate -L zsh
-
     if [[ -z "$BUFFER" ]]; then
         BUFFER="yazi"
         zle accept-line
@@ -89,7 +87,6 @@ bindkey -M viins "^I" _yazi_launcher                                 # Tab
 # ---------------------------------------------------------------------------- #
 local function _launch_nvim_wrapper() {
     emulate -L zsh
-
     if [[ -z "$BUFFER" ]]; then
         _launch_nvim
     else
@@ -138,7 +135,6 @@ bindkey -M viins "^[[A" _zsh_cmd_history_wrapper                     # Up
 # ---------------------------------------------------------------------------- #
 local function _cd_up_dir() {
     emulate -L zsh
-
     if [[ -z "$BUFFER" ]]; then
         BUFFER="cd ../"
         zle accept-line
@@ -174,7 +170,6 @@ bindkey -M viins "'" _teleport_wrapper                               # '
 # ---------------------------------------------------------------------------- #
 local function _find_and_goto_dir_wrapper() {
     emulate -L zsh
-
     if [[ -z "$BUFFER" ]]; then
         _find_and_goto_dir
     else

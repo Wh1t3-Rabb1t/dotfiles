@@ -2,6 +2,8 @@
 
 - Dropping karabiner. Link no longer exists in deploy script
 
+- Fix brew_shellenv race condition when launching via kitty Session
+
 - Add checks for os type when using `pbpaste` in scripts
 - Add a check to ensure that luarocks is installed before initializing luacheck
 

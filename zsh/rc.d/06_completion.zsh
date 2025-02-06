@@ -13,15 +13,15 @@
 
 
 # Completion tweaks
-zstyle ':completion:*'              list-colors         "${(s.:.)LS_COLORS}"
-zstyle ':completion:*'              list-dirs-first     true
-zstyle ':completion:*'              verbose             true
-zstyle ':completion:*'              menu                no
-zstyle ':completion:*'              matcher-list        'm:{[:lower:]}={[:upper:]}'
-zstyle ':completion::complete:*'    use-cache           true
-zstyle ':completion::complete:*'    cache-path          "${XDG_CACHE_HOME}/zsh/compcache"
-zstyle ':completion:*:descriptions' format              [%d]
-zstyle ':completion:*:manuals'      separate-sections   true
+zstyle ':completion:*'               list-colors        "${(s.:.)LS_COLORS}"
+zstyle ':completion:*'               list-dirs-first    true
+zstyle ':completion:*'               verbose            true
+zstyle ':completion:*'               menu               no
+zstyle ':completion:*'               matcher-list       'm:{[:lower:]}={[:upper:]}'
+zstyle ':completion::complete:*'     use-cache          true
+zstyle ':completion::complete:*'     cache-path         "${XDG_CACHE_HOME}/zsh/compcache"
+zstyle ':completion:*:descriptions'  format             [%d]
+zstyle ':completion:*:manuals'       separate-sections  true
 
 # Enable cached completions, if present
 if [[ -d "${XDG_CACHE_HOME}/zsh/fpath" ]]; then
@@ -54,6 +54,10 @@ if [[ -n "${XDG_CACHE_HOME}/zsh/compdump"(#qN.mh+20) ]]; then
             # NOTE: An atomic operation is completed as a single, indivisible step,
             # thus ensuring that only one process succeeds in acquiring the lock.
             if command mkdir "${zcompdump}.zwc.lock" 2>/dev/null; then
+
+                # NOTE: The shell protects programs run with `&` from interrupts but not hangups.
+                # Using a `trap` ensures removal of the lock even if a hangup occurs.
+                trap 'command rmdir "${zcompdump}.zwc.lock" 2>/dev/null' EXIT
                 zcompile "$zcompdump"
                 command rmdir "${zcompdump}.zwc.lock" 2>/dev/null
             fi

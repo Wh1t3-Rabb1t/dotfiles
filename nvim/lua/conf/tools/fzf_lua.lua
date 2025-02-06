@@ -82,13 +82,6 @@ function M.config()
             -- ...
             ["--margin"] = "1%",
             ["--cycle"] = "",
-
-            ["--ansi"]           = true,
-            ["--info"]           = "inline-right", -- fzf < v0.42 = "inline"
-            ["--height"]         = "100%",
-            ["--layout"]         = "reverse",
-            ["--border"]         = "none",
-            ["--highlight-line"] = true,           -- fzf >= v0.53
         },
 
         -- Window options
@@ -227,16 +220,20 @@ function M.config()
             file_icons = true,       -- Show file icons (true|"devicons"|"mini")?
             color_icons = true,      -- Colorize file|git icons
             find_opts = [[-type f -not -path '*/\.git/*' -printf '%P\n']],
-            rg_opts = [[--color=never --files --hidden --follow -g "!.git"]],
+            rg_opts = [[--color=never --files --follow -g "!.git"]],
             fd_opts = [[--color=never --type f --hidden --follow --exclude .git]],
-            cwd_header = true,
+            cwd_header = false,
             cwd_prompt = false,
             cwd_prompt_shorten_len = 28,         -- Shorten prompt beyond this length
             cwd_prompt_shorten_val = 1,          -- Shortened path parts length
             toggle_ignore_flag = "--no-ignore",  -- Flag toggled in `actions.toggle_ignore`
             toggle_hidden_flag = "--hidden",     -- Flag toggled in `actions.toggle_hidden`
+            no_header = true,
+            no_header_i = true,
             actions = {
-                ["alt-i"] = actions.toggle_ignore,
+                ["alt-i"] = false,
+                ["shift-tab"] = actions.toggle_ignore,
+                ["tab"] = actions.toggle_hidden,
                 ["enter"] = actions.file_edit,  -- Don't send multiselect to qf
             },
             fzf_opts = {
@@ -255,6 +252,8 @@ function M.config()
             show_unloaded = true,  -- Show unloaded buffers
             cwd_only = false,      -- Buffers for the cwd only
             cwd = nil,             -- Buffers list for a given dir
+            no_header = true,
+            no_header_i = true,
             actions = {
                 ["alt-w"] = { fn = actions.buf_del, reload = true },
                 ["ctrl-x"] = false,
@@ -302,8 +301,8 @@ function M.config()
                 ["alt-/"] = actions.toggle_ignore,
                 ["ctrl-g"] = false,
             },
-            no_header = false,    -- Hide grep|cwd header?
-            no_header_i = false,  -- Hide interactive header?
+            no_header = true,    -- Hide grep|cwd header?
+            no_header_i = true,  -- Hide interactive header?
             fzf_opts = {
                 ["--with-nth"] = "1..",
                 ["--no-hscroll"] = false,
@@ -318,6 +317,8 @@ function M.config()
             show_unloaded = true,    -- Show unloaded buffers
             show_unlisted = false,   -- Exclude 'help' buffers
             no_term_buffers = true,  -- Exclude 'term' buffers
+            no_header = true,
+            no_header_i = true,
             fzf_opts = {
                 -- Don't include bufnr in fuzzy matching
                 -- tiebreak by line no.
@@ -334,6 +335,8 @@ function M.config()
             show_unlisted = true,     -- Include 'help' buffers
             no_term_buffers = false,  -- Include 'term' buffers
             start = "cursor",         -- Start display from cursor
+            no_header = true,
+            no_header_i = true,
             fzf_opts = {
                 -- Hide filename, tiebreak by line no.
                 ["--delimiter"] = "[:]",

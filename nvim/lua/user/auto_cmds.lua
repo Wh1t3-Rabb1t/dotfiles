@@ -85,16 +85,31 @@ autocmd("InsertLeave", {
 })
 
 
--- HIGHLIGHT ON YANK
+-- SYNC REGISTER STACK / HIGHLIGHT SELECTION ON YANK
 --------------------------------------------------------------------------------
 autocmd("TextYankPost", {
-    group = augroup("YankHighlight", { clear = true }),
+    group = augroup("YankUtils", { clear = true }),
     pattern = "*",
     callback = function()
         vim.highlight.on_yank()
         vim.fn.setreg("1", {})  -- Prevent numbered register pollution
+
+        -- Copy system register contents onto register stack
+        util.shift_up_register_stack()
+        vim.fn.setreg('a', vim.fn.getreg('*'))
     end
 })
+
+-- -- HIGHLIGHT ON YANK
+-- --------------------------------------------------------------------------------
+-- autocmd("TextYankPost", {
+--     group = augroup("YankHighlight", { clear = true }),
+--     pattern = "*",
+--     callback = function()
+--         vim.highlight.on_yank()
+--         vim.fn.setreg("1", {})  -- Prevent numbered register pollution
+--     end
+-- })
 
 
 -- TRIM TRAILING WHITESPACE AND CONVERT TABS TO SPACES PRE SAVE
@@ -120,6 +135,7 @@ autocmd("BufWritePre", {
 -- PRINT FILENAME WITH RELATIVE PATH, DATE & TIME POST SAVE
 --------------------------------------------------------------------------------
 autocmd("BufWritePost", {
+    group = augroup("PrintDateAndTimeOnSave", { clear = true }),
     callback = function()
         local filename = vim.fn.expand("%:.")
         local cwd = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
@@ -131,9 +147,17 @@ autocmd("BufWritePost", {
 -- CLEANUP UNWANTED BUFFERS AND SAVE SESSION PRE EXIT
 --------------------------------------------------------------------------------
 autocmd("VimLeavePre", {
+    group = augroup("CleanupOnVimExit", { clear = true }),
     callback = function()
         win.cleanup_windows()
-        util.cleanup_registers()
+
+
+
+        -- util.cleanup_registers()
+
+
+
+
         util.cleanup_marks()
     end
 })

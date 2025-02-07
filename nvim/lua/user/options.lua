@@ -75,6 +75,18 @@ local options = {
         "folds",             -- Fold options
         "help",              -- The help window
     },
+
+    -- Enable per project shada file.
+    -- https://www.reddit.com/r/neovim/comments/1hkpgar/a_per_project_shadafile/
+    shadafile = (function()
+        local data = vim.fn.stdpath("data")
+        local cwd = vim.fn.getcwd()
+        cwd = vim.fs.root(cwd, ".git") or cwd
+        local cwd_b64 = vim.base64.encode(cwd)
+        local file = vim.fs.joinpath(data, "project_shada", cwd_b64)
+        vim.fn.mkdir(vim.fs.dirname(file), "p")
+        return file
+    end)(),
     shiftwidth = 4,          -- The number of spaces inserted for each indentation
     showbreak = "󰌑 ",        -- Icon shown at the beginning of wrapped lines
     showmode = false,        -- Hide current mode

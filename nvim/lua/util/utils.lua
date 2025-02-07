@@ -60,7 +60,6 @@ function M.cleanup_registers()
     -- Alphabetical
     for char = 97, 122 do
         vim.fn.setreg(string.char(char), {})
-        vim.fn.setreg(string.char(char):upper(), {})
     end
 
     -- Numbered

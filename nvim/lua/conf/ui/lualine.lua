@@ -33,9 +33,9 @@ local icons = {
             ["i"] = "❯",
             ["v"] = "V",
             ["V"] = "L",
+            ["\x16"] = "B",  -- Vblock escape sequence
             ["c"] = "󰞷",
             ["R"] = "▶",
-            ["\x16"] = "B",  -- Vblock escape sequence
         }
         -- Return search icon when fzf is active
         return mode_icon[vim_mode] or ""
@@ -88,6 +88,7 @@ function M.config()
     }
 
     -- Setup
+    ----------------------------------------------------------------------------
     require("lualine").setup({
         options = {
             icons_enabled = true,
@@ -112,6 +113,7 @@ function M.config()
         },
 
         -- Status line
+        ------------------------------------------------------------------------
         sections = {
             lualine_a = {},
             lualine_b = { icons.get_vim_mode },
@@ -157,6 +159,7 @@ function M.config()
         },
 
         -- Focused window
+        ------------------------------------------------------------------------
         winbar = {
             lualine_a = { icons.vim_logo },
             lualine_b = {},
@@ -199,6 +202,7 @@ function M.config()
         },
 
         -- Unfocused window
+        ------------------------------------------------------------------------
         inactive_winbar = {
             lualine_a = {},
             lualine_b = {},

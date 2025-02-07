@@ -29,7 +29,7 @@
 -- CHANGE
 -- PASTE
 -- OPEN / JOIN LINES
--- NAVIGATE `f` and `/` SEARCH RESULTS
+-- `f` and `/` SEARCH
 -- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
@@ -56,9 +56,9 @@ local nvomap = function (...) util.map({ "n", "v", "o" }, ...) end
 -- LEADER
 --------------------------------------------------------------------------------
 -- Must map leader before plugins are required or wrong leader will be used
-vim.g.mapleader = " "
+vim.g.mapleader      = " "
 vim.g.maplocalleader = " "
-nvmap("<Space>", "<Nop>")
+nvmap("<Space>",       "<Nop>")
 
 
 -- INSERT MODE
@@ -315,7 +315,7 @@ nmap("<S-CR>",         "O<C-o>mo<Esc>`o")        -- New line ABOVE
 nvmap("j",             "J")                      -- Join lines
 
 
--- NAVIGATE `f` and `/` SEARCH RESULTS
+-- `f` and `/` SEARCH
 --------------------------------------------------------------------------------
 nvmap("h",             ",")                      -- Prev f search result
 nvmap("Y",             "mnN")                    -- Prev / search result

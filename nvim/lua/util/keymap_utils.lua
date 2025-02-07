@@ -104,7 +104,7 @@ function M.paste()
 end
 
 
--- NAVIGATE `f` and `/` SEARCH RESULTS
+-- `f` and `/` SEARCH
 --------------------------------------------------------------------------------
 function M.toggle_search_hl()
     if vim.v.hlsearch == 1 then
@@ -115,8 +115,8 @@ function M.toggle_search_hl()
 end
 
 function M.search_for_selection()
-    vim.cmd('normal! "9y')
-    local selection = vim.fn.getreg('9')
+    vim.cmd('normal! ""y')
+    local selection = vim.fn.getreg('"')
     local escaped_selection = vim.fn.escape(selection, "\\/.*$^~[]")
 
     -- Replace newlines with literal "\n" so multi-line searches work
@@ -126,7 +126,7 @@ function M.search_for_selection()
     local search_cmd = "/" .. escaped_selection .. "\n"
     local keys = vim.api.nvim_replace_termcodes(search_cmd, true, false, true)
     vim.api.nvim_feedkeys(keys, 'n', false)
-    vim.fn.setreg('9', '')
+    vim.fn.setreg('"', '')
 end
 
 

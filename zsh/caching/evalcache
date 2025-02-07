@@ -6,23 +6,40 @@ setopt local_options extended_glob
 
 local cache_dir="${XDG_CACHE_HOME}/zsh/eval"
 local cache_file="${cache_dir}/${(j:_:)@:gs/\//_}.zsh"
+local lock_dir="${cache_file}.lock"
 
-# Remove cache file when it's present, but arg isn't executable
-if [[ -r "${cache_file}" ]] && ! whence ${1} > /dev/null; then
+# Remove cache file when it's present, but the command isn't executable
+if [[ -r "${cache_file}" ]] && ! whence "$1" > /dev/null; then
     echo "evalcache ERROR: $1 isn't executable, removing cache file" >&2
-    zf_rm -f "${cache_file}*"
-# Revalidate cache every 20 hours
+    zf_rm -f "${cache_file}"*
+# Revalidate cache every 20 hours or if it doesn't exist
 elif [[ ! -e "${cache_file}" || -n "${cache_file}"(#qN.mh+20) ]]; then
     # Cache miss
-    if (( ${+commands[${1}]} )); then
+    if (( ${+commands[$1]} )); then
         zf_mkdir -p "${cache_dir}"
-        command "$@" > "${cache_file}"
-        source "${cache_file}"
-        # zrecompile cache file in background
-        {
-            autoload -Uz zrecompile
-            zrecompile -pq "${cache_file}"
-        } &!
+        if command mkdir "${lock_dir}" 2>/dev/null; then
+            # Prevent stale locks if an interrupt or hangup occurs
+            trap 'command rmdir "${lock_dir}" 2>/dev/null' EXIT
+            command "$@" > "${cache_file}"
+            source "${cache_file}"
+            command rmdir "${lock_dir}" 2>/dev/null
+
+            # zrecompile cache file in background
+            {
+                autoload -Uz zrecompile
+                zrecompile -pq "${cache_file}"
+            } &!
+        else
+            # Prevent infinite loop if `mkdir` is not available
+            (( ! ${+commands[mkdir]} )) && return 1
+
+            # If another process is updating the cache wait until
+            # its lock is released.
+            while [[ -d "${lock_dir}" ]]; do
+                sleep 0.1
+            done
+            source "${cache_file}"
+        fi
     else
         echo "evalcache ERROR: $1 is not available in PATH" >&2
     fi

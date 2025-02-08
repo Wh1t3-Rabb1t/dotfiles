@@ -43,7 +43,7 @@
 
 local util = require("util.utils")
 local win = require("util.window")
-local km = require("util.keymap_utils")
+local km = require("util.keymap_funcs")
 local nmap = function (...) util.map("n", ...) end
 local vmap = function (...) util.map("v", ...) end
 local imap = function (...) util.map("i", ...) end
@@ -223,8 +223,12 @@ nmap(">",              "msva<V")                 -- Select around <> block
 
 -- COPY
 --------------------------------------------------------------------------------
--- To selected registers
+-- System register '*' entries are added to the alphabetical register stack.
+-- Secondary register '+' entries are added to the numeric register stack.
+
 vmap("c",              'mm"*y`m')                -- Copy to system register
+vmap("<Leader>c",      '"+y')                    -- Copy to register stack
+
 
 -- Word
 nmap("c",              "<Nop>")
@@ -249,8 +253,13 @@ nmap("ch",             '"*yT')                   -- Copy backwards to char
 
 -- CUT
 --------------------------------------------------------------------------------
--- To selected registers
-vmap("x",              '"*d')                    -- Cut to system register
+-- All `d` motions that span than one line (the deleted text is not confined to
+-- a single line) are sent to the numeric register stack by default. We
+-- circumvent this by instead yanking to the system register then restoring the
+-- previous visual selection and deleting it to the black hole register.
+
+vmap("x",              '"*ygv"_d')               -- Cut to system register
+vmap("<Leader>x",      '"+ygv"_d')               -- Cut to register stack
 
 -- Word
 nmap("x",              "<Nop>")
@@ -259,14 +268,14 @@ nmap("xu",             '"*db')                   -- Cut word LEFT
 nmap("xo",             '"*de')                   -- Cut word RIGHT
 
 -- Line
-nmap("xl",             '"*dd')                   -- Cut whole line
+nmap("xl",             'V"*ygv"_d')              -- Cut whole line
 nmap("x,",             '"*d^')                   -- Cut to line START
 nmap("x.",             '"*d$')                   -- Cut to line END
 
 -- Paragraph
-nmap("xp",             '"*dip')                  -- Cut in paragraph
-nmap("xi",             '"*d{')                   -- Cut paragraph UP
-nmap("xk",             '"*d}')                   -- Cut paragraph DOWN
+nmap("xp",             'vip"*ygv"_d')            -- Cut in paragraph
+nmap("xi",             'v{"*ygv"_d')             -- Cut paragraph UP
+nmap("xk",             'v}"*ygv"_d')             -- Cut paragraph DOWN
 
 -- To char
 nmap("x;",             '"*dt')                   -- Cut forwards to char

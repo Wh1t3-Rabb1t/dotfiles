@@ -23,37 +23,6 @@ function M.map(mode, lhs, rhs, opts)
 end
 
 
--- ADD SELECTION TO REGISTER STACK
---------------------------------------------------------------------------------
-function M.shift_up_register_stack()
-    local contents = {}
-
-    -- ASCII values for 'a' (97) to 'z' (122)
-    for i = 97, 122 do
-        local reg = string.char(i)
-        local selection = vim.fn.getreg(reg)
-
-        -- Cache registers
-        if selection ~= "" then
-            contents[reg] = selection
-        else
-            break
-        end
-    end
-
-    -- Start from 'y' (ASCII 121) to 'a' (ASCII 97) in reverse order
-    for i = 121, 97, -1 do
-        local reg_current = string.char(i)
-        local reg_next = string.char(i + 1)
-
-        -- Shift the contents up by one index
-        if contents[reg_current] then
-            vim.fn.setreg(reg_next, contents[reg_current])
-        end
-    end
-end
-
-
 -- CLEANUP REGISTERS
 --------------------------------------------------------------------------------
 function M.cleanup_registers()
@@ -67,7 +36,6 @@ function M.cleanup_registers()
         vim.fn.setreg(tostring(num), {})
     end
 
-    -- Save to shada
     vim.cmd.wshada({ bang = true })
 end
 

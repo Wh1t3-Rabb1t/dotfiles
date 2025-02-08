@@ -7,6 +7,7 @@
 - Set broot jump between results binding
 - Set up macOS mission control navigation bindings and increase animation speed via cli os settings
 
+
 - Look into enabling italic and bold in kitty Monaco font
 
 - Move all keybindings declared in Legendary to 'keymaps.lua'
@@ -15,28 +16,7 @@
 - Finish configuring fzf lua
 
 - Set clipboard ring binding for nvim and zsh
-- Send all copy / cut actions to the register stack (create an autocommand tied to yank events). Also need to cleanup the current copy bindings to remove `shift_up_register_stack` etc.
-- 0 Yank register for the last yank command. Last yanked text (not overwritten by deletes).
-- Use autocmd to copy contents of the 0 register to the alphabetical register stack on yank event if the contents are different (prevent duplicates)
 
-- Possibly convert this to util function: (not important)
-```lua
-vmap("/",              "<Esc>/\\%V", {           -- Search within selection
-    silent = false
-})
-```
-
-```lua
-vmap("<Leader>c", function()                      -- Copy to register stack
-    util.shift_up_register_stack()
-    vim.cmd([[ :execute 'normal! mm"ay`m' ]])
-end)
-
-vmap("<Leader>x", function()
-    util.shift_up_register_stack()                -- Cut to register stack
-    vim.cmd([[ :execute 'normal! "ad' ]])
-end)
-```
 
 
 

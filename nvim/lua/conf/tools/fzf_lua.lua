@@ -376,17 +376,17 @@ function M.config()
                 ["--no-hscroll"] = false,
             }
             -- "  Unnamed register. Holds the last deleted or yanked text.
-            -- #  Alternate file name register. Holds name of the last file edited.
-            -- /  Last search pattern register. Stores the most recent search pattern.
             -- *  Primary system clipboard selection (X11 on Unix-like systems).
             -- +  Secondary clipboard register. Used for copying/pasting with the system clipboard.
             -- .  Last inserted text register. Contains last inserted text.
+            -- -  Small delete register. Holds text from deletions smaller than a line (like dw).
+            -- 0  Yank register for the last yank command. Last yanked text (not overwritten by deletes).
+            -- _  Black hole register. Discards any text sent to it, acting as a "null" register.
+            -- #  Alternate file name register. Holds name of the last file edited.
+            -- /  Last search pattern register. Stores the most recent search pattern.
             -- %  Current file name register. Holds the name of the current file.
             -- :  Last executed command register. Containing the last command-line command entered.
-            -- -  Small delete register. Holds text from deletions smaller than a line (like dw).
-            -- _  Black hole register. Discards any text sent to it, acting as a "null" register.
             -- =  Expression register. Allows you to evaluate expressions and insert the result.
-            -- 0  Yank register for the last yank command. Last yanked text (not overwritten by deletes).
             -- ~  Register for the last tilde operation. Stores result of the last g~ or ~ operation.
         },
 

@@ -85,31 +85,48 @@ autocmd("InsertLeave", {
 })
 
 
--- SYNC REGISTER STACK / HIGHLIGHT SELECTION ON YANK
+-- UPDATE REGISTER STACK / HIGHLIGHT SELECTION ON YANK
 --------------------------------------------------------------------------------
 autocmd("TextYankPost", {
     group = augroup("YankUtils", { clear = true }),
     pattern = "*",
     callback = function()
         vim.highlight.on_yank()
-        vim.fn.setreg("1", {})  -- Prevent numbered register pollution
+        local register = vim.v.event.regname
 
-        -- Copy system register contents onto register stack
-        util.shift_up_register_stack()
-        vim.fn.setreg('a', vim.fn.getreg('*'))
+        -- Copy to the alphabetical register stack
+        if register == "*" then
+            -- If there are no non whitespace chars
+            if vim.fn.getreg(register):match("%S") == nil then return end
+
+            -- Loop from register 'y' (ASCII 121) down to 'a' (ASCII 97)
+            local carry = vim.fn.getreg("z")
+            for i = 121, 97, -1 do
+                local reg = string.char(i)
+                local current = vim.fn.getreg(reg)
+                vim.fn.setreg(reg, carry)
+                if current == "" then break end
+                carry = current
+            end
+
+            vim.fn.setreg("z", vim.fn.getreg("*"))
+        end
+
+        -- Copy to the numeric register stack
+        if register == "+" then
+            if vim.fn.getreg(register):match("%S") == nil then return end
+
+            local carry = vim.fn.getreg("+")
+            for i = 1, 9 do
+                local reg = tostring(i)
+                local current = vim.fn.getreg(reg)
+                vim.fn.setreg(reg, carry)
+                if current == "" then break end
+                carry = current
+            end
+        end
     end
 })
-
--- -- HIGHLIGHT ON YANK
--- --------------------------------------------------------------------------------
--- autocmd("TextYankPost", {
---     group = augroup("YankHighlight", { clear = true }),
---     pattern = "*",
---     callback = function()
---         vim.highlight.on_yank()
---         vim.fn.setreg("1", {})  -- Prevent numbered register pollution
---     end
--- })
 
 
 -- TRIM TRAILING WHITESPACE AND CONVERT TABS TO SPACES PRE SAVE
@@ -150,14 +167,11 @@ autocmd("VimLeavePre", {
     group = augroup("CleanupOnVimExit", { clear = true }),
     callback = function()
         win.cleanup_windows()
-
-
-
-        -- util.cleanup_registers()
-
-
-
-
         util.cleanup_marks()
+
+        local session_in_cwd = vim.fn.filereadable("Session.vim") == 1
+        if not session_in_cwd then
+            util.cleanup_registers()
+        end
     end
 })

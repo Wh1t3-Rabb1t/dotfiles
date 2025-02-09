@@ -109,6 +109,7 @@ fi
 # ---------------------------------------------------------------------------- #
 [[ -v ZSCRIPTDIR ]] && {
     alias nf="_create_files"
+    alias pr="_preview_files"
     alias nd="_create_dirs"
     alias md="_glow_markdown"
     alias cl="_clear_screen_soft_bottom"

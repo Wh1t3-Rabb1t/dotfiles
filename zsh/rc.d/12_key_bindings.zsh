@@ -30,9 +30,9 @@ zle -N _grep_into_nvim
 bindkey -M viins "^[g" _grep_into_nvim                              # Alt g
 
 
-# Alt p: Preview files with bat
+# Alt m: Preview files with bat
 zle -N _preview_files
-bindkey -M viins "^[p" _preview_files                               # Alt p
+bindkey -M viins "^[m" _preview_files                               # Alt m
 
 
 # ╭─────────────────────────╮

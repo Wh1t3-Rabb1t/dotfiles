@@ -113,6 +113,18 @@ function M.config()
             -- Misc
             --------------------------------------------------------------------
             {
+                mode = { "v" },
+                "=+",
+                "g<C-a>gv",
+                desc = " Increment numbers sequentially"
+            },
+            {
+                mode = { "v" },
+                "=-",
+                "g<C-x>gv",
+                desc = " Decrement numbers sequentially"
+            },
+            {
                 mode = { "n" },
                 "ga",
                 "ga",

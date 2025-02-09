@@ -31,7 +31,6 @@
 -- DUPLICATE LINE / SELECTION
 -- OPEN / JOIN LINES
 -- `f` and `/` SEARCH
--- INCREMENT / DECREMENT NUMS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
 -- SAVE CHANGES
@@ -346,12 +345,6 @@ vmap("F",              km.search_for_selection)  -- Search for selected area
 vmap("/",              "<Esc>/\\%V", {           -- Search within selection
     silent = false
 })
-
-
--- INCREMENT / DECREMENT NUMS SEQUENTIALLY
---------------------------------------------------------------------------------
-vmap("=+",             "g<C-a>gv")               -- Increment num sequentially
-vmap("=-",             "g<C-x>gv")               -- Decrement num sequentially
 
 
 -- QUICKFIX

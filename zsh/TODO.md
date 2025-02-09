@@ -2,6 +2,7 @@
 
 - Dropping karabiner. Link no longer exists in deploy script
 
+- Find a way to cache dirs that contain Session.vim files (store in an array and update when Session files are created or moved to Trash)
 - Setup autoenv for python as an intro to envs
 
 - Add checks for os type when using `pbpaste` in scripts

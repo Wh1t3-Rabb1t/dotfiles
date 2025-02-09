@@ -35,8 +35,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "williamboman/mason.nvim",
-        -- event = "BufEnter",
-        lazy = false,
+        event = "BufEnter",
         config = require("conf.lang.mason").config,
     },
 
@@ -44,8 +43,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "williamboman/mason-lspconfig.nvim",
-        -- event = "BufEnter",
-        lazy = false,
+        event = "BufEnter",
         config = true,
     },
 
@@ -53,8 +51,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "neovim/nvim-lspconfig",
-        -- event = "BufEnter",
-        lazy = false,
+        event = "BufEnter",
         config = require("conf.lang.nvim_lspconfig").config,
     },
 

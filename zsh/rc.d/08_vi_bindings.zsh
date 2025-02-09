@@ -209,11 +209,14 @@ bindkey -M visual 'y'       vi-change                    # y
 # ---------------------------------------------------------------------------- #
 # Cmd
 bindkey -M vicmd 'v'        _paste_from_clipboard        # v
-bindkey -M vicmd 'V'        _clipboard_ring_paste        # V
+bindkey -M vicmd '^[p'      _clipboard_ring_paste        # Alt p
 
 # Vis
 bindkey -M visual 'v'       _paste_from_clipboard_visual # v
-bindkey -M visual 'V'       _clipboard_ring_paste_over   # V
+bindkey -M visual '^[p'     _clipboard_ring_paste_over   # Alt p
+
+# Ins
+bindkey -M viins '^[p'      _clipboard_ring_paste        # Alt p
 
 
 # INCREMENT / DECREMENT INTEGERS

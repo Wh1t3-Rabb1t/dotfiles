@@ -7,23 +7,46 @@
 
 local M = {}
 
--- INIT
+-- KEYS
 --------------------------------------------------------------------------------
-local map = require("util.utils").map
-function M.init()
-    map("n", "X", function()
-        require("dial.map").manipulate("increment", "normal")
-    end, { desc = "Increment" })
-    map("n", "C", function()
-        require("dial.map").manipulate("decrement", "normal")
-    end, { desc = "Decrement" })
-    map("v", "X", function()
-        require("dial.map").manipulate("increment", "visual")
-    end, { desc = "Increment" })
-    map("v", "C", function()
-        require("dial.map").manipulate("decrement", "visual")
-    end, { desc = "Decrement" })
-end
+M.keys = {
+    {
+
+        mode = { "n" },
+        "X",
+        function()
+            require("dial.map").manipulate("increment", "normal")
+        end,
+        desc = " Dial increment"
+    },
+    {
+
+        mode = { "n" },
+        "C",
+        function()
+            require("dial.map").manipulate("decrement", "normal")
+        end,
+        desc = " Dial decrement"
+    },
+    {
+
+        mode = { "v" },
+        "X",
+        function()
+            require("dial.map").manipulate("increment", "visual")
+        end,
+        desc = " Dial increment"
+    },
+    {
+
+        mode = { "v" },
+        "C",
+        function()
+            require("dial.map").manipulate("decrement", "visual")
+        end,
+        desc = " Dial decrement"
+    }
+}
 
 
 -- CONFIG

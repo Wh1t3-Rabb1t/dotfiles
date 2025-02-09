@@ -13,10 +13,6 @@
 
 
 
-- Add all plugin bindings declared in init tables to Legendary
-
-- Set clipboard ring binding for nvim and zsh
-
 
 
 

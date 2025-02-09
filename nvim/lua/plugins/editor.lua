@@ -58,7 +58,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "monaqa/dial.nvim",
-        init = require("conf.editor.dial").init,
+        keys = require("conf.editor.dial").keys,
         config = require("conf.editor.dial").config,
     },
 

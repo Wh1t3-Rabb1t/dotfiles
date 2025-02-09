@@ -13,7 +13,7 @@ M.keys = {
     {
         mode = { "n", "v" },
         "<A-/>",
-        desc = "Comment"
+        desc = " Comment"
     }
 }
 

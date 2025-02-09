@@ -14,7 +14,7 @@ M.keys = {
         mode = { "n" },
         "<Leader>f",
         "<cmd>FzfLua files<CR>",
-        desc = "Search files in cwd"
+        desc = "󰢱 FZF files in cwd"
     },
     {
         mode = { "n" },
@@ -26,31 +26,31 @@ M.keys = {
                 "FzfLua lgrep_curbuf"
             )
         end,
-        desc = "Grep current buffer"
+        desc = "󰢱 FZF grep buffer"
     },
     {
         mode = { "n" },
         "<A-a>",
         "<cmd>FzfLua live_grep_native<CR>",
-        desc = "Grep cwd"
+        desc = "󰢱 FZF grep cwd"
     },
     {
         mode = { "v" },
         "<A-f>",
         "<cmd>FzfLua grep_visual<CR>",
-        desc = "Grep visual selection"
+        desc = "󰢱 FZF grep visual selection"
     },
     {
         mode = { "n" },
         "<A-S-f>",
         "<cmd>FzfLua blines<CR>",
-        desc = "Fzy search current buffer"
+        desc = "󰢱 FZF fuzzy buffer"
     },
     {
         mode = { "n" },
         "<A-'>",
         "<cmd>FzfLua buffers<CR>",
-        desc = "Search open buffers"
+        desc = "󰢱 FZF open buffers"
     }
 }
 

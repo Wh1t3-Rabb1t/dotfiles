@@ -37,7 +37,7 @@ M.keys = {
         mode = { "n" },
         "<A-Right>",
         "<cmd>Neotree reveal<CR>",
-        desc = "Toggle Neotree"
+        desc = " Toggle Neotree"
     }
 }
 

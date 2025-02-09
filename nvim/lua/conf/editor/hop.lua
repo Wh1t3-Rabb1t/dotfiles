@@ -14,7 +14,7 @@ M.keys = {
         mode = { "n", "v" },
         "<Leader>j",
         "<cmd>HopChar2<CR>",
-        desc = "HOP (2 char search)"
+        desc = " Hop"
     }
 }
 

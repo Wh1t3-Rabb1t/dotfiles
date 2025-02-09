@@ -21,7 +21,7 @@ M.keys = {
                 require("rip-substitute").sub()
             end
         end,
-        desc = "Rip Substitute",
+        desc = " Rip substitute",
     }
 }
 

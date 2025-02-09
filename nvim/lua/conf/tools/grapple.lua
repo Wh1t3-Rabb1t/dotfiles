@@ -18,67 +18,67 @@ M.keys = {
             vim.cmd("Grapple toggle")
             util.sync_grapple_and_barbar_indexes()
         end,
-        desc = "󰛢 Toggle Grapple tag on current buffer"
+        desc = "󰛢 Toggle Grapple tag"
     },
     {
         mode = { "n" },
         "<A-g>",
         "<cmd>Grapple toggle_tags<CR>",
-        desc = "󰛢 Open Grapple tags window"
+        desc = "󰛢 Open Grapple ui"
     },
     {
         mode = { "n" },
         "<Leader>1",
         "<cmd>Grapple select index=1<CR>",
-        desc = "󰛢 Select Grapple tag #1"
+        desc = "󰛢 Grapple tag #1"
     },
     {
         mode = { "n" },
         "<Leader>2",
         "<cmd>Grapple select index=2<CR>",
-        desc = "󰛢 Select Grapple tag #2"
+        desc = "󰛢 Grapple tag #2"
     },
     {
         mode = { "n" },
         "<Leader>3",
         "<cmd>Grapple select index=3<CR>",
-        desc = "󰛢 Select Grapple tag #3"
+        desc = "󰛢 Grapple tag #3"
     },
     {
         mode = { "n" },
         "<Leader>4",
         "<cmd>Grapple select index=4<CR>",
-        desc = "󰛢 Select Grapple tag #4"
+        desc = "󰛢 Grapple tag #4"
     },
     {
         mode = { "n" },
         "<Leader>5",
         "<cmd>Grapple select index=5<CR>",
-        desc = "󰛢 Select Grapple tag #5"
+        desc = "󰛢 Grapple tag #5"
     },
     {
         mode = { "n" },
         "<Leader>6",
         "<cmd>Grapple select index=6<CR>",
-        desc = "󰛢 Select Grapple tag #6"
+        desc = "󰛢 Grapple tag #6"
     },
     {
         mode = { "n" },
         "<Leader>7",
         "<cmd>Grapple select index=7<CR>",
-        desc = "󰛢 Select Grapple tag #7"
+        desc = "󰛢 Grapple tag #7"
     },
     {
         mode = { "n" },
         "<Leader>8",
         "<cmd>Grapple select index=8<CR>",
-        desc = "󰛢 Select Grapple tag #8"
+        desc = "󰛢 Grapple tag #8"
     },
     {
         mode = { "n" },
         "<Leader>9",
         "<cmd>Grapple select index=9<CR>",
-        desc = "󰛢 Select Grapple tag #9"
+        desc = "󰛢 Grapple tag #9"
     }
 }
 

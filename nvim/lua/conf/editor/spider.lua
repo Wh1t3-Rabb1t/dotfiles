@@ -14,25 +14,25 @@ M.keys = {
         mode = { "n", "v", "o" },
         "o",
         "<cmd>lua require('spider').motion('w')<CR>",
-        desc = "Jump forward by word"
+        desc = " Forward word"
     },
     {
         mode = { "n", "v", "o" },
         "u",
         "<cmd>lua require('spider').motion('b')<CR>",
-        desc = "Jump backward by word"
+        desc = " Backward word"
     },
     {
         mode = { "n", "v", "o" },
         "O",
         "<cmd>lua require('spider').motion('e')<CR>",
-        desc = "Jump forward to word end"
+        desc = " Forward word end"
     },
     {
         mode = { "n", "v", "o" },
         "U",
         "<cmd>lua require('spider').motion('ge')<CR>",
-        desc = "Jump backward to word end"
+        desc = " Backward word end"
     }
 }
 

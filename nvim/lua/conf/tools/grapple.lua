@@ -13,7 +13,7 @@ local util = require("util.utils")
 M.keys = {
     {
         mode = { "n" },
-        "<Leader>g",
+        "<Leader>a",
         function()
             vim.cmd("Grapple toggle")
             util.sync_grapple_and_barbar_indexes()
@@ -22,7 +22,7 @@ M.keys = {
     },
     {
         mode = { "n" },
-        "<A-g>",
+        "<A-a>",
         "<cmd>Grapple toggle_tags<CR>",
         desc = "󰛢 Open Grapple ui"
     },

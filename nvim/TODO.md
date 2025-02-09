@@ -8,6 +8,8 @@
 - Set up macOS mission control navigation bindings and increase animation speed via cli os settings
 
 
+- bind cc to copy whole buffer xx to cut ww to delete etc
+
 - Look into enabling italic and bold in kitty Monaco font
 
 - Creat Legendary command to clear register stack
@@ -29,6 +31,22 @@ after updating the numeric register stack
 
 - (maybe) Set up down left right bindings for visual mode
 - Reinstall hammerspoon via homebrew
+
+
+Store notes on registers somewhere:
+-- "  Unnamed register. Holds the last deleted or yanked text.
+-- *  Primary system clipboard selection (X11 on Unix-like systems).
+-- +  Secondary clipboard register. Used for copying/pasting with the system clipboard.
+-- .  Last inserted text register. Contains last inserted text.
+-- -  Small delete register. Holds text from deletions smaller than a line (like dw).
+-- 0  Yank register for the last yank command. Last yanked text (not overwritten by deletes).
+-- _  Black hole register. Discards any text sent to it, acting as a "null" register.
+-- #  Alternate file name register. Holds name of the last file edited.
+-- /  Last search pattern register. Stores the most recent search pattern.
+-- %  Current file name register. Holds the name of the current file.
+-- :  Last executed command register. Containing the last command-line command entered.
+-- =  Expression register. Allows you to evaluate expressions and insert the result.
+-- ~  Register for the last tilde operation. Stores result of the last g~ or ~ operation.
 
 
 ---

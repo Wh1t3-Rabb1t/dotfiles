@@ -28,9 +28,10 @@
 -- CUT
 -- CHANGE
 -- PASTE
+-- DUPLICATE LINE / SELECTION
 -- OPEN / JOIN LINES
 -- `f` and `/` SEARCH
--- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
+-- INCREMENT / DECREMENT NUMS SEQUENTIALLY
 -- QUICKFIX
 -- WINDOW
 -- SAVE CHANGES
@@ -315,6 +316,12 @@ cmap("<A-v>",          "<C-r>*")                 -- Paste from system register
 imap("<A-v>",          km.paste)                 -- Paste from system register
 
 
+-- DUPLICATE LINE / SELECTION
+--------------------------------------------------------------------------------
+nmap("<Leader>d",      "VyPj")                   -- Duplicate line below
+vmap("<Leader>d",      "<C-v>VyPgv")             -- Duplicate selection below
+
+
 -- OPEN / JOIN LINES
 --------------------------------------------------------------------------------
 -- `<C-o>` in insert mode sends a single normal
@@ -337,7 +344,7 @@ vmap("/",              "<Esc>/\\%V", {           -- Search within selection
 })
 
 
--- INCREMENT / DECREMENT NUMBERS SEQUENTIALLY
+-- INCREMENT / DECREMENT NUMS SEQUENTIALLY
 --------------------------------------------------------------------------------
 vmap("=+",             "g<C-a>gv")               -- Increment num sequentially
 vmap("=-",             "g<C-x>gv")               -- Decrement num sequentially
@@ -345,7 +352,8 @@ vmap("=-",             "g<C-x>gv")               -- Decrement num sequentially
 
 -- QUICKFIX
 --------------------------------------------------------------------------------
-nmap("<A-p>",          km.toggle_quickfix_win)   -- Toggle quickfix list
+nmap("<A-x>",          km.toggle_quickfix_win)   -- Toggle quickfix list
+nmap("<A-c>",          km.add_line_to_quickfix)  -- Update quickfix list
 
 
 -- WINDOW

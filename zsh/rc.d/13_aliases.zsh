@@ -111,7 +111,6 @@ fi
     alias nf="_create_files"
     alias nd="_create_dirs"
     alias md="_glow_markdown"
-    alias vs="_find_vim_sessions"
     alias cl="_clear_screen_soft_bottom"
     alias po="_check_for_plugin_updates"
     alias pu="_update_plugins"

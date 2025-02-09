@@ -57,52 +57,10 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
+    local util = require("util.utils")
     local win = require("util.window")
     require("legendary").setup({
         keymaps = {
-
-            -- Quickfix add entries
-            --------------------------------------------------------------------
-            {
-                mode = { "n" },
-                "<Leader>u",
-                function()
-                    -- Add line under cursor to the quickfix list
-                    local line = vim.api.nvim_get_current_line()
-                    local bufnr = vim.api.nvim_get_current_buf()
-                    local lnum = vim.api.nvim_win_get_cursor(0)[1]
-
-                    -- Create a quickfix entry
-                    local item = {
-                        bufnr = bufnr,
-                        lnum = lnum,
-                        text = line,
-                    }
-
-                    -- Append the entry to the quickfix list
-                    vim.fn.setqflist({}, "a", { items = { item } })
-                    vim.notify(
-                        "Line #" .. lnum .. " added to quickfix list",
-                        vim.log.levels.INFO
-                    )
-                end,
-                desc = " Update quickfix list with current line"
-            },
-
-            -- Duplicate line / selection
-            --------------------------------------------------------------------
-            {
-                mode = { "n" },
-                "<Leader>d",
-                'V"dy"dPj',
-                desc = " Duplicate line below"
-            },
-            {
-                mode = { "v" },
-                "<Leader>d",
-                '<C-v>V"dy"dPgv',
-                desc = " Duplicate visual selection below"
-            },
 
             -- Spelling
             --------------------------------------------------------------------
@@ -348,6 +306,10 @@ function M.config()
                             vim.cmd("redraw!")
                         end,
                         desc = " Enlarge command line window"
+                    },
+                    {
+                        function() util.cleanup_registers() end,
+                        desc = " Clear register stacks"
                     }
                 }
             }

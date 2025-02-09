@@ -25,7 +25,7 @@ M.keys = {
     },
     {
         mode = { "n" },
-        "<A-a>",
+        "<A-g>",
         "<cmd>FzfLua live_grep_native<CR>",
         desc = "󰢱 FZF grep cwd"
     },
@@ -46,6 +46,23 @@ M.keys = {
         "<A-'>",
         "<cmd>FzfLua buffers<CR>",
         desc = "󰢱 FZF open buffers"
+    },
+    {
+        mode = { "n" },
+        "<A-p>",
+        "<cmd>FzfLua registers<CR>",
+        desc = "󰢱 FZF registers"
+    },
+    {
+        mode = { "v" },
+        "<A-p>",
+        function()
+            vim.cmd([[
+                :execute 'normal! "_d'
+                FzfLua registers
+            ]])
+        end,
+        desc = "󰢱 FZF paste over selection from register (visual)"
     },
 
     -- Leader bindings
@@ -86,7 +103,7 @@ M.keys = {
     },
     {
         mode = { "n" },
-        "<Leader>a",
+        "<Leader>s",
         function()
             require("fzf-lua").lsp_document_symbols({
                 prompt="DocSymbols  ",
@@ -97,7 +114,7 @@ M.keys = {
     },
     {
         mode = { "n" },
-        "<Leader>A",
+        "<Leader>S",
         function()
             require("fzf-lua").lsp_workspace_symbols({
                 prompt="WsSymbols  ",
@@ -105,23 +122,6 @@ M.keys = {
             })
         end,
         desc = "󰢱 FZF LSP workspace symbols"
-    },
-    {
-        mode = { "n" },
-        "<Leader>r",
-        "<cmd>FzfLua registers<CR>",
-        desc = "󰢱 FZF registers"
-    },
-    {
-        mode = { "v" },
-        "<Leader>r",
-        function()
-            vim.cmd([[
-                :execute 'normal! "_d'
-                FzfLua registers
-            ]])
-        end,
-        desc = "󰢱 FZF paste over selection from register (visual)"
     },
     {
         mode = { "n" },
@@ -137,7 +137,7 @@ M.keys = {
     },
     {
         mode = { "n" },
-        "<Leader>S",
+        "<Leader>GS",
         "<cmd>FzfLua spell_suggest<CR>",
         desc = "󰢱 FZF Get spelling suggestions"
     }
@@ -192,7 +192,7 @@ function M.config()
             title_pos = "center",  -- 'left', 'center' or 'right'
             fullscreen = false,    -- start fullscreen?
             preview = {
-                default = "bat",           -- override the default previewer?
+                default = "bat",   -- override the default previewer?
 
                 -- Defaults are: border|noborder
                 border = { " ", " ", " ", " ", " ", " ", " ", " " },
@@ -464,19 +464,6 @@ function M.config()
                 ["--with-nth"] = "1..",
                 ["--no-hscroll"] = false,
             }
-            -- "  Unnamed register. Holds the last deleted or yanked text.
-            -- *  Primary system clipboard selection (X11 on Unix-like systems).
-            -- +  Secondary clipboard register. Used for copying/pasting with the system clipboard.
-            -- .  Last inserted text register. Contains last inserted text.
-            -- -  Small delete register. Holds text from deletions smaller than a line (like dw).
-            -- 0  Yank register for the last yank command. Last yanked text (not overwritten by deletes).
-            -- _  Black hole register. Discards any text sent to it, acting as a "null" register.
-            -- #  Alternate file name register. Holds name of the last file edited.
-            -- /  Last search pattern register. Stores the most recent search pattern.
-            -- %  Current file name register. Holds the name of the current file.
-            -- :  Last executed command register. Containing the last command-line command entered.
-            -- =  Expression register. Allows you to evaluate expressions and insert the result.
-            -- ~  Register for the last tilde operation. Stores result of the last g~ or ~ operation.
         },
 
         --  Commands

@@ -140,6 +140,27 @@ function M.toggle_quickfix_win()
     end
 end
 
+function M.add_line_to_quickfix()
+    -- Add line under cursor to the quickfix list
+    local line = vim.api.nvim_get_current_line()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local lnum = vim.api.nvim_win_get_cursor(0)[1]
+
+    -- Create a quickfix entry
+    local item = {
+        bufnr = bufnr,
+        lnum = lnum,
+        text = line,
+    }
+
+    -- Append the entry to the quickfix list
+    vim.fn.setqflist({}, "a", { items = { item } })
+    vim.notify(
+        "Line #" .. lnum .. " added to quickfix list",
+        vim.log.levels.INFO
+    )
+end
+
 
 -- SAVE CHANGES
 --------------------------------------------------------------------------------

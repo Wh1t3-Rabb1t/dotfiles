@@ -17,14 +17,16 @@ local icons = {
 }
 
 
--- INIT
+-- KEYS
 --------------------------------------------------------------------------------
-local map = require("util.utils").map
-function M.init()
-    map("n", "<A-Left>", "<cmd>AerialOpen<CR>", {
-        desc = "Toggle Aerial"
-    })
-end
+M.keys = {
+    {
+        mode = { "n" },
+        "<A-Left>",
+        "<cmd>AerialOpen<CR>",
+        desc = " Toggle Aerial"
+    }
+}
 
 
 -- CONFIG

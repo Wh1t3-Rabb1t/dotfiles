@@ -9,15 +9,11 @@
 - Look into enabling italic and bold in kitty Monaco font
 
 
+- Finish configuring fzf lua
+
 
 
 - Add all plugin bindings declared in init tables to Legendary
-- bind cc to copy whole buffer xx to cut ww to delete etc
-
-- Finish configuring fzf lua
-
-- Add logic to the end of the numeric clipboard ring autocommand to add content from the + reg to the * reg
-after updating the numeric register stack
 
 - Set clipboard ring binding for nvim and zsh
 

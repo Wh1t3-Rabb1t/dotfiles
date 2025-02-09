@@ -2,6 +2,8 @@
 
 - Dropping karabiner. Link no longer exists in deploy script
 
+- Setup autoenv for python as an intro to envs
+
 - Add checks for os type when using `pbpaste` in scripts
 - Add a check to ensure that luarocks is installed before initializing luacheck
 

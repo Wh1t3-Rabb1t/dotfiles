@@ -16,67 +16,78 @@ local icons = {
 }
 
 
--- INIT
+-- KEYS
 --------------------------------------------------------------------------------
 local util = require("util.utils")
-local map = require("util.utils").map
-function M.init()
-    local tag = require("grapple")
-
+M.keys = {
     -- Navigate tabs
-    map("n", "<C-PageDown>", function()
-        -- Prevent bug when tab switching with a single help page open
-        if vim.bo.filetype ~= "help" then
-            vim.cmd("BufferNext")
-        end
-    end, {
-        desc = "Next tab"
-    })
-    map("n", "<C-PageUp>", function()
-        -- Prevent bug when tab switching with a single help page open
-        if vim.bo.filetype ~= "help" then
-            vim.cmd("BufferPrevious")
-        end
-    end, {
-        desc = "Previous tab"
-    })
+    {
+        mode = { "n" },
+        "<C-PageDown>",
+        function()
+            -- Prevent bug when tab switching with a single help page open
+            if vim.bo.filetype ~= "help" then
+                vim.cmd("BufferNext")
+            end
+        end,
+        desc = " Next tab"
+    },
+    {
+        mode = { "n" },
+        "<C-PageUp>",
+        function()
+            if vim.bo.filetype ~= "help" then
+                vim.cmd("BufferPrevious")
+            end
+        end,
+        desc = " Previous tab"
+    },
 
-    -- Rearrange tabs
-    map("n", "<C-S-PageDown>", function()
-        -- Prevent reordering of pinned tabs
-        if type(tag.name_or_index()) ~= "number" then
-            vim.cmd("BufferMoveNext")
-        end
-    end, {
-        desc = "Swap tab with next tab"
-    })
-    map("n", "<C-S-PageUp>", function()
-        -- Prevent reordering of pinned tabs
-        if type(tag.name_or_index()) ~= "number" then
-            vim.cmd("BufferMovePrevious")
-        end
-    end, {
-        desc = "Swap tab with previous tab"
-    })
+    -- Reorder tabs
+    {
+        mode = { "n" },
+        "<C-S-PageDown>",
+        function()
+            -- Prevent reordering of pinned tabs
+            if type(require("grapple").name_or_index()) ~= "number" then
+                vim.cmd("BufferMoveNext")
+            end
+        end,
+        desc = " Swap tab with next"
+    },
+    {
+        mode = { "n" },
+        "<C-S-PageUp>",
+        function()
+            -- Prevent reordering of pinned tabs
+            if type(require("grapple").name_or_index()) ~= "number" then
+                vim.cmd("BufferMovePrevious")
+            end
+        end,
+        desc = " Swap tab with previous"
+    },
 
     -- Close tabs
-    map("n", "<A-w>", function()
-        if vim.bo.filetype == "qf" then
-            vim.cmd("bo cclose")
-            return
-        end
+    {
+        mode = { "n" },
+        "<A-w>",
+        function()
+            if vim.bo.filetype == "qf" then
+                vim.cmd("bo cclose")
+                return
+            end
 
-        if type(tag.name_or_index()) == "number" then
-            vim.cmd("Grapple toggle")
-            vim.cmd("BufferClose")
-            util.sync_grapple_and_barbar_indexes()
-        else
-            vim.cmd("BufferClose")
-        end
-    end, {
-        desc = "Close focused tab"
-    })
-end
+            if type(require("grapple").name_or_index()) == "number" then
+                vim.cmd("Grapple toggle")
+                vim.cmd("BufferClose")
+                util.sync_grapple_and_barbar_indexes()
+            else
+                vim.cmd("BufferClose")
+            end
+        end,
+        desc = " Close tab"
+    }
+}
 
 
 -- CONFIG

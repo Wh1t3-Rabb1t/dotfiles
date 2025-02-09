@@ -133,7 +133,7 @@ function M.config()
         }
     })
 
-    -- Sync barbar tabs with grapple indexes grapple ui exit
+    -- Sync barbar tabs with grapple indexes on grapple ui exit
     vim.api.nvim_create_augroup("GrappleGroup", { clear = true })
     vim.api.nvim_create_autocmd("WinLeave", {
         group = "GrappleGroup",

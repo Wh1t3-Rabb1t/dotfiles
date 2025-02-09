@@ -16,7 +16,7 @@ return {
             "nvim-tree/nvim-web-devicons",
         },
         cmd = "AerialOpen",
-        init = require("conf.ui.aerial").init,
+        keys = require("conf.ui.aerial").keys,
         config = require("conf.ui.aerial").config,
     },
 
@@ -25,14 +25,15 @@ return {
     {
         "romgrk/barbar.nvim",
         dependencies = "nvim-tree/nvim-web-devicons",
-        event = function()  -- Restore tab order via session file if present
+        event = function()
+            -- Restore tab order via session file if present
             if vim.tbl_contains(vim.v.argv, "-S") then
                 return "SessionLoadPost"
             else
                 return "VeryLazy"
             end
         end,
-        init = require("conf.ui.barbar").init,
+        keys = require("conf.ui.barbar").keys,
         config = require("conf.ui.barbar").config,
     },
 

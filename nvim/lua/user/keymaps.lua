@@ -164,6 +164,7 @@ imap("<C-Del>",        km.del_line_right)        -- Delete line RIGHT
 -- DELETE MOTIONS
 --------------------------------------------------------------------------------
 vmap("w",              '"_x')                    -- Delete visual selection
+nmap("ww",             'ggVG"_d')                -- Delete whole buffer
 
 -- Word
 nmap("w",              "<Nop>")
@@ -262,6 +263,7 @@ nmap("ch",             '"*yT')                   -- Copy backwards to char
 
 vmap("x",              '"*ygv"_d')               -- Cut to system register
 vmap("<Leader>x",      '"+ygv"_d')               -- Cut to register stack
+nmap("xx",             'ggVG"*ygv"_d')           -- Cut whole buffer
 
 -- Word
 nmap("x",              "<Nop>")
@@ -287,6 +289,7 @@ nmap("xh",             '"*dT')                   -- Cut backwards to char
 -- CHANGE (all changed text is sent to the black hole register)
 --------------------------------------------------------------------------------
 vmap("y",              '"_c')                    -- Change visual selection
+nmap("yy",             'ggVG"_C')                -- Change whole buffer
 
 -- Word
 nmap("y",              "<Nop>")

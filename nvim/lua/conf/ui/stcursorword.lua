@@ -7,6 +7,24 @@
 
 local M = {}
 
+-- KEYS
+--------------------------------------------------------------------------------
+M.keys = {
+    {
+        mode = { "n" },
+        "gw",
+        "<cmd>Cursorword enable<CR>",
+        desc = " Cursor word highlights ON"
+    },
+    {
+        mode = { "n" },
+        "gW",
+        "<cmd>Cursorword disable<CR>",
+        desc = " Cursor word highlights OFF"
+    }
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()

@@ -10,12 +10,7 @@ local M = {}
 -- KEYS
 --------------------------------------------------------------------------------
 M.keys = {
-    {
-        mode = { "n" },
-        "<Leader>f",
-        "<cmd>FzfLua files<CR>",
-        desc = "󰢱 FZF files in cwd"
-    },
+    -- Alt bindings
     {
         mode = { "n" },
         "<A-f>",
@@ -51,6 +46,100 @@ M.keys = {
         "<A-'>",
         "<cmd>FzfLua buffers<CR>",
         desc = "󰢱 FZF open buffers"
+    },
+
+    -- Leader bindings
+    {
+        mode = { "n" },
+        "<Leader>f",
+        "<cmd>FzfLua files<CR>",
+        desc = "󰢱 FZF files in cwd"
+    },
+    {
+        mode = { "n" },
+        "<Leader>h",
+        "<cmd>FzfLua helptags<CR>",
+        desc = "󰢱 FZF help tags"
+    },
+    {
+        mode = { "n" },
+        "<Leader>H",
+        "<cmd>FzfLua highlights<CR>",
+        desc = "󰢱 FZF highlights"
+    },
+    {
+        mode = { "n" },
+        "<Leader>C",
+        "<cmd>FzfLua commands<CR>",
+        desc = "󰢱 FZF commands"
+    },
+    {
+        mode = { "n" },
+        "<Leader>l",
+        function()
+            require("fzf-lua").lsp_finder({
+                prompt="LSP finder  ",
+                fzf_opts = { ["--with-nth"] = "1.." }
+            })
+        end,
+        desc = "󰢱 FZF LSP finder"
+    },
+    {
+        mode = { "n" },
+        "<Leader>a",
+        function()
+            require("fzf-lua").lsp_document_symbols({
+                prompt="DocSymbols  ",
+                fzf_opts = { ["--with-nth"] = "1.." }
+            })
+        end,
+        desc = "󰢱 FZF LSP document symbols"
+    },
+    {
+        mode = { "n" },
+        "<Leader>A",
+        function()
+            require("fzf-lua").lsp_workspace_symbols({
+                prompt="WsSymbols  ",
+                fzf_opts = { ["--with-nth"] = "1.." }
+            })
+        end,
+        desc = "󰢱 FZF LSP workspace symbols"
+    },
+    {
+        mode = { "n" },
+        "<Leader>r",
+        "<cmd>FzfLua registers<CR>",
+        desc = "󰢱 FZF registers"
+    },
+    {
+        mode = { "v" },
+        "<Leader>r",
+        function()
+            vim.cmd([[
+                :execute 'normal! "_d'
+                FzfLua registers
+            ]])
+        end,
+        desc = "󰢱 FZF paste over selection from register (visual)"
+    },
+    {
+        mode = { "n" },
+        "<Leader>m",
+        "<cmd>FzfLua marks<CR>",
+        desc = "󰢱 FZF marks"
+    },
+    {
+        mode = { "n" },
+        "<Leader>M",
+        "<cmd>FzfLua manpages<CR>",
+        desc = "󰢱 FZF manpages"
+    },
+    {
+        mode = { "n" },
+        "<Leader>S",
+        "<cmd>FzfLua spell_suggest<CR>",
+        desc = "󰢱 FZF Get spelling suggestions"
     }
 }
 

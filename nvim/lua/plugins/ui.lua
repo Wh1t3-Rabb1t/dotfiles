@@ -59,6 +59,7 @@ return {
     {
         "lewis6991/gitsigns.nvim",
         event = "UiEnter",
+        keys = require("conf.ui.gitsigns").keys,
         config = require("conf.ui.gitsigns").config,
     },
 
@@ -115,7 +116,8 @@ return {
     ----------------------------------------------------------------------------
     {
         "sontungexpt/stcursorword",
-        cmd = "Cursorword toggle",
+        cmd = "Cursorword enable",
+        keys = require("conf.ui.stcursorword").keys,
         config = require("conf.ui.stcursorword").config,
     }
 }

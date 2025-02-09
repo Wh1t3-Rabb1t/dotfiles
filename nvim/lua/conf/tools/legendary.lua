@@ -26,25 +26,28 @@ M.keys = {
         "p",
         function()
             require("legendary").find({
-                itemgroup = "Commands & Functions",
+                itemgroup = "Commands & Functions"
             })
         end,
-        desc = "Legendary Commands & Functions"
+        desc = "LGD cmds & funcs"
     },
     {
         mode = { "n", "v" },
         "P",
-        "<cmd>Legendary<CR>",
-        desc = "Legendary Keybindings"
+        function()
+            require("legendary").find({
+                filters = { require("legendary.filters").current_mode() }
+            })
+        end,
+        desc = "LGD kb"
     },
     {
         mode = { "n", "v" },
         "<Leader>p",
         "<cmd>LegendaryRepeat<CR>",
-        desc = "Repeat last Legendary command"
+        desc = "LGD repeat cmd"
     }
 }
-
 
 
 -- CONFIG
@@ -57,89 +60,6 @@ function M.config()
     local win = require("util.window")
     require("legendary").setup({
         keymaps = {
-
-            -- FzfLua
-            --------------------------------------------------------------------
-            {
-                mode = { "n" },
-                "<Leader>h",
-                "<cmd>FzfLua helptags<CR>",
-                desc = "󰢱 FZF help tags"
-            },
-            {
-                mode = { "n" },
-                "<Leader>H",
-                "<cmd>FzfLua highlights<CR>",
-                desc = "󰢱 FZF highlights"
-            },
-            {
-                mode = { "n" },
-                "<Leader>C",
-                "<cmd>FzfLua commands<CR>",
-                desc = "󰢱 FZF commands"
-            },
-            {
-                mode = { "n" },
-                "<Leader>l",
-                function()
-                    require("fzf-lua").lsp_finder({
-                        prompt="LSP finder  ",
-                        fzf_opts = { ["--with-nth"] = "1.." }
-                    })
-                end,
-                desc = "󰢱 FZF LSP finder"
-            },
-            {
-                mode = { "n" },
-                "<Leader>a",
-                function()
-                    require("fzf-lua").lsp_document_symbols({
-                        prompt="DocSymbols  ",
-                        fzf_opts = { ["--with-nth"] = "1.." }
-                    })
-                end,
-                desc = "󰢱 FZF LSP document symbols"
-            },
-            {
-                mode = { "n" },
-                "<Leader>A",
-                function()
-                    require("fzf-lua").lsp_workspace_symbols({
-                        prompt="WsSymbols  ",
-                        fzf_opts = { ["--with-nth"] = "1.." }
-                    })
-                end,
-                desc = "󰢱 FZF LSP workspace symbols"
-            },
-            {
-                mode = { "n" },
-                "<Leader>r",
-                "<cmd>FzfLua registers<CR>",
-                desc = "󰢱 FZF registers"
-            },
-            {
-                mode = { "v" },
-                "<Leader>r",
-                function()
-                    vim.cmd([[
-                        :execute 'normal! "_d'
-                        FzfLua registers
-                    ]])
-                end,
-                desc = "󰢱 FZF paste over selection from register (visual)"
-            },
-            {
-                mode = { "n" },
-                "<Leader>m",
-                "<cmd>FzfLua marks<CR>",
-                desc = "󰢱 FZF marks"
-            },
-            {
-                mode = { "n" },
-                "<Leader>M",
-                "<cmd>FzfLua manpages<CR>",
-                desc = "󰢱 FZF manpages"
-            },
 
             -- Quickfix add entries
             --------------------------------------------------------------------
@@ -188,12 +108,6 @@ function M.config()
             --------------------------------------------------------------------
             {
                 mode = { "n" },
-                "<Leader>S",
-                "<cmd>FzfLua spell_suggest<CR>",
-                desc = "󰢱 FZF Get spelling suggestions"
-            },
-            {
-                mode = { "n" },
                 "gs",
                 "]s",
                 desc = " Go to next MISSPELLED word"
@@ -238,60 +152,6 @@ function M.config()
                 desc = " Delete FOLD under cursor"
             },
 
-            -- Gitsigns
-            --------------------------------------------------------------------
-            {
-                mode = { "n" },
-                "gr",
-                "<cmd>Gitsigns refresh<CR>",
-                desc = " Gitsigns refresh"
-            },
-            {
-                mode = { "n" },
-                "ghl",
-                "<cmd>Gitsigns toggle_numhl<CR>",
-                desc = " Gitsigns toggle number line highlights"
-            },
-            {
-                mode = { "n" },
-                "ghi",
-                "<cmd>Gitsigns toggle_linehl<CR>",
-                desc = " Gitsigns toggle inline bg highlights"
-            },
-            {
-                mode = { "n" },
-                "gP",
-                "<cmd>Gitsigns diffthis<CR>",
-                desc = " Gitsigns show diff"
-            },
-            {
-                mode = { "n" },
-                "gp",
-                "<cmd>Gits preview_hunk<CR>",
-                desc = " Gitsigns preview hunk in popup"
-            },
-            {
-                mode = { "n" },
-                "gk",
-                "<cmd>Gitsigns next_hunk<CR>",
-                desc = " Gitsigns go to next hunk"
-            },
-            {
-                mode = { "n" },
-                "gi",
-                "<cmd>Gitsigns prev_hunk<CR>",
-                desc = " Gitsigns go to previous hunk"
-            },
-
-            -- StCursorWord
-            --------------------------------------------------------------------
-            {
-                mode = { "n" },
-                "gw",
-                "<cmd>Cursorword toggle<CR>",
-                desc = " Toggle cursor word highlights"
-            },
-
             -- Misc
             --------------------------------------------------------------------
             {
@@ -310,11 +170,7 @@ function M.config()
 
         -- Can also be a function that returns the list
         commands = {},
-
-        -- Can also be a function that returns the list
         autocmds = {},
-
-        -- Can also be a function that returns the list
         funcs = {},
 
         -- Initial item groups to bind, note that item groups can also

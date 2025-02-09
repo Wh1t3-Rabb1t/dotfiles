@@ -7,6 +7,54 @@
 
 local M = {}
 
+-- KEYS
+--------------------------------------------------------------------
+M.keys = {
+    {
+        mode = { "n" },
+        "gr",
+        "<cmd>Gitsigns refresh<CR>",
+        desc = " Gitsigns refresh"
+    },
+    {
+        mode = { "n" },
+        "ghl",
+        "<cmd>Gitsigns toggle_numhl<CR>",
+        desc = " Gitsigns toggle number line highlights"
+    },
+    {
+        mode = { "n" },
+        "ghi",
+        "<cmd>Gitsigns toggle_linehl<CR>",
+        desc = " Gitsigns toggle inline bg highlights"
+    },
+    {
+        mode = { "n" },
+        "gP",
+        "<cmd>Gitsigns diffthis<CR>",
+        desc = " Gitsigns show diff"
+    },
+    {
+        mode = { "n" },
+        "gp",
+        "<cmd>Gits preview_hunk<CR>",
+        desc = " Gitsigns preview hunk in popup"
+    },
+    {
+        mode = { "n" },
+        "gk",
+        "<cmd>Gitsigns next_hunk<CR>",
+        desc = " Gitsigns go to next hunk"
+    },
+    {
+        mode = { "n" },
+        "gi",
+        "<cmd>Gitsigns prev_hunk<CR>",
+        desc = " Gitsigns go to previous hunk"
+    }
+}
+
+
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()

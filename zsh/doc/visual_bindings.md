@@ -49,7 +49,7 @@
 ## PASTE -----------------------------------------------------------------------
 
 - `v`                    : Paste from clipboard
-- `V`                    : Paste over selection from clipboard ring
+- `Alt p`                : Paste over selection from clipboard ring
 
 
 ## ADD SURROUNDING -------------------------------------------------------------

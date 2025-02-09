@@ -34,6 +34,7 @@
 ## PASTE -----------------------------------------------------------------------
 
 - `Alt v`                : Paste from clipboard
+- `Alt p`                : Paste from clipboard ring
 
 ---
 

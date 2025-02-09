@@ -5,6 +5,10 @@
 - Find a way to cache dirs that contain Session.vim files (store in an array and update when Session files are created or moved to Trash)
 - Setup autoenv for python as an intro to envs
 
+- Create a zsh `stage` to copy or move files / dirs quickly after teleport jumps
+
+- Add zscript to manually regenerate compdump (if we say, download something with brew and want completions right away)
+
 - Add checks for os type when using `pbpaste` in scripts
 - Add a check to ensure that luarocks is installed before initializing luacheck
 

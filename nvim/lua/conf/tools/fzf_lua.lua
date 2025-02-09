@@ -139,7 +139,7 @@ M.keys = {
         mode = { "n" },
         "<Leader>GS",
         "<cmd>FzfLua spell_suggest<CR>",
-        desc = "󰢱 FZF Get spelling suggestions"
+        desc = "󰢱 FZF spelling suggestions"
     }
 }
 

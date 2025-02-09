@@ -5,7 +5,6 @@
 #  |_|\_\___|\__, | |_.__/|_|_| |_|\__,_|_|_| |_|\__, |___/
 # ===========|___/===============================|___/======================== #
 
-
 # ╭────────────────────────╮
 # │ ALT LAYER KEY BINDINGS │
 # ╰────────────────────────╯
@@ -14,21 +13,17 @@
 zle -N _rename_fzf
 bindkey -M viins "^[r" _rename_fzf                                  # Alt r
 
-
 # Alt f: Find and open file/s with neovim
 zle -N _find_files
 bindkey -M viins "^[f" _find_files                                  # Alt f
-
 
 # Alt s: Find and open neovim sessions
 zle -N _find_vim_sessions
 bindkey -M viins "^[s" _find_vim_sessions                           # Alt s
 
-
 # Alt g: Grep term and open with neovim
 zle -N _grep_into_nvim
 bindkey -M viins "^[g" _grep_into_nvim                              # Alt g
-
 
 # Alt m: Preview files with bat
 zle -N _preview_files

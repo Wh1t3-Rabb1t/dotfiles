@@ -106,7 +106,7 @@
 ## PASTE -----------------------------------------------------------------------
 
 - `v`                    : Paste from clipboard
-- `V`                    : Paste from clipboard ring
+- `Alt p`                : Paste from clipboard ring
 
 
 ## INCREMENT / DECREMENT INTEGERS ----------------------------------------------

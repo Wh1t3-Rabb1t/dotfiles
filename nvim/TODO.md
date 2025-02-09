@@ -10,10 +10,15 @@
 
 - Look into enabling italic and bold in kitty Monaco font
 
+- Creat Legendary command to clear register stack
+- Add all plugin bindings declared in init tables to Legendary
 - Move all keybindings declared in Legendary to 'keymaps.lua'
 - Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
 
 - Finish configuring fzf lua
+
+- Add logic to the end of the numeric clipboard ring autocommand to add content from the + reg to the * reg
+after updating the numeric register stack
 
 - Set clipboard ring binding for nvim and zsh
 

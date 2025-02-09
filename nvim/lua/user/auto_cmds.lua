@@ -20,6 +20,7 @@ autocmd({ "VimEnter", "VimResume" }, {
         io.stdout:write("\x1b]1337;SetUserVar=in_editor=MQo\007")
     end
 })
+
 autocmd({ "VimLeave", "VimSuspend" }, {
     group = augroup("KittyUnsetVarVimLeave", { clear = true }),
     callback = function()
@@ -79,6 +80,7 @@ autocmd("InsertEnter", {
         end
     end
 })
+
 autocmd("InsertLeave", {
     group = augroup("DisableSpellSuggest", { clear = true }),
     callback = function() vim.o.spell = false end

@@ -24,8 +24,18 @@ M.keys = {
     {
         mode = { "n", "v" },
         "p",
+        function()
+            require("legendary").find({
+                itemgroup = "Commands & Functions",
+            })
+        end,
+        desc = "Legendary Commands & Functions"
+    },
+    {
+        mode = { "n", "v" },
+        "P",
         "<cmd>Legendary<CR>",
-        desc = "Launch Legendary"
+        desc = "Legendary Keybindings"
     },
     {
         mode = { "n", "v" },
@@ -34,6 +44,7 @@ M.keys = {
         desc = "Repeat last Legendary command"
     }
 }
+
 
 
 -- CONFIG
@@ -298,184 +309,193 @@ function M.config()
         },
 
         -- Can also be a function that returns the list
-        commands = {
-
-            -- Fidget
-            --------------------------------------------------------------------
-            {
-                "<cmd>Fidget clear<CR>",
-                desc = " CLEAR active notifications"
-            },
-            {
-                "<cmd>Fidget clear_history<CR>",
-                desc = " CLEAR notifications history"
-            },
-            {
-                "<cmd>Fidget history<CR>",
-                desc = " SHOW notifications history"
-            },
-            {
-                "<cmd>Fidget lsp_suppress<CR>",
-                desc = " SUPPRESS LSP progress notifications"
-            },
-            {
-                "<cmd>Fidget suppress<CR>",
-                desc = " SUPPRESS notification window"
-            },
-
-            -- Glance
-            --------------------------------------------------------------------
-            {
-                "<cmd>Glance references<CR>",
-                desc = " Glance LSP references"
-            },
-            {
-                "<cmd>Glance definitions<CR>",
-                desc = " Glance LSP definitions"
-            },
-            {
-                "<cmd>Glance type_definitions<CR>",
-                desc = " Glance LSP type definitions"
-            },
-            {
-                "<cmd>Glance implementations<CR>",
-                desc = " Glance LSP implementations"
-            },
-
-            -- Highlight colors
-            --------------------------------------------------------------------
-            {
-                "<cmd>HighlightColors On<CR>",
-                desc = " Color highlights ON"
-            },
-            {
-                "<cmd>HighlightColors Off<CR>",
-                desc = " Color highlights OFF"
-            },
-
-            -- Splits layout
-            --------------------------------------------------------------------
-            {
-                "<cmd>windo wincmd H<CR>",
-                desc = " Set splits layout to VERTICAL"
-            },
-            {
-                "<cmd>windo wincmd K<CR>",
-                desc = " Set splits layout to HORIZONTAL"
-            },
-
-            -- Highlight cursor column
-            --------------------------------------------------------------------
-            {
-                "<cmd>set colorcolumn=80<CR>",
-                desc = " Set highlight at 80th column"
-            },
-            {
-                '<cmd>set colorcolumn=""<CR>',
-                desc = " Disable highlight at 80th column"
-            },
-
-            -- Misc
-            --------------------------------------------------------------------
-            {
-                "<cmd>bo checkhealth<CR>",
-                desc = "󰓙 Checkhealth"
-            },
-            {
-                "<cmd>bo checkhealth lspconfig<CR>",
-                desc = "󰓙 LSP info"
-            },
-            {
-                "<cmd>LintInfo<CR>",
-                desc = "󰓙 Lint info"
-            },
-            {
-                "<cmd>Lazy<CR>",
-                desc = "󰒲 Lazy UI"
-            },
-            {
-                "<cmd>Mason<CR>",
-                desc = " Mason UI"
-            },
-            {
-                "<cmd>ConformInfo<CR>",
-                desc = " Conform info"
-            },
-            {
-                "<cmd>Format<CR>",
-                desc = " Format buffer"
-            },
-            {
-                "<cmd>ClearNeoComposer<CR>",
-                desc = " Clear NeoComposer macros"
-            },
-            {
-                "<cmd>RenderMarkdown toggle<CR>",
-                desc = " Toggle markdown rendering"
-            },
-            {
-                "<cmd>LegendaryFrecencyReset<CR>",
-                desc = " Reset Legendary frecency cache"
-            }
-        },
+        commands = {},
 
         -- Can also be a function that returns the list
         autocmds = {},
 
         -- Can also be a function that returns the list
-        funcs = {
-
-            -- Options toggling
-            --------------------------------------------------------------------
-            {
-                function()
-                    vim.opt.cursorcolumn = not vim.opt.cursorcolumn._value
-                end,
-                desc = " Toggle cursor column highlight"
-            },
-            {
-                function() vim.opt.wrap = not vim.opt.wrap._value end,
-                desc = " Toggle line WRAP"
-            },
-            {
-                function() vim.opt.spell = not vim.opt.spell._value end,
-                desc = " Toggle incorrect spelling highlights"
-            },
-            {
-                function()
-                    local fc_state = vim.opt.foldclose._value
-                    if fc_state == "all" then
-                        vim.opt.foldclose = ""
-                    else
-                        vim.opt.foldclose = "all"
-                    end
-                end,
-                desc = " Toggle FOLDS auto closing when UNFOCUSED"
-            },
-
-            -- Misc
-            --------------------------------------------------------------------
-            {
-                function()
-                    win.cleanup_windows()
-                    vim.cmd("Mksession!")
-                    print("Session saved: " .. os.date())
-                end,
-                desc = " Session save"
-            },
-            {
-                function()
-                    vim.o.cmdheight = vim.o.cmdheight + 10
-                    vim.cmd("redraw!")
-                end,
-                desc = " Enlarge command line window"
-            }
-        },
+        funcs = {},
 
         -- Initial item groups to bind, note that item groups can also
         -- be under keymaps, commands, autocmds, or funcs;
         -- can also be a function that returns the list.
-        itemgroups = {},
+        itemgroups = {
+            {
+                itemgroup = 'Commands & Functions',
+                description = 'Cmds & Funcs',
+                icon = '',
+                commands = {
+
+                    -- Fidget
+                    --------------------------------------------------------------------
+                    {
+                        "<cmd>Fidget clear<CR>",
+                        desc = " CLEAR active notifications"
+                    },
+                    {
+                        "<cmd>Fidget clear_history<CR>",
+                        desc = " CLEAR notifications history"
+                    },
+                    {
+                        "<cmd>Fidget history<CR>",
+                        desc = " SHOW notifications history"
+                    },
+                    {
+                        "<cmd>Fidget lsp_suppress<CR>",
+                        desc = " SUPPRESS LSP progress notifications"
+                    },
+                    {
+                        "<cmd>Fidget suppress<CR>",
+                        desc = " SUPPRESS notification window"
+                    },
+
+                    -- Glance
+                    --------------------------------------------------------------------
+                    {
+                        "<cmd>Glance references<CR>",
+                        desc = " Glance LSP references"
+                    },
+                    {
+                        "<cmd>Glance definitions<CR>",
+                        desc = " Glance LSP definitions"
+                    },
+                    {
+                        "<cmd>Glance type_definitions<CR>",
+                        desc = " Glance LSP type definitions"
+                    },
+                    {
+                        "<cmd>Glance implementations<CR>",
+                        desc = " Glance LSP implementations"
+                    },
+
+                    -- Highlight colors
+                    --------------------------------------------------------------------
+                    {
+                        "<cmd>HighlightColors On<CR>",
+                        desc = " Color highlights ON"
+                    },
+                    {
+                        "<cmd>HighlightColors Off<CR>",
+                        desc = " Color highlights OFF"
+                    },
+
+                    -- Splits layout
+                    --------------------------------------------------------------------
+                    {
+                        "<cmd>windo wincmd H<CR>",
+                        desc = " Set splits layout to VERTICAL"
+                    },
+                    {
+                        "<cmd>windo wincmd K<CR>",
+                        desc = " Set splits layout to HORIZONTAL"
+                    },
+
+                    -- Highlight cursor column
+                    --------------------------------------------------------------------
+                    {
+                        "<cmd>set colorcolumn=80<CR>",
+                        desc = " Set highlight at 80th column"
+                    },
+                    {
+                        '<cmd>set colorcolumn=""<CR>',
+                        desc = " Disable highlight at 80th column"
+                    },
+
+                    -- Misc
+                    --------------------------------------------------------------------
+                    {
+                        "<cmd>bo checkhealth<CR>",
+                        desc = "󰓙 Checkhealth"
+                    },
+                    {
+                        "<cmd>bo checkhealth lspconfig<CR>",
+                        desc = "󰓙 LSP info"
+                    },
+                    {
+                        "<cmd>LintInfo<CR>",
+                        desc = "󰓙 Lint info"
+                    },
+                    {
+                        "<cmd>Lazy<CR>",
+                        desc = "󰒲 Lazy UI"
+                    },
+                    {
+                        "<cmd>Mason<CR>",
+                        desc = " Mason UI"
+                    },
+                    {
+                        "<cmd>ConformInfo<CR>",
+                        desc = " Conform info"
+                    },
+                    {
+                        "<cmd>Format<CR>",
+                        desc = " Format buffer"
+                    },
+                    {
+                        "<cmd>ClearNeoComposer<CR>",
+                        desc = " Clear NeoComposer macros"
+                    },
+                    {
+                        "<cmd>RenderMarkdown toggle<CR>",
+                        desc = " Toggle markdown rendering"
+                    },
+                    {
+                        "<cmd>LegendaryFrecencyReset<CR>",
+                        desc = " Reset Legendary frecency cache"
+                    }
+
+                },
+                funcs = {
+
+                    -- Options toggling
+                    --------------------------------------------------------------------
+                    {
+                        function()
+                            vim.opt.cursorcolumn = not vim.opt.cursorcolumn._value
+                        end,
+                        desc = " Toggle cursor column highlight"
+                    },
+                    {
+                        function() vim.opt.wrap = not vim.opt.wrap._value end,
+                        desc = " Toggle line WRAP"
+                    },
+                    {
+                        function() vim.opt.spell = not vim.opt.spell._value end,
+                        desc = " Toggle incorrect spelling highlights"
+                    },
+                    {
+                        function()
+                            local fc_state = vim.opt.foldclose._value
+                            if fc_state == "all" then
+                                vim.opt.foldclose = ""
+                            else
+                                vim.opt.foldclose = "all"
+                            end
+                        end,
+                        desc = " Toggle FOLDS auto closing when UNFOCUSED"
+                    },
+
+                    -- Misc
+                    --------------------------------------------------------------------
+                    {
+                        function()
+                            win.cleanup_windows()
+                            vim.cmd("Mksession!")
+                            print("Session saved: " .. os.date())
+                        end,
+                        desc = " Session save"
+                    },
+                    {
+                        function()
+                            vim.o.cmdheight = vim.o.cmdheight + 10
+                            vim.cmd("redraw!")
+                        end,
+                        desc = " Enlarge command line window"
+                    }
+                }
+            }
+        },
 
         -- Default opts to merge with the `opts` table
         default_opts = {
@@ -518,11 +538,12 @@ function M.config()
 
         -- Auto register keymaps that are defined by lazy with 'keys'
         lazy_nvim = {
-            auto_register = true,
+            auto_register = true
         },
 
         -- Which extensions to load; no extensions are loaded by default
         extensions = {
+            lazy_nvim = true,
             nvim_tree = false,
             smart_splits = false,
             op_nvim = false,

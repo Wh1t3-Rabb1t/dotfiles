@@ -87,6 +87,7 @@ local options = {
         vim.fn.mkdir(vim.fs.dirname(file), "p")
         return file
     end)(),
+
     shiftwidth = 4,          -- The number of spaces inserted for each indentation
     showbreak = "󰌑 ",        -- Icon shown at the beginning of wrapped lines
     showmode = false,        -- Hide current mode

@@ -308,8 +308,12 @@ function M.config()
                         desc = " Enlarge command line window"
                     },
                     {
-                        function() util.cleanup_registers() end,
-                        desc = " Clear register stacks"
+                        function() util.cleanup_alphabetical_registers() end,
+                        desc = " Clear alphabetical register stack"
+                    },
+                    {
+                        function() util.cleanup_numeric_registers() end,
+                        desc = " Clear numeric register stack"
                     }
                 }
             }

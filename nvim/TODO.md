@@ -6,16 +6,13 @@
 
 - Set broot jump between results binding
 - Set up macOS mission control navigation bindings and increase animation speed via cli os settings
-
-
-- bind cc to copy whole buffer xx to cut ww to delete etc
-
 - Look into enabling italic and bold in kitty Monaco font
 
-- Creat Legendary command to clear register stack
+
+
+
 - Add all plugin bindings declared in init tables to Legendary
-- Move all keybindings declared in Legendary to 'keymaps.lua'
-- Bind 'leader p' to launch Legendary searching keymaps only (bind 'P' to repeat last command)
+- bind cc to copy whole buffer xx to cut ww to delete etc
 
 - Finish configuring fzf lua
 

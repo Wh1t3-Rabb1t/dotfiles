@@ -229,6 +229,7 @@ nmap(">",              "msva<V")                 -- Select around <> block
 
 vmap("c",              'mm"*y`m')                -- Copy to system register
 vmap("<Leader>c",      '"+y')                    -- Copy to register stack
+nmap("cc",             'mmVggoG"*y`m')           -- Copy whole buffer
 
 
 -- Word

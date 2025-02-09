@@ -170,10 +170,5 @@ autocmd("VimLeavePre", {
     callback = function()
         win.cleanup_windows()
         util.cleanup_marks()
-
-        local session_in_cwd = vim.fn.filereadable("Session.vim") == 1
-        if not session_in_cwd then
-            util.cleanup_registers()
-        end
     end
 })

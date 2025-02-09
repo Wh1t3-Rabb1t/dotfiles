@@ -39,6 +39,20 @@ function M.cleanup_registers()
     vim.cmd.wshada({ bang = true })
 end
 
+function M.cleanup_alphabetical_registers()
+    for char = 97, 122 do
+        vim.fn.setreg(string.char(char), {})
+    end
+    vim.cmd.wshada({ bang = true })
+end
+
+function M.cleanup_numeric_registers()
+    for num = 0, 9 do
+        vim.fn.setreg(tostring(num), {})
+    end
+    vim.cmd.wshada({ bang = true })
+end
+
 
 -- CLEANUP MARKS
 --------------------------------------------------------------------------------

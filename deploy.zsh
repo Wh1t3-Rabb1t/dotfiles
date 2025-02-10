@@ -111,19 +111,19 @@ print "\n    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
-# Compile compatible zsh plugin files
-# ---------------------------------------------------------------------------- #
-print "Compiling zsh plugins...\n"
-{
-    emulate -LR zsh
-    setopt local_options extended_glob
-    autoload -Uz zrecompile
-    for plugin_file in ${SCRIPT_DIR}/zsh/plugins/**/*.zsh{-theme,}(#q.); do
-        zrecompile -pq "${plugin_file}"
-    done
-}
-print "    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+# # Compile compatible zsh plugin files
+# # ---------------------------------------------------------------------------- #
+# print "Compiling zsh plugins...\n"
+# {
+#     emulate -LR zsh
+#     setopt local_options extended_glob
+#     autoload -Uz zrecompile
+#     for plugin_file in ${SCRIPT_DIR}/zsh/plugins/**/*.zsh{-theme,}(#q.); do
+#         zrecompile -pq "${plugin_file}"
+#     done
+# }
+# print "    ...done\n"
+# print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Trigger zsh run with powerlevel10k prompt to download gitstatusd

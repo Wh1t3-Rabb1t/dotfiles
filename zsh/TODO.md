@@ -2,10 +2,18 @@
 
 - Dropping karabiner. Link no longer exists in deploy script
 
+- NVIM: create autocommand to turn off wrap if buffer width is < 80
+
 - Find a way to cache dirs that contain Session.vim files (store in an array and update when Session files are created or moved to Trash)
 - Setup autoenv for python as an intro to envs
 
-- Create a zsh `stage` to copy or move files / dirs quickly after teleport jumps
+- Create a zsh `stage` to copy or move files / dirs quickly after teleport jumps (save selected absolute path to an array). can bind to `alt c`. on `tab` toggle the stage itself / list of entries being added
+try to find a way of displaying the staging area in the preview
+stage should be a file, not an array so that it is easily accessible between different zsh processes
+
+
+- Create script that duplicates a file / dir in place
+
 
 - Add zscript to manually regenerate compdump (if we say, download something with brew and want completions right away)
 

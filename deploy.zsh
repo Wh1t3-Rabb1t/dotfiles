@@ -35,10 +35,10 @@ if [[ "${OSTYPE}" == darwin* ]]; then
     print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
     # Install dependancies
-    print "Installing Homebrew dependancies...\n"
-    command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}macos/Brewfile"
-    print "\n    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+    # print "Installing Homebrew dependancies...\n"
+    # command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}macos/Brewfile"
+    # print "\n    ...done\n"
+    # print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
     # Set macOS defaults
     print "Setting macOS defaults...\n"
@@ -54,8 +54,12 @@ print "Creating required directory tree...\n"
 zf_mkdir -p "${XDG_CONFIG_HOME}"/nvim
 zf_mkdir -p "${XDG_CACHE_HOME}"/{vim/{backup,swap,undo},zsh}
 zf_mkdir -p "${XDG_DATA_HOME}"/{{goenv,jenv,luaenv,nodenv,phpenv,plenv,pyenv,rbenv}/plugins,zsh,man/man1,vim/spell,nvim/site/pack/plugins}
-zf_mkdir -p "${XDG_STATE_HOME}"
+zf_mkdir -p "${XDG_STATE_HOME}"/zsh-vi
 zf_mkdir -p "${HOME}"/.local/{bin,etc}
+
+touch "${XDG_STATE_HOME}/zsh-vi/clipboard_ring"
+touch "${XDG_STATE_HOME}/zsh-vi/staging_area"
+
 print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 

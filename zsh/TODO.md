@@ -10,7 +10,7 @@
 - Create a zsh `stage` to copy or move files / dirs quickly after teleport jumps (save selected absolute path to an array). can bind to `alt c`. on `tab` toggle the stage itself / list of entries being added
 try to find a way of displaying the staging area in the preview
 stage should be a file, not an array so that it is easily accessible between different zsh processes
-
+add a zsh autocommand that echoes the stage contents any time the dir changes while there are entries on the stage
 
 - Create script that duplicates a file / dir in place
 

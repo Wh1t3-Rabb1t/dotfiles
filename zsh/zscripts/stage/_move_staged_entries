@@ -1,0 +1,20 @@
+#!/usr/bin/env zsh
+
+# ---------------------------------------------------------------------------- #
+# Move selected files / dirs from the staging area to the cwd.                 #
+# ---------------------------------------------------------------------------- #
+# Args    : None                                                               #
+# Globals : None                                                               #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
+local -a selection
+selection=( ${(f)"$(<"${ZSH_STAGE}")"} )
+
+# The '--' prevents problems with file names starting with a dash
+mv --interactive --verbose --target-directory "${PWD}" -- "${selection[@]}"
+unset selection
+
+# Clear the staging area
+sed -ni '' "${ZSH_STAGE}"

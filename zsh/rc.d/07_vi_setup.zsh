@@ -256,13 +256,6 @@ zle -N _select_in_word
 
 # CLIPBOARD RING
 # ---------------------------------------------------------------------------- #
-# local VI_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/zsh-vi"
-# local VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard_ring"
-
-# Ensure required dir / file exists
-# [[ ! -d "${VI_STATE_DIR}" ]] && mkdir -p "${VI_STATE_DIR}"
-# [[ ! -f "${VI_CLIPBOARD_RING}" ]] && touch "${VI_CLIPBOARD_RING}"
-
 local function _copy_to_clipboard() {
     emulate -L zsh
     zle vi-yank

@@ -114,6 +114,7 @@ fi
     alias cl="_clear_screen_soft_bottom"
     alias po="_check_for_plugin_updates"
     alias pu="_update_plugins"
+    alias v="_move_staged_entries"
 }
 
 # Needs some testing...

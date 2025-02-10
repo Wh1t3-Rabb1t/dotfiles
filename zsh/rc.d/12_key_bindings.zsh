@@ -29,6 +29,11 @@ bindkey -M viins "^[g" _grep_into_nvim                              # Alt g
 zle -N _preview_files
 bindkey -M viins "^[m" _preview_files                               # Alt m
 
+# Alt a: Add selection to zsh staging area
+zle -N _add_to_stage
+bindkey -M viins "^[a" _add_to_stage                                # Alt a
+
+
 
 # ╭─────────────────────────╮
 # │ EMPTY LINE KEY BINDINGS │

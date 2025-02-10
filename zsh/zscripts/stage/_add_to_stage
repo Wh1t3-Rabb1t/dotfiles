@@ -9,37 +9,26 @@
 
 emulate -L zsh
 
-local HEADER_A="󰐃 Add selection to the stage. <Tab> : Show staging area."
-local HEADER_B="󰐃 Remove selection from the stage. <Tab> : Resume search."
-local PROMPT_A="Concealing .  "
-local PROMPT_B="Displaying .  "
-
 local selection=$( \
     fd \
-        --type=file \
+        --absolute-path \
         --color=always \
-    | fzf \
-        --multi \
-        --header=$HEADER_A \
-        --header-border=top \
-        --prompt=$PROMPT_A \
-        --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
-            && echo \
-                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                    fd \
-                        --type=file \
-                        --color=always \
-                )" \
-            || echo \
-                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                    fd \
-                        --type=file \
-                        --hidden \
-                        --color=always \
-                )"' \
+    | fzf --multi \
 )
 
-if [[ "$selection" ]]; then
-    nvim $(echo "$selection" | tr '\n' ' ')
-fi
+[[ "${selection}" ]] && echo "${selection}" >> "${ZSH_STAGE}"
+
+# if [[ "${selection}" ]]; then
+#     echo "${selection}" >> "${ZSH_STAGE}"
+# fi
+
+
+
+
+
+
+# local HEADER_A="󰐃 Add selection to the stage. <Tab> : Show staging area."
+# local HEADER_B="󰐃 Remove selection from the stage. <Tab> : Resume search."
+# local PROMPT_A="Concealing .  "
+# local PROMPT_B="Displaying .  "
 

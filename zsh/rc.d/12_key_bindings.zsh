@@ -17,9 +17,9 @@ bindkey -M viins "^[r" _rename_fzf                                  # Alt r
 zle -N _find_files
 bindkey -M viins "^[f" _find_files                                  # Alt f
 
-# Alt s: Find and open neovim sessions
+# Alt a: Find and open neovim sessions
 zle -N _find_vim_sessions
-bindkey -M viins "^[s" _find_vim_sessions                           # Alt s
+bindkey -M viins "^[a" _find_vim_sessions                           # Alt a
 
 # Alt g: Grep term and open with neovim
 zle -N _grep_into_nvim
@@ -28,11 +28,6 @@ bindkey -M viins "^[g" _grep_into_nvim                              # Alt g
 # Alt m: Preview files with bat
 zle -N _preview_files
 bindkey -M viins "^[m" _preview_files                               # Alt m
-
-# Alt a: Add selection to zsh staging area
-zle -N _add_to_stage
-bindkey -M viins "^[a" _add_to_stage                                # Alt a
-
 
 
 # ╭─────────────────────────╮

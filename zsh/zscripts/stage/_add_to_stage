@@ -4,25 +4,65 @@
 # Add selected files / dirs to the staging area.                               #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
-# Globals : None                                                               #
+# Globals :                                                                    #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
 
 local selection=$( \
-    fd \
-        --absolute-path \
-        --color=always \
+    fd --color=always \
     | fzf --multi \
 )
 
-[[ "${selection}" ]] && echo "${selection}" >> "${ZSH_STAGE}"
+if [[ -n "$selection" ]]; then
+    local entries=""
+    local arrow="\e[0m\e[33m=>\e[m"
 
-# if [[ "${selection}" ]]; then
-#     echo "${selection}" >> "${ZSH_STAGE}"
+    # The (f) flag splits $selection into an array on newlines
+    for file in ${(f)selection}; do
+        local absolute_file="${file:A}"
+
+        # Only append if the file is not already in $ZSH_STAGE
+        if ! grep -Fxq "$absolute_file" "${ZSH_STAGE}"; then
+            echo "$absolute_file" >> "${ZSH_STAGE}"
+            entries+="  ${arrow} ${file}"$'\n'
+        fi
+    done
+    unset file
+
+    if [[ -n "$entries" ]]; then
+        entries=${entries%$'\n'}
+        echo "Added to the staging area:"
+        echo "$entries"
+    fi
+fi
+
+
+
+##########################################
+
+# if [[ -n "$selection" ]]; then
+#     local entries=""
+#     local arrow="\e[0m\e[33m=>\e[m"
+
+#     # The (f) flag splits "$selection" into an array on newlines
+#     for file in ${(f)selection}; do
+#         local absolute_file="${file:A}"
+
+#         # Only append if the file is not already in ZSH_STAGE
+#         if ! grep -Fxq "$absolute_file" "${ZSH_STAGE}"; then
+#             echo "$absolute_file" >> "${ZSH_STAGE}"
+#             entries+="  ${arrow} ${file}"$'\n'
+#         fi
+#     done
+#     unset file
+
+#     if [[ -n "$entries" ]]; then
+#         entries=${entries%$'\n'}
+#         echo "Added to the staging area:"
+#         echo "$entries"
+#     fi
 # fi
-
-
 
 
 

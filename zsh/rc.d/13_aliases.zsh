@@ -114,7 +114,9 @@ fi
     alias cl="_clear_screen_soft_bottom"
     alias po="_check_for_plugin_updates"
     alias pu="_update_plugins"
-    alias v="_move_staged_entries"
+    alias st="_add_to_stage"
+    alias sm="_move_staged_entries"
+    alias se="echo -e ${ZSH_STAGED_ENTRIES}"
 }
 
 # Needs some testing...

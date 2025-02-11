@@ -14,7 +14,6 @@ selection=( ${(f)"$(<"${ZSH_STAGE}")"} )
 
 # The '--' prevents problems with file names starting with a dash
 mv --interactive --verbose --target-directory "${PWD}" -- "${selection[@]}"
-unset selection
 
 # Clear the staging area
 sed -ni '' "${ZSH_STAGE}"

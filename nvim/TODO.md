@@ -11,10 +11,10 @@
 
 - Finish configuring fzf lua
 
+- Bind alt c in visual mode to copy visual selection to the qt list
 
 
-
-
+- Fix line jump bindings (op pending not working for i and k)
 
 
 

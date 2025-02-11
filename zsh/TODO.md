@@ -4,6 +4,8 @@
 
 - NVIM: create autocommand to turn off wrap if buffer width is < 80
 
+- Update zplugin update script to dump plugins, re clone, and re compile before pushing
+
 - Find a way to cache dirs that contain Session.vim files (store in an array and update when Session files are created or moved to Trash)
 - Setup autoenv for python as an intro to envs
 
@@ -11,6 +13,22 @@
 try to find a way of displaying the staging area in the preview
 stage should be a file, not an array so that it is easily accessible between different zsh processes
 add a zsh autocommand that echoes the stage contents any time the dir changes while there are entries on the stage
+
+- make sure the stage is clear when launching a new zsh instance (the app not a new process)
+
+- Need to wrangle this. currently when changing dir if no command was entered (i.e using right arrow to cd down one dir) the echo gets put on the command line
+```bash
+# Do something when the cwd changes
+function chpwd() {
+    echo "hello"
+}
+```
+
+- update vi mode `gv` with this:
+zle-line-pre-redraw
+       Executed whenever the input line is about to be redrawn, providing an opportunity to update the region_highlight array.
+
+
 
 - Create script that duplicates a file / dir in place
 

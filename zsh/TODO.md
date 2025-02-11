@@ -13,6 +13,9 @@
 try to find a way of displaying the staging area in the preview
 stage should be a file, not an array so that it is easily accessible between different zsh processes
 add a zsh autocommand that echoes the stage contents any time the dir changes while there are entries on the stage
+- tab toggles onto the stage where entries can be removed
+
+- sync stage aliases with broot internals
 
 - make sure the stage is clear when launching a new zsh instance (the app not a new process)
 

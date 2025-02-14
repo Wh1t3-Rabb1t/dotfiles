@@ -53,6 +53,9 @@ function M.config()
             prev_selection = "R",
             keymaps = {
                 ["W"] = "textsubjects-smart",
+                [";"] = false,
+                [","] = false,
+                ["."] = false,
             }
         }
     })

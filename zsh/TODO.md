@@ -15,6 +15,8 @@ stage should be a file, not an array so that it is easily accessible between dif
 add a zsh autocommand that echoes the stage contents any time the dir changes while there are entries on the stage
 - tab toggles onto the stage where entries can be removed
 
+- when the stage is focused use the --keep-right flag to ensure the file names are showing if the terminal pane is narrower than the path length
+
 - sync stage aliases with broot internals
 
 - make sure the stage is clear when launching a new zsh instance (the app not a new process)

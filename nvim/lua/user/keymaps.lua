@@ -337,6 +337,7 @@ nvmap("j",             "J")                      -- Join lines
 -- `f` and `/` SEARCH
 --------------------------------------------------------------------------------
 nvmap("h",             ",")                      -- Prev f search result
+nvmap(";",             ";")                      -- Prev f search result
 nvmap("Y",             "mnN")                    -- Prev / search result
 nvmap("V",             "mnn")                    -- Next / search result
 nmap("?",              km.toggle_search_hl)      -- Toggle search highlights

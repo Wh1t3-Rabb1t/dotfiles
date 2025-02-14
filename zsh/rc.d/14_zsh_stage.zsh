@@ -48,6 +48,26 @@ local HEADER_B="󱪢 Remove selection from the stage. <Tab> : Resume search."
 local PROMPT_A="Staging .  "
 local PROMPT_B="Removing .  "
 
+local TOGGLE_STAGING_AREA='
+    if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
+        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always)"
+    else
+        echo "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
+    fi
+'
+
+local UNSTAGE='
+    if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
+        echo "execute(
+            sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE'
+        )+reload(
+            cat '$ZSH_STAGE'
+        )"
+    else
+        echo "backward-delete-char"
+    fi
+'
+
 local function _add_to_staging_area() {
     local selection=$( \
         fd --color=always \
@@ -56,17 +76,8 @@ local function _add_to_staging_area() {
             --header=$HEADER_A \
             --header-border=top \
             --prompt=$PROMPT_A \
-            --bind='tab:transform:[[ ! $FZF_PROMPT =~ Staging ]] \
-                && echo \
-                    "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                        fd --color=always \
-                    )" \
-                || echo \
-                    "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                        cat "$ZSH_STAGE" \
-                    )"' \
-                --bind='del:execute([[ ! $FZF_PROMPT =~ Staging ]] \
-                    && sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '"$ZSH_STAGE"')+reload(cat "$ZSH_STAGE")' \
+            --bind="tab:transform:$TOGGLE_STAGING_AREA" \
+            --bind="backspace:transform:$UNSTAGE" \
     )
 
     [[ ! -n "$selection" ]] && return
@@ -118,15 +129,49 @@ local function _move_staged_entries() {
     mv --interactive --verbose --target-directory "$PWD" -- "${selection[@]}"
 
     # Clear the staging area
-    sed -ni '' "$ZSH_STAGE"
+    > "$ZSH_STAGE"
 }
 alias sm="_move_staged_entries"
 
 
 
+# sed -ni '' "$ZSH_STAGE"
 
 
 ###################################################
+
+
+# local unstage='del:execute([[ ! $FZF_PROMPT =~ Staging ]] && sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '"$ZSH_STAGE"')+reload(cat "$ZSH_STAGE")'
+
+# --bind='tab:transform:[[ ! $FZF_PROMPT =~ Staging ]] \
+#     && echo \
+#         "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
+#             fd --color=always \
+#         )" \
+#     || echo \
+#         "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
+#             cat "$ZSH_STAGE" \
+#         )"' \
+# --bind='del:execute([[ ! $FZF_PROMPT =~ Staging ]] \
+#     && sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")+reload( \
+#         cat "$ZSH_STAGE" \
+#     )' \
+
+
+
+# --bind='del:execute([[ ! $FZF_PROMPT =~ Staging ]] \
+#     && sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')' \
+
+
+# local TRANSFORMER='
+#     [[ ! $FZF_PROMPT =~ Staging ]] \
+#         && echo \
+#             "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always)" \
+#         || echo \
+#             "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
+# '
+
+
 
 # local function _add_to_staging_area() {
 #     local selection=$( \

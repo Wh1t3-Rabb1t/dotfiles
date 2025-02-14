@@ -58,6 +58,7 @@ zf_mkdir -p "${XDG_STATE_HOME}"/zsh-vi
 zf_mkdir -p "${HOME}"/.local/{bin,etc}
 touch "${XDG_STATE_HOME}/zsh-vi/clipboard_ring"
 touch "${XDG_STATE_HOME}/zsh-vi/staging_area"
+touch "${XDG_STATE_HOME}/zsh-vi/log"
 print "    ...done\n"
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 

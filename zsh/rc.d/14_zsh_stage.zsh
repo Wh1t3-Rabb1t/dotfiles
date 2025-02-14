@@ -56,17 +56,24 @@ local TOGGLE_STAGING_AREA='
     fi
 '
 
-local UNSTAGE='
-    if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
-        echo "execute(
-            sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE'
-        )+reload(
-            cat '$ZSH_STAGE'
-        )"
-    else
-        echo "backward-delete-char"
-    fi
-'
+
+
+# for item in {+}; do
+#     echo "$item" >> "$ZSH_VI_LOG"
+#     echo "execute(sed -i "$(grep -Fxn -- '$item' '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
+# done
+# unset item
+
+
+# for log in "$ZSH_VI_LOG"; do
+#     echo "execute(sed -i "$(grep -Fxn -- '$log' '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
+# done
+# unset log
+
+
+#
+# NEED TO CREATE STAGE SWAP FILE GREP FOR THE INDEXES ONE BY ONE (USE A WHILE LOOP, WHILE ENTRIES REMAIN UNMATCHED IN SWAP FILE)
+#
 
 local function _add_to_staging_area() {
     local selection=$( \
@@ -77,7 +84,23 @@ local function _add_to_staging_area() {
             --header-border=top \
             --prompt=$PROMPT_A \
             --bind="tab:transform:$TOGGLE_STAGING_AREA" \
-            --bind="backspace:transform:$UNSTAGE" \
+            --bind='backspace:transform:(
+                if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
+                    if (( "$FZF_SELECT_COUNT" > 1 )); then
+
+                        for item in {+}; do
+                            trimmed_item="${item//$'\n'/}"
+                            echo "$(grep -Fxn -- "$trimmed_item" "$ZSH_STAGE" | cut -d: -f1)" >> "$ZSH_VI_LOG"
+                        done
+                        unset item
+
+                    else
+                        echo "execute(sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
+                    fi
+                else
+                    echo "backward-delete-char"
+                fi
+            )'
     )
 
     [[ ! -n "$selection" ]] && return
@@ -98,7 +121,6 @@ local function _add_to_staging_area() {
         #     --quiet
         if ! grep -Fxq "$absolute_path" "$ZSH_STAGE"; then
             echo "$absolute_path" >> "$ZSH_STAGE"
-            unset absolute_path
 
             local icon
             [[ -d "$item" ]] && icon="\033[38;5;75m  \033[m" \
@@ -107,6 +129,7 @@ local function _add_to_staging_area() {
             entries+="${icon} ${item}"$'\n'
             unset icon
         fi
+        unset absolute_path
     done
     unset item
 
@@ -139,6 +162,84 @@ alias sm="_move_staged_entries"
 
 
 ###################################################
+
+
+
+# while IFS= read -r item; do
+#     echo "execute(sed -i "$(grep -Fxn -- "$item" '$ZSH_STAGE' | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
+# done <<< "{+}"
+
+# echo "execute(sed -i "$(grep -Fxn -- '${item}' '$ZSH_STAGE' | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
+
+# for item in ${+}; do
+#     echo "$item" >> "$ZSH_VI_LOG"
+#     echo "execute(sed -i "$(grep -Fxn -- "$item" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')"
+# done
+# unset item
+
+
+# for item in ${+}; do
+#     echo "$item" >> "$ZSH_VI_LOG"
+#     echo "execute(sed -i "$(grep -Fxn -- "$item" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')"
+# done
+# unset item
+
+# echo "reload(cat '$ZSH_STAGE')"
+
+
+
+# local UNSTAGE='
+#     if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
+#         if (( "$FZF_SELECT_COUNT" > 1 )); then
+
+#             for item in {+}; do
+#                 echo "$item" >> "$ZSH_VI_LOG"
+#                 echo "execute(sed -i "$(grep -Fxn -- '$item' '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')"
+#             done
+#             unset item
+
+#         else
+#             echo "execute(sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
+#         fi
+#     else
+#         echo "backward-delete-char"
+#     fi
+# '
+
+# echo "execute(sed -i "$(grep -Fxn -- "$item" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")"
+
+# --bind='backspace:transform:(
+#     if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
+#         if (( "$FZF_SELECT_COUNT" > 1 )); then
+
+#             for item in {+}; do
+#                 echo "$item" >> "$ZSH_VI_LOG"
+#                 echo "execute(sed -i "$(grep -Fxn -- {q} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")"
+#                 echo "execute(sed -i "$(grep -Fxn -- "${item//$'\n'/}" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")"
+#             done
+#             unset item
+
+#         else
+#             echo "execute(sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")+reload(cat "$ZSH_STAGE")"
+#         fi
+#     else
+#         echo "backward-delete-char"
+#     fi
+# )'
+
+
+
+# local UNSTAGE='
+#     if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
+#         echo "execute(
+#             sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE'
+#         )+reload(
+#             cat '$ZSH_STAGE'
+#         )"
+#     else
+#         echo "backward-delete-char"
+#     fi
+# '
 
 
 # local unstage='del:execute([[ ! $FZF_PROMPT =~ Staging ]] && sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '"$ZSH_STAGE"')+reload(cat "$ZSH_STAGE")'

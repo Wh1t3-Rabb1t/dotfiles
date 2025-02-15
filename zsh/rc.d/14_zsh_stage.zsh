@@ -14,7 +14,7 @@ function chpwd() {
         local file_icon="\033[38;5;189m  \033[m ~"
 
         echo -e "\nCurrently staged:"
-        awk -F'/' -v file_icon="$file_icon" -v dir_icon="$dir_icon" '
+        awk -F '/' -v file_icon="$file_icon" -v dir_icon="$dir_icon" '
             BEGIN { OFS=FS }
             {
                 # Build the target path starting from field 4 if available
@@ -43,9 +43,13 @@ function chpwd() {
 
 # ADD SELECTED ITEMS TO THE STAGING AREA
 # ---------------------------------------------------------------------------- #
+
+local SUB_HEADER_HIDDEN_STATE="<Btab>  : Show hidden."
+
 local HEADER_A=" Select items to stage.
 <Tab>   : Show staging area.
 <Enter> : Add selection to the staging area.
+$SUB_HEADER_HIDDEN_STATE
 "
 
 local HEADER_B="󱪢 Remove selection from the stage.
@@ -58,7 +62,7 @@ local PROMPT_B="Removing  "
 
 local TOGGLE_STAGING_AREA='
     if [[ "$FZF_PROMPT" != "Staging  " ]]; then
-        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always --hidden)"
+        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always)"
     else
         echo "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
     fi
@@ -68,19 +72,18 @@ local STAGE_OR_UNSTAGE='
     if [[ "$FZF_PROMPT" != "Staging  " ]]; then
         if (( "$FZF_SELECT_COUNT" > 1 )); then
             local marked_items
+
             for item in {+}; do
                 local line="$(grep -Fxn -- "${item//$'\n'/}" "$ZSH_STAGE" | cut -d: -f1)"
                 marked_items="${marked_items}${line}d;"
                 unset line
             done
-            unset item
 
             sed -i "$marked_items" "$ZSH_STAGE"
-            unset marked_items
-
             echo "reload(cat "$ZSH_STAGE")"
         else
-            echo "execute(sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | cut -d: -f1)d" "$ZSH_STAGE")+reload(cat "$ZSH_STAGE")"
+            local line="$(grep -Fxn -- {} "$ZSH_STAGE" | cut -d: -f1)"
+            echo "execute(sed -i "${line}d" "$ZSH_STAGE")+reload(cat "$ZSH_STAGE")"
         fi
     else
         echo "accept-non-empty"
@@ -88,14 +91,20 @@ local STAGE_OR_UNSTAGE='
 '
 
 
+# local TOGGLE_HIDDEN='
+#     if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+#         SUB_HEADER_HIDDEN_STATE="<Btab>  : Conceal hidden."
+#         echo "change-header('$HEADER_A')+reload(fd --color=always --hidden)"
+#     fi
+# '
+# --bind="btab:transform:$TOGGLE_HIDDEN" \
+
 # TODO: add a toggle for hidden files, and a toggle for cwd / entire dir tree
 
 
 local function _add_to_staging_area() {
     local selection=$( \
-        fd \
-            --color=always \
-            --hidden \
+        fd --color=always \
         | fzf \
             --multi \
             --header=$HEADER_A \
@@ -155,10 +164,6 @@ local function _move_staged_entries() {
     mv --interactive --verbose --target-directory "$PWD" -- "${selection[@]}"
 
     # Clear the staging area
-    > "$ZSH_STAGE"
+    sed -ni '' "$ZSH_STAGE"
 }
 alias sm="_move_staged_entries"
-
-
-
-# sed -ni '' "$ZSH_STAGE"

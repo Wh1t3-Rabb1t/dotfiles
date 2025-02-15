@@ -9,17 +9,11 @@
 - Find a way to cache dirs that contain Session.vim files (store in an array and update when Session files are created or moved to Trash)
 - Setup autoenv for python as an intro to envs
 
-- Create a zsh `stage` to copy or move files / dirs quickly after teleport jumps (save selected absolute path to an array). can bind to `alt c`. on `tab` toggle the stage itself / list of entries being added
-try to find a way of displaying the staging area in the preview
-stage should be a file, not an array so that it is easily accessible between different zsh processes
-add a zsh autocommand that echoes the stage contents any time the dir changes while there are entries on the stage
-- tab toggles onto the stage where entries can be removed
 
 - when the stage is focused use the --keep-right flag to ensure the file names are showing if the terminal pane is narrower than the path length
-
 - sync stage aliases with broot internals
-
 - make sure the stage is clear when launching a new zsh instance (the app not a new process)
+- Create script that duplicates a file / dir in place
 
 - Need to wrangle this. currently when changing dir if no command was entered (i.e using right arrow to cd down one dir) the echo gets put on the command line
 ```bash
@@ -35,7 +29,6 @@ zle-line-pre-redraw
 
 
 
-- Create script that duplicates a file / dir in place
 
 
 - Add zscript to manually regenerate compdump (if we say, download something with brew and want completions right away)

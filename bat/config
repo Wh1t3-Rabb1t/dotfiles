@@ -26,4 +26,4 @@
 
 --style=numbers
 --color=always
---line-range=0:200
+--line-range=0:1000

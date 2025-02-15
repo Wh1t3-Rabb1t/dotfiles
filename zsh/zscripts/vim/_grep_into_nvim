@@ -9,6 +9,31 @@
 
 emulate -L zsh
 
+export TEMP=$(mktemp -u)
+trap 'rm -f "$TEMP"' EXIT
+
+INITIAL_QUERY="${*:-}"
+TRANSFORMER='
+    rg_pat={q:1}     # The first word is passed to ripgrep
+    fzf_pat={q:2..}  # The rest are passed to fzf
+
+    if ! [[ -r "$TEMP" ]] || [[ $rg_pat != $(cat "$TEMP") ]]; then
+        echo "$rg_pat" > "$TEMP"
+        printf "reload:sleep 0.1; rg --column --line-number --no-heading --color=always --smart-case %q || true" "$rg_pat"
+    fi
+    echo "+search:$fzf_pat"
+'
+fzf --disabled --query "$INITIAL_QUERY" \
+    --bind="start,change:transform:$TRANSFORMER" \
+    --header=" Open line. Rg searches first word, Fzf everything after." \
+    --header-border=top \
+    --preview='bat --color=always {1} --highlight-line {2}' \
+    --preview-window='right,border-left,<88(up:50%,border-bottom),+{2}+3/3,~3' \
+    --delimiter=: \
+    --bind='enter:become(nvim {1} +{2})'
+
+
+
 # local HEADER_A=" Open line. <Tab> : Switch to Fzf."
 # local HEADER_B=" Open line. <Tab> : Switch to Rg."
 # local PROMPT_A="Rg  "
@@ -35,29 +60,3 @@ emulate -L zsh
 #     --preview='bat --color=always {1} --highlight-line {2}' \
 #     --preview-window='+{2}+3/3,~3' \
 #     --bind='enter:become(${EDITOR} {1} +{2})'
-
-
-
-# could possibly bind space to change the prompt (check if there are space chars in the buffer)
-
-export TEMP=$(mktemp -u)
-trap 'rm -f "$TEMP"' EXIT
-
-INITIAL_QUERY="${*:-}"
-TRANSFORMER='
-    rg_pat={q:1}     # The first word is passed to ripgrep
-    fzf_pat={q:2..}  # The rest are passed to fzf
-
-    if ! [[ -r "$TEMP" ]] || [[ $rg_pat != $(cat "$TEMP") ]]; then
-        echo "$rg_pat" > "$TEMP"
-        printf "reload:sleep 0.1; rg --column --line-number --no-heading --color=always --smart-case %q || true" "$rg_pat"
-    fi
-    echo "+search:$fzf_pat"
-'
-fzf --disabled --query "$INITIAL_QUERY" \
-    --bind="start,change:transform:$TRANSFORMER" \
-    --header=" Open line. Rg searches first word, Fzf everything else." \
-    --header-border=top \
-    --preview='bat --color=always {1} --highlight-line {2}' \
-    --delimiter=: \
-    --bind='enter:become(nvim {1} +{2})'

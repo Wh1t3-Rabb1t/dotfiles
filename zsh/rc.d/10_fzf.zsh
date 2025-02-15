@@ -39,7 +39,7 @@ fg:#585b70,\
 gutter:#313244,\
 current-bg:#313244,\
 current-fg:#7f849c,\
-hl:reverse:#870005,\
+hl:reverse:#960006,\
 current-hl:#f38ba8:underline,\
 prompt:#cdd6f4,\
 pointer:#cdd6f4,\
@@ -75,7 +75,7 @@ local FZF_PREVIEW="\
         --color {} \
     | less)) \
 || echo {} 2> /dev/null \
-| head -200"
+| head -1000"
 
 export FZF_DEFAULT_OPTS="\
 --bind='$FZF_KEY_BINDINGS' \
@@ -102,7 +102,7 @@ local RG_COMMAND="rg \
 --follow"
 
 local FD_COMMAND="fd \
---type file \
+--type=file \
 --hidden \
 --follow \
 --color=always"

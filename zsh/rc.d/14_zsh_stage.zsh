@@ -43,101 +43,104 @@ function chpwd() {
 
 # ADD SELECTED ITEMS TO THE STAGING AREA
 # ---------------------------------------------------------------------------- #
-local HEADER_A=" Add selection to the stage. <Tab> : Show staging area."
-local HEADER_B="󱪢 Remove selection from the stage. <Tab> : Resume search."
-local PROMPT_A="Staging .  "
-local PROMPT_B="Removing .  "
+local HEADER_A=" Select items to stage.
+<Tab>   : Show staging area.
+<Enter> : Add selection to the staging area.
+"
+
+local HEADER_B="󱪢 Remove selection from the stage.
+<Tab>   : Resume search.
+<Enter> : Remove selection from the staging area.
+"
+
+local PROMPT_A="Staging  "
+local PROMPT_B="Removing  "
 
 local TOGGLE_STAGING_AREA='
-    if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
-        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always)"
+    if [[ "$FZF_PROMPT" != "Staging  " ]]; then
+        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always --hidden)"
     else
         echo "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
     fi
 '
 
+local STAGE_OR_UNSTAGE='
+    if [[ "$FZF_PROMPT" != "Staging  " ]]; then
+        if (( "$FZF_SELECT_COUNT" > 1 )); then
+            local marked_items
+            for item in {+}; do
+                local line="$(grep -Fxn -- "${item//$'\n'/}" "$ZSH_STAGE" | cut -d: -f1)"
+                marked_items="${marked_items}${line}d;"
+                unset line
+            done
+            unset item
+
+            sed -i "$marked_items" "$ZSH_STAGE"
+            unset marked_items
+
+            echo "reload(cat "$ZSH_STAGE")"
+        else
+            echo "execute(sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | cut -d: -f1)d" "$ZSH_STAGE")+reload(cat "$ZSH_STAGE")"
+        fi
+    else
+        echo "accept-non-empty"
+    fi
+'
 
 
-# for item in {+}; do
-#     echo "$item" >> "$ZSH_VI_LOG"
-#     echo "execute(sed -i "$(grep -Fxn -- '$item' '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
-# done
-# unset item
+# TODO: add a toggle for hidden files, and a toggle for cwd / entire dir tree
 
-
-# for log in "$ZSH_VI_LOG"; do
-#     echo "execute(sed -i "$(grep -Fxn -- '$log' '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
-# done
-# unset log
-
-
-#
-# NEED TO CREATE STAGE SWAP FILE GREP FOR THE INDEXES ONE BY ONE (USE A WHILE LOOP, WHILE ENTRIES REMAIN UNMATCHED IN SWAP FILE)
-#
 
 local function _add_to_staging_area() {
     local selection=$( \
-        fd --color=always \
+        fd \
+            --color=always \
+            --hidden \
         | fzf \
             --multi \
             --header=$HEADER_A \
             --header-border=top \
             --prompt=$PROMPT_A \
             --bind="tab:transform:$TOGGLE_STAGING_AREA" \
-            --bind='backspace:transform:(
-                if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
-                    if (( "$FZF_SELECT_COUNT" > 1 )); then
-
-                        for item in {+}; do
-                            trimmed_item="${item//$'\n'/}"
-                            echo "$(grep -Fxn -- "$trimmed_item" "$ZSH_STAGE" | cut -d: -f1)" >> "$ZSH_VI_LOG"
-                        done
-                        unset item
-
-                    else
-                        echo "execute(sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
-                    fi
-                else
-                    echo "backward-delete-char"
-                fi
-            )'
+            --bind="enter:transform:$STAGE_OR_UNSTAGE" \
     )
 
-    [[ ! -n "$selection" ]] && return
+    if [[ -n "$selection" ]]; then
+        local entries=""
 
-    # The (f) flag splits $selection into an array on newlines
-    local entries=""
-    for item in ${(f)selection}; do
+        # The (f) flag splits $selection into an array delimited by line breaks
+        for item in ${(f)selection}; do
 
-        # Preserve trailing slash if present
-        local absolute_path
-        [[ "$item" == */ ]] && absolute_path="${item:A}/" \
-            || absolute_path="${item:A}"
+            # Preserve trailing slash if present
+            local absolute_path
+            [[ "$item" == */ ]] && absolute_path="${item:A}/" \
+                || absolute_path="${item:A}"
 
-        # Only append if the file is not already in $ZSH_STAGE
-        # Grep flags:
-        #     --fixed-strings
-        #     --line-regexp
-        #     --quiet
-        if ! grep -Fxq "$absolute_path" "$ZSH_STAGE"; then
-            echo "$absolute_path" >> "$ZSH_STAGE"
+            # Only append if the file is not already in $ZSH_STAGE
+            # Grep flags:
+            #     --fixed-strings
+            #     --line-regexp
+            #     --quiet
+            if ! grep -Fxq "$absolute_path" "$ZSH_STAGE"; then
+                echo "$absolute_path" >> "$ZSH_STAGE"
 
-            local icon
-            [[ -d "$item" ]] && icon="\033[38;5;75m  \033[m" \
-                || icon="\033[38;5;189m  \033[m"
+                local icon
+                [[ -d "$item" ]] && icon="\033[38;5;75m  \033[m" \
+                    || icon="\033[38;5;189m  \033[m"
 
-            entries+="${icon} ${item}"$'\n'
-            unset icon
-        fi
-        unset absolute_path
-    done
-    unset item
+                entries+="${icon} ${item}"$'\n'
+                unset icon
+            fi
+            unset absolute_path
+        done
+        unset item
+    fi
 
-    [[ ! -n "$entries" ]] && return
-
-    entries=${entries%$'\n'}
-    echo -e "\nAdded to the staging area:"
-    echo -e "$entries"
+    if [[ -n "$entries" ]]; then
+        entries="${entries%$'\n'}"
+        echo -e "\nAdded to the staging area:"
+        echo -e "$entries"
+    fi
 }
 alias st="_add_to_staging_area"
 
@@ -159,166 +162,3 @@ alias sm="_move_staged_entries"
 
 
 # sed -ni '' "$ZSH_STAGE"
-
-
-###################################################
-
-
-
-# while IFS= read -r item; do
-#     echo "execute(sed -i "$(grep -Fxn -- "$item" '$ZSH_STAGE' | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
-# done <<< "{+}"
-
-# echo "execute(sed -i "$(grep -Fxn -- '${item}' '$ZSH_STAGE' | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
-
-# for item in ${+}; do
-#     echo "$item" >> "$ZSH_VI_LOG"
-#     echo "execute(sed -i "$(grep -Fxn -- "$item" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')"
-# done
-# unset item
-
-
-# for item in ${+}; do
-#     echo "$item" >> "$ZSH_VI_LOG"
-#     echo "execute(sed -i "$(grep -Fxn -- "$item" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')"
-# done
-# unset item
-
-# echo "reload(cat '$ZSH_STAGE')"
-
-
-
-# local UNSTAGE='
-#     if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
-#         if (( "$FZF_SELECT_COUNT" > 1 )); then
-
-#             for item in {+}; do
-#                 echo "$item" >> "$ZSH_VI_LOG"
-#                 echo "execute(sed -i "$(grep -Fxn -- '$item' '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')"
-#             done
-#             unset item
-
-#         else
-#             echo "execute(sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')"
-#         fi
-#     else
-#         echo "backward-delete-char"
-#     fi
-# '
-
-# echo "execute(sed -i "$(grep -Fxn -- "$item" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")"
-
-# --bind='backspace:transform:(
-#     if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
-#         if (( "$FZF_SELECT_COUNT" > 1 )); then
-
-#             for item in {+}; do
-#                 echo "$item" >> "$ZSH_VI_LOG"
-#                 echo "execute(sed -i "$(grep -Fxn -- {q} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")"
-#                 echo "execute(sed -i "$(grep -Fxn -- "${item//$'\n'/}" "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")"
-#             done
-#             unset item
-
-#         else
-#             echo "execute(sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")+reload(cat "$ZSH_STAGE")"
-#         fi
-#     else
-#         echo "backward-delete-char"
-#     fi
-# )'
-
-
-
-# local UNSTAGE='
-#     if [[ "$FZF_PROMPT" != "Staging .  " ]]; then
-#         echo "execute(
-#             sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE'
-#         )+reload(
-#             cat '$ZSH_STAGE'
-#         )"
-#     else
-#         echo "backward-delete-char"
-#     fi
-# '
-
-
-# local unstage='del:execute([[ ! $FZF_PROMPT =~ Staging ]] && sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" '"$ZSH_STAGE"')+reload(cat "$ZSH_STAGE")'
-
-# --bind='tab:transform:[[ ! $FZF_PROMPT =~ Staging ]] \
-#     && echo \
-#         "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-#             fd --color=always \
-#         )" \
-#     || echo \
-#         "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-#             cat "$ZSH_STAGE" \
-#         )"' \
-# --bind='del:execute([[ ! $FZF_PROMPT =~ Staging ]] \
-#     && sed -i "$(grep -Fxn -- {} "$ZSH_STAGE" | head -n1 | cut -d: -f1)d" "$ZSH_STAGE")+reload( \
-#         cat "$ZSH_STAGE" \
-#     )' \
-
-
-
-# --bind='del:execute([[ ! $FZF_PROMPT =~ Staging ]] \
-#     && sed -i "$(grep -Fxn -- {} '$ZSH_STAGE' | head -n1 | cut -d: -f1)d" '$ZSH_STAGE')+reload(cat '$ZSH_STAGE')' \
-
-
-# local TRANSFORMER='
-#     [[ ! $FZF_PROMPT =~ Staging ]] \
-#         && echo \
-#             "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always)" \
-#         || echo \
-#             "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
-# '
-
-
-
-# local function _add_to_staging_area() {
-#     local selection=$( \
-#         fd --color=always \
-#         | fzf --multi \
-#     )
-
-#     if [[ -n "$selection" ]]; then
-#         local entries=""
-
-#         # The (f) flag splits $selection into an array on newlines
-#         for item in ${(f)selection}; do
-
-#             # Preserve trailing slash if present (if path is a directory)
-#             local path
-#             [[ "$item" == */ ]] && path="${item:A}/" || path="${item:A}"
-
-#             # if [[ "$item" == */ ]]; then
-#             #     path="${item:A}/"
-#             # else
-#             #     path="${item:A}"
-#             # fi
-
-
-#             if ! grep -Fxq "$path" "${ZSH_STAGE}"; then
-#                 echo "$path" >> "${ZSH_STAGE}"
-#                 unset path
-
-#                 local icon
-#                 if [[ -d "$item" ]]; then
-#                     icon="\033[38;5;75m  \033[m"
-#                 else
-#                     icon="\033[38;5;189m  \033[m"
-#                 fi
-
-#                 entries+="${icon} ${item}"$'\n'
-#                 unset icon
-#             fi
-#         done
-#         unset item
-
-#         if [[ -n "$entries" ]]; then
-#             entries=${entries%$'\n'}
-#             echo -e "\nAdded to the staging area:"
-#             echo -e "$entries"
-#         fi
-#     fi
-# }
-

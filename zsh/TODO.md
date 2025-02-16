@@ -15,12 +15,13 @@
 - make sure the stage is clear when launching a new zsh instance (the app not a new process)
 - Create script that duplicates a file / dir in place
 
-- Need to wrangle this. currently when changing dir if no command was entered (i.e using right arrow to cd down one dir) the echo gets put on the command line
+- Need to wrangle this.
 ```bash
-# Do something when the cwd changes
-function chpwd() {
-    echo "hello"
-}
+# With 'change-nth'. The current nth option is exported as $FZF_NTH.
+ps -ef | fzf --reverse --header-lines 1 --header-border bottom --input-border \
+           --color nth:regular,fg:dim \
+           --bind 'ctrl-n:change-nth(8..|1|2|3|4|5|6|7|)' \
+           --bind 'result:transform-prompt:echo "${FZF_NTH}> "'
 ```
 
 - update vi mode `gv` with this:

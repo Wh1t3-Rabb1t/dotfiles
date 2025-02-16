@@ -44,12 +44,25 @@ function chpwd() {
 # ADD SELECTED ITEMS TO THE STAGING AREA
 # ---------------------------------------------------------------------------- #
 
-local SUB_HEADER_HIDDEN_STATE="<Btab>  : Show hidden."
+# TODO: add a toggle for hidden files, and a toggle for cwd / entire dir tree
+
+# echo "change-header('"$HEADER_A"')+reload(fd)"
+# echo "change-header('"$HEADER_A"')+reload(fd --hidden)"
+
+
+# TODO: set binding to combo actions. first create the file flag. then call the constructor case statement
+
+
+# example of action chaining
+# --bind="alt-_:transform:$TOGGLE_HIDDEN+$TOGGLE_STAGING_AREA" \
+
+
 
 local HEADER_A=" Select items to stage.
 <Tab>   : Show staging area.
 <Enter> : Add selection to the staging area.
-$SUB_HEADER_HIDDEN_STATE
+<Alt-_> : Toggle hidden.
+<Alt-'> : Toggle cwd/full tree.
 "
 
 local HEADER_B="󱪢 Remove selection from the stage.
@@ -62,14 +75,14 @@ local PROMPT_B="Removing  "
 
 local TOGGLE_STAGING_AREA='
     if [[ "$FZF_PROMPT" != "Staging  " ]]; then
-        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd --color=always)"
+        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd)"
     else
         echo "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
     fi
 '
 
 local STAGE_OR_UNSTAGE='
-    if [[ "$FZF_PROMPT" != "Staging  " ]]; then
+    if [[ "$FZF_PROMPT" == "Removing  " ]]; then
         if (( "$FZF_SELECT_COUNT" > 1 )); then
             local marked_items
 
@@ -90,29 +103,52 @@ local STAGE_OR_UNSTAGE='
     fi
 '
 
-
-# local TOGGLE_HIDDEN='
-#     if [[ "$FZF_PROMPT" == "Staging  " ]]; then
-#         SUB_HEADER_HIDDEN_STATE="<Btab>  : Conceal hidden."
-#         echo "change-header('$HEADER_A')+reload(fd --color=always --hidden)"
-#     fi
-# '
-# --bind="btab:transform:$TOGGLE_HIDDEN" \
-
-# TODO: add a toggle for hidden files, and a toggle for cwd / entire dir tree
-
-
 local function _add_to_staging_area() {
+    # Generate a unique state directory using timestamp
+    local FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
+    mkdir -p "$FZF_STATE_DIR"
+    touch "$FZF_STATE_DIR/hidden"
+
+    local TOGGLE_HIDDEN_FLAG='
+        if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+            [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && rm "'"$FZF_STATE_DIR"'/hidden" \
+                || touch "'"$FZF_STATE_DIR"'/hidden"
+        fi
+    '
+
+    local RELOAD_OPTS='
+        if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+            local HEADER_VALUE FD_VALUE
+            case "$(test -e "'"$FZF_STATE_DIR"'/hidden" && echo hidden || echo nohidden)" in
+                hidden)
+                    HEADER_VALUE="Hide hidden."
+                    FD_VALUE="fd"
+                    ;;
+                nohidden)
+                    HEADER_VALUE="Show hidden."
+                    FD_VALUE="fd --hidden"
+                    ;;
+            esac
+            echo "change-header('\$HEADER_VALUE')+reload('\$FD_VALUE')"
+        fi
+    '
+
     local selection=$( \
-        fd --color=always \
+        fd \
+            --hidden \
         | fzf \
             --multi \
+            --prompt=$PROMPT_A \
             --header=$HEADER_A \
             --header-border=top \
-            --prompt=$PROMPT_A \
+            --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
             --bind="tab:transform:$TOGGLE_STAGING_AREA" \
             --bind="enter:transform:$STAGE_OR_UNSTAGE" \
     )
+
+    [[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
+    # after selection confirmed...
+
 
     if [[ -n "$selection" ]]; then
         local entries=""
@@ -167,3 +203,32 @@ local function _move_staged_entries() {
     sed -ni '' "$ZSH_STAGE"
 }
 alias sm="_move_staged_entries"
+
+
+
+
+###################################################################
+
+
+# local RELOAD_OPTS='
+#     if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+#         if [[ -e "'"$FZF_STATE_DIR"'/hidden" ]]; then
+#             echo "change-header("Hide hidden.")+reload(fd)"
+#         else
+#             echo "change-header("Show hidden.")+reload(fd --hidden)"
+#         fi
+#     fi
+# '
+
+
+
+# local TOGGLE_HIDDEN_FLAG='
+#     if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+#         if [[ -e "'"$FZF_STATE_DIR"'/hidden" ]]; then
+#             rm "'"$FZF_STATE_DIR"'/hidden"
+#         else
+#             touch "'"$FZF_STATE_DIR"'/hidden"
+#         fi
+#     fi
+# '
+

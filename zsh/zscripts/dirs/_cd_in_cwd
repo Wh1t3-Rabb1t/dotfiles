@@ -43,7 +43,6 @@ local selection=$( \
 )
 
 if [[ "$selection" ]]; then
-    cd "$selection"
+    BUFFER="cd "$selection""
     zle accept-line
 fi
-

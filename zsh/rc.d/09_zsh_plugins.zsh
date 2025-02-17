@@ -5,6 +5,7 @@
 #  /___|___/_| |_| | .__/|_|\__,_|\__, |_|_| |_|___/
 # =================|_|============|___/======================================= #
 
+
 # ZSH-Z
 # ---------------------------------------------------------------------------- #
 # XDG compliance
@@ -51,4 +52,18 @@ bindkey -M viins '^[[A' history-substring-search-down
 # ---------------------------------------------------------------------------- #
 if (( ${+commands[broot]} )); then
     source "${DOTFILES}/broot/launcher/bash/br"
+fi
+
+
+# VIVID
+# ---------------------------------------------------------------------------- #
+if (( ${+commands[vivid]} )); then
+    export LS_COLORS="$(vivid generate solarized-dark)"
+
+    # Also nice:
+    # export LS_COLORS="$(vivid generate solarized-light)"
+    # export LS_COLORS="$(vivid generate tokyonight-moon)"
+    # export LS_COLORS="$(vivid generate tokyonight-night)"
+    # export LS_COLORS="$(vivid generate tokyonight-storm)"
+    # export LS_COLORS="$(vivid generate ayu)"
 fi

@@ -9,40 +9,97 @@
 
 emulate -L zsh
 
-local HEADER_A=" Cd into directory. <Tab> : Expand tree."
-local HEADER_B=" Cd into directory. <Tab> : Collapse tree."
-local PROMPT_A="Displaying cwd  "
-local PROMPT_B="Displaying all  "
+local FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
+mkdir -p "$FZF_STATE_DIR"
+
+local HEADER_A=" Cd into directory.
+Alt _ : Show dotfiles.
+Alt ' : Expand dir tree."
+
+local TOGGLE_HIDDEN_FLAG='
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
+        && rm "'"$FZF_STATE_DIR"'/hidden" \
+        || touch "'"$FZF_STATE_DIR"'/hidden"
+'
+
+local TOGGLE_CWD_FLAG='
+    [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] \
+        && rm "'"$FZF_STATE_DIR"'/cwd" \
+        || touch "'"$FZF_STATE_DIR"'/cwd"
+'
+
+local RELOAD_OPTS='
+    local FD_CMD="fd --type=directory --max-depth=1 --color=always"
+    local SEARCH_HEADER="'"$HEADER_A"'"
+
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
+        SEARCH_HEADER="${SEARCH_HEADER/Show dotfiles./Hide dotfiles.}" \
+        FD_CMD+=" --hidden"
+
+    [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] && \
+        SEARCH_HEADER="${SEARCH_HEADER/Expand dir tree./Collapse dir tree.}" \
+        FD_CMD="${FD_CMD/ --max-depth=1}"
+
+    echo "change-header('\$SEARCH_HEADER')+reload('\$FD_CMD')"
+'
 
 local selection=$( \
     fd \
-        --max-depth=1 \
         --type=directory \
-        --hidden \
+        --max-depth=1 \
         --color=always \
     | fzf \
         --header=$HEADER_A \
         --header-border=top \
-        --prompt=$PROMPT_A \
-        --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
-            && echo \
-                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                    fd \
-                        --max-depth=1 \
-                        --type=directory \
-                        --hidden \
-                        --color=always \
-                )" \
-            || echo \
-                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                    fd \
-                        --type=directory \
-                        --hidden \
-                        --color=always \
-                )"' \
+        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
+        --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
 )
+
+# Cleanup fzf state directory on exit
+[[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
 
 if [[ "$selection" ]]; then
     BUFFER="cd "$selection""
     zle accept-line
 fi
+
+
+###############################################################
+
+# local HEADER_A=" Cd into directory. <Tab> : Expand tree."
+# local HEADER_B=" Cd into directory. <Tab> : Collapse tree."
+# local PROMPT_A="Displaying cwd  "
+# local PROMPT_B="Displaying all  "
+
+# local selection=$( \
+#     fd \
+#         --max-depth=1 \
+#         --type=directory \
+#         --hidden \
+#         --color=always \
+#     | fzf \
+#         --header=$HEADER_A \
+#         --header-border=top \
+#         --prompt=$PROMPT_A \
+#         --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
+#             && echo \
+#                 "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
+#                     fd \
+#                         --max-depth=1 \
+#                         --type=directory \
+#                         --hidden \
+#                         --color=always \
+#                 )" \
+#             || echo \
+#                 "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
+#                     fd \
+#                         --type=directory \
+#                         --hidden \
+#                         --color=always \
+#                 )"' \
+# )
+
+# if [[ "$selection" ]]; then
+#     BUFFER="cd "$selection""
+#     zle accept-line
+# fi

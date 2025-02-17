@@ -59,20 +59,23 @@ Tab   : Resume search.
 Enter : Remove selection from the staging area."
 
     local TOGGLE_STAGING_AREA='
-        [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]] && rm "'"$FZF_STATE_DIR"'/stage_focused" \
+        [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]] \
+            && rm -f "'"$FZF_STATE_DIR"'/stage_focused" \
             || touch "'"$FZF_STATE_DIR"'/stage_focused"
     '
 
     local TOGGLE_HIDDEN_FLAG='
         if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
-            [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && rm "'"$FZF_STATE_DIR"'/hidden" \
+            [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
+                && rm "'"$FZF_STATE_DIR"'/hidden" \
                 || touch "'"$FZF_STATE_DIR"'/hidden"
         fi
     '
 
     local TOGGLE_CWD_FLAG='
         if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
-            [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] && rm "'"$FZF_STATE_DIR"'/cwd" \
+            [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] \
+                && rm "'"$FZF_STATE_DIR"'/cwd" \
                 || touch "'"$FZF_STATE_DIR"'/cwd"
         fi
     '
@@ -82,7 +85,7 @@ Enter : Remove selection from the staging area."
             local STAGE_HEADER="'"$HEADER_B"'"
             echo "change-header('\$STAGE_HEADER')+reload(cat '"$ZSH_STAGE"')"
         else
-            local FD_CMD="fd --max-depth=1"
+            local FD_CMD="fd --max-depth=1 --color=always"
             local SEARCH_HEADER="'"$HEADER_A"'"
 
             [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
@@ -122,6 +125,7 @@ Enter : Remove selection from the staging area."
     local selection=$( \
         fd \
             --max-depth=1 \
+            --color=always \
         | fzf \
             --multi \
             --header=$HEADER_A \
@@ -147,15 +151,12 @@ Enter : Remove selection from the staging area."
                 || absolute_path="${item:A}"
 
             # Only append the path if it's not already in $ZSH_STAGE
-            # Grep flags:
-            #     --fixed-strings
-            #     --line-regexp
-            #     --quiet
             if ! grep -Fxq "$absolute_path" "$ZSH_STAGE"; then
                 echo "$absolute_path" >> "$ZSH_STAGE"
 
                 local icon
-                [[ -d "$item" ]] && icon="\033[38;5;75m  \033[m" \
+                [[ -d "$item" ]] \
+                    && icon="\033[38;5;75m  \033[m" \
                     || icon="\033[38;5;189m  \033[m"
 
                 entries+="${icon} ${item}"$'\n'

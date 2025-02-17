@@ -45,7 +45,11 @@ function chpwd() {
 # ---------------------------------------------------------------------------- #
 local function _open_zsh_stage() {
     # Generate a unique state directory using timestamp
-    local FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
+    local FZF_STATE_DIR
+    (( ${+commands[gdate]} )) \
+        && FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(gdate +%Y%m%d%H%M%S%6N)" \
+        || FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
+
     mkdir -p "$FZF_STATE_DIR"
 
     local HEADER_A=" Select items to stage.
@@ -67,7 +71,7 @@ Enter : Remove selection from the staging area."
     local TOGGLE_HIDDEN_FLAG='
         if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
             [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
-                && rm "'"$FZF_STATE_DIR"'/hidden" \
+                && rm -f "'"$FZF_STATE_DIR"'/hidden" \
                 || touch "'"$FZF_STATE_DIR"'/hidden"
         fi
     '
@@ -75,7 +79,7 @@ Enter : Remove selection from the staging area."
     local TOGGLE_CWD_FLAG='
         if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
             [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] \
-                && rm "'"$FZF_STATE_DIR"'/cwd" \
+                && rm -f "'"$FZF_STATE_DIR"'/cwd" \
                 || touch "'"$FZF_STATE_DIR"'/cwd"
         fi
     '

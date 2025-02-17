@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 # ---------------------------------------------------------------------------- #
-# Fzf cwd and append `mv` and the rename target (x2) to the command line.      #
+# Append `mv` and the rename target (x2) to the command line.                  #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
 # Globals : BUFFER, CURSOR                                                     #
@@ -9,40 +9,103 @@
 
 emulate -L zsh
 
-local selection
+local FZF_STATE_DIR
+(( ${+commands[gdate]} )) \
+    && FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(gdate +%Y%m%d%H%M%S%6N)" \
+    || FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
 
-# Use `eza` over `gls` if available
-if (( ${+commands[eza]} )); then
-    selection=$( \
-        eza \
-            --almost-all \
-            --icons=always \
-            --color=always \
-        | fzf \
-            --header=' Rename target file / directory.' \
-            --header-border=top \
-            --no-preview \
-    )
-elif (( ${+commands[gls]} )); then
-    selection=$( \
-        gls \
-            --almost-all \
-            --group-directories-first \
-            --color \
-        | fzf \
-            --header=' Rename target file / directory.' \
-            --header-border=top \
-            --no-preview \
-    )
-fi
+mkdir -p "$FZF_STATE_DIR"
+
+local HEADER_TEMPLATE=" Rename target file / directory.
+Alt _ : Show dotfiles.
+Alt ' : Expand dir tree."
+
+local TOGGLE_HIDDEN_FLAG='
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
+        && rm -f "'"$FZF_STATE_DIR"'/hidden" \
+        || touch "'"$FZF_STATE_DIR"'/hidden"
+'
+
+local TOGGLE_CWD_FLAG='
+    [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] \
+        && rm -f "'"$FZF_STATE_DIR"'/cwd" \
+        || touch "'"$FZF_STATE_DIR"'/cwd"
+'
+
+local RELOAD_OPTS='
+    local FD_CMD="fd --max-depth=1 --color=always"
+    local HEADER="'"$HEADER_TEMPLATE"'"
+
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
+        HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
+        FD_CMD+=" --hidden"
+
+    [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] && \
+        HEADER="${HEADER/Expand dir tree./Collapse dir tree.}" \
+        FD_CMD="${FD_CMD/ --max-depth=1}"
+
+    echo "change-header('\$HEADER')+reload('\$FD_CMD')"
+'
+
+local selection=$( \
+    fd \
+        --max-depth=1 \
+        --color=always \
+    | fzf \
+        --header=$HEADER_TEMPLATE \
+        --header-border=top \
+        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
+        --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
+)
+
+# Cleanup fzf state directory on exit
+[[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
 
 if [[ "$selection" ]]; then
-    # Remove icons if `eza` was used
-    (( ${+commands[eza]} )) && selection="$(echo "$selection" | sed -E 's/^.{2}//')"
-
     BUFFER="mv $selection $selection"
 
     # Navigate to the start of the second name
     CURSOR=$(( ${#BUFFER} - ${#selection} + 1 ))
     zle vi-cmd-mode
 fi
+
+
+################################################################
+# Alternate version with icons. Probably no point in keeping.
+
+# local selection
+# # Use `eza` over `gls` if available
+# if (( ${+commands[eza]} )); then
+#     selection=$( \
+#         eza \
+#             --almost-all \
+#             --icons=always \
+#             --color=always \
+#         | fzf \
+#             --header=' Rename target file / directory.' \
+#             --header-border=top \
+#             --no-preview \
+#     )
+# elif (( ${+commands[gls]} )); then
+#     selection=$( \
+#         gls \
+#             --almost-all \
+#             --group-directories-first \
+#             --color \
+#         | fzf \
+#             --header=' Rename target file / directory.' \
+#             --header-border=top \
+#             --no-preview \
+#     )
+# fi
+
+# if [[ "$selection" ]]; then
+#     # Remove icons if `eza` was used
+#     (( ${+commands[eza]} )) && selection="$(echo "$selection" | sed -E 's/^.{2}//')"
+
+#     BUFFER="mv $selection $selection"
+
+#     # Navigate to the start of the second name
+#     CURSOR=$(( ${#BUFFER} - ${#selection} + 1 ))
+#     zle vi-cmd-mode
+# fi

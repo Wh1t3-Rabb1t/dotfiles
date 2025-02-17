@@ -118,18 +118,20 @@ local function _add_to_staging_area() {
 
     local RELOAD_OPTS='
         if [[ "$FZF_PROMPT" == "Staging  " ]]; then
-            local HEADER_VALUE FD_VALUE
-            case "$(test -e "'"$FZF_STATE_DIR"'/hidden" && echo hidden || echo nohidden)" in
-                hidden)
-                    HEADER_VALUE="Hide hidden."
-                    FD_VALUE="fd"
-                    ;;
-                nohidden)
-                    HEADER_VALUE="Show hidden."
-                    FD_VALUE="fd --hidden"
-                    ;;
-            esac
-            echo "change-header('\$HEADER_VALUE')+reload('\$FD_VALUE')"
+            local FD_CMD="fd"
+
+            local HEADER_TEMPLATE=" Select items to stage.
+Tab   : Show staging area.
+Enter : Add selection to the staging area.
+Alt h : Show hidden.
+Alt t : Toggle cwd/full tree."
+
+            if [[ -e "'"$FZF_STATE_DIR"'/hidden" ]]; then
+                HEADER_TEMPLATE="${HEADER_TEMPLATE/Alt h : Show hidden./Alt h : Hide hidden.}"
+                FD_CMD+=" --hidden"
+            fi
+
+            echo "change-header('\$HEADER_TEMPLATE')+reload('\$FD_CMD')"
         fi
     '
 

@@ -41,139 +41,99 @@ function chpwd() {
 }
 
 
-# ADD SELECTED ITEMS TO THE STAGING AREA
+# ADD TO / REMOVE FROM THE STAGING AREA
 # ---------------------------------------------------------------------------- #
-
-# TODO: add a toggle for hidden files, and a toggle for cwd / entire dir tree
-
-# echo "change-header('"$HEADER_A"')+reload(fd)"
-# echo "change-header('"$HEADER_A"')+reload(fd --hidden)"
-
-
-# TODO: set binding to combo actions. first create the file flag. then call the constructor case statement
-
-
-# example of action chaining
-# --bind="alt-_:transform:$TOGGLE_HIDDEN+$TOGGLE_STAGING_AREA" \
-
-
-
-
-local HEADER_B="󱪢 Remove selection from the stage.
-<Tab>   : Resume search.
-<Enter> : Remove selection from the staging area.
-"
-
-local PROMPT_A="Staging  "
-local PROMPT_B="Removing  "
-
-local TOGGLE_STAGING_AREA='
-    if [[ "$FZF_PROMPT" != "Staging  " ]]; then
-        echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd)"
-    else
-        echo "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
-    fi
-'
-
-local STAGE_OR_UNSTAGE='
-    if [[ "$FZF_PROMPT" == "Removing  " ]]; then
-        if (( "$FZF_SELECT_COUNT" > 1 )); then
-            local marked_items
-
-            for item in {+}; do
-                local line="$(grep -Fxn -- "${item//$'\n'/}" "$ZSH_STAGE" | cut -d: -f1)"
-                marked_items="${marked_items}${line}d;"
-                unset line
-            done
-
-            sed -i "$marked_items" "$ZSH_STAGE"
-            echo "reload(cat "$ZSH_STAGE")"
-        else
-            local line="$(grep -Fxn -- {} "$ZSH_STAGE" | cut -d: -f1)"
-            echo "execute(sed -i "${line}d" "$ZSH_STAGE")+reload(cat "$ZSH_STAGE")"
-        fi
-    else
-        echo "accept-non-empty"
-    fi
-'
-
-# local HEADER_A=" Select items to stage.
-# <Tab>   : Show staging area.
-# <Enter> : Add selection to the staging area.
-# <Alt-_> : Toggle hidden.
-# <Alt-'> : Toggle cwd/full tree.
-# "
-
-local HEADER_A=" Select items to stage.
-Tab   : Show staging area.
-Enter : Add selection to the staging area.
-Alt h : Show hidden.
-Alt t : Collapse tree."
-
-
-# local HEADER_TEMPLATE=" Select items to stage.
-# Tab   : Show staging area.
-# Enter : Add selection to the staging area.
-# Alt h : Show hidden.
-# Alt t : Toggle cwd/full tree."
-
-
 local function _add_to_staging_area() {
     # Generate a unique state directory using timestamp
     local FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
     mkdir -p "$FZF_STATE_DIR"
-    touch "$FZF_STATE_DIR/hidden"
+
+    local HEADER_A=" Select items to stage.
+Alt _ : Show hidden.
+Alt ' : Show tree.
+Tab   : Show staging area.
+Enter : Add selection to the staging area."
+
+    local HEADER_B="󱪢 Remove selection from the stage.
+Tab   : Resume search.
+Enter : Remove selection from the staging area."
+
+    local TOGGLE_STAGING_AREA='
+        [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]] && rm "'"$FZF_STATE_DIR"'/stage_focused" \
+            || touch "'"$FZF_STATE_DIR"'/stage_focused"
+    '
 
     local TOGGLE_HIDDEN_FLAG='
-        if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+        if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
             [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && rm "'"$FZF_STATE_DIR"'/hidden" \
                 || touch "'"$FZF_STATE_DIR"'/hidden"
         fi
     '
 
     local TOGGLE_CWD_FLAG='
-        if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+        if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
             [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] && rm "'"$FZF_STATE_DIR"'/cwd" \
                 || touch "'"$FZF_STATE_DIR"'/cwd"
         fi
     '
 
     local RELOAD_OPTS='
-        if [[ "$FZF_PROMPT" == "Staging  " ]]; then
-            local FD_CMD="fd"
-
-            local HEADER_TEMPLATE="'"$HEADER_A"'"
+        if [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
+            local STAGE_HEADER="'"$HEADER_B"'"
+            echo "change-header('\$STAGE_HEADER')+reload(cat '"$ZSH_STAGE"')"
+        else
+            local FD_CMD="fd --max-depth=1"
+            local SEARCH_HEADER="'"$HEADER_A"'"
 
             if [[ -e "'"$FZF_STATE_DIR"'/hidden" ]]; then
-                HEADER_TEMPLATE="${HEADER_TEMPLATE/Alt h : Show hidden./Alt h : Hide hidden.}"
+                SEARCH_HEADER="${SEARCH_HEADER/Show hidden./Hide hidden.}"
                 FD_CMD+=" --hidden"
             fi
-
             if [[ -e "'"$FZF_STATE_DIR"'/cwd" ]]; then
-                HEADER_TEMPLATE="${HEADER_TEMPLATE/Alt t : Collapse tree./Alt t : Show tree.}"
-                FD_CMD+=" --max-depth=1"
+                SEARCH_HEADER="${SEARCH_HEADER/Show tree./Collapse tree.}"
+                FD_CMD="${FD_CMD/ --max-depth=1}"
             fi
 
-            echo "change-header('\$HEADER_TEMPLATE')+reload('\$FD_CMD')"
+            echo "change-header('\$SEARCH_HEADER')+reload('\$FD_CMD')"
+        fi
+    '
+
+    local STAGE_OR_UNSTAGE='
+        if [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
+            if (( "$FZF_SELECT_COUNT" > 1 )); then
+                local marked_items
+
+                for item in {+}; do
+                    local line="$(grep -Fxn -- "${item//$'\n'/}" "$ZSH_STAGE" | cut -d: -f1)"
+                    marked_items="${marked_items}${line}d;"
+                    unset line
+                done
+
+                sed -i "$marked_items" "$ZSH_STAGE"
+                echo "reload(cat '"$ZSH_STAGE"')"
+            else
+                local line="$(grep -Fxn -- {} '"$ZSH_STAGE"' | cut -d: -f1)"
+                echo "execute(sed -i "${line}d" '"$ZSH_STAGE"')+reload(cat '"$ZSH_STAGE"')"
+            fi
+        else
+            echo "accept-non-empty"
         fi
     '
 
     local selection=$( \
         fd \
+            --max-depth=1 \
         | fzf \
             --multi \
-            --prompt=$PROMPT_A \
             --header=$HEADER_A \
             --header-border=top \
             --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
             --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
-            --bind="tab:transform:$TOGGLE_STAGING_AREA" \
+            --bind="tab:transform:$TOGGLE_STAGING_AREA+$RELOAD_OPTS" \
             --bind="enter:transform:$STAGE_OR_UNSTAGE" \
     )
 
     [[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
-    # after selection confirmed...
-
 
     if [[ -n "$selection" ]]; then
         local entries=""
@@ -256,4 +216,58 @@ alias sm="_move_staged_entries"
 #         fi
 #     fi
 # '
+
+
+# TODO: add a toggle for hidden files, and a toggle for cwd / entire dir tree
+
+# echo "change-header('"$HEADER_A"')+reload(fd)"
+# echo "change-header('"$HEADER_A"')+reload(fd --hidden)"
+
+
+# TODO: set binding to combo actions. first create the file flag. then call the constructor case statement
+
+
+# example of action chaining
+# --bind="alt-_:transform:$TOGGLE_HIDDEN+$TOGGLE_STAGING_AREA" \
+
+
+
+
+# local HEADER_A=" Select items to stage.
+# <Tab>   : Show staging area.
+# <Enter> : Add selection to the staging area.
+# <Alt-_> : Toggle hidden.
+# <Alt-'> : Toggle cwd/full tree.
+# "
+
+
+
+# local TOGGLE_STAGING_AREA='
+#     if [[ "$FZF_PROMPT" != "Staging  " ]]; then
+#         echo "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload(fd)"
+#     else
+#         echo "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload(cat '$ZSH_STAGE')"
+#     fi
+# '
+
+
+
+# local HEADER_TEMPLATE=" Select items to stage.
+# Tab   : Show staging area.
+# Enter : Add selection to the staging area.
+# Alt h : Show hidden.
+# Alt t : Toggle cwd/full tree."
+
+
+# local TOGGLE_STAGING_AREA='
+#     local PROMPT_A="Staging  "
+#     local PROMPT_B="Removing  "
+
+#     if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+#         echo "change-prompt('\$PROMPT_B')+reload(fd)"
+#     else
+#         echo "change-prompt('\$PROMPT_A')+clear-query"
+#     fi
+# '
+
 

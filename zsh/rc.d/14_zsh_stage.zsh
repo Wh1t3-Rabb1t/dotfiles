@@ -58,12 +58,6 @@ function chpwd() {
 
 
 
-local HEADER_A=" Select items to stage.
-<Tab>   : Show staging area.
-<Enter> : Add selection to the staging area.
-<Alt-_> : Toggle hidden.
-<Alt-'> : Toggle cwd/full tree.
-"
 
 local HEADER_B="󱪢 Remove selection from the stage.
 <Tab>   : Resume search.
@@ -103,6 +97,27 @@ local STAGE_OR_UNSTAGE='
     fi
 '
 
+# local HEADER_A=" Select items to stage.
+# <Tab>   : Show staging area.
+# <Enter> : Add selection to the staging area.
+# <Alt-_> : Toggle hidden.
+# <Alt-'> : Toggle cwd/full tree.
+# "
+
+local HEADER_A=" Select items to stage.
+Tab   : Show staging area.
+Enter : Add selection to the staging area.
+Alt h : Show hidden.
+Alt t : Collapse tree."
+
+
+# local HEADER_TEMPLATE=" Select items to stage.
+# Tab   : Show staging area.
+# Enter : Add selection to the staging area.
+# Alt h : Show hidden.
+# Alt t : Toggle cwd/full tree."
+
+
 local function _add_to_staging_area() {
     # Generate a unique state directory using timestamp
     local FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
@@ -116,19 +131,27 @@ local function _add_to_staging_area() {
         fi
     '
 
+    local TOGGLE_CWD_FLAG='
+        if [[ "$FZF_PROMPT" == "Staging  " ]]; then
+            [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] && rm "'"$FZF_STATE_DIR"'/cwd" \
+                || touch "'"$FZF_STATE_DIR"'/cwd"
+        fi
+    '
+
     local RELOAD_OPTS='
         if [[ "$FZF_PROMPT" == "Staging  " ]]; then
             local FD_CMD="fd"
 
-            local HEADER_TEMPLATE=" Select items to stage.
-Tab   : Show staging area.
-Enter : Add selection to the staging area.
-Alt h : Show hidden.
-Alt t : Toggle cwd/full tree."
+            local HEADER_TEMPLATE="'"$HEADER_A"'"
 
             if [[ -e "'"$FZF_STATE_DIR"'/hidden" ]]; then
                 HEADER_TEMPLATE="${HEADER_TEMPLATE/Alt h : Show hidden./Alt h : Hide hidden.}"
                 FD_CMD+=" --hidden"
+            fi
+
+            if [[ -e "'"$FZF_STATE_DIR"'/cwd" ]]; then
+                HEADER_TEMPLATE="${HEADER_TEMPLATE/Alt t : Collapse tree./Alt t : Show tree.}"
+                FD_CMD+=" --max-depth=1"
             fi
 
             echo "change-header('\$HEADER_TEMPLATE')+reload('\$FD_CMD')"
@@ -137,13 +160,13 @@ Alt t : Toggle cwd/full tree."
 
     local selection=$( \
         fd \
-            --hidden \
         | fzf \
             --multi \
             --prompt=$PROMPT_A \
             --header=$HEADER_A \
             --header-border=top \
             --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
+            --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
             --bind="tab:transform:$TOGGLE_STAGING_AREA" \
             --bind="enter:transform:$STAGE_OR_UNSTAGE" \
     )

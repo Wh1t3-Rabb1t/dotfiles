@@ -4,7 +4,7 @@
 # Cd into a child dir of the cwd.                                              #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
-# Globals : None                                                               #
+# Globals : BUFFER                                                             #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
@@ -63,6 +63,6 @@ local selection=$( \
 [[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
 
 if [[ "$selection" ]]; then
-    BUFFER="cd "$selection""
+    BUFFER="cd ${selection:q}"
     zle accept-line
 fi

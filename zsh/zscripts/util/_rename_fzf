@@ -33,7 +33,7 @@ local TOGGLE_CWD_FLAG='
 '
 
 local RELOAD_OPTS='
-    local FD_CMD="fd --max-depth=1 --color=always"
+    local FD_CMD="fd --max-depth=1 --no-ignore --color=always"
     local HEADER="'"$HEADER_TEMPLATE"'"
 
     [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
@@ -50,6 +50,7 @@ local RELOAD_OPTS='
 local selection=$( \
     fd \
         --max-depth=1 \
+        --no-ignore \
         --color=always \
     | fzf \
         --header=$HEADER_TEMPLATE \
@@ -61,8 +62,8 @@ local selection=$( \
 # Cleanup fzf state directory on exit
 [[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
 
-if [[ "$selection" ]]; then
-    BUFFER="mv $selection $selection"
+if [[ -n "$selection" ]]; then
+    BUFFER="mv ${selection:q} $selection"
 
     # Navigate to the start of the second name
     CURSOR=$(( ${#BUFFER} - ${#selection} + 1 ))

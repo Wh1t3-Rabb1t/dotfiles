@@ -9,10 +9,32 @@
 
 emulate -L zsh
 
-local HEADER_A=" Render markdown. <Tab> : Show dotfiles."
-local HEADER_B=" Render markdown. <Tab> : Hide dotfiles."
-local PROMPT_A="Concealing .  "
-local PROMPT_B="Displaying .  "
+local FZF_STATE_DIR
+(( ${+commands[gdate]} )) \
+    && FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(gdate +%Y%m%d%H%M%S%6N)" \
+    || FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
+
+mkdir -p "$FZF_STATE_DIR"
+
+local HEADER_TEMPLATE=" Render markdown with Glow.
+Alt _ : Show dotfiles."
+
+local TOGGLE_HIDDEN_FLAG='
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
+        && rm -f "'"$FZF_STATE_DIR"'/hidden" \
+        || touch "'"$FZF_STATE_DIR"'/hidden"
+'
+
+local RELOAD_OPTS='
+    local FD_CMD="fd --type=file --extension=md --color=always"
+    local HEADER="'"$HEADER_TEMPLATE"'"
+
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
+        HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
+        FD_CMD+=" --hidden"
+
+    echo "change-header('\$HEADER')+reload('\$FD_CMD')"
+'
 
 local selection=$( \
     fd \
@@ -20,28 +42,13 @@ local selection=$( \
         --extension=md \
         --color=always \
     | fzf \
-        --header=$HEADER_A \
         --header-border=top \
-        --prompt=$PROMPT_A \
-        --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
-            && echo \
-                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                    fd \
-                        --type=file \
-                        --extension=md \
-                        --color=always \
-                )" \
-            || echo \
-                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                    fd \
-                        --type=file \
-                        --hidden \
-                        --extension=md \
-                        --color=always \
-                )"' \
+        --header=$HEADER_TEMPLATE \
+        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
 )
 
-if [[ "$selection" ]]; then
-    local split_width=$(( COLUMNS - 5 ))
-    glow -w "$split_width" "$selection"
-fi
+# Cleanup fzf state directory on exit
+[[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
+
+# Glow markdown
+[[ "$selection" ]] && glow --width $(( COLUMNS - 5 )) "$selection"

@@ -9,40 +9,61 @@
 
 emulate -L zsh
 
-local HEADER_A="󰭟 Preview file with bat. <Tab> : Show dotfiles."
-local HEADER_B="󰭟 Preview file with bat. <Tab> : Hide dotfiles."
-local PROMPT_A="Concealing .  "
-local PROMPT_B="Displaying .  "
+local FZF_STATE_DIR="$(mktemp -d "${VI_STATE_DIR}/fzf_state_XXXXXXXXX")"
+mkdir -p "$FZF_STATE_DIR"
+trap 'rm -rf "$FZF_STATE_DIR"' EXIT
+
+local HEADER_TEMPLATE="󰭟 Preview file with bat.
+Alt _ : Show dotfiles.
+Alt ' : Expand dir tree."
+
+local TOGGLE_HIDDEN_FLAG='
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
+        && rm -f "'"$FZF_STATE_DIR"'/hidden" \
+        || touch "'"$FZF_STATE_DIR"'/hidden"
+'
+
+local TOGGLE_CWD_FLAG='
+    [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] \
+        && rm -f "'"$FZF_STATE_DIR"'/cwd" \
+        || touch "'"$FZF_STATE_DIR"'/cwd"
+'
+
+local RELOAD_OPTS='
+    local FD_CMD="fd --type=file --max-depth=1 --color=always"
+    local HEADER="'"$HEADER_TEMPLATE"'"
+
+    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
+        HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
+        FD_CMD+=" --hidden"
+
+    [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] && \
+        HEADER="${HEADER/Expand dir tree./Collapse dir tree.}" \
+        FD_CMD="${FD_CMD/ --max-depth=1}"
+
+    echo "change-header('\$HEADER')+reload('\$FD_CMD')"
+'
 
 local selection=$( \
     fd \
         --type=file \
+        --max-depth=1 \
         --color=always \
     | fzf \
-        --header=$HEADER_A \
         --header-border=top \
-        --prompt=$PROMPT_A \
-        --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
-            && echo \
-                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                    fd \
-                        --type=file \
-                        --color=always \
-                )" \
-            || echo \
-                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                    fd \
-                        --type=file \
-                        --hidden \
-                        --color=always \
-                )"' \
+        --header=$HEADER_TEMPLATE \
+        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
+        --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
 )
 
-if [[ "$selection" ]]; then
+# Cleanup fzf state directory on exit
+[[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
+
+if [[ -n "$selection" ]]; then
     if (( ${+commands[bat]} )); then
-        print " "; bat --line-range=0:10000 "$selection"; print "\n"
+        print "${selection:t}\n"; bat --line-range=0:10000 "$selection"; print "\n"
     else
-        print " "; cat "$selection"; print "\n"
+        print "${selection:t}\n"; cat "$selection"; print "\n"
     fi
 
     zle redisplay

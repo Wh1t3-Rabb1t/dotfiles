@@ -61,7 +61,6 @@ fi
 export WORKSPACE="${HOME}/workspace"
 export RIPGREP_CONFIG_PATH="${DOTFILES}/ripgrep/config"
 export GIT_CONFIG_GLOBAL="${DOTFILES}/git/config"
-export EZA_CONFIG_DIR="${DOTFILES}/eza"
 export GOPATH="${XDG_DATA_HOME}/go"
 
 # Zsh

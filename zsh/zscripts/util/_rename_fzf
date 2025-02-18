@@ -9,12 +9,9 @@
 
 emulate -L zsh
 
-local FZF_STATE_DIR
-(( ${+commands[gdate]} )) \
-    && FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(gdate +%Y%m%d%H%M%S%6N)" \
-    || FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
-
+local FZF_STATE_DIR="$(mktemp -d "${VI_STATE_DIR}/fzf_state_XXXXXXXXX")"
 mkdir -p "$FZF_STATE_DIR"
+trap 'rm -rf "$FZF_STATE_DIR"' EXIT
 
 local HEADER_TEMPLATE=" Rename target file / directory.
 Alt _ : Show dotfiles.
@@ -33,7 +30,7 @@ local TOGGLE_CWD_FLAG='
 '
 
 local RELOAD_OPTS='
-    local FD_CMD="fd --max-depth=1 --no-ignore --color=always"
+    local FD_CMD="fd --no-ignore --max-depth=1 --color=always"
     local HEADER="'"$HEADER_TEMPLATE"'"
 
     [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
@@ -49,8 +46,8 @@ local RELOAD_OPTS='
 
 local selection=$( \
     fd \
-        --max-depth=1 \
         --no-ignore \
+        --max-depth=1 \
         --color=always \
     | fzf \
         --header=$HEADER_TEMPLATE \
@@ -69,44 +66,3 @@ if [[ -n "$selection" ]]; then
     CURSOR=$(( ${#BUFFER} - ${#selection} + 1 ))
     zle vi-cmd-mode
 fi
-
-
-################################################################
-# Alternate version with icons. Probably no point in keeping.
-
-# local selection
-# # Use `eza` over `gls` if available
-# if (( ${+commands[eza]} )); then
-#     selection=$( \
-#         eza \
-#             --almost-all \
-#             --icons=always \
-#             --color=always \
-#         | fzf \
-#             --header=' Rename target file / directory.' \
-#             --header-border=top \
-#             --no-preview \
-#     )
-# elif (( ${+commands[gls]} )); then
-#     selection=$( \
-#         gls \
-#             --almost-all \
-#             --group-directories-first \
-#             --color \
-#         | fzf \
-#             --header=' Rename target file / directory.' \
-#             --header-border=top \
-#             --no-preview \
-#     )
-# fi
-
-# if [[ "$selection" ]]; then
-#     # Remove icons if `eza` was used
-#     (( ${+commands[eza]} )) && selection="$(echo "$selection" | sed -E 's/^.{2}//')"
-
-#     BUFFER="mv $selection $selection"
-
-#     # Navigate to the start of the second name
-#     CURSOR=$(( ${#BUFFER} - ${#selection} + 1 ))
-#     zle vi-cmd-mode
-# fi

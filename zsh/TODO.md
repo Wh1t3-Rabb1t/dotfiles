@@ -9,6 +9,8 @@
 - Find a way to cache dirs that contain Session.vim files (store in an array and update when Session files are created or moved to Trash)
 - Setup autoenv for python as an intro to envs
 
+- drop unnecessary find_and_goto_dir script and replace hyphen empty line binding with something else
+
 
 - when the stage is focused use the --keep-right flag to ensure the file names are showing if the terminal pane is narrower than the path length
 - sync stage aliases with broot internals

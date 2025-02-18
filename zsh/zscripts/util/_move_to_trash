@@ -9,12 +9,9 @@
 
 emulate -L zsh
 
-local FZF_STATE_DIR
-(( ${+commands[gdate]} )) \
-    && FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(gdate +%Y%m%d%H%M%S%6N)" \
-    || FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
-
+local FZF_STATE_DIR="$(mktemp -d "${VI_STATE_DIR}/fzf_state_XXXXXXXXX")"
 mkdir -p "$FZF_STATE_DIR"
+trap 'rm -rf "$FZF_STATE_DIR"' EXIT
 
 local HEADER_TEMPLATE=" Trash selection.
 Alt _ : Show dotfiles.
@@ -65,10 +62,17 @@ local selection=$( \
 
 if [[ -n "$selection" ]]; then
     local target="$(echo "$selection" | tr '\n' ' ')"
-    BUFFER="mv -i -v ${target:q}~/.Trash/"
+    BUFFER="mv -i -v "$target" ~/.Trash/"
     CURSOR=${#BUFFER}
     zle redisplay
 fi
+
+# if [[ -n "$selection" ]]; then
+#     local target="$(echo "$selection" | tr '\n' ' ')"
+#     BUFFER="mv -i -v ${target:q} ~/.Trash/"
+#     CURSOR=${#BUFFER}
+#     zle redisplay
+# fi
 
 
 

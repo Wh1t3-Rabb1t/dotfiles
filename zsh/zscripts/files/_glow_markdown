@@ -17,16 +17,16 @@ local HEADER_TEMPLATE=" Render markdown with Glow.
 Alt _ : Show dotfiles."
 
 local TOGGLE_HIDDEN_FLAG='
-    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
-        && rm -f "'"$FZF_STATE_DIR"'/hidden" \
-        || touch "'"$FZF_STATE_DIR"'/hidden"
+    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] \
+        && rm "'"$FZF_STATE_DIR"'/hidden" \
+        || ln -s "" "'"$FZF_STATE_DIR"'/hidden"
 '
 
 local RELOAD_OPTS='
     local FD_CMD="fd --type=file --extension=md --color=always"
     local HEADER="'"$HEADER_TEMPLATE"'"
 
-    [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
+    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] && \
         HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
         FD_CMD+=" --hidden"
 

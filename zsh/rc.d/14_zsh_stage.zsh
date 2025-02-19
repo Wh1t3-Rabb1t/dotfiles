@@ -44,13 +44,9 @@ function chpwd() {
 # ADD TO / REMOVE FROM THE STAGING AREA
 # ---------------------------------------------------------------------------- #
 local function _open_zsh_stage() {
-    # Generate a unique state directory using timestamp
-    local FZF_STATE_DIR
-    (( ${+commands[gdate]} )) \
-        && FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(gdate +%Y%m%d%H%M%S%6N)" \
-        || FZF_STATE_DIR="${VI_STATE_DIR}/fzf_state_$(date +%Y%m%d%H%M%S)"
-
+    local FZF_STATE_DIR="$(mktemp -d "${VI_STATE_DIR}/fzf_state_XXXXXXXXX")"
     mkdir -p "$FZF_STATE_DIR"
+    trap 'rm -rf "$FZF_STATE_DIR"' EXIT
 
     local HEADER_A=" Select items to stage.
 Alt _ : Show dotfiles.
@@ -63,40 +59,40 @@ Tab   : Resume search.
 Enter : Remove selection from the staging area."
 
     local TOGGLE_STAGING_AREA='
-        [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]] \
-            && rm -f "'"$FZF_STATE_DIR"'/stage_focused" \
-            || touch "'"$FZF_STATE_DIR"'/stage_focused"
+        [[ -L "'"$FZF_STATE_DIR"'/stage_focused" ]] \
+            && rm "'"$FZF_STATE_DIR"'/stage_focused" \
+            || ln -s "" "'"$FZF_STATE_DIR"'/stage_focused"
     '
 
     local TOGGLE_HIDDEN_FLAG='
-        if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
-            [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] \
-                && rm -f "'"$FZF_STATE_DIR"'/hidden" \
-                || touch "'"$FZF_STATE_DIR"'/hidden"
+        if [[ ! -L "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
+            [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] \
+                && rm "'"$FZF_STATE_DIR"'/hidden" \
+                || ln -s "" "'"$FZF_STATE_DIR"'/hidden"
         fi
     '
 
     local TOGGLE_CWD_FLAG='
-        if [[ ! -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
-            [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] \
-                && rm -f "'"$FZF_STATE_DIR"'/cwd" \
-                || touch "'"$FZF_STATE_DIR"'/cwd"
+        if [[ ! -L "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
+            [[ -L "'"$FZF_STATE_DIR"'/cwd" ]] \
+                && rm "'"$FZF_STATE_DIR"'/cwd" \
+                || ln -s "" "'"$FZF_STATE_DIR"'/cwd"
         fi
     '
 
     local RELOAD_OPTS='
-        if [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
+        if [[ -L "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
             local STAGE_HEADER="'"$HEADER_B"'"
             echo "change-header('\$STAGE_HEADER')+reload(cat '"$ZSH_STAGE"')"
         else
             local FD_CMD="fd --max-depth=1 --color=always"
             local SEARCH_HEADER="'"$HEADER_A"'"
 
-            [[ -e "'"$FZF_STATE_DIR"'/hidden" ]] && \
+            [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] && \
                 SEARCH_HEADER="${SEARCH_HEADER/Show dotfiles./Hide dotfiles.}" \
                 FD_CMD+=" --hidden"
 
-            [[ -e "'"$FZF_STATE_DIR"'/cwd" ]] && \
+            [[ -L "'"$FZF_STATE_DIR"'/cwd" ]] && \
                 SEARCH_HEADER="${SEARCH_HEADER/Expand dir tree./Collapse dir tree.}" \
                 FD_CMD="${FD_CMD/ --max-depth=1}"
 
@@ -105,7 +101,7 @@ Enter : Remove selection from the staging area."
     '
 
     local STAGE_OR_UNSTAGE='
-        if [[ -e "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
+        if [[ -L "'"$FZF_STATE_DIR"'/stage_focused" ]]; then
             if (( "$FZF_SELECT_COUNT" > 1 )); then
                 local marked_items
 

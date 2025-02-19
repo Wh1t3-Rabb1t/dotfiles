@@ -18,26 +18,26 @@ Alt _ : Show dotfiles.
 Alt ' : Expand dir tree."
 
 local TOGGLE_HIDDEN_FLAG='
-    [[ -d "'"$FZF_STATE_DIR"'/hidden" ]] \
-        && rm -rf "'"$FZF_STATE_DIR"'/hidden" \
-        || mkdir "'"$FZF_STATE_DIR"'/hidden"
+    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] \
+        && rm "'"$FZF_STATE_DIR"'/hidden" \
+        || ln -s "" "'"$FZF_STATE_DIR"'/hidden"
 '
 
 local TOGGLE_CWD_FLAG='
-    [[ -d "'"$FZF_STATE_DIR"'/cwd" ]] \
-        && rm -rf "'"$FZF_STATE_DIR"'/cwd" \
-        || mkdir "'"$FZF_STATE_DIR"'/cwd"
+    [[ -L "'"$FZF_STATE_DIR"'/cwd" ]] \
+        && rm "'"$FZF_STATE_DIR"'/cwd" \
+        || ln -s "" "'"$FZF_STATE_DIR"'/cwd"
 '
 
 local RELOAD_OPTS='
     local FD_CMD="fd --type=directory --max-depth=1 --color=always"
     local HEADER="'"$HEADER_TEMPLATE"'"
 
-    [[ -d "'"$FZF_STATE_DIR"'/hidden" ]] && \
+    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] && \
         HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
         FD_CMD+=" --hidden"
 
-    [[ -d "'"$FZF_STATE_DIR"'/cwd" ]] && \
+    [[ -L "'"$FZF_STATE_DIR"'/cwd" ]] && \
         HEADER="${HEADER/Expand dir tree./Collapse dir tree.}" \
         FD_CMD="${FD_CMD/ --max-depth=1}"
 
@@ -50,8 +50,8 @@ local selection=$( \
         --max-depth=1 \
         --color=always \
     | fzf \
-        --header=$HEADER_TEMPLATE \
         --header-border=top \
+        --header=$HEADER_TEMPLATE \
         --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
         --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
 )

@@ -30,7 +30,7 @@ local selection=$( \
         --no-sort \
 )
 
-if [[ "$selection" ]]; then
+if [[ -n "$selection" ]]; then
     BUFFER="cd ${selection:q}"
     zle accept-line
 fi

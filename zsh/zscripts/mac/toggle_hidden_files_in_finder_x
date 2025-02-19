@@ -9,12 +9,15 @@
 
 emulate -L zsh
 
-local option_state=$(defaults read com.apple.finder AppleShowAllFiles)
+local option_state
+option_state=$(defaults read com.apple.finder AppleShowAllFiles)
 
 if [[ "$option_state" == "True" ]]; then
     defaults write com.apple.finder AppleShowAllFiles False
-else
+    echo -e "\n Hiding dotfiles in macOS Finder."
+elif [[ "$option_state" == "False" ]]; then
     defaults write com.apple.finder AppleShowAllFiles True
+    echo -e "\n Displaying dotfiles in macOS Finder."
 fi
 
 killall Finder

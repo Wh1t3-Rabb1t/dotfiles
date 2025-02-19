@@ -51,8 +51,8 @@ local selection=$( \
         --color=always \
     | fzf \
         --multi \
-        --header=$HEADER_TEMPLATE \
         --header-border=top \
+        --header=$HEADER_TEMPLATE \
         --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
         --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
 )
@@ -61,59 +61,10 @@ local selection=$( \
 [[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
 
 if [[ -n "$selection" ]]; then
-    local target="$(echo "$selection" | tr '\n' ' ')"
-    BUFFER="mv -i -v "$target" ~/.Trash/"
+    # Wrap each selected line with double quotes and join them with a space
+    local target
+    target="$(echo "$selection" | sed 's/^/"/; s/$/"/' | paste -sd ' ')"
+    BUFFER="mv -iv $target ~/.Trash/"
     CURSOR=${#BUFFER}
     zle redisplay
 fi
-
-# if [[ -n "$selection" ]]; then
-#     local target="$(echo "$selection" | tr '\n' ' ')"
-#     BUFFER="mv -i -v ${target:q} ~/.Trash/"
-#     CURSOR=${#BUFFER}
-#     zle redisplay
-# fi
-
-
-
-###############################################################
-
-# local HEADER_A=" Trash selection. <Tab> : Expand tree."
-# local HEADER_B=" Trash selection. <Tab> : Collapse tree."
-# local PROMPT_A="Displaying cwd  "
-# local PROMPT_B="Displaying all  "
-
-# local selection=$( \
-#     fd \
-#         --max-depth=1 \
-#         --no-ignore \
-#         --hidden \
-#         --color=always \
-#     | fzf \
-#         --multi \
-#         --header=$HEADER_A \
-#         --header-border=top \
-#         --prompt=$PROMPT_A \
-#         --bind='tab:transform:[[ ! $FZF_PROMPT =~ cwd ]] \
-#             && echo \
-#                 "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-#                     fd \
-#                         --max-depth=1 \
-#                         --no-ignore \
-#                         --hidden \
-#                         --color=always \
-#                 )" \
-#             || echo \
-#                 "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-#                     fd \
-#                         --no-ignore \
-#                         --hidden \
-#                         --color=always \
-#                 )"' \
-# )
-
-# if [[ "$selection" ]]; then
-#     local target="$(echo "$selection" | tr '\n' ' ')"
-#     BUFFER="mv -i -v ${target}~/.Trash/"
-#     zle redisplay
-# fi

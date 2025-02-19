@@ -60,9 +60,11 @@ local selection=$( \
 [[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
 
 if [[ -n "$selection" ]]; then
-    BUFFER="mv ${selection:q} $selection"
+    local target
+    target="$(echo "$selection" | sed 's/^/"/; s/$/"/')"
+    BUFFER="mv $target $target"
 
     # Navigate to the start of the second name
-    CURSOR=$(( ${#BUFFER} - ${#selection} + 1 ))
+    CURSOR=$(( ${#BUFFER} - ${#selection} ))
     zle vi-cmd-mode
 fi

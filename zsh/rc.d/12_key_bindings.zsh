@@ -21,6 +21,10 @@ bindkey -M viins "^[f" _find_files                                  # Alt f
 zle -N _grep_into_nvim
 bindkey -M viins "^[g" _grep_into_nvim                              # Alt g
 
+# Alt a: Grep term and open with neovim
+zle -N _find_vim_sessions
+bindkey -M viins "^[a" _find_vim_sessions                           # Alt a
+
 # Alt m: Preview files with bat
 zle -N _preview_files
 bindkey -M viins "^[m" _preview_files                               # Alt m

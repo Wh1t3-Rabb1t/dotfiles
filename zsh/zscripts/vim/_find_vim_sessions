@@ -4,7 +4,7 @@
 # Search for Vim sessions, cd to parent dir, and open selected session.        #
 # ---------------------------------------------------------------------------- #
 # Args    : None                                                               #
-# Globals : None                                                               #
+# Globals : BUFFER                                                             #
 # ---------------------------------------------------------------------------- #
 
 emulate -L zsh
@@ -43,6 +43,7 @@ Alt r : Reload results."
 local selection=$(
     cat "$vim_sessions" \
     | fzf \
+        --keep-right \
         --header-border=top \
         --header=$HEADER \
         --bind="alt-r:reload(cat "$vim_sessions")"
@@ -54,6 +55,7 @@ if [[ -n "$selection" ]]; then
         return
     fi
 
-    cd -- "$selection"
+    BUFFER="cd ${selection:q}"
+    zle accept-line
     nvim -S
 fi

@@ -25,8 +25,8 @@ TRANSFORMER='
 '
 fzf --disabled --query "$INITIAL_QUERY" \
     --bind="start,change:transform:$TRANSFORMER" \
-    --header=" Open line. Rg searches first word, Fzf everything after." \
     --header-border=top \
+    --header=" Open line. Rg searches first word, Fzf everything after." \
     --preview='bat --color=always {1} --highlight-line {2}' \
     --preview-window='right,border-left,<88(up:50%,border-bottom),+{2}+3/3,~3' \
     --delimiter=: \

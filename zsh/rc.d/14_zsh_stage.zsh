@@ -122,7 +122,7 @@ Enter : Remove selection from the staging area."
         fi
     '
 
-    local selection=$( \
+    local selection=$(
         fd \
             --max-depth=1 \
             --color=always \

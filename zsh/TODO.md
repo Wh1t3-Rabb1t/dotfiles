@@ -1,18 +1,17 @@
 # TODO
 
 - Dropping karabiner. Link no longer exists in deploy script
-
+- Setup autoenv for python as an intro to envs
 - NVIM: create autocommand to turn off wrap if buffer width is < 80
 
-- Update zplugin update script to dump plugins, re clone, and re compile before pushing
-
-- Find a way to cache dirs that contain Session.vim files (store in an array and update when Session files are created or moved to Trash)
-- Setup autoenv for python as an intro to envs
-
 - drop unnecessary find_and_goto_dir script and replace hyphen empty line binding with something else
-
 - make sure the stage is clear when launching a new zsh instance (the app not a new process)
 - Create script that duplicates a file / dir in place
+
+- Update zplugin update script to dump plugins, re clone, and re compile before pushing
+- Add zscript to manually regenerate compdump (if we say, download something with brew and want completions right away)
+- Add checks for os type when using `pbpaste` in scripts
+
 
 - Need to wrangle this.
 ```bash
@@ -38,11 +37,6 @@ fd
        deterministic sort order.
 
 
-
-
-- Add zscript to manually regenerate compdump (if we say, download something with brew and want completions right away)
-
-- Add checks for os type when using `pbpaste` in scripts
 - Add a check to ensure that luarocks is installed before initializing luacheck
 
 - Hammerspoon:
@@ -53,7 +47,6 @@ fd
 
 
 - Configure vimium-c
-
 - Ascii art: https://emojicombos.com/batman-ascii-art
 
 

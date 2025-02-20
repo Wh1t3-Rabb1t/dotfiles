@@ -11,9 +11,6 @@
 
 - drop unnecessary find_and_goto_dir script and replace hyphen empty line binding with something else
 
-
-- when the stage is focused use the --keep-right flag to ensure the file names are showing if the terminal pane is narrower than the path length
-- sync stage aliases with broot internals
 - make sure the stage is clear when launching a new zsh instance (the app not a new process)
 - Create script that duplicates a file / dir in place
 
@@ -30,6 +27,15 @@ ps -ef | fzf --reverse --header-lines 1 --header-border bottom --input-border \
 zle-line-pre-redraw
        Executed whenever the input line is about to be redrawn, providing an opportunity to update the region_highlight array.
 
+
+- maybe use this in some scripts
+fd
+-l, --list-details
+       Use a detailed listing format like 'ls -l'. This is
+       basically an alias for '--exec-batch ls -l' with some
+       additional 'ls' options. This can be used to see more
+       metadata, to show symlink targets and to achieve a
+       deterministic sort order.
 
 
 
@@ -49,6 +55,21 @@ zle-line-pre-redraw
 - Configure vimium-c
 
 - Ascii art: https://emojicombos.com/batman-ascii-art
+
+
+---
+
+## zsh man page index
+
+1   User commands (executables in /bin, /usr/bin)
+2   System calls (kernel-level functions, e.g., open(), read())
+3   Library functions (C standard library, e.g., printf(), malloc())
+4   Special files (e.g., /dev/null, /proc)
+5   File formats and configuration files (e.g., /etc/passwd, crontab)
+6   Games and screensavers
+7   Miscellaneous (e.g., man 7 regex explains regex syntax)
+8   System administration commands (requires root, e.g., mount, iptables)
+9   Kernel internal APIs (used for kernel development)
 
 ---
 

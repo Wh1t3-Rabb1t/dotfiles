@@ -128,8 +128,9 @@ Enter : Remove selection from the staging area."
             --color=always \
         | fzf \
             --multi \
-            --header=$HEADER_A \
+            --keep-right \
             --header-border=top \
+            --header=$HEADER_A \
             --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
             --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
             --bind="tab:transform:$TOGGLE_STAGING_AREA+$RELOAD_OPTS" \

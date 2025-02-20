@@ -17,10 +17,6 @@ bindkey -M viins "^[r" _rename_fzf                                  # Alt r
 zle -N _find_files
 bindkey -M viins "^[f" _find_files                                  # Alt f
 
-# Alt a: Find and open neovim sessions
-zle -N _find_vim_sessions
-bindkey -M viins "^[a" _find_vim_sessions                           # Alt a
-
 # Alt g: Grep term and open with neovim
 zle -N _grep_into_nvim
 bindkey -M viins "^[g" _grep_into_nvim                              # Alt g

@@ -9,24 +9,51 @@
 
 emulate -L zsh
 
-pushd ~
+local vim_sessions="${VI_STATE_DIR}/vim_sessions"
+local vim_session_swap="${VI_STATE_DIR}/vim_session_swap"
+[[ ! -f "$vim_sessions" ]] && touch "$vim_sessions"
+[[ ! -f "$vim_session_swap" ]] && touch "$vim_session_swap"
 
-local selection=$( \
-    fd Session.vim \
-        --format={//} \
-        --fixed-strings \
-        --extension=.vim \
-        --hidden \
-        --no-ignore \
-        --exclude=.cache \
+(
+    local verify_sessions=$(
+        fd Session.vim \
+            --search-path=$HOME \
+            --extension=.vim \
+            --exclude=.cache \
+            --fixed-strings \
+            --hidden \
+            --no-ignore \
+            --absolute-path \
+            --format={//} \
+    )
+
+    if [[ -n "$verify_sessions" ]]; then
+        # Ensure results are sorted
+        echo "$verify_sessions" | sort > "$vim_session_swap"
+
+        if ! cmp -s "$vim_session_swap" "$vim_sessions"; then
+            cp "$vim_session_swap" "$vim_sessions"
+        fi
+    fi
+) &> /dev/null &!
+
+local HEADER=" Open session.
+Alt r : Reload results."
+
+local selection=$(
+    cat "$vim_sessions" \
     | fzf \
-        --header=' Launch Vim session.' \
         --header-border=top \
+        --header=$HEADER \
+        --bind="alt-r:reload(cat "$vim_sessions")"
 )
 
-if [[ -z "$selection" ]]; then
-    popd
-else
-    cd "$selection"
-    command nvim -S
+if [[ -n "$selection" ]]; then
+    if [[ ! -e "${selection}/Session.vim" ]]; then
+        echo -e "\nSession file was deleted. Relaunch for updated list."
+        return
+    fi
+
+    cd -- "$selection"
+    nvim -S
 fi

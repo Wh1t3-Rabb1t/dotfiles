@@ -1,7 +1,5 @@
 # SHELL SCRIPT
 
----
-
 # Basic Operators
 
 ## Arithmetic Operators --------------------------------------------------------

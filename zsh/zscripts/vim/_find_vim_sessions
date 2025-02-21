@@ -17,9 +17,10 @@ local vim_session_swap="${VI_STATE_DIR}/vim_session_swap"
 (
     local verify_sessions=$(
         fd Session.vim \
-            --search-path=$HOME \
             --extension=.vim \
+            --search-path=$HOME \
             --exclude=.cache \
+            --exclude=Library \
             --fixed-strings \
             --hidden \
             --no-ignore \
@@ -49,13 +50,8 @@ local selection=$(
         --bind="alt-r:reload(cat "$vim_sessions")"
 )
 
-if [[ -n "$selection" ]]; then
-    if [[ ! -e "${selection}/Session.vim" ]]; then
-        echo -e "\nSession file was deleted. Relaunch for updated list."
-        return
-    fi
-
+if [[ -n "$selection" && -e "${selection}/Session.vim" ]]; then
     BUFFER="cd ${selection:q}"
     zle accept-line
-    nvim -S
+    nvim -S "${selection}/Session.vim"
 fi

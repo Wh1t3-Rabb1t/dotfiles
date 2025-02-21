@@ -1,5 +1,13 @@
 # TODO
 
+
+- !! The reason the embedded fzf script wasn't working was because the file variables were scoped outside of the fzf subscript
+
+- Change echo calls to printf
+- Add checks for os type when using `pbpaste` in scripts
+
+- Consider changing enter binding back to broot launcher
+
 - Dropping karabiner. Link no longer exists in deploy script
 - Setup autoenv for python as an intro to envs
 - NVIM: create autocommand to turn off wrap if buffer width is < 80
@@ -10,7 +18,6 @@
 
 - Update zplugin update script to dump plugins, re clone, and re compile before pushing
 - Add zscript to manually regenerate compdump (if we say, download something with brew and want completions right away)
-- Add checks for os type when using `pbpaste` in scripts
 
 
 - Need to wrangle this.

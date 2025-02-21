@@ -9,12 +9,31 @@
 
 emulate -L zsh
 
-pushd "$ZDOTDIR"
+local FZF_STATE_DIR="$(mktemp -d "${VI_STATE_DIR}/fzf_state_XXXXXXXXX")"
+mkdir -p "$FZF_STATE_DIR"
+trap 'rm -rf "$FZF_STATE_DIR"' EXIT
 
-local HEADER_A=" Zsh help pages. <Tab> : Show dotfiles."
-local HEADER_B=" Zsh help pages. <Tab> : Hide dotfiles."
-local PROMPT_A="Concealing .  "
-local PROMPT_B="Displaying .  "
+local HEADER_TEMPLATE=" Zsh help pages.
+Alt _ : Show dotfiles."
+
+local TOGGLE_HIDDEN_FLAG='
+    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] \
+        && rm "'"$FZF_STATE_DIR"'/hidden" \
+        || ln -s "" "'"$FZF_STATE_DIR"'/hidden"
+'
+
+local RELOAD_OPTS='
+    local FD_CMD="fd --type=file --extension=md --color=always"
+    local HEADER="'"$HEADER_TEMPLATE"'"
+
+    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] && \
+        HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
+        FD_CMD+=" --hidden"
+
+    echo "change-header('\$HEADER')+reload('\$FD_CMD')"
+'
+
+pushd "$ZDOTDIR"
 
 local selection=$( \
     fd \
@@ -22,26 +41,13 @@ local selection=$( \
         --extension=md \
         --color=always \
     | fzf \
-        --header=$HEADER_A \
         --header-border=top \
-        --prompt=$PROMPT_A \
-        --bind='tab:transform:[[ ! $FZF_PROMPT =~ Concealing ]] \
-            && echo \
-                "change-prompt('$PROMPT_A')+change-header('$HEADER_A')+reload( \
-                    fd \
-                        --type=file \
-                        --extension=md \
-                        --color=always \
-                )" \
-            || echo \
-                "change-prompt('$PROMPT_B')+change-header('$HEADER_B')+reload( \
-                    fd \
-                        --type=file \
-                        --hidden \
-                        --extension=md \
-                        --color=always \
-                )"' \
+        --header=$HEADER_TEMPLATE \
+        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
 )
+
+# Cleanup fzf state directory on exit
+[[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
 
 if [[ "$selection" ]]; then
     if (( ${+commands[glow]} )); then

@@ -44,7 +44,7 @@ local RELOAD_OPTS='
     echo "change-header('\$HEADER')+reload('\$FD_CMD')"
 '
 
-local selection=$( \
+local selection=$(
     fd \
         --type=file \
         --max-depth=1 \

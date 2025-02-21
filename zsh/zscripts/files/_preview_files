@@ -44,7 +44,7 @@ local RELOAD_OPTS='
     echo "change-header('\$HEADER')+reload('\$FD_CMD')"
 '
 
-local selection=$( \
+local selection=$(
     fd \
         --type=file \
         --max-depth=1 \
@@ -52,8 +52,8 @@ local selection=$( \
     | fzf \
         --header-border=top \
         --header=$HEADER_TEMPLATE \
-        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
-        --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
+        --bind=alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS \
+        --bind=alt-\':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS \
 )
 
 # Cleanup fzf state directory on exit

@@ -62,7 +62,7 @@ local selection=$( \
 if [[ -n "$selection" ]]; then
     local target
     target="$(echo "$selection" | sed 's/^/"/; s/$/"/')"
-    BUFFER="mv $target $target"
+    BUFFER="mv -i $target $target"
 
     # Navigate to the start of the second name
     CURSOR=$(( ${#BUFFER} - ${#selection} ))

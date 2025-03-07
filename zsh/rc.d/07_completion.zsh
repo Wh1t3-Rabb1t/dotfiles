@@ -11,7 +11,6 @@
 # man zshcompsys
 # man zshcompctl
 
-
 # Completion tweaks
 zstyle ':completion:*'               list-colors        "${(s.:.)LS_COLORS}"
 zstyle ':completion:*'               list-dirs-first    true

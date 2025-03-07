@@ -309,8 +309,9 @@ local function _clipboard_ring_paste_over() {
     local selection=$( \
         cat "${VI_CLIPBOARD_RING}" \
         | fzf \
-            --header='󱓦 Vi clipboard ring.' \
             --no-preview
+            --header-border=top \
+            --header='󱓦 Vi clipboard ring.' \
     )
 
     if [[ "${selection}" ]]; then

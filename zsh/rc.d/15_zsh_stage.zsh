@@ -187,6 +187,6 @@ local function _move_staged_entries() {
     mv --interactive --verbose --target-directory "$PWD" -- "${selection[@]}"
 
     # Clear the staging area
-    sed -ni '' "$ZSH_STAGE"
+    : > "$ZSH_STAGE"
 }
 alias sm="_move_staged_entries"

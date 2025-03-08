@@ -55,21 +55,9 @@ if (( ${+commands[broot]} )); then
 fi
 
 
-# # VIVID
-# # ---------------------------------------------------------------------------- #
-# if (( ${+commands[vivid]} )); then
-#     export LS_COLORS="$(vivid generate solarized-dark)"
-
-#     # Also nice:
-#     # export LS_COLORS="$(vivid generate solarized-light)"
-#     # export LS_COLORS="$(vivid generate tokyonight-moon)"
-#     # export LS_COLORS="$(vivid generate tokyonight-night)"
-#     # export LS_COLORS="$(vivid generate tokyonight-storm)"
-#     # export LS_COLORS="$(vivid generate ayu)"
-# fi
 
 
-# source "${WORKSPACE}/fzf_ui_plugin/init.zsh"
+source "${WORKSPACE}/fzf_ui_plugin/init.zsh"
 
-# FZF_UI_BIND "alt-n" "--absolute-path" "--relative-path"
 # FZF_UI_BIND "alt-m" "--hidden" "--no-hidden"
+# FZF_UI_BIND "alt-n" "--absolute-path" "--relative-path"

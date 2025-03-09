@@ -46,18 +46,6 @@ function M.config()
         highlight = { enable = true },
         indent = { enable = true },
         autopairs = { enable = true },
-
-        -- Expand selection
-        textsubjects = {
-            enable = true,
-            prev_selection = "R",
-            keymaps = {
-                ["W"] = "textsubjects-smart",
-                [";"] = false,
-                [","] = false,
-                ["."] = false,
-            }
-        }
     })
 end
 

@@ -59,7 +59,6 @@ return {
     ----------------------------------------------------------------------------
     {
         "nvim-treesitter/nvim-treesitter",
-        dependencies = "RRethy/nvim-treesitter-textsubjects",
         event = "UiEnter",
         build = ":TSUpdate",
         config = require("conf.lang.treesitter").config,

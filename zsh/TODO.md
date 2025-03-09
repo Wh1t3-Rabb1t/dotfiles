@@ -9,7 +9,9 @@
 - Consider changing enter binding back to broot launcher
 
 - Fix zsh stage error (an empty file with only spaces is considered as an entry)
-- Move to trash script is failing to output results to the command line after a new instance of the kitty app is launched
+
+- Move to trash script is failing to output results to the command line after a new instance of the kitty app is launched,
+it's being caused because zscripts are loaded before rc.d in .zshrc need to move zscript init to somewhere within rc.d
 
 - Dropping karabiner. Link no longer exists in deploy script
 - Setup autoenv for python as an intro to envs

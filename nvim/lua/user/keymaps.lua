@@ -205,6 +205,7 @@ vmap("-",              "mmu`m")                  -- Lowercase visual selection
 -- SELECT IN / AROUND
 --------------------------------------------------------------------------------
 nmap("W",              "viw")                    -- Select in word
+vmap("W",              "ip")                     -- Select in paragraph
 
 -- In surrounding
 nmap("'",              "msvi'")                  -- Select inside ''

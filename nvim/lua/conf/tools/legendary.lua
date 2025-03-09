@@ -62,6 +62,31 @@ function M.config()
     require("legendary").setup({
         keymaps = {
 
+            -- Logging in cwd
+            --------------------------------------------------------------------
+            {
+                mode = { "n" },
+                "gl",
+                function()
+                    -- Check if log_generate.zsh exists and is executable
+                    if vim.fn.filereadable("./log_generate.zsh") == 0 then
+                        vim.notify("Error: 'log_generate.zsh' not found", vim.log.levels.ERROR)
+                        return
+                    elseif vim.fn.executable("./log_generate.zsh") == 0 then
+                        vim.notify("Error: 'log_generate.zsh' is not executable", vim.log.levels.ERROR)
+                        return
+                    end
+
+                    -- Create log file if not present
+                    if vim.fn.filereadable("./log.zsh") == 0 then
+                        vim.fn.writefile({}, "./log.zsh")
+                    end
+
+                    vim.cmd("silent !./log_generate.zsh")
+                end,
+                desc = " Write to log file in cwd"
+            },
+
             -- Spelling
             --------------------------------------------------------------------
             {

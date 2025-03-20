@@ -172,14 +172,14 @@ function M.config()
                     -- Displays file status (readonly status, modified status)
                     file_status = true,
 
-                    -- Display new file status (new file means no write after created)
+                    -- Display new file status (new means no write after created)
                     newfile_status = false,
 
                     -- 0: Just the filename
                     -- 1: Relative path
                     -- 2: Absolute path
-                    -- 3: Absolute path, with tilde as the home directory
-                    -- 4: Filename and parent dir, with tilde as the home directory
+                    -- 3: Absolute path, with tilde as the home dir
+                    -- 4: Filename and parent dir, with tilde as the home dir
                     path = 1,
                 },
                 {   -- Grapple
@@ -191,11 +191,7 @@ function M.config()
                 }
             },
             lualine_x = {
-                {
-                    "datetime",
-                    icon = icons.clock,
-                    style = "%H:%M",
-                }
+                "lsp_status",
             },
             lualine_y = {},
             lualine_z = {},

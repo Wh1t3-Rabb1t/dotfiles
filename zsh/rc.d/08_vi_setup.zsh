@@ -285,8 +285,9 @@ local function _clipboard_ring_paste() {
     local selection=$( \
         cat "${VI_CLIPBOARD_RING}" \
         | fzf \
-            --header='󱓦 Vi clipboard ring.' \
-            --no-preview
+            --no-preview \
+            --header-border=top \
+            --header='󱓦 Vi clipboard ring.'
     )
 
     if [[ "${selection}" ]]; then
@@ -298,6 +299,7 @@ local function _clipboard_ring_paste() {
             CURSOR+=$(( "${#selection}" - 1 ))
         fi
 
+        echo -n "$selection" | pbcopy -i
         POSTDISPLAY=
         zle redisplay
     fi
@@ -325,6 +327,7 @@ local function _clipboard_ring_paste_over() {
             CURSOR+=$(( "${#selection}" - 1 ))
         fi
 
+        echo -n "$selection" | pbcopy -i
         POSTDISPLAY=
         zle redisplay
     fi

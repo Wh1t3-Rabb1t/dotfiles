@@ -1,6 +1,6 @@
 # The official dotfile repository of Master Wayne
 
-- zsh config is currently a wip.
+- zsh config is currently a wip (needs heavy refactoring).
 
 ```txt
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

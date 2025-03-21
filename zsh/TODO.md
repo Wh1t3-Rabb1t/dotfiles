@@ -16,7 +16,6 @@ move zscript init to somewhere within rc.d.
 
 ## Priority: Low
 
-- Setup: https://github.com/gdh1995/vimium-c
 - Set broot jump between results binding.
 - Look into enabling italic and bold in kitty Monaco font.
 - Consider changing enter binding back to broot launcher.
@@ -25,6 +24,8 @@ move zscript init to somewhere within rc.d.
 - Create script that duplicates a file / dir in place.
 - Update zplugin update script to dump plugins, re clone, and re compile before pushing.
 - Add zscript to manually regenerate compdump (if we say, download something with brew and want completions right away).
+
+- Setup: https://github.com/gdh1995/vimium-c
 
 - Need to wrangle this:
 ```bash

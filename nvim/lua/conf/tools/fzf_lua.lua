@@ -384,7 +384,6 @@ function M.config()
             -- multiline      = 1,      -- Display as: PATH:LINE:COL\nTEXT
             -- multiline      = 2,      -- Display as: PATH:LINE:COL\nTEXT\n
             actions = {
-                -- ["alt-f"] = actions.grep_lgrep,
                 ["tab"] = actions.grep_lgrep,
                 ["alt-/"] = actions.toggle_ignore,
                 ["ctrl-g"] = false,
@@ -394,6 +393,7 @@ function M.config()
             fzf_opts = {
                 ["--with-nth"] = "1..",
                 ["--no-hscroll"] = false,
+                ["--tac"] = true,
             }
         },
 
@@ -411,10 +411,11 @@ function M.config()
                 -- Don't include bufnr in fuzzy matching
                 -- tiebreak by line no.
                 ["--delimiter"] = "[\\]:]",
-                ["--nth"] = "2..",
+                ["--nth"] = "1..",
                 ["--no-hscroll"] = false,
                 ["--tiebreak"] = "index",
                 ["--tabstop"] = "1",
+                ["--tac"] = true,
             }
         },
         blines = {
@@ -426,12 +427,10 @@ function M.config()
             no_header = true,
             no_header_i = true,
             fzf_opts = {
-                -- Hide filename, tiebreak by line no.
-                ["--delimiter"] = "[:]",
-                ["--with-nth"] = "2..",
                 ["--no-hscroll"] = false,
                 ["--tiebreak"] = "index",
                 ["--tabstop"] = "1",
+                ["--tac"] = true,
             }
         },
 

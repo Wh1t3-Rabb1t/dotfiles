@@ -165,16 +165,11 @@ function M.config()
     require("fzf-lua").register_ui_select()
     require("fzf-lua").setup({
         fzf_opts = {
-            -- NOTE: Required to preserve correct formatting with Legendary...
-            -- ["--with-nth"] = "2..",
+            -- NOTE: no-hscroll preserves correct formatting in Legendary
             ["--no-hscroll"] = true,
-            -- ...
             ["--margin"] = "1%",
             ["--cycle"] = true,
             ["--layout"] = "default",
-            -- ["--layout"] = "reverse-list",
-            -- ["--border"] = "none",
-            -- ["--tac"] = "",
         },
 
         -- Window options

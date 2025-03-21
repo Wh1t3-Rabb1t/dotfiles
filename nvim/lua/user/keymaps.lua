@@ -6,6 +6,7 @@
 -- ===========|___/================|_|==========================================
 
 -- https://learnvimscriptthehardway.stevelosh.com/
+-- https://github.com/ibhagwan/vim-cheatsheet
 
 -- ╭───────╮
 -- │ INDEX │

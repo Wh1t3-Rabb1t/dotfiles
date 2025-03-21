@@ -1,5 +1,7 @@
 # The official dotfile repository of Master Wayne
 
+- zsh config is currently a wip.
+
 ```txt
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 : du nu nu nu nu nu nu nu... :::::::::::::::-'```````'-:::::::::::::::

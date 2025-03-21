@@ -285,6 +285,7 @@ local function _clipboard_ring_paste() {
     local selection=$( \
         cat "${VI_CLIPBOARD_RING}" \
         | fzf \
+            --tac \
             --no-preview \
             --header-border=top \
             --header='󱓦 Vi clipboard ring.'
@@ -311,6 +312,7 @@ local function _clipboard_ring_paste_over() {
     local selection=$( \
         cat "${VI_CLIPBOARD_RING}" \
         | fzf \
+            --tac \
             --no-preview
             --header-border=top \
             --header='󱓦 Vi clipboard ring.' \

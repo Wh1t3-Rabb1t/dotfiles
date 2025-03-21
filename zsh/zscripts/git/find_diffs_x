@@ -37,6 +37,7 @@ preview_cmd=" \
 git --no-pager diff --name-only \
     ${commit} -- ${files[*]} \
 | fzf \
+    --tac \
     --header=' Find diffs.' \
     --header-border=top \
     --exit-0 \

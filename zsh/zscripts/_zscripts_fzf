@@ -20,7 +20,7 @@ local selection=$( \
     | awk -F "_" '{
         OFS="_";
         if ($NF == "x") {
-            $NF="\033[38;5;41m"$NF"\033[0m";
+            $NF="\033[38;5;191m"$NF"\033[0m";
         }
         print
     }' \

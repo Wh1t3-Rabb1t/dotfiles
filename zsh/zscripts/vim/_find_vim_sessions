@@ -44,6 +44,7 @@ Alt r : Reload results."
 local selection=$(
     cat "$vim_sessions" \
     | fzf \
+        --tac \
         --keep-right \
         --header-border=top \
         --header=$HEADER \

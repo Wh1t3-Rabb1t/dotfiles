@@ -88,7 +88,6 @@ export FZF_DEFAULT_OPTS="\
 --prompt=' ' \
 --pointer='▐' \
 --marker='▌' \
---tac \
 --ansi"
 
 

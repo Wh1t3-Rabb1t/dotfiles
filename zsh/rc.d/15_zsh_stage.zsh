@@ -127,6 +127,7 @@ Enter : Remove selection from the staging area."
             --max-depth=1 \
             --color=always \
         | fzf \
+            --tac \
             --multi \
             --keep-right \
             --header-border=top \

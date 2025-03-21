@@ -28,6 +28,7 @@ local selection=$( \
         --header-border=top \
         --filepath-word \
         --no-sort \
+        --tac \
 )
 
 if [[ -n "$selection" ]]; then

@@ -3,6 +3,8 @@
 
 - !! The reason the embedded fzf script wasn't working was because the file variables were scoped outside of the fzf subscript
 
+- Fix the broken highlight on the `_x` in zscripts fzf function
+
 - Change echo calls to printf
 - Add checks for os type when using `pbpaste` in scripts
 

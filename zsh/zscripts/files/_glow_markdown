@@ -39,6 +39,7 @@ local selection=$( \
         --extension=md \
         --color=always \
     | fzf \
+        --tac \
         --header-border=top \
         --header=$HEADER_TEMPLATE \
         --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \

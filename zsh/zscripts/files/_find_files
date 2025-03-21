@@ -50,6 +50,7 @@ local selection=$(
         --max-depth=1 \
         --color=always \
     | fzf \
+        --tac \
         --multi \
         --header-border=top \
         --header=$HEADER_TEMPLATE \

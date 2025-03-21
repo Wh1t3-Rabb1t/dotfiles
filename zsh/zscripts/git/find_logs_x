@@ -17,6 +17,7 @@ git log \
     --graph \
     --color=always \
 | fzf \
+    --tac \
     --header=' Find logs.' \
     --header-border=top \
     --no-sort \

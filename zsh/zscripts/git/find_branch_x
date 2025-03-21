@@ -18,6 +18,7 @@ git checkout $( \
         --sort=committerdate \
         --no-contains \
     | fzf \
+        --tac \
         --no-sort \
         --query="${@}" \
         --header-border=top \

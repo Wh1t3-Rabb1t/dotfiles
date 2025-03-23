@@ -16,6 +16,10 @@ move zscript init to somewhere within rc.d.
 
 ## Priority: Low
 
+- Refactor these horrible lines from deploy.zsh to remove subshells:
+```bash
+print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+```
 - Set broot jump between results binding.
 - Look into enabling italic and bold in kitty Monaco font.
 - Consider changing enter binding back to broot launcher.

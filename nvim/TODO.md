@@ -2,6 +2,7 @@
 
 ## Priority: High
 
+- Legendary.nvim is possibly getting deprecated soon. Replace with Snacks.picker (Folke).
 - Finish configuring fzf lua.
 - Create autocommand to turn off wrap if buffer width is < 80.
 - Add an autocommand that add the contents pasted from the clipboard ring to the current system clipboard.
@@ -21,6 +22,7 @@
 
 ## Plugins
 
+- https://github.com/folke/snacks.nvim
 - https://github.com/CWood-sdf/banana.nvim
 - https://github.com/sindrets/diffview.nvim
 - https://github.com/andrewferrier/debugprint.nvim

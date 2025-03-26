@@ -2,6 +2,7 @@
 
 ## Priority: High
 
+- Set comment binding `alt-/` to work in insert mode.
 - Legendary.nvim is possibly getting deprecated soon. Replace with Snacks.picker (Folke).
 - Finish configuring fzf lua.
 - Create autocommand to turn off wrap if buffer width is < 80.

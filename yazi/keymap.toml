@@ -26,8 +26,8 @@ keymap = [
     { on = "D",        run = "arrow 50%",       desc = "Move cursor down half page" },
 
     # Top / bottom
-    { on = "<S-Up>",   run = "arrow -99999999", desc = "Move cursor to the top" },
-    { on = "<S-Down>", run = "arrow 99999999",  desc = "Move cursor to the bottom" },
+    { on = "<S-Up>",   run = "arrow top", desc = "Move cursor to the top" },
+    { on = "<S-Down>", run = "arrow bot",  desc = "Move cursor to the bottom" },
 
     # Navigation
     # -------------------------------------------------------------------------------------------- #

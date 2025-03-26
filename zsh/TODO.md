@@ -2,6 +2,8 @@
 
 ## Priority: High
 
+
+- Fix: 'compinit:527: no such file or directory: /opt/homebrew/share/zsh/site-functions/_brew_services'.
 - Move to trash script is failing to output results to the command line after a new instance of the
 kitty app is launched, it's being caused because zscripts are loaded before rc.d in .zshrc need to
 move zscript init to somewhere within rc.d.

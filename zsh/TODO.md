@@ -22,6 +22,12 @@ move zscript init to somewhere within rc.d.
 ```bash
 print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 ```
+
+- Debugging echo command (make leading or trailing whitespace obvious):
+```sh
+echo ">$line<" > "$LOG"
+```
+
 - Set broot jump between results binding.
 - Look into enabling italic and bold in kitty Monaco font.
 - Consider changing enter binding back to broot launcher.
@@ -42,6 +48,8 @@ ps -ef | fzf --reverse --header-lines 1 --header-border bottom --input-border \
            --bind 'result:transform-prompt:echo "${FZF_NTH}> "'
 ```
 
+
+
 - Update vi mode `gv` with this:
 ```txt
 zle-line-pre-redraw
@@ -60,6 +68,7 @@ to fuzzy for the fine tuning.
 
 ## Plugins
 
+- https://github.com/bigH/git-fuzzy
 - https://github.com/Julien-cpsn/ATAC
 - https://github.com/catppuccin/bat
 - https://github.com/hyperupcall/autoenv

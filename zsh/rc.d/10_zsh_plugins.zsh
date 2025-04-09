@@ -55,9 +55,8 @@ if (( ${+commands[broot]} )); then
 fi
 
 
+source "${WORKSPACE}/sentrifuge/init.zsh"
 
-
-source "${WORKSPACE}/fzf_ui_plugin/init.zsh"
 
 # FZF_UI_BIND "alt-m" "--hidden" "--no-hidden"
 # FZF_UI_BIND "alt-n" "--absolute-path" "--relative-path"

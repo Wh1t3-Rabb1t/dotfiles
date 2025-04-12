@@ -8,8 +8,10 @@
 alias h="cd ~"
 alias b="cd -"
 alias oa="open -a"
+alias lg='cat "${VI_STATE_DIR}/log"'
 alias getip="ifconfig | grep inet"
 alias bindings="bindkey | grep -v '_noop' | column"
+
 
 # Eza / gnu ls
 # ---------------------------------------------------------------------------- #

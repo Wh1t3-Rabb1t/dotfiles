@@ -124,9 +124,6 @@ if (( ${+commands[nvim]} )); then
     export EDITOR="nvim"
     export VISUAL="nvim"
     export MANPAGER="nvim +Man!"
-
-    # Account for man pages wrapping in nvim
-    export MANWIDTH=$((COLUMNS - 6))
 else
     export EDITOR="vim"
     export VISUAL="vim"

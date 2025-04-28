@@ -104,6 +104,7 @@ fi
     alias dl480p="yt-dlp -S vcodec:h264,fps,res:480,acodec:m4a"
     alias dl720p="yt-dlp -S vcodec:h264,fps,res:720,acodec:m4a"
     alias dl1080p="yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a"
+    alias dl1440p="yt-dlp -S vcodec:h264,fps,res:1440,acodec:m4a"
 }
 
 

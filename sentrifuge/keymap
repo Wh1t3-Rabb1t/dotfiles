@@ -1,3 +1,15 @@
-o:up
+i:up
 k:down
+I:up+toggle
+K:down+toggle
+alt-i:up+up+up+up
+alt-k:down+down+down+down
+ctrl-alt-i:first
+ctrl-alt-k:last
+J:jump
+t:backward-char
+l:forward-char
 page-up:preview-page-up
+page-down:preview-page-down
+f:toggle
+esc:abort

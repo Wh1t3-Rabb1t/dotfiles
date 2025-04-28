@@ -69,7 +69,8 @@ export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export VI_STATE_DIR="${XDG_STATE_HOME}/zsh-vi"
 export VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard_ring"
 export ZSH_STAGE="${VI_STATE_DIR}/staging_area"
-export LOG="${VI_STATE_DIR}/log"
+export LOG_DIR="${XDG_STATE_HOME}/logs"
+export LOG="${LOG_DIR}/log"
 
 
 # PATHS

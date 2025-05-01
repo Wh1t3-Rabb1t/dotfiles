@@ -1,9 +1,9 @@
 i:up
 k:down
-I:up+toggle
-K:down+toggle
-alt-i:up+up+up+up
-alt-k:down+down+down+down
+I:up+up+up
+K:down+down+down
+alt-i:up+toggle
+alt-k:down+toggle
 ctrl-alt-i:first
 ctrl-alt-k:last
 J:jump
@@ -13,3 +13,5 @@ page-up:preview-page-up
 page-down:preview-page-down
 f:toggle
 esc:abort
+s:reload(hello)+reload(...)+up
+S:reload(...)+reload(...)+down

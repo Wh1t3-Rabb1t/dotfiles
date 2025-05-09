@@ -2,9 +2,23 @@
 
 ## Priority: High
 
-- Move to trash script is failing to output results to the command line after a new instance of the
-kitty app is launched, it's being caused because zscripts are loaded before rc.d in .zshrc need to
-move zscript init to somewhere within rc.d.
+- Running brew doctor on a newly launched kitty instance causes this error...
+```zsh
+Please note that these warnings are just used to help the Homebrew maintainers
+with debugging if you file an issue. If everything you use Homebrew for is
+working fine: please don't worry or file an issue; just ignore this. Thanks!
+
+Warning: Homebrew's "sbin" was not found in your PATH but you have installed
+formulae that put executables in /opt/homebrew/sbin.
+Consider setting your PATH for example like so:
+  echo 'export PATH="/opt/homebrew/sbin:$PATH"' >> ~/.zshrc
+[1]    24599 exit 1     brew doctor
+```
+... need to try updating the PATH earlier in zsh init process, will come back to this after sf sorting strategy is complete.
+
+- (maybe related to above) Move to trash script is failing to output results to the command line after
+a new instance of the kitty app is launched, it's being caused because zscripts are loaded before rc.d
+in .zshrc need to move zscript init to somewhere within rc.d.
 - zscripts: Fix the broken highlight on the `_x` in zscripts fzf function.
 - Change echo calls to printf.
 - Set up macOS mission control navigation bindings and increase animation speed via cli os settings.

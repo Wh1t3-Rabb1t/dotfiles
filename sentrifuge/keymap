@@ -1,17 +1,16 @@
 i:up
 k:down
-I:up+up+up
-K:down+down+down
-alt-i:up+toggle
-alt-k:down+toggle
+I:up+toggle
+K:down+toggle
+alt-i:up+up+up
 ctrl-alt-i:first
+alt-k:down+down+down+down
 ctrl-alt-k:last
 J:jump
+w:jump+toggle
 t:backward-char
+u:transform(source "${SF_SRC}/vi-motions/replace_char")
 l:forward-char
 page-up:preview-page-up
 page-down:preview-page-down
 f:toggle
-esc:abort
-s:reload(hello)+reload(...)+up
-S:reload(...)+reload(...)+down

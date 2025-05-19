@@ -2,15 +2,13 @@ i:up
 k:down
 I:up+toggle
 K:down+toggle
-alt-i:up+up+up
 ctrl-alt-i:first
-alt-k:down+down+down+down
 ctrl-alt-k:last
 J:jump
 w:jump+toggle
 t:backward-char
-u:transform(source "${SF_SRC}/vi-motions/replace_char")
+esc:sf_toggle_vi_mode
 l:forward-char
 page-up:preview-page-up
 page-down:preview-page-down
-f:toggle
+G:sf_remove_selection

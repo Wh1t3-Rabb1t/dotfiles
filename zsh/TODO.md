@@ -2,6 +2,8 @@
 
 ## Priority: High
 
+- Use a coproc to read from the subshell in the find vim sessions script.
+
 - Running brew doctor on a newly launched kitty instance causes this error...
 ```zsh
 Please note that these warnings are just used to help the Homebrew maintainers

@@ -13,7 +13,7 @@ M.keys = {
     {
 
         mode = { "n" },
-        "X",
+        "C",
         function()
             require("dial.map").manipulate("increment", "normal")
         end,
@@ -22,7 +22,7 @@ M.keys = {
     {
 
         mode = { "n" },
-        "C",
+        "X",
         function()
             require("dial.map").manipulate("decrement", "normal")
         end,
@@ -31,7 +31,7 @@ M.keys = {
     {
 
         mode = { "v" },
-        "X",
+        "C",
         function()
             require("dial.map").manipulate("increment", "visual")
         end,
@@ -40,7 +40,7 @@ M.keys = {
     {
 
         mode = { "v" },
-        "C",
+        "X",
         function()
             require("dial.map").manipulate("decrement", "visual")
         end,

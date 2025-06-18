@@ -55,7 +55,8 @@ if (( ${+commands[broot]} )); then
 fi
 
 
-source "${WORKSPACE}/sentrifuge/init.zsh"
+source "${WORKSPACE}/sentinel-zsh/init.zsh"
+# source "${WORKSPACE}/sentrifuge/init.zsh"
 
 
 # FZF_UI_BIND "alt-m" "--hidden" "--no-hidden"

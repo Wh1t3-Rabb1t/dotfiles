@@ -20,4 +20,4 @@ S          toggle-sort
 page-up    preview-page-up
 page-down  preview-page-down
 Q          sl_remove_selection
-esc        abort
+backspace         backward-delete-char

@@ -55,7 +55,8 @@ if (( ${+commands[broot]} )); then
 fi
 
 
-source "${WORKSPACE}/sentinel-zsh/init.zsh"
+builtin source "${WORKSPACE}/sentinel-zsh/init.zsh"
+
 # source "${WORKSPACE}/sentrifuge/init.zsh"
 
 

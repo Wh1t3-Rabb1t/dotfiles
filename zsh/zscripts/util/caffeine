@@ -74,12 +74,12 @@ local function calculate_caffeine_levels() {
         text_hl=$'\x1b[38;5;69m'  # Blue
     fi
 
-    local pills time mg
+    local pills session_start mg
     pills="${text_hl}${pill_counter}${no_color}"
-    time="${subtext_hl}${start_time_readable}${no_color}"
+    session_start="${subtext_hl}${start_time_readable}${no_color}"
     mg="${text_hl}${total_mg}${no_color}"
 
-    builtin printf "%s\n" "You have consumed ${pills} caffeine pill/s today starting at ${time}."
+    builtin printf "%s\n" "You have consumed ${pills} caffeine pill/s today starting at ${session_start}."
     builtin printf "%s\n" "There is approximately ${mg}mg of caffeine active in your bloodstream."
     builtin printf "%s\n" "$warning_message"
 }

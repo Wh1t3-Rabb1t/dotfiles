@@ -26,11 +26,11 @@
 --marker='▌'
 --multi
 --color='
-fg:197
+fg:238
 list-fg:123
-selected-fg:0
+selected-fg:-1
 preview-fg:-1
-bg:234
+bg:232
 list-bg:232
 selected-bg:-1
 preview-bg:234
@@ -46,7 +46,7 @@ alt-bg:-1
 query:-1
 disabled:-1
 info:-1
-border:232
+border:-1
 list-border:232
 scrollbar:-1
 separator:-1
@@ -76,13 +76,13 @@ header:-1
 --bind='scroll-down:ignore'
 --bind='alt-left:ignore'
 --bind='I:up+toggle'
+--bind='J:execute(source /Users/tillcappel/workspace/sentinel-zsh/scripts/execute/sl_remove_selection {})'
 --bind='left:ignore'
 --bind='K:down+toggle'
---bind='backspace:backward-delete-char'
+--bind='backspace:ignore'
 --bind='shift-up:ignore'
---bind='P:change-preview-window(right|left)'
+--bind='P:change-preview-window(up|right|down|left)'
 --bind='ctrl-/:ignore'
---bind='Q:execute(source /Users/tillcappel/workspace/sentinel-zsh/scripts/execute/sl_remove_selection {})'
 --bind='S:toggle-sort'
 --bind='T:toggle-all'
 --bind='W:clear-query+toggle'

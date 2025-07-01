@@ -15,9 +15,8 @@ w          clear-query
 T          toggle-all
 I          up+toggle
 K          down+toggle
-P          change-preview-window(right|left)
+P          change-preview-window(up|right|down|left)
 S          toggle-sort
 page-up    preview-page-up
 page-down  preview-page-down
-Q          sl_remove_selection
-backspace         backward-delete-char
+J          sl_remove_selection

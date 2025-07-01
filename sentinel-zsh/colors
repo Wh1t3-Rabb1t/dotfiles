@@ -1,8 +1,8 @@
-fg:197
+fg:238
 list-fg:123
-selected-fg:0
+selected-fg:-1
 preview-fg:-1
-bg:234
+bg:232
 list-bg:232
 selected-bg:-1
 preview-bg:234
@@ -18,7 +18,7 @@ alt-bg:-1
 query:-1
 disabled:-1
 info:-1
-border:232
+border:-1
 list-border:232
 scrollbar:-1
 separator:-1

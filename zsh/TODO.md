@@ -2,6 +2,8 @@
 
 ## Priority: High
 
+- Change the name of `$ZSH_VI` into something suitable for a generalized for a user state dir.
+
 - Use a coproc to read from the subshell in the find vim sessions script.
 
 - Running brew doctor on a newly launched kitty instance causes this error...

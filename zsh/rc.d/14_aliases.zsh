@@ -7,6 +7,7 @@
 
 alias h="cd ~"
 alias b="cd -"
+alias fein="_caffeine"
 alias oa="open -a"
 alias lg='cat "${VI_STATE_DIR}/log"'
 alias getip="ifconfig | grep inet"

@@ -1,11 +1,13 @@
 #!/usr/bin/env zsh
 
-# ---------------------------------------------------------------------------- #
-# Perform a specified command in each subdirectory of current directory.       #
-# ---------------------------------------------------------------------------- #
-# Args    : Command to execute; i.e. `touch README.md`                         #
-# Globals : None                                                               #
-# ---------------------------------------------------------------------------- #
+################################################################################
+# Perform a specified command in each subdirectory of current directory.
+# ----------------------------------------------------------------------
+# Arguments:
+#     Command to execute; i.e. `touch README.md`
+# Globals:
+#     None
+################################################################################
 
 emulate -L zsh
 

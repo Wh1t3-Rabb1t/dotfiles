@@ -1,13 +1,15 @@
 #!/usr/bin/env zsh
 
-# ---------------------------------------------------------------------------- #
-# Download a series of audio files from a youtube playlist in opus format,     #
-# then concatenate into a single audio file.                                   #
-# ---------------------------------------------------------------------------- #
-# Arg 1   : Newly created file name                                            #
-# Arg 2   : URL                                                                #
-# Globals : None                                                               #
-# ---------------------------------------------------------------------------- #
+################################################################################
+# Download a series of audio files from a youtube playlist in opus format, then
+# concatenate into a single audio file.
+# -------------------------------------
+# Arguments:
+#     1) Newly created file name
+#     2) URL
+# Globals:
+#     None
+################################################################################
 
 emulate -L zsh
 

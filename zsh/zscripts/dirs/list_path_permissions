@@ -1,13 +1,15 @@
 #!/usr/bin/env zsh
 
-# ---------------------------------------------------------------------------- #
-# List permissions of all directories leading up to a filename.                #
-# This is useful to see if some permissions are blocking access to a file.     #
-# If no args are passed, lists entire parent dir tree over cwd.                #
-# ---------------------------------------------------------------------------- #
-# Args    : File name / None                                                   #
-# Globals : None                                                               #
-# ---------------------------------------------------------------------------- #
+################################################################################
+# List permissions of all directories leading up to a filename.
+# This is useful to see if some permissions are blocking access to a file.
+# If no args are passed, lists entire parent dir tree over cwd.
+# -------------------------------------------------------------
+# Arguments:
+#     File name / None
+# Globals:
+#     None
+################################################################################
 
 emulate -L zsh
 

@@ -2,13 +2,12 @@
 
 ################################################################################
 # Track daily caffeine intake and monitor active levels.
-#
-# Args:
+# ------------------------------------------------------
+# Arguments:
 #     1) inc   - Increase pill count by one
 #     2) dec   - Decrease pill count by one
 #     3) total - Print total consumed pills / active mg of caffeine
 #     4) reset - Reset pill count
-#
 # Globals:
 #     $VI_STATE_DIR
 ################################################################################

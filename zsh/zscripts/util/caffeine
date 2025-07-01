@@ -1,26 +1,46 @@
 #!/usr/bin/env zsh
 
+# ---------------------------------------------------------------------------- #
+# Track daily caffeine intake.                                                 #
+# ---------------------------------------------------------------------------- #
+# Args:                                                                        #
+#     1) inc   - Increase pill count by one                                    #
+#     2) dec   - Decrease pill count by one                                    #
+#     3) total - Print total consumed pills                                    #
+#     4) reset - Reset pill count                                              #
+# Globals:                                                                     #
+#     $VI_STATE_DIR                                                            #
+# ---------------------------------------------------------------------------- #
+
+emulate -L zsh
+
 local state_dir pill_counter start_timestamp dosage_log
 state_dir="${VI_STATE_DIR}/caffeine"
 pill_counter="${VI_STATE_DIR}/caffeine/pill_counter"
 start_timestamp="${VI_STATE_DIR}/caffeine/start_timestamp"
 dosage_log="${VI_STATE_DIR}/caffeine/dosage_log"
 
+# Set strict file permissions
+local original_permissions
+original_permissions=$(umask)
+umask 077
+trap 'umask '$original_permissions'' EXIT
+
 # Ensure required dirs / files exist
 [[ ! -d "$state_dir" ]]       && mkdir "$state_dir"
 [[ ! -f "$pill_counter" ]]    && builtin printf "%s" "0" > "$pill_counter"
-[[ ! -f "$start_timestamp" ]] && : > "$start_timestamp"
+[[ ! -f "$start_timestamp" ]] && builtin printf "%s" "$(date +%s)/$(date)" > "$start_timestamp"
 [[ ! -f "$dosage_log" ]]      && : > "$dosage_log"
 
 local function calculate_caffeine_levels() {
-    local total_mg start_time start_time_readable now_time elapsed_time joined_timestamps
-    daily_pills=$(< "$pill_counter" )
-    now_time=$(date +%s)
-    elapsed_time=$(( now_time - start_time ))
+    local total_mg joined_timestamps start_time start_time_readable now_time elapsed_time
+    pill_counter=$(< "$pill_counter" )
+    total_mg=0
     joined_timestamps=$(< "$start_timestamp" )
     start_time=${joined_timestamps%%/*}
     start_time_readable=${joined_timestamps#*/}
-    total_mg=0
+    now_time=$(date +%s)
+    elapsed_time=$(( now_time - start_time ))
 
     # Calculate total active mgs of caffeine
     local index
@@ -33,8 +53,8 @@ local function calculate_caffeine_levels() {
         unset dose_index dose_timestamp time_of_dose
     done
 
-    # Determine approximate highlight colors depending on caffeine levels
-    local text_hl subtext_hl no_color warning_message
+    # Determine approximate message and colors depending on caffeine levels
+    local warning_message text_hl subtext_hl no_color
     subtext_hl=$'\x1b[38;5;38m'
     no_color=$'\x1b[0m'
 
@@ -52,43 +72,51 @@ local function calculate_caffeine_levels() {
         text_hl=$'\x1b[38;5;69m'  # Blue
     fi
 
-    builtin printf "\n%s\n" "You have consumed ${text_hl}${daily_pills}${no_color} caffeine pill/s today starting at ${subtext_hl}${start_time_readable}${no_color}."
+    builtin printf "\n%s\n" "You have consumed ${text_hl}${pill_counter}${no_color} caffeine pill/s today starting at ${subtext_hl}${start_time_readable}${no_color}."
     builtin printf "%s\n" "There is approximately ${text_hl}${total_mg}${no_color}mg of caffeine active in your bloodstream."
     builtin printf "%s\n" "$warning_message"
 }
 
+local daily_pills
+daily_pills=$(< "$pill_counter" )
+
 # Init session start time if no pills have been consumed
-if (( "$(< $pill_counter )" == 0 )); then
+if (( $daily_pills == 0 )); then
     : > "$dosage_log"
     builtin printf "%s" "$(date +%s)/$(date)" > "$start_timestamp"
 fi
 
-# Increment pill counter and update dosage log
 if [[ $1 == "inc" ]] || [[ $# == 0 ]]; then
-    daily_pills=$(< "$pill_counter" )
+    # Increment pill counter and update dosage log
     daily_pills=$(( daily_pills + 1 ))
     builtin printf "%s" "$daily_pills" > "$pill_counter"
     builtin printf "%s\n" "$daily_pills $(date +%s)" >> "$dosage_log"
     calculate_caffeine_levels
-
-# Decrement pill counter and update dosage log
 elif [[ $1 == "dec" ]]; then
-    daily_pills=$(< "$pill_counter" )
-
-    # Prevent pill count from dropping below 0
+    # Decrement pill counter and update dosage log
     if (( daily_pills > 0 )); then
+        local temp_file
+        temp_file=$(mktemp "${dosage_log}.XXXX")
+        head --line=-1 -- "$dosage_log" > "$temp_file" && mv -- "$temp_file" "$dosage_log"
         daily_pills=$(( daily_pills - 1 ))
         builtin printf "%s" "$daily_pills" > "$pill_counter"
-        head --line=-1 -- "$dosage_log" > "$dosage_log.tmp" && mv -- "$dosage_log.tmp" "$dosage_log"
         calculate_caffeine_levels
     else
         builtin printf "%s\n" "Insufficient levels. Need more caffeine."
     fi
-
-# Reset pill count
+elif [[ $1 == "total" ]]; then
+    # Print amount of caffeine consumed
+    calculate_caffeine_levels
 elif [[ $1 == "reset" ]]; then
+    # Reset pill count
     builtin printf "%s" "0" > "$pill_counter"
     builtin printf "\n%s\n" "Reset caffeine pill count to 0."
 else
-    builtin printf "%s\n" "Invalid argument. Pass 'reset' to reset pill count."
+    # Invalid argument
+    builtin printf "%s\n\n" "Invalid argument."
+    builtin printf "%s\n" "Pass:"
+    builtin printf "%s\n" "    inc   - To increase pill count."
+    builtin printf "%s\n" "    dec   - To decrease pill count."
+    builtin printf "%s\n" "    total - To print the total caffeine consumed."
+    builtin printf "%s\n" "    reset - To reset pill count."
 fi

@@ -7,6 +7,7 @@
 
 alias h="cd ~"
 alias b="cd -"
+alias ei="caffeine"
 alias fein="caffeine"
 alias oa="open -a"
 alias lg='cat "${VI_STATE_DIR}/log"'

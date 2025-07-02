@@ -78,8 +78,8 @@ local function calculate_caffeine_levels() {
     session_start="${subtext_hl}${start_time_readable}${no_color}"
     mg="${text_hl}${total_mg}${no_color}"
 
-    builtin printf "%s\n" "You have consumed ${pills} caffeine pill/s starting at ${session_start}."
-    builtin printf "%s\n" "There is approximately ${mg}mg of caffeine active in your bloodstream."
+    builtin printf "%s\n" "You've consumed ${pills} caffeine pill/s starting at ${session_start}."
+    builtin printf "%s\n" "There's approximately ${mg}mg of caffeine active in your bloodstream."
     builtin printf "%s\n" "$status_message"
 }
 
@@ -99,7 +99,7 @@ if [[ $1 == "inc" || $1 == "i" ]] || [[ $# == 0 ]]; then
     builtin printf "%s" "$daily_pills" > "$pill_counter"
     builtin printf "%s\n" "$daily_pills $(date +%s)" >> "$dosage_log"
     calculate_caffeine_levels
-elif [[ $1 == "dec" ]]; then
+elif [[ $1 == "dec" || $1 == "d" ]]; then
     # Decrement pill counter and update dosage log
     if (( daily_pills > 0 )); then
         local temp_file

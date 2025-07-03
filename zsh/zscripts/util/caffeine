@@ -2,21 +2,22 @@
 
 ################################################################################
 # Track daily caffeine intake and monitor active levels.
-# ------------------------------------------------------
+#
 # Arguments:
-#     1) inc   - Increase pill count by one
-#     2) dec   - Decrease pill count by one
-#     3) total - Print total consumed pills / active mg of caffeine
-#     4) reset - Reset pill count
+#   $1  inc   - Increase pill count by one
+#   $2  dec   - Decrease pill count by one
+#   $3  total - Print total consumed pills / active mg of caffeine
+#   $4  reset - Reset pill count
+#
 # Globals:
-#     $VI_STATE_DIR
+#   $VI_STATE_DIR
 ################################################################################
 
 emulate -L zsh
 
 # Set strict file permissions
 local original_permissions
-original_permissions=$(umask)
+original_permissions=$(( 0$(umask) ))
 umask 077
 trap 'umask '$original_permissions'' EXIT
 

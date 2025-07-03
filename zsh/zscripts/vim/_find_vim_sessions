@@ -2,11 +2,12 @@
 
 ################################################################################
 # Search for `vim` sessions, `cd` to parent dir, and open selected session.
-# -------------------------------------------------------------------------
+#
 # Arguments:
-#     None
+#   None
+#
 # Globals:
-#     $BUFFER
+#   $BUFFER
 ################################################################################
 
 # TODO: use a coproc to read from the subshell

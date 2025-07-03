@@ -17,9 +17,9 @@ emulate -L zsh
 
 # Set strict file permissions
 local original_permissions
-original_permissions=$(( 0$(umask) ))
+original_permissions=$(umask)
 umask 077
-trap 'umask '$original_permissions'' EXIT
+trap 'umask '"$original_permissions"'' EXIT
 
 # Declare state files
 local state_dir pill_counter start_timestamp dosage_log

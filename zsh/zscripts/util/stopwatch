@@ -1,0 +1,70 @@
+#!/usr/bin/env zsh
+
+################################################################################
+# Interactive stopwatch.
+#
+# Arguments:
+#   $1  start - Start the timer
+#   $2  stop  - Stop the timer
+#   $3  reset - Reset the timer
+#   $4  log   - Print archived log data
+#
+# Globals:
+#   $VI_STATE_DIR
+################################################################################
+
+emulate -L zsh
+
+# Set strict file permissions
+local original_permissions
+original_permissions=$(umask)
+umask 077
+trap 'umask '"$original_permissions"'' EXIT
+
+# Declare state files
+local state_dir start_timestamp stopwatch_state work_hours_log
+state_dir="${VI_STATE_DIR}/work-timer"
+stopwatch_state="${state_dir}/stopwatch_state"
+total_time_passed="${state_dir}/total_time_passed"
+work_hours_log="${state_dir}/work_hours_log"
+
+# Ensure required dirs / files exist
+[[ ! -d "$state_dir" ]]         && mkdir "$state_dir"
+[[ ! -f "$stopwatch_state" ]]   && : > "$stopwatch_state"
+[[ ! -f "$total_time_passed" ]] && : > "$total_time_passed"
+[[ ! -f "$work_hours_log" ]]    && : > "$work_hours_log"
+
+local elapsed
+[[ ! -s "$total_time_passed" ]] && elapsed=0 || elapsed=$(< "$total_time_passed" )
+[[ ! -s "$stopwatch_state" ]] && builtin printf "on" > "$stopwatch_state"
+
+local stopwatch key
+while true; do
+    stopwatch=$(< "$stopwatch_state" )
+
+    # Incrementally update timer while stopwatch state is set to 'on'
+    if [[ $stopwatch == "on" ]]; then
+        (( elapsed++ ))
+        printf "\rElapsed: %02d:%02d:%02d " $(( elapsed/3600 )) $(( elapsed/60%60 )) $(( elapsed%60 ))
+    fi
+
+    # Use read with timeout for responsive key polling
+    if read -t 1 -k 1 key; then
+        case "$key" in
+            ' ')
+                if [[ $stopwatch == "on" ]]; then
+                    builtin printf "off" > "$stopwatch_state"
+                    builtin printf "$elapsed" > "$total_time_passed"
+                else
+                    builtin printf "on" > "$stopwatch_state"
+                fi
+                ;;
+            q)
+                : > "$stopwatch_state"
+                builtin printf "$elapsed" > "$total_time_passed"
+                builtin printf "\nStopped at: %02d:%02d:%02d \n" $(( elapsed/3600 )) $(( elapsed/60%60 )) $(( elapsed%60 ))
+                break
+                ;;
+        esac
+    fi
+done

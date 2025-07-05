@@ -6,6 +6,15 @@
 
 - Use a coproc to read from the subshell in the find vim sessions script.
 
+- Incorporate vi-pipe into vi mode:
+```txt
+vi-pipe
+       This function reads a movement command from the keyboard and then prompts for an external command. The part of the buffer covered by the movement is piped
+       to the external command and then replaced by the command's output. If the movement command is bound to vi-pipe, the current line is used.
+
+       The function serves as an example for reading a vi movement command from within a user-defined widget.
+```
+
 - Running brew doctor on a newly launched kitty instance causes this error...
 ```zsh
 Please note that these warnings are just used to help the Homebrew maintainers
@@ -33,6 +42,11 @@ in .zshrc need to move zscript init to somewhere within rc.d.
 - Update nerdfont repo brew install command in README `brew install --cask font-hack-nerd-font`.
 
 ## Priority: Low
+
+- Research zshcontrib:
+Dumping Shell State
+Remembering recent directories
+Keyboard Definition
 
 - Refactor these horrible lines from deploy.zsh to remove subshells:
 ```bash

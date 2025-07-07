@@ -4,10 +4,10 @@
 # Track daily caffeine intake and monitor active levels.
 #
 # Arguments:
-#   $1  inc   - Increase pill count by one
-#   $2  dec   - Decrease pill count by one
-#   $3  total - Print total consumed pills / active mg of caffeine
-#   $4  reset - Reset pill count
+#   $@  inc   - Increase pill count by one
+#   $@  dec   - Decrease pill count by one
+#   $@  total - Print total consumed pills / active mg of caffeine
+#   $@  reset - Reset pill count
 #
 # Globals:
 #   $VI_STATE_DIR
@@ -81,9 +81,22 @@ local function calculate_caffeine_levels() {
     session_start="${subtext_hl}${start_time_readable}${no_color}"
     mg="${text_hl}${total_mg}${no_color}"
 
-    builtin printf "%s\n" "You've consumed ${pills} caffeine pill/s starting at ${session_start}."
-    builtin printf "%s\n" "There's approximately ${mg}mg of caffeine active in your bloodstream."
-    builtin printf "%s\n" "$status_message"
+    builtin printf "%s\n%s\n%s\n" \
+        "You've consumed ${pills} caffeine pill/s starting at ${session_start}." \
+        "There's approximately ${mg}mg of caffeine active in your bloodstream." \
+        "$status_message"
+}
+
+# Help menu
+local function print_help_menu() {
+    builtin printf "%s\n\n%s\n%s\n%s\n%s\n%s\n%s\n" \
+        "Invalid argument." \
+        "Pass:" \
+        "    inc   - To increase pill count." \
+        "    dec   - To decrease pill count." \
+        "    total - To print the total caffeine consumed." \
+        "    reset - To reset pill count." \
+        "    help  - To print this help page."
 }
 
 local daily_pills
@@ -124,12 +137,9 @@ elif [[ $1 == "reset" ]]; then
     # Reset pill count
     builtin printf "%s" "0" > "$pill_counter"
     builtin printf "%s\n" "Reset caffeine pill count to 0."
+elif [[ $1 == "help" ]]; then
+    print_help_menu
 else
     # Invalid argument
-    builtin printf "%s\n\n" "Invalid argument."
-    builtin printf "%s\n" "Pass:"
-    builtin printf "%s\n" "    inc   - To increase pill count."
-    builtin printf "%s\n" "    dec   - To decrease pill count."
-    builtin printf "%s\n" "    total - To print the total caffeine consumed."
-    builtin printf "%s\n" "    reset - To reset pill count."
+    print_help_menu
 fi

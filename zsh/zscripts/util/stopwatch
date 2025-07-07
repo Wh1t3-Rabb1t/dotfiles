@@ -4,10 +4,9 @@
 # Interactive stopwatch.
 #
 # Arguments:
-#   $1  start - Start the timer
-#   $2  stop  - Stop the timer
-#   $3  reset - Reset the timer
-#   $4  log   - Print archived log data
+#   $@  start - Start the timer
+#   $@  new   - Dump session data and start a new session
+#   $@  log   - Print archived log data
 #
 # Globals:
 #   $VI_STATE_DIR
@@ -22,49 +21,129 @@ umask 077
 trap 'umask '"$original_permissions"'' EXIT
 
 # Declare state files
-local state_dir start_timestamp stopwatch_state work_hours_log
+local state_dir start_timestamp stopwatch_state work_logs
 state_dir="${VI_STATE_DIR}/work-timer"
+work_logs="${state_dir}/work-logs"
 stopwatch_state="${state_dir}/stopwatch_state"
-total_time_passed="${state_dir}/total_time_passed"
-work_hours_log="${state_dir}/work_hours_log"
+current_session="${state_dir}/current_session"
 
 # Ensure required dirs / files exist
-[[ ! -d "$state_dir" ]]         && mkdir "$state_dir"
-[[ ! -f "$stopwatch_state" ]]   && : > "$stopwatch_state"
-[[ ! -f "$total_time_passed" ]] && : > "$total_time_passed"
-[[ ! -f "$work_hours_log" ]]    && : > "$work_hours_log"
+[[ ! -d "$state_dir" ]]       && mkdir "$state_dir"
+[[ ! -d "$work_logs" ]]       && mkdir "$work_logs"
+[[ ! -f "$stopwatch_state" ]] && : > "$stopwatch_state"
+[[ ! -f "$current_session" ]] && : > "$current_session"
 
-local elapsed
-[[ ! -s "$total_time_passed" ]] && elapsed=0 || elapsed=$(< "$total_time_passed" )
-[[ ! -s "$stopwatch_state" ]] && builtin printf "on" > "$stopwatch_state"
+local function init_work_session() {
+    # Determine current time group for work logs (i.e. which year / month is it)
+    local cur_year cur_month cur_day year_dir month_dir log_file
+    cur_year=$(date +%Y)
+    cur_month=$(date +%B)
+    cur_day=$(date +%A_%d_%H_%M_%S)
+    year_dir="${work_logs}/${cur_year}"
+    month_dir="${year_dir}/${cur_month}"
+    log_file="${month_dir}/${cur_day}"
 
-local stopwatch key
-while true; do
-    stopwatch=$(< "$stopwatch_state" )
+    # Create required dirs / files if they don't exist
+    [[ ! -d "$year_dir" ]]  && mkdir "$year_dir"
+    [[ ! -d "$month_dir" ]] && mkdir "$month_dir"
+    [[ ! -f "$log_file" ]]  && : > "$log_file"
 
-    # Incrementally update timer while stopwatch state is set to 'on'
-    if [[ $stopwatch == "on" ]]; then
-        (( elapsed++ ))
-        printf "\rElapsed: %02d:%02d:%02d " $(( elapsed/3600 )) $(( elapsed/60%60 )) $(( elapsed%60 ))
-    fi
+    # Init current session file path and elapsed work time
+    builtin printf "%s" "$log_file" > "$current_session"
+    builtin printf "%s" "0" > "$log_file"
+}
 
-    # Use read with timeout for responsive key polling
-    if read -t 1 -k 1 key; then
-        case "$key" in
-            ' ')
-                if [[ $stopwatch == "on" ]]; then
-                    builtin printf "off" > "$stopwatch_state"
-                    builtin printf "$elapsed" > "$total_time_passed"
-                else
-                    builtin printf "on" > "$stopwatch_state"
-                fi
-                ;;
-            q)
-                : > "$stopwatch_state"
-                builtin printf "$elapsed" > "$total_time_passed"
-                builtin printf "\nStopped at: %02d:%02d:%02d \n" $(( elapsed/3600 )) $(( elapsed/60%60 )) $(( elapsed%60 ))
-                break
-                ;;
-        esac
-    fi
-done
+local function start_stopwatch() {
+    # Turn stopwatch on if re-launching after quitting
+    [[ ! -s "$stopwatch_state" ]] && builtin printf "on" > "$stopwatch_state"
+
+    builtin printf "%s\n%s\n\n" \
+        "Space : Toggle stopwatch on/off" \
+        "q     : Stop stopwatch"
+
+    local stopwatch key
+    while true; do
+        stopwatch=$(< "$stopwatch_state" )
+
+        # Incrementally update timer while stopwatch state is set to 'on'
+        if [[ $stopwatch == "on" ]]; then
+            (( elapsed++ ))
+            builtin printf "\rElapsed time: %02d:%02d:%02d " \
+                $(( elapsed/3600 )) \
+                $(( elapsed/60%60 )) \
+                $(( elapsed%60 ))
+        fi
+
+        # Use read with timeout for responsive key polling
+        if read -t 1 -k 1 key; then
+            case "$key" in
+                ' ')
+                    [[ $stopwatch == "on" ]] \
+                        && builtin printf "off" > "$stopwatch_state" \
+                        || builtin printf "on" > "$stopwatch_state"
+                    ;;
+                q)
+                    builtin printf "$elapsed" > "$active_session_file"
+
+                    builtin printf "\rStopped at: %02d:%02d:%02d " \
+                        $(( elapsed/3600 )) \
+                        $(( elapsed/60%60 )) \
+                        $(( elapsed%60 ))
+
+                    : > "$stopwatch_state"
+                    break
+                    ;;
+            esac
+        fi
+    done
+}
+
+# Dump current session data and create a new one
+local function init_new_work_session() {
+    active_session_file="${active_session_file/${state_dir}/work-timer}"
+
+    builtin printf -v session_time "%02d:%02d:%02d" \
+        $(( elapsed/3600 )) \
+        $(( elapsed/60%60 )) \
+        $(( elapsed%60 ))
+
+    builtin printf "%s\n\n%s\n%s\n\n%s\n" \
+        "Dumping current session data:" \
+        "Elapsed time    : ${session_time}" \
+        "Current session : ${active_session_file}" \
+        "A new session will initialize automatically when restarting the stopwatch."
+
+    : > "$current_session"
+}
+
+# Help menu
+local function print_help_menu() {
+    builtin printf "%s\n\n%s\n%s\n%s\n%s\n" \
+        "Invalid argument." \
+        "Pass:" \
+        "    start - To start stopwatch." \
+        "    new   - To dump current session data and start new session." \
+        "    help  - To print this help page."
+}
+
+# Init new session if $current_session is empty
+if [[ ! -s "$current_session" ]]; then
+    init_work_session
+fi
+
+# Retrieve active session data
+local active_session_file elapsed
+active_session_file=$(< "$current_session" )
+elapsed=$(< "$active_session_file" )
+
+# Parse flags
+if [[ $1 == "start" ]] || [[ $# == 0 ]]; then
+    start_stopwatch
+elif [[ $1 == "new" ]]; then
+    init_new_work_session
+elif [[ $1 == "help" ]]; then
+    print_help_menu
+else
+    # Invalid argument
+    print_help_menu
+fi

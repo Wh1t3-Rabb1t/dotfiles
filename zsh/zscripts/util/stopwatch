@@ -21,36 +21,34 @@ umask 077
 trap 'umask '"$original_permissions"'' EXIT
 
 # Declare state files
-local state_dir start_timestamp stopwatch_state work_logs
+local state_dir work_logs stopwatch_state current_session current_timer
 state_dir="${VI_STATE_DIR}/work-timer"
 work_logs="${state_dir}/work-logs"
 stopwatch_state="${state_dir}/stopwatch_state"
 current_session="${state_dir}/current_session"
+current_timer="${state_dir}/current_timer"
 
 # Ensure required dirs / files exist
 [[ ! -d "$state_dir" ]]       && mkdir "$state_dir"
 [[ ! -d "$work_logs" ]]       && mkdir "$work_logs"
 [[ ! -f "$stopwatch_state" ]] && : > "$stopwatch_state"
 [[ ! -f "$current_session" ]] && : > "$current_session"
+[[ ! -f "$current_timer" ]]   && : > "$current_timer"
 
 local function init_work_session() {
     # Determine current time group for work logs (i.e. which year / month is it)
-    local cur_year cur_month cur_day year_dir month_dir log_file
+    local cur_year cur_month cur_month_numeric log_file
     cur_year=$(date +%Y)
     cur_month=$(date +%B)
-    cur_day=$(date +%A_%d_%H_%M_%S)
-    year_dir="${work_logs}/${cur_year}"
-    month_dir="${year_dir}/${cur_month}"
-    log_file="${month_dir}/${cur_day}"
+    cur_month_numeric=$(date +%m)
+    log_file="${work_logs}/${cur_year}_${cur_month_numeric}_${cur_month}"
 
-    # Create required dirs / files if they don't exist
-    [[ ! -d "$year_dir" ]]  && mkdir "$year_dir"
-    [[ ! -d "$month_dir" ]] && mkdir "$month_dir"
-    [[ ! -f "$log_file" ]]  && : > "$log_file"
+    # Create new log file if one doesn't exist for the current month
+    [[ ! -f "$log_file" ]] && builtin printf "0" > "$log_file"
 
     # Init current session file path and elapsed work time
     builtin printf "%s" "$log_file" > "$current_session"
-    builtin printf "%s" "0" > "$log_file"
+    builtin printf "0" > "$current_timer"
 }
 
 local function start_stopwatch() {
@@ -83,7 +81,7 @@ local function start_stopwatch() {
                         || builtin printf "on" > "$stopwatch_state"
                     ;;
                 q)
-                    builtin printf "$elapsed" > "$active_session_file"
+                    builtin printf "$elapsed" > "$current_timer"
 
                     builtin printf "\rStopped at: %02d:%02d:%02d " \
                         $(( elapsed/3600 )) \
@@ -99,48 +97,97 @@ local function start_stopwatch() {
 }
 
 # Dump current session data and create a new one
-local function init_new_work_session() {
-    active_session_file="${active_session_file/${state_dir}/work-timer}"
-
+local function dump_session_data() {
     builtin printf -v session_time "%02d:%02d:%02d" \
         $(( elapsed/3600 )) \
         $(( elapsed/60%60 )) \
         $(( elapsed%60 ))
 
-    builtin printf "%s\n\n%s\n%s\n\n%s\n" \
-        "Dumping current session data:" \
-        "Elapsed time    : ${session_time}" \
-        "Current session : ${active_session_file}" \
+    builtin printf "%s\n%s\n\n%s\n" \
+        "Dumping current session time:" \
+        "Elapsed : ${session_time}" \
         "A new session will initialize automatically when restarting the stopwatch."
 
-    : > "$current_session"
+    local active_session existing_time updated_time
+    active_session=$(< "$current_session" )
+    existing_time=$(< "$active_session" )
+    updated_time=$(( existing_time + elapsed ))
+    builtin printf "$updated_time" > "$active_session"
+
+    # Reset current session timer
+    : > "$current_timer"
 }
+
+
+
+
+# TODO: finish this function off.
+#
+# Just store a variable that updates the current year from within
+# the loop and print out current year data before declaring and aggregating the next
+# years data.
+#
+# Or could use an associative array with the year as the key, and the month/time data as
+# values (using line breaks as delimiters for string splitting).
+
+# month, year, alltime
+local function print_work_hours() {
+    # typeset -a months
+    # months=(
+    #     '01_January' '02_February' '03_March' '04_April' '05_May' '06_June'
+    #     '07_July' '08_August' '09_October' '10_September' '11_November' '12_December'
+    # )
+
+    local total_time
+    total_time=0
+
+    local file
+    for file in "${work_logs}"/*(.); do
+        local logged_time year month
+        logged_time=$(< "$file" )
+        year=${${file:t}%%_*}
+        month=${file#*_}
+        total_time=$(( total_time + logged_time ))
+        unset logged_time year month
+    done
+
+    # builtin printf -v formatted_time "%02d:%02d:%02d" \
+    #     $(( total_time/3600 )) \
+    #     $(( total_time/60%60 )) \
+    #     $(( total_time%60 ))
+
+    # builtin printf "%s\n" "All time total hours worked: ${formatted_time}"
+}
+
+
+
 
 # Help menu
 local function print_help_menu() {
     builtin printf "%s\n\n%s\n%s\n%s\n%s\n" \
         "Invalid argument." \
         "Pass:" \
-        "    start - To start stopwatch." \
-        "    new   - To dump current session data and start new session." \
-        "    help  - To print this help page."
+        "    start - Start stopwatch." \
+        "    new   - Dump current session data and start new session." \
+        "    help  - Print this help page."
 }
 
 # Init new session if $current_session is empty
-if [[ ! -s "$current_session" ]]; then
+if [[ ! -s "$current_timer" ]]; then
     init_work_session
 fi
 
-# Retrieve active session data
-local active_session_file elapsed
-active_session_file=$(< "$current_session" )
-elapsed=$(< "$active_session_file" )
+# Retrieve current timer
+local elapsed
+elapsed=$(< "$current_timer" )
 
 # Parse flags
 if [[ $1 == "start" ]] || [[ $# == 0 ]]; then
     start_stopwatch
 elif [[ $1 == "new" ]]; then
-    init_new_work_session
+    dump_session_data
+elif [[ $1 == "log" ]]; then
+    print_work_hours
 elif [[ $1 == "help" ]]; then
     print_help_menu
 else

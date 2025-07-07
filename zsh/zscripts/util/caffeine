@@ -92,11 +92,11 @@ local function print_help_menu() {
     builtin printf "%s\n\n%s\n%s\n%s\n%s\n%s\n%s\n" \
         "Invalid argument." \
         "Pass:" \
-        "    inc   - To increase pill count." \
-        "    dec   - To decrease pill count." \
-        "    total - To print the total caffeine consumed." \
-        "    reset - To reset pill count." \
-        "    help  - To print this help page."
+        "    inc   - Increase pill count." \
+        "    dec   - Decrease pill count." \
+        "    total - Print the total caffeine consumed." \
+        "    reset - Reset pill count." \
+        "    help  - Print this help page."
 }
 
 local daily_pills

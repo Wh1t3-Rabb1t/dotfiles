@@ -5,7 +5,7 @@
 #
 # Arguments:
 #   $@  start - Start the timer
-#   $@  new   - Dump session data and start a new session
+#   $@  reset - Dump session data and start a new session
 #   $@  log   - Print archived log data
 #
 # Globals:
@@ -21,18 +21,16 @@ umask 077
 trap 'umask '"$original_permissions"'' EXIT
 
 # Declare state files
-local state_dir work_logs stopwatch_state current_session current_timer
+local state_dir work_logs stopwatch_state current_timer
 state_dir="${VI_STATE_DIR}/work-timer"
 work_logs="${state_dir}/work-logs"
 stopwatch_state="${state_dir}/stopwatch_state"
-current_session="${state_dir}/current_session"
 current_timer="${state_dir}/current_timer"
 
 # Ensure required dirs / files exist
 [[ ! -d "$state_dir" ]]       && mkdir "$state_dir"
 [[ ! -d "$work_logs" ]]       && mkdir "$work_logs"
 [[ ! -f "$stopwatch_state" ]] && : > "$stopwatch_state"
-[[ ! -f "$current_session" ]] && : > "$current_session"
 [[ ! -f "$current_timer" ]]   && : > "$current_timer"
 
 local function init_work_session() {
@@ -41,13 +39,12 @@ local function init_work_session() {
     cur_year=$(date +%Y)
     cur_month=$(date +%B)
     cur_month_numeric=$(date +%m)
-    log_file="${work_logs}/${cur_year}_${cur_month_numeric}_${cur_month}"
+    log_file="${work_logs}/${cur_year}"
 
-    # Create new log file if one doesn't exist for the current month
-    [[ ! -f "$log_file" ]] && builtin printf "0" > "$log_file"
+    # Create new log file if one doesn't exist for the current year
+    [[ ! -f "$log_file" ]] && builtin printf "${cur_month_numeric}_${cur_month} 0" > "$log_file"
 
-    # Init current session file path and elapsed work time
-    builtin printf "%s" "$log_file" > "$current_session"
+    # Init elapsed work time
     builtin printf "0" > "$current_timer"
 }
 
@@ -104,20 +101,38 @@ local function dump_session_data() {
         $(( elapsed%60 ))
 
     builtin printf "%s\n%s\n\n%s\n" \
-        "Dumping current session time:" \
-        "Elapsed : ${session_time}" \
+        "Dumping current session time." \
+        "Elapsed: ${session_time}" \
         "A new session will initialize automatically when restarting the stopwatch."
 
-    local active_session existing_time updated_time
-    active_session=$(< "$current_session" )
-    existing_time=$(< "$active_session" )
-    updated_time=$(( existing_time + elapsed ))
-    builtin printf "$updated_time" > "$active_session"
+    # Split the current log file contents into an array for processing
+    local log_file
+    typeset -a log_array
+    log_file="${work_logs}/$(date +%Y)"
+    log_array=( "${(f)$(< "$log_file" )}" )
+
+    # Update time logs with the current stopwatch elapsed time
+    local entry log_month
+    log_month="$(date +%m)_$(date +%B)"
+    for entry in "${log_array[@]}"; do
+        if [[ $entry == "$log_month"* ]]; then
+            local logged_time updated_time index
+            logged_time=${entry#* }
+            updated_time=$(( logged_time + elapsed ))
+            index="${log_array[(Ie)$entry]}"
+            log_array[$index]="${log_month} ${updated_time}"
+            break
+        fi
+    done
+
+    # Regenerate the relevant log file with updated values
+    local temp_file
+    temp_file=$(mktemp "${log_file}.XXXX")
+    builtin printf "%s\n" "${log_array[@]}" > "$temp_file" && mv -- "$temp_file" "$log_file"
 
     # Reset current session timer
     : > "$current_timer"
 }
-
 
 
 
@@ -168,11 +183,11 @@ local function print_help_menu() {
         "Invalid argument." \
         "Pass:" \
         "    start - Start stopwatch." \
-        "    new   - Dump current session data and start new session." \
+        "    reset - Dump current session data and start new session." \
         "    help  - Print this help page."
 }
 
-# Init new session if $current_session is empty
+# Init new session if $current_timer is set to zero
 if [[ ! -s "$current_timer" ]]; then
     init_work_session
 fi
@@ -184,7 +199,7 @@ elapsed=$(< "$current_timer" )
 # Parse flags
 if [[ $1 == "start" ]] || [[ $# == 0 ]]; then
     start_stopwatch
-elif [[ $1 == "new" ]]; then
+elif [[ $1 == "reset" ]]; then
     dump_session_data
 elif [[ $1 == "log" ]]; then
     print_work_hours
@@ -194,3 +209,19 @@ else
     # Invalid argument
     print_help_menu
 fi
+
+
+# builtin printf "%s\n" "${log_array[@]}" > "$log_file"
+
+    # index="${session_array[(Ie)$line]}"
+
+    # session_array[(Ie)$line]="${month} ${updated_time}"
+    # session_array[index]=$new_element
+
+    # local active_session existing_time updated_time
+    # # active_session=$(< "$current_session" )
+    # # existing_time=$(< "$active_session" )
+    # updated_time=$(( existing_time + elapsed ))
+    # # builtin printf "$updated_time" > "$active_session"
+
+

@@ -63,10 +63,7 @@ local function start_stopwatch() {
         # Incrementally update timer while stopwatch state is set to 'on'
         if [[ $stopwatch == "on" ]]; then
             (( elapsed++ ))
-            builtin printf "\rElapsed time: %02d:%02d:%02d " \
-                $(( elapsed/3600 )) \
-                $(( elapsed/60%60 )) \
-                $(( elapsed%60 ))
+            builtin printf "\rElapsed time: %02d:%02d:%02d " $((elapsed/3600)) $((elapsed/60%60)) $((elapsed%60))
         fi
 
         # Use read with timeout for responsive key polling
@@ -79,12 +76,7 @@ local function start_stopwatch() {
                     ;;
                 q)
                     builtin printf "$elapsed" > "$current_timer"
-
-                    builtin printf "\rStopped at: %02d:%02d:%02d " \
-                        $(( elapsed/3600 )) \
-                        $(( elapsed/60%60 )) \
-                        $(( elapsed%60 ))
-
+                    builtin printf "\rStopped at: %02d:%02d:%02d " $((elapsed/3600)) $((elapsed/60%60)) $((elapsed%60))
                     : > "$stopwatch_state"
                     break
                     ;;
@@ -95,10 +87,7 @@ local function start_stopwatch() {
 
 # Dump current session data and create a new one
 local function dump_session_data() {
-    builtin printf -v session_time "%02d:%02d:%02d" \
-        $(( elapsed/3600 )) \
-        $(( elapsed/60%60 )) \
-        $(( elapsed%60 ))
+    builtin printf -v session_time "%02d:%02d:%02d" $((elapsed/3600)) $((elapsed/60%60)) $((elapsed%60))
 
     builtin printf "%s\n%s\n\n%s\n" \
         "Dumping current session time." \
@@ -128,66 +117,75 @@ local function dump_session_data() {
     # Regenerate the relevant log file with updated values
     local temp_file
     temp_file=$(mktemp "${log_file}.XXXX")
+    trap 'rm -f "$temp_file"' EXIT
     builtin printf "%s\n" "${log_array[@]}" > "$temp_file" && mv -- "$temp_file" "$log_file"
 
     # Reset current session timer
     : > "$current_timer"
 }
 
-
-
-# TODO: finish this function off.
-#
-# Just store a variable that updates the current year from within
-# the loop and print out current year data before declaring and aggregating the next
-# years data.
-#
-# Or could use an associative array with the year as the key, and the month/time data as
-# values (using line breaks as delimiters for string splitting).
-
-# month, year, alltime
+# Print breakdowns of average hours worked per day, week, month
 local function print_work_hours() {
-    # typeset -a months
-    # months=(
-    #     '01_January' '02_February' '03_March' '04_April' '05_May' '06_June'
-    #     '07_July' '08_August' '09_October' '10_September' '11_November' '12_December'
-    # )
-
-    local total_time
-    total_time=0
+    local main_group_hl subgroup_hl no_color
+    main_group_hl=$'\x1b[38;5;11m'
+    subgroup_hl=$'\x1b[38;5;38m'
+    no_color=$'\x1b[0m'
 
     local file
     for file in "${work_logs}"/*(.); do
-        local logged_time year month
-        logged_time=$(< "$file" )
-        year=${${file:t}%%_*}
-        month=${file#*_}
-        total_time=$(( total_time + logged_time ))
-        unset logged_time year month
+        typeset -a log_array
+        log_array=( "${(f)$(< "$file" )}" )
+
+        local year_total monthly_totals
+        year_total=0
+
+        local entry
+        for entry in "${log_array[@]}"; do
+            local month logged_time
+            month=${entry%% *}
+            logged_time=${entry#* }
+
+            builtin printf -v total_time "%02d:%02d" $((logged_time/3600)) $((logged_time/60%60))
+            builtin printf -v weekly_time "%02d:%02d" $(((logged_time/4)/3600)) $(((logged_time/4)/60%60))
+            builtin printf -v daily_time "%02d:%02d" $(((logged_time/31)/3600)) $(((logged_time/31)/60%60))
+
+            monthly_totals+="- ${subgroup_hl}${month#*_}${no_color}\nMonthly total:   ${total_time}\nWeekly average:  ${weekly_time}\nDaily average:   ${daily_time}\n\n"
+            year_total=$(( year_total + logged_time ))
+            unset month logged_time
+        done
+        unset entry
+
+        # Print averages for each month in the current year
+        builtin printf "\n%s\n\n" "_________ ${main_group_hl}${file:t}${no_color} _________"
+        builtin printf "$monthly_totals"
+
+        builtin printf -v yearly_total "%02d:%02d" $((year_total/3600)) $((year_total/60%60))
+        builtin printf -v monthly_average "%02d:%02d" $(((year_total/12)/3600)) $(((year_total/12)/60%60))
+        builtin printf -v weekly_average "%02d:%02d" $(((year_total/52)/3600)) $(((year_total/52)/60%60))
+        builtin printf -v daily_average "%02d:%02d" $(((year_total/365)/3600)) $(((year_total/365)/60%60))
+
+        # Print yearly totals
+        builtin printf "%s\n%s\n%s\n%s\n%s\n" \
+            "- ${subgroup_hl}TOTALS${no_color}" \
+            "Yearly total:    ${yearly_total}" \
+            "Monthly average: ${monthly_average}" \
+            "Weekly average:  ${weekly_average}" \
+            "Daily average:   ${daily_average}"
+
+        unset log_array year_total monthly_totals
     done
-
-    # builtin printf -v formatted_time "%02d:%02d:%02d" \
-    #     $(( total_time/3600 )) \
-    #     $(( total_time/60%60 )) \
-    #     $(( total_time%60 ))
-
-    # builtin printf "%s\n" "All time total hours worked: ${formatted_time}"
 }
-
-
-
 
 # Help menu
 local function print_help_menu() {
-    builtin printf "%s\n\n%s\n%s\n%s\n%s\n" \
-        "Invalid argument." \
-        "Pass:" \
+    builtin printf "%s\n%s\n%s\n%s\n" \
+        "Available arguments:" \
         "    start - Start stopwatch." \
         "    reset - Dump current session data and start new session." \
         "    help  - Print this help page."
 }
 
-# Init new session if $current_timer is set to zero
+# Init new session if $current_timer is empty
 if [[ ! -s "$current_timer" ]]; then
     init_work_session
 fi
@@ -207,21 +205,6 @@ elif [[ $1 == "help" ]]; then
     print_help_menu
 else
     # Invalid argument
+    builtin printf "%s\n\n" "Invalid argument."
     print_help_menu
 fi
-
-
-# builtin printf "%s\n" "${log_array[@]}" > "$log_file"
-
-    # index="${session_array[(Ie)$line]}"
-
-    # session_array[(Ie)$line]="${month} ${updated_time}"
-    # session_array[index]=$new_element
-
-    # local active_session existing_time updated_time
-    # # active_session=$(< "$current_session" )
-    # # existing_time=$(< "$active_session" )
-    # updated_time=$(( existing_time + elapsed ))
-    # # builtin printf "$updated_time" > "$active_session"
-
-

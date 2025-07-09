@@ -6,8 +6,8 @@
 # Arguments:
 #   $@  inc   - Increase pill count by one
 #   $@  dec   - Decrease pill count by one
-#   $@  total - Print total consumed pills / active mg of caffeine
 #   $@  reset - Reset pill count
+#   $@  total - Print total consumed pills / active mg of caffeine
 #
 # Globals:
 #   $VI_STATE_DIR

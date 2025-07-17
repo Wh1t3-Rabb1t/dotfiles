@@ -140,7 +140,9 @@ local function dump_session_data() {
     local temp_file
     temp_file=$(mktemp "${log_file}.XXXX")
     trap 'rm -f "$temp_file"' EXIT
-    builtin printf "%s\n" "${log_array[@]}" > "$temp_file" && mv -- "$temp_file" "$log_file"
+
+    builtin printf "%s\n" "${log_array[@]}" > "$temp_file" \
+        && mv -- "$temp_file" "$log_file"
 
     # Reset current session timer
     : > "$current_timer"

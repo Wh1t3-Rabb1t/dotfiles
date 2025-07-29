@@ -1,5 +1,5 @@
 fg:238
-list-fg:123
+list-fg:123:underline
 selected-fg:-1
 preview-fg:-1
 bg:232

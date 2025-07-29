@@ -2,7 +2,6 @@
 --header-first
 --layout=reverse
 --cycle
---height=100%
 --prompt='> '
 --pointer='▐'
 --marker='▌'

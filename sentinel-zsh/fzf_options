@@ -5,7 +5,7 @@
 --prompt='> '
 --pointer='▐'
 --marker='▌'
---multi
+--multi=1
 
 // All of the options below are available but inactive.
 // Uncomment to activate (remove the '// ' at the beginning of the line).

@@ -222,8 +222,8 @@ bindkey -M viins '^[p'      _clipboard_ring_paste        # Alt p
 # INCREMENT / DECREMENT INTEGERS
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'X'        _increment_integers          # X
-bindkey -M vicmd 'C'        _decrement_integers          # C
+bindkey -M vicmd 'C'        _increment_integers          # X
+bindkey -M vicmd 'X'        _decrement_integers          # C
 
 
 # MATCH BRACKETS

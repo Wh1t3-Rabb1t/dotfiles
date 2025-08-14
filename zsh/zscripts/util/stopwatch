@@ -41,6 +41,10 @@ local function init_work_session() {
     cur_month_numeric=$(date +%m)
     log_file="${work_logs}/${cur_year}"
 
+
+    # TODO: fix this (change of month isn't being recognized)
+
+
     # Create new log file if one doesn't exist for the current year
     [[ ! -f "$log_file" ]] && builtin printf "${cur_month_numeric}_${cur_month} 0" > "$log_file"
 

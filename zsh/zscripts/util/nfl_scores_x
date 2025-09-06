@@ -1,0 +1,28 @@
+#!/usr/bin/env zsh
+
+################################################################################
+# Print aggregated scores from the previous fortnights nfl games.
+#
+# Arguments:
+#   None
+#
+# Globals:
+#   None
+################################################################################
+
+emulate -L zsh
+
+# Check for GNU vs BSD coreutils
+local start_date end_date
+if (( ${+commands[gdircolors]} )); then
+    start_date="$(date -d "14 days ago" +%Y%m%d)"
+else
+    start_date="$(date -v-14d +%Y%m%d)"
+fi
+end_date="$(date +%Y%m%d)"
+
+local site
+site="https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?limit"
+curl -s "${site}=1000&dates=${start_date}-${end_date}" \
+| jq -r '.events[]
+| "\(.date[0:10])  \((.competitions[0].competitors[0].score | tonumber) + (.competitions[0].competitors[1].score | tonumber))  \(.competitions[0].competitors[0].team.shortDisplayName) vs \(.competitions[0].competitors[1].team.shortDisplayName)"'

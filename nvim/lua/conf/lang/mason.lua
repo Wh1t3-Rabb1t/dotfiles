@@ -25,31 +25,31 @@ function M.config()
     local options = {
         ensure_installed = {
             "lua-language-server",
-            "luacheck",                    -- Linter (maintainer passed away RIP)
-            "stylua",                      -- Formatter
+            "luacheck",              -- Linter (maintainer passed away RIP)
+            "stylua",                -- Formatter
 
             -- Shell
-            "bash-language-server",        -- Language server
-            "shellcheck",                  -- Linter
-            "shfmt",                       -- Formatter
+            "bash-language-server",  -- Language server
+            "shellcheck",            -- Linter
+            "shfmt",                 -- Formatter
 
             -- Go
-            "gopls",                       -- Language server
-            "golangci-lint",               -- Linter
-            "delve",                       -- Debugger
-
-            -- JS
-            "typescript-language-server",  -- Language server
-            "emmet-language-server",       -- Language server
-
-            -- CSS
-            "css-lsp",                     -- Language server
-
-            -- HTML
-            "html-lsp",                    -- Language server
+            "gopls",                 -- Language server
+            "golangci-lint",         -- Linter
+            "delve",                 -- Debugger
 
             -- JSON
-            "json-lsp",                    -- Language server
+            "json-lsp",              -- Language server
+
+            -- JS
+            -- "typescript-language-server",  -- Language server
+            -- "emmet-language-server",       -- Language server
+
+            -- CSS
+            -- "css-lsp",                     -- Language server
+
+            -- HTML
+            -- "html-lsp",                    -- Language server
         },
         max_concurrent_installers = 10,
         ui = {

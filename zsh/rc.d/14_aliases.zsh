@@ -10,7 +10,7 @@ alias b="cd -"
 alias ei="caffeine"
 alias fein="caffeine"
 alias oa="open -a"
-alias lg='cat "${VI_STATE_DIR}/log"'
+alias lg='cat "${XDG_STATE_HOME}/logs/log"'
 alias getip="ifconfig | grep inet"
 alias bindings="bindkey | grep -v '_noop' | column"
 

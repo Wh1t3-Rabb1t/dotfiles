@@ -12,13 +12,10 @@
 
 emulate -L zsh
 
-# Check for GNU vs BSD coreutils
+# Requires GNU coreutils if on macos
+# (not searching for a reliable coreutils check right now)
 local start_date end_date
-if (( ${+commands[gdircolors]} )); then
-    start_date="$(date -d "14 days ago" +%Y%m%d)"
-else
-    start_date="$(date -v-14d +%Y%m%d)"
-fi
+start_date="$(date -d "14 days ago" +%Y%m%d)"
 end_date="$(date +%Y%m%d)"
 
 local site

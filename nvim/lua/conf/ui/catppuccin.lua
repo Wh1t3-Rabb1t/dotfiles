@@ -18,14 +18,14 @@ function M.config()
     local colors = require("catppuccin.palettes").get_palette()
     require("catppuccin").setup({
         compile_path = vim.fn.stdpath "cache" .. "/catppuccin",
-        flavour = "mocha",              -- latte, frappe, macchiato, mocha
-        background = {                  -- See `:h background`
+        flavour = "macchiato",              -- latte, frappe, macchiato, mocha
+        background = {                      -- See `:h background`
             light = "macchiato",
             dark = "mocha",
         },
-        transparent_background = true,  -- Disable setting the bg color
-        show_end_of_buffer = false,     -- Show '~' characters at EOF
-        term_colors = false,            -- Set term colors (e.g. `g:terminal_color_0`)
+        transparent_background = false,  -- Disable setting the bg color
+        show_end_of_buffer = false,      -- Show '~' characters at EOF
+        term_colors = false,             -- Set term colors (e.g. `g:terminal_color_0`)
         dim_inactive = { enabled = false },
         no_italic = false,
         no_bold = false,

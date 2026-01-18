@@ -83,23 +83,24 @@
 -- Turn off bluetooth when system goes to sleep.
 -----------------------------------------------------------------------------------------------
 
+
+-- -- Print the error message if command fails to execute.
+-- -- function checkBluetoothResult(rc, stderr, stderr)
+-- function checkBluetoothResult(rc, stderr)
+--     if rc ~= 0 then
+--         print(string.format('Unexpected result executing `blueutil`: rc=%d stderr=%s stdout=%s', rc, stderr, stdout))
+--     end
+-- end
+
+-- function bluetooth(power)
+--     print('Setting bluetooth to ' .. power)
+--     local t = hs.task.new('/opt/homebrew/bin/blueutil', checkBluetoothResult, {'--power', power})
+--     t:start()
+-- end
+
 local function toggleWifi()
     local currentStatus = hs.wifi.interfaceDetails().power
     hs.wifi.setPower(not currentStatus)
-end
-
--- Print the error message if command fails to execute.
--- function checkBluetoothResult(rc, stderr, stderr)
-function checkBluetoothResult(rc, stderr)
-    if rc ~= 0 then
-        print(string.format('Unexpected result executing `blueutil`: rc=%d stderr=%s stdout=%s', rc, stderr, stdout))
-    end
-end
-
-function bluetooth(power)
-    print('Setting bluetooth to ' .. power)
-    local t = hs.task.new('/opt/homebrew/bin/blueutil', checkBluetoothResult, {'--power', power})
-    t:start()
 end
 
 function f(event)
@@ -109,12 +110,12 @@ function f(event)
         toggleWifi()
     end
 
-    if event == hs.caffeinate.watcher.systemWillSleep then
-        bluetooth('off')
-    elseif event == hs.caffeinate.watcher.screensDidWake then
-        bluetooth('on')
-        hs.alert('Bluetooth is connected.')
-    end
+    -- if event == hs.caffeinate.watcher.systemWillSleep then
+    --     bluetooth('off')
+    -- elseif event == hs.caffeinate.watcher.screensDidWake then
+    --     bluetooth('on')
+    --     hs.alert('Bluetooth is connected.')
+    -- end
 end
 watcher = hs.caffeinate.watcher.new(f)
 watcher:start()

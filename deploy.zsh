@@ -13,7 +13,7 @@ zmodload -m -F zsh/files b:zf_rm b:zf_ln b:zf_mkdir
 # Get the current path
 # ---------------------------------------------------------------------------- #
 SCRIPT_DIR="${0:A:h}"
-cd "${SCRIPT_DIR}"
+cd "$SCRIPT_DIR"
 
 
 # Default XDG paths
@@ -23,28 +23,31 @@ XDG_CACHE_HOME="${HOME}/.cache"
 XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
+local separator="${(l:$COLUMNS::#:)}"
+# print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+
 
 # Install Homebrew and set macOS defaults
 # ---------------------------------------------------------------------------- #
-if [[ "${OSTYPE}" == darwin* ]]; then
+if [[ "$OSTYPE" == darwin* ]]; then
     # Install brew
     print "\nInstalling Homebrew...\n"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/opt/homebrew/bin/brew shellenv)"
     print "    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+    print "${separator}\n"
 
     # Install dependancies
     print "Installing Homebrew dependancies...\n"
     command brew bundle install --verbose --no-lock --file "${SCRIPT_DIR}macos/Brewfile"
     print "\n    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+    print "${separator}\n"
 
     # Set macOS defaults
     print "Setting macOS defaults...\n"
     "${SCRIPT_DIR}/macos/system_settings.zsh"
     print "    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+    print "${separator}\n"
 fi
 
 
@@ -61,19 +64,19 @@ touch "${XDG_STATE_HOME}/zsh-vi/clipboard_ring"
 touch "${XDG_STATE_HOME}/zsh-vi/staging_area"
 touch "${XDG_STATE_HOME}/logs/log"
 print "    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "${separator}\n"
 
 
 # Link zshenv if needed
 # ---------------------------------------------------------------------------- #
 print "Checking for ZDOTDIR env variable...\n"
-if [[ "${ZDOTDIR}" = "${SCRIPT_DIR}/zsh" ]]; then
+if [[ "$ZDOTDIR" = "${SCRIPT_DIR}/zsh" ]]; then
     print "    ...present and valid, skipping .zshenv symlink\n"
 else
     ln -sf "${SCRIPT_DIR}/zsh/.zshenv" "${ZDOTDIR:-${HOME}}/.zshenv"
     print "    ...failed to match this script dir, symlinking .zshenv\n"
 fi
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "${separator}\n"
 
 
 # Link configs
@@ -97,7 +100,7 @@ zf_ln -sfn "${SCRIPT_DIR}/ripgrep" "${XDG_CONFIG_HOME}/ripgrep"
 zf_ln -sfn "${SCRIPT_DIR}/serie" "${XDG_CONFIG_HOME}/serie"
 zf_ln -sfn "${SCRIPT_DIR}/yazi" "${XDG_CONFIG_HOME}/yazi"
 print "    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "${separator}\n"
 
 
 # Make sure submodules are installed
@@ -107,7 +110,7 @@ git submodule sync > /dev/null
 git submodule update --init --recursive > /dev/null
 git clean -ffd
 print "\n    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "${separator}\n"
 
 
 # Compile compatible zsh plugin files
@@ -122,23 +125,23 @@ print "Compiling zsh plugins...\n"
     done
 }
 print "    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "${separator}\n"
 
 
 # Trigger zsh run with powerlevel10k prompt to download gitstatusd
 # ---------------------------------------------------------------------------- #
 print "Downloading gitstatusd for powerlevel10k...\n"
-${SHELL} -is <<<'' &> /dev/null
+$SHELL -is <<<'' &> /dev/null
 print "    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "${separator}\n"
 
 
 # Set fast-syntax-highlighting theme
 # ---------------------------------------------------------------------------- #
 print "Setting fast-syntax-highlighting theme...\n"
-${SHELL} -is <<<'fast-theme base16' &> /dev/null
+$SHELL -is <<<'fast-theme base16' &> /dev/null
 print "    ...done\n"
-print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+print "${separator}\n"
 
 
 # Generate Vim help tags
@@ -147,7 +150,7 @@ if (( ${+commands[vim]} )); then
     print "Generating Vim helptags...\n"
     command vim --not-a-term -i "NONE" -c "helptags ALL" -c "qall" &> /dev/null
     print "    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+    print "${separator}\n"
 fi
 
 
@@ -164,7 +167,7 @@ if (( ${+commands[nvim]} )); then
     # It's a user command declared in:  './nvim/lua/conf/lang/mason.lua'
     command nvim --headless -c "MasonInstallAll" -c "qall" &> /dev/null
     print "    ...done\n"
-    print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
+    print "${separator}\n"
 fi
 
 

@@ -189,7 +189,7 @@ nmap("wh",             '"_dT')                   -- Delete backwards to char
 
 -- DOT OPERATOR / UNDO / REDO
 --------------------------------------------------------------------------------
-nmap("-",              ".")                      -- Dot operator
+nmap("_",              ".")                      -- Dot operator
 nmap("<A-y>",          "u")                      -- Undo
 nmap("<A-S-y>",        "U")                      -- Redo
 imap("<A-y>",          km.undo)                  -- Undo
@@ -198,9 +198,9 @@ imap("<A-S-y>",        km.redo)                  -- Redo
 
 -- SWAP CASE
 --------------------------------------------------------------------------------
-nmap("_",              "~")                      -- Swap case
-vmap("_",              "mmU`m")                  -- Uppercase visual selection
-vmap("-",              "mmu`m")                  -- Lowercase visual selection
+nmap("-",              "~")                      -- Swap case
+vmap("-",              "mmU`m")                  -- Uppercase visual selection
+vmap("_",              "mmu`m")                  -- Lowercase visual selection
 
 
 -- SELECT IN / AROUND

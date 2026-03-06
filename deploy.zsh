@@ -24,7 +24,6 @@ XDG_DATA_HOME="${HOME}/.local/share"
 XDG_STATE_HOME="${HOME}/.local/state"
 
 local separator="${(l:$COLUMNS::#:)}"
-# print "$(printf '%*s' "$(tput cols)" | tr ' ' '#')\n"
 
 
 # Install Homebrew and set macOS defaults

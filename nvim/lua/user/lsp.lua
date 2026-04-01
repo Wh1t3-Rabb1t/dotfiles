@@ -1,4 +1,10 @@
--- basic LSP keymaps
+--   _
+--  | |___ _ __
+--  | / __| '_ \
+--  | \__ \ |_) |
+--  |_|___/ .__/
+-- =======|_|===================================================================
+
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
         local buf = args.buf

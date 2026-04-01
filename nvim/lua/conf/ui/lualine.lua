@@ -182,13 +182,6 @@ function M.config()
                     -- 4: Filename and parent dir, with tilde as the home dir
                     path = 1,
                 },
-                {   -- Grapple
-                    icons.grapple_icon,
-                    color = { fg = colors.sky },
-                    cond = function()
-                        return require("grapple").exists()
-                    end
-                }
             },
             lualine_x = {
                 "lsp_status",

@@ -22,6 +22,7 @@
 require("user.auto_cmds")
 require("user.keymaps")
 require("user.options")
+require("user.lsp")
 
 
 -- BOOTSTRAP LAZY

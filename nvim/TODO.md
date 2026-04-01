@@ -1,5 +1,28 @@
 # TODO
 
+## Snacks notes:
+
+Plugins to keep:
+
+- Lualine
+- Rip substitute
+- Barbar
+- Fidget
+- Comment
+- Dial
+- Autopairs
+- NeoComposer
+- Spider
+- Surround
+- Trailblazer
+- Neotree
+- Gitsigns
+
+(Replaced by Snacks)
+- ibl (indent blank line)
+
+
+
 ## Priority: High
 
 - Save change in word jump to next match as a macro and bind to a key.

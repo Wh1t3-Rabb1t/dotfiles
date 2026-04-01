@@ -16,43 +16,6 @@ return {
         config = require("conf.editor.autopairs").config,
     },
 
-    -- COMMENT
-    ----------------------------------------------------------------------------
-    {
-        "numToStr/Comment.nvim",
-        keys = require("conf.editor.comment").keys,
-        opts = require("conf.editor.comment").opts,
-    },
-
-    -- CMP
-    ----------------------------------------------------------------------------
-    {
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
-        dependencies = {
-            "hrsh7th/cmp-buffer",                    -- Text in buffer
-            "hrsh7th/cmp-path",                      -- File system paths
-            "lukas-reineke/cmp-rg",                  -- Rg files in cwd
-            "f3fora/cmp-spell",                      -- Spelling suggestions
-            "hrsh7th/cmp-nvim-lsp",                  -- LSP completions
-            "hrsh7th/cmp-nvim-lsp-signature-help",   -- LSP signatures
-            "onsails/lspkind.nvim",                  -- vs-code like pictograms
-            "saadparwaiz1/cmp_luasnip",              -- Luasnip cmp source
-            {
-                "L3MON4D3/LuaSnip",                  -- Snippet engine
-                dependencies = {
-                    "rafamadriz/friendly-snippets",  -- Friendly snippets
-                    "hrsh7th/cmp-nvim-lua",          -- Nvim lua api
-                }
-            },
-            {
-                "hrsh7th/cmp-cmdline",               -- Command line completion
-                keys = require("conf.editor.cmp").cmd_line_keys,
-                config = require("conf.editor.cmp").cmd_line_config,
-            }
-        },
-        config = require("conf.editor.cmp").config,
-    },
 
     -- DIAL
     ----------------------------------------------------------------------------
@@ -62,23 +25,47 @@ return {
         config = require("conf.editor.dial").config,
     },
 
-    -- HOP
+    -- SNACKS
     ----------------------------------------------------------------------------
     {
-        "smoka7/hop.nvim",
-        version = "*",
-        keys = require("conf.editor.hop").keys,
-        config = require("conf.editor.hop").config,
-    },
+        "folke/snacks.nvim",
+        priority = 1000,
+        lazy = false,
+        opts = require("conf.editor.snacks").opts,
+        keys = require("conf.editor.snacks").keys,
 
-    -- NEOCOMPOSER
-    ----------------------------------------------------------------------------
-    {
-        "ecthelionvi/NeoComposer.nvim",
-        dependencies = "kkharji/sqlite.lua",
-        cmd = "ClearNeoComposer",  -- Allow Legendary to call if not loaded
-        keys = require("conf.editor.neocomposer").keys,
-        config = require("conf.editor.neocomposer").config,
+        init = function()
+            vim.api.nvim_create_autocmd("User", {
+                pattern = "VeryLazy",
+                callback = function()
+                    -- Setup some globals for debugging (lazy-loaded)
+                    _G.dd = function(...)
+                        Snacks.debug.inspect(...)
+                    end
+                    _G.bt = function()
+                        Snacks.debug.backtrace()
+                    end
+
+                    -- Override print to use snacks for `:=` command
+                    if vim.fn.has("nvim-0.11") == 1 then
+                        vim._print = function(_, ...)
+                            dd(...)
+                        end
+                    else
+                        vim.print = _G.dd
+                    end
+
+                    -- Create some toggle mappings
+                    Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>us")
+                    Snacks.toggle.option("wrap", { name = "Wrap" }):map("<leader>uw")
+                    Snacks.toggle.diagnostics():map("<leader>ud")
+                    Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2 }):map("<leader>uc")
+                    Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
+                    Snacks.toggle.inlay_hints():map("<leader>uh")
+                    Snacks.toggle.dim():map("<leader>uD")
+                end,
+            })
+        end,
     },
 
     -- SPIDER
@@ -97,12 +84,4 @@ return {
         keys = require("conf.editor.surround").keys,
         config = require("conf.editor.surround").config,
     },
-
-    -- TRAILBLAZER
-    ----------------------------------------------------------------------------
-    {
-        "LeonHeidelbach/trailblazer.nvim",
-        keys = require("conf.editor.trailblazer").keys,
-        config = require("conf.editor.trailblazer").config,
-    }
 }

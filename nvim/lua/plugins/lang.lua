@@ -7,52 +7,13 @@
 
 return {
 
-    -- GARBAGE DAY
-    ----------------------------------------------------------------------------
-    {
-        "zeioth/garbage-day.nvim",
-        dependencies = "neovim/nvim-lspconfig",
-        event = "VeryLazy",
-        opts = {
-            notifications = true,
-            aggressive_mode = false,
-        }
-    },
-
-    -- LINT
-    ----------------------------------------------------------------------------
-    {
-        "mfussenegger/nvim-lint",
-        event = {
-            "BufReadPre",
-            "BufNewFile",
-            "InsertLeave",
-        },
-        config = require("conf.lang.lint").config,
-    },
-
     -- MASON
     ----------------------------------------------------------------------------
     {
         "williamboman/mason.nvim",
         event = "BufEnter",
-        config = require("conf.lang.mason").config,
-    },
-
-    -- MASON LSP CONFIG
-    ----------------------------------------------------------------------------
-    {
-        "williamboman/mason-lspconfig.nvim",
-        event = "BufEnter",
-        config = true,
-    },
-
-    -- NVIM LSP CONFIG
-    ----------------------------------------------------------------------------
-    {
-        "neovim/nvim-lspconfig",
-        event = "BufEnter",
-        config = require("conf.lang.nvim_lspconfig").config,
+        opts = {},
+        -- config = require("conf.lang.mason").config,
     },
 
     -- TREESITTER
@@ -61,6 +22,6 @@ return {
         "nvim-treesitter/nvim-treesitter",
         event = "UiEnter",
         build = ":TSUpdate",
-        config = require("conf.lang.treesitter").config,
-    }
+        -- config = require("conf.lang.treesitter").config,
+    },
 }

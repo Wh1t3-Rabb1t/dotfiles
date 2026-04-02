@@ -13,14 +13,23 @@ return {
     git_status_open = false,
     git_untracked = true,
     follow_file = true,
-    focus = "list",
-    auto_close = false,
+    focus = "input",
+    -- focus = "list",
+    auto_close = true,  -- 'ture' is required to prevent window hanging on select
     jump = { close = false },
-    layout = { preset = "sidebar", preview = false, layout = { position = "right" } },
+    layout = { preview = true },
     -- layout = { preset = "sidebar", preview = false },
     -- to show the explorer to the right, add the below to
     -- your config under `opts.picker.sources.explorer`
     -- layout = { layout = { position = "right" } },
+
+    -- Set explorer only to the right side panel
+    sources = {
+        explorer = {
+            layout = { layout = { position = "right" } },
+        }
+    },
+
     formatters = {
         file = { filename_only = true },
         severity = { pos = "right" },
@@ -33,10 +42,10 @@ return {
             keys = {
                 -- to close the picker on ESC instead of going to normal mode,
                 -- add the following keymap to your config
-                -- ["<Esc>"] = { "close", mode = { "n", "i" } },
                 -- ["/"] = "toggle_focus",
                 -- ["<Esc>"] = "cancel",
-                ["<Esc>"] = { "toggle_focus", mode = { "i" } },
+                -- ["<Esc>"] = { "toggle_focus", mode = { "i" } },
+                ["<Esc>"] = { "close", mode = { "n", "i" } },
                 ["<C-Down>"] = { "history_forward", mode = { "i", "n" } },
                 ["<C-Up>"] = { "history_back", mode = { "i", "n" } },
                 ["<C-c>"] = { "cancel", mode = "i" },

@@ -5,30 +5,25 @@
 Plugins to keep:
 
 - Lualine
-- Rip substitute
 - Barbar
-- Fidget
-- Comment
 - Dial
 - Autopairs
-- NeoComposer
 - Spider
 - Surround
-- Trailblazer
-- Neotree
-- Gitsigns
-
-(Replaced by Snacks)
-- ibl (indent blank line)
-
+- ? Rip substitute
+- ? NeoComposer
+- ? Trailblazer
+- ? Gitsigns
 
 
 ## Priority: High
 
-- Surround plugin is causing a delay on 'd' key remapping.
+- Incorporate whichkey into config.
+- Consider using 'vim.keymap.del' to purge unwanted bindings.
+- Overhaul cmp config (lsp_kind vscode pictograms are no longer displaying).
 - Save change in word jump to next match as a macro and bind to a key.
-- Set comment binding `alt-/` to work in insert mode.
-- Legendary.nvim is possibly getting deprecated soon. Replace with Snacks.picker (Folke).
+
+- Legendary.nvim is deprecated. Replace with Snacks.picker (Folke).
 - Fix: Copy to char (moving left) doesn't pin and jump back to the starting location.
 - Finish configuring fzf lua.
 - Create autocommand to turn off wrap if buffer width is < 80.
@@ -49,7 +44,6 @@ Plugins to keep:
 
 ## Plugins
 
-- https://github.com/folke/snacks.nvim
 - https://github.com/CWood-sdf/banana.nvim
 - https://github.com/sindrets/diffview.nvim
 - https://github.com/andrewferrier/debugprint.nvim

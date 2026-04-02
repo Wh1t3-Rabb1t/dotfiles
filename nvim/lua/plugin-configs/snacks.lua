@@ -4,24 +4,88 @@ return {
     -- SNACKS
     ----------------------------------------------------------------------------
     "folke/snacks.nvim",
+
+    enabled = true,
+
     priority = 1000,
     lazy = false,
     opts = {
         bigfile = { enabled = false },
-        dashboard = { enabled = true },
+        dashboard = { enabled = false },
         explorer = { enabled = true },
         indent = { enabled = true },
-        input = { enabled = true },
+        input = { enabled = false },
         notifier = {
             enabled = false,
             timeout = 3000,
         },
-        picker = { enabled = true },
+        picker = {
+            enabled = true,
+
+            finder = "explorer",
+            sort = { fields = { "sort" } },
+            supports_live = true,
+            tree = true,
+            watch = true,
+            diagnostics = true,
+            diagnostics_open = false,
+            git_status = true,
+            git_status_open = false,
+            git_untracked = true,
+            follow_file = true,
+            focus = "list",
+            auto_close = false,
+            jump = { close = false },
+            layout = { preset = "sidebar", preview = false },
+            -- to show the explorer to the right, add the below to
+            -- your config under `opts.picker.sources.explorer`
+            -- layout = { layout = { position = "right" } },
+            formatters = {
+                file = { filename_only = true },
+                severity = { pos = "right" },
+            },
+            matcher = { sort_empty = false, fuzzy = false },
+            win = {
+                list = {
+                    keys = {
+                        ["<BS>"] = "explorer_up",
+                        ["l"] = "confirm",
+                        ["h"] = "explorer_close", -- close directory
+                        ["a"] = "explorer_add",
+                        ["d"] = "explorer_del",
+                        ["r"] = "explorer_rename",
+                        ["c"] = "explorer_copy",
+                        ["m"] = "explorer_move",
+                        ["o"] = "explorer_open", -- open with system application
+                        ["Q"] = "toggle_preview",
+                        ["y"] = { "explorer_yank", mode = { "n", "x" } },
+                        ["P"] = "explorer_paste",
+                        ["u"] = "explorer_update",
+                        ["<c-c>"] = "tcd",
+                        ["<leader>/"] = "picker_grep",
+                        ["<c-t>"] = "terminal",
+                        ["."] = "explorer_focus",
+                        ["I"] = "toggle_ignored",
+                        ["H"] = "toggle_hidden",
+                        ["Z"] = "explorer_close_all",
+                        ["]g"] = "explorer_git_next",
+                        ["[g"] = "explorer_git_prev",
+                        ["]d"] = "explorer_diagnostic_next",
+                        ["[d"] = "explorer_diagnostic_prev",
+                        ["]w"] = "explorer_warn_next",
+                        ["[w"] = "explorer_warn_prev",
+                        ["]e"] = "explorer_error_next",
+                        ["[e"] = "explorer_error_prev",
+                    },
+                },
+            },
+
+        },
         quickfile = { enabled = false },
-        scope = { enabled = true },
+        scope = { enabled = false },
         scroll = { enabled = false },
-        statuscolumn = { enabled = true },
-        words = { enabled = true },
+        statuscolumn = { enabled = false },
+        words = { enabled = false },
         styles = {
             notification = {
                 -- wo = { wrap = true } -- Wrap notifications
@@ -36,7 +100,9 @@ return {
         { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
         { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
         { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
-        { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
+
+        { "<A-Right>", function() Snacks.explorer() end, desc = "File Explorer" },
+
         -- find
         { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
         { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
@@ -84,16 +150,18 @@ return {
         { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
         { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
         { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
+
         -- LSP
-        { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
-        { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
-        { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
-        { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
-        { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
-        { "gai", function() Snacks.picker.lsp_incoming_calls() end, desc = "C[a]lls Incoming" },
-        { "gao", function() Snacks.picker.lsp_outgoing_calls() end, desc = "C[a]lls Outgoing" },
+        -- { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
+        -- { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
+        -- { "gr", function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
+        -- { "gI", function() Snacks.picker.lsp_implementations() end, desc = "Goto Implementation" },
+        -- { "gy", function() Snacks.picker.lsp_type_definitions() end, desc = "Goto T[y]pe Definition" },
+        -- { "gai", function() Snacks.picker.lsp_incoming_calls() end, desc = "C[a]lls Incoming" },
+        -- { "gao", function() Snacks.picker.lsp_outgoing_calls() end, desc = "C[a]lls Outgoing" },
         { "<leader>ss", function() Snacks.picker.lsp_symbols() end, desc = "LSP Symbols" },
         { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
+
         -- Other
         { "<leader>z",  function() Snacks.zen() end, desc = "Toggle Zen Mode" },
         { "<leader>Z",  function() Snacks.zen.zoom() end, desc = "Toggle Zoom" },

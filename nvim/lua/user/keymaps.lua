@@ -15,6 +15,7 @@
 -- VISUAL MODE
 -- COMMAND LINE MODE
 -- ARROW NAVIGATION
+-- COMMENTS
 -- MOVE LINES UP / DOWN
 -- INDENT / OUTDENT
 -- JUMP TO START / END OF WORD / LINE
@@ -42,16 +43,17 @@
 -- predefined arguments directly. Functions without arguments passed in
 -- don't require wrapping though.
 
-local util = require("util.utils")
+local map = require("util.utils").map
 local win = require("util.window")
 local km = require("util.keymap_funcs")
-local nmap = function (...) util.map("n", ...) end
-local vmap = function (...) util.map("v", ...) end
-local imap = function (...) util.map("i", ...) end
-local cmap = function (...) util.map("c", ...) end
-local nvmap = function (...) util.map({ "n", "v" }, ...) end
-local nimap = function (...) util.map({ "n", "i" }, ...) end
-local nvomap = function (...) util.map({ "n", "v", "o" }, ...) end
+
+local nmap = function(...) map("n", ...) end
+local vmap = function(...) map("v", ...) end
+local imap = function(...) map("i", ...) end
+local cmap = function(...) map("c", ...) end
+local nvmap = function(...) map({ "n", "v" }, ...) end
+local nimap = function(...) map({ "n", "i" }, ...) end
+local nvomap = function(...) map({ "n", "v", "o" }, ...) end
 
 
 -- LEADER
@@ -98,12 +100,19 @@ imap("<Up>",           km.cursor_up_ins)         -- Move cursor UP
 imap("<Down>",         km.cursor_down_ins)       -- Move cursor DOWN
 
 
+-- COMMENTS
+--------------------------------------------------------------------------------
+nmap("<A-/>",          "gcc", { remap = true })  -- Comment line
+vmap("<A-/>",          "gc", { remap = true })   -- Comment visual selection
+
+
 -- MOVE LINES UP / DOWN
 --------------------------------------------------------------------------------
 nmap("I",              ":m .-2<CR>==")           -- Move line UP
 nmap("K",              ":m .+1<CR>==")           -- Move line DOWN
 vmap("I",              ":m '<-2<CR>gv=gv")       -- Move line UP
 vmap("K",              ":m '>+1<CR>gv=gv")       -- Move line DOWN
+
 
 
 -- INDENT / OUTDENT
@@ -128,6 +137,9 @@ nvmap(".",             km.line_end_cmd)          -- Jump to line END
 --------------------------------------------------------------------------------
 nvmap("e",             "6k")                     -- Jump 6 lines UP
 nvmap("d",             "6j")                     -- Jump 6 lines DOWN
+
+-- vim.keymap.set('n', 'd', '6j', { noremap = true, nowait = true })
+
 nvmap("E",             "mj{")                    -- Jump block UP
 nvmap("D",             "mj}")                    -- Jump block DOWN
 

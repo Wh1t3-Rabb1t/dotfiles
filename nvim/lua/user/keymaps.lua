@@ -137,9 +137,6 @@ nvmap(".",             km.line_end_cmd)          -- Jump to line END
 --------------------------------------------------------------------------------
 nvmap("e",             "6k")                     -- Jump 6 lines UP
 nvmap("d",             "6j")                     -- Jump 6 lines DOWN
-
--- vim.keymap.set('n', 'd', '6j', { noremap = true, nowait = true })
-
 nvmap("E",             "mj{")                    -- Jump block UP
 nvmap("D",             "mj}")                    -- Jump block DOWN
 

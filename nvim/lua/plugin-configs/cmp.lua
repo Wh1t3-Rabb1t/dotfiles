@@ -14,7 +14,6 @@ M.cmd_line_keys = {
     ":",
 }
 
-
 -- CMD LINE CONFIG
 --------------------------------------------------------------------------------
 function M.cmd_line_config()
@@ -23,7 +22,6 @@ function M.cmd_line_config()
     local sendkey = vim.api.nvim_feedkeys
 
     -- `/` cmdline setup
-    ----------------------------------------------------------------------------
     cmp.setup.cmdline("/", {
         mapping = map.preset.cmdline({
             ["<Down>"] = cmp.mapping({
@@ -77,7 +75,6 @@ function M.cmd_line_config()
     })
 
     -- `:` cmdline setup
-    ----------------------------------------------------------------------------
     cmp.setup.cmdline(":", {
         mapping = map.preset.cmdline({
             ["<Down>"] = cmp.mapping({

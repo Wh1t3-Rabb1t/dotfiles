@@ -13,8 +13,6 @@ function M.config()
     local status_ok = pcall(require, "lualine")
     if not status_ok then return end
 
-    -- ICONS
-    --------------------------------------------------------------------------------
     local icons = {
         clock = "",
         component_separator_left = "╱",

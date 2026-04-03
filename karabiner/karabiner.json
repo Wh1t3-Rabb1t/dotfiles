@@ -818,7 +818,7 @@
                         },
                         {
                             "from": { "key_code": "delete_or_backspace" },
-                            "to": [{ "key_code": "delete_forward" }]
+                            "to": [{ "key_code": "tab" }]
                         },
                         {
                             "from": { "key_code": "j" },
@@ -847,10 +847,6 @@
                         {
                             "from": { "key_code": "left_option" },
                             "to": [{ "key_code": "left_command" }]
-                        },
-                        {
-                            "from": { "key_code": "return_or_enter" },
-                            "to": [{ "key_code": "tab" }]
                         }
                     ]
                 },

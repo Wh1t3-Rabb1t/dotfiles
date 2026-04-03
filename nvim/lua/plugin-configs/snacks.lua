@@ -1,28 +1,254 @@
+--                        _
+--   ___ _ __   __ _  ___| | _____
+--  / __| '_ \ / _` |/ __| |/ / __|
+--  \__ \ | | | (_| | (__|   <\__ \
+--  |___/_| |_|\__,_|\___|_|\_\___/
+-- =============================================================================
+
 local M = {}
 
+-- OPTS
+--------------------------------------------------------------------------------
 M.opts = {
-    indent = require("plugin-configs.snacks-plugins.indent"),
-    picker = require("plugin-configs.snacks-plugins.picker"),
-    explorer = { enabled = true },
-    notifier = { enabled = true },
-    statuscolumn = { enabled = true },
-    git = { enabled = true },
-
-    dashboard = { enabled = true },
-
+    -- Disabled
+    dashboard = { enabled = false },
     input = { enabled = false },
     bigfile = { enabled = false },
     quickfile = { enabled = false },
     scope = { enabled = false },
     words = { enabled = false },
     scroll = { enabled = false },
+
+    -- Enabled
+    explorer = { enabled = true },
+    notifier = { enabled = true },
+    statuscolumn = { enabled = true },
+    git = { enabled = true },
+
     styles = {
         notification = {
             -- wo = { wrap = true } -- Wrap notifications
         }
+    },
+
+    -- PICKER CONFIG
+    -- (source "snacks.nvim/lua/snacks/picker/config/defaults.lua")
+    picker = {
+        finder = "explorer",
+        sort = { fields = { "sort" } },
+        supports_live = true,
+        tree = true,
+        watch = true,
+        diagnostics = true,
+        diagnostics_open = false,
+        git_status = true,
+        git_status_open = false,
+        git_untracked = true,
+        follow_file = true,
+        focus = "input",    -- (input|list)
+        auto_close = true,  -- 'true' is required to prevent window hanging on select
+        jump = { close = false },
+
+        -- To show the explorer to the right, add the below to
+        -- your config under `opts.picker.sources.explorer`
+        -- layout = { layout = { position = "right" } },
+        layout = { preview = true },  -- layout = { preset = "sidebar", preview = false },
+
+        -- Set explorer only to the right side panel
+        sources = {
+            explorer = {
+                layout = { layout = { position = "right" } },
+            }
+        },
+        formatters = {
+            file = { filename_only = true },
+            severity = { pos = "right" },
+        },
+        matcher = { sort_empty = false, fuzzy = false },
+        win = {
+            -- Input window
+            input = {
+                keys = {
+                    -- To close the picker on ESC instead of going to normal mode,
+                    -- add the following keymap to your config.
+                    -- ["<Esc>"] = { "close", mode = { "n", "i" } },
+
+                    -- ["/"] = "toggle_focus",
+
+                    ["<Esc>"] = { "close", mode = { "n", "i" } },
+                    ["<C-Down>"] = { "history_forward", mode = { "i", "n" } },
+                    ["<C-Up>"] = { "history_back", mode = { "i", "n" } },
+
+                    -- Normal, insert
+                    ["<CR>"] = { "confirm", mode = { "n", "i" } },
+                    ["<Down>"] = { "list_down", mode = { "i", "n" } },
+                    ["<S-CR>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
+                    ["<S-Tab>"] = { "select_and_prev", mode = { "i", "n" } },
+                    ["<Tab>"] = { "select_and_next", mode = { "i", "n" } },
+                    ["<Up>"] = { "list_up", mode = { "i", "n" } },
+                    ["<A-d>"] = { "inspect", mode = { "n", "i" } },
+                    ["<A-f>"] = { "toggle_follow", mode = { "i", "n" } },
+                    ["<A-h>"] = { "toggle_hidden", mode = { "i", "n" } },
+                    ["<A-i>"] = { "toggle_ignored", mode = { "i", "n" } },
+                    ["<A-r>"] = { "toggle_regex", mode = { "i", "n" } },
+                    ["<A-m>"] = { "toggle_maximize", mode = { "i", "n" } },
+                    ["<A-p>"] = { "toggle_preview", mode = { "i", "n" } },
+                    ["<A-w>"] = { "cycle_win", mode = { "i", "n" } },
+                    ["<C-a>"] = { "select_all", mode = { "n", "i" } },
+                    ["<C-b>"] = { "preview_scroll_up", mode = { "i", "n" } },
+                    ["<C-d>"] = { "list_scroll_down", mode = { "i", "n" } },
+                    ["<C-f>"] = { "preview_scroll_down", mode = { "i", "n" } },
+                    ["<C-g>"] = { "toggle_live", mode = { "i", "n" } },
+                    ["<C-j>"] = { "list_down", mode = { "i", "n" } },
+                    ["<C-k>"] = { "list_up", mode = { "i", "n" } },
+                    ["<C-n>"] = { "list_down", mode = { "i", "n" } },
+                    ["<C-p>"] = { "list_up", mode = { "i", "n" } },
+                    ["<C-q>"] = { "qflist", mode = { "i", "n" } },
+                    ["<C-s>"] = { "edit_split", mode = { "i", "n" } },
+                    ["<C-t>"] = { "tab", mode = { "n", "i" } },
+                    ["<C-u>"] = { "list_scroll_up", mode = { "i", "n" } },
+                    ["<C-v>"] = { "edit_vsplit", mode = { "i", "n" } },
+
+                    -- Insert only
+                    ["<C-c>"] = { "cancel", mode = "i" },
+                    ["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
+                    ["<C-r>#"] = { "insert_alt", mode = "i" },
+                    ["<C-r>%"] = { "insert_filename", mode = "i" },
+                    ["<C-r><C-a>"] = { "insert_cWORD", mode = "i" },
+                    ["<C-r><C-f>"] = { "insert_file", mode = "i" },
+                    ["<C-r><C-l>"] = { "insert_line", mode = "i" },
+                    ["<C-r><C-p>"] = { "insert_file_full", mode = "i" },
+                    ["<C-r><C-w>"] = { "insert_cword", mode = "i" },
+
+                    ["<C-w>H"] = "layout_left",
+                    ["<C-w>J"] = "layout_bottom",
+                    ["<C-w>K"] = "layout_top",
+                    ["<C-w>L"] = "layout_right",
+                    ["?"] = "toggle_help_input",
+                    ["G"] = "list_bottom",
+                    ["gg"] = "list_top",
+                    ["k"] = "list_down",
+                    ["i"] = "list_up",
+                    ["q"] = "cancel",
+                },
+                b = {
+                    minipairs_disable = true,
+                }
+            },
+
+            -- Result list window
+            list = {
+                keys = {
+                    ["i"] = "list_up",
+                    ["k"] = "list_down",
+                    ["/"] = "focus_input",
+
+
+                    -- ["<Esc>"] = "focus_list",
+                    -- ["<Esc>"] = "cancel",
+
+
+                    [","] = "explorer_up",
+                    ["."] = "explorer_focus",
+                    ["l"] = "confirm",
+                    ["t"] = "explorer_close", -- close directory
+                    ["n"] = "explorer_add",
+                    ["R"] = "explorer_del",
+                    ["r"] = "explorer_rename",
+                    ["x"] = "explorer_copy",
+                    ["m"] = "explorer_move",
+                    ["P"] = "toggle_preview",
+                    ["c"] = { "explorer_yank", mode = { "n", "x" } },
+                    ["v"] = "explorer_paste",
+                    ["I"] = "toggle_ignored",
+                    ["H"] = "toggle_hidden",
+                    ["T"] = "explorer_close_all",
+
+                    ["u"] = "explorer_update",
+                    ["<c-c>"] = "tcd",
+                    ["<leader>/"] = "picker_grep",
+                    ["<c-t>"] = "terminal",
+
+                    -- ["o"] = "explorer_open", -- open with system application
+                    -- ["]g"] = "explorer_git_next",
+                    -- ["[g"] = "explorer_git_prev",
+                    -- ["]d"] = "explorer_diagnostic_next",
+                    -- ["[d"] = "explorer_diagnostic_prev",
+                    -- ["]w"] = "explorer_warn_next",
+                    -- ["[w"] = "explorer_warn_prev",
+                    -- ["]e"] = "explorer_error_next",
+                    -- ["[e"] = "explorer_error_prev",
+                }
+            }
+        },
+
+        -- Preview window
+        preview = {
+            keys = {
+                ["<Esc>"] = "cancel",
+                ["q"] = "cancel",
+                ["/"] = "focus_input",
+                ["<A-w>"] = "cycle_win",
+            }
+        }
+    },
+
+    -- INDENT CONFIG
+    -- (source "snacks.nvim/lua/snacks/indent.lua")
+    indent = {
+        indent = {
+            priority = 1,
+            enabled = true,        -- Enable indent guides
+            only_scope = false,    -- Only show indent guides of the scope
+            only_current = false,  -- Only show indent guides in the current window
+            hl = "SnacksIndent",   ---@type string|string[] hl groups for indent guides
+        },
+
+        -- Animate scopes. Enabled by default for Neovim >= 0.10
+        -- Works on older versions but has to trigger redraws during animation.
+        --   * out: animate outwards from the cursor
+        --   * up: animate upwards from the cursor
+        --   * down: animate downwards from the cursor
+        --   * up_down: animate up or down based on the cursor position
+        animate = {
+            enabled = vim.fn.has("nvim-0.10") == 1,
+            style = "out",
+            easing = "linear",
+            duration = {
+                step = 20,    -- ms per step
+                total = 500,  -- Maximum duration
+            }
+        },
+
+        scope = {
+            enabled = true,            -- Enable highlighting the current scope
+            priority = 200,
+            char = "│",
+            underline = false,         -- Underline the start of the scope
+            only_current = false,      -- Only show scope in the current window
+            hl = "SnacksIndentScope",  ---@type string|string[] hl group for scopes
+        },
+
+        chunk = {
+            -- When enabled, scopes will be rendered as chunks, except for the
+            -- top-level scope which will be rendered as a scope.
+            enabled = false,
+            only_current = false,      -- Only show chunk scopes in the current window
+            priority = 200,
+            hl = "SnacksIndentChunk",  ---@type string|string[] hl group for chunk scopes
+            char = {
+                corner_top = "┌",
+                corner_bottom = "└",
+                horizontal = "─",
+                vertical = "│",
+                arrow = ">",
+            }
+        }
     }
 }
 
+-- KEYS
+--------------------------------------------------------------------------------
 M.keys = {
     -- Top Pickers & Explorer
     { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
@@ -128,12 +354,14 @@ M.keys = {
                     signcolumn = "yes",
                     statuscolumn = " ",
                     conceallevel = 3,
-                },
+                }
             })
-        end,
+        end
     }
 }
 
+-- INIT
+--------------------------------------------------------------------------------
 M.init = function()
     vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
@@ -154,7 +382,7 @@ M.init = function()
             else
                 vim.print = _G.dd
             end
-        end,
+        end
     })
 end
 

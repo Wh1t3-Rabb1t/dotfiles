@@ -34,50 +34,26 @@ function M.config()
             conditionals = { "italic" },
             comments = { "bold" },
             loops = { "italic" },
-            functions = {},
-            keywords = {},
-            strings = {},
-            variables = {},
-            numbers = {},
-            booleans = {},
-            properties = {},
-            types = {},
-            operators = {},
         },
         color_overrides = {},
         custom_highlights = {
 
             -- Barbar
             -------------------------------------------------------------------
-            BufferCurrent = {             -- Tab contents
-                fg = colors.text,
-            },
-            BufferInactive = {
-                fg = colors.overlay0,
-                italic = true,
-            },
-            BufferCurrentSignRight = {    -- Tab separator
-                fg = colors.text,
-            },
-            BufferInactiveSignRight = {
-                fg = colors.text,
-            },
-            BufferCurrentMod = {          -- Modified contents
-                fg = colors.text,
-            },
-            BufferInactiveMod = {
-                fg = colors.overlay0,
-                italic = true,
-            },
-            BufferCurrentModBtn = {       -- Modified icon
-                fg = colors.text,
-            },
-            BufferInactiveModBtn = {
-                fg = colors.text,
-            },
-            BufferScrollArrow = {         -- Scroll arrow
-                fg = colors.yellow,
-            },
+            -- Tab contents
+            BufferCurrent = { fg = colors.text },
+            BufferInactive = { fg = colors.overlay0, italic = true },
+            -- Tab separator
+            BufferCurrentSignRight = { fg = colors.text },
+            BufferInactiveSignRight = { fg = colors.text },
+            -- Modified contents
+            BufferCurrentMod = { fg = colors.text },
+            BufferInactiveMod = { fg = colors.overlay0, italic = true },
+            -- Modified icon
+            BufferCurrentModBtn = { fg = colors.text },
+            BufferInactiveModBtn = { fg = colors.text },
+            -- Scroll arrow
+            BufferScrollArrow = { fg = colors.yellow },
 
             -- Diagnostics
             -------------------------------------------------------------------

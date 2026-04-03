@@ -52,6 +52,7 @@ local vmap = function(...) map("v", ...) end
 local imap = function(...) map("i", ...) end
 local cmap = function(...) map("c", ...) end
 local nvmap = function(...) map({ "n", "v" }, ...) end
+local nxmap = function(...) map({ "n", "v", "x" }, ...) end
 local nimap = function(...) map({ "n", "i" }, ...) end
 local nvomap = function(...) map({ "n", "v", "o" }, ...) end
 
@@ -73,9 +74,9 @@ nvmap("<S-Esc>",       "I")                      -- Insert mode at line start
 -- VISUAL MODE
 --------------------------------------------------------------------------------
 nvmap("s",             "v")                      -- Visual mode
-nvmap("S",             "V")                      -- Visual LINE mode
-nvmap("B",             "<C-v>")                  -- Visual BLOCK mode
-nvmap("G",             "msgv")                   -- Restore visual selection
+nxmap("S",             "V")                      -- Visual LINE mode
+nxmap("B",             "<C-v>")                  -- Visual BLOCK mode
+nxmap("G",             "msgv")                   -- Restore visual selection
 vmap("a",              "o")                      -- Swap point & mark
 vmap("A",              km.swap_point_and_mark)   -- Swap point & mark
 

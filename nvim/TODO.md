@@ -18,6 +18,7 @@ Plugins to keep:
 
 ## Priority: High
 
+- Lualine is conflicting with the Snacks explorer side panel.
 - Incorporate whichkey into config.
 - Consider using 'vim.keymap.del' to purge unwanted bindings.
 - Overhaul cmp config (lsp_kind vscode pictograms are no longer displaying).

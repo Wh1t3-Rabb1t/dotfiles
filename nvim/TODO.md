@@ -18,6 +18,8 @@ Plugins to keep:
 
 ## Priority: High
 
+- Need to replace (or tweak) the macro recorder plugin so that it handles
+  clipboard actions within the macro properly.
 - Preview window options for the snacks picker need to be set.
 - Lualine is conflicting with the Snacks explorer side panel.
 - Incorporate whichkey into config.

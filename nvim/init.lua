@@ -41,7 +41,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
--- enable servers (0.12 style)
+-- Enable servers (0.12 style)
 local servers = {
     "lua_ls",
     "tsserver",

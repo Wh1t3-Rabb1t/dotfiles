@@ -17,12 +17,13 @@ Plugins to keep:
 
 ## Priority: High
 
+- Fix lsp setup. (prob the reason cmp lsp_kind isn't working)
 - Overhaul cmp config (lsp_kind vscode pictograms are no longer displaying).
 
 - Incorporate whichkey into config.
 
+- Replace Legendary.nvim with Snacks.picker.
 - Write a simple replacement for the Trailblazer plugin.
-- Legendary.nvim is deprecated. Replace with Snacks.picker (Folke).
 - Consider using 'vim.keymap.del' to purge unwanted bindings.
 - Look into keymap_funcs and replace anything that has been made redundant.
 - Create autocommand to turn off wrap if buffer width is < 80.

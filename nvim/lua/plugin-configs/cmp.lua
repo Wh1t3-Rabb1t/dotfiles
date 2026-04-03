@@ -203,6 +203,11 @@ function M.config()
 
         -- Sources for autocompletion
         sources = require("cmp").config.sources({
+
+
+            { name = "nvim_lsp" },
+
+
             {   -- Snippet engine
                 name = "luasnip",
                 group_index = 1,
@@ -259,45 +264,28 @@ function M.config()
             }
         }),
 
-        -- Configure lspkind for pictograms in completion menu
         formatting = {
-            fields = { "kind", "abbr", "menu" },
+            fields = { 'icon', 'abbr', 'kind', 'menu' },
             format = function(entry, item)
-                -- Define source menu labels with consistent column count for clean formatting
-                local source_labels = {
-                    luasnip = "[snip]  ",
-                    nvim_lsp = "[LSP]   ",
-                    nvim_lua = "[nvLua] ",
-                    path = "[Path]  ",
-                    buffer = "[Buf]   ",
-                    rg = "[rg]    ",
-                    spell = "[Eng]   ",
-                }
-
-                -- Format kind with lspkind and set options
-                local lspkind_format = require("lspkind").cmp_format({
-                    mode = "symbol_text",
-                    maxwidth = 50,
-                })
-
-                -- Apply the lspkind formatting
-                local kind = lspkind_format(entry, item)
-                if not kind or not kind.kind then
-                    return item  -- Return the unmodified item if formatting fails
+                -- Convert numeric kinds -> string (LSP spec -> readable)
+                local kinds = require("cmp.types").lsp.CompletionItemKind
+                if type(item.kind) == "number" then
+                    item.kind = kinds[item.kind] or item.kind
                 end
 
-                -- Split the kind string to separate symbol and text
-                local kind_parts = vim.split(kind.kind, "%s", { trimempty = true })
-                kind.kind = kind_parts[1] and (" " .. kind_parts[1] .. " ") or " "
+                local source_labels = {
+                    luasnip = "[luaSnip]",
+                    nvim_lsp = "[LSP]",
+                    nvim_lua = "[nvLua]",
+                    path = "[Path]",
+                    buffer = "[Buf]",
+                    rg = "[rg]",
+                    spell = "[Eng]",
+                }
 
-                -- Add formatted source label and kind text to menu, ensuring all parts exist
-                local source_name = entry.source and entry.source.name
-                local label = source_name and source_labels[source_name] or ""
-                local text = kind_parts[2] or ""
+                item.menu = source_labels[entry.source.name] or ""
 
-                kind.menu = label ~= "" and (label .. "(" .. text .. ")") or "(" .. text .. ")"
-
-                return kind
+                return item
             end
         }
     })

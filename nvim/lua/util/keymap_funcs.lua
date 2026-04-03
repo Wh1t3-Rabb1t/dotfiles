@@ -107,11 +107,7 @@ end
 -- `f` and `/` SEARCH
 --------------------------------------------------------------------------------
 function M.toggle_search_hl()
-    if vim.v.hlsearch == 1 then
-        vim.cmd("nohlsearch")
-    else
-        vim.cmd("set hls")
-    end
+    vim.opt.hlsearch = not vim.o.hlsearch
 end
 
 function M.search_for_selection()

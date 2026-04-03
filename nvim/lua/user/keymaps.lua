@@ -59,9 +59,8 @@ local nimap = function(...) map({ "n", "i" }, ...) end
 local nvomap = function(...) map({ "n", "v", "o" }, ...) end
 
 
--- LEADER KEY                                                                _00
+-- LEADER KEY (must be set before plugin init or wrong leader will be used)  _00
 --------------------------------------------------------------------------------
--- Must map leader before plugins are required or wrong leader will be used
 vim.g.mapleader      = " "
 vim.g.maplocalleader = " "
 nvmap("<Space>",       "<Nop>")

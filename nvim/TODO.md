@@ -29,7 +29,6 @@ Plugins to keep:
 
 - Incorporate whichkey into config.
 
-- Fix: Copy to char (moving left) doesn't pin and jump back to the starting location.
 - Legendary.nvim is deprecated. Replace with Snacks.picker (Folke).
 - Create autocommand to turn off wrap if buffer width is < 80.
 

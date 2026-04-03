@@ -11,32 +11,33 @@
 -- ╭───────╮
 -- │ INDEX │
 -- ╰───────╯
--- INSERT MODE
--- VISUAL MODE
--- COMMAND LINE MODE
--- ARROW NAVIGATION
--- COMMENTS
--- MOVE LINES UP / DOWN
--- INDENT / OUTDENT
--- JUMP TO START / END OF WORD / LINE
--- JUMP 6 LINES / BETWEEN BLOCKS
--- SCROLL PAGE UP / DOWN
--- DELETE BINDINGS
--- DELETE MOTIONS
--- DOT OPERATOR / UNDO / REDO
--- SWAP CASE
--- SELECT IN / AROUND
--- COPY
--- CUT
--- CHANGE
--- PASTE
--- DUPLICATE LINE / SELECTION
--- OPEN / JOIN LINES
--- `f` and `/` SEARCH
--- QUICKFIX
--- WINDOW
--- SAVE CHANGES
--- QUIT
+-- LEADER KEY                          _00
+-- INSERT MODE                         _01
+-- VISUAL MODE                         _02
+-- COMMAND LINE MODE                   _03
+-- ARROW NAVIGATION                    _04
+-- COMMENTS                            _05
+-- MOVE LINES UP / DOWN                _06
+-- INDENT / OUTDENT                    _07
+-- JUMP TO START / END OF WORD / LINE  _08
+-- JUMP 6 LINES / BETWEEN BLOCKS       _09
+-- SCROLL PAGE UP / DOWN               _10
+-- DELETE BINDINGS                     _11
+-- DELETE MOTIONS                      _12
+-- DOT OPERATOR / UNDO / REDO          _13
+-- SWAP CASE                           _14
+-- SELECT IN / AROUND                  _15
+-- COPY                                _16
+-- CUT                                 _17
+-- CHANGE                              _18
+-- PASTE                               _19
+-- DUPLICATE LINE / SELECTION          _20
+-- OPEN / JOIN LINES                   _21
+-- `f` and `/` SEARCH                  _22
+-- QUICKFIX                            _23
+-- WINDOW                              _24
+-- SAVE CHANGES                        _25
+-- QUIT                                _26
 
 -- NOTE: If a module bound to a key needs an argument, it must be wrapped
 -- in a function. Neovim’s keymaps don’t support calling functions with
@@ -57,7 +58,7 @@ local nimap = function(...) map({ "n", "i" }, ...) end
 local nvomap = function(...) map({ "n", "v", "o" }, ...) end
 
 
--- LEADER
+-- LEADER KEY                                                                _00
 --------------------------------------------------------------------------------
 -- Must map leader before plugins are required or wrong leader will be used
 vim.g.mapleader      = " "
@@ -65,13 +66,13 @@ vim.g.maplocalleader = " "
 nvmap("<Space>",       "<Nop>")
 
 
--- INSERT MODE
+-- INSERT MODE                                                               _01
 --------------------------------------------------------------------------------
 nmap("<Esc>",          "i")                      -- Insert mode
 nvmap("<S-Esc>",       "I")                      -- Insert mode at line start
 
 
--- VISUAL MODE
+-- VISUAL MODE                                                               _02
 --------------------------------------------------------------------------------
 nvmap("s",             "v")                      -- Visual mode
 nxmap("S",             "V")                      -- Visual LINE mode
@@ -81,7 +82,7 @@ vmap("a",              "o")                      -- Swap point & mark
 vmap("A",              km.swap_point_and_mark)   -- Swap point & mark
 
 
--- COMMAND LINE MODE
+-- COMMAND LINE MODE                                                         _03
 --------------------------------------------------------------------------------
 cmap("<C-BS>",         "<C-u>")                  -- Clear cmd prompt
 cmap("<A-BS>",         "<C-w>")                  -- Delete WORD left
@@ -92,7 +93,7 @@ cmap("<S-Up>",         "<Up>")                   -- Scroll UP cmd history
 cmap("<S-Down>",       "<Down>")                 -- Scroll DOWN cmd history
 
 
--- ARROW NAVIGATION
+-- ARROW NAVIGATION                                                          _04
 --------------------------------------------------------------------------------
 nvomap("t",            "h")                      -- Move cursor LEFT
 nvomap("i",            km.cursor_up_cmd)         -- Move cursor UP
@@ -101,13 +102,13 @@ imap("<Up>",           km.cursor_up_ins)         -- Move cursor UP
 imap("<Down>",         km.cursor_down_ins)       -- Move cursor DOWN
 
 
--- COMMENTS
+-- COMMENTS                                                                  _05
 --------------------------------------------------------------------------------
 nmap("<A-/>",          "gcc", { remap = true })  -- Comment line
 vmap("<A-/>",          "gc", { remap = true })   -- Comment visual selection
 
 
--- MOVE LINES UP / DOWN
+-- MOVE LINES UP / DOWN                                                      _06
 --------------------------------------------------------------------------------
 nmap("I",              ":m .-2<CR>==")           -- Move line UP
 nmap("K",              ":m .+1<CR>==")           -- Move line DOWN
@@ -115,8 +116,7 @@ vmap("I",              ":m '<-2<CR>gv=gv")       -- Move line UP
 vmap("K",              ":m '>+1<CR>gv=gv")       -- Move line DOWN
 
 
-
--- INDENT / OUTDENT
+-- INDENT / OUTDENT                                                          _07
 --------------------------------------------------------------------------------
 nmap("L",              ">>")                     -- Indent
 nmap("T",              "<<")                     -- Outdent
@@ -124,7 +124,7 @@ vmap("L",              ">gv^")                   -- Indent
 vmap("T",              "<gv^")                   -- Outdent
 
 
--- JUMP TO START / END OF WORD / LINE
+-- JUMP TO START / END OF WORD / LINE                                        _08
 --------------------------------------------------------------------------------
 imap("<A-Left>",       km.forwards_word)         -- Jump backwards by word
 imap("<A-Right>",      km.backwards_word)        -- Jump backwards by word
@@ -134,7 +134,7 @@ nvmap(",",             km.line_start_cmd)        -- Jump to line START
 nvmap(".",             km.line_end_cmd)          -- Jump to line END
 
 
--- JUMP 6 LINES / BETWEEN BLOCKS
+-- JUMP 6 LINES / BETWEEN BLOCKS                                             _09
 --------------------------------------------------------------------------------
 nvmap("e",             "6k")                     -- Jump 6 lines UP
 nvmap("d",             "6j")                     -- Jump 6 lines DOWN
@@ -142,7 +142,7 @@ nvmap("E",             "mj{")                    -- Jump block UP
 nvmap("D",             "mj}")                    -- Jump block DOWN
 
 
--- SCROLL PAGE UP / DOWN
+-- SCROLL PAGE UP / DOWN                                                     _10
 --------------------------------------------------------------------------------
 nvmap("<PageUp>",      "<C-u>zz")                -- Page UP
 nvmap("<PageDown>",    "<C-d>zz")                -- Page DOWN
@@ -150,7 +150,7 @@ nvmap("<S-PageUp>",    "mjgg")                   -- Page TOP
 nvmap("<S-PageDown>",  "mjG")                    -- Page BOTTOM
 
 
--- DELETE BINDINGS (all deletions are sent to the black hole register)
+-- DELETE BINDINGS (all deletions are sent to the black hole register)       _11
 --------------------------------------------------------------------------------
 -- Char
 nmap("<BS>",           '"_X')                    -- Delete backwards
@@ -171,7 +171,7 @@ imap("<C-BS>",         km.del_line_left)         -- Delete line LEFT
 imap("<C-Del>",        km.del_line_right)        -- Delete line RIGHT
 
 
--- DELETE MOTIONS
+-- DELETE MOTIONS                                                            _12
 --------------------------------------------------------------------------------
 vmap("w",              '"_x')                    -- Delete visual selection
 nmap("ww",             'ggVG"_d')                -- Delete whole buffer
@@ -197,7 +197,7 @@ nmap("w;",             '"_dt')                   -- Delete forwards to char
 nmap("wh",             '"_dT')                   -- Delete backwards to char
 
 
--- DOT OPERATOR / UNDO / REDO
+-- DOT OPERATOR / UNDO / REDO                                                _13
 --------------------------------------------------------------------------------
 nmap("_",              ".")                      -- Dot operator
 nmap("<A-y>",          "u")                      -- Undo
@@ -206,14 +206,14 @@ imap("<A-y>",          km.undo)                  -- Undo
 imap("<A-S-y>",        km.redo)                  -- Redo
 
 
--- SWAP CASE
+-- SWAP CASE                                                                 _14
 --------------------------------------------------------------------------------
 nmap("-",              "~")                      -- Swap case
 vmap("-",              "mmU`m")                  -- Uppercase visual selection
 vmap("_",              "mmu`m")                  -- Lowercase visual selection
 
 
--- SELECT IN / AROUND
+-- SELECT IN / AROUND                                                        _15
 --------------------------------------------------------------------------------
 nmap("W",              "viw")                    -- Select in word
 vmap("W",              "ip")                     -- Select in paragraph
@@ -234,7 +234,7 @@ nmap("]",              "msva[V")                 -- Select around [] block
 nmap(">",              "msva<V")                 -- Select around <> block
 
 
--- COPY
+-- COPY                                                                      _16
 --------------------------------------------------------------------------------
 -- System register '*' entries are added to the alphabetical register stack.
 -- Secondary register '+' entries are added to the numeric register stack.
@@ -265,7 +265,7 @@ nmap("c;",             '"*yt')                   -- Copy forwards to char
 nmap("ch",             '"*yT')                   -- Copy backwards to char
 
 
--- CUT
+-- CUT                                                                       _17
 --------------------------------------------------------------------------------
 -- All `d` motions that span than one line (the deleted text is not confined to
 -- a single line) are sent to the numeric register stack by default. We
@@ -297,7 +297,7 @@ nmap("x;",             '"*dt')                   -- Cut forwards to char
 nmap("xh",             '"*dT')                   -- Cut backwards to char
 
 
--- CHANGE (all changed text is sent to the black hole register)
+-- CHANGE (all changed text is sent to the black hole register)              _18
 --------------------------------------------------------------------------------
 vmap("y",              '"_c')                    -- Change visual selection
 nmap("yy",             'ggVG"_C')                -- Change whole buffer
@@ -323,7 +323,7 @@ nmap("y;",             '"_ct')                   -- Change forwards to char
 nmap("yh",             '"_cT')                   -- Change backwards to char
 
 
--- PASTE
+-- PASTE                                                                     _19
 --------------------------------------------------------------------------------
 nmap("v",              '"*]P')                   -- Paste from system register
 vmap("v",              '"_d"*P')                 -- Paste over selection
@@ -331,13 +331,13 @@ cmap("<A-v>",          "<C-r>*")                 -- Paste from system register
 imap("<A-v>",          km.paste)                 -- Paste from system register
 
 
--- DUPLICATE LINE / SELECTION
+-- DUPLICATE LINE / SELECTION                                                _20
 --------------------------------------------------------------------------------
 nmap("<Leader>d",      "VyPj")                   -- Duplicate line below
 vmap("<Leader>d",      "<C-v>VyPgv")             -- Duplicate selection below
 
 
--- OPEN / JOIN LINES
+-- OPEN / JOIN LINES                                                         _21
 --------------------------------------------------------------------------------
 -- `<C-o>` in insert mode sends a single normal
 -- mode cmd then returns back to insert
@@ -346,7 +346,7 @@ nmap("<S-CR>",         "O<C-o>mo<Esc>`o")        -- New line ABOVE
 nvmap("j",             "J")                      -- Join lines
 
 
--- `f` and `/` SEARCH
+-- `f` and `/` SEARCH                                                        _22
 --------------------------------------------------------------------------------
 nvmap("h",             ",")                      -- Prev f search result
 nvmap(";",             ";")                      -- Prev f search result
@@ -360,13 +360,13 @@ vmap("/",              "<Esc>/\\%V", {           -- Search within selection
 })
 
 
--- QUICKFIX
+-- QUICKFIX                                                                  _23
 --------------------------------------------------------------------------------
 nmap("<A-x>",          km.toggle_quickfix_win)   -- Toggle quickfix list
 nmap("<A-c>",          km.add_line_to_quickfix)  -- Update quickfix list
 
 
--- WINDOW
+-- WINDOW                                                                    _24
 --------------------------------------------------------------------------------
 -- Navigate
 nmap("<Up>", function()                          -- Focus split ABOVE
@@ -405,12 +405,12 @@ nmap("<End>",          "zlzlzl")                 -- Scroll window RIGHT
 nmap("<D-[>",          "<C-w>r")                 -- Swap splits (2 splits max)
 
 
--- SAVE CHANGES
+-- SAVE CHANGES                                                              _25
 --------------------------------------------------------------------------------
 nimap("<A-s>",         km.save_changes)          -- Save changes
 
 
--- QUIT (never quit)
+-- QUIT (never quit)                                                         _26
 --------------------------------------------------------------------------------
 nvmap("<Leader>QQ",    "<cmd>qa!<CR>")           -- Force quit nvim
 nmap("<A-q>",          km.quit_session)          -- Quit and save session

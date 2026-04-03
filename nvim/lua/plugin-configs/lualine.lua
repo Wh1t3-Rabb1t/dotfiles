@@ -98,12 +98,11 @@ function M.config()
                 right = icons.section_separator_right,
             },
             always_divide_middle = true,
-            globalstatus = true,
+            globalstatus = false,
             refresh = { tabline = 100000, },
             disabled_filetypes = {
                 winbar = {
-                    "neo-tree",
-                    "aerial"
+                    "snacks_picker_list"
                 }
             }
         },

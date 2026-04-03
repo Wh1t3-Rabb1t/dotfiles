@@ -17,19 +17,14 @@ Plugins to keep:
 
 ## Priority: High
 
-- Look into keymap_funcs and replace anything that has been made redundant.
-- Preview window options for the snacks picker need to be set.
-- Lualine is conflicting with the Snacks explorer side panel.
-- Consider using 'vim.keymap.del' to purge unwanted bindings.
 - Overhaul cmp config (lsp_kind vscode pictograms are no longer displaying).
-- Write a simple replacement for the Trailblazer plugin.
-
-- Need to replace (or tweak) the macro recorder plugin so that it handles
-  clipboard actions within the macro properly.
 
 - Incorporate whichkey into config.
 
+- Write a simple replacement for the Trailblazer plugin.
 - Legendary.nvim is deprecated. Replace with Snacks.picker (Folke).
+- Consider using 'vim.keymap.del' to purge unwanted bindings.
+- Look into keymap_funcs and replace anything that has been made redundant.
 - Create autocommand to turn off wrap if buffer width is < 80.
 
 ## Priority: Low

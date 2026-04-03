@@ -25,17 +25,11 @@ M.opts = {
     statuscolumn = { enabled = true },
     git = { enabled = true },
 
-    styles = {
-        notification = {
-            -- wo = { wrap = true }  -- Wrap notifications
-        }
-    },
-
     -- PICKER CONFIG
     -- (source "snacks.nvim/lua/snacks/picker/config/defaults.lua")
     picker = {
+        prompt = " ",
         finder = "explorer",
-        sort = { fields = { "sort" } },
         supports_live = true,
         tree = true,
         watch = true,
@@ -45,14 +39,9 @@ M.opts = {
         git_status_open = false,
         git_untracked = true,
         follow_file = true,
-        focus = "input",    -- input, list
+        focus = "input",    -- (input|list)
         auto_close = true,  -- 'true' is required to prevent window hanging on select
-        jump = { close = false },
-
-        -- To show the explorer to the right, add the below to
-        -- your config under `opts.picker.sources.explorer`
-        -- layout = { layout = { position = "right" } },
-        layout = { preview = true },  -- layout = { preset = "sidebar", preview = false },
+        jump = { close = true },
 
         -- Set explorer only to the right side panel
         sources = {
@@ -60,17 +49,25 @@ M.opts = {
                 layout = { layout = { position = "right" } },
             }
         },
-        formatters = {
-            file = { filename_only = true },
-            severity = { pos = "right" },
+
+        matcher = {
+            fuzzy = true,           -- Use fuzzy matching
+            smartcase = true,       -- Use smartcase
+            ignorecase = true,      -- Use ignorecase
+            sort_empty = false,     -- Sort results when the search string is empty
+            filename_bonus = true,  -- Give bonus for matching file names (last part of the path)
+            file_pos = true,        -- Support patterns like `file:line:col` and `file:line`
+
+            -- The bonusses below, possibly require string concatenation and path normalization,
+            -- so this can have a performance impact for large lists and increase memory usage.
+            cwd_bonus = false,      -- Give bonus for matching files in the cwd
+            frecency = false,       -- Frecency bonus
+            history_bonus = false,  -- Give more weight to chronological order
         },
-        matcher = { sort_empty = false, fuzzy = false },
+
         win = {
             -- Input window
             input = {
-                -- To close the picker on ESC instead of going to normal mode,
-                -- add the following keymap to your config.
-                -- ["<Esc>"] = { "close", mode = { "n", "i" } },
                 keys = {
                     -- TODO: find a good mapping for these ...
                     ["<A-h>"]         = { "toggle_hidden",       mode = { "i", "n" } },
@@ -128,9 +125,6 @@ M.opts = {
                     ["<C-w>K"]     = false,  -- "layout_top",
                     ["<C-w>L"]     = false,  -- "layout_right",
                     ["q"]          = false,  -- "cancel",
-                },
-                b = {
-                    minipairs_disable = true,
                 }
             },
 
@@ -172,16 +166,6 @@ M.opts = {
                     ["]e"]        = false,  -- "explorer_error_next",
                     ["[e"]        = false,  -- "explorer_error_prev",
                 }
-            }
-        },
-
-        -- Preview window
-        preview = {
-            keys = {
-                ["<Esc>"] = "cancel",
-                ["<A-w>"] = "cycle_win",
-                ["q"]     = "cancel",
-                ["/"]     = "focus_input",
             }
         }
     },
@@ -250,6 +234,7 @@ M.keys = {
     { "<Leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
 
     { "<A-g>", function() Snacks.picker.grep() end, desc = "Grep" },
+
     { "<A-'>", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<Leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
 

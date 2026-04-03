@@ -14,23 +14,22 @@ function M.config()
     if not status_ok then return end
 
     -- Setup
-    -- https://catppuccin.com/palette
-    local colors = require("catppuccin.palettes").get_palette()
+    local hl = require("catppuccin.palettes").get_palette()  -- https://catppuccin.com/palette
     require("catppuccin").setup({
         compile_path = vim.fn.stdpath "cache" .. "/catppuccin",
-        flavour = "macchiato",              -- latte, frappe, macchiato, mocha
-        background = {                      -- See `:h background`
+        flavour = "macchiato",  -- latte, frappe, macchiato, mocha
+        background = {
             light = "macchiato",
             dark = "mocha",
         },
         transparent_background = false,  -- Disable setting the bg color
         show_end_of_buffer = false,      -- Show '~' characters at EOF
         term_colors = false,             -- Set term colors (e.g. `g:terminal_color_0`)
-        dim_inactive = { enabled = false },
         no_italic = false,
         no_bold = false,
         no_underline = false,
-        styles = {                      -- See `:h highlight-args`
+        dim_inactive = { enabled = false },
+        styles = {
             conditionals = { "italic" },
             comments = { "bold" },
             loops = { "italic" },
@@ -39,52 +38,41 @@ function M.config()
         custom_highlights = {
 
             -- Barbar
-            -------------------------------------------------------------------
-            -- Tab contents
-            BufferCurrent = { fg = colors.text },
-            BufferInactive = { fg = colors.overlay0, italic = true },
-            -- Tab separator
-            BufferCurrentSignRight = { fg = colors.text },
-            BufferInactiveSignRight = { fg = colors.text },
-            -- Modified contents
-            BufferCurrentMod = { fg = colors.text },
-            BufferInactiveMod = { fg = colors.overlay0, italic = true },
-            -- Modified icon
-            BufferCurrentModBtn = { fg = colors.text },
-            BufferInactiveModBtn = { fg = colors.text },
-            -- Scroll arrow
-            BufferScrollArrow = { fg = colors.yellow },
+            BufferScrollArrow = { fg = hl.yellow },     -- Scroll arrow
+            BufferCurrent = { fg = hl.text },           -- Tab contents
+            BufferCurrentSignRight = { fg = hl.text },  -- Tab separator
+            BufferCurrentMod = { fg = hl.text },        -- Modified contents
+            BufferCurrentModBtn = { fg = hl.text },     -- Modified icon
+            BufferInactiveModBtn = { fg = hl.text },
+            BufferInactiveSignRight = { fg = hl.text },
+            BufferInactive = { fg = hl.overlay0, italic = true },
+            BufferInactiveMod = { fg = hl.overlay0, italic = true },
 
             -- Diagnostics
-            -------------------------------------------------------------------
-            DiagnosticSignError = { fg = colors.red },
-            DiagnosticSignWarn = { fg = colors.yellow },
-            DiagnosticSignInfo = { fg = colors.teal },
-            DiagnosticSignHint = { fg = colors.text },
+            DiagnosticSignError = { fg = hl.red },
+            DiagnosticSignWarn = { fg = hl.yellow },
+            DiagnosticSignInfo = { fg = hl.teal },
+            DiagnosticSignHint = { fg = hl.text },
 
             -- Ui
-            -------------------------------------------------------------------
-            FoldColumn = { fg = colors.yellow },      -- Line next to folded section
-            WinSeparator = { fg = colors.overlay0 },  -- Line between splits
-            CursorColumn = { bg = colors.surface0 },  -- Vertical cursor column line
-            IncSearch = { bg = colors.red },          -- Search results (/)
+            FoldColumn = { fg = hl.yellow },      -- Line next to folded section
+            WinSeparator = { fg = hl.overlay0 },  -- Line between splits
+            CursorColumn = { bg = hl.surface0 },  -- Vertical cursor column line
+            IncSearch = { bg = hl.red },          -- Search results (/)
             Search = {
-                fg = colors.crust,
-                bg = colors.overlay1,
+                fg = hl.crust,
+                bg = hl.overlay1,
             }
         },
 
         integrations = {
-            aerial = false,
             barbar = false,         -- Keep 'false' to enable transparent bg
             cmp = true,
             dropbar = {
                 enabled = true,
                 color_mode = true,  -- Enable color for kind's texts, and icons
             },
-            fidget = false,
             gitsigns = true,
-            neotree = true,
             treesitter = true,
             notify = false,
             -- For more plugins integrations please scroll down

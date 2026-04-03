@@ -45,7 +45,7 @@ M.opts = {
         git_status_open = false,
         git_untracked = true,
         follow_file = true,
-        focus = "input",    -- (input|list)
+        focus = "input",    -- input, list
         auto_close = true,  -- 'true' is required to prevent window hanging on select
         jump = { close = false },
 
@@ -68,68 +68,80 @@ M.opts = {
         win = {
             -- Input window
             input = {
+                -- To close the picker on ESC instead of going to normal mode,
+                -- add the following keymap to your config.
+                -- ["<Esc>"] = { "close", mode = { "n", "i" } },
                 keys = {
-                    -- To close the picker on ESC instead of going to normal mode,
-                    -- add the following keymap to your config.
-                    -- ["<Esc>"] = { "close", mode = { "n", "i" } },
-
-                    -- ["/"] = "toggle_focus",
-
-                    ["<Esc>"] = { "close", mode = { "n", "i" } },
-                    ["<C-Down>"] = { "history_forward", mode = { "i", "n" } },
-                    ["<C-Up>"] = { "history_back", mode = { "i", "n" } },
-
-                    -- Normal, insert
-                    ["<CR>"] = { "confirm", mode = { "n", "i" } },
-                    ["<Down>"] = { "list_down", mode = { "i", "n" } },
-                    ["<S-CR>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
-                    ["<S-Tab>"] = { "select_and_prev", mode = { "i", "n" } },
-                    ["<Tab>"] = { "select_and_next", mode = { "i", "n" } },
+                    ["<Esc>"] = { "close", mode = { "i", "n" } },
+                    ["<CR>"] = { "confirm", mode = { "i", "n" } },
                     ["<Up>"] = { "list_up", mode = { "i", "n" } },
+                    ["<Down>"] = { "list_down", mode = { "i", "n" } },
+                    ["<Tab>"] = { "select_and_next", mode = { "i", "n" } },
+                    ["<S-Tab>"] = { "select_and_prev", mode = { "i", "n" } },
+                    ["<A-a>"] = { "select_all", mode = { "i", "n" } },
+                    ["<A-w>"] = { "cycle_win", mode = { "i", "n" } },
+
+                    ["<Page-Up>"] = { "preview_scroll_up", mode = { "i", "n" } },
+                    ["<Page-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
+                    ["<S-Up>"] = { "list_scroll_up", mode = { "i", "n" } },
+                    ["<S-Down>"] = { "list_scroll_down", mode = { "i", "n" } },
+
+                    ["<A-f>"] = { "qflist", mode = { "i", "n" } },
+
                     ["<A-d>"] = { "inspect", mode = { "n", "i" } },
-                    ["<A-f>"] = { "toggle_follow", mode = { "i", "n" } },
                     ["<A-h>"] = { "toggle_hidden", mode = { "i", "n" } },
                     ["<A-i>"] = { "toggle_ignored", mode = { "i", "n" } },
                     ["<A-r>"] = { "toggle_regex", mode = { "i", "n" } },
-                    ["<A-m>"] = { "toggle_maximize", mode = { "i", "n" } },
                     ["<A-p>"] = { "toggle_preview", mode = { "i", "n" } },
-                    ["<A-w>"] = { "cycle_win", mode = { "i", "n" } },
-                    ["<C-a>"] = { "select_all", mode = { "n", "i" } },
-                    ["<C-b>"] = { "preview_scroll_up", mode = { "i", "n" } },
-                    ["<C-d>"] = { "list_scroll_down", mode = { "i", "n" } },
-                    ["<C-f>"] = { "preview_scroll_down", mode = { "i", "n" } },
-                    ["<C-g>"] = { "toggle_live", mode = { "i", "n" } },
-                    ["<C-j>"] = { "list_down", mode = { "i", "n" } },
-                    ["<C-k>"] = { "list_up", mode = { "i", "n" } },
-                    ["<C-n>"] = { "list_down", mode = { "i", "n" } },
-                    ["<C-p>"] = { "list_up", mode = { "i", "n" } },
-                    ["<C-q>"] = { "qflist", mode = { "i", "n" } },
-                    ["<C-s>"] = { "edit_split", mode = { "i", "n" } },
-                    ["<C-t>"] = { "tab", mode = { "n", "i" } },
-                    ["<C-u>"] = { "list_scroll_up", mode = { "i", "n" } },
-                    ["<C-v>"] = { "edit_vsplit", mode = { "i", "n" } },
+                    -- ["<A-f>"] = { "toggle_follow", mode = { "i", "n" } },  -- ?
+                    -- ["<C-g>"] = { "toggle_live", mode = { "i", "n" } },    -- ?
+
+                    -- ["i"] = false,  -- "list_up",
+                    -- ["k"] = false,  -- "list_down",
+                    -- ["G"] = false,  -- "list_bottom",
+                    -- ["gg"] = false, --  "list_top",
+
+                    ["i"] = { "list_up", mode = "n" },
+                    ["k"] = { "list_down", mode = "n" },
+                    ["G"] = { "list_bottom", mode = "n" },
+                    ["gg"] = { "list_top", mode = "n" },
+
+                    ["<A-/>"] = { "toggle_help_input", mode = { "i", "n" } },
 
                     -- Insert only
                     ["<C-c>"] = { "cancel", mode = "i" },
-                    ["<C-w>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
-                    ["<C-r>#"] = { "insert_alt", mode = "i" },
-                    ["<C-r>%"] = { "insert_filename", mode = "i" },
-                    ["<C-r><C-a>"] = { "insert_cWORD", mode = "i" },
-                    ["<C-r><C-f>"] = { "insert_file", mode = "i" },
-                    ["<C-r><C-l>"] = { "insert_line", mode = "i" },
-                    ["<C-r><C-p>"] = { "insert_file_full", mode = "i" },
-                    ["<C-r><C-w>"] = { "insert_cword", mode = "i" },
+                    ["<A-BS>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
 
-                    ["<C-w>H"] = "layout_left",
-                    ["<C-w>J"] = "layout_bottom",
-                    ["<C-w>K"] = "layout_top",
-                    ["<C-w>L"] = "layout_right",
-                    ["?"] = "toggle_help_input",
-                    ["G"] = "list_bottom",
-                    ["gg"] = "list_top",
-                    ["k"] = "list_down",
-                    ["i"] = "list_up",
-                    ["q"] = "cancel",
+                    -- Unset default bindings
+                    ["<A-m>"] = false,       -- { "toggle_maximize", mode = { "i", "n" } },
+                    ["<C-q>"] = false,       -- { "qflist", mode = { "i", "n" } },
+                    ["<C-s>"] = false,       -- { "edit_split", mode = { "i", "n" } },
+                    ["<C-v>"] = false,       -- { "edit_vsplit", mode = { "i", "n" } },
+                    ["<C-b>"] = false,       -- { "preview_scroll_up", mode = { "i", "n" } },
+                    ["<C-f>"] = false,       -- { "preview_scroll_down", mode = { "i", "n" } },
+                    ["<C-u>"] = false,       -- { "list_scroll_up", mode = { "i", "n" } },
+                    ["<C-d>"] = false,       -- { "list_scroll_down", mode = { "i", "n" } },
+                    ["<C-Down>"] = false,    -- { "history_forward", mode = { "i", "n" } },
+                    ["<C-Up>"] = false,      -- { "history_back", mode = { "i", "n" } },
+                    ["q"] = false,           -- "cancel",
+                    ["<S-CR>"] = false,      -- { { "pick_win", "jump" }, mode = { "n", "i" } },
+                    ["<C-t>"] = false,       -- { "tab", mode = { "n", "i" } },
+                    ["<C-k>"] = false,       -- { "list_up", mode = { "i", "n" } },
+                    ["<C-p>"] = false,       -- { "list_up", mode = { "i", "n" } },
+                    ["<C-j>"] = false,       -- { "list_down", mode = { "i", "n" } },
+                    ["<C-n>"] = false,       -- { "list_down", mode = { "i", "n" } },
+                    ["<C-w>"] = false,       -- { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
+                    ["<C-r>#"] = false,      -- { "insert_alt", mode = "i" },
+                    ["<C-r>%"] = false,      -- { "insert_filename", mode = "i" },
+                    ["<C-r><C-a>"] = false,  -- { "insert_cWORD", mode = "i" },
+                    ["<C-r><C-f>"] = false,  -- { "insert_file", mode = "i" },
+                    ["<C-r><C-l>"] = false,  -- { "insert_line", mode = "i" },
+                    ["<C-r><C-p>"] = false,  -- { "insert_file_full", mode = "i" },
+                    ["<C-r><C-w>"] = false,  -- { "insert_cword", mode = "i" },
+                    ["<C-w>H"] = false,      -- "layout_left",
+                    ["<C-w>J"] = false,      -- "layout_bottom",
+                    ["<C-w>K"] = false,      -- "layout_top",
+                    ["<C-w>L"] = false,      -- "layout_right",
                 },
                 b = {
                     minipairs_disable = true,
@@ -141,43 +153,38 @@ M.opts = {
                 keys = {
                     ["i"] = "list_up",
                     ["k"] = "list_down",
-                    ["/"] = "focus_input",
-
-
-                    -- ["<Esc>"] = "focus_list",
-                    -- ["<Esc>"] = "cancel",
-
-
-                    [","] = "explorer_up",
-                    ["."] = "explorer_focus",
+                    ["t"] = "explorer_close",  -- Collapse dir
                     ["l"] = "confirm",
-                    ["t"] = "explorer_close", -- close directory
+                    ["T"] = "explorer_close_all",
+                    ["I"] = "toggle_ignored",
+                    ["H"] = "toggle_hidden",
+                    [","] = "explorer_up",     -- 'cd' into parent dir
+                    ["."] = "explorer_focus",  -- 'cd' into dir
                     ["n"] = "explorer_add",
                     ["R"] = "explorer_del",
                     ["r"] = "explorer_rename",
-                    ["x"] = "explorer_copy",
-                    ["m"] = "explorer_move",
-                    ["P"] = "toggle_preview",
-                    ["c"] = { "explorer_yank", mode = { "n", "x" } },
+                    ["x"] = { "explorer_yank", mode = { "n", "x" } },
+                    ["c"] = "explorer_copy",
                     ["v"] = "explorer_paste",
-                    ["I"] = "toggle_ignored",
-                    ["H"] = "toggle_hidden",
-                    ["T"] = "explorer_close_all",
+                    ["P"] = "toggle_preview",
+                    ["m"] = "explorer_move",
+                    ["/"] = "focus_input",
+                    ["<Leader>g"] = "picker_grep",
 
-                    ["u"] = "explorer_update",
-                    ["<c-c>"] = "tcd",
-                    ["<leader>/"] = "picker_grep",
-                    ["<c-t>"] = "terminal",
-
-                    -- ["o"] = "explorer_open", -- open with system application
-                    -- ["]g"] = "explorer_git_next",
-                    -- ["[g"] = "explorer_git_prev",
-                    -- ["]d"] = "explorer_diagnostic_next",
-                    -- ["[d"] = "explorer_diagnostic_prev",
-                    -- ["]w"] = "explorer_warn_next",
-                    -- ["[w"] = "explorer_warn_prev",
-                    -- ["]e"] = "explorer_error_next",
-                    -- ["[e"] = "explorer_error_prev",
+                    -- Unset default bindings
+                    ["<Leader>/"] = false,  --"picker_grep",
+                    ["<C-c>"] = false,      -- "tcd",
+                    ["<C-t>"] = false,      -- "terminal",
+                    ["u"] = false,          -- "explorer_update",
+                    ["o"] = false,          -- "explorer_open", -- open with system application
+                    ["]g"] = false,         -- "explorer_git_next",
+                    ["[g"] = false,         -- "explorer_git_prev",
+                    ["]d"] = false,         -- "explorer_diagnostic_next",
+                    ["[d"] = false,         -- "explorer_diagnostic_prev",
+                    ["]w"] = false,         -- "explorer_warn_next",
+                    ["[w"] = false,         -- "explorer_warn_prev",
+                    ["]e"] = false,         -- "explorer_error_next",
+                    ["[e"] = false,         -- "explorer_error_prev",
                 }
             }
         },

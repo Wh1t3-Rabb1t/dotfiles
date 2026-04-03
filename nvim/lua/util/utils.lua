@@ -13,9 +13,11 @@ function M.map(mode, lhs, rhs, opts)
     local options = { noremap = true, silent = true, nowait = true }
 
     -- Silent is detrimental to cmd line bindings
-    if mode == "c" then
-        options.silent = false
-    end
+    if mode == "c" then options.silent = false end
+
+    -- Comment bindings require 'remap' to be true
+    if rhs == "gc" then options.noremap = false end
+    if rhs == "gcc" then options.noremap = false end
 
     if opts then
         options = vim.tbl_extend("force", options, opts)

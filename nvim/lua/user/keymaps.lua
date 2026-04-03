@@ -39,10 +39,11 @@
 -- SAVE CHANGES                        _25
 -- QUIT                                _26
 
--- NOTE: If a module bound to a key needs an argument, it must be wrapped
--- in a function. Neovim’s keymaps don’t support calling functions with
--- predefined arguments directly. Functions without arguments passed in
--- don't require wrapping though.
+-- NOTE:
+-- If a module bound to a key needs an argument, it must be wrapped
+-- in a function. Neovim’s keymaps don’t support calling functions
+-- with predefined arguments directly. Functions without arguments
+-- passed in don't require wrapping though.
 
 local map = require("util.utils").map
 local win = require("util.window")
@@ -234,67 +235,65 @@ nmap("]",              "msva[V")                 -- Select around [] block
 nmap(">",              "msva<V")                 -- Select around <> block
 
 
--- COPY                                                                      _16
+-- COPY (all copied text is added to the alphabetical register stack)        _16
 --------------------------------------------------------------------------------
--- System register '*' entries are added to the alphabetical register stack.
--- Secondary register '+' entries are added to the numeric register stack.
-
-vmap("c",              'mm"*y`m')                -- Copy to system register
-vmap("<Leader>c",      '"+y')                    -- Copy to register stack
-nmap("cc",             'mmVggoG"*y`m')           -- Copy whole buffer
-
+vmap("c",              'mm"zy`m')                -- Copy to 'z' register
+vmap("<Leader>c",      '"*y')                    -- Copy to system clipboard
+nmap("cc",             'mmVggoG"zy`m')           -- Copy whole buffer
 
 -- Word
 nmap("c",              "<Nop>")
-nmap("ct",             'mm"*yiw`m')              -- Copy in word
-nmap("cu",             'mm"*yb`m')               -- Copy word LEFT
-nmap("co",             '"*ye')                   -- Copy word RIGHT
+nmap("ct",             'mm"zyiw`m')              -- Copy in word
+nmap("cu",             'mm"zyb`m')               -- Copy word LEFT
+nmap("co",             '"zye')                   -- Copy word RIGHT
 
 -- Line
-nmap("cl",             '"*yy')                   -- Copy whole line
-nmap("c,",             'mm"*y^`m')               -- Copy to line START
-nmap("c.",             '"*y$')                   -- Copy to line END
+nmap("cl",             '"zyy')                   -- Copy whole line
+nmap("c,",             'mm"zy^`m')               -- Copy to line START
+nmap("c.",             '"zy$')                   -- Copy to line END
 
 -- Paragraph
-nmap("cp",             'mm"*yip`m')              -- Copy in paragraph
-nmap("ci",             'mm"*y{`m')               -- Copy paragraph UP
-nmap("ck",             '"*y}')                   -- Copy paragraph DOWN
+nmap("cp",             'mm"zyip`m')              -- Copy in paragraph
+nmap("ci",             'mm"zy{`m')               -- Copy paragraph UP
+nmap("ck",             '"zy}')                   -- Copy paragraph DOWN
 
 -- To char
-nmap("c;",             '"*yt')                   -- Copy forwards to char
-nmap("ch",             '"*yT')                   -- Copy backwards to char
+nmap("c;",             '"zyt')                   -- Copy forwards to char
+nmap("ch",             '"zyT')                   -- Copy backwards to char
 
 
 -- CUT                                                                       _17
 --------------------------------------------------------------------------------
--- All `d` motions that span than one line (the deleted text is not confined to
--- a single line) are sent to the numeric register stack by default. We
--- circumvent this by instead yanking to the system register then restoring the
--- previous visual selection and deleting it to the black hole register.
+-- All `d` motions that span than one line
+-- (the deleted text is not confined to a
+-- single line) are sent to the numeric register
+-- stack by default; we circumvent this by
+-- instead yanking to the system register then
+-- restoring the previous visual selection and
+-- deleting it to the black hole register.
 
-vmap("x",              '"*ygv"_d')               -- Cut to system register
-vmap("<Leader>x",      '"+ygv"_d')               -- Cut to register stack
-nmap("xx",             'ggVG"*ygv"_d')           -- Cut whole buffer
+vmap("x",              '"zygv"_d')               -- Cut to 'z' register
+nmap("xx",             'ggVG"zygv"_d')           -- Cut whole buffer
 
 -- Word
 nmap("x",              "<Nop>")
-nmap("xt",             '"*diw')                  -- Cut in word
-nmap("xu",             '"*db')                   -- Cut word LEFT
-nmap("xo",             '"*de')                   -- Cut word RIGHT
+nmap("xt",             '"zdiw')                  -- Cut in word
+nmap("xo",             '"zde')                   -- Cut word RIGHT
+nmap("xu",             '"zdb')                   -- Cut word LEFT
 
 -- Line
-nmap("xl",             'V"*ygv"_d')              -- Cut whole line
-nmap("x,",             '"*d^')                   -- Cut to line START
-nmap("x.",             '"*d$')                   -- Cut to line END
+nmap("xl",             'V"zygv"_d')              -- Cut whole line
+nmap("x,",             '"zd^')                   -- Cut to line START
+nmap("x.",             '"zd$')                   -- Cut to line END
 
 -- Paragraph
-nmap("xp",             'vip"*ygv"_d')            -- Cut in paragraph
-nmap("xi",             'v{"*ygv"_d')             -- Cut paragraph UP
-nmap("xk",             'v}"*ygv"_d')             -- Cut paragraph DOWN
+nmap("xp",             'vip"zygv"_d')            -- Cut in paragraph
+nmap("xi",             'v{"zygv"_d')             -- Cut paragraph UP
+nmap("xk",             'v}"zygv"_d')             -- Cut paragraph DOWN
 
 -- To char
-nmap("x;",             '"*dt')                   -- Cut forwards to char
-nmap("xh",             '"*dT')                   -- Cut backwards to char
+nmap("x;",             '"zdt')                   -- Cut forwards to char
+nmap("xh",             '"zdT')                   -- Cut backwards to char
 
 
 -- CHANGE (all changed text is sent to the black hole register)              _18
@@ -325,10 +324,11 @@ nmap("yh",             '"_cT')                   -- Change backwards to char
 
 -- PASTE                                                                     _19
 --------------------------------------------------------------------------------
-nmap("v",              '"*]P')                   -- Paste from system register
-vmap("v",              '"_d"*P')                 -- Paste over selection
-cmap("<A-v>",          "<C-r>*")                 -- Paste from system register
-imap("<A-v>",          km.paste)                 -- Paste from system register
+nmap("v",              '"z]P')                   -- Paste from 'p' register
+nmap("<Leader>v",      '"*]P')                   -- Paste from system register
+vmap("v",              '"_d"zP')                 -- Paste over selection
+cmap("<A-v>",          "<C-r>z")                 -- Paste from 'p' register
+imap("<A-v>",          km.paste)                 -- Paste from 'p' register
 
 
 -- DUPLICATE LINE / SELECTION                                                _20
@@ -340,7 +340,7 @@ vmap("<Leader>d",      "<C-v>VyPgv")             -- Duplicate selection below
 -- OPEN / JOIN LINES                                                         _21
 --------------------------------------------------------------------------------
 -- `<C-o>` in insert mode sends a single normal
--- mode cmd then returns back to insert
+-- mode cmd then returns back to insert.
 nmap("<CR>",           "o<C-o>mo<Esc>`o")        -- New line BELOW
 nmap("<S-CR>",         "O<C-o>mo<Esc>`o")        -- New line ABOVE
 nvmap("j",             "J")                      -- Join lines

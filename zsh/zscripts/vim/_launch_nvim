@@ -19,7 +19,7 @@ if [[ "$#" -eq 0 ]]; then
     if [[ -e "Session.vim" ]]; then
         nvim -S
     else
-        nvim -c "Neotree reveal"
+        nvim
     fi
 else
     nvim "$@"

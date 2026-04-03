@@ -100,7 +100,7 @@ end
 --------------------------------------------------------------------------------
 function M.paste()
     -- Make paste respect indentation in insert
-    vim.cmd([[ :execute 'normal! "*]Pl' ]])
+    vim.cmd([[ :execute 'normal! "z]Pl' ]])
 end
 
 
@@ -166,7 +166,7 @@ end
 --------------------------------------------------------------------------------
 function M.save_changes()
     local current_ft = vim.o.filetype
-    local excluded_ft = { "diff", "lazy", "mason", "neo-tree", "aerial" }
+    local excluded_ft = { "diff", "lazy", "mason" }
 
     -- Don't save when certain filetypes are focused
     if vim.tbl_contains(excluded_ft, current_ft) or vim.o.binary then

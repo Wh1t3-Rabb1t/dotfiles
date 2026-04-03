@@ -19,10 +19,10 @@
   "mason.nvim": { "branch": "main", "commit": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65" },
   "nvim-autopairs": { "branch": "master", "commit": "59bce2eef357189c3305e25bc6dd2d138c1683f5" },
   "nvim-cmp": { "branch": "main", "commit": "a1d504892f2bc56c2e79b65c6faded2fd21f3eca" },
-  "nvim-recorder": { "branch": "main", "commit": "cf2e07d1d60f225943b2f2457ecd8e2b3e4ee2d5" },
-  "nvim-spider": { "branch": "main", "commit": "4bca4dbc53f01b37385146b37ab5ce55bdc083fc" },
+  "nvim-recorder": { "branch": "main", "commit": "2aa64628e05c470a2b59df6227db5a653ed283b9" },
+  "nvim-spider": { "branch": "main", "commit": "af2f73ffd62e61a091b3503845b7704d76d81d95" },
   "nvim-surround": { "branch": "main", "commit": "61319d4bd1c5e336e197defa15bd104c51f0fb29" },
-  "nvim-treesitter": { "branch": "main", "commit": "539abf6da5ee8702e37b82cc953131dadd570da2" },
+  "nvim-treesitter": { "branch": "main", "commit": "81295eb0c5fc05ab3796a28c9f160c3ac4098106" },
   "nvim-web-devicons": { "branch": "master", "commit": "40e9d5a6cc3db11b309e39593fc7ac03bb844e38" },
   "snacks.nvim": { "branch": "main", "commit": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e" }
 }

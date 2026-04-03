@@ -11,30 +11,27 @@ Plugins to keep:
 - Spider
 - Surround
 - ? Rip substitute
-- ? NeoComposer
 - ? Trailblazer
 - ? Gitsigns
 
 
 ## Priority: High
 
-- Need to replace (or tweak) the macro recorder plugin so that it handles
-  clipboard actions within the macro properly.
+- Look into keymap_funcs and replace anything that has been made redundant.
 - Preview window options for the snacks picker need to be set.
 - Lualine is conflicting with the Snacks explorer side panel.
-- Incorporate whichkey into config.
 - Consider using 'vim.keymap.del' to purge unwanted bindings.
 - Overhaul cmp config (lsp_kind vscode pictograms are no longer displaying).
-- Save change in word jump to next match as a macro and bind to a key.
+- Write a simple replacement for the Trailblazer plugin.
 
-- Legendary.nvim is deprecated. Replace with Snacks.picker (Folke).
+- Need to replace (or tweak) the macro recorder plugin so that it handles
+  clipboard actions within the macro properly.
+
+- Incorporate whichkey into config.
+
 - Fix: Copy to char (moving left) doesn't pin and jump back to the starting location.
-- Finish configuring fzf lua.
+- Legendary.nvim is deprecated. Replace with Snacks.picker (Folke).
 - Create autocommand to turn off wrap if buffer width is < 80.
-- Add an autocommand that add the contents pasted from the clipboard ring to the current system clipboard.
-- Set bindings for gitsigns (commit, add etc).
-- Find out how to toggle annoying LSP warnings.
-- Add a check to ensure that luarocks is installed before initializing luacheck.
 
 ## Priority: Low
 

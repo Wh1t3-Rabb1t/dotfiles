@@ -33,9 +33,9 @@ function M.config()
         -- temporarily changes changes some settings for the duration of the macro.
         performanceOpts = {
             countThreshold = 100,
-            lazyredraw = true,          -- Enable lazyredraw (see `:h lazyredraw`)
-            noSystemClipboard = false,  -- Don't remove `+`/`*` from clipboard option
-            autocmdEventsIgnore = {     -- Temporarily ignore these autocmd events
+            lazyredraw = true,         -- Enable lazyredraw (see `:h lazyredraw`)
+            noSystemClipboard = true,  -- Remove `+`/`*` from clipboard option
+            autocmdEventsIgnore = {    -- Temporarily ignore these autocmd events
                 "TextChangedI",
                 "TextChanged",
                 "InsertLeave",

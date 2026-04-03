@@ -75,57 +75,30 @@ autocmd("FileType", {
 autocmd("InsertEnter", {
     group = augroup("EnableSpellSuggest", { clear = true }),
     callback = function()
-        if vim.bo.filetype ~= "neo-tree-popup" then
-            vim.o.spell = true
-        end
+        vim.o.spell = true
     end
 })
 
 autocmd("InsertLeave", {
     group = augroup("DisableSpellSuggest", { clear = true }),
-    callback = function() vim.o.spell = false end
+    callback = function()
+        vim.o.spell = false
+    end
 })
 
 
--- UPDATE REGISTER STACK / HIGHLIGHT SELECTION ON YANK
+-- HIGHLIGHT YANKED TEXT AND NOTIFY WHEN COPYING TO SYSTEM REGISTER
 --------------------------------------------------------------------------------
 autocmd("TextYankPost", {
     group = augroup("YankUtils", { clear = true }),
     pattern = "*",
     callback = function()
         vim.highlight.on_yank()
+
+        -- Notify when copying to the system register
         local register = vim.v.event.regname
-
-        -- Copy to the alphabetical register stack
         if register == "*" then
-            -- If there are no non whitespace chars
-            if vim.fn.getreg(register):match("%S") == nil then return end
-
-            -- Loop from register 'y' (ASCII 121) down to 'a' (ASCII 97)
-            local carry = vim.fn.getreg("z")
-            for i = 121, 97, -1 do
-                local reg = string.char(i)
-                local current = vim.fn.getreg(reg)
-                vim.fn.setreg(reg, carry)
-                if current == "" then break end
-                carry = current
-            end
-
-            vim.fn.setreg("z", vim.fn.getreg("*"))
-        end
-
-        -- Copy to the numeric register stack
-        if register == "+" then
-            if vim.fn.getreg(register):match("%S") == nil then return end
-
-            local carry = vim.fn.getreg("+")
-            for i = 1, 9 do
-                local reg = tostring(i)
-                local current = vim.fn.getreg(reg)
-                vim.fn.setreg(reg, carry)
-                if current == "" then break end
-                carry = current
-            end
+            vim.notify("Selection copied to system clipboard", vim.log.levels.INFO)
         end
     end
 })

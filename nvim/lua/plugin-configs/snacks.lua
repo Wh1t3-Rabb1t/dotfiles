@@ -27,7 +27,7 @@ M.opts = {
 
     styles = {
         notification = {
-            -- wo = { wrap = true } -- Wrap notifications
+            -- wo = { wrap = true }  -- Wrap notifications
         }
     },
 
@@ -72,45 +72,31 @@ M.opts = {
                 -- add the following keymap to your config.
                 -- ["<Esc>"] = { "close", mode = { "n", "i" } },
                 keys = {
-                    ["<Esc>"] = { "close", mode = { "i", "n" } },
-                    ["<CR>"] = { "confirm", mode = { "i", "n" } },
-                    ["<Up>"] = { "list_up", mode = { "i", "n" } },
-                    ["<Down>"] = { "list_down", mode = { "i", "n" } },
-                    ["<Tab>"] = { "select_and_next", mode = { "i", "n" } },
-                    ["<S-Tab>"] = { "select_and_prev", mode = { "i", "n" } },
-                    ["<A-a>"] = { "select_all", mode = { "i", "n" } },
-                    ["<A-w>"] = { "cycle_win", mode = { "i", "n" } },
-
-                    ["<Page-Up>"] = { "preview_scroll_up", mode = { "i", "n" } },
-                    ["<Page-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
-                    ["<S-Up>"] = { "list_scroll_up", mode = { "i", "n" } },
-                    ["<S-Down>"] = { "list_scroll_down", mode = { "i", "n" } },
-
-                    ["<A-f>"] = { "qflist", mode = { "i", "n" } },
-
-                    ["<A-d>"] = { "inspect", mode = { "n", "i" } },
-                    ["<A-h>"] = { "toggle_hidden", mode = { "i", "n" } },
-                    ["<A-i>"] = { "toggle_ignored", mode = { "i", "n" } },
-                    ["<A-r>"] = { "toggle_regex", mode = { "i", "n" } },
-                    ["<A-p>"] = { "toggle_preview", mode = { "i", "n" } },
-                    -- ["<A-f>"] = { "toggle_follow", mode = { "i", "n" } },  -- ?
-                    -- ["<C-g>"] = { "toggle_live", mode = { "i", "n" } },    -- ?
-
-                    -- ["i"] = false,  -- "list_up",
-                    -- ["k"] = false,  -- "list_down",
-                    -- ["G"] = false,  -- "list_bottom",
-                    -- ["gg"] = false, --  "list_top",
-
-                    ["i"] = { "list_up", mode = "n" },
-                    ["k"] = { "list_down", mode = "n" },
-                    ["G"] = { "list_bottom", mode = "n" },
-                    ["gg"] = { "list_top", mode = "n" },
-
-                    ["<A-/>"] = { "toggle_help_input", mode = { "i", "n" } },
+                    -- TODO: find a good mapping for these ...
+                    ["<A-h>"]         = { "toggle_hidden",       mode = { "i", "n" } },
+                    ["<A-i>"]         = { "toggle_ignored",      mode = { "i", "n" } },
+                    -- ...
+                    ["<Esc>"]         = { "close",               mode = { "i", "n" } },
+                    ["<Tab>"]         = { "cycle_win",           mode = { "i", "n" } },
+                    ["<CR>"]          = { "confirm",             mode = { "i", "n" } },
+                    ["<Up>"]          = { "list_up",             mode = { "i", "n" } },
+                    ["<Down>"]        = { "list_down",           mode = { "i", "n" } },
+                    ["<S-Up>"]        = { "select_and_prev",     mode = { "i", "n" } },
+                    ["<S-Down>"]      = { "select_and_next",     mode = { "i", "n" } },
+                    ["<A-a>"]         = { "select_all",          mode = { "i", "n" } },
+                    ["<Page-Up>"]     = { "list_scroll_up",      mode = { "i", "n" } },
+                    ["<Page-Down>"]   = { "list_scroll_down",    mode = { "i", "n" } },
+                    ["<S-Page-Up>"]   = { "preview_scroll_up",   mode = { "i", "n" } },
+                    ["<S-Page-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
+                    ["<A-f>"]         = { "qflist",              mode = { "i", "n" } },
+                    ["<A-p>"]         = { "toggle_preview",      mode = { "i", "n" } },
+                    ["<A-/>"]         = { "toggle_help_input",   mode = { "i", "n" } },
+                    ["<A-r>"]         = { "toggle_regex",        mode = { "i", "n" } },
+                    ["<A-/>"]         = { "toggle_help_input",   mode = { "i", "n" } },
 
                     -- Insert only
-                    ["<C-c>"] = { "cancel", mode = "i" },
-                    ["<A-BS>"] = { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
+                    ["<C-c>"]  = { "cancel",  mode = "i" },
+                    ["<A-BS>"] = { "<c-s-w>", mode = "i", expr = true, desc = "delete word" },
 
                     -- Unset default bindings
                     ["<A-m>"] = false,       -- { "toggle_maximize", mode = { "i", "n" } },
@@ -123,7 +109,6 @@ M.opts = {
                     ["<C-d>"] = false,       -- { "list_scroll_down", mode = { "i", "n" } },
                     ["<C-Down>"] = false,    -- { "history_forward", mode = { "i", "n" } },
                     ["<C-Up>"] = false,      -- { "history_back", mode = { "i", "n" } },
-                    ["q"] = false,           -- "cancel",
                     ["<S-CR>"] = false,      -- { { "pick_win", "jump" }, mode = { "n", "i" } },
                     ["<C-t>"] = false,       -- { "tab", mode = { "n", "i" } },
                     ["<C-k>"] = false,       -- { "list_up", mode = { "i", "n" } },
@@ -142,6 +127,7 @@ M.opts = {
                     ["<C-w>J"] = false,      -- "layout_bottom",
                     ["<C-w>K"] = false,      -- "layout_top",
                     ["<C-w>L"] = false,      -- "layout_right",
+                    ["q"] = false,           -- "cancel",
                 },
                 b = {
                     minipairs_disable = true,
@@ -172,7 +158,7 @@ M.opts = {
                     ["<Leader>g"] = "picker_grep",
 
                     -- Unset default bindings
-                    ["<Leader>/"] = false,  --"picker_grep",
+                    ["<Leader>/"] = false,  -- "picker_grep",
                     ["<C-c>"] = false,      -- "tcd",
                     ["<C-t>"] = false,      -- "terminal",
                     ["u"] = false,          -- "explorer_update",

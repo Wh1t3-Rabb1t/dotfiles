@@ -18,6 +18,7 @@ Plugins to keep:
 
 ## Priority: High
 
+- Preview window options for the snacks picker need to be set.
 - Lualine is conflicting with the Snacks explorer side panel.
 - Incorporate whichkey into config.
 - Consider using 'vim.keymap.del' to purge unwanted bindings.

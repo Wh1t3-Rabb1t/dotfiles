@@ -94,8 +94,8 @@ return {
     ----------------------------------------------------------------------------
     {
         "williamboman/mason.nvim",
-        event = "BufEnter",
-        opts = {},
+        lazy = false,  -- Can't lazy load or lsp won't autostart (nvim v0.12)
+        config = require("plugin-configs.mason").config,
     },
 
     -- RECORDER
@@ -110,7 +110,6 @@ return {
     ----------------------------------------------------------------------------
     {
         "folke/snacks.nvim",
-        -- dependencies = "nvim-tree/nvim-web-devicons",
         priority = 1000,
         lazy = false,
         opts = require("plugin-configs.snacks").opts,

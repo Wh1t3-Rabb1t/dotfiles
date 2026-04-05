@@ -203,11 +203,6 @@ function M.config()
 
         -- Sources for autocompletion
         sources = require("cmp").config.sources({
-
-
-            { name = "nvim_lsp" },
-
-
             {   -- Snippet engine
                 name = "luasnip",
                 group_index = 1,

@@ -102,6 +102,9 @@ return {
     ----------------------------------------------------------------------------
     {
         "chrisgrieser/nvim-recorder",
+
+        enabled = false,
+
         keys = require("plugin-configs.recorder").keys,
         config = require("plugin-configs.recorder").config,
     },
@@ -140,5 +143,16 @@ return {
         "nvim-treesitter/nvim-treesitter",
         event = "UiEnter",
         build = ":TSUpdate",
+    },
+
+    -- WHICH KEY
+    ----------------------------------------------------------------------------
+    {
+        "folke/which-key.nvim",
+
+        enabled = false,
+
+        event = "VeryLazy",
+        opts = require("plugin-configs.which_key").opts,
     }
 }

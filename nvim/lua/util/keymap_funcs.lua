@@ -20,6 +20,21 @@ function M.swap_point_and_mark()
 end
 
 
+-- COMMENT
+--------------------------------------------------------------------------------
+function M.comment_line()
+    vim.go.operatorfunc = "v:lua.require'vim._comment'.operator"
+    local keys = vim.api.nvim_replace_termcodes("g@_", true, false, true)
+    vim.api.nvim_feedkeys(keys, "n", false)
+end
+
+function M.comment_visual()
+    vim.go.operatorfunc = "v:lua.require'vim._comment'.operator"
+    local keys = vim.api.nvim_replace_termcodes("g@", true, false, true)
+    vim.api.nvim_feedkeys(keys, "x", false)
+end
+
+
 -- ARROW NAVIGATION
 --------------------------------------------------------------------------------
 function M.cursor_up_ins()

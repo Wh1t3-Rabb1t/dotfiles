@@ -20,9 +20,11 @@
   "nvim-autopairs": { "branch": "master", "commit": "59bce2eef357189c3305e25bc6dd2d138c1683f5" },
   "nvim-cmp": { "branch": "main", "commit": "a1d504892f2bc56c2e79b65c6faded2fd21f3eca" },
   "nvim-recorder": { "branch": "main", "commit": "2aa64628e05c470a2b59df6227db5a653ed283b9" },
+  "nvim-rip-substitute": { "branch": "main", "commit": "3ff85033206aa9fbf9b988b2cc71e25ae4566424" },
   "nvim-spider": { "branch": "main", "commit": "af2f73ffd62e61a091b3503845b7704d76d81d95" },
   "nvim-surround": { "branch": "main", "commit": "61319d4bd1c5e336e197defa15bd104c51f0fb29" },
   "nvim-treesitter": { "branch": "main", "commit": "4916d6592ede8c07973490d9322f187e07dfefac" },
   "nvim-web-devicons": { "branch": "master", "commit": "40e9d5a6cc3db11b309e39593fc7ac03bb844e38" },
-  "snacks.nvim": { "branch": "main", "commit": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e" }
+  "snacks.nvim": { "branch": "main", "commit": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e" },
+  "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" }
 }

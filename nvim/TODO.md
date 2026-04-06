@@ -4,12 +4,6 @@
 
 Plugins to keep:
 
-- Lualine
-- Barbar
-- Dial
-- Autopairs
-- Spider
-- Surround
 - ? Rip substitute
 - ? Trailblazer
 - ? Gitsigns
@@ -17,14 +11,17 @@ Plugins to keep:
 
 ## Priority: High
 
-- Fix lsp setup. (prob the reason cmp lsp_kind isn't working)
-- Overhaul cmp config (lsp_kind vscode pictograms are no longer displaying).
+- Finish adding descriptions to keymaps file.
+- Replace Legendary.nvim with Snacks.picker.
 
 - Incorporate whichkey into config.
-
-- Replace Legendary.nvim with Snacks.picker.
-- Write a simple replacement for the Trailblazer plugin.
+- `:checkhealth which-key` has useful info about overlapping bindings.
 - Consider using 'vim.keymap.del' to purge unwanted bindings.
+
+- Remove/replace recorder plugin (it's introducing key timeout when invoked
+  for some reason).
+
+- Write a simple replacement for the Trailblazer plugin.
 - Look into keymap_funcs and replace anything that has been made redundant.
 - Create autocommand to turn off wrap if buffer width is < 80.
 
@@ -36,21 +33,13 @@ Plugins to keep:
 - Write correct lua evaluation bindings for a popup window -- vmap("=", ":lua<CR>", { silent = false }).
 - Set up code action bindings.
 - Clear quickfix list / search hl after using quicker substitute.
-- Prevent fzf lua overwriting qf list when adding to it (possibly patch fzf lua).
 
 ## Plugins
 
-- https://github.com/CWood-sdf/banana.nvim
-- https://github.com/sindrets/diffview.nvim
 - https://github.com/andrewferrier/debugprint.nvim
-- https://github.com/chrisgrieser/nvim-chainsaw
-- https://github.com/rest-nvim/rest.nvim
-- https://github.com/mistweaverco/kulala.nvim
 - https://github.com/stevearc/overseer.nvim
-- https://github.com/folke/lazydev.nvim
 - https://github.com/kawre/leetcode.nvim
 - https://github.com/lukas-reineke/cmp-under-comparator
-- https://github.com/uga-rosa/cmp-dictionary
 
 - Plugin framework: https://github.com/ldelossa/litee.nvim
 

@@ -35,6 +35,41 @@ function M.comment_visual()
 end
 
 
+-- LEADER BINDINGS (just misc vim commands/opts toggling)
+--------------------------------------------------------------------------------
+function M.set_column_hl()
+    vim.cmd("set colorcolumn=80")
+end
+
+function M.rm_column_hl()
+    vim.cmd("set colorcolumn=''")
+end
+
+function M.v_split_layout()
+    vim.cmd("windo wincmd H")
+end
+
+function M.h_split_layout()
+    vim.cmd("windo wincmd K")
+end
+
+function M.open_lazy()
+    vim.cmd("Lazy")
+end
+
+function M.open_mason()
+    vim.cmd("Mason")
+end
+
+function M.toggle_column_hl()
+    vim.wo.cursorcolumn = not vim.wo.cursorcolumn
+end
+
+function M.toggle_wrap()
+    vim.wo.wrap = not vim.wo.wrap
+end
+
+
 -- ARROW NAVIGATION
 --------------------------------------------------------------------------------
 function M.cursor_up_ins()
@@ -128,7 +163,6 @@ function M.toggle_search_hl()
         vim.cmd("set hls")
     end
 end
-
 
 function M.regex_selection()
     vim.cmd('normal! ""y')

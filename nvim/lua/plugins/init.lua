@@ -147,12 +147,10 @@ return {
 
     -- WHICH KEY
     ----------------------------------------------------------------------------
-    {
-        "folke/which-key.nvim",
-
-        enabled = false,
-
-        event = "VeryLazy",
-        opts = require("plugin-configs.which_key").opts,
-    }
+    -- {
+    --     "folke/which-key.nvim",
+    --     enabled = false,
+    --     event = "VeryLazy",
+    --     opts = {},
+    -- }
 }

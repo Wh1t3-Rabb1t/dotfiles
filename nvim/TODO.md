@@ -11,10 +11,9 @@ Plugins to keep:
 
 ## Priority: High
 
-- Finish adding descriptions to keymaps file.
-- Replace Legendary.nvim with Snacks.picker.
+- Consider using <Leader>; for all 'command palette' bindings (i.e. bindings
+  we create just to be shown in the keymaps snacks picker).
 
-- Incorporate whichkey into config.
 - `:checkhealth which-key` has useful info about overlapping bindings.
 - Consider using 'vim.keymap.del' to purge unwanted bindings.
 
@@ -23,16 +22,14 @@ Plugins to keep:
 
 - Write a simple replacement for the Trailblazer plugin.
 - Look into keymap_funcs and replace anything that has been made redundant.
-- Create autocommand to turn off wrap if buffer width is < 80.
 
 ## Priority: Low
 
-- Fix line jump bindings (op pending not working for i and k).
+- Create autocommand to turn off wrap if buffer width is < 80.
 - Consider creating an ignored filetypes module that sets ignore lists for different plugins to prevent plugins clashing.
 - Set up bindings to inspect / evaluate selection.
 - Write correct lua evaluation bindings for a popup window -- vmap("=", ":lua<CR>", { silent = false }).
 - Set up code action bindings.
-- Clear quickfix list / search hl after using quicker substitute.
 
 ## Plugins
 

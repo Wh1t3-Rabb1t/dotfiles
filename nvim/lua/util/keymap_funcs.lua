@@ -130,7 +130,7 @@ function M.toggle_search_hl()
 end
 
 
-function M.search_for_selection()
+function M.regex_selection()
     vim.cmd('normal! ""y')
     local selection = vim.fn.getreg('"')
     local escaped_selection = vim.fn.escape(selection, "\\/.*$^~[]")

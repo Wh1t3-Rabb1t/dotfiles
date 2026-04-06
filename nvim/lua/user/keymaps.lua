@@ -354,14 +354,14 @@ nvmap("j",     "J",               { desc = ' Join lines' })
 
 -- `f` and `/` SEARCH                                                        _22
 --------------------------------------------------------------------------------
-nvmap("h", ",",                     { desc = ' Prev f search result' })
-nvmap(";", ";",                     { desc = ' Prev f search result' })
-nvmap("Y", "mnN",                   { desc = ' Prev / search result' })
-nvmap("V", "mnn",                   { desc = ' Next / search result' })
-nmap("?",  km.toggle_search_hl,     { desc = ' Toggle search highlights' })
-nmap("F",  "mn*",                   { desc = ' Search for inner word' })
-vmap("F",  km.search_for_selection, { desc = ' Search for selected area' })
-vmap("/",  "<Esc>/\\%V",            { desc = ' Search within selection', silent = false })
+nvmap("h", ",",                 { desc = ' Prev f search result' })
+nvmap(";", ";",                 { desc = ' Prev f search result' })
+nvmap("Y", "mnN",               { desc = ' Prev / search result' })
+nvmap("V", "mnn",               { desc = ' Next / search result' })
+nmap("?",  km.toggle_search_hl, { desc = ' Toggle search highlights' })
+nmap("F",  "mn*",               { desc = ' Search for inner word' })
+vmap("F",  km.regex_selection,  { desc = ' Search for selected area' })
+vmap("/",  "<Esc>/\\%V",        { desc = ' Search within selection', silent = false })
 
 
 -- QUICKFIX                                                                  _23
@@ -372,33 +372,17 @@ nmap("<Leader>c", km.add_line_to_quickfix, { desc = ' Update quickfix list' }
 
 -- WINDOW                                                                    _24
 --------------------------------------------------------------------------------
--- Navigate
-nmap("<Up>", function()                          -- Focus split ABOVE
-    win.navigate_vertically("k")
-end)
-nmap("<Down>", function()                        -- Focus split BELOW
-    win.navigate_vertically("j")
-end)
-nmap("<Left>", function()                        -- Focus split LEFT
-    win.navigate_horizontally("h")
-end)
-nmap("<Right>", function()                       -- Focus split RIGHT
-    win.navigate_horizontally("l")
-end)
+-- Focus split
+nmap("<Up>",    function() win.navigate_vertically("k") end)    -- Above
+nmap("<Down>",  function() win.navigate_vertically("j") end)    -- Below
+nmap("<Left>",  function() win.navigate_horizontally("h") end)  -- Left
+nmap("<Right>", function() win.navigate_horizontally("l") end)  -- Right
 
--- Resize
-nmap("<S-Up>", function()                        -- Resize window UP
-    win.relative_resize("up")
-end)
-nmap("<S-Down>", function()                      -- Resize window DOWN
-    win.relative_resize("down")
-end)
-nmap("<S-Left>", function()                      -- Resize window LEFT
-    win.relative_resize("left")
-end)
-nmap("<S-Right>", function()                     -- Resize window RIGHT
-    win.relative_resize("right")
-end)
+-- Resize window
+nmap("<S-Up>",    function() win.relative_resize("up") end)     -- Up
+nmap("<S-Down>",  function() win.relative_resize("down") end)   -- Down
+nmap("<S-Left>",  function() win.relative_resize("left") end)   -- Left
+nmap("<S-Right>", function() win.relative_resize("right") end)  -- Right
 
 -- Cmds
 nmap("<Leader>w", win.close_window,  { desc = ' Close window' })

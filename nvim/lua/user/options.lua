@@ -68,7 +68,6 @@ local options = {
         "globals",           -- Global variables that start with an uppercase letter
         "buffers",           -- Hidden and unloaded buffers, not just those in windows
         "curdir",            -- The current directory
-        "tabpages",          -- All tabs; without this only the current tab is restored
         "winsize",           -- Window sizes
         "winpos",            -- Position of the whole Vim window
         "skiprtp",           -- Exclude 'runtimepath' and 'packpath' from the options

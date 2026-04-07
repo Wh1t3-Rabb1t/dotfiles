@@ -5,23 +5,25 @@
 Plugins to keep:
 
 - ? Rip substitute
-- ? Trailblazer
 - ? Gitsigns
 
+Plugins to remove (rewrite essential functionality):
+- Trailblazer
+- Recorder
+- Spider
 
 ## Priority: High
 
 - Consider using <Leader>; for all 'command palette' bindings (i.e. bindings
   we create just to be shown in the keymaps snacks picker).
-
-- `:checkhealth which-key` has useful info about overlapping bindings.
-- Consider using 'vim.keymap.del' to purge unwanted bindings.
-
 - Remove/replace recorder plugin (it's introducing key timeout when invoked
   for some reason).
-
-- Write a simple replacement for the Trailblazer plugin.
+- Remove/replace Trailblazer plugin.
+- Make sure swap_point_and_mark function is still working properly.
 - Look into keymap_funcs and replace anything that has been made redundant.
+- Look into whether or not we can disable multiple tabs (help pages etc forced to launch in splits).
+
+- `:checkhealth which-key` has useful info about overlapping bindings.
 
 ## Priority: Low
 

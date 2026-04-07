@@ -11,7 +11,7 @@ local M = {}
 --------------------------------------------------------------------------------
 M.keys = {
     -- These must match the keys in the mapping config below
-    { "M", desc = " Start Recording" },
+    { "Q", desc = " Start Recording" },
     { "q", desc = " Play Recording" },
 }
 
@@ -20,22 +20,22 @@ M.keys = {
 function M.config()
     require("recorder").setup({
         mapping = {
-            startStopRecording = "M",
+            startStopRecording = "Q",
             playMacro = "q",
         },
-        clear = true,  -- Clears all macros-slots on startup
-        performanceOpts = {
-            countThreshold = 100,
-            lazyredraw = true,         -- Enable lazyredraw (see `:h lazyredraw`)
-            noSystemClipboard = true,  -- Remove `+`/`*` from clipboard option
-            autocmdEventsIgnore = {    -- Temporarily ignore these autocmd events
-                "TextChangedI",
-                "TextChanged",
-                "InsertLeave",
-                "InsertEnter",
-                "InsertCharPre",
-            }
-        }
+        -- clear = true,  -- Clears all macros-slots on startup
+        -- performanceOpts = {
+        --     countThreshold = 100,
+        --     lazyredraw = true,         -- Enable lazyredraw (see `:h lazyredraw`)
+        --     noSystemClipboard = true,  -- Remove `+`/`*` from clipboard option
+        --     autocmdEventsIgnore = {    -- Temporarily ignore these autocmd events
+        --         "TextChangedI",
+        --         "TextChanged",
+        --         "InsertLeave",
+        --         "InsertEnter",
+        --         "InsertCharPre",
+        --     }
+        -- }
     })
 end
 

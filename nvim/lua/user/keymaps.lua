@@ -49,14 +49,13 @@ local win = require("util.window")
 local km = require("util.keymap_funcs")
 
 local nmap = function(...) map("n", ...) end
-local vmap = function(...) map("v", ...) end
+local vmap = function(...) map("x", ...) end
 local imap = function(...) map("i", ...) end
 local cmap = function(...) map("c", ...) end
 local nvmap = function(...) map({ "n", "v" }, ...) end
 local nxmap = function(...) map({ "n", "v", "x" }, ...) end
 local nimap = function(...) map({ "n", "i" }, ...) end
 local nvomap = function(...) map({ "n", "v", "o" }, ...) end
-
 
 -- Remove most default keymaps
 --
@@ -72,21 +71,21 @@ vim.g.maplocalleader = " "
 nvmap("<Space>",       "<Nop>")
 
 -- Cmds
+nmap("<Leader>;w", km.toggle_wrap,      { desc = ' Toggle line wrap' })
+nmap("<Leader>;c", km.toggle_column_hl, { desc = ' Toggle cursor column hl' })
 nmap("<Leader>;s", km.set_column_hl,    { desc = ' Set highlight at 80th column' })
 nmap("<Leader>;u", km.rm_column_hl,     { desc = ' Unset highlight at 80th column' })
 nmap("<Leader>;v", km.v_split_layout,   { desc = ' Set splits layout to vertical' })
 nmap("<Leader>;h", km.h_split_layout,   { desc = ' Set splits layout to horizontal' })
-nmap("<Leader>;l", km.open_lazy,        { desc = ' Open Lazy ui' })
-nmap("<Leader>;m", km.open_mason,       { desc = ' Open Mason ui' })
-nmap("<Leader>;c", km.toggle_column_hl, { desc = ' Toggle cursor column hl' })
-nmap("<Leader>;w", km.toggle_wrap,      { desc = ' Toggle line wrap' })
+nmap("<Leader>;l", km.open_lazy,        { desc = ' Lazy ui' })
+nmap("<Leader>;m", km.open_mason,       { desc = ' Mason ui' })
 
 -- Folds
-vmap("<Leader>;f", "zf",                { desc = ' Fold selection' })
-nmap("<Leader>;t", "za",                { desc = ' Toggle fold under cursor' })
-nmap("<Leader>;a", "zR",                { desc = ' Open all folds' })
-nmap("<Leader>;_", "zM",                { desc = ' Close all folds' })
-nmap("<Leader>;d", "zD",                { desc = ' Delete fold under cursor' })
+vmap("<Leader>;f", "zf",                { desc = ' Fold selection' })
+nmap("<Leader>;t", "za",                { desc = ' Toggle fold under cursor' })
+nmap("<Leader>;a", "zR",                { desc = ' Open all folds' })
+nmap("<Leader>;_", "zM",                { desc = ' Close all folds' })
+nmap("<Leader>;d", "zD",                { desc = ' Delete fold under cursor' })
 
 -- Inc/dec nums
 vmap("<Leader>C", "g<C-a>gv",           { desc = ' Increment numbers sequentially' })
@@ -103,8 +102,8 @@ nvmap("<S-Esc>", "I", { desc = ' Insert mode at line start' })
 --------------------------------------------------------------------------------
 nvmap("s", "v",                    { desc = ' Visual mode' })
 nxmap("S", "V",                    { desc = ' Visual line mode' })
-nxmap("B", "<C-v>",                { desc = ' Visual block mode' })
-nxmap("G", "msgv",                 { desc = ' Restore visual selection' })
+nxmap("F", "<C-v>",                { desc = ' Visual block mode' })
+nxmap("H", "msgv",                 { desc = ' Restore visual selection' })
 vmap("a",  "o",                    { desc = ' Swap point & mark' })
 vmap("A",  km.swap_point_and_mark, { desc = ' Swap point & mark' })
 
@@ -131,8 +130,8 @@ imap("<Down>", km.cursor_down_ins, { desc = ' Move cursor down' })
 
 -- COMMENTS                                                                  _05
 --------------------------------------------------------------------------------
-nmap("<A-/>", km.comment_line,   { desc = ' Comment line' })
-vmap("<A-/>", km.comment_visual, { desc = ' Comment visual' })
+nmap("?", km.comment_line,   { desc = ' Comment line' })
+vmap("?", km.comment_visual, { desc = ' Comment visual' })
 
 
 -- MOVE LINES UP / DOWN                                                      _06
@@ -215,7 +214,7 @@ nmap("w,", '"_d^',    { desc = ' Delete line left' })
 nmap("w.", '"_d$',    { desc = ' Delete line right' })
 
 -- Paragraph
-nmap("wp", '"_dip',   { desc = ' Delete in paragraph' })
+nmap("wm", '"_dip',   { desc = ' Delete in paragraph' })
 nmap("wi", '"_d{',    { desc = ' Delete paragraph up' })
 nmap("wk", '"_d}',    { desc = ' Delete paragraph down' })
 
@@ -242,8 +241,8 @@ vmap("_", "mmU`m", { desc = ' Uppercase visual selection' })
 
 -- SELECT IN / AROUND                                                        _15
 --------------------------------------------------------------------------------
-nmap("W", "viw",    { desc = ' Select in word' })
-vmap("W", "ip",     { desc = ' Select in paragraph' })
+nmap("m", "viw",    { desc = ' Select in word' })
+vmap("m", "ip",     { desc = ' Select in paragraph' })
 
 -- In surrounding
 nmap("'", "msvi'",  { desc = " Select in ''" })
@@ -254,7 +253,7 @@ nmap("(", "msvi(",  { desc = ' Select in ()' })
 nmap("[", "msvi[",  { desc = ' Select in []' })
 nmap("<", "msvi<",  { desc = ' Select in <>' })
 
--- Around brackets
+-- Around brackets (code blocks)
 nmap("}", "msva{V", { desc = ' Select around {} block' })
 nmap(")", "msva(V", { desc = ' Select around () block' })
 nmap("]", "msva[V", { desc = ' Select around [] block' })
@@ -279,7 +278,7 @@ nmap("c,",    'mm"zy^`m',     { desc = ' Copy to line start' })
 nmap("c.",    '"zy$',         { desc = ' Copy to line end' })
 
 -- Paragraph
-nmap("cp",    'mm"zyip`m',    { desc = ' Copy in paragraph' })
+nmap("cm",    'mm"zyip`m',    { desc = ' Copy in paragraph' })
 nmap("ci",    'mm"zy{`m',     { desc = ' Copy paragraph up' })
 nmap("ck",    '"zy}',         { desc = ' Copy paragraph down' })
 
@@ -311,7 +310,7 @@ nmap("x,", '"zd^',         { desc = ' Cut to line start' })
 nmap("x.", '"zd$',         { desc = ' Cut to line end' })
 
 -- Paragraph
-nmap("xp", 'vip"zygv"_d',  { desc = ' Cut in paragraph' })
+nmap("xm", 'vip"zygv"_d',  { desc = ' Cut in paragraph' })
 nmap("xi", 'v{"zygv"_d',   { desc = ' Cut paragraph up' })
 nmap("xk", 'v}"zygv"_d',   { desc = ' Cut paragraph down' })
 
@@ -337,7 +336,7 @@ nmap("y,", '"_d^i',   { desc = ' Change to line start' })
 nmap("y.", '"_C',     { desc = ' Change to line end' })
 
 -- Paragraph
-nmap("yp", '"_cip',   { desc = ' Change in paragraph' })
+nmap("ym", '"_cip',   { desc = ' Change in paragraph' })
 nmap("yi", '"_c{',    { desc = ' Change paragraph up' })
 nmap("yk", '"_c}',    { desc = ' Change paragraph down' })
 
@@ -372,20 +371,20 @@ nvmap("j",     "J",               { desc = ' Join lines' })
 
 -- `f` and `/` SEARCH                                                        _22
 --------------------------------------------------------------------------------
-nvmap("h", ",",                 { desc = ' Prev f search result' })
-nvmap(";", ";",                 { desc = ' Prev f search result' })
-nvmap("Y", "mnN",               { desc = ' Prev / search result' })
-nvmap("V", "mnn",               { desc = ' Next / search result' })
-nmap("?",  km.toggle_search_hl, { desc = ' Toggle search highlights' })
-nmap("F",  "mn*",               { desc = ' Search for inner word' })
-vmap("F",  km.regex_selection,  { desc = ' Search for selected area' })
-vmap("/",  "<Esc>/\\%V",        { desc = ' Search within selection', silent = false })
+nvmap("h",    ",",                 { desc = ' Prev f search result' })
+nvmap(";",    ";",                 { desc = ' Prev f search result' })
+nvmap("N",    "mnN",               { desc = ' Prev / search result' })
+nvmap("n",    "mnn",               { desc = ' Next / search result' })
+nmap("<A-/>", km.toggle_search_hl, { desc = ' Toggle search highlights' })
+nmap("M",     "mn*",               { desc = ' Search for inner word' })
+vmap("M",     km.regex_selection,  { desc = ' Search for selected area' })
+vmap("/",     "<Esc>/\\%V",        { desc = ' Search within selection', silent = false })
 
 
 -- QUICKFIX                                                                  _23
 --------------------------------------------------------------------------------
+nmap("<Leader>c", km.add_line_to_quickfix, { desc = ' Add to quickfix list' })
 nmap("<Leader>x", km.toggle_quickfix_win,  { desc = ' Toggle quickfix list' })
-nmap("<Leader>c", km.add_line_to_quickfix, { desc = ' Update quickfix list' })
 
 
 -- WINDOW                                                                    _24

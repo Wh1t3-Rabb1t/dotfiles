@@ -17,7 +17,7 @@ function M.config()
     local hl = require("catppuccin.palettes").get_palette()  -- https://catppuccin.com/palette
     require("catppuccin").setup({
         compile_path = vim.fn.stdpath "cache" .. "/catppuccin",
-        flavour = "macchiato",  -- latte, frappe, macchiato, mocha
+        flavour = "mocha",  -- latte, frappe, macchiato, mocha
         background = {
             light = "macchiato",
             dark = "mocha",
@@ -66,12 +66,8 @@ function M.config()
         },
 
         integrations = {
-            barbar = false,         -- Keep 'false' to enable transparent bg
+            barbar = false,  -- Keep 'false' to enable transparent bg
             cmp = true,
-            dropbar = {
-                enabled = true,
-                color_mode = true,  -- Enable color for kind's texts, and icons
-            },
             gitsigns = true,
             treesitter = true,
             notify = false,

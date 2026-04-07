@@ -137,6 +137,14 @@ return {
         config = require("plugin-configs.surround").config,
     },
 
+    -- TRAILBLAZER
+    ----------------------------------------------------------------------------
+    {
+        "LeonHeidelbach/trailblazer.nvim",
+        keys = require("plugin-configs.trailblazer").keys,
+        config = require("plugin-configs.trailblazer").config,
+    },
+
     -- TREESITTER
     ----------------------------------------------------------------------------
     {
@@ -153,4 +161,5 @@ return {
     --     event = "VeryLazy",
     --     opts = {},
     -- }
+
 }

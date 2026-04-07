@@ -12,12 +12,11 @@ local M = {}
 M.opts = {
     -- Disabled
     dashboard = { enabled = false },
-    input = { enabled = false },
     bigfile = { enabled = false },
     quickfile = { enabled = false },
     scope = { enabled = false },
-    words = { enabled = false },
     scroll = { enabled = false },
+    words = { enabled = false },  -- Default off, toggle on/off via keybindings
 
     -- Enabled
     explorer = { enabled = true },
@@ -25,9 +24,19 @@ M.opts = {
     statuscolumn = { enabled = true },
     git = { enabled = true },
     indent = { enabled = true },
+    input = { enabled = true },
+
+    -- WINDOW STYLES
+    -- (doc: "https://github.com/folke/snacks.nvim/blob/main/docs/styles.md")
+    styles = {
+        input = {
+            -- Escape cancels popup rather than entering normal mode
+            keys = { i_esc = { "<Esc>", "cancel", mode = "i", expr = true } }
+        }
+    },
 
     -- PICKER CONFIG
-    -- (source "snacks.nvim/lua/snacks/picker/config/defaults.lua")
+    -- (source: "snacks.nvim/lua/snacks/picker/config/defaults.lua")
     picker = {
         prompt = " ",
         finder = "explorer",
@@ -165,57 +174,40 @@ M.opts = {
 -- d ?
 -- esc ?
 -- a
+-- g
+-- b
 -- v
+-- k
+-- m
 -- u
 -- i
 -- _
 -- -
---
--- Existing
--- --------
--- e (explorer)
--- s (search menu i.e. Leader si = search icons)
--- g (git menu i.e. Leader gs = git status)
--- l (lsp menu i.e. Leader ls = lsp symbols)
--- f (find files)
--- k (keymaps)
--- r (registers)
--- n (notification history)
--- w (close split)
--- z (toggle zoom)
---
--- c (add to qf list)
--- x (show/hide qf list)
---
--- TOOD: change this
--- d (duplicate line)
 
 
 -- KEYS
 --------------------------------------------------------------------------------
 M.keys = {
 
-    { desc = " Keymaps",         "g", function() Snacks.picker.keymaps() end },
-
     -- Top Pickers & Explorer
-    { desc = " Buffers",         "<A-'>",     function() Snacks.picker.buffers() end },
-    { desc = " Keymaps",         "<Leader>k", function() Snacks.picker.keymaps() end },
-    { desc = " File Explorer",   "<Leader>e", function() Snacks.explorer() end },
-    { desc = " Find Files",      "<Leader>f", function() Snacks.picker.files() end },
-    { desc = " Registers",       "<Leader>r", function() Snacks.picker.registers() end },
-    { desc = " Buffer Lines",    "<Leader>b", function() Snacks.picker.lines() end },
-    { desc = " Marks",           "<Leader>m", function() Snacks.picker.marks() end },
-    { desc = " Command History", "<Leader>:", function() Snacks.picker.command_history() end },
-    { desc = " Search History",  "<Leader>/", function() Snacks.picker.search_history() end },
-    { desc = " Undo History",    "<Leader>y", function() Snacks.picker.undo() end },
-    { desc = " Resume",          "<Leader>p", function() Snacks.picker.resume() end },
+    { desc = " File Explorer",   "<Leader>e",       function() Snacks.explorer() end },
+    { desc = " Keymaps",         "g",               function() Snacks.picker.keymaps() end },
+    { desc = " Buffers",         "<A-'>",           function() Snacks.picker.buffers() end },
+    { desc = " Find Files",      "<Leader>f",       function() Snacks.picker.files() end },
+    { desc = " Registers",       "<Leader>r",       function() Snacks.picker.registers() end },
+    { desc = " Buffer Lines",    "<Leader>b",       function() Snacks.picker.lines() end },
+    { desc = " Marks (pins)",    "<Leader>p",       function() Snacks.picker.marks() end },
+    { desc = " Command History", "<Leader>:",       function() Snacks.picker.command_history() end },
+    { desc = " Search History",  "<Leader>/",       function() Snacks.picker.search_history() end },
+    { desc = " Undo History",    "<Leader>y",       function() Snacks.picker.undo() end },
+    { desc = " Resume",          "<Leader><Space>", function() Snacks.picker.resume() end },
 
     -- Grep
     { desc = " Grep Open Buffers", "<Leader>sB", function() Snacks.picker.grep_buffers() end },
     { desc = " Grep selection",    "<Leader>sw", function() Snacks.picker.grep_word() end, mode = { "n", "x" } },
     { desc = " Grep",              "<A-g>",      function() Snacks.picker.grep() end },
 
-    -- git
+    -- Git
     { desc = " Git Branches",     "<Leader>gb", function() Snacks.picker.git_branches() end },
     { desc = " Git Log",          "<Leader>gl", function() Snacks.picker.git_log() end },
     { desc = " Git Log L[i]ne",   "<Leader>gi", function() Snacks.picker.git_log_line() end },
@@ -225,7 +217,7 @@ M.keys = {
     { desc = " Git Log File",     "<Leader>gf", function() Snacks.picker.git_log_file() end },
     { desc = " Git B[r]owse",     "<Leader>gr", function() Snacks.gitbrowse() end, mode = { "n", "v" } },
 
-    -- search
+    -- Search
     { desc = " Icons",                "<Leader>si", function() Snacks.picker.icons() end },
     { desc = " Jumps",                "<Leader>sj", function() Snacks.picker.jumps() end },
     { desc = " Commands",             "<Leader>sc", function() Snacks.picker.commands() end },
@@ -249,6 +241,19 @@ M.keys = {
     { desc = " LSP Goto T[y]pe Definition", "<Leader>ly", function() Snacks.picker.lsp_type_definitions() end },
     { desc = " LSP Calls Incoming",         "<Leader>li", function() Snacks.picker.lsp_incoming_calls() end },
     { desc = " LSP Calls Outgoing",         "<Leader>lo", function() Snacks.picker.lsp_outgoing_calls() end },
+    {
+        desc = " Word reference highlights toggle",
+        "<Leader>;r",
+        function()
+            if Snacks.words.is_enabled() then
+                Snacks.words.disable()
+                vim.notify("Snacks lsp words: OFF")
+            else
+                Snacks.words.enable()
+                vim.notify("Snacks lsp words: ON")
+            end
+        end
+    },
 
     -- Other
     { desc = " Notification History",      "<Leader>n", function() Snacks.notifier.show_history() end },

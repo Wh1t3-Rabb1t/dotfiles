@@ -169,10 +169,18 @@ function M.config()
         }
     })
 
+    vim.keymap.set("n", "zd", "<Plug>(nvim-surround-delete)", {
+        desc = "Delete a surrounding pair",
+    })
+    vim.keymap.set("n", "zr", "<Plug>(nvim-surround-change)", {
+        desc = "Change a surrounding pair",
+    })
+
     -- Prevent plugin from setting up bindings
     vim.keymap.del("n", "ys")
     vim.keymap.del("n", "ds")
     vim.keymap.del("n", "cs")
+
 end
 
 return M

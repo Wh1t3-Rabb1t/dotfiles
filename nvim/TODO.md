@@ -14,11 +14,8 @@ Plugins to remove (rewrite essential functionality):
 
 ## Priority: High
 
-- Remove/replace Trailblazer plugin.
 - Remove Spider plugin and instead tweak nvims text objects for congruence.
 - Rework open line below to drop the use of marks if possible.
-- Remove/replace recorder plugin (it's introducing key timeout when invoked
-  for some reason).
 - Make sure swap_point_and_mark function is still working properly.
 - Look into keymap_funcs and replace anything that has been made redundant.
 - Look into whether or not we can disable multiple tabs

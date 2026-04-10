@@ -34,10 +34,11 @@
 -- DUPLICATE LINE / SELECTION          _20
 -- OPEN / JOIN LINES                   _21
 -- `f` and `/` SEARCH                  _22
--- QUICKFIX                            _23
--- WINDOW                              _24
--- SAVE CHANGES                        _25
--- QUIT                                _26
+-- MARKS                               _23
+-- QUICKFIX                            _24
+-- WINDOW                              _25
+-- SAVE CHANGES                        _26
+-- QUIT                                _27
 
 -- Note: If a module bound to a key needs an argument, it must be wrapped
 -- in a function. Neovim’s keymaps don’t support calling functions with
@@ -91,14 +92,6 @@ nmap("<Leader>;d", "zD",                { desc = ' Delete fold under cursor' 
 -- Inc/dec nums
 vmap("<Leader>C",  "g<C-a>gv",          { desc = ' Increment numbers sequentially' })
 vmap("<Leader>X",  "g<C-x>gv",          { desc = ' Decrement numbers sequentially' })
-
-
-
-nmap("p", km.toggle_mark,        { desc = ' Add mark' })
-nmap("B", km.jump_to_above_mark, { desc = ' Jump to mark above cursor' })
-nmap("b", km.jump_to_below_mark, { desc = ' Jump to mark below cursor' })
-
-
 
 
 -- INSERT MODE                                                               _01
@@ -391,13 +384,21 @@ vmap("M",  km.regex_selection,  { desc = ' Search for selected area' })
 vmap("/",  "<Esc>/\\%V",        { desc = ' Search within selection', silent = false })
 
 
--- QUICKFIX                                                                  _23
+-- MARKS                                                                     _23
+--------------------------------------------------------------------------------
+nmap("p", km.toggle_mark,        { desc = ' Toggle mark' })
+nmap("P", km.toggle_mark,        { desc = ' Toggle mark' })
+nmap("B", km.jump_to_mark_above, { desc = ' Jump to mark above cursor' })
+nmap("b", km.jump_to_mark_below, { desc = ' Jump to mark below cursor' })
+
+
+-- QUICKFIX                                                                  _24
 --------------------------------------------------------------------------------
 nmap("<Leader>c", km.add_line_to_quickfix, { desc = ' Add to quickfix list' })
 nmap("<Leader>x", km.toggle_quickfix_win,  { desc = ' Toggle quickfix list' })
 
 
--- WINDOW                                                                    _24
+-- WINDOW                                                                    _25
 --------------------------------------------------------------------------------
 -- Focus split
 nmap("<Up>",    function() win.navigate_vertically("k") end)    -- Above
@@ -420,12 +421,12 @@ nmap("<End>",     "zlzlzl",          { desc = ' Scroll window right' })
 nmap("<D-[>",     "<C-w>r",          { desc = ' Swap splits (2 splits max)' })
 
 
--- SAVE CHANGES                                                              _25
+-- SAVE CHANGES                                                              _26
 --------------------------------------------------------------------------------
 nimap("<A-s>", km.save_changes, { desc = ' Save changes' })
 
 
--- QUIT (never quit)                                                         _26
+-- QUIT (never quit)                                                         _27
 --------------------------------------------------------------------------------
 nvmap("<Leader>QQ", "<cmd>qa!<CR>",  { desc = ' Force quit nvim' })
 nmap("<A-q>",       km.quit_session, { desc = ' Quit and save session' })

@@ -142,6 +142,6 @@ autocmd("VimLeavePre", {
     group = augroup("CleanupOnVimExit", { clear = true }),
     callback = function()
         win.cleanup_windows()
-        util.cleanup_marks()
+        -- util.cleanup_marks()
     end
 })

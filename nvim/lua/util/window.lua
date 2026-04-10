@@ -49,11 +49,7 @@ end
 -- CLEANUP WINDOWS
 --------------------------------------------------------------------------------
 function M.cleanup_windows()
-    local excluded_ft = {
-        "checkhealth",
-        "aerial",
-        "neo-tree",
-    }
+    local excluded_ft = { "checkhealth" }
 
     -- Close unwanted buffers if open
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
@@ -73,10 +69,8 @@ local cached_win_width
 function M.navigate_horizontally(direction)
     if M.open_win_count() == 1 then return end
 
-    local neotree_id
-    local neotree_width
-    local aerial_id
-    local aerial_width
+    local explorer_id
+    local explorer_width
     local width = vim.o.columns
     local get_width = vim.api.nvim_win_get_width
     local set_width = vim.api.nvim_win_set_width
@@ -85,19 +79,13 @@ function M.navigate_horizontally(direction)
         local bufnr = vim.api.nvim_win_get_buf(winid)
         local ft = vim.bo[bufnr].filetype
 
-        if ft == "neo-tree" then
-            neotree_id = winid
-            neotree_width = get_width(winid)
-            width = width - neotree_width
-        elseif ft == "aerial" then
-            aerial_id = winid
-            aerial_width = get_width(winid)
-            width = width - aerial_width
+        if ft == "snacks_picker_list" then
+            explorer_id = winid
+            explorer_width = get_width(winid)
+            width = width - explorer_width
         end
 
-        -- Prevent catastrophic performance tanking
-        -- when iterating the loop 4-5 times :)
-        if neotree_id and aerial_id then break end
+        if explorer_id then break end
     end
 
     local initial_win = vim.fn.winnr()
@@ -125,8 +113,7 @@ function M.navigate_horizontally(direction)
     end
 
     -- Fix sidebar sizes when resizing windows
-    if neotree_id then set_width(neotree_id, neotree_width) end
-    if aerial_id then set_width(aerial_id, aerial_width) end
+    if explorer_id then set_width(explorer_id, explorer_width) end
 
     -- Disable line wrap on minimized vertical splits
     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
@@ -145,7 +132,7 @@ end
 local cached_win_height
 
 function M.navigate_vertically(direction)
-    local excluded_ft = { "lazy", "mason", "neo-tree", "aerial", "grapple" }
+    local excluded_ft = { "lazy", "mason" }
     local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
 
     -- Enable arrow key navigation in desired buffers

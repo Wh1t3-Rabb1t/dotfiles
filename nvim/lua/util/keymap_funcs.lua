@@ -11,6 +11,7 @@ local M = {}
 --------------------------------------------------------------------------------
 function M.swap_point_and_mark()
     local mode = vim.fn.mode()
+
     if mode == "v" or mode == "V" then
         vim.cmd([[ :execute "normal! O" ]])
     else

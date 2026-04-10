@@ -105,7 +105,7 @@ nvmap("<S-Esc>", "I", { desc = ' Insert mode at line start' })
 nvmap("s", "v",                    { desc = ' Visual mode' })
 nxmap("S", "V",                    { desc = ' Visual line mode' })
 nxmap("F", "<C-v>",                { desc = ' Visual block mode' })
-nxmap("H", "msgv",                 { desc = ' Restore visual selection' })
+nxmap("H", "mzgv",                 { desc = ' Restore visual selection' })
 vmap("a",  "o",                    { desc = ' Swap point and mark' })
 vmap("A",  km.swap_point_and_mark, { desc = ' Swap point and mark' })
 
@@ -165,18 +165,17 @@ nvmap(".",        km.line_end_cmd,   { desc = ' Jump to line end' })
 -- JUMP 6 LINES / BETWEEN BLOCKS                                             _09
 --------------------------------------------------------------------------------
 nvmap("e", "6k",  { desc = ' Jump 6 lines up' })
--- nvmap("d", "6j",  { desc = ' Jump 6 lines down' })
-nvmap("d", "6j",  { desc = ' Jump 6 lines down', nowait = true })
-nvmap("E", "mj{", { desc = ' Jump block up' })
-nvmap("D", "mj}", { desc = ' Jump block down' })
+nvmap("d", "6j",  { desc = ' Jump 6 lines down' })
+nvmap("E", "mz{", { desc = ' Jump block up' })
+nvmap("D", "mz}", { desc = ' Jump block down' })
 
 
 -- SCROLL PAGE UP / DOWN                                                     _10
 --------------------------------------------------------------------------------
 nvmap("<PageUp>",     "<C-u>zz", { desc = ' Page up' })
 nvmap("<PageDown>",   "<C-d>zz", { desc = ' Page down' })
-nvmap("<S-PageUp>",   "mjgg",    { desc = ' Page top' })
-nvmap("<S-PageDown>", "mjG",     { desc = ' Page bottom' })
+nvmap("<S-PageUp>",   "mzgg",    { desc = ' Page top' })
+nvmap("<S-PageDown>", "mzG",     { desc = ' Page bottom' })
 
 
 -- DELETE BINDINGS (all deletions are sent to the black hole register)       _11
@@ -238,8 +237,8 @@ imap("<A-S-y>", km.redo, { desc = ' Redo' })
 -- SWAP CASE                                                                 _14
 --------------------------------------------------------------------------------
 nmap("-", "~",     { desc = ' Swap case' })
-vmap("-", "mmu`m", { desc = ' Lowercase visual selection' })
-vmap("_", "mmU`m", { desc = ' Uppercase visual selection' })
+vmap("-", "mzu`z", { desc = ' Lowercase visual selection' })
+vmap("_", "mzU`z", { desc = ' Uppercase visual selection' })
 
 
 -- SELECT IN / AROUND                                                        _15
@@ -248,41 +247,41 @@ nmap("m", "viw",    { desc = ' Select in word' })
 vmap("m", "ip",     { desc = ' Select in paragraph' })
 
 -- In surrounding
-nmap("'", "msvi'",  { desc = " Select in ''" })
-nmap('"', 'msvi"',  { desc = ' Select in ""' })
-nmap("`", "msvi`",  { desc = ' Select in ``' })
-nmap("{", "msvi{",  { desc = ' Select in {}' })
-nmap("(", "msvi(",  { desc = ' Select in ()' })
-nmap("[", "msvi[",  { desc = ' Select in []' })
-nmap("<", "msvi<",  { desc = ' Select in <>' })
+nmap("'", "mzvi'",  { desc = " Select in ''" })
+nmap('"', 'mzvi"',  { desc = ' Select in ""' })
+nmap("`", "mzvi`",  { desc = ' Select in ``' })
+nmap("{", "mzvi{",  { desc = ' Select in {}' })
+nmap("(", "mzvi(",  { desc = ' Select in ()' })
+nmap("[", "mzvi[",  { desc = ' Select in []' })
+nmap("<", "mzvi<",  { desc = ' Select in <>' })
 
 -- Around brackets (code blocks)
-nmap("}", "msva{V", { desc = ' Select around {} block' })
-nmap(")", "msva(V", { desc = ' Select around () block' })
-nmap("]", "msva[V", { desc = ' Select around [] block' })
-nmap(">", "msva<V", { desc = ' Select around <> block' })
+nmap("}", "mzva{V", { desc = ' Select around {} block' })
+nmap("]", "mzva[V", { desc = ' Select around [] block' })
+nmap(")", "mzva(V", { desc = ' Select around () block' })
+nmap(">", "mzva<V", { desc = ' Select around <> block' })
 
 
 -- COPY (all copied text is added to the alphabetical register stack)        _16
 --------------------------------------------------------------------------------
-vmap("c",     'mm""y`m',      { desc = ' Copy to " register' })
+vmap("c",     'mz""y`z',      { desc = ' Copy to " register' })
 vmap("<A-c>", '"*y',          { desc = ' Copy to system clipboard' })
-nmap("cc",    'mmVggoG""y`m', { desc = ' Copy whole buffer' })
+nmap("cc",    'mzVggoG""y`z', { desc = ' Copy whole buffer' })
 
 -- Word
 nmap("c",     "<Nop>")
-nmap("ct",    'mm""yiw`m',    { desc = ' Copy in word' })
-nmap("cu",    'mm""yb`m',     { desc = ' Copy word left' })
+nmap("ct",    'mz""yiw`z',    { desc = ' Copy in word' })
+nmap("cu",    'mz""yb`z',     { desc = ' Copy word left' })
 nmap("co",    '""ye',         { desc = ' Copy word right' })
 
 -- Line
 nmap("cl",    '""yy',         { desc = ' Copy whole line' })
-nmap("c,",    'mm""y^`m',     { desc = ' Copy to line start' })
+nmap("c,",    'mz""y^`z',     { desc = ' Copy to line start' })
 nmap("c.",    '""y$',         { desc = ' Copy to line end' })
 
 -- Paragraph
-nmap("cm",    'mm""yip`m',    { desc = ' Copy in paragraph' })
-nmap("ci",    'mm""y{`m',     { desc = ' Copy paragraph up' })
+nmap("cm",    'mz""yip`z',    { desc = ' Copy in paragraph' })
+nmap("ci",    'mz""y{`z',     { desc = ' Copy paragraph up' })
 nmap("ck",    '""y}',         { desc = ' Copy paragraph down' })
 
 -- To char
@@ -365,31 +364,29 @@ vmap("<Leader>d", "<C-v>VyPgv", { desc = ' Duplicate selection below' })
 
 -- OPEN / JOIN LINES                                                         _21
 --------------------------------------------------------------------------------
--- Note: `<C-o>` in insert mode sends a single normal mode cmd; then
--- returns back to insert mode.
-nmap("<CR>",   "o<C-o>mo<Esc>`o", { desc = ' New line below' })
-nmap("<S-CR>", "O<C-o>mo<Esc>`o", { desc = ' New line above' })
-nvmap("j",     "J",               { desc = ' Join lines' })
+nmap("<CR>",   "o<Space><Esc>", { desc = ' New line below' })
+nmap("<S-CR>", "O<Space><Esc>", { desc = ' New line above' })
+nvmap("j",     "J",             { desc = ' Join lines' })
 
 
 -- `f` and `/` SEARCH                                                        _22
 --------------------------------------------------------------------------------
 nvmap("h", ",",                 { desc = ' Prev f search result' })
 nvmap(";", ";",                 { desc = ' Prev f search result' })
-nvmap("N", "mnN",               { desc = ' Prev / search result' })
-nvmap("n", "mnn",               { desc = ' Next / search result' })
+nvmap("N", "mzN",               { desc = ' Prev / search result' })
+nvmap("n", "mzn",               { desc = ' Next / search result' })
 nmap("?",  km.toggle_search_hl, { desc = ' Toggle search highlights' })
-nmap("M",  "mn*",               { desc = ' Search for inner word' })
+nmap("M",  "mz*",               { desc = ' Search for inner word' })
 vmap("M",  km.regex_selection,  { desc = ' Search for selected area' })
 vmap("/",  "<Esc>/\\%V",        { desc = ' Search within selection', silent = false })
 
 
 -- MARKS                                                                     _23
 --------------------------------------------------------------------------------
-nmap("p", km.toggle_mark,        { desc = ' Toggle mark' })
-nmap("P", km.toggle_mark,        { desc = ' Toggle mark' })
-nmap("B", km.jump_to_mark_above, { desc = ' Jump to mark above cursor' })
-nmap("b", km.jump_to_mark_below, { desc = ' Jump to mark below cursor' })
+nvmap("p", km.toggle_mark,        { desc = ' Toggle mark' })
+nvmap("P", km.toggle_mark,        { desc = ' Toggle mark' })
+nvmap("B", km.jump_to_mark_above, { desc = ' Jump to mark above cursor' })
+nvmap("b", km.jump_to_mark_below, { desc = ' Jump to mark below cursor' })
 
 
 -- QUICKFIX                                                                  _24

@@ -11,7 +11,6 @@ local map = require("util.utils").map
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
-
 -- KITTY KEY PASSTHROUGH INTEGRATION
 --------------------------------------------------------------------------------
 autocmd({ "VimEnter", "VimResume" }, {
@@ -28,7 +27,6 @@ autocmd({ "VimLeave", "VimSuspend" }, {
     end
 })
 
-
 -- OVERRIDE DEFAULT MAN / HELP PAGE BINDINGS
 --------------------------------------------------------------------------------
 autocmd("FileType", {
@@ -44,7 +42,6 @@ autocmd("FileType", {
     end
 })
 
-
 -- COMMENT HJSON FILES
 --------------------------------------------------------------------------------
 autocmd("FileType", {
@@ -54,7 +51,6 @@ autocmd("FileType", {
         vim.bo.commentstring = "#%s"
     end
 })
-
 
 -- SET QUICKFIX HEIGHT TO THE NUMBER OF ENTRIES IF > 10
 --------------------------------------------------------------------------------
@@ -68,7 +64,6 @@ autocmd("FileType", {
         end
     end
 })
-
 
 -- TOGGLE SPELL SUGGESTIONS WHEN ENTERING / LEAVING INSERT MODE
 --------------------------------------------------------------------------------
@@ -86,7 +81,6 @@ autocmd("InsertLeave", {
     end
 })
 
-
 -- HIGHLIGHT YANKED TEXT AND NOTIFY WHEN COPYING TO SYSTEM REGISTER
 --------------------------------------------------------------------------------
 autocmd("TextYankPost", {
@@ -102,7 +96,6 @@ autocmd("TextYankPost", {
         end
     end
 })
-
 
 -- TRIM TRAILING WHITESPACE AND CONVERT TABS TO SPACES PRE SAVE
 --------------------------------------------------------------------------------
@@ -123,7 +116,6 @@ autocmd("BufWritePre", {
     end
 })
 
-
 -- PRINT FILENAME WITH RELATIVE PATH, DATE & TIME POST SAVE
 --------------------------------------------------------------------------------
 autocmd("BufWritePost", {
@@ -135,13 +127,12 @@ autocmd("BufWritePost", {
     end
 })
 
-
 -- CLEANUP UNWANTED BUFFERS AND SAVE SESSION PRE EXIT
 --------------------------------------------------------------------------------
 autocmd("VimLeavePre", {
     group = augroup("CleanupOnVimExit", { clear = true }),
     callback = function()
         win.cleanup_windows()
-        -- util.cleanup_marks()
+        util.cleanup_marks()
     end
 })

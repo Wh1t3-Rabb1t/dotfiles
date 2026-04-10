@@ -35,6 +35,86 @@ function M.comment_visual()
 end
 
 
+-- MARKS
+--------------------------------------------------------------------------------
+function M.toggle_mark()
+    local buf = 0
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+    -- PASS 1: Remove mark if it exists on this line
+    for i = string.byte("a"), string.byte("z") do
+        local mark = string.char(i)
+        local pos = vim.fn.getpos("'" .. mark)
+
+        if pos[2] == row then
+            vim.api.nvim_buf_del_mark(buf, mark)
+            vim.notify("Removed mark '" .. mark)
+            return mark
+        end
+    end
+
+    -- PASS 2: Add first available mark
+    for i = string.byte("a"), string.byte("z") do
+        local mark = string.char(i)
+        local pos = vim.fn.getpos("'" .. mark)
+
+        if pos[2] == 0 then
+            vim.api.nvim_buf_set_mark(buf, mark, row, col, {})
+            vim.notify("Set mark '" .. mark)
+            return mark
+        end
+    end
+
+    vim.notify("No available marks", vim.log.levels.WARN)
+end
+
+function M.jump_to_above_mark()
+    local current_row = vim.api.nvim_win_get_cursor(0)[1]
+    local best_mark = nil
+    local best_row = -1
+
+    for i = string.byte("a"), string.byte("z") do
+        local mark = string.char(i)
+        local pos = vim.fn.getpos("'" .. mark)
+        local row = pos[2]
+
+        if row > 0 and row < current_row then
+            if row > best_row then
+                best_row = row
+                best_mark = mark
+            end
+        end
+    end
+
+    if best_mark then
+        vim.cmd("normal! '" .. best_mark)
+    end
+end
+
+function M.jump_to_below_mark()
+    local current_row = vim.api.nvim_win_get_cursor(0)[1]
+    local best_mark = nil
+    local best_row = math.huge
+
+    for i = string.byte("a"), string.byte("z") do
+        local mark = string.char(i)
+        local pos = vim.fn.getpos("'" .. mark)
+        local row = pos[2]
+
+        if row > current_row then
+            if row < best_row then
+                best_row = row
+                best_mark = mark
+            end
+        end
+    end
+
+    if best_mark then
+        vim.cmd("normal! '" .. best_mark)
+    end
+end
+
+
 -- LEADER BINDINGS (just misc vim commands/opts toggling)
 --------------------------------------------------------------------------------
 function M.set_column_hl()

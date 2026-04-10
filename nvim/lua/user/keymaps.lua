@@ -89,8 +89,16 @@ nmap("<Leader>;_", "zM",                { desc = ' Close all folds' })
 nmap("<Leader>;d", "zD",                { desc = ' Delete fold under cursor' })
 
 -- Inc/dec nums
-vmap("<Leader>C", "g<C-a>gv",           { desc = ' Increment numbers sequentially' })
-vmap("<Leader>X", "g<C-x>gv",           { desc = ' Decrement numbers sequentially' })
+vmap("<Leader>C",  "g<C-a>gv",          { desc = ' Increment numbers sequentially' })
+vmap("<Leader>X",  "g<C-x>gv",          { desc = ' Decrement numbers sequentially' })
+
+
+
+nmap("p", km.toggle_mark,        { desc = ' Add mark' })
+nmap("B", km.jump_to_above_mark, { desc = ' Jump to mark above cursor' })
+nmap("b", km.jump_to_below_mark, { desc = ' Jump to mark below cursor' })
+
+
 
 
 -- INSERT MODE                                                               _01

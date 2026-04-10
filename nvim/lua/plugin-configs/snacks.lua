@@ -173,14 +173,10 @@ M.opts = {
 -- ---------------------------
 -- d ?
 -- esc ?
--- a
--- g
--- b
 -- v
 -- k
 -- m
 -- u
--- i
 -- _
 -- -
 
@@ -192,10 +188,9 @@ M.keys = {
     -- Top Pickers & Explorer
     { desc = " File Explorer",   "<Leader>e",       function() Snacks.explorer() end },
     { desc = " Keymaps",         "g",               function() Snacks.picker.keymaps() end },
-    { desc = " Buffers",         "<A-'>",           function() Snacks.picker.buffers() end },
+    { desc = " Buffers",         "<Leader>b",       function() Snacks.picker.buffers() end },
     { desc = " Find Files",      "<Leader>f",       function() Snacks.picker.files() end },
     { desc = " Registers",       "<Leader>r",       function() Snacks.picker.registers() end },
-    { desc = " Buffer Lines",    "<Leader>b",       function() Snacks.picker.lines() end },
     { desc = " Marks (pins)",    "<Leader>p",       function() Snacks.picker.marks() end },
     { desc = " Command History", "<Leader>:",       function() Snacks.picker.command_history() end },
     { desc = " Search History",  "<Leader>/",       function() Snacks.picker.search_history() end },
@@ -203,21 +198,22 @@ M.keys = {
     { desc = " Resume",          "<Leader><Space>", function() Snacks.picker.resume() end },
 
     -- Grep
-    { desc = " Grep Open Buffers", "<Leader>sB", function() Snacks.picker.grep_buffers() end },
-    { desc = " Grep selection",    "<Leader>sw", function() Snacks.picker.grep_word() end, mode = { "n", "x" } },
-    { desc = " Grep",              "<A-g>",      function() Snacks.picker.grep() end },
+    { desc = " Grep",           "<Leader>g", function() Snacks.picker.grep() end },
+    { desc = " Grep selection", "<Leader>g", function() Snacks.picker.grep_word() end, mode = { "x" } },
+    { desc = " Grep Workspace", "<Leader>a", function() Snacks.picker.grep_buffers() end },
 
     -- Git
-    { desc = " Git Branches",     "<Leader>gb", function() Snacks.picker.git_branches() end },
-    { desc = " Git Log",          "<Leader>gl", function() Snacks.picker.git_log() end },
-    { desc = " Git Log L[i]ne",   "<Leader>gi", function() Snacks.picker.git_log_line() end },
-    { desc = " Git Status",       "<Leader>gs", function() Snacks.picker.git_status() end },
-    { desc = " Git S[t]ash",      "<Leader>gt", function() Snacks.picker.git_stash() end },
-    { desc = " Git Diff (Hunks)", "<Leader>gd", function() Snacks.picker.git_diff() end },
-    { desc = " Git Log File",     "<Leader>gf", function() Snacks.picker.git_log_file() end },
-    { desc = " Git B[r]owse",     "<Leader>gr", function() Snacks.gitbrowse() end, mode = { "n", "v" } },
+    { desc = " Git Branches",     "<Leader>ib", function() Snacks.picker.git_branches() end },
+    { desc = " Git Log",          "<Leader>il", function() Snacks.picker.git_log() end },
+    { desc = " Git Log L[i]ne",   "<Leader>ii", function() Snacks.picker.git_log_line() end },
+    { desc = " Git Status",       "<Leader>is", function() Snacks.picker.git_status() end },
+    { desc = " Git S[t]ash",      "<Leader>it", function() Snacks.picker.git_stash() end },
+    { desc = " Git Diff (Hunks)", "<Leader>id", function() Snacks.picker.git_diff() end },
+    { desc = " Git Log File",     "<Leader>if", function() Snacks.picker.git_log_file() end },
+    { desc = " Git B[r]owse",     "<Leader>ir", function() Snacks.gitbrowse() end, mode = { "n", "v" } },
 
     -- Search
+    { desc = " Buffer Lines",         "<Leader>sl", function() Snacks.picker.lines() end },
     { desc = " Icons",                "<Leader>si", function() Snacks.picker.icons() end },
     { desc = " Jumps",                "<Leader>sj", function() Snacks.picker.jumps() end },
     { desc = " Commands",             "<Leader>sc", function() Snacks.picker.commands() end },

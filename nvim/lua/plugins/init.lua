@@ -138,6 +138,9 @@ return {
     ----------------------------------------------------------------------------
     {
         "LeonHeidelbach/trailblazer.nvim",
+
+        enabled = false,
+
         keys = require("plugin-configs.trailblazer").keys,
         config = require("plugin-configs.trailblazer").config,
     },

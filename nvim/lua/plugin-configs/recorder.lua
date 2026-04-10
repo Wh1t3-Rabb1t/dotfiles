@@ -27,7 +27,8 @@ function M.config()
             deleteAllMacros = "<Leader>;dq",
             yankMacro = "<Leader>;yq",
             -- !! This should be a string you don't use in insert mode during a macro
-            addBreakPoint = "##",
+            -- addBreakPoint = "##",
+            addBreakPoint = "z#z#z#",
         },
         clear = false,  -- Clears all macros-slots on startup
         lessNotifications = false,

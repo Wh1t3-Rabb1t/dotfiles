@@ -1,14 +1,11 @@
 # TODO
 
-## Snacks notes:
-
-Plugins to keep:
-
-- ? Rip substitute
-- ? Gitsigns
-
 ## Priority: High
 
+- Surround plugin is bugged (e.g. change surrounding with <Leader>{ etc is triggering
+  the Snacks picker etc).
+- Re-incorporate the Rip-substitute plugin.
+- Re-incorporate the Gitsigns plugin (if Snacks doesn't replace it).
 - Tweak comment functions such that they ignore empty lines.
 - Make sure swap_point_and_mark function is still working properly.
 - Look into keymap_funcs and replace anything that has been made redundant.

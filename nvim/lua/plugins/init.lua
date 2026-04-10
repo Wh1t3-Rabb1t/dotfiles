@@ -122,6 +122,9 @@ return {
     {
         "kylechui/nvim-surround",
         version = "*",  -- Use for stability. Use 'main' branch for latest features
+
+        lazy = false,
+
         keys = require("plugin-configs.surround").keys,
         config = require("plugin-configs.surround").config,
     },
@@ -133,6 +136,7 @@ return {
         event = "UiEnter",
         build = ":TSUpdate",
     },
+}
 
     -- WHICH KEY
     ----------------------------------------------------------------------------
@@ -143,4 +147,3 @@ return {
     --     opts = {},
     -- }
 
-}

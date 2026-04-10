@@ -266,7 +266,7 @@ nmap(")", "mzva(V", { desc = ' Select around () block' })
 nmap(">", "mzva<V", { desc = ' Select around <> block' })
 
 
--- COPY (all copied text is added to the alphabetical register stack)        _16
+-- COPY                                                                      _16
 --------------------------------------------------------------------------------
 vmap("c",     'mz""y`z',      { desc = ' Copy to " register' })
 vmap("<A-c>", '"*y',          { desc = ' Copy to system clipboard' })
@@ -295,12 +295,6 @@ nmap("c;",    '""yt',         { desc = ' Copy forwards to char' })
 
 -- CUT                                                                       _17
 --------------------------------------------------------------------------------
--- Note: All `d` motions that span than more one line (the deleted text is
--- not confined to a single line) are sent to the numeric register stack by
--- default; we circumvent this by instead yanking to the system register
--- then restoring the previous visual selection and deleting it to the
--- black hole register.
-
 vmap("x",  '""ygv"_d',     { desc = ' Cut to " register' })
 nmap("xx", 'ggVG""ygv"_d', { desc = ' Cut whole buffer' })
 

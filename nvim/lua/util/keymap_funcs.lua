@@ -38,58 +38,24 @@ end
 
 -- LEADER BINDINGS (just misc vim commands/opts toggling)
 --------------------------------------------------------------------------------
-function M.set_column_hl()
-    vim.cmd("set colorcolumn=80")
-end
-
-function M.rm_column_hl()
-    vim.cmd("set colorcolumn=''")
-end
-
-function M.v_split_layout()
-    vim.cmd("windo wincmd H")
-end
-
-function M.h_split_layout()
-    vim.cmd("windo wincmd K")
-end
-
-function M.open_lazy()
-    vim.cmd("Lazy")
-end
-
-function M.open_mason()
-    vim.cmd("Mason")
-end
-
-function M.toggle_column_hl()
-    vim.wo.cursorcolumn = not vim.wo.cursorcolumn
-end
-
-function M.toggle_wrap()
-    vim.wo.wrap = not vim.wo.wrap
-end
-
-function M.open_link()
-    local url = vim.fn.expand("<cfile>")
-    vim.ui.open(url)
-end
+function M.set_column_hl()    vim.cmd("set colorcolumn=80") end
+function M.rm_column_hl()     vim.cmd("set colorcolumn=''") end
+function M.v_split_layout()   vim.cmd("windo wincmd H") end
+function M.h_split_layout()   vim.cmd("windo wincmd K") end
+function M.open_lazy()        vim.cmd("Lazy") end
+function M.open_mason()       vim.cmd("Mason") end
+function M.toggle_column_hl() vim.wo.cursorcolumn = not vim.wo.cursorcolumn end
+function M.toggle_wrap()      vim.wo.wrap = not vim.wo.wrap end
+function M.open_link()        vim.ui.open(vim.fn.expand("<cfile>")) end
 
 
 -- ARROW NAVIGATION
 --------------------------------------------------------------------------------
-function M.cursor_up_ins()
-    vim.cmd([[ :execute "normal! g\<Up>" ]])
-end
-
-function M.cursor_down_ins()
-    vim.cmd([[ :execute "normal! g\<Down>" ]])
-end
-
+function M.cursor_up_ins()   vim.cmd([[ :execute "normal! g\<Up>" ]]) end
+function M.cursor_down_ins() vim.cmd([[ :execute "normal! g\<Down>" ]]) end
 function M.cursor_up_cmd()
     vim.cmd([[ :execute v:count == 0 ? "normal! gk" : "normal! k" ]])
 end
-
 function M.cursor_down_cmd()
     vim.cmd([[ :execute v:count == 0 ? "normal! gj" : "normal! j" ]])
 end
@@ -97,26 +63,13 @@ end
 
 -- JUMP TO START / END OF WORD / LINE
 --------------------------------------------------------------------------------
-function M.forwards_word()
-    vim.cmd([[ :execute "normal! b" ]])
-end
-
-function M.backwards_word()
-    vim.cmd([[ :execute "normal! el" ]])
-end
-
-function M.line_start_ins()
-    vim.cmd([[ :execute "normal! g^" ]])
-end
-
-function M.line_end_ins()
-    vim.cmd([[ :execute "normal! g$" ]])
-end
-
+function M.forwards_word()  vim.cmd([[ :execute "normal! b" ]]) end
+function M.backwards_word() vim.cmd([[ :execute "normal! el" ]]) end
+function M.line_start_ins() vim.cmd([[ :execute "normal! g^" ]]) end
+function M.line_end_ins()   vim.cmd([[ :execute "normal! g$" ]]) end
 function M.line_start_cmd()
     vim.cmd([[ :execute v:count == 0 ? "normal! g^" : "normal! ^" ]])
 end
-
 function M.line_end_cmd()
     vim.cmd([[ :execute v:count == 0 ? "normal! g$h" : "normal! $" ]])
 end
@@ -124,40 +77,22 @@ end
 
 -- DELETE BINDINGS
 --------------------------------------------------------------------------------
-function M.del_word_left()
-    vim.cmd([[ :execute 'normal! "_db']])
-end
-
-function M.del_word_right()
-    vim.cmd([[ :execute 'normal! "_de']])
-end
-
-function M.del_line_left()
-    vim.cmd([[ :execute 'normal! "_d^']])
-end
-
-function M.del_line_right()
-    vim.cmd([[ :execute 'normal! "_d$']])
-end
+function M.del_word_left()  vim.cmd([[ :execute 'normal! "_db']]) end
+function M.del_word_right() vim.cmd([[ :execute 'normal! "_de']]) end
+function M.del_line_left()  vim.cmd([[ :execute 'normal! "_d^']]) end
+function M.del_line_right() vim.cmd([[ :execute 'normal! "_d$']]) end
 
 
 -- UNDO / REDO
 --------------------------------------------------------------------------------
-function M.undo()
-    vim.cmd([[ :execute "normal! u" ]])
-end
-
-function M.redo()
-    vim.cmd([[ :execute "normal! U" ]])
-end
+function M.undo() vim.cmd([[ :execute "normal! u" ]]) end
+function M.redo() vim.cmd([[ :execute "normal! U" ]]) end
 
 
 -- PASTE
 --------------------------------------------------------------------------------
-function M.paste()
-    -- Make paste respect indentation in insert
-    vim.cmd([[ :execute 'normal! ""]Pl' ]])
-end
+-- Make paste respect indentation in insert
+function M.paste() vim.cmd([[ :execute 'normal! ""]Pl' ]]) end
 
 
 -- `f` and `/` SEARCH

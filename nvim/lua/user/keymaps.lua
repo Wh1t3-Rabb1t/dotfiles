@@ -79,6 +79,7 @@ nmap("<Leader>;v", km.v_split_layout,   { desc = ' Set splits layout to verti
 nmap("<Leader>;h", km.h_split_layout,   { desc = ' Set splits layout to horizontal' })
 nmap("<Leader>;l", km.open_lazy,        { desc = ' Lazy ui' })
 nmap("<Leader>;m", km.open_mason,       { desc = ' Mason ui' })
+nmap("<Leader>;x", km.open_link,        { desc = ' Open link in browser' })
 
 -- Folds
 vmap("<Leader>;f", "zf",                { desc = ' Fold selection' })
@@ -104,8 +105,8 @@ nvmap("s", "v",                    { desc = ' Visual mode' })
 nxmap("S", "V",                    { desc = ' Visual line mode' })
 nxmap("F", "<C-v>",                { desc = ' Visual block mode' })
 nxmap("H", "msgv",                 { desc = ' Restore visual selection' })
-vmap("a",  "o",                    { desc = ' Swap point & mark' })
-vmap("A",  km.swap_point_and_mark, { desc = ' Swap point & mark' })
+vmap("a",  "o",                    { desc = ' Swap point and mark' })
+vmap("A",  km.swap_point_and_mark, { desc = ' Swap point and mark' })
 
 
 -- COMMAND LINE MODE                                                         _03
@@ -121,17 +122,17 @@ cmap("<S-Down>",  "<Down>",         { desc = ' Scroll down cmd history' })
 
 -- ARROW NAVIGATION                                                          _04
 --------------------------------------------------------------------------------
-nvomap("t",    "h",                { desc = ' Move cursor left' })
-nvomap("i",    km.cursor_up_cmd,   { desc = ' Move cursor up' })
-nvomap("k",    km.cursor_down_cmd, { desc = ' Move cursor down' })
-imap("<Up>",   km.cursor_up_ins,   { desc = ' Move cursor up' })
-imap("<Down>", km.cursor_down_ins, { desc = ' Move cursor down' })
+nvomap("t",    "h",                { desc = ' Cursor left' })
+nvomap("i",    km.cursor_up_cmd,   { desc = ' Cursor up' })
+nvomap("k",    km.cursor_down_cmd, { desc = ' Cursor down' })
+imap("<Up>",   km.cursor_up_ins,   { desc = ' Cursor up' })
+imap("<Down>", km.cursor_down_ins, { desc = ' Cursor down' })
 
 
 -- COMMENTS                                                                  _05
 --------------------------------------------------------------------------------
-nmap("?", km.comment_line,   { desc = ' Comment line' })
-vmap("?", km.comment_visual, { desc = ' Comment visual' })
+nmap("<A-/>", km.comment_line,   { desc = ' Comment line' })
+vmap("<A-/>", km.comment_visual, { desc = ' Comment visual selection' })
 
 
 -- MOVE LINES UP / DOWN                                                      _06
@@ -163,7 +164,8 @@ nvmap(".",        km.line_end_cmd,   { desc = ' Jump to line end' })
 -- JUMP 6 LINES / BETWEEN BLOCKS                                             _09
 --------------------------------------------------------------------------------
 nvmap("e", "6k",  { desc = ' Jump 6 lines up' })
-nvmap("d", "6j",  { desc = ' Jump 6 lines down' })
+-- nvmap("d", "6j",  { desc = ' Jump 6 lines down' })
+nvmap("d", "6j",  { desc = ' Jump 6 lines down', nowait = true })
 nvmap("E", "mj{", { desc = ' Jump block up' })
 nvmap("D", "mj}", { desc = ' Jump block down' })
 
@@ -262,29 +264,29 @@ nmap(">", "msva<V", { desc = ' Select around <> block' })
 
 -- COPY (all copied text is added to the alphabetical register stack)        _16
 --------------------------------------------------------------------------------
-vmap("c",     'mm"zy`m',      { desc = " Copy to 'z' register" })
+vmap("c",     'mm""y`m',      { desc = ' Copy to " register' })
 vmap("<A-c>", '"*y',          { desc = ' Copy to system clipboard' })
-nmap("cc",    'mmVggoG"zy`m', { desc = ' Copy whole buffer' })
+nmap("cc",    'mmVggoG""y`m', { desc = ' Copy whole buffer' })
 
 -- Word
 nmap("c",     "<Nop>")
-nmap("ct",    'mm"zyiw`m',    { desc = ' Copy in word' })
-nmap("cu",    'mm"zyb`m',     { desc = ' Copy word left' })
-nmap("co",    '"zye',         { desc = ' Copy word right' })
+nmap("ct",    'mm""yiw`m',    { desc = ' Copy in word' })
+nmap("cu",    'mm""yb`m',     { desc = ' Copy word left' })
+nmap("co",    '""ye',         { desc = ' Copy word right' })
 
 -- Line
-nmap("cl",    '"zyy',         { desc = ' Copy whole line' })
-nmap("c,",    'mm"zy^`m',     { desc = ' Copy to line start' })
-nmap("c.",    '"zy$',         { desc = ' Copy to line end' })
+nmap("cl",    '""yy',         { desc = ' Copy whole line' })
+nmap("c,",    'mm""y^`m',     { desc = ' Copy to line start' })
+nmap("c.",    '""y$',         { desc = ' Copy to line end' })
 
 -- Paragraph
-nmap("cm",    'mm"zyip`m',    { desc = ' Copy in paragraph' })
-nmap("ci",    'mm"zy{`m',     { desc = ' Copy paragraph up' })
-nmap("ck",    '"zy}',         { desc = ' Copy paragraph down' })
+nmap("cm",    'mm""yip`m',    { desc = ' Copy in paragraph' })
+nmap("ci",    'mm""y{`m',     { desc = ' Copy paragraph up' })
+nmap("ck",    '""y}',         { desc = ' Copy paragraph down' })
 
 -- To char
-nmap("c;",    '"zyt',         { desc = ' Copy forwards to char' })
-nmap("ch",    '"zyT',         { desc = ' Copy backwards to char' })
+nmap("ch",    '""yT',         { desc = ' Copy backwards to char' })
+nmap("c;",    '""yt',         { desc = ' Copy forwards to char' })
 
 
 -- CUT                                                                       _17
@@ -295,28 +297,28 @@ nmap("ch",    '"zyT',         { desc = ' Copy backwards to char' })
 -- then restoring the previous visual selection and deleting it to the
 -- black hole register.
 
-vmap("x",  '"zygv"_d',     { desc = " Cut to 'z' register" })
-nmap("xx", 'ggVG"zygv"_d', { desc = ' Cut whole buffer' })
+vmap("x",  '""ygv"_d',     { desc = ' Cut to " register' })
+nmap("xx", 'ggVG""ygv"_d', { desc = ' Cut whole buffer' })
 
 -- Word
 nmap("x",  "<Nop>")
-nmap("xt", '"zdiw',        { desc = ' Cut in word' })
-nmap("xo", '"zde',         { desc = ' Cut word right' })
-nmap("xu", '"zdb',         { desc = ' Cut word left' })
+nmap("xt", '""diw',        { desc = ' Cut in word' })
+nmap("xo", '""de',         { desc = ' Cut word right' })
+nmap("xu", '""db',         { desc = ' Cut word left' })
 
 -- Line
-nmap("xl", 'V"zygv"_d',    { desc = ' Cut whole line' })
-nmap("x,", '"zd^',         { desc = ' Cut to line start' })
-nmap("x.", '"zd$',         { desc = ' Cut to line end' })
+nmap("xl", 'V""ygv"_d',    { desc = ' Cut whole line' })
+nmap("x,", '""d^',         { desc = ' Cut to line start' })
+nmap("x.", '""d$',         { desc = ' Cut to line end' })
 
 -- Paragraph
-nmap("xm", 'vip"zygv"_d',  { desc = ' Cut in paragraph' })
-nmap("xi", 'v{"zygv"_d',   { desc = ' Cut paragraph up' })
-nmap("xk", 'v}"zygv"_d',   { desc = ' Cut paragraph down' })
+nmap("xm", 'vip""ygv"_d',  { desc = ' Cut in paragraph' })
+nmap("xi", 'v{""ygv"_d',   { desc = ' Cut paragraph up' })
+nmap("xk", 'v}""ygv"_d',   { desc = ' Cut paragraph down' })
 
 -- To char
-nmap("x;", '"zdt',         { desc = ' Cut forwards to char' })
-nmap("xh", '"zdT',         { desc = ' Cut backwards to char' })
+nmap("x;", '""dt',         { desc = ' Cut forwards to char' })
+nmap("xh", '""dT',         { desc = ' Cut backwards to char' })
 
 
 -- CHANGE (all changed text is sent to the black hole register)              _18
@@ -347,11 +349,11 @@ nmap("yh", '"_cT',    { desc = ' Change backwards to char' })
 
 -- PASTE                                                                     _19
 --------------------------------------------------------------------------------
-nmap("v",     '"z]P',   { desc = " Paste from 'p' register" })
+nmap("v",     '""]P',   { desc = ' Paste from " register' })
 nmap("<A-v>", '"*]P',   { desc = ' Paste from system register' })
-vmap("v",     '"_d"zP', { desc = ' Paste over selection' })
-cmap("<A-v>", "<C-r>z", { desc = " Paste from 'p' register" })
-imap("<A-v>", km.paste, { desc = " Paste from 'p' register" })
+vmap("v",     '"_d""P', { desc = ' Paste over selection' })
+cmap("<A-v>", '<C-r>"', { desc = ' Paste from " register' })
+imap("<A-v>", km.paste, { desc = ' Paste from " register' })
 
 
 -- DUPLICATE LINE / SELECTION                                                _20
@@ -371,14 +373,14 @@ nvmap("j",     "J",               { desc = ' Join lines' })
 
 -- `f` and `/` SEARCH                                                        _22
 --------------------------------------------------------------------------------
-nvmap("h",    ",",                 { desc = ' Prev f search result' })
-nvmap(";",    ";",                 { desc = ' Prev f search result' })
-nvmap("N",    "mnN",               { desc = ' Prev / search result' })
-nvmap("n",    "mnn",               { desc = ' Next / search result' })
-nmap("<A-/>", km.toggle_search_hl, { desc = ' Toggle search highlights' })
-nmap("M",     "mn*",               { desc = ' Search for inner word' })
-vmap("M",     km.regex_selection,  { desc = ' Search for selected area' })
-vmap("/",     "<Esc>/\\%V",        { desc = ' Search within selection', silent = false })
+nvmap("h", ",",                 { desc = ' Prev f search result' })
+nvmap(";", ";",                 { desc = ' Prev f search result' })
+nvmap("N", "mnN",               { desc = ' Prev / search result' })
+nvmap("n", "mnn",               { desc = ' Next / search result' })
+nmap("?",  km.toggle_search_hl, { desc = ' Toggle search highlights' })
+nmap("M",  "mn*",               { desc = ' Search for inner word' })
+vmap("M",  km.regex_selection,  { desc = ' Search for selected area' })
+vmap("/",  "<Esc>/\\%V",        { desc = ' Search within selection', silent = false })
 
 
 -- QUICKFIX                                                                  _23

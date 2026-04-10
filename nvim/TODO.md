@@ -14,21 +14,24 @@ Plugins to remove (rewrite essential functionality):
 
 ## Priority: High
 
-- Consider using <Leader>; for all 'command palette' bindings (i.e. bindings
-  we create just to be shown in the keymaps snacks picker).
+- Remove Spider plugin and instead tweak nvims text objects for congruence.
+- Rework open line below to drop the use of marks if possible.
+- Remove/replace Trailblazer plugin.
+- Write a paste from system register into the command line function.
 - Remove/replace recorder plugin (it's introducing key timeout when invoked
   for some reason).
-- Remove/replace Trailblazer plugin.
 - Make sure swap_point_and_mark function is still working properly.
 - Look into keymap_funcs and replace anything that has been made redundant.
-- Look into whether or not we can disable multiple tabs (help pages etc forced to launch in splits).
+- Look into whether or not we can disable multiple tabs
+  (help pages etc forced to launch in splits).
 
 - `:checkhealth which-key` has useful info about overlapping bindings.
 
 ## Priority: Low
 
 - Create autocommand to turn off wrap if buffer width is < 80.
-- Consider creating an ignored filetypes module that sets ignore lists for different plugins to prevent plugins clashing.
+- Consider creating an ignored filetypes module that sets ignore lists for
+  different plugins to prevent plugins clashing.
 - Set up bindings to inspect / evaluate selection.
 - Write correct lua evaluation bindings for a popup window -- vmap("=", ":lua<CR>", { silent = false }).
 - Set up code action bindings.

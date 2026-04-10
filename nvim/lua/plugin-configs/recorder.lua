@@ -11,8 +11,8 @@ local M = {}
 --------------------------------------------------------------------------------
 M.keys = {
     -- These must match the keys in the mapping config below
-    { "Q", desc = " Start Recording" },
-    { "q", desc = " Play Recording" },
+    { "Q", desc = " Start Recording" },
+    { "q", desc = " Play Recording" },
 }
 
 -- CONFIG
@@ -22,20 +22,15 @@ function M.config()
         mapping = {
             startStopRecording = "Q",
             playMacro = "q",
+            switchSlot = "<Leader>;<C-q>",
+            editMacro = "<Leader>;cq",
+            deleteAllMacros = "<Leader>;dq",
+            yankMacro = "<Leader>;yq",
+            -- !! This should be a string you don't use in insert mode during a macro
+            addBreakPoint = "##",
         },
-        -- clear = true,  -- Clears all macros-slots on startup
-        -- performanceOpts = {
-        --     countThreshold = 100,
-        --     lazyredraw = true,         -- Enable lazyredraw (see `:h lazyredraw`)
-        --     noSystemClipboard = true,  -- Remove `+`/`*` from clipboard option
-        --     autocmdEventsIgnore = {    -- Temporarily ignore these autocmd events
-        --         "TextChangedI",
-        --         "TextChanged",
-        --         "InsertLeave",
-        --         "InsertEnter",
-        --         "InsertCharPre",
-        --     }
-        -- }
+        clear = false,  -- Clears all macros-slots on startup
+        lessNotifications = false,
     })
 end
 

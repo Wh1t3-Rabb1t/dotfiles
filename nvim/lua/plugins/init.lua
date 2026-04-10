@@ -102,9 +102,6 @@ return {
     ----------------------------------------------------------------------------
     {
         "chrisgrieser/nvim-recorder",
-
-        enabled = false,
-
         keys = require("plugin-configs.recorder").keys,
         config = require("plugin-configs.recorder").config,
     },

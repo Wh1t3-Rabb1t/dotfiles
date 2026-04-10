@@ -69,6 +69,11 @@ function M.toggle_wrap()
     vim.wo.wrap = not vim.wo.wrap
 end
 
+function M.open_link()
+    local url = vim.fn.expand("<cfile>")
+    vim.ui.open(url)
+end
+
 
 -- ARROW NAVIGATION
 --------------------------------------------------------------------------------
@@ -150,7 +155,7 @@ end
 --------------------------------------------------------------------------------
 function M.paste()
     -- Make paste respect indentation in insert
-    vim.cmd([[ :execute 'normal! "z]Pl' ]])
+    vim.cmd([[ :execute 'normal! ""]Pl' ]])
 end
 
 

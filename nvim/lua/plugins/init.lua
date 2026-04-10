@@ -117,14 +117,6 @@ return {
         init = require("plugin-configs.snacks").init,
     },
 
-    -- SPIDER
-    ----------------------------------------------------------------------------
-    {
-        "chrisgrieser/nvim-spider",
-        keys = require("plugin-configs.spider").keys,
-        config = true,
-    },
-
     -- SURROUND
     ----------------------------------------------------------------------------
     {

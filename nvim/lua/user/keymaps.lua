@@ -8,9 +8,9 @@
 -- https://learnvimscriptthehardway.stevelosh.com/
 -- https://github.com/ibhagwan/vim-cheatsheet
 
--- ╭───────╮
--- │ INDEX │
--- ╰───────╯
+-- +-------+
+-- | INDEX |
+-- ---------------------------------------
 -- LEADER                              _00
 -- INSERT MODE                         _01
 -- VISUAL MODE                         _02
@@ -46,7 +46,6 @@
 -- don't require wrapping though.
 
 local map = require("util.utils").map
-local win = require("util.window")
 local km = require("util.keymap_funcs")
 
 local nmap = function(...) map("n", ...) end
@@ -81,6 +80,7 @@ nmap("<Leader>;h", km.h_split_layout,   { desc = ' Set splits layout to horiz
 nmap("<Leader>;l", km.open_lazy,        { desc = ' Lazy ui' })
 nmap("<Leader>;m", km.open_mason,       { desc = ' Mason ui' })
 nmap("<Leader>;x", km.open_link,        { desc = ' Open link in browser' })
+nmap("<Leader>;P", km.delete_all_marks, { desc = ' Delete all local marks' })
 
 -- Folds
 vmap("<Leader>;f", "zf",                { desc = ' Fold selection' })
@@ -154,8 +154,12 @@ vmap("T", "<gv^", { desc = ' Outdent' })
 
 -- JUMP TO START / END OF WORD / LINE                                        _08
 --------------------------------------------------------------------------------
-imap("<A-Left>",  km.forwards_word,  { desc = ' Jump backwards by word' })
-imap("<A-Right>", km.backwards_word, { desc = ' Jump backwards by word' })
+nvmap("o",        "w",               { desc = ' Jump forwards by word' })
+nvmap("u",        "b",               { desc = ' Jump backwards by word' })
+nvmap("O",        "e",               { desc = ' Jump forwards to word end' })
+nvmap("U",        "ge",              { desc = ' Jump backwards to word end' })
+imap("<A-Right>", km.forwards_word,  { desc = ' Jump forwards by word' })
+imap("<A-Left>",  km.backwards_word, { desc = ' Jump backwards by word' })
 imap("<Home>",    km.line_start_ins, { desc = ' Jump to line start' })
 imap("<End>",     km.line_end_ins,   { desc = ' Jump to line end' })
 nvmap(",",        km.line_start_cmd, { desc = ' Jump to line start' })
@@ -291,8 +295,8 @@ nmap("c;",    '""yt',         { desc = ' Copy forwards to char' })
 
 -- CUT                                                                       _17
 --------------------------------------------------------------------------------
--- Note: All `d` motions that span than one line (the deleted text is not
--- confined to a single line) are sent to the numeric register stack by
+-- Note: All `d` motions that span than more one line (the deleted text is
+-- not confined to a single line) are sent to the numeric register stack by
 -- default; we circumvent this by instead yanking to the system register
 -- then restoring the previous visual selection and deleting it to the
 -- black hole register.
@@ -398,19 +402,19 @@ nmap("<Leader>x", km.toggle_quickfix_win,  { desc = ' Toggle quickfix list' }
 -- WINDOW                                                                    _25
 --------------------------------------------------------------------------------
 -- Focus split
-nmap("<Up>",    function() win.navigate_vertically("k") end)    -- Above
-nmap("<Down>",  function() win.navigate_vertically("j") end)    -- Below
-nmap("<Left>",  function() win.navigate_horizontally("h") end)  -- Left
-nmap("<Right>", function() win.navigate_horizontally("l") end)  -- Right
+nmap("<Up>",      function() km.navigate_vertically("k") end)    -- Above
+nmap("<Down>",    function() km.navigate_vertically("j") end)    -- Below
+nmap("<Left>",    function() km.navigate_horizontally("h") end)  -- Left
+nmap("<Right>",   function() km.navigate_horizontally("l") end)  -- Right
 
 -- Resize window
-nmap("<S-Up>",    function() win.relative_resize("up") end)     -- Up
-nmap("<S-Down>",  function() win.relative_resize("down") end)   -- Down
-nmap("<S-Left>",  function() win.relative_resize("left") end)   -- Left
-nmap("<S-Right>", function() win.relative_resize("right") end)  -- Right
+nmap("<S-Up>",    function() km.relative_resize("up") end)       -- Up
+nmap("<S-Down>",  function() km.relative_resize("down") end)     -- Down
+nmap("<S-Left>",  function() km.relative_resize("left") end)     -- Left
+nmap("<S-Right>", function() km.relative_resize("right") end)    -- Right
 
 -- Cmds
-nmap("<Leader>w", win.close_window,  { desc = ' Close window' })
+nmap("<Leader>w", km.close_window,   { desc = ' Close window' })
 nmap("<A-m>",     "<cmd>vsplit<CR>", { desc = ' Split window vertically' })
 nmap("<A-n>",     "<cmd>split<CR>",  { desc = ' Split window horizontally' })
 nmap("<Home>",    "zhzhzh",          { desc = ' Scroll window left' })

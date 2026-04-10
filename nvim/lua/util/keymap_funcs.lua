@@ -5,9 +5,43 @@
 --  |_|\_\___|\__, |_| |_| |_|\__,_| .__/  |_|  \__,_|_| |_|\___|___/
 -- ===========|___/================|_|==========================================
 
+-- +-------+
+-- | INDEX |
+-- ---------------------------------------
+-- LEADER                              _00
+-- VISUAL MODE                         _01
+-- ARROW NAVIGATION                    _02
+-- COMMENTS                            _03
+-- JUMP TO START / END OF WORD / LINE  _04
+-- DELETE BINDINGS                     _05
+-- UNDO / REDO                         _06
+-- PASTE                               _07
+-- `f` and `/` SEARCH                  _08
+-- MARKS                               _09
+-- QUICKFIX                            _10
+-- WINDOW                              _11
+-- SAVE CHANGES                        _12
+-- QUIT                                _13
+
 local M = {}
 
--- VISUAL MODE
+local util = require("util.utils")
+
+-- LEADER                                                                    _00
+--------------------------------------------------------------------------------
+function M.set_column_hl()    vim.cmd("set colorcolumn=80") end
+function M.rm_column_hl()     vim.cmd("set colorcolumn=''") end
+function M.v_split_layout()   vim.cmd("windo wincmd H") end
+function M.h_split_layout()   vim.cmd("windo wincmd K") end
+function M.open_lazy()        vim.cmd("Lazy") end
+function M.open_mason()       vim.cmd("Mason") end
+function M.toggle_column_hl() vim.wo.cursorcolumn = not vim.wo.cursorcolumn end
+function M.toggle_wrap()      vim.wo.wrap = not vim.wo.wrap end
+function M.open_link()        vim.ui.open(vim.fn.expand("<cfile>")) end
+function M.delete_all_marks() vim.cmd.delm({ bang = true }) end
+
+
+-- VISUAL MODE                                                               _01
 --------------------------------------------------------------------------------
 function M.swap_point_and_mark()
     local mode = vim.fn.mode()
@@ -21,7 +55,19 @@ function M.swap_point_and_mark()
 end
 
 
--- COMMENT
+-- ARROW NAVIGATION                                                          _02
+--------------------------------------------------------------------------------
+function M.cursor_up_ins()   vim.cmd([[ :execute "normal! g\<Up>" ]]) end
+function M.cursor_down_ins() vim.cmd([[ :execute "normal! g\<Down>" ]]) end
+function M.cursor_up_cmd()
+    vim.cmd([[ :execute v:count == 0 ? "normal! gk" : "normal! k" ]])
+end
+function M.cursor_down_cmd()
+    vim.cmd([[ :execute v:count == 0 ? "normal! gj" : "normal! j" ]])
+end
+
+
+-- COMMENTS                                                                  _03
 --------------------------------------------------------------------------------
 function M.comment_line()
     vim.go.operatorfunc = "v:lua.require'vim._comment'.operator"
@@ -36,35 +82,10 @@ function M.comment_visual()
 end
 
 
--- LEADER BINDINGS (just misc vim commands/opts toggling)
+-- JUMP TO START / END OF WORD / LINE                                        _04
 --------------------------------------------------------------------------------
-function M.set_column_hl()    vim.cmd("set colorcolumn=80") end
-function M.rm_column_hl()     vim.cmd("set colorcolumn=''") end
-function M.v_split_layout()   vim.cmd("windo wincmd H") end
-function M.h_split_layout()   vim.cmd("windo wincmd K") end
-function M.open_lazy()        vim.cmd("Lazy") end
-function M.open_mason()       vim.cmd("Mason") end
-function M.toggle_column_hl() vim.wo.cursorcolumn = not vim.wo.cursorcolumn end
-function M.toggle_wrap()      vim.wo.wrap = not vim.wo.wrap end
-function M.open_link()        vim.ui.open(vim.fn.expand("<cfile>")) end
-
-
--- ARROW NAVIGATION
---------------------------------------------------------------------------------
-function M.cursor_up_ins()   vim.cmd([[ :execute "normal! g\<Up>" ]]) end
-function M.cursor_down_ins() vim.cmd([[ :execute "normal! g\<Down>" ]]) end
-function M.cursor_up_cmd()
-    vim.cmd([[ :execute v:count == 0 ? "normal! gk" : "normal! k" ]])
-end
-function M.cursor_down_cmd()
-    vim.cmd([[ :execute v:count == 0 ? "normal! gj" : "normal! j" ]])
-end
-
-
--- JUMP TO START / END OF WORD / LINE
---------------------------------------------------------------------------------
-function M.forwards_word()  vim.cmd([[ :execute "normal! b" ]]) end
-function M.backwards_word() vim.cmd([[ :execute "normal! el" ]]) end
+function M.forwards_word()  vim.cmd([[ :execute "normal! el" ]]) end
+function M.backwards_word() vim.cmd([[ :execute "normal! b" ]]) end
 function M.line_start_ins() vim.cmd([[ :execute "normal! g^" ]]) end
 function M.line_end_ins()   vim.cmd([[ :execute "normal! g$" ]]) end
 function M.line_start_cmd()
@@ -75,7 +96,7 @@ function M.line_end_cmd()
 end
 
 
--- DELETE BINDINGS
+-- DELETE BINDINGS                                                           _05
 --------------------------------------------------------------------------------
 function M.del_word_left()  vim.cmd([[ :execute 'normal! "_db']]) end
 function M.del_word_right() vim.cmd([[ :execute 'normal! "_de']]) end
@@ -83,19 +104,19 @@ function M.del_line_left()  vim.cmd([[ :execute 'normal! "_d^']]) end
 function M.del_line_right() vim.cmd([[ :execute 'normal! "_d$']]) end
 
 
--- UNDO / REDO
+-- UNDO / REDO                                                               _06
 --------------------------------------------------------------------------------
 function M.undo() vim.cmd([[ :execute "normal! u" ]]) end
 function M.redo() vim.cmd([[ :execute "normal! U" ]]) end
 
 
--- PASTE
+-- PASTE                                                                     _07
 --------------------------------------------------------------------------------
 -- Make paste respect indentation in insert
 function M.paste() vim.cmd([[ :execute 'normal! ""]Pl' ]]) end
 
 
--- `f` and `/` SEARCH
+-- `f` and `/` SEARCH                                                        _08
 --------------------------------------------------------------------------------
 function M.toggle_search_hl()
     if vim.v.hlsearch == 1 then
@@ -121,7 +142,7 @@ function M.regex_selection()
 end
 
 
--- MARKS
+-- MARKS                                                                    _09
 --------------------------------------------------------------------------------
 function M.toggle_mark()
     local buf = 0
@@ -223,7 +244,7 @@ function M.jump_to_mark_below()
 end
 
 
--- QUICKFIX
+-- QUICKFIX                                                                 _10
 --------------------------------------------------------------------------------
 function M.toggle_quickfix_win()
     if vim.bo.filetype == "qf" then
@@ -255,7 +276,225 @@ function M.add_line_to_quickfix()
 end
 
 
--- SAVE CHANGES
+-- NAVIGATE WINDOWS HORIZONTALLY                                             _11
+--------------------------------------------------------------------------------
+local cached_win_width
+
+function M.navigate_horizontally(direction)
+    if util.open_win_count() == 1 then return end
+
+    local explorer_id
+    local explorer_width
+    local width = vim.o.columns
+    local get_width = vim.api.nvim_win_get_width
+    local set_width = vim.api.nvim_win_set_width
+
+    for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local bufnr = vim.api.nvim_win_get_buf(winid)
+        local ft = vim.bo[bufnr].filetype
+
+        if ft == "snacks_picker_list" then
+            explorer_id = winid
+            explorer_width = get_width(winid)
+            width = width - explorer_width
+        end
+
+        if explorer_id then break end
+    end
+
+    local initial_win = vim.fn.winnr()
+    local initial_win_width = get_width(0)
+
+    vim.cmd("wincmd " .. direction)
+
+    local moving_onto_screen_edge = vim.fn.winnr() == initial_win
+    local current_win_width = get_width(0)
+    local maximized_win_width = width - 12
+
+    if moving_onto_screen_edge then
+        if current_win_width < maximized_win_width then
+            cached_win_width = current_win_width
+            vim.cmd("vertical resize " .. maximized_win_width)
+        else
+            if cached_win_width then
+                vim.cmd("vertical resize " .. cached_win_width)
+            end
+        end
+    else
+        if current_win_width <= 24 then
+            vim.cmd("vertical resize " .. initial_win_width)
+        end
+    end
+
+    -- Fix sidebar sizes when resizing windows
+    if explorer_id then set_width(explorer_id, explorer_width) end
+
+    -- Disable line wrap on minimized vertical splits
+    for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+        local buf_width = get_width(winid)
+        if buf_width < 80 then
+            vim.wo[winid].wrap = false
+        else
+            vim.wo[winid].wrap = true
+        end
+    end
+end
+
+
+-- NAVIGATE WINDOWS VERTICALLY                                               _11
+--------------------------------------------------------------------------------
+local cached_win_height
+
+function M.navigate_vertically(direction)
+    local excluded_ft = { "lazy", "mason" }
+    local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
+
+    -- Enable arrow key navigation in desired buffers
+    if vim.tbl_contains(excluded_ft, vim.bo.filetype) then
+        vim.api.nvim_feedkeys(vim.keycode(keys[direction]), "n", true)
+        return
+    end
+
+    if util.open_win_count() == 1 then return end
+
+    local qf_id
+    local qf_length = 0
+    local get_height = vim.api.nvim_win_get_height
+    local set_height = vim.api.nvim_win_set_height
+
+    -- If quickfix window is open...
+    for _, win in ipairs(vim.fn.getwininfo()) do
+        if win.quickfix == 1 then
+            local num = #vim.fn.getqflist()
+            if num < 10 then qf_length = 10 else qf_length = num end
+            qf_id = win.winid
+            break
+        end
+    end
+
+    local initial_win = vim.fn.winnr()
+    local initial_win_height = get_height(0)
+
+    vim.cmd("wincmd " .. direction)
+
+    if vim.bo.filetype == "qf" then return end
+
+    local moving_onto_screen_edge = vim.fn.winnr() == initial_win
+    local current_win_height = get_height(0)
+    local maximized_win_height = (vim.o.lines - vim.o.cmdheight - qf_length) - 6
+
+    if moving_onto_screen_edge then
+        if current_win_height < maximized_win_height then
+            cached_win_height = current_win_height
+            vim.cmd("resize " .. maximized_win_height)
+        else
+            if cached_win_height then
+                vim.cmd("resize " .. cached_win_height)
+            end
+        end
+    else
+        if current_win_height <= 10 then
+            vim.cmd("resize " .. initial_win_height)
+        end
+    end
+
+    -- Prevent miscalculations because I'm an idiot
+    if qf_id then set_height(qf_id, qf_length) end
+end
+
+
+-- RESIZE WINDOWS                                                            _11
+--------------------------------------------------------------------------------
+function M.relative_resize(direction)
+    if util.open_win_count() == 1 then return end
+
+    local function neighbor(target)
+        local cur = vim.fn.winnr()
+        local cur_pos = vim.fn.win_screenpos(0)
+        local comp = vim.fn.winnr(target)
+
+        if cur == comp then return false end
+
+        local comp_pos = vim.fn.win_screenpos(comp)
+
+        if target == "k" or target == "j" then
+            return comp_pos[0] == cur_pos[0]
+        else
+            return comp_pos[1] == cur_pos[1]
+        end
+    end
+
+    local top, bottom = neighbor("k"), neighbor("j")
+    local left, right = neighbor("h"), neighbor("l")
+
+    local modifier
+    if direction == "up" then
+        if top and bottom then
+            modifier = "-"
+        elseif top then
+            modifier = "+"
+        elseif bottom then
+            modifier = "-"
+        end
+    elseif direction == "down" then
+        if top and bottom then
+            modifier = "+"
+        elseif top then
+            modifier = "-"
+        elseif bottom then
+            modifier = "+"
+        end
+    elseif direction == "left" then
+        if left and right then
+            modifier = "-"
+        elseif left then
+            modifier = "+"
+        elseif right then
+            modifier = "-"
+        elseif top then
+             modifier = "+"  -- Prevent no modifier edge case
+        end
+    elseif direction == "right" then
+        if left and right then
+            modifier = "+"
+        elseif left then
+            modifier = "-"
+        elseif right then
+            modifier = "+"
+        elseif top then
+            modifier = "-"  -- Prevent no modifier edge case
+        end
+    end
+
+    if not modifier then return end
+
+    if direction == "up" or direction == "down" then
+        vim.cmd("resize " .. modifier .. "2")
+    else
+        vim.cmd("vertical resize " .. modifier .. "2")
+    end
+end
+
+
+-- CLOSE WINDOW                                                              _11
+--------------------------------------------------------------------------------
+function M.close_window()
+    if vim.bo.filetype == "checkhealth" then
+        vim.api.nvim_buf_delete(
+            vim.api.nvim_get_current_buf(), {
+                force = true
+            }
+        )
+    end
+
+    -- Don't quit if only one window is open
+    if util.open_win_count() ~= 1 then
+        vim.cmd("q")
+    end
+end
+
+
+-- SAVE CHANGES                                                              _12
 --------------------------------------------------------------------------------
 function M.save_changes()
     local current_ft = vim.o.filetype
@@ -275,7 +514,7 @@ function M.save_changes()
 end
 
 
--- QUIT (never quit)
+-- QUIT (never quit)                                                         _13
 --------------------------------------------------------------------------------
 function M.quit_session()
     -- Save session if nvim was launched via session file

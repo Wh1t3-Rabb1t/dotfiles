@@ -7,18 +7,12 @@
 
 local M = {}
 
-local icons = {
-    separator = "│",
-    modified = "●",
-    pinned = "",
-}
-
 -- KEYS
 --------------------------------------------------------------------------------
 M.keys = {
     -- Navigate tabs
     {
-        mode = { "n" },
+        desc = " Next tab",
         "<C-PageDown>",
         function()
             -- Prevent bug when tab switching with a single help page open
@@ -26,40 +20,40 @@ M.keys = {
                 vim.cmd("BufferNext")
             end
         end,
-        desc = " Next tab"
+        mode = { "n" },
     },
     {
-        mode = { "n" },
+        desc = " Previous tab",
         "<C-PageUp>",
         function()
             if vim.bo.filetype ~= "help" then
                 vim.cmd("BufferPrevious")
             end
         end,
-        desc = " Previous tab"
+        mode = { "n" },
     },
 
     -- Reorder tabs
     {
-        mode = { "n" },
+        desc = " Swap tab with next",
         "<C-S-PageDown>",
         function()
             vim.cmd("BufferMoveNext")
         end,
-        desc = " Swap tab with next"
+        mode = { "n" },
     },
     {
-        mode = { "n" },
+        desc = " Swap tab with previous",
         "<C-S-PageUp>",
         function()
             vim.cmd("BufferMovePrevious")
         end,
-        desc = " Swap tab with previous"
+        mode = { "n" },
     },
 
     -- Close tabs
     {
-        mode = { "n" },
+        desc = " Close tab",
         "<A-w>",
         function()
             if vim.bo.filetype == "qf" then
@@ -68,7 +62,7 @@ M.keys = {
             end
             vim.cmd("BufferClose")
         end,
-        desc = " Close tab"
+        mode = { "n" },
     }
 }
 
@@ -96,47 +90,34 @@ function M.config()
     -- Setup
     require("barbar").setup({
         animation = false,                     -- Enable/disable animations
-        tabpages = true,                       -- Toggle tabpages indicator (top right corner)
         clickable = false,                     -- Left-click: go to buffer, Middle-click: delete buffer
-        exclude_ft = {                         -- Exclude buffers by filetype
-            "checkhealth",
-            "qf",
-        },
-        exclude_name = {},                     -- Exclude buffers by name
+        exclude_ft = { "checkhealth", "qf" },  -- Exclude buffers by filetype
         focus_on_close = "right",              -- Previous, left, right
-        highlight_alternate = false,           -- Highlighting unfocused buffers
         highlight_inactive_file_icons = true,  -- Highlighting unfocused buffer icons
-        highlight_visible = true,              -- Highlighting active buffers
         icons = {
-            buffer_index = false,
-            buffer_number = false,
             button = "",
             separator = {
                 left = "",
-                right = icons.separator
+                right = "│",
             },
 
-            -- -- Configure the icons on the bufferline when modified or pinned.
-            -- -- Supports all the base icon options.
-            modified = { button = icons.modified },
-            pinned = {
-                buffer_index = true,
-                filename = true,
-            },
+            -- Configure the icons on the bufferline when modified or pinned.
+            -- Supports all the base icon options.
+            modified = { button = "●" },
 
             -- Configure the icons on the bufferline based on the visibility of a buffer.
             -- Supports all the base icon options, plus `modified` and `pinned`.
             inactive = {
                 separator = {
                     left = "",
-                    right = icons.separator,
+                    right = "│",
                 }
             }
         },
-        maximum_padding = 1,  -- Max padding around each tab
-        minimum_padding = 1,  -- Min padding around each tab
-        maximum_length = 30,  -- Max buffer name length
-        minimum_length = 0,   -- Min buffer name length
+        maximum_padding = 1,  -- Sets the maximum padding width for each tab
+        minimum_padding = 1,  -- Sets the minimum padding width for each tab
+        maximum_length = 30,  -- Sets the maximum buffer name length
+        minimum_length = 0,   -- Sets the minimum buffer name length
     })
 end
 

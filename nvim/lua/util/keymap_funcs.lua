@@ -281,10 +281,13 @@ end
 local cached_win_width
 
 function M.navigate_horizontally(direction)
-    if util.open_win_count() == 1 then return end
+    local win_count = util.open_win_count()
+
+    if win_count == 1 then return end
 
     local explorer_id
     local explorer_width
+    local no_resize = false
     local width = vim.o.columns
     local get_width = vim.api.nvim_win_get_width
     local set_width = vim.api.nvim_win_set_width
@@ -299,13 +302,21 @@ function M.navigate_horizontally(direction)
             width = width - explorer_width
         end
 
-        if explorer_id then break end
+        if explorer_id then
+            if win_count == 2 then
+                no_resize = true
+            end
+            break
+        end
     end
 
     local initial_win = vim.fn.winnr()
     local initial_win_width = get_width(0)
 
     vim.cmd("wincmd " .. direction)
+
+    -- Return without resizing if only the explorer and one buffer is open
+    if no_resize == true then return end
 
     local moving_onto_screen_edge = vim.fn.winnr() == initial_win
     local current_win_width = get_width(0)
@@ -339,6 +350,72 @@ function M.navigate_horizontally(direction)
         end
     end
 end
+
+
+--
+-- -- NAVIGATE WINDOWS HORIZONTALLY                                             _11
+-- --------------------------------------------------------------------------------
+-- local cached_win_width
+--
+-- function M.navigate_horizontally(direction)
+--     if util.open_win_count() == 1 then return end
+--
+--     local explorer_id
+--     local explorer_width
+--     local width = vim.o.columns
+--     local get_width = vim.api.nvim_win_get_width
+--     local set_width = vim.api.nvim_win_set_width
+--
+--     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+--         local bufnr = vim.api.nvim_win_get_buf(winid)
+--         local ft = vim.bo[bufnr].filetype
+--
+--         if ft == "snacks_picker_list" then
+--             explorer_id = winid
+--             explorer_width = get_width(winid)
+--             width = width - explorer_width
+--         end
+--
+--         if explorer_id then break end
+--     end
+--
+--     local initial_win = vim.fn.winnr()
+--     local initial_win_width = get_width(0)
+--
+--     vim.cmd("wincmd " .. direction)
+--
+--     local moving_onto_screen_edge = vim.fn.winnr() == initial_win
+--     local current_win_width = get_width(0)
+--     local maximized_win_width = width - 12
+--
+--     if moving_onto_screen_edge then
+--         if current_win_width < maximized_win_width then
+--             cached_win_width = current_win_width
+--             vim.cmd("vertical resize " .. maximized_win_width)
+--         else
+--             if cached_win_width then
+--                 vim.cmd("vertical resize " .. cached_win_width)
+--             end
+--         end
+--     else
+--         if current_win_width <= 24 then
+--             vim.cmd("vertical resize " .. initial_win_width)
+--         end
+--     end
+--
+--     -- Fix sidebar sizes when resizing windows
+--     if explorer_id then set_width(explorer_id, explorer_width) end
+--
+--     -- Disable line wrap on minimized vertical splits
+--     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+--         local buf_width = get_width(winid)
+--         if buf_width < 80 then
+--             vim.wo[winid].wrap = false
+--         else
+--             vim.wo[winid].wrap = true
+--         end
+--     end
+-- end
 
 
 -- NAVIGATE WINDOWS VERTICALLY                                               _11

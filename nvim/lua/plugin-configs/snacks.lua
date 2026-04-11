@@ -189,11 +189,11 @@ M.keys = {
     { desc = " File Explorer",   "<Leader>e",       function() Snacks.explorer() end },
     { desc = " Keymaps",         "gk",              function() Snacks.picker.keymaps() end },
     { desc = " Marks (pins)",    "gp",              function() Snacks.picker.marks() end },
+    { desc = " Command History", "g;",              function() Snacks.picker.command_history() end },
+    { desc = " Search History",  "g/",              function() Snacks.picker.search_history() end },
     { desc = " Buffers",         "<Leader>b",       function() Snacks.picker.buffers() end },
     { desc = " Find Files",      "<Leader>f",       function() Snacks.picker.files() end },
     { desc = " Registers",       "<Leader>r",       function() Snacks.picker.registers() end },
-    { desc = " Command History", "<Leader>:",       function() Snacks.picker.command_history() end },
-    { desc = " Search History",  "<Leader>/",       function() Snacks.picker.search_history() end },
     { desc = " Undo History",    "<Leader>y",       function() Snacks.picker.undo() end },
     { desc = " Resume",          "<Leader><Space>", function() Snacks.picker.resume() end },
 

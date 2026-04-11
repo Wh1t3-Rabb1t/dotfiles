@@ -8,20 +8,19 @@
 -- +-------+
 -- | INDEX |
 -- +-------+------------------------------
--- LEADER                              _00
--- VISUAL MODE                         _01
--- ARROW NAVIGATION                    _02
--- COMMENTS                            _03
--- JUMP TO START / END OF WORD / LINE  _04
--- DELETE BINDINGS                     _05
--- UNDO / REDO                         _06
--- PASTE                               _07
--- `f` and `/` SEARCH                  _08
--- MARKS                               _09
--- QUICKFIX                            _10
--- WINDOW                              _11
--- SAVE CHANGES                        _12
--- QUIT                                _13
+-- LEADER                              _01
+-- ARROW NAVIGATION                    _01
+-- COMMENTS                            _02
+-- JUMP TO START / END OF WORD / LINE  _03
+-- DELETE BINDINGS                     _04
+-- UNDO / REDO                         _05
+-- PASTE                               _06
+-- `f` and `/` SEARCH                  _07
+-- MARKS                               _08
+-- QUICKFIX                            _09
+-- WINDOW                              _10
+-- SAVE CHANGES                        _11
+-- QUIT                                _12
 
 local M = {}
 
@@ -41,21 +40,7 @@ function M.open_link()        vim.ui.open(vim.fn.expand("<cfile>")) end
 function M.delete_all_marks() vim.cmd.delm({ bang = true }) end
 
 
--- VISUAL MODE                                                               _01
---------------------------------------------------------------------------------
-function M.swap_point_and_mark()
-    local mode = vim.fn.mode()
-
-    if mode == "v" or mode == "V" then
-        vim.cmd([[ :execute "normal! O" ]])
-    else
-        -- Default behaviour in vblock mode
-        vim.api.nvim_feedkeys("A", "n", true)
-    end
-end
-
-
--- ARROW NAVIGATION                                                          _02
+-- ARROW NAVIGATION                                                          _01
 --------------------------------------------------------------------------------
 function M.cursor_up_ins()   vim.cmd([[ :execute "normal! g\<Up>" ]]) end
 function M.cursor_down_ins() vim.cmd([[ :execute "normal! g\<Down>" ]]) end
@@ -67,7 +52,7 @@ function M.cursor_down_cmd()
 end
 
 
--- COMMENTS                                                                  _03
+-- COMMENTS                                                                  _02
 --------------------------------------------------------------------------------
 function M.comment_line()
     vim.go.operatorfunc = "v:lua.require'vim._comment'.operator"
@@ -82,7 +67,7 @@ function M.comment_visual()
 end
 
 
--- JUMP TO START / END OF WORD / LINE                                        _04
+-- JUMP TO START / END OF WORD / LINE                                        _03
 --------------------------------------------------------------------------------
 function M.forwards_word()  vim.cmd([[ :execute "normal! el" ]]) end
 function M.backwards_word() vim.cmd([[ :execute "normal! b" ]]) end
@@ -96,7 +81,7 @@ function M.line_end_cmd()
 end
 
 
--- DELETE BINDINGS                                                           _05
+-- DELETE BINDINGS                                                           _04
 --------------------------------------------------------------------------------
 function M.del_word_left()  vim.cmd([[ :execute 'normal! "_db']]) end
 function M.del_word_right() vim.cmd([[ :execute 'normal! "_de']]) end
@@ -104,19 +89,19 @@ function M.del_line_left()  vim.cmd([[ :execute 'normal! "_d^']]) end
 function M.del_line_right() vim.cmd([[ :execute 'normal! "_d$']]) end
 
 
--- UNDO / REDO                                                               _06
+-- UNDO / REDO                                                               _05
 --------------------------------------------------------------------------------
 function M.undo() vim.cmd([[ :execute "normal! u" ]]) end
 function M.redo() vim.cmd([[ :execute "normal! U" ]]) end
 
 
--- PASTE                                                                     _07
+-- PASTE                                                                     _06
 --------------------------------------------------------------------------------
 -- Make paste respect indentation in insert
 function M.paste() vim.cmd([[ :execute 'normal! ""]Pl' ]]) end
 
 
--- `f` and `/` SEARCH                                                        _08
+-- `f` and `/` SEARCH                                                        _07
 --------------------------------------------------------------------------------
 function M.toggle_search_hl()
     if vim.v.hlsearch == 1 then
@@ -142,7 +127,7 @@ function M.regex_selection()
 end
 
 
--- MARKS                                                                    _09
+-- MARKS                                                                    _08
 --------------------------------------------------------------------------------
 function M.toggle_mark()
     local buf = 0
@@ -244,7 +229,7 @@ function M.jump_to_mark_below()
 end
 
 
--- QUICKFIX                                                                 _10
+-- QUICKFIX                                                                 _09
 --------------------------------------------------------------------------------
 function M.toggle_quickfix_win()
     if vim.bo.filetype == "qf" then
@@ -276,7 +261,7 @@ function M.add_line_to_quickfix()
 end
 
 
--- NAVIGATE WINDOWS HORIZONTALLY                                             _11
+-- NAVIGATE WINDOWS HORIZONTALLY                                             _10
 --------------------------------------------------------------------------------
 local cached_win_width
 
@@ -352,73 +337,7 @@ function M.navigate_horizontally(direction)
 end
 
 
---
--- -- NAVIGATE WINDOWS HORIZONTALLY                                             _11
--- --------------------------------------------------------------------------------
--- local cached_win_width
---
--- function M.navigate_horizontally(direction)
---     if util.open_win_count() == 1 then return end
---
---     local explorer_id
---     local explorer_width
---     local width = vim.o.columns
---     local get_width = vim.api.nvim_win_get_width
---     local set_width = vim.api.nvim_win_set_width
---
---     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
---         local bufnr = vim.api.nvim_win_get_buf(winid)
---         local ft = vim.bo[bufnr].filetype
---
---         if ft == "snacks_picker_list" then
---             explorer_id = winid
---             explorer_width = get_width(winid)
---             width = width - explorer_width
---         end
---
---         if explorer_id then break end
---     end
---
---     local initial_win = vim.fn.winnr()
---     local initial_win_width = get_width(0)
---
---     vim.cmd("wincmd " .. direction)
---
---     local moving_onto_screen_edge = vim.fn.winnr() == initial_win
---     local current_win_width = get_width(0)
---     local maximized_win_width = width - 12
---
---     if moving_onto_screen_edge then
---         if current_win_width < maximized_win_width then
---             cached_win_width = current_win_width
---             vim.cmd("vertical resize " .. maximized_win_width)
---         else
---             if cached_win_width then
---                 vim.cmd("vertical resize " .. cached_win_width)
---             end
---         end
---     else
---         if current_win_width <= 24 then
---             vim.cmd("vertical resize " .. initial_win_width)
---         end
---     end
---
---     -- Fix sidebar sizes when resizing windows
---     if explorer_id then set_width(explorer_id, explorer_width) end
---
---     -- Disable line wrap on minimized vertical splits
---     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
---         local buf_width = get_width(winid)
---         if buf_width < 80 then
---             vim.wo[winid].wrap = false
---         else
---             vim.wo[winid].wrap = true
---         end
---     end
--- end
-
-
--- NAVIGATE WINDOWS VERTICALLY                                               _11
+-- NAVIGATE WINDOWS VERTICALLY                                               _10
 --------------------------------------------------------------------------------
 local cached_win_height
 
@@ -480,7 +399,7 @@ function M.navigate_vertically(direction)
 end
 
 
--- RESIZE WINDOWS                                                            _11
+-- RESIZE WINDOWS                                                            _10
 --------------------------------------------------------------------------------
 function M.relative_resize(direction)
     if util.open_win_count() == 1 then return end
@@ -553,7 +472,7 @@ function M.relative_resize(direction)
 end
 
 
--- CLOSE WINDOW                                                              _11
+-- CLOSE WINDOW                                                              _10
 --------------------------------------------------------------------------------
 function M.close_window()
     if vim.bo.filetype == "checkhealth" then
@@ -571,7 +490,7 @@ function M.close_window()
 end
 
 
--- SAVE CHANGES                                                              _12
+-- SAVE CHANGES                                                              _11
 --------------------------------------------------------------------------------
 function M.save_changes()
     local current_ft = vim.o.filetype
@@ -591,7 +510,7 @@ function M.save_changes()
 end
 
 
--- QUIT (never quit)                                                         _13
+-- QUIT (never quit)                                                         _12
 --------------------------------------------------------------------------------
 function M.quit_session()
     -- Save session if nvim was launched via session file

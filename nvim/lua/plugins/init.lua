@@ -20,6 +20,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "romgrk/barbar.nvim",
+        version = "^1.0.0",
         dependencies = "nvim-tree/nvim-web-devicons",
         event = function()
             -- Restore tab order via session file if present
@@ -37,6 +38,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "catppuccin/nvim",
+        version = "^2.0.0",
         name = "catppuccin",
         lazy = false,
         priority = 1000,
@@ -47,6 +49,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "hrsh7th/nvim-cmp",
+        version = "^0.0.0",
         event = "InsertEnter",
         dependencies = {
             "hrsh7th/cmp-buffer",                    -- Text in buffer
@@ -77,6 +80,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "monaqa/dial.nvim",
+        version = "^0.0.0",
         keys = require("plugin-configs.dial").keys,
         config = require("plugin-configs.dial").config,
     },
@@ -94,6 +98,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "williamboman/mason.nvim",
+        version = "^2.0.0",
         lazy = false,  -- Can't lazy load or lsp won't autostart (nvim v0.12)
         config = require("plugin-configs.mason").config,
     },
@@ -119,6 +124,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "folke/snacks.nvim",
+        version = "^2.0.0",
         priority = 1000,
         lazy = false,
         opts = require("plugin-configs.snacks").opts,
@@ -130,7 +136,7 @@ return {
     ----------------------------------------------------------------------------
     {
         "kylechui/nvim-surround",
-        version = "*",  -- Use for stability. Use 'main' branch for latest features
+        version = "^4.0.0",
         keys = require("plugin-configs.surround").keys,
         config = require("plugin-configs.surround").config,
     },
@@ -143,13 +149,3 @@ return {
         build = ":TSUpdate",
     },
 }
-
-    -- WHICH KEY
-    ----------------------------------------------------------------------------
-    -- {
-    --     "folke/which-key.nvim",
-    --     enabled = false,
-    --     event = "VeryLazy",
-    --     opts = {},
-    -- }
-

@@ -126,25 +126,25 @@ M.opts = {
             -- Result list window
             list = {
                 keys = {
-                    ["i"]     = "list_up",
-                    ["k"]     = "list_down",
-                    ["t"]     = "explorer_close",  -- Collapse dir
-                    ["l"]     = "confirm",
-                    ["T"]     = "explorer_close_all",
-                    ["I"]     = "toggle_ignored",
-                    ["H"]     = "toggle_hidden",
-                    [","]     = "explorer_up",     -- "cd" into parent dir
-                    ["."]     = "explorer_focus",  -- "cd" into dir
-                    ["n"]     = "explorer_add",
-                    ["R"]     = "explorer_del",
-                    ["r"]     = "explorer_rename",
-                    ["x"]     = { "explorer_yank", mode = { "n", "x" } },
-                    ["c"]     = "explorer_copy",
-                    ["v"]     = "explorer_paste",
-                    ["P"]     = "toggle_preview",
-                    ["m"]     = "explorer_move",
-                    ["/"]     = "focus_input",
-                    ["<A-g>"] = "picker_grep",
+                    ["i"]         = "list_up",
+                    ["k"]         = "list_down",
+                    ["t"]         = "explorer_close",  -- Collapse dir
+                    ["l"]         = "confirm",
+                    ["T"]         = "explorer_close_all",
+                    ["I"]         = "toggle_ignored",
+                    ["H"]         = "toggle_hidden",
+                    [","]         = "explorer_up",     -- "cd" into parent dir
+                    ["."]         = "explorer_focus",  -- "cd" into dir
+                    ["n"]         = "explorer_add",
+                    ["R"]         = "explorer_del",
+                    ["r"]         = "explorer_rename",
+                    ["x"]         = { "explorer_yank", mode = { "n", "x" } },
+                    ["c"]         = "explorer_copy",
+                    ["v"]         = "explorer_paste",
+                    ["P"]         = "toggle_preview",
+                    ["m"]         = "explorer_move",
+                    ["/"]         = "focus_input",
+                    ["<Leader>g"] = "picker_grep",
 
                     -- Unset default bindings
                     ["<Leader>/"] = false,  -- "picker_grep",
@@ -166,24 +166,13 @@ M.opts = {
     }
 }
 
-
--- LEADER
---
--- Prime available real estate
--- ---------------------------
--- d ?
--- esc ?
--- v
--- k
--- m
--- u
--- _
--- -
-
-
 -- KEYS
 --------------------------------------------------------------------------------
 M.keys = {
+
+    -- Prime binding real estate
+    -- --------------------------
+    -- Leader: v k m u p _ -
 
     -- Top Pickers & Explorer
     { desc = " File Explorer",   "<Leader>e",       function() Snacks.explorer() end },
@@ -218,13 +207,13 @@ M.keys = {
     { desc = " Jumps",                "<Leader>sj", function() Snacks.picker.jumps() end },
     { desc = " Commands",             "<Leader>sc", function() Snacks.picker.commands() end },
     { desc = " Color[s]chemes",       "<Leader>ss", function() Snacks.picker.colorschemes() end },
-    { desc = " Quickfix List",        "<Leader>sq", function() Snacks.picker.qflist() end },
     { desc = " Help Pages",           "<Leader>sh", function() Snacks.picker.help() end },
+    { desc = " Man Pages",            "<Leader>sm", function() Snacks.picker.man() end },
+    { desc = " Quickfix List",        "<Leader>sq", function() Snacks.picker.qflist() end },
     { desc = " Highlights",           "<Leader>sH", function() Snacks.picker.highlights() end },
     { desc = " Autocmds",             "<Leader>sa", function() Snacks.picker.autocmds() end },
     { desc = " Diagnostics",          "<Leader>sd", function() Snacks.picker.diagnostics() end },
     { desc = " B[u]ffer Diagnostics", "<Leader>su", function() Snacks.picker.diagnostics_buffer() end },
-    { desc = " Man Pages",            "<Leader>sm", function() Snacks.picker.man() end },
     { desc = " Search Plugin Specs",  "<Leader>sp", function() Snacks.picker.lazy() end },
 
     -- LSP

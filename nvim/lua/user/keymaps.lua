@@ -102,12 +102,12 @@ nvmap("<S-Esc>", "I", { desc = ' Insert mode at line start' })
 
 -- VISUAL MODE                                                               _02
 --------------------------------------------------------------------------------
-nvmap("s", "v",                    { desc = ' Visual mode' })
-nxmap("S", "V",                    { desc = ' Visual line mode' })
-nxmap("F", "<C-v>",                { desc = ' Visual block mode' })
-nxmap("H", "mzgv",                 { desc = ' Restore visual selection' })
-vmap("a",  "o",                    { desc = ' Swap point and mark' })
-vmap("A",  km.swap_point_and_mark, { desc = ' Swap point and mark' })
+nvmap("s", "v",     { desc = ' Visual mode' })
+nvmap("S", "V",     { desc = ' Visual line mode' })
+nxmap("F", "<C-v>", { desc = ' Visual block mode' })
+nxmap("H", "mzgv",  { desc = ' Restore visual selection' })
+vmap("a",  "o",     { desc = ' Swap point and mark' })
+vmap("A",  "O",     { desc = ' Swap point and mark' })
 
 
 -- COMMAND LINE MODE                                                         _03

@@ -7,6 +7,17 @@
 
 local M = {}
 
+-- EVENT
+--------------------------------------------------------------------------------
+function M.event()
+    -- Restore tab order via session file if present
+    if vim.tbl_contains(vim.v.argv, "-S") then
+        return "SessionLoadPost"
+    else
+        return "VeryLazy"
+    end
+end
+
 -- KEYS
 --------------------------------------------------------------------------------
 M.keys = {

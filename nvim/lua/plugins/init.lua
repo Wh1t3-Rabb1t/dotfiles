@@ -22,14 +22,7 @@ return {
         "romgrk/barbar.nvim",
         version = "^1.0.0",
         dependencies = "nvim-tree/nvim-web-devicons",
-        event = function()
-            -- Restore tab order via session file if present
-            if vim.tbl_contains(vim.v.argv, "-S") then
-                return "SessionLoadPost"
-            else
-                return "VeryLazy"
-            end
-        end,
+        event = require("plugin-configs.barbar").event,
         keys = require("plugin-configs.barbar").keys,
         config = require("plugin-configs.barbar").config,
     },
@@ -61,14 +54,16 @@ return {
             "onsails/lspkind.nvim",                  -- vs-code like pictograms
             "saadparwaiz1/cmp_luasnip",              -- Luasnip cmp source
             {
-                "L3MON4D3/LuaSnip",                  -- Snippet engine
+                -- Snippet engine
+                "L3MON4D3/LuaSnip",
                 dependencies = {
                     "rafamadriz/friendly-snippets",  -- Friendly snippets
                     "hrsh7th/cmp-nvim-lua",          -- Nvim lua api
                 }
             },
             {
-                "hrsh7th/cmp-cmdline",               -- Command line completion
+                -- Command line completion
+                "hrsh7th/cmp-cmdline",
                 keys = require("plugin-configs.cmp").cmd_line_keys,
                 config = require("plugin-configs.cmp").cmd_line_config,
             }

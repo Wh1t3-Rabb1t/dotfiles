@@ -362,9 +362,10 @@ vmap("<Leader>d", "<C-v>VyPgv", { desc = ' Duplicate selection below' })
 
 -- OPEN / JOIN LINES                                                         _21
 --------------------------------------------------------------------------------
-nmap("<CR>",   "o<Space><BS><Esc>l", { desc = ' New line below' })
-nmap("<S-CR>", "O<Space><BS><Esc>l", { desc = ' New line above' })
-nvmap("j",     "J",                  { desc = ' Join lines' })
+-- `<C-o>` sends a single normal mode cmd then returns back to insert
+nmap("<CR>",   "o<C-o>mz<Esc>`z", { desc = ' New line below' })
+nmap("<S-CR>", "O<C-o>mz<Esc>`z", { desc = ' New line above' })
+nvmap("j",     "J",               { desc = ' Join lines' })
 
 
 -- `f` and `/` SEARCH                                                        _22

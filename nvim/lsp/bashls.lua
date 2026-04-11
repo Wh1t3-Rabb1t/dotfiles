@@ -1,4 +1,11 @@
 return {
-    cmd = { 'bash-language-server', 'start' },
-    filetypes = { 'bash', 'sh', 'zsh' },
+    cmd = {
+        'bash-language-server',
+        'start'
+    },
+    filetypes = {
+        'bash',
+        'sh',
+        'zsh'
+    }
 }

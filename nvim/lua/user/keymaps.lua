@@ -178,8 +178,8 @@ nvmap("D", "mz}", { desc = ' Jump block down' })
 --------------------------------------------------------------------------------
 nvmap("<PageUp>",     "<C-u>zz", { desc = ' Page up' })
 nvmap("<PageDown>",   "<C-d>zz", { desc = ' Page down' })
-nvmap("<S-PageUp>",   "mzgg",    { desc = ' Page top' })
-nvmap("<S-PageDown>", "mzG",     { desc = ' Page bottom' })
+nvmap("gg",           "mzgg",    { desc = ' Page top' })
+nvmap("G",            "mzG",     { desc = ' Page bottom' })
 
 
 -- DELETE BINDINGS (all deletions are sent to the black hole register)       _11

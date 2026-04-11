@@ -1,10 +1,13 @@
 return {
-    cmd = { "emmet-language-server", "--stdio" },
+    cmd = {
+        'emmet-language-server',
+        '--stdio'
+    },
     filetypes = {
-        "html",
-        "css",
-        "scss",
-        "javascriptreact",
-        "typescriptreact",
+        'html',
+        'css',
+        'scss',
+        'javascriptreact',
+        'typescriptreact',
     }
 }

@@ -187,8 +187,7 @@ M.keys = {
 
     -- Top Pickers & Explorer
     { desc = " File Explorer",   "<Leader>e",       function() Snacks.explorer() end },
-    { desc = " Keymaps",         "<Leader>k",               function() Snacks.picker.keymaps() end },
-    -- { desc = " Keymaps",         "g",               function() Snacks.picker.keymaps() end },
+    { desc = " Keymaps",         "gk",              function() Snacks.picker.keymaps() end },
     { desc = " Buffers",         "<Leader>b",       function() Snacks.picker.buffers() end },
     { desc = " Find Files",      "<Leader>f",       function() Snacks.picker.files() end },
     { desc = " Registers",       "<Leader>r",       function() Snacks.picker.registers() end },

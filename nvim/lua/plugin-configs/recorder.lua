@@ -21,6 +21,7 @@ function M.config()
     local status_ok = pcall(require, "recorder")
     if not status_ok then return end
 
+    -- Setup
     require("recorder").setup({
         mapping = {
             startStopRecording = "q",

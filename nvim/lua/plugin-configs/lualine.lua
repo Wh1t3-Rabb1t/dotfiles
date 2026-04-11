@@ -83,7 +83,7 @@ function M.config()
         }
     }
 
-    -- SETUP
+    -- Setup
     require("lualine").setup({
         options = {
             theme = lualine_theme,
@@ -103,7 +103,7 @@ function M.config()
             }
         },
 
-        -- STATUS LINE
+        -- Status line
         sections = {
             lualine_a = {},
             lualine_b = { icons.get_vim_mode },
@@ -145,7 +145,7 @@ function M.config()
             lualine_z = {},
         },
 
-        -- FOCUSED WINDOW
+        -- Focused window
         winbar = {
             lualine_a = { icons.vim_logo },
             lualine_b = {},
@@ -162,7 +162,7 @@ function M.config()
             lualine_z = {},
         },
 
-        -- UNFOCUSED WINDOW
+        -- Unfocused window
         inactive_winbar = {
             lualine_a = {},
             lualine_b = {},

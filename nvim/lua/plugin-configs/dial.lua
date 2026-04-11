@@ -12,33 +12,25 @@ local M = {}
 M.keys = {
     {
         "C",
-        function()
-            require("dial.map").manipulate("increment", "normal")
-        end,
+        function() require("dial.map").manipulate("increment", "normal") end,
         mode = { "n" },
         desc = " Dial increment",
     },
     {
         "X",
-        function()
-            require("dial.map").manipulate("decrement", "normal")
-        end,
+        function() require("dial.map").manipulate("decrement", "normal") end,
         mode = { "n" },
         desc = " Dial decrement",
     },
     {
         "C",
-        function()
-            require("dial.map").manipulate("increment", "visual")
-        end,
+        function() require("dial.map").manipulate("increment", "visual") end,
         mode = { "v" },
         desc = " Dial increment",
     },
     {
         "X",
-        function()
-            require("dial.map").manipulate("decrement", "visual")
-        end,
+        function() require("dial.map").manipulate("decrement", "visual") end,
         mode = { "v" },
         desc = " Dial decrement",
     }

@@ -24,11 +24,9 @@ M.keys = {
     -- Navigate tabs
     {
         "<C-PageDown>",
+        -- Prevent bug when tab switching with a single help page open
         function()
-            -- Prevent bug when tab switching with a single help page open
-            if vim.bo.filetype ~= "help" then
-                vim.cmd("BufferNext")
-            end
+            if vim.bo.filetype ~= "help" then vim.cmd("BufferNext") end
         end,
         mode = { "n" },
         desc = " Next tab",
@@ -36,9 +34,7 @@ M.keys = {
     {
         "<C-PageUp>",
         function()
-            if vim.bo.filetype ~= "help" then
-                vim.cmd("BufferPrevious")
-            end
+            if vim.bo.filetype ~= "help" then vim.cmd("BufferPrevious") end
         end,
         mode = { "n" },
         desc = " Previous tab",
@@ -47,17 +43,13 @@ M.keys = {
     -- Reorder tabs
     {
         "<C-S-PageDown>",
-        function()
-            vim.cmd("BufferMoveNext")
-        end,
+        function() vim.cmd("BufferMoveNext") end,
         mode = { "n" },
         desc = " Swap tab with next",
     },
     {
         "<C-S-PageUp>",
-        function()
-            vim.cmd("BufferMovePrevious")
-        end,
+        function() vim.cmd("BufferMovePrevious") end,
         mode = { "n" },
         desc = " Swap tab with previous",
     },

@@ -134,7 +134,7 @@ function M.cmd_line_config()
     })
 end
 
--- CMP CONFIG
+-- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
     local status_ok = pcall(require, "cmp")

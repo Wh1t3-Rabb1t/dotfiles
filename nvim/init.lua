@@ -10,13 +10,9 @@
 --     Neo \  /     |__||__|           \ |
 -- ======== \/ ======================== \| =====================================
 
-
--- USER SETTINGS
---------------------------------------------------------------------------------
 require("user.auto_cmds")
 require("user.keymaps")
 require("user.options")
-
 
 -- LSP
 --------------------------------------------------------------------------------
@@ -33,7 +29,6 @@ local servers = {
 for _, server in ipairs(servers) do
     vim.lsp.enable(server)
 end
-
 
 -- LAZY
 --------------------------------------------------------------------------------
@@ -64,24 +59,12 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Setup
 require("lazy").setup({
-    -- Import your plugins
     spec = { { import = "plugins" } },
-
-    -- Lazy load plugins
-    defaults = { lazy = true },
-
-    -- Colorscheme that will be used when installing plugins
-    install = { colorscheme = { "catppuccin" } },
-
-    -- Automatically check for plugin updates
-    checker = { enabled = true },
-
-    -- Dir where you store your local plugin projects
-    dev = { path = "~/workspace/nvim-plugins" },
-
-    -- Automatically check for config file changes and reload the ui
-    change_detection = { enabled = false },
-
+    defaults = { lazy = true },                   -- Lazy load plugins
+    install = { colorscheme = { "catppuccin" } }, -- Lazy ui colorscheme
+    checker = { enabled = true },                 -- Auto check for updates
+    dev = { path = "~/workspace/nvim-plugins" },  -- Plugin development dir
+    change_detection = { enabled = false },       -- Hot reload on config change
     performance = {
         rtp = {
             -- Don't disable "man" for use of the MANPAGER from zsh

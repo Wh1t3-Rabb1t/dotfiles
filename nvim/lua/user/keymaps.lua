@@ -362,15 +362,14 @@ vmap("<Leader>d", "<C-v>VyPgv", { desc = ' Duplicate selection below' })
 
 -- OPEN / JOIN LINES                                                         _21
 --------------------------------------------------------------------------------
-nmap("<CR>",   "o<Space><Esc>", { desc = ' New line below' })
-nmap("<S-CR>", "O<Space><Esc>", { desc = ' New line above' })
-nvmap("j",     "J",             { desc = ' Join lines' })
+nmap("<CR>",   "o<Space><BS><Esc>l", { desc = ' New line below' })
+nmap("<S-CR>", "O<Space><BS><Esc>l", { desc = ' New line above' })
+nvmap("j",     "J",                  { desc = ' Join lines' })
 
 
 -- `f` and `/` SEARCH                                                        _22
 --------------------------------------------------------------------------------
 nvmap("h", ",",                 { desc = ' Prev f search result' })
-nvmap(";", ";",                 { desc = ' Prev f search result' })
 nvmap("N", "mzN",               { desc = ' Prev / search result' })
 nvmap("n", "mzn",               { desc = ' Next / search result' })
 nmap("?",  km.toggle_search_hl, { desc = ' Toggle search highlights' })

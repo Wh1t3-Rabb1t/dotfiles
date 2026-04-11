@@ -99,7 +99,7 @@ function M.config()
             refresh = { tabline = 100000 },
             disabled_filetypes = {
                 winbar = { "snacks_picker_list" },
-                statusline = { "snacks_picker_list" }
+                statusline = { "snacks_picker_list" },
             }
         },
 
@@ -155,7 +155,7 @@ function M.config()
                     file_status = true,      -- File status (readonly status, modified status)
                     newfile_status = false,  -- New file status (new means no write after created)
                     path = 1,
-                },
+                }
             },
             lualine_x = { "lsp_status" },
             lualine_y = {},
@@ -168,6 +168,11 @@ function M.config()
             lualine_b = {},
             lualine_c = {
                 {
+                    function()
+                        -- Hack to ensure 'snacks_picker_list' is ignored
+                        if vim.bo.buftype == "nofile" then return "" end
+                        return vim.fn.expand("%:t")
+                    end,
                     "filename",
                     file_status = true,
                     newfile_status = false,

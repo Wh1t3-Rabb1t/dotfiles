@@ -10,11 +10,6 @@
 --     Neo \  /     |__||__|           \ |
 -- ======== \/ ======================== \| =====================================
 
--- See:
---   https://dotfyle.com/neovim/configurations/top
---   https://thevaluable.dev/vim-runtime-guide-example/
---   https://dev.to/vonheikemen/lazynvim-how-to-revert-a-plugin-back-to-a-previous-version-1pdp
-
 
 -- USER SETTINGS
 --------------------------------------------------------------------------------

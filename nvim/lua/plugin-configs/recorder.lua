@@ -11,23 +11,25 @@ local M = {}
 --------------------------------------------------------------------------------
 M.keys = {
     -- These must match the keys in the mapping config below
-    { "Q", desc = " Start Recording" },
-    { "q", desc = " Play Recording" },
+    { "q", desc = " Start Recording" },
+    { "Q", desc = " Play Recording" },
 }
 
 -- CONFIG
 --------------------------------------------------------------------------------
 function M.config()
+    local status_ok = pcall(require, "recorder")
+    if not status_ok then return end
+
     require("recorder").setup({
         mapping = {
-            startStopRecording = "Q",
-            playMacro = "q",
+            startStopRecording = "q",
+            playMacro = "Q",
             switchSlot = "<Leader>;<C-q>",
             editMacro = "<Leader>;cq",
             deleteAllMacros = "<Leader>;dq",
             yankMacro = "<Leader>;yq",
             -- !! This should be a string you don't use in insert mode during a macro
-            -- addBreakPoint = "##",
             addBreakPoint = "z#z#z#",
         },
         clear = false,  -- Clears all macros-slots on startup

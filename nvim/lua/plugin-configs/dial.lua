@@ -11,40 +11,36 @@ local M = {}
 --------------------------------------------------------------------------------
 M.keys = {
     {
-
-        mode = { "n" },
         "C",
         function()
             require("dial.map").manipulate("increment", "normal")
         end,
-        desc = " Dial increment"
+        mode = { "n" },
+        desc = " Dial increment",
     },
     {
-
-        mode = { "n" },
         "X",
         function()
             require("dial.map").manipulate("decrement", "normal")
         end,
-        desc = " Dial decrement"
+        mode = { "n" },
+        desc = " Dial decrement",
     },
     {
-
-        mode = { "v" },
         "C",
         function()
             require("dial.map").manipulate("increment", "visual")
         end,
-        desc = " Dial increment"
+        mode = { "v" },
+        desc = " Dial increment",
     },
     {
-
-        mode = { "v" },
         "X",
         function()
             require("dial.map").manipulate("decrement", "visual")
         end,
-        desc = " Dial decrement"
+        mode = { "v" },
+        desc = " Dial decrement",
     }
 }
 
@@ -121,54 +117,22 @@ function M.config()
                 cyclic = true,
             }),
             augend.constant.new({
-                elements = {
-                    "mon",
-                    "tue",
-                    "wed",
-                    "thu",
-                    "fri",
-                    "sat",
-                    "sun"
-                },
+                elements = { "mon", "tue", "wed", "thu", "fri", "sat", "sun" },
                 word = true,
                 cyclic = true,
             }),
             augend.constant.new({
-                elements = {
-                    "Mon",
-                    "Tue",
-                    "Wed",
-                    "Thu",
-                    "Fri",
-                    "Sat",
-                    "Sun"
-                },
+                elements = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" },
                 word = true,
                 cyclic = true,
             }),
             augend.constant.new({
-                elements = {
-                    "monday",
-                    "tuesday",
-                    "wednesday",
-                    "thursday",
-                    "friday",
-                    "saturday",
-                    "sunday"
-                },
+                elements = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" },
                 word = true,
                 cyclic = true,
             }),
             augend.constant.new({
-                elements = {
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                    "Sunday"
-                },
+                elements = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" },
                 word = true,
                 cyclic = true,
             })

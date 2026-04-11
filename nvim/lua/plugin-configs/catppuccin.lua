@@ -17,26 +17,19 @@ function M.config()
     local hl = require("catppuccin.palettes").get_palette()  -- https://catppuccin.com/palette
     require("catppuccin").setup({
         compile_path = vim.fn.stdpath "cache" .. "/catppuccin",
-        flavour = "mocha",  -- latte, frappe, macchiato, mocha
+        flavour = "mocha",  -- (latte,frappe,macchiato,mocha)
         background = {
             light = "macchiato",
             dark = "mocha",
         },
-        transparent_background = false,  -- Disable setting the bg color
-        show_end_of_buffer = false,      -- Show '~' characters at EOF
-        term_colors = false,             -- Set term colors (e.g. `g:terminal_color_0`)
-        no_italic = false,
-        no_bold = false,
-        no_underline = false,
+        transparent_background = false,
         dim_inactive = { enabled = false },
         styles = {
             conditionals = { "italic" },
             comments = { "bold" },
             loops = { "italic" },
         },
-        color_overrides = {},
         custom_highlights = {
-
             -- Barbar
             BufferScrollArrow = { fg = hl.yellow },     -- Scroll arrow
             BufferCurrent = { fg = hl.text },           -- Tab contents

@@ -25,7 +25,6 @@ function M.config()
                 -- Don't add pairs in javascript template_string treesitter nodes
                 "template_string"
             }
-            -- java = false,  -- Don't check treesitter on java
         }
     })
 

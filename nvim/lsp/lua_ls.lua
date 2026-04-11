@@ -1,11 +1,12 @@
+-- Server name:    'lua_ls'
+-- Mason pkg name: 'lua-language-server'
 return {
     cmd = { 'lua-language-server' },
     filetypes = { 'lua' },
-    -- Root markers tell Neovim where the project "starts"
-    root_markers = {
+    root_markers = {  -- Root markers tell Neovim where the project "starts"
         '.luarc.json',
         '.luarc.jsonc',
-        '.git'
+        '.git',
     },
     settings = {
         Lua = {

@@ -1,11 +1,13 @@
+-- Server name:    'jsonls'
+-- Mason pkg name: 'vscode-json-language-server'
 return {
     cmd = {
         'vscode-json-language-server',
-        '--stdio'
+        '--stdio',
     },
     filetypes = {
         'json',
-        'jsonc'
+        'jsonc',
     },
     settings = {
         json = {

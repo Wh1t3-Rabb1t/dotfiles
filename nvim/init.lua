@@ -12,7 +12,6 @@
 
 -- See:
 --   https://dotfyle.com/neovim/configurations/top
---   https://dotfyle.com/neovim/configurations/top?page=1&plugins=hrsh7th%2Fnvim-cmp
 --   https://thevaluable.dev/vim-runtime-guide-example/
 --   https://dev.to/vonheikemen/lazynvim-how-to-revert-a-plugin-back-to-a-previous-version-1pdp
 
@@ -24,7 +23,7 @@ require("user.keymaps")
 require("user.options")
 
 
--- LSP SETUP
+-- LSP
 --------------------------------------------------------------------------------
 local servers = {
     "lua_ls",
@@ -41,9 +40,11 @@ for _, server in ipairs(servers) do
 end
 
 
--- BOOTSTRAP LAZY
+-- LAZY
 --------------------------------------------------------------------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+-- Bootstrap
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
     local lazyrepo = "https://github.com/folke/lazy.nvim.git"
     local out = vim.fn.system({
@@ -66,9 +67,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-
--- SETUP LAZY
---------------------------------------------------------------------------------
+-- Setup
 require("lazy").setup({
     -- Import your plugins
     spec = { { import = "plugins" } },

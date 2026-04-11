@@ -1,7 +1,9 @@
+-- Server name:    'emmet_ls'
+-- Mason pkg name: 'emmet-language-server'
 return {
     cmd = {
         'emmet-language-server',
-        '--stdio'
+        '--stdio',
     },
     filetypes = {
         'html',

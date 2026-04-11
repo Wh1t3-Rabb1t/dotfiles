@@ -13,134 +13,134 @@ M.keys = {
 
     -- Change
     {                                     -- ''
-        mode = { "n" },
         "<Leader>'",
         "<Plug>(nvim-surround-change)'",
-        desc = " Change surrounding ''"
+        mode = { "n" },
+        desc = " Change surrounding ''",
     },
     {                                     -- ""
-        mode = { "n" },
         '<Leader>"',
         '<Plug>(nvim-surround-change)"',
-        desc = ' Change surrounding ""'
+        mode = { "n" },
+        desc = ' Change surrounding ""',
     },
     {                                     -- ``
-        mode = { "n" },
         "<Leader>`",
         "<Plug>(nvim-surround-change)`",
-        desc = " Change surrounding ``"
+        mode = { "n" },
+        desc = " Change surrounding ``",
     },
     {                                     -- {}
-        mode = { "n" },
         "<Leader>{",
         "<Plug>(nvim-surround-change){",
-        desc = " Change surrounding {}"
+        mode = { "n" },
+        desc = " Change surrounding {}",
     },
     {                                     -- ()
-        mode = { "n" },
         "<Leader>(",
         "<Plug>(nvim-surround-change)(",
-        desc = " Change surrounding ()"
+        mode = { "n" },
+        desc = " Change surrounding ()",
     },
     {                                     -- []
-        mode = { "n" },
         "<Leader>[",
         "<Plug>(nvim-surround-change)[",
-        desc = " Change surrounding []"
+        mode = { "n" },
+        desc = " Change surrounding []",
     },
     {                                     -- <>
-        mode = { "n" },
         "<Leader><",
         "<Plug>(nvim-surround-change)<",
-        desc = " Change surrounding <>"
+        mode = { "n" },
+        desc = " Change surrounding <>",
     },
 
     -- Delete
     {                                     -- ''
-        mode = { "n" },
         "<Leader>''",
         "<Plug>(nvim-surround-delete)'",
-        desc = " Delete surrounding ''"
+        mode = { "n" },
+        desc = " Delete surrounding ''",
     },
     {                                     -- ""
-        mode = { "n" },
         '<Leader>""',
         '<Plug>(nvim-surround-delete)"',
-        desc = ' Delete surrounding ""'
+        mode = { "n" },
+        desc = ' Delete surrounding ""',
     },
     {                                     -- ``
-        mode = { "n" },
         "<Leader>``",
         "<Plug>(nvim-surround-delete)`",
-        desc = " Delete surrounding ``"
+        mode = { "n" },
+        desc = " Delete surrounding ``",
     },
     {                                     -- {}
-        mode = { "n" },
         "<Leader>{{",
         "<Plug>(nvim-surround-delete){",
-        desc = " Delete surrounding {}"
+        mode = { "n" },
+        desc = " Delete surrounding {}",
     },
     {                                     -- ()
-        mode = { "n" },
         "<Leader>((",
         "<Plug>(nvim-surround-delete)(",
-        desc = " Delete surrounding ()"
+        mode = { "n" },
+        desc = " Delete surrounding ()",
     },
     {                                     -- []
-        mode = { "n" },
         "<Leader>[[",
         "<Plug>(nvim-surround-delete)[",
-        desc = " Delete surrounding []"
+        mode = { "n" },
+        desc = " Delete surrounding []",
     },
     {                                     -- <>
-        mode = { "n" },
         "<Leader><<",
         "<Plug>(nvim-surround-delete)<",
-        desc = " Delete surrounding <>"
+        mode = { "n" },
+        desc = " Delete surrounding <>",
     },
 
     -- Add (visual mode)
     {                                     -- ''
-        mode = { "v" },
         "'",
         "<Plug>(nvim-surround-visual)'",
-        desc = " Add surrounding ''"
+        mode = { "v" },
+        desc = " Add surrounding ''",
     },
     {                                     -- ""
-        mode = { "v" },
         '"',
         '<Plug>(nvim-surround-visual)"',
-        desc = ' Add surrounding ""'
+        mode = { "v" },
+        desc = ' Add surrounding ""',
     },
     {                                     -- ``
-        mode = { "v" },
         "`",
         "<Plug>(nvim-surround-visual)`",
-        desc = " Add surrounding ``"
+        mode = { "v" },
+        desc = " Add surrounding ``",
     },
     {                                     -- {}
-        mode = { "v" },
         "{",
         "<Plug>(nvim-surround-visual){",
-        desc = " Add surrounding {}"
+        mode = { "v" },
+        desc = " Add surrounding {}",
     },
     {                                     -- ()
-        mode = { "v" },
         "(",
         "<Plug>(nvim-surround-visual)(",
-        desc = " Add surrounding ()"
+        mode = { "v" },
+        desc = " Add surrounding ()",
     },
     {                                     -- []
-        mode = { "v" },
         "[",
         "<Plug>(nvim-surround-visual)[",
-        desc = " Add surrounding []"
+        mode = { "v" },
+        desc = " Add surrounding []",
     },
     {                                     -- <>
-        mode = { "v" },
         "<",
         "<Plug>(nvim-surround-visual)<",
-        desc = " Add surrounding <>"
+        mode = { "v" },
+        desc = " Add surrounding <>",
     }
 }
 
@@ -154,26 +154,11 @@ function M.config()
     require("nvim-surround").setup({
         -- Wrap content without adding spaces
         surrounds = {
-            ["{"] = {
-                add = { "{", "}" }
-            },
-            ["("] = {
-                add = { "(", ")" }
-            },
-            ["["] = {
-                add = { "[", "]" }
-            },
-            ["<"] = {
-                add = { "<", ">" }
-            }
+            ["{"] = { add = { "{", "}" } },
+            ["("] = { add = { "(", ")" } },
+            ["["] = { add = { "[", "]" } },
+            ["<"] = { add = { "<", ">" } },
         }
-    })
-
-    vim.keymap.set("n", "zd", "<Plug>(nvim-surround-delete)", {
-        desc = "Delete a surrounding pair",
-    })
-    vim.keymap.set("n", "zr", "<Plug>(nvim-surround-change)", {
-        desc = "Change a surrounding pair",
     })
 
     -- Prevent plugin from setting up bindings

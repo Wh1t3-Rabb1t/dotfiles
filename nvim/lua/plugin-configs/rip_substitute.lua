@@ -11,7 +11,6 @@ local M = {}
 --------------------------------------------------------------------------------
 M.keys = {
     {
-        desc = " Rip substitute",
         "<A-r>",
         function()
             -- Begin a vim substitute command if quickfix is focused
@@ -22,9 +21,9 @@ M.keys = {
             end
         end,
         mode = { "n", "x" },
+        desc = " Rip substitute",
     }
 }
-
 
 -- CONFIG
 --------------------------------------------------------------------------------
@@ -36,7 +35,7 @@ function M.config()
     require("rip-substitute").setup {
         popupWin = {
             title = "Rip-Substitute",
-            position = "top",  -- (top|bottom)
+            position = "top",  -- (top,bottom)
         },
         prefill = {
             visual = "selectionFirstLine",  -- Cannot be false

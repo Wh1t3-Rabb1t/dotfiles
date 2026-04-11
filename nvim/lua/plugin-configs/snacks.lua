@@ -13,6 +13,7 @@ M.keys = {
     -- Prime binding real estate
     -- --------------------------
     -- Leader: v k m u p _ -
+    -- g: t l i m n o u
 
     -- Top Pickers & Explorer
     { desc = " File Explorer",   "<Leader>e",       function() Snacks.explorer() end },
@@ -136,7 +137,7 @@ M.opts = {
     picker = {
         prompt = " ",
         finder = "explorer",
-        focus = "input",    -- (input|list)
+        focus = "input",    -- (input,list)
         auto_close = true,  -- 'true' is required to prevent window hanging on select
         jump = { close = true },
 

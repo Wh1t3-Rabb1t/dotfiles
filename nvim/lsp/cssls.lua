@@ -1,11 +1,13 @@
+-- Server name:    'cssls'
+-- Mason pkg name: 'vscode-css-language-server'
 return {
     cmd = {
         'vscode-css-language-server',
-        '--stdio'
+        '--stdio',
     },
     filetypes = {
         'css',
-        'scss'
+        'scss',
     },
     settings = {
         css = { validate = true },

@@ -1,11 +1,13 @@
+-- Server name:    'bashls'
+-- Mason pkg name: 'bash-language-server'
 return {
     cmd = {
         'bash-language-server',
-        'start'
+        'start',
     },
     filetypes = {
         'bash',
         'sh',
-        'zsh'
+        'zsh',
     }
 }

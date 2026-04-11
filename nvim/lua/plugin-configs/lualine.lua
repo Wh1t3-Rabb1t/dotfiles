@@ -29,7 +29,6 @@ function M.config()
         diff_modified = " ",
         modified = function() return "●" end,
         vim_logo = function() return "" end,
-        grapple_icon = function() return "󰛢" end,
         get_vim_mode = function()
             local vim_mode = vim.fn.mode()
             local mode_icon = {
@@ -51,43 +50,42 @@ function M.config()
     }
 
     -- Color overrides
-    local colors = require("catppuccin.palettes").get_palette()
+    local hl = require("catppuccin.palettes").get_palette()
     local lualine_theme = require("lualine.themes.powerline_dark")
     lualine_theme = {
         normal = {
-            a = { fg = colors.crust, bg = colors.sky },
-            b = { fg = colors.crust, bg = colors.sky },
-            c = { fg = colors.peach, bg = colors.surface1 },
+            a = { fg = hl.crust, bg = hl.sky },
+            b = { fg = hl.crust, bg = hl.sky },
+            c = { fg = hl.peach, bg = hl.surface1 },
         },
         insert = {
-            a = { fg = colors.crust, bg = colors.sky },
-            b = { fg = colors.sky, bg = colors.surface1 },
-            c = { fg = colors.peach, bg = colors.crust, gui = "italic" },
+            a = { fg = hl.crust, bg = hl.sky },
+            b = { fg = hl.sky, bg = hl.surface1 },
+            c = { fg = hl.peach, bg = hl.crust, gui = "italic" },
         },
         visual = {
-            a = { fg = colors.crust, bg = colors.sky },
-            b = { fg = colors.sky, bg = "#125ef4" },
-            c = { fg = colors.peach, bg = "#06338d", gui = "italic" },
+            a = { fg = hl.crust, bg = hl.sky },
+            b = { fg = hl.sky, bg = "#125ef4" },
+            c = { fg = hl.peach, bg = "#06338d", gui = "italic" },
         },
         replace = {
-            a = { fg = colors.crust, bg = colors.sky },
-            b = { fg = colors.crust, bg = "#8d0a26" },
-            c = { fg = colors.peach, bg = colors.crust },
+            a = { fg = hl.crust, bg = hl.sky },
+            b = { fg = hl.crust, bg = "#8d0a26" },
+            c = { fg = hl.peach, bg = hl.crust },
         },
         command = {
-            a = { fg = colors.crust, bg = colors.sky },
-            b = { fg = colors.sky, bg = "#d20f39" },
-            c = { fg = colors.peach, bg = "#4d0615" },
+            a = { fg = hl.crust, bg = hl.sky },
+            b = { fg = hl.sky, bg = "#d20f39" },
+            c = { fg = hl.peach, bg = "#4d0615" },
         },
         inactive = {
-            c = { fg = colors.surface2, bg = colors.mantle, gui = "italic" },
+            c = { fg = hl.surface2, bg = hl.mantle, gui = "italic" },
         }
     }
 
     -- SETUP
     require("lualine").setup({
         options = {
-            icons_enabled = true,
             theme = lualine_theme,
             component_separators = {
                 left = icons.component_separator_left,
@@ -97,13 +95,11 @@ function M.config()
                 left = icons.section_separator_left,
                 right = icons.section_separator_right,
             },
-            always_divide_middle = true,
             globalstatus = false,
-            refresh = { tabline = 100000, },
+            refresh = { tabline = 100000 },
             disabled_filetypes = {
-                winbar = {
-                    "snacks_picker_list"
-                }
+                winbar = { "snacks_picker_list" },
+                statusline = { "snacks_picker_list" }
             }
         },
 
@@ -116,10 +112,7 @@ function M.config()
                     "location",
                     separator = "",
                     padding = 0,
-                    icon = {
-                        icons.location_icon,
-                        align="left"
-                    }
+                    icon = { icons.location_icon, align="left" }
                 },
                 "progress",
             },
@@ -158,27 +151,13 @@ function M.config()
             lualine_b = {},
             lualine_c = {
                 {
-                    -- Omit the 'symbols' field for now as it crashes neovim if
-                    -- launched without any files open.
                     "filename",
-
-                    -- Displays file status (readonly status, modified status)
-                    file_status = true,
-
-                    -- Display new file status (new means no write after created)
-                    newfile_status = false,
-
-                    -- 0: Just the filename
-                    -- 1: Relative path
-                    -- 2: Absolute path
-                    -- 3: Absolute path, with tilde as the home dir
-                    -- 4: Filename and parent dir, with tilde as the home dir
+                    file_status = true,      -- File status (readonly status, modified status)
+                    newfile_status = false,  -- New file status (new means no write after created)
                     path = 1,
                 },
             },
-            lualine_x = {
-                "lsp_status",
-            },
+            lualine_x = { "lsp_status" },
             lualine_y = {},
             lualine_z = {},
         },
@@ -198,9 +177,7 @@ function M.config()
             lualine_x = {},
             lualine_y = {},
             lualine_z = {},
-        },
-
-        extensions = {},
+        }
     })
 end
 

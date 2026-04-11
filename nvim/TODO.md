@@ -2,11 +2,6 @@
 
 ## Priority: High
 
-- Surround plugin is bugged (e.g. change surrounding with <Leader>{ etc is triggering
-  the Snacks picker etc).
-  It's caused by Snacks. Disabling Snacks stops the problem.
-  Caused by binding the keymaps picker to 'g'.
-- Re-incorporate the Rip-substitute plugin.
 - Re-incorporate the Gitsigns plugin (if Snacks doesn't replace it).
 - Tweak horizontal window navigation functions to return immediately if there
   are only 2 windows open, and one of them is 'snacks_picker_list'.

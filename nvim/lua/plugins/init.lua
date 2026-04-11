@@ -106,13 +106,19 @@ return {
         config = require("plugin-configs.recorder").config,
     },
 
+    -- RIP SUBSTITUTE
+    ----------------------------------------------------------------------------
+    {
+        "chrisgrieser/nvim-rip-substitute",
+        cmd = "RipSubstitute",
+        keys = require("plugin-configs.rip_substitute").keys,
+        config = require("plugin-configs.rip_substitute").config,
+    },
+
     -- SNACKS
     ----------------------------------------------------------------------------
     {
         "folke/snacks.nvim",
-
-        -- enabled = false,
-
         priority = 1000,
         lazy = false,
         opts = require("plugin-configs.snacks").opts,
@@ -125,14 +131,8 @@ return {
     {
         "kylechui/nvim-surround",
         version = "*",  -- Use for stability. Use 'main' branch for latest features
-
-        -- lazy = false,
-
-        event = "VeryLazy",
-
         keys = require("plugin-configs.surround").keys,
         config = require("plugin-configs.surround").config,
-        -- init = require("plugin-configs.surround").config,
     },
 
     -- TREESITTER

@@ -188,10 +188,10 @@ M.keys = {
     -- Top Pickers & Explorer
     { desc = " File Explorer",   "<Leader>e",       function() Snacks.explorer() end },
     { desc = " Keymaps",         "gk",              function() Snacks.picker.keymaps() end },
+    { desc = " Marks (pins)",    "gp",              function() Snacks.picker.marks() end },
     { desc = " Buffers",         "<Leader>b",       function() Snacks.picker.buffers() end },
     { desc = " Find Files",      "<Leader>f",       function() Snacks.picker.files() end },
     { desc = " Registers",       "<Leader>r",       function() Snacks.picker.registers() end },
-    { desc = " Marks (pins)",    "<Leader>p",       function() Snacks.picker.marks() end },
     { desc = " Command History", "<Leader>:",       function() Snacks.picker.command_history() end },
     { desc = " Search History",  "<Leader>/",       function() Snacks.picker.search_history() end },
     { desc = " Undo History",    "<Leader>y",       function() Snacks.picker.undo() end },
@@ -199,7 +199,7 @@ M.keys = {
 
     -- Grep
     { desc = " Grep",           "<Leader>g", function() Snacks.picker.grep() end },
-    { desc = " Grep selection", "<Leader>g", function() Snacks.picker.grep_word() end, mode = { "x" } },
+    { desc = " Grep Selection", "<Leader>g", function() Snacks.picker.grep_word() end, mode = { "x" } },
     { desc = " Grep Workspace", "<Leader>a", function() Snacks.picker.grep_buffers() end },
 
     -- Git

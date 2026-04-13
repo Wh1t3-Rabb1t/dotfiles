@@ -94,7 +94,7 @@ return {
     {
         "williamboman/mason.nvim",
         version = "^2.0.0",
-        lazy = false,  -- Can't lazy load or lsp won't autostart (nvim v0.12)
+        cmd = "Mason",
         config = require("plugin-configs.mason").config,
     },
 

@@ -89,6 +89,16 @@ function M.config()
                 cyclic = true,
             }),
             augend.constant.new({
+                elements = { "on", "off" },
+                word = true,
+                cyclic = true,
+            }),
+            augend.constant.new({
+                elements = { "ON", "OFF" },
+                word = true,
+                cyclic = true,
+            }),
+            augend.constant.new({
                 elements = { "horizontal", "vertical" },
                 word = true,
                 cyclic = true,

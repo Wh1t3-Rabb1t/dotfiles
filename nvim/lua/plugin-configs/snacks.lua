@@ -7,6 +7,120 @@
 
 local M = {}
 
+-- OPTS
+--------------------------------------------------------------------------------
+M.opts = {
+    -- Disabled
+    dashboard = { enabled = false },
+    bigfile = { enabled = false },
+    quickfile = { enabled = false },
+    scope = { enabled = false },
+    scroll = { enabled = false },
+    words = { enabled = false },  -- Default off, toggle on/off via keybindings
+
+    -- Enabled
+    explorer = { enabled = true },
+    notifier = { enabled = true },
+    statuscolumn = { enabled = true },
+    git = { enabled = true },
+    indent = { enabled = true },
+    input = { enabled = true },
+
+    -- WINDOW STYLES
+    -- (doc: "https://github.com/folke/snacks.nvim/blob/main/docs/styles.md")
+    styles = {
+        input = {
+            -- Escape cancels popup rather than entering normal mode
+            keys = { i_esc = { "<Esc>", "cancel", mode = "i", expr = true } }
+        }
+    },
+
+    -- PICKER CONFIG
+    -- (source: "snacks.nvim/lua/snacks/picker/config/defaults.lua")
+    picker = {
+        prompt = " ",
+        finder = "explorer",
+        focus = "input",    -- (input,list)
+        auto_close = true,  -- 'true' is required to prevent window hanging on select
+        jump = { close = true },
+
+        sources = {
+            keymaps = {
+                -- Disable preview for the 'keymaps' picker
+                layout = { preview = { enabled = false } },
+            },
+            explorer = {
+                -- Set explorer only to the right side panel
+                layout = { layout = { position = "right" } },
+            }
+        },
+
+        matcher = {
+            fuzzy = true,       -- Use fuzzy matching
+            smartcase = true,   -- Use smartcase
+            ignorecase = true,  -- Use ignorecase
+        },
+
+        win = {
+            -- Input window
+            input = {
+                keys = {
+                    -- TODO: find a good mapping for these ...
+                    ["<A-h>"]         = { "toggle_hidden",       mode = { "i", "n" } },
+                    ["<A-i>"]         = { "toggle_ignored",      mode = { "i", "n" } },
+                    -- ...
+                    ["<Esc>"]         = { "close",               mode = { "i", "n" } },
+                    ["<Tab>"]         = { "cycle_win",           mode = { "i", "n" } },
+                    ["<CR>"]          = { "confirm",             mode = { "i", "n" } },
+                    ["<Up>"]          = { "list_up",             mode = { "i", "n" } },
+                    ["<Down>"]        = { "list_down",           mode = { "i", "n" } },
+                    ["<S-Up>"]        = { "select_and_prev",     mode = { "i", "n" } },
+                    ["<S-Down>"]      = { "select_and_next",     mode = { "i", "n" } },
+                    ["<A-a>"]         = { "select_all",          mode = { "i", "n" } },
+                    ["<Page-Up>"]     = { "list_scroll_up",      mode = { "i", "n" } },
+                    ["<Page-Down>"]   = { "list_scroll_down",    mode = { "i", "n" } },
+                    ["<S-Page-Up>"]   = { "preview_scroll_up",   mode = { "i", "n" } },
+                    ["<S-Page-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
+                    ["<A-f>"]         = { "qflist",              mode = { "i", "n" } },
+                    ["<A-p>"]         = { "toggle_preview",      mode = { "i", "n" } },
+                    ["<A-r>"]         = { "toggle_regex",        mode = { "i", "n" } },
+                    ["<A-/>"]         = { "toggle_help_input",   mode = { "i", "n" } },
+
+                    -- Insert only
+                    ["<C-c>"]  = { "cancel",  mode = "i" },
+                    ["<A-BS>"] = { "<c-s-w>", mode = "i", expr = true, desc = "delete word" },
+                }
+            },
+
+            -- Result list window
+            list = {
+                keys = {
+                    ["i"]         = "list_up",
+                    ["k"]         = "list_down",
+                    ["d"]         = "list_down",
+                    ["t"]         = "explorer_close",  -- Collapse dir
+                    ["l"]         = "confirm",
+                    ["T"]         = "explorer_close_all",
+                    ["I"]         = "toggle_ignored",
+                    ["H"]         = "toggle_hidden",
+                    [","]         = "explorer_up",     -- "cd" into parent dir
+                    ["."]         = "explorer_focus",  -- "cd" into dir
+                    ["n"]         = "explorer_add",
+                    ["R"]         = "explorer_del",
+                    ["r"]         = "explorer_rename",
+                    ["x"]         = { "explorer_yank", mode = { "n", "x" } },
+                    ["c"]         = "explorer_copy",
+                    ["v"]         = "explorer_paste",
+                    ["P"]         = "toggle_preview",
+                    ["m"]         = "explorer_move",
+                    ["/"]         = "focus_input",
+                    ["<Leader>g"] = "picker_grep",
+                }
+            }
+        }
+    }
+}
+
  -- KEYS
  --------------------------------------------------------------------------------
 M.keys = {
@@ -104,165 +218,6 @@ M.keys = {
     }
 }
 
--- OPTS
---------------------------------------------------------------------------------
-M.opts = {
-    -- Disabled
-    dashboard = { enabled = false },
-    bigfile = { enabled = false },
-    quickfile = { enabled = false },
-    scope = { enabled = false },
-    scroll = { enabled = false },
-    words = { enabled = false },  -- Default off, toggle on/off via keybindings
-
-    -- Enabled
-    explorer = { enabled = true },
-    notifier = { enabled = true },
-    statuscolumn = { enabled = true },
-    git = { enabled = true },
-    indent = { enabled = true },
-    input = { enabled = true },
-
-    -- WINDOW STYLES
-    -- (doc: "https://github.com/folke/snacks.nvim/blob/main/docs/styles.md")
-    styles = {
-        input = {
-            -- Escape cancels popup rather than entering normal mode
-            keys = { i_esc = { "<Esc>", "cancel", mode = "i", expr = true } }
-        }
-    },
-
-    -- PICKER CONFIG
-    -- (source: "snacks.nvim/lua/snacks/picker/config/defaults.lua")
-    picker = {
-        prompt = " ",
-        finder = "explorer",
-        focus = "input",    -- (input,list)
-        auto_close = true,  -- 'true' is required to prevent window hanging on select
-        jump = { close = true },
-
-        sources = {
-            keymaps = {
-                -- Disable preview for the 'keymaps' picker
-                layout = { preview = { enabled = false } },
-            },
-            explorer = {
-                -- Set explorer only to the right side panel
-                layout = { layout = { position = "right" } },
-            }
-        },
-
-        matcher = {
-            fuzzy = true,       -- Use fuzzy matching
-            smartcase = true,   -- Use smartcase
-            ignorecase = true,  -- Use ignorecase
-        },
-
-        win = {
-            -- Input window
-            input = {
-                keys = {
-                    -- TODO: find a good mapping for these ...
-                    ["<A-h>"]         = { "toggle_hidden",       mode = { "i", "n" } },
-                    ["<A-i>"]         = { "toggle_ignored",      mode = { "i", "n" } },
-                    -- ...
-                    ["<Esc>"]         = { "close",               mode = { "i", "n" } },
-                    ["<Tab>"]         = { "cycle_win",           mode = { "i", "n" } },
-                    ["<CR>"]          = { "confirm",             mode = { "i", "n" } },
-                    ["<Up>"]          = { "list_up",             mode = { "i", "n" } },
-                    ["<Down>"]        = { "list_down",           mode = { "i", "n" } },
-                    ["<S-Up>"]        = { "select_and_prev",     mode = { "i", "n" } },
-                    ["<S-Down>"]      = { "select_and_next",     mode = { "i", "n" } },
-                    ["<A-a>"]         = { "select_all",          mode = { "i", "n" } },
-                    ["<Page-Up>"]     = { "list_scroll_up",      mode = { "i", "n" } },
-                    ["<Page-Down>"]   = { "list_scroll_down",    mode = { "i", "n" } },
-                    ["<S-Page-Up>"]   = { "preview_scroll_up",   mode = { "i", "n" } },
-                    ["<S-Page-Down>"] = { "preview_scroll_down", mode = { "i", "n" } },
-                    ["<A-f>"]         = { "qflist",              mode = { "i", "n" } },
-                    ["<A-p>"]         = { "toggle_preview",      mode = { "i", "n" } },
-                    ["<A-r>"]         = { "toggle_regex",        mode = { "i", "n" } },
-                    ["<A-/>"]         = { "toggle_help_input",   mode = { "i", "n" } },
-
-                    -- Insert only
-                    ["<C-c>"]  = { "cancel",  mode = "i" },
-                    ["<A-BS>"] = { "<c-s-w>", mode = "i", expr = true, desc = "delete word" },
-
-                    -- Unset default bindings
-                    ["<A-m>"]      = false,  -- { "toggle_maximize", mode = { "i", "n" } },
-                    ["<C-q>"]      = false,  -- { "qflist", mode = { "i", "n" } },
-                    ["<C-s>"]      = false,  -- { "edit_split", mode = { "i", "n" } },
-                    ["<C-v>"]      = false,  -- { "edit_vsplit", mode = { "i", "n" } },
-                    ["<C-b>"]      = false,  -- { "preview_scroll_up", mode = { "i", "n" } },
-                    ["<C-f>"]      = false,  -- { "preview_scroll_down", mode = { "i", "n" } },
-                    ["<C-u>"]      = false,  -- { "list_scroll_up", mode = { "i", "n" } },
-                    ["<C-d>"]      = false,  -- { "list_scroll_down", mode = { "i", "n" } },
-                    ["<C-Down>"]   = false,  -- { "history_forward", mode = { "i", "n" } },
-                    ["<C-Up>"]     = false,  -- { "history_back", mode = { "i", "n" } },
-                    ["<S-CR>"]     = false,  -- { { "pick_win", "jump" }, mode = { "n", "i" } },
-                    ["<C-t>"]      = false,  -- { "tab", mode = { "n", "i" } },
-                    ["<C-k>"]      = false,  -- { "list_up", mode = { "i", "n" } },
-                    ["<C-p>"]      = false,  -- { "list_up", mode = { "i", "n" } },
-                    ["<C-j>"]      = false,  -- { "list_down", mode = { "i", "n" } },
-                    ["<C-n>"]      = false,  -- { "list_down", mode = { "i", "n" } },
-                    ["<C-w>"]      = false,  -- { "<c-s-w>", mode = { "i" }, expr = true, desc = "delete word" },
-                    ["<C-r>#"]     = false,  -- { "insert_alt", mode = "i" },
-                    ["<C-r>%"]     = false,  -- { "insert_filename", mode = "i" },
-                    ["<C-r><C-a>"] = false,  -- { "insert_cWORD", mode = "i" },
-                    ["<C-r><C-f>"] = false,  -- { "insert_file", mode = "i" },
-                    ["<C-r><C-l>"] = false,  -- { "insert_line", mode = "i" },
-                    ["<C-r><C-p>"] = false,  -- { "insert_file_full", mode = "i" },
-                    ["<C-r><C-w>"] = false,  -- { "insert_cword", mode = "i" },
-                    ["<C-w>H"]     = false,  -- "layout_left",
-                    ["<C-w>J"]     = false,  -- "layout_bottom",
-                    ["<C-w>K"]     = false,  -- "layout_top",
-                    ["<C-w>L"]     = false,  -- "layout_right",
-                    ["q"]          = false,  -- "cancel",
-                }
-            },
-
-            -- Result list window
-            list = {
-                keys = {
-                    ["i"]         = "list_up",
-                    ["k"]         = "list_down",
-                    ["d"]         = "list_down",
-                    ["t"]         = "explorer_close",  -- Collapse dir
-                    ["l"]         = "confirm",
-                    ["T"]         = "explorer_close_all",
-                    ["I"]         = "toggle_ignored",
-                    ["H"]         = "toggle_hidden",
-                    [","]         = "explorer_up",     -- "cd" into parent dir
-                    ["."]         = "explorer_focus",  -- "cd" into dir
-                    ["n"]         = "explorer_add",
-                    ["R"]         = "explorer_del",
-                    ["r"]         = "explorer_rename",
-                    ["x"]         = { "explorer_yank", mode = { "n", "x" } },
-                    ["c"]         = "explorer_copy",
-                    ["v"]         = "explorer_paste",
-                    ["P"]         = "toggle_preview",
-                    ["m"]         = "explorer_move",
-                    ["/"]         = "focus_input",
-                    ["<Leader>g"] = "picker_grep",
-
-                    -- Unset default bindings
-                    ["<Leader>/"] = false,  -- "picker_grep",
-                    ["<C-c>"]     = false,  -- "tcd",
-                    ["<C-t>"]     = false,  -- "terminal",
-                    ["u"]         = false,  -- "explorer_update",
-                    ["o"]         = false,  -- "explorer_open",  -- Open with system application
-                    ["]g"]        = false,  -- "explorer_git_next",
-                    ["[g"]        = false,  -- "explorer_git_prev",
-                    ["]d"]        = false,  -- "explorer_diagnostic_next",
-                    ["[d"]        = false,  -- "explorer_diagnostic_prev",
-                    ["]w"]        = false,  -- "explorer_warn_next",
-                    ["[w"]        = false,  -- "explorer_warn_prev",
-                    ["]e"]        = false,  -- "explorer_error_next",
-                    ["[e"]        = false,  -- "explorer_error_prev",
-                }
-            }
-        }
-    }
-}
 
 -- INIT
 --------------------------------------------------------------------------------

@@ -8,19 +8,20 @@
 -- +-------+
 -- | INDEX |
 -- +-------+------------------------------
--- LEADER                              _01
--- ARROW NAVIGATION                    _01
--- COMMENTS                            _02
--- JUMP TO START / END OF WORD / LINE  _03
--- DELETE BINDINGS                     _04
--- UNDO / REDO                         _05
--- PASTE                               _06
--- `f` and `/` SEARCH                  _07
--- MARKS                               _08
--- QUICKFIX                            _09
--- WINDOW                              _10
--- SAVE CHANGES                        _11
--- QUIT                                _12
+-- LEADER                              _00
+-- VISUAL MODE                         _01
+-- ARROW NAVIGATION                    _02
+-- COMMENTS                            _03
+-- JUMP TO START / END OF WORD / LINE  _04
+-- DELETE BINDINGS                     _05
+-- UNDO / REDO                         _06
+-- PASTE                               _07
+-- `f` and `/` SEARCH                  _08
+-- MARKS                               _09
+-- QUICKFIX                            _10
+-- WINDOW                              _11
+-- SAVE CHANGES                        _12
+-- QUIT                                _13
 
 local M = {}
 
@@ -28,19 +29,60 @@ local util = require("util.utils")
 
 -- LEADER                                                                    _00
 --------------------------------------------------------------------------------
-function M.set_column_hl()    vim.cmd("set colorcolumn=80") end
-function M.rm_column_hl()     vim.cmd("set colorcolumn=''") end
-function M.v_split_layout()   vim.cmd("windo wincmd H") end
-function M.h_split_layout()   vim.cmd("windo wincmd K") end
-function M.open_lazy()        vim.cmd("Lazy") end
-function M.open_mason()       vim.cmd("Mason") end
-function M.toggle_column_hl() vim.wo.cursorcolumn = not vim.wo.cursorcolumn end
-function M.toggle_wrap()      vim.wo.wrap = not vim.wo.wrap end
-function M.open_link()        vim.ui.open(vim.fn.expand("<cfile>")) end
-function M.delete_all_marks() vim.cmd.delm({ bang = true }) end
+function M.v_split_layout() vim.cmd("windo wincmd H") end
+function M.h_split_layout() vim.cmd("windo wincmd K") end
+function M.open_lazy()      vim.cmd("Lazy") end
+function M.open_mason()     vim.cmd("Mason") end
+function M.open_link()      vim.ui.open(vim.fn.expand("<cfile>")) end
+
+function M.delete_all_marks()
+    vim.cmd.delm({ bang = true })
+    vim.notify(" Deleted all local marks")
+end
+
+function M.toggle_color_column()
+    if vim.wo.colorcolumn == "" then
+        vim.wo.colorcolumn = "80"
+        vim.notify(" 80th column hl: ON")
+    else
+        vim.wo.colorcolumn = ""
+        vim.notify(" 80th column hl: OFF")
+    end
+end
+
+function M.toggle_column_hl()
+    local enabled = vim.wo.cursorcolumn
+    vim.wo.cursorcolumn = not enabled
+    vim.notify(enabled and " Cursor column hl: OFF" or " Cursor column hl: ON")
+end
+
+function M.toggle_wrap()
+    local enabled = vim.wo.wrap
+    vim.wo.wrap = not enabled
+    vim.notify(enabled and " Wrap: OFF" or " Wrap: ON")
+end
+
+function M.toggle_diagnostics()
+    local enabled = vim.diagnostic.is_enabled()
+    vim.diagnostic.enable(not enabled)
+    vim.notify(enabled and " Diagnostics: OFF" or " Diagnostics: ON")
+end
 
 
--- ARROW NAVIGATION                                                          _01
+-- VISUAL MODE                                                               _01
+--------------------------------------------------------------------------------
+function M.swap_point_and_mark()
+    local mode = vim.fn.mode()
+    if mode == "v" or mode == "V" then
+        vim.cmd([[ :execute "normal! O" ]])
+    else
+        -- Default behaviour in vblock mode
+        vim.api.nvim_feedkeys("A", "n", true)
+    end
+end
+
+
+-- ARROW NAVIGATION                                                          _02
 --------------------------------------------------------------------------------
 function M.cursor_up_ins()   vim.cmd([[ :execute "normal! g\<Up>" ]]) end
 function M.cursor_down_ins() vim.cmd([[ :execute "normal! g\<Down>" ]]) end
@@ -52,7 +94,7 @@ function M.cursor_down_cmd()
 end
 
 
--- COMMENTS                                                                  _02
+-- COMMENTS                                                                  _03
 --------------------------------------------------------------------------------
 function M.comment_line()
     vim.go.operatorfunc = "v:lua.require'vim._comment'.operator"
@@ -67,7 +109,7 @@ function M.comment_visual()
 end
 
 
--- JUMP TO START / END OF WORD / LINE                                        _03
+-- JUMP TO START / END OF WORD / LINE                                        _04
 --------------------------------------------------------------------------------
 function M.forwards_word()  vim.cmd([[ :execute "normal! el" ]]) end
 function M.backwards_word() vim.cmd([[ :execute "normal! b" ]]) end
@@ -81,7 +123,7 @@ function M.line_end_cmd()
 end
 
 
--- DELETE BINDINGS                                                           _04
+-- DELETE BINDINGS                                                           _05
 --------------------------------------------------------------------------------
 function M.del_word_left()  vim.cmd([[ :execute 'normal! "_db']]) end
 function M.del_word_right() vim.cmd([[ :execute 'normal! "_de']]) end
@@ -89,19 +131,19 @@ function M.del_line_left()  vim.cmd([[ :execute 'normal! "_d^']]) end
 function M.del_line_right() vim.cmd([[ :execute 'normal! "_d$']]) end
 
 
--- UNDO / REDO                                                               _05
+-- UNDO / REDO                                                               _06
 --------------------------------------------------------------------------------
 function M.undo() vim.cmd([[ :execute "normal! u" ]]) end
 function M.redo() vim.cmd([[ :execute "normal! U" ]]) end
 
 
--- PASTE                                                                     _06
+-- PASTE                                                                     _07
 --------------------------------------------------------------------------------
 -- Make paste respect indentation in insert
 function M.paste() vim.cmd([[ :execute 'normal! ""]Pl' ]]) end
 
 
--- `f` and `/` SEARCH                                                        _07
+-- `f` and `/` SEARCH                                                        _08
 --------------------------------------------------------------------------------
 function M.toggle_search_hl()
     if vim.v.hlsearch == 1 then
@@ -127,7 +169,7 @@ function M.regex_selection()
 end
 
 
--- MARKS                                                                    _08
+-- MARKS                                                                     _09
 --------------------------------------------------------------------------------
 function M.toggle_mark()
     local buf = 0
@@ -229,7 +271,7 @@ function M.jump_to_mark_below()
 end
 
 
--- QUICKFIX                                                                 _09
+-- QUICKFIX                                                                  _10
 --------------------------------------------------------------------------------
 function M.toggle_quickfix_win()
     if vim.bo.filetype == "qf" then
@@ -261,7 +303,7 @@ function M.add_line_to_quickfix()
 end
 
 
--- NAVIGATE WINDOWS HORIZONTALLY                                             _10
+-- NAVIGATE WINDOWS HORIZONTALLY                                             _11
 --------------------------------------------------------------------------------
 local cached_win_width
 
@@ -337,7 +379,7 @@ function M.navigate_horizontally(direction)
 end
 
 
--- NAVIGATE WINDOWS VERTICALLY                                               _10
+-- NAVIGATE WINDOWS VERTICALLY                                               _11
 --------------------------------------------------------------------------------
 local cached_win_height
 
@@ -399,7 +441,7 @@ function M.navigate_vertically(direction)
 end
 
 
--- RESIZE WINDOWS                                                            _10
+-- RESIZE WINDOWS                                                            _11
 --------------------------------------------------------------------------------
 function M.relative_resize(direction)
     if util.open_win_count() == 1 then return end
@@ -472,7 +514,7 @@ function M.relative_resize(direction)
 end
 
 
--- CLOSE WINDOW                                                              _10
+-- CLOSE WINDOW                                                              _11
 --------------------------------------------------------------------------------
 function M.close_window()
     if vim.bo.filetype == "checkhealth" then
@@ -490,7 +532,7 @@ function M.close_window()
 end
 
 
--- SAVE CHANGES                                                              _11
+-- SAVE CHANGES                                                              _12
 --------------------------------------------------------------------------------
 function M.save_changes()
     local current_ft = vim.o.filetype
@@ -510,7 +552,7 @@ function M.save_changes()
 end
 
 
--- QUIT (never quit)                                                         _12
+-- QUIT (never quit)                                                         _13
 --------------------------------------------------------------------------------
 function M.quit_session()
     -- Save session if nvim was launched via session file

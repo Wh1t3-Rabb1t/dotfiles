@@ -30,6 +30,10 @@ for _, server in ipairs(servers) do
     vim.lsp.enable(server)
 end
 
+-- Add servers to PATH
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.env.PATH
+
+
 -- LAZY
 --------------------------------------------------------------------------------
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

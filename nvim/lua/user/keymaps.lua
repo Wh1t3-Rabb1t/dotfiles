@@ -71,27 +71,27 @@ vim.g.maplocalleader = " "
 nvmap("<Space>",       "<Nop>")
 
 -- Cmds
-nmap("<Leader>;w", km.toggle_wrap,      { desc = ' Toggle line wrap' })
-nmap("<Leader>;c", km.toggle_column_hl, { desc = ' Toggle cursor column hl' })
-nmap("<Leader>;s", km.set_column_hl,    { desc = ' Set highlight at 80th column' })
-nmap("<Leader>;u", km.rm_column_hl,     { desc = ' Unset highlight at 80th column' })
-nmap("<Leader>;v", km.v_split_layout,   { desc = ' Set splits layout to vertical' })
-nmap("<Leader>;h", km.h_split_layout,   { desc = ' Set splits layout to horizontal' })
-nmap("<Leader>;l", km.open_lazy,        { desc = ' Lazy ui' })
-nmap("<Leader>;m", km.open_mason,       { desc = ' Mason ui' })
-nmap("<Leader>;x", km.open_link,        { desc = ' Open link in browser' })
-nmap("<Leader>;P", km.delete_all_marks, { desc = ' Delete all local marks' })
+nmap("<Leader>;w", km.toggle_wrap,         { desc = ' Toggle line wrap' })
+nmap("<Leader>;D", km.toggle_diagnostics,  { desc = ' Toggle Diagnostics' })
+nmap("<Leader>;c", km.toggle_column_hl,    { desc = ' Toggle cursor column hl' })
+nmap("<Leader>;s", km.toggle_color_column, { desc = ' Toggle hl at 80th column' })
+nmap("<Leader>;v", km.v_split_layout,      { desc = ' Set splits layout to vertical' })
+nmap("<Leader>;h", km.h_split_layout,      { desc = ' Set splits layout to horizontal' })
+nmap("<Leader>;l", km.open_lazy,           { desc = ' Lazy ui' })
+nmap("<Leader>;m", km.open_mason,          { desc = ' Mason ui' })
+nmap("<Leader>;x", km.open_link,           { desc = ' Open link in browser' })
+nmap("<Leader>;P", km.delete_all_marks,    { desc = ' Delete all local marks' })
 
 -- Folds
-vmap("<Leader>;f", "zf",                { desc = ' Fold selection' })
-nmap("<Leader>;t", "za",                { desc = ' Toggle fold under cursor' })
-nmap("<Leader>;a", "zR",                { desc = ' Open all folds' })
-nmap("<Leader>;_", "zM",                { desc = ' Close all folds' })
-nmap("<Leader>;d", "zD",                { desc = ' Delete fold under cursor' })
+vmap("<Leader>;f", "zf",                   { desc = ' Fold selection' })
+nmap("<Leader>;t", "za",                   { desc = ' Toggle fold under cursor' })
+nmap("<Leader>;a", "zR",                   { desc = ' Open all folds' })
+nmap("<Leader>;_", "zM",                   { desc = ' Close all folds' })
+nmap("<Leader>;d", "zD",                   { desc = ' Delete fold under cursor' })
 
 -- Inc/dec nums
-vmap("<Leader>C",  "g<C-a>gv",          { desc = ' Increment numbers sequentially' })
-vmap("<Leader>X",  "g<C-x>gv",          { desc = ' Decrement numbers sequentially' })
+vmap("<Leader>C",  "g<C-a>gv",             { desc = ' Increment numbers sequentially' })
+vmap("<Leader>X",  "g<C-x>gv",             { desc = ' Decrement numbers sequentially' })
 
 
 -- INSERT MODE                                                               _01
@@ -102,12 +102,12 @@ nvmap("<S-Esc>", "I", { desc = ' Insert mode at line start' })
 
 -- VISUAL MODE                                                               _02
 --------------------------------------------------------------------------------
-nvmap("s", "v",     { desc = ' Visual mode' })
-nvmap("S", "V",     { desc = ' Visual line mode' })
-nxmap("F", "<C-v>", { desc = ' Visual block mode' })
-nxmap("H", "mzgv",  { desc = ' Restore visual selection' })
-vmap("a",  "o",     { desc = ' Swap point and mark' })
-vmap("A",  "O",     { desc = ' Swap point and mark' })
+nvmap("s", "v",                    { desc = ' Visual mode' })
+nvmap("S", "V",                    { desc = ' Visual line mode' })
+nxmap("F", "<C-v>",                { desc = ' Visual block mode' })
+nxmap("H", "mzgv",                 { desc = ' Restore visual selection' })
+vmap("a",  "o",                    { desc = ' Swap point and mark' })
+vmap("A",  km.swap_point_and_mark, { desc = ' Swap point and mark' })
 
 
 -- COMMAND LINE MODE                                                         _03

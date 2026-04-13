@@ -182,7 +182,7 @@ function M.toggle_mark()
 
         if pos[2] == row then
             vim.api.nvim_buf_del_mark(buf, mark)
-            vim.notify("Removed mark '" .. mark)
+            vim.notify(" Removed mark '" .. mark)
             return mark
         end
     end
@@ -194,12 +194,12 @@ function M.toggle_mark()
 
         if pos[2] == 0 then
             vim.api.nvim_buf_set_mark(buf, mark, row, col, {})
-            vim.notify("Set mark '" .. mark)
+            vim.notify(" Set mark '" .. mark)
             return mark
         end
     end
 
-    vim.notify("No available marks", vim.log.levels.WARN)
+    vim.notify(" No available marks", vim.log.levels.WARN)
 end
 
 function M.jump_to_mark_above()
@@ -273,14 +273,6 @@ end
 
 -- QUICKFIX                                                                  _10
 --------------------------------------------------------------------------------
-function M.toggle_quickfix_win()
-    if vim.bo.filetype == "qf" then
-        vim.cmd("bo cclose")
-    else
-        vim.cmd("bo copen")
-    end
-end
-
 function M.add_line_to_quickfix()
     -- Add line under cursor to the quickfix list
     local line = vim.api.nvim_get_current_line()
@@ -297,9 +289,17 @@ function M.add_line_to_quickfix()
     -- Append the entry to the quickfix list
     vim.fn.setqflist({}, "a", { items = { item } })
     vim.notify(
-        "Line #" .. lnum .. " added to quickfix list",
+        "󰖷 Line #" .. lnum .. " added to quickfix list",
         vim.log.levels.INFO
     )
+end
+
+function M.toggle_quickfix_win()
+    if vim.bo.filetype == "qf" then
+        vim.cmd("bo cclose")
+    else
+        vim.cmd("bo copen")
+    end
 end
 
 

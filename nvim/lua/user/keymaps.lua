@@ -79,8 +79,8 @@ nmap("<Leader>;v", km.v_split_layout,      { desc = ' Set splits layout to ve
 nmap("<Leader>;h", km.h_split_layout,      { desc = ' Set splits layout to horizontal' })
 nmap("<Leader>;l", km.open_lazy,           { desc = ' Lazy ui' })
 nmap("<Leader>;m", km.open_mason,          { desc = ' Mason ui' })
-nmap("<Leader>;x", km.open_link,           { desc = ' Open link in browser' })
 nmap("<Leader>;P", km.delete_all_marks,    { desc = ' Delete all local marks' })
+nmap("<Leader>;x", km.open_link,           { desc = ' Open link with system app' })
 
 -- Folds
 vmap("<Leader>;f", "zf",                   { desc = ' Fold selection' })

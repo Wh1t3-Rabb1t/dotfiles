@@ -165,7 +165,6 @@ function M.config()
     vim.keymap.del("n", "ys")
     vim.keymap.del("n", "ds")
     vim.keymap.del("n", "cs")
-
 end
 
 return M

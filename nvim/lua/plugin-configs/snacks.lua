@@ -187,10 +187,10 @@ M.keys = {
         function()
             if Snacks.words.is_enabled() then
                 Snacks.words.disable()
-                vim.notify("Snacks lsp words: OFF")
+                vim.notify(" Snacks lsp words: OFF")
             else
                 Snacks.words.enable()
-                vim.notify("Snacks lsp words: ON")
+                vim.notify(" Snacks lsp words: ON")
             end
         end
     },

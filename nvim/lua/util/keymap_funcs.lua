@@ -140,7 +140,7 @@ function M.redo() vim.cmd([[ :execute "normal! U" ]]) end
 -- PASTE                                                                     _07
 --------------------------------------------------------------------------------
 -- Make paste respect indentation in insert
-function M.paste() vim.cmd([[ :execute 'normal! ""]Pl' ]]) end
+function M.paste() vim.cmd([[ :execute 'normal! "z]Pl' ]]) end
 
 
 -- `f` and `/` SEARCH                                                        _08

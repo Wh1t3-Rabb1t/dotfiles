@@ -268,55 +268,55 @@ nmap(">", "mzva<V", { desc = ' Select around <> block' })
 
 -- COPY                                                                      _16
 --------------------------------------------------------------------------------
-vmap("c",     'mz""y`z',      { desc = ' Copy to " register' })
+vmap("c",     'mz"zy`z',      { desc = " Copy to 'z' register" })
 vmap("<A-c>", '"*y',          { desc = ' Copy to system clipboard' })
-nmap("cc",    'mzVggoG""y`z', { desc = ' Copy whole buffer' })
+nmap("cc",    'mzVggoG"zy`z', { desc = ' Copy whole buffer' })
 
 -- Word
 nmap("c",     "<Nop>")
-nmap("ct",    'mz""yiw`z',    { desc = ' Copy in word' })
-nmap("cu",    'mz""yb`z',     { desc = ' Copy word left' })
-nmap("co",    '""ye',         { desc = ' Copy word right' })
+nmap("ct",    'mz"zyiw`z',    { desc = ' Copy in word' })
+nmap("cu",    'mz"zyb`z',     { desc = ' Copy word left' })
+nmap("co",    '"zye',         { desc = ' Copy word right' })
 
 -- Line
-nmap("cl",    '""yy',         { desc = ' Copy whole line' })
-nmap("c,",    'mz""y^`z',     { desc = ' Copy to line start' })
-nmap("c.",    '""y$',         { desc = ' Copy to line end' })
+nmap("cl",    '"zyy',         { desc = ' Copy whole line' })
+nmap("c,",    'mz"zy^`z',     { desc = ' Copy to line start' })
+nmap("c.",    '"zy$',         { desc = ' Copy to line end' })
 
 -- Paragraph
-nmap("cm",    'mz""yip`z',    { desc = ' Copy in paragraph' })
-nmap("ci",    'mz""y{`z',     { desc = ' Copy paragraph up' })
-nmap("ck",    '""y}',         { desc = ' Copy paragraph down' })
+nmap("cm",    'mz"zyip`z',    { desc = ' Copy in paragraph' })
+nmap("ci",    'mz"zy{`z',     { desc = ' Copy paragraph up' })
+nmap("ck",    '"zy}',         { desc = ' Copy paragraph down' })
 
 -- To char
-nmap("ch",    '""yT',         { desc = ' Copy backwards to char' })
-nmap("c;",    '""yt',         { desc = ' Copy forwards to char' })
+nmap("ch",    '"zyT',         { desc = ' Copy backwards to char' })
+nmap("c;",    '"zyt',         { desc = ' Copy forwards to char' })
 
 
 -- CUT                                                                       _17
 --------------------------------------------------------------------------------
-vmap("x",  '""ygv"_d',     { desc = ' Cut to " register' })
-nmap("xx", 'ggVG""ygv"_d', { desc = ' Cut whole buffer' })
+vmap("x",  '"zygv"_d',     { desc = " Cut to 'z' register" })
+nmap("xx", 'ggVG"zygv"_d', { desc = ' Cut whole buffer' })
 
 -- Word
 nmap("x",  "<Nop>")
-nmap("xt", '""diw',        { desc = ' Cut in word' })
-nmap("xo", '""de',         { desc = ' Cut word right' })
-nmap("xu", '""db',         { desc = ' Cut word left' })
+nmap("xt", '"zdiw',        { desc = ' Cut in word' })
+nmap("xo", '"zde',         { desc = ' Cut word right' })
+nmap("xu", '"zdb',         { desc = ' Cut word left' })
 
 -- Line
-nmap("xl", 'V""ygv"_d',    { desc = ' Cut whole line' })
-nmap("x,", '""d^',         { desc = ' Cut to line start' })
-nmap("x.", '""d$',         { desc = ' Cut to line end' })
+nmap("xl", 'V"zygv"_d',    { desc = ' Cut whole line' })
+nmap("x,", '"zd^',         { desc = ' Cut to line start' })
+nmap("x.", '"zd$',         { desc = ' Cut to line end' })
 
 -- Paragraph
-nmap("xm", 'vip""ygv"_d',  { desc = ' Cut in paragraph' })
-nmap("xi", 'v{""ygv"_d',   { desc = ' Cut paragraph up' })
-nmap("xk", 'v}""ygv"_d',   { desc = ' Cut paragraph down' })
+nmap("xm", 'vip"zygv"_d',  { desc = ' Cut in paragraph' })
+nmap("xi", 'v{"zygv"_d',   { desc = ' Cut paragraph up' })
+nmap("xk", 'v}"zygv"_d',   { desc = ' Cut paragraph down' })
 
 -- To char
-nmap("x;", '""dt',         { desc = ' Cut forwards to char' })
-nmap("xh", '""dT',         { desc = ' Cut backwards to char' })
+nmap("x;", '"zdt',         { desc = ' Cut forwards to char' })
+nmap("xh", '"zdT',         { desc = ' Cut backwards to char' })
 
 
 -- CHANGE (all changed text is sent to the black hole register)              _18
@@ -347,9 +347,9 @@ nmap("yh", '"_cT',    { desc = ' Change backwards to char' })
 
 -- PASTE                                                                     _19
 --------------------------------------------------------------------------------
-nmap("v",     '""]P',   { desc = ' Paste from " register' })
+nmap("v",     '"z]P',   { desc = " Paste from 'z' register" })
 nmap("<A-v>", '"*]P',   { desc = ' Paste from system register' })
-vmap("v",     '"_d""P', { desc = ' Paste over selection' })
+vmap("v",     '"_d"zP', { desc = ' Paste over selection' })
 cmap("<A-v>", '<C-r>"', { desc = ' Paste from " register' })
 imap("<A-v>", km.paste, { desc = ' Paste from " register' })
 

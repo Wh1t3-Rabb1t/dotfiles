@@ -52,7 +52,7 @@ local function _dl_and_concat_yt_playlist() {
             return 1
         }
 
-        for file in $files; do
+        for file in "${files[@]}"; do
             printf "file '%s'\n" "${file:t}" >> "$list_file"
         done
 

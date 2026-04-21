@@ -24,39 +24,59 @@ local function _download_and_concat() {
 
     local output_name="$1"
     local url="$2"
+
     local tmp_dir="./yt_tmp_$$"
+    {
+        mkdir -p "$tmp_dir" || {
+            REPLY="mkdir failed"
+            return 1
+        }
 
-    mkdir -p "$tmp_dir" || return 1
+        yt-dlp \
+            -x \
+            --audio-format opus \
+            -o "$tmp_dir/%(playlist_index)05d.%(title)s.%(ext)s" \
+            "$url" || {
+                REPLY="yt-dlp failed"
+                return 1
+            }
 
-    yt-dlp \
-        -x \
-        --audio-format opus \
-        -o "$tmp_dir/%(playlist_index)05d.%(title)s.%(ext)s" \
-        "$url" || return 1
+        cd "$tmp_dir" || {
+            REPLY="cd failed"
+            return 1
+        }
 
-    cd "$tmp_dir" || { REPLY="cd failed"; return 1}
+        # Ensure files exist
+        local files=( *.opus )
+        (( ${#files} )) || {
+            REPLY="No files downloaded"
+            return 1
+        }
 
-    # Ensure files exist
-    local files=( *.opus )
-    (( ${#files} )) || { REPLY="No files downloaded"; return 1 }
+        # Build concat list
+        local list_file="files.txt"
+        : > "$list_file"
 
-    # Build concat list
-    local list_file="files.txt"
-    : > "$list_file"
+        for f in $files; do
+            printf "file '%s'\n" "$f" >> "$list_file"
+        done
 
-    for f in $files; do
-        printf "file '%s'\n" "$f" >> "$list_file"
-    done
+        ffmpeg -f concat -safe 0 -i "$list_file" -c copy "../${output_name}.opus" || {
+            REPLY="ffmpeg failed"
+            return 1
+        }
 
-    ffmpeg -f concat -safe 0 -i "$list_file" -c copy "../${output_name}.opus"
+        cd ..
 
-    cd ..
-    rm -rf "$tmp_dir"
+    # Ensure cleanup of tmp_dir even if download fails (can't trap function exit)
+    } always {
+        rm -rf "$tmp_dir"
+    }
 }
 
-if ! _download_and_concat "$@"; then
-    print "$REPLY"
-fi
+_download_and_concat "$@" || print "$REPLY"
+
+
 
 
 # Cut from (-ss) / to (-t)

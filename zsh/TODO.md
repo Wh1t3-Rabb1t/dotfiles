@@ -2,7 +2,12 @@
 
 ## Priority: High
 
-- Change the name of `$ZSH_VI` into something suitable for a generalized for a user state dir.
+- Implement download 'from' and 'to' flags in both the dlm and dlpl scripts.
+
+- Update vi mode bindings to reflect new nvim bindings.
+
+- Change the name of `$ZSH_VI` into something suitable for a generalized for
+  a user state dir.
 
 - Use a coproc to read from the subshell in the find vim sessions script.
 
@@ -27,19 +32,23 @@ Consider setting your PATH for example like so:
   echo 'export PATH="/opt/homebrew/sbin:$PATH"' >> ~/.zshrc
 [1]    24599 exit 1     brew doctor
 ```
-... need to try updating the PATH earlier in zsh init process, will come back to this after sf sorting strategy is complete.
+... need to try updating the PATH earlier in zsh init process, will come back
+to this after sf sorting strategy is complete.
 
-- (maybe related to above) Move to trash script is failing to output results to the command line after
-a new instance of the kitty app is launched, it's being caused because zscripts are loaded before rc.d
-in .zshrc need to move zscript init to somewhere within rc.d.
+- (maybe related to above) Move to trash script is failing to output results
+  to the command line after a new instance of the kitty app is launched, it's
+  being caused because zscripts are loaded before rc.d in .zshrc need to move
+  zscript init to somewhere within rc.d.
 - zscripts: Fix the broken highlight on the `_x` in zscripts fzf function.
 - Change echo calls to printf.
-- Set up macOS mission control navigation bindings and increase animation speed via cli os settings.
+- Set up macOS mission control navigation bindings and increase animation
+  speed via cli os settings.
 - Add checks for os type when using `pbpaste` in scripts.
 - Setup `autoenv` for python as an intro to envs.
 - Look into implementing `gnu privacy guard`, `wireguard`, and `pfblockerNG`.
 - Learn Java: https://www.youtube.com/playlist?list=PLZPZq0r_RZOMhCAyywfnYLlrjiVOkdAI1
-- Update nerdfont repo brew install command in README `brew install --cask font-hack-nerd-font`.
+- Update nerdfont repo brew install command in README
+  `brew install --cask font-hack-nerd-font`.
 
 ## Priority: Low
 
@@ -124,10 +133,3 @@ to fuzzy for the fine tuning.
 - https://github.com/chrisgrieser/.config/
 - https://github.com/gennaro-tedesco/dotfiles/
 - https://github.com/Phantas0s/.dotfiles/
-
-## Some ambient dnb / future jungle on the horizon
-
-- https://soundcloud.com/papazen
-- https://soundcloud.com/zorrovian
-- https://soundcloud.com/pizza_hotline
-- https://soundcloud.com/neuralfold

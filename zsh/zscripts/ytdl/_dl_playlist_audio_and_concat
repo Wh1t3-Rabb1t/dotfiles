@@ -24,7 +24,6 @@ local function _dl_and_concat_yt_playlist() {
 
     local title="$1"
     local url="$2"
-
     local tmp_dir="./yt_tmp_$$"
     {
         mkdir -p "$tmp_dir" || {
@@ -41,16 +40,17 @@ local function _dl_and_concat_yt_playlist() {
                 return 1
             }
 
-        # Build concat list
-        local list_file="${tmp_dir}/files.txt"
-        : > "$list_file"
+        typeset -a files=( ${tmp_dir}/*.opus )
 
         # Ensure files exist
-        typeset -a files=( ${tmp_dir}/*.opus )
         (( ${#files} )) || {
             REPLY="No files downloaded"
             return 1
         }
+
+        # Build concat list
+        local list_file="${tmp_dir}/files.txt"
+        : > "$list_file"
 
         for file in "${files[@]}"; do
             printf "file '%s'\n" "${file:t}" >> "$list_file"

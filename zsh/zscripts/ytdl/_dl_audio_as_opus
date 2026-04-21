@@ -12,4 +12,6 @@
 
 emulate -L zsh
 
-yt-dlp -x --audio-format opus --audio-quality 320K -o "$1.%(ext)s" "$2"
+yt-dlp -x --audio-format opus -o "$1.%(ext)s" "$2"
+
+# yt-dlp -x --audio-format opus --audio-quality 320K -o "$1.%(ext)s" "$2"

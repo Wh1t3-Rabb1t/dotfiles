@@ -16,13 +16,13 @@ emulate -L zsh
 set -e
 setopt pipefail null_glob
 
-local function _download_and_concat() {
+local function _dl_and_concat_yt_playlist() {
     if (( $# != 2 )); then
         REPLY="ERROR: Two args expected. \n1. File name \n2. url"
         return 1
     fi
 
-    local output_name="$1"
+    local title="$1"
     local url="$2"
 
     local tmp_dir="./yt_tmp_$$"
@@ -35,47 +35,39 @@ local function _download_and_concat() {
         yt-dlp \
             -x \
             --audio-format opus \
-            -o "$tmp_dir/%(playlist_index)05d.%(title)s.%(ext)s" \
+            -o "${tmp_dir}/%(playlist_index)05d.%(ext)s" \
             "$url" || {
                 REPLY="yt-dlp failed"
                 return 1
             }
 
-        cd "$tmp_dir" || {
-            REPLY="cd failed"
-            return 1
-        }
+        # Build concat list
+        local list_file="${tmp_dir}/files.txt"
+        : > "$list_file"
 
         # Ensure files exist
-        local files=( *.opus )
+        typeset -a files=( ${tmp_dir}/*.opus )
         (( ${#files} )) || {
             REPLY="No files downloaded"
             return 1
         }
 
-        # Build concat list
-        local list_file="files.txt"
-        : > "$list_file"
-
-        for f in $files; do
-            printf "file '%s'\n" "$f" >> "$list_file"
+        for file in $files; do
+            printf "file '%s'\n" "${file:t}" >> "$list_file"
         done
 
-        ffmpeg -f concat -safe 0 -i "$list_file" -c copy "../${output_name}.opus" || {
+        ffmpeg -f concat -safe 0 -i "$list_file" -c copy "${title}.opus" || {
             REPLY="ffmpeg failed"
             return 1
         }
 
-        cd ..
-
-    # Ensure cleanup of tmp_dir even if download fails (can't trap function exit)
+    # Ensure cleanup of tmp_dir if dl fails (can't trap function exit)
     } always {
         rm -rf "$tmp_dir"
     }
 }
 
-_download_and_concat "$@" || print "$REPLY"
-
+_dl_and_concat_yt_playlist "$@" || print "$REPLY"
 
 
 

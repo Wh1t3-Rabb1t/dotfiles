@@ -18,7 +18,7 @@ setopt pipefail
 
 local function _dl_yt_video() {
     if ! (( ${+commands[yt-dlp]} )); then
-        REPLY="ERROR: yt-dlp isn't available."
+        REPLY="ERROR: yt-dlp is required."
         return 1
     fi
 

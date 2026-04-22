@@ -17,8 +17,8 @@ emulate -L zsh
 setopt pipefail null_glob
 
 local function _dl_and_concat_yt_playlist() {
-    if ! (( ${+commands[yt-dlp]} )); then
-        REPLY="ERROR: yt-dlp isn't available."
+    if ! (( ${+commands[yt-dlp]} && ${+commands[ffmpeg]} )); then
+        REPLY="ERROR: yt-dlp and ffmpeg are required."
         return 1
     fi
 

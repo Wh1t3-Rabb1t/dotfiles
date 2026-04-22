@@ -8,6 +8,7 @@ return {
     filetypes = {
         'json',
         'jsonc',
+        'hjson',
     },
     settings = {
         json = {

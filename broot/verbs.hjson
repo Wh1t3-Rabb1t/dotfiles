@@ -50,6 +50,7 @@ verbs: [
             opus
             mp3
             mp4
+            mkv
         ]
         leave_broot: false
     }

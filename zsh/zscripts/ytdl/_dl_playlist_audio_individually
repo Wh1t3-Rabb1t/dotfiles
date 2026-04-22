@@ -1,15 +1,54 @@
 #!/usr/bin/env zsh
 
 ################################################################################
-# Download a youtube playlist without concatting.
-# -----------------------------------------------
-# Arguments:
-#     1) File name
-#     2) URL
-# Globals:
-#     None
+# Download a series of audio files from a youtube playlist in opus format.
+# ------------------------------------------------------------------------
+# Args:
+#     1. Generic title
+#     2. url
+#
+# Exports:
+#     REPLY
 ################################################################################
+
+if ! (( ${+commands[yt-dlp]} )); then
+    print -- "ERROR: yt-dlp isn't available."
+    return 1
+fi
 
 emulate -L zsh
 
-command yt-dlp -x --audio-format opus --audio-quality 320K -o "${1}-%(autonumber)02d.%(ext)s" "${2}"
+setopt pipefail
+
+local function _dl_yt_playlist() {
+    if (( $# != 2 )); then
+        if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
+            local help="Download a full yt playlists audio in .opus format.\n\n"
+            help+="Args:\n"
+            help+="  1. Generic title\n"
+            help+="  2. url"
+
+            print -- "$help"
+            return 0
+        else
+            REPLY="ERROR: Two args expected. \n\nPass '--help' or '-h' to show help page."
+            return 1
+        fi
+    fi
+
+    local title="$1"
+    local url="$2"
+
+    yt-dlp \
+        -f "bestaudio[acodec=opus]/bestaudio" \
+        -x \
+        --audio-format opus \
+        --audio-quality 0 \
+        -o "${title}-%(autonumber)02d.%(ext)s" \
+        "$url" || {
+            REPLY="ERROR: yt-dlp failed"
+            return 1
+        }
+}
+
+_dl_yt_playlist "$@" || print -- "$REPLY"

@@ -1,0 +1,61 @@
+#!/usr/bin/env zsh
+
+################################################################################
+# Download video with max audio quality and size-optimized video.
+# ---------------------------------------------------------------
+# Args:
+#     1. File name
+#     2. url
+#     3. Resolution (optional)
+#
+# Exports:
+#     REPLY
+################################################################################
+
+if ! (( ${+commands[yt-dlp]} )); then
+    print -- "ERROR: yt-dlp isn't available."
+    return 1
+fi
+
+emulate -L zsh
+
+setopt pipefail
+
+local function _dl_yt_video() {
+    if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
+        local help="Download video with max audio quality and size-optimized video.\n\n"
+        help+="Args:\n"
+        help+="  1. File name\n"
+        help+="  2. url\n"
+        help+="  3. (optional) Resolution (e.g. 480, 720, 1080, 1440, 2160)"
+
+        print -- "$help"
+        return 0
+    fi
+
+    if (( $# < 2 || $# > 3 )); then
+        REPLY="ERROR: Expected 2–3 args. \n\nPass '--help' or '-h' to show help page."
+        return 1
+    fi
+
+    local title="$1"
+    local url="$2"
+    local height="${3:-720}"
+
+    if ! [[ "$height" =~ '^[0-9]+$' ]]; then
+        REPLY="ERROR: Resolution must be a number (e.g. 480, 720, 1080, 1440, 2160)"
+        return 1
+    fi
+
+    yt-dlp \
+        -S "res:${height},vcodec:av01,vcodec:vp9,fps:30" \
+        -f "bv+ba/b" \
+        --merge-output-format mkv \
+        -o "${title}.%(ext)s" \
+        "$url" || {
+            REPLY="ERROR: yt-dlp failed"
+            return 1
+        }
+}
+
+_dl_yt_video "$@" || print -- "$REPLY"

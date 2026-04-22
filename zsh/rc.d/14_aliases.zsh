@@ -14,9 +14,25 @@ alias lg='cat "${XDG_STATE_HOME}/logs/log"'
 alias getip="ifconfig | grep inet"
 alias bindings="bindkey | grep -v '_noop' | column"
 
+# yt-dlp
+alias dlm="_dl_audio_as_opus"
+alias dlpl="_dl_playlist_audio_and_concat"
+alias dlfullpl="_dl_playlist_audio_individually"
+alias dlv="_dl_video_size_optimized"
+
+# Git
+(( ${+commands[git]} )) && {
+    alias gg="_add_commit_push"
+    alias gl="git log --all --graph --decorate --oneline"
+}
+
+# Homebrew
+(( ${+commands[brew]} )) && {
+    alias bo="brew outdated"
+    alias bu="brew upgrade"
+}
 
 # Eza / gnu ls
-# ---------------------------------------------------------------------------- #
 if (( ${+commands[eza]} )); then
     # Short list (using --long flag for git status in output)
     alias ls="eza \
@@ -78,40 +94,7 @@ elif (( ${+commands[gls]} )); then
         --color"
 fi
 
-
-# Git
-# ---------------------------------------------------------------------------- #
-(( ${+commands[git]} )) && {
-    alias gg="_add_commit_push"
-    alias gl="git log --all --graph --decorate --oneline"
-}
-
-
-# Homebrew
-# ---------------------------------------------------------------------------- #
-(( ${+commands[brew]} )) && {
-    alias bo="brew outdated"
-    alias bu="brew upgrade"
-}
-
-
-# yt-dlp
-# ---------------------------------------------------------------------------- #
-(( ${+commands[yt-dlp]} )) && {
-    alias dlm="_dl_audio_as_opus"
-    alias dlpl="_dl_playlist_audio_and_concat"
-    alias dlfullpl="_dl_playlist_audio_individually"
-    alias dlv="yt-dlp -f mp4"
-    alias dl320p="yt-dlp -S vcodec:h264,fps,res:320,acodec:m4a"
-    alias dl480p="yt-dlp -S vcodec:h264,fps,res:480,acodec:m4a"
-    alias dl720p="yt-dlp -S vcodec:h264,fps,res:720,acodec:m4a"
-    alias dl1080p="yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a"
-    alias dl1440p="yt-dlp -S vcodec:h264,fps,res:1440,acodec:m4a"
-}
-
-
 # zscripts
-# ---------------------------------------------------------------------------- #
 [[ -v ZSCRIPTDIR ]] && {
     alias nf="_create_files"
     alias nd="_create_dirs"

@@ -4,22 +4,37 @@
 # Download a series of audio files from a youtube playlist in opus format, then
 # concatenate into a single audio file.
 # -------------------------------------
-# Arguments:
-#     1) Newly created file name
-#     2) URL
-# Globals:
-#     None
+# Args:
+#     1. File name
+#     2. url
+#
+# Exports:
+#     REPLY
 ################################################################################
+
+if ! (( ${+commands[yt-dlp]} )); then
+    print -- "ERROR: yt-dlp isn't available."
+    return 1
+fi
 
 emulate -L zsh
 
-set -e
 setopt pipefail null_glob
 
 local function _dl_and_concat_yt_playlist() {
     if (( $# != 2 )); then
-        REPLY="ERROR: Two args expected. \n1. File name \n2. url"
-        return 1
+        if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
+            local help="Download and concat audio files from yt playlist in .opus format.\n\n"
+            help+="Args:\n"
+            help+="  1. File name\n"
+            help+="  2. url"
+
+            print -- "$help"
+            return 0
+        else
+            REPLY="ERROR: Two args expected. \n\nPass '--help' or '-h' to show help page."
+            return 1
+        fi
     fi
 
     local title="$1"
@@ -27,16 +42,18 @@ local function _dl_and_concat_yt_playlist() {
     local tmp_dir="./yt_tmp_$$"
     {
         mkdir -p "$tmp_dir" || {
-            REPLY="mkdir failed"
+            REPLY="ERROR: mkdir failed"
             return 1
         }
 
         yt-dlp \
+            -f "bestaudio[acodec=opus]/bestaudio" \
             -x \
             --audio-format opus \
+            --audio-quality 0 \
             -o "${tmp_dir}/%(playlist_index)05d.%(ext)s" \
             "$url" || {
-                REPLY="yt-dlp failed"
+                REPLY="ERROR: yt-dlp failed"
                 return 1
             }
 
@@ -44,7 +61,7 @@ local function _dl_and_concat_yt_playlist() {
 
         # Ensure files exist
         (( ${#files} )) || {
-            REPLY="No files downloaded"
+            REPLY="ERROR: No files downloaded"
             return 1
         }
 
@@ -52,12 +69,13 @@ local function _dl_and_concat_yt_playlist() {
         local list_file="${tmp_dir}/files.txt"
         : > "$list_file"
 
+        local file
         for file in "${files[@]}"; do
             printf "file '%s'\n" "${file:t}" >> "$list_file"
         done
 
         ffmpeg -f concat -safe 0 -i "$list_file" -c copy "${title}.opus" || {
-            REPLY="ffmpeg failed"
+            REPLY="ERROR: ffmpeg failed"
             return 1
         }
 
@@ -67,7 +85,7 @@ local function _dl_and_concat_yt_playlist() {
     }
 }
 
-_dl_and_concat_yt_playlist "$@" || print "$REPLY"
+_dl_and_concat_yt_playlist "$@" || print -- "$REPLY"
 
 
 

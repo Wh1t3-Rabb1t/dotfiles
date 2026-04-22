@@ -2,7 +2,9 @@
 
 ## Priority: High
 
-- Implement download 'from' and 'to' flags in both the dlm and dlpl scripts.
+- Write 'trim' scrpit. If invoked with no args launch fzf and select a
+  file from the cwd, output file back onto cli with:
+  trim 'filename' 'from,00:00:00' 'to,00:00:00'
 
 - Update vi mode bindings to reflect new nvim bindings.
 

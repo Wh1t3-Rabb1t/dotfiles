@@ -19,6 +19,7 @@ alias dlm="_dl_audio_as_opus"
 alias dlpl="_dl_playlist_audio_and_concat"
 alias dlfullpl="_dl_playlist_audio_individually"
 alias dlv="_dl_video_size_optimized"
+alias dlvm="_dl_video_quality_max"
 
 # Git
 (( ${+commands[git]} )) && {

@@ -12,16 +12,16 @@
 #     REPLY
 ################################################################################
 
-if ! (( ${+commands[yt-dlp]} )); then
-    print -- "ERROR: yt-dlp isn't available."
-    return 1
-fi
-
 emulate -L zsh
 
 setopt pipefail
 
 local function _dl_yt_video() {
+    if ! (( ${+commands[yt-dlp]} )); then
+        REPLY="ERROR: yt-dlp isn't available."
+        return 1
+    fi
+
     if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
         local help="Download video with max audio quality and size-optimized video.\n\n"
         help+="Args:\n"

@@ -12,16 +12,16 @@
 #     REPLY
 ################################################################################
 
-if ! (( ${+commands[yt-dlp]} )); then
-    print -- "ERROR: yt-dlp isn't available."
-    return 1
-fi
-
 emulate -L zsh
 
 setopt pipefail null_glob
 
 local function _dl_and_concat_yt_playlist() {
+    if ! (( ${+commands[yt-dlp]} )); then
+        REPLY="ERROR: yt-dlp isn't available."
+        return 1
+    fi
+
     if (( $# != 2 )); then
         if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
             local help="Download and concat audio files from yt playlist in .opus format.\n\n"

@@ -15,6 +15,13 @@ emulate -L zsh
 
 setopt pipefail
 
+local help_page
+help_page+="Download video in best available quality (audio + video).\n"
+help_page+="\n"
+help_page+="Args:\n"
+help_page+="  1. File name\n"
+help_page+="  2. url"
+
 local function _dl_yt_video_max() {
     if ! (( ${+commands[yt-dlp]} )); then
         REPLY="ERROR: yt-dlp is required."
@@ -22,12 +29,7 @@ local function _dl_yt_video_max() {
     fi
 
     if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
-        local help="Download video in best available quality (audio + video).\n\n"
-        help+="Args:\n"
-        help+="  1. File name\n"
-        help+="  2. url"
-
-        print -- "$help"
+        print -- "$help_page"
         return 0
     fi
 
@@ -40,14 +42,16 @@ local function _dl_yt_video_max() {
     local url="$2"
 
     yt-dlp \
-        -S "vcodec:av01,vcodec:vp9" \
-        -f "bv*+ba/b" \
+        --format-sort "vcodec:av01,vcodec:vp9" \
+        --format "bv*+ba/b" \
         --merge-output-format mkv \
-        -o "${title}.%(ext)s" \
+        --output "${title}.%(ext)s" \
         "$url" || {
             REPLY="ERROR: yt-dlp failed"
             return 1
         }
+
+    return 0
 }
 
 _dl_yt_video_max "$@" || print -- "$REPLY"

@@ -16,6 +16,13 @@ emulate -L zsh
 
 setopt pipefail null_glob
 
+local help_page
+help_page+="Download and concat audio files from yt playlist in .opus format.\n"
+help_page+="\n"
+help_page+="Args:\n"
+help_page+="  1. File name\n"
+help_page+="  2. url"
+
 local function _dl_and_concat_yt_playlist() {
     if ! (( ${+commands[yt-dlp]} && ${+commands[ffmpeg]} )); then
         REPLY="ERROR: yt-dlp and ffmpeg are required."
@@ -24,12 +31,7 @@ local function _dl_and_concat_yt_playlist() {
 
     if (( $# != 2 )); then
         if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
-            local help="Download and concat audio files from yt playlist in .opus format.\n\n"
-            help+="Args:\n"
-            help+="  1. File name\n"
-            help+="  2. url"
-
-            print -- "$help"
+            print -- "$help_page"
             return 0
         else
             REPLY="ERROR: Two args expected. \n\nPass '--help' or '-h' to show help page."
@@ -47,11 +49,11 @@ local function _dl_and_concat_yt_playlist() {
         }
 
         yt-dlp \
-            -f "bestaudio[acodec=opus]/bestaudio" \
-            -x \
+            --format "bestaudio[acodec=opus]/bestaudio" \
+            --extract-audio \
             --audio-format opus \
             --audio-quality 0 \
-            -o "${tmp_dir}/%(playlist_index)05d.%(ext)s" \
+            --output "${tmp_dir}/%(playlist_index)05d.%(ext)s" \
             "$url" || {
                 REPLY="ERROR: yt-dlp failed"
                 return 1

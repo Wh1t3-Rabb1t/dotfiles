@@ -5,10 +5,7 @@
 # This is useful to see if some permissions are blocking access to a file.
 # If no args are passed, lists entire parent dir tree over cwd.
 # -------------------------------------------------------------
-# Arguments:
-#     File name / None
-# Globals:
-#     None
+# Args:  File name / None
 ################################################################################
 
 emulate -L zsh

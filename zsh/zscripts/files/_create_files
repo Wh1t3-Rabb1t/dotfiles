@@ -2,41 +2,54 @@
 
 ################################################################################
 # Create files.
-# Can pass multiple arguments to create multiple files.
-# -----------------------------------------------------
-# Arguments:
-#     File name / names
-# Globals:
-#     None
+# Pass multiple arguments to create multiple files.
+# -------------------------------------------------
+# Args:     File name(s)
+# Exports:  REPLY
 ################################################################################
 
 emulate -L zsh
 
-local arrow="\e[0m\e[33m>\e[m"
-local green="\e[0m\e[33m"
-local grey="\e[38;5;245m"
-local color_end="\e[m"
+local function _create_new_file() {
+    local err="\e[31mERROR:\e[m"        # Red hl
+    local created="\e[32mCreated:\e[m"  # Green hl
 
-if [[ "$#" -eq 0 ]]; then
-    echo -e "\nNo argument given."
-    return
-fi
-
-local created_files=()
-
-for file in $@; do
-    if [[ -e $file ]]; then
-        echo "touch: $file: File exists"
-    else
-        touch $file && created_files+=($file)
+    if (( $# == 0 )); then
+        REPLY="${err} No argument given."
+        return 1
     fi
-done
 
-# If at least one file was successfully created
-if [[ ${#created_files[@]} -gt 0 ]]; then
-    echo ""
-    for file in ${created_files[@]}; do
-        echo -e "${arrow}  $file"
+    typeset -a created_files
+
+    local file error_msg
+    for file in "$@"; do
+        if [[ -e "$file" ]]; then
+            error_msg+="${err} '${file}' already exists.\n"
+        else
+            if touch "$file"; then
+                created_files+=( "$file" )
+            else
+                error_msg+="${err} touch '${file}' failed.\n"
+            fi
+        fi
     done
-    echo -e "\n${green}Created${color_end}."
-fi
+    error_msg=${error_msg%\\n}
+
+    # Print error messages if any
+    [[ -n "$error_msg" ]] && print -- "$error_msg"
+
+    # If at least one file was successfully created
+    if (( ${#created_files[@]} > 0 )); then
+        local new_file output_msg
+        for new_file in "${created_files[@]}"; do
+            output_msg+="${created} '${new_file}'\n"
+        done
+        output_msg=${output_msg%\\n}
+
+        print -- "$output_msg"
+    fi
+
+    return 0
+}
+
+_create_new_file "$@" || print -- "$REPLY"

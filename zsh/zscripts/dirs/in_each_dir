@@ -3,11 +3,8 @@
 ################################################################################
 # Perform a specified command in each subdirectory of current directory.
 # ----------------------------------------------------------------------
-# Arguments:
-#     Command to execute; i.e. `touch README.md`
-#
-# Globals:
-#     None
+# Args:     Command to execute; i.e. `touch README.md`
+# Globals:  None
 ################################################################################
 
 emulate -L zsh

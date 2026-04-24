@@ -1,69 +1,65 @@
 #!/usr/bin/env zsh
 
 ################################################################################
-# Create directories.
+# Create directory.
 # Pass multiple arguments to create multiple directories.
 # -------------------------------------------------------
-# Args:
-#     Directory name(s)
-#
-# Globals:
-#     REPLY
+# Args:     Directory name(s)
+# Exports:  REPLY
 ################################################################################
 
 emulate -L zsh
 
 local function _create_new_dir() {
+    local err="\e[31mERROR:\e[m"        # Red hl
+    local created="\e[32mCreated:\e[m"  # Green hl
+
     if (( $# == 0 )); then
-        REPLY="ERROR: No argument given."
+        REPLY="${err} No argument given."
         return 1
     fi
 
-    local folder="\e[38;5;192m\e[m"
-    local arrow="\e[0m\e[33m>\e[m"
-    local green="\e[0m\e[33m"
-    local color_end="\e[m"
-
     if (( $# == 1 )); then
-        local dir_name="$1"
+        local dir="$1"
 
-        mkdir -p -- "$dir_name" || {
-            REPLY="ERROR: mkdir failed."
-            return 1
-        }
+        [[ -e "$dir" ]]    && { REPLY="${err} './${dir}' already exists."; return 1 }
+        mkdir -p -- "$dir" || { REPLY="${err} mkdir './${dir}' failed.";   return 1 }
+        cd "$dir"          || { REPLY="${err} cd failed.";                 return 1 }
 
-        cd "$dir_name" || {
-            REPLY="ERROR: cd failed."
-            return 1
-        }
+        local output_msg
+        output_msg+="${created} '${PWD}'\n"
+        output_msg+="Changed cwd to './${dir}'"
 
-        local msg
-        msg+="${arrow}  ${folder} ${dir_name}"
-        msg+="\n${green}Created${color_end}."
-        msg+="\ncwd changed to: ${folder} ${dir_name}"
-
-        print -- "$msg"
+        print -- "$output_msg"
     else
         typeset -a created_dirs
 
+        local dir error_msg
         for dir in "$@"; do
-            if mkdir -p -- "$dir"; then
-                created_dirs+=( "$dir" )
+            if [[ -e "$dir" ]]; then
+                error_msg+="${err} './${dir}' already exists.\n"
             else
-                REPLY="ERROR: mkdir failed."
-                return 1
+                if mkdir -p -- "$dir"; then
+                    created_dirs+=( "$dir" )
+                else
+                    error_msg+="${err} mkdir './${dir}' failed.\n"
+                fi
             fi
         done
+        error_msg=${error_msg%\\n}
+
+        # Print error messages if any
+        [[ -n "$error_msg" ]] && print -- "$error_msg"
 
         # If at least one dir was successfully created
         if (( ${#created_dirs[@]} > 0 )); then
-            local dir msg
-            for dir in "${created_dirs[@]}"; do
-                msg+="${arrow}  ${folder} ${dir}\n"
+            local new_dir output_msg
+            for new_dir in "${created_dirs[@]}"; do
+                output_msg+="${created} '${PWD}/${new_dir}'\n"
             done
-            msg+="\n${green}Created${color_end}."
+            output_msg=${output_msg%\\n}
 
-            print -- "$msg"
+            print -- "$output_msg"
         fi
     fi
 

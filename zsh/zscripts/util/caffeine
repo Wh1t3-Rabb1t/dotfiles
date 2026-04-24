@@ -2,15 +2,15 @@
 
 ################################################################################
 # Track daily caffeine intake and monitor active levels.
+# ------------------------------------------------------
+# Args:
+#     $@  inc   - Increase pill count by one
+#     $@  dec   - Decrease pill count by one
+#     $@  reset - Reset pill count
+#     $@  total - Print total consumed pills / active mg of caffeine
 #
-# Arguments:
-#   $@  inc   - Increase pill count by one
-#   $@  dec   - Decrease pill count by one
-#   $@  reset - Reset pill count
-#   $@  total - Print total consumed pills / active mg of caffeine
-#
-# Globals:
-#   $VI_STATE_DIR
+# Exports:
+#     VI_STATE_DIR
 ################################################################################
 
 emulate -L zsh

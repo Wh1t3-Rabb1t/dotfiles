@@ -2,14 +2,14 @@
 
 ################################################################################
 # Interactive stopwatch.
+# ----------------------
+# Args:
+#     $@  start - Start the timer
+#     $@  reset - Dump session data and start a new session
+#     $@  log   - Print archived log data
 #
-# Arguments:
-#   $@  start - Start the timer
-#   $@  reset - Dump session data and start a new session
-#   $@  log   - Print archived log data
-#
-# Globals:
-#   $VI_STATE_DIR
+# Exports:
+#     VI_STATE_DIR
 ################################################################################
 
 emulate -L zsh

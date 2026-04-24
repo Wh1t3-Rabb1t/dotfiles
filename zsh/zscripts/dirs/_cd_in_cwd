@@ -4,7 +4,7 @@
 # `cd` into a child dir of the cwd.
 # ---------------------------------
 # Args:     None
-# Globals:  BUFFER
+# Exports:  BUFFER
 ################################################################################
 
 emulate -L zsh

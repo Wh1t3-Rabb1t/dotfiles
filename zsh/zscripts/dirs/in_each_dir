@@ -4,7 +4,7 @@
 # Perform a specified command in each subdirectory of current directory.
 # ----------------------------------------------------------------------
 # Args:     Command to execute; i.e. `touch README.md`
-# Globals:  None
+# Globals:  TRAPINT
 ################################################################################
 
 emulate -L zsh

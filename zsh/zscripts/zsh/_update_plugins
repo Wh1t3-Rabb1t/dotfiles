@@ -3,17 +3,15 @@
 ################################################################################
 # Update all zsh plugins.
 # -----------------------
-# Arguments:
-#     None
-# Globals:
-#     None
+# Args:     None
+# Exports:  DOTFILES
 ################################################################################
 
 # https://stackoverflow.com/questions/5828324/update-git-submodule-to-latest-commit-on-origin
 
 emulate -L zsh
 
-pushd "${DOTFILES}"
+pushd "$DOTFILES"
 
 git submodule update --remote --merge
 git add .

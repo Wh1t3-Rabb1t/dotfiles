@@ -16,6 +16,8 @@ emulate -L zsh
 
 setopt pipefail
 
+local err="\e[31mERROR:\e[m"  # Red hl
+
 local help_page
 help_page+="Download video with max audio quality and size-optimized video.\n"
 help_page+="\n"
@@ -26,18 +28,19 @@ help_page+="  3. (optional) Resolution (e.g. 480, 720, 1080, 1440, 2160)"
 
 local function _dl_yt_video() {
     if ! (( ${+commands[yt-dlp]} )); then
-        REPLY="ERROR: yt-dlp is required."
+        REPLY="${err} yt-dlp is required."
         return 1
     fi
 
-    if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
-        print -- "$help_page"
-        return 0
-    fi
-
-    if (( $# < 2 || $# > 3 )); then
-        REPLY="ERROR: Expected 2–3 args. \n\nPass '--help' or '-h' to show help page."
-        return 1
+    # Parse args
+    if (( $# != 2 )); then
+        if (( $# == 1 )) && [[ "$1" == (--help|-h) ]]; then
+            print -- "$help_page"
+            return 0
+        else
+            REPLY="${err} Two args expected. \n\nPass '--help' or '-h' to show help page."
+            return 1
+        fi
     fi
 
     local title="$1"
@@ -45,7 +48,7 @@ local function _dl_yt_video() {
     local height="${3:-720}"  # Fallback to 720p is not specified
 
     if ! [[ "$height" =~ '^[0-9]+$' ]]; then
-        REPLY="ERROR: Resolution must be a number (e.g. 480, 720, 1080, 1440, 2160)"
+        REPLY="${err} Resolution must be a number (e.g. 480, 720, 1080, 1440, 2160)"
         return 1
     fi
 
@@ -55,7 +58,7 @@ local function _dl_yt_video() {
         --merge-output-format mkv \
         --output "${title}.%(ext)s" \
         "$url" || {
-            REPLY="ERROR: yt-dlp failed"
+            REPLY="${err} yt-dlp failed"
             return 1
         }
 

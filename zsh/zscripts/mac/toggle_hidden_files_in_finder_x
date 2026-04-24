@@ -2,11 +2,6 @@
 
 ################################################################################
 # Toggle displaying hidden files in the Finder.
-# ---------------------------------------------
-# Arguments:
-#     None
-# Globals:
-#     None
 ################################################################################
 
 emulate -L zsh
@@ -14,12 +9,15 @@ emulate -L zsh
 local option_state
 option_state=$(defaults read com.apple.finder AppleShowAllFiles)
 
-if [[ "$option_state" == "True" ]]; then
-    defaults write com.apple.finder AppleShowAllFiles False
-    echo -e "\n Hiding dotfiles in macOS Finder."
-elif [[ "$option_state" == "False" ]]; then
-    defaults write com.apple.finder AppleShowAllFiles True
-    echo -e "\n Displaying dotfiles in macOS Finder."
-fi
+case "$option_state" in
+    True)
+        defaults write com.apple.finder AppleShowAllFiles False
+        print -- "Hiding dotfiles in macOS Finder."
+        ;;
+    False)
+        defaults write com.apple.finder AppleShowAllFiles True
+        print -- "Displaying dotfiles in macOS Finder."
+        ;;
+esac
 
 killall Finder

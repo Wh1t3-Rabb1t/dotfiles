@@ -5,13 +5,14 @@
 #   \___\___/|_|\___/|_|  |___/
 # ============================================================================ #
 
+# Also nice:
+#   solarized-light
+#   tokyonight-moon
+#   tokyonight-night
+#   tokyonight-storm
+#   ayu
+
 if (( ${+commands[vivid]} )); then
     export LS_COLORS="$(vivid generate solarized-dark)"
-
-    # Also nice:
-    # export LS_COLORS="$(vivid generate solarized-light)"
-    # export LS_COLORS="$(vivid generate tokyonight-moon)"
-    # export LS_COLORS="$(vivid generate tokyonight-night)"
-    # export LS_COLORS="$(vivid generate tokyonight-storm)"
-    # export LS_COLORS="$(vivid generate ayu)"
 fi
+

@@ -3,12 +3,12 @@
 ################################################################################
 # Terminal cheat sheet powered by `fzf`.
 # --------------------------------------
-# Arguments:
+# Args:
 #     None
-# Globals:
-#     $BUFFER
-#     $CURSOR
-#     $ZSCRIPTDIR
+# Exports:
+#     BUFFER
+#     CURSOR
+#     ZSCRIPTDIR
 ################################################################################
 
 emulate -L zsh
@@ -16,7 +16,7 @@ emulate -L zsh
 pushd "$ZSCRIPTDIR"
 
 # Search cheat sheet, ignoring files with a leading underscore
-local selection=$( \
+local selection=$(
     fd \
         --type=file \
         --exclude='_*' \
@@ -30,12 +30,12 @@ local selection=$( \
     }' \
     | fzf \
         --header=' Zsh cheat sheet. Green x : Immediate execution.' \
-        --header-border=top \
+        --header-border=top
 )
 
 popd
 
-if [[ "$selection" ]]; then
+if [[ -n "$selection" ]]; then
     # Strip everything up to, and including the slash
     BUFFER="${selection#*/}"
 

@@ -81,7 +81,7 @@ fpath=(${ZDOTDIR}/caching ${fpath})
 # Ensure we have local paths enabled
 path=(/usr/local/bin /usr/local/sbin ${path})
 
-if [[ "${OSTYPE}" = darwin* ]]; then
+if [[ "$OSTYPE" = darwin* ]]; then
     # Check whether Homebrew available under new path
     if (( ! ${+commands[brew]} )) && [[ -x /opt/homebrew/bin/brew ]]; then
         path=(/opt/homebrew/bin ${path})

@@ -27,6 +27,6 @@ unset zscripts
 # RC
 # ---------------------------------------------------------------------------- #
 for conffile in "${ZDOTDIR}"/rc.d/*; do
-    source "${conffile}"
+    source "$conffile"
 done
 unset conffile

@@ -5,30 +5,29 @@
 #  |_|\_\___|\__, | |_.__/|_|_| |_|\__,_|_|_| |_|\__, |___/
 # ===========|___/===============================|___/======================== #
 
-
 # ╭────────────────────────╮
 # │ ALT LAYER KEY BINDINGS │
 # ╰────────────────────────╯
 
-# Alt r: Rename files / dirs in cwd
+# Rename files / dirs in cwd
 zle -N _rename_fzf
-bindkey -M viins "^[r" _rename_fzf                                  # Alt r
+bindkey -M viins "^[r" _rename_fzf         # Alt r
 
-# Alt f: Find and open file/s with neovim
+# Find and open file/s with neovim
 zle -N _find_files
-bindkey -M viins "^[f" _find_files                                  # Alt f
+bindkey -M viins "^[f" _find_files         # Alt f
 
-# Alt g: Grep term and open with neovim
+# Grep term and open with neovim
 zle -N _grep_into_nvim
-bindkey -M viins "^[g" _grep_into_nvim                              # Alt g
+bindkey -M viins "^[g" _grep_into_nvim     # Alt g
 
-# Alt a: Grep term and open with neovim
+# Grep term and open with neovim
 zle -N _find_vim_sessions
-bindkey -M viins "^[a" _find_vim_sessions                           # Alt a
+bindkey -M viins "^[a" _find_vim_sessions  # Alt a
 
-# Alt m: Preview files with bat
+# Preview files with bat
 zle -N _preview_files
-bindkey -M viins "^[m" _preview_files                               # Alt m
+bindkey -M viins "^[m" _preview_files      # Alt m
 
 
 # ╭─────────────────────────╮
@@ -64,7 +63,7 @@ local function _broot_launcher() {
     fi
 }
 zle -N _broot_launcher
-bindkey -M viins " " _broot_launcher                                 # Space
+bindkey -M viins " " _broot_launcher  # Space
 
 
 # YAZI LAUNCHER
@@ -81,22 +80,18 @@ local function _yazi_launcher() {
     fi
 }
 zle -N _yazi_launcher
-bindkey -M viins "^I" _yazi_launcher                                 # Tab
+bindkey -M viins "^I" _yazi_launcher  # Tab
 
 
 # LAUNCH NEOVIM SESSION
 # ---------------------------------------------------------------------------- #
 local function _launch_nvim_wrapper() {
     emulate -L zsh
-    if [[ -z "$BUFFER" ]]; then
-        _launch_nvim
-    else
-        zle accept-line
-    fi
+    [[ -z "$BUFFER" ]] && _launch_nvim || zle accept-line
 }
 zle -N _launch_nvim_wrapper
-bindkey -M viins "^M" _launch_nvim_wrapper                           # Enter
-bindkey -M vicmd "^M" _launch_nvim_wrapper
+bindkey -M viins "^M" _launch_nvim_wrapper  # Enter
+bindkey -M vicmd "^M" _launch_nvim_wrapper  # Enter
 
 
 # ZSCRIPTS FZF
@@ -106,7 +101,7 @@ local function _zscripts_fzf_wrapper() {
     [[ -z "$BUFFER" ]] && _zscripts_fzf || LBUFFER[CURSOR+1]+=";"
 }
 zle -N _zscripts_fzf_wrapper
-bindkey -M viins ";" _zscripts_fzf_wrapper                           # ;
+bindkey -M viins ";" _zscripts_fzf_wrapper  # ;
 
 
 # ZSH HELP PAGES
@@ -116,7 +111,7 @@ local function _zsh_help_pages_wrapper() {
     [[ -z "$BUFFER" ]] && _zsh_help_pages || LBUFFER[CURSOR+1]+="?"
 }
 zle -N _zsh_help_pages_wrapper
-bindkey -M viins "?" _zsh_help_pages_wrapper                         # ?
+bindkey -M viins "?" _zsh_help_pages_wrapper  # ?
 
 
 # CMD HISTORY
@@ -129,22 +124,17 @@ local function _zsh_cmd_history_wrapper() {
     [[ -z "$BUFFER" ]] && _zsh_cmd_history || history-substring-search-down
 }
 zle -N _zsh_cmd_history_wrapper
-bindkey -M viins "^[[A" _zsh_cmd_history_wrapper                     # Up
+bindkey -M viins "^[[A" _zsh_cmd_history_wrapper  # Up
 
 
 # CD UP ONE DIR
 # ---------------------------------------------------------------------------- #
 local function _cd_up_dir() {
     emulate -L zsh
-    if [[ -z "$BUFFER" ]]; then
-        BUFFER="cd ../"
-        zle accept-line
-    else
-        zle vi-backward-char
-    fi
+    [[ -z "$BUFFER" ]] && { BUFFER="cd ../"; zle accept-line } || zle vi-backward-char
 }
 zle -N _cd_up_dir
-bindkey -M viins "^[[D" _cd_up_dir                                   # Left
+bindkey -M viins "^[[D" _cd_up_dir  # Left
 
 
 # CD DOWN DIR TREE
@@ -154,7 +144,7 @@ local function _cd_in_cwd_wrapper() {
     [[ -z "$BUFFER" ]] && _cd_in_cwd || zle vi-forward-char
 }
 zle -N _cd_in_cwd_wrapper
-bindkey -M viins "^[[C" _cd_in_cwd_wrapper                           # Right
+bindkey -M viins "^[[C" _cd_in_cwd_wrapper  # Right
 
 
 # TELEPORT
@@ -164,22 +154,7 @@ local function _teleport_wrapper() {
     [[ -z "$BUFFER" ]] && _teleport || autopair-insert
 }
 zle -N _teleport_wrapper
-bindkey -M viins "'" _teleport_wrapper                               # '
-
-
-# FD INTO CD
-# ---------------------------------------------------------------------------- #
-local function _find_and_goto_dir_wrapper() {
-    emulate -L zsh
-    if [[ -z "$BUFFER" ]]; then
-        _find_and_goto_dir
-    else
-        POSTDISPLAY=
-        LBUFFER[CURSOR+1]+="-"
-    fi
-}
-zle -N _find_and_goto_dir_wrapper
-bindkey -M viins "\-" _find_and_goto_dir_wrapper                     # -
+bindkey -M viins "'" _teleport_wrapper  # '
 
 
 # TRASH FILES / DIRECTORIES
@@ -189,19 +164,14 @@ local function _move_to_trash_wrapper() {
     [[ -z "$BUFFER" ]] && _move_to_trash || zle backward-kill-word
 }
 zle -N _move_to_trash_wrapper
-bindkey -M viins "^[^?" _move_to_trash_wrapper                       # Alt BS
+bindkey -M viins "^[^?" _move_to_trash_wrapper  # Alt BS
 
 
 # CLEAR COMMAND LINE
 # ---------------------------------------------------------------------------- #
 local function _clear_command_line() {
     emulate -L zsh
-    if [[ -z "$RBUFFER" ]]; then
-        BUFFER=
-        POSTDISPLAY=
-    else
-        zle delete-char
-    fi
+    [[ -z "$RBUFFER" ]] && { BUFFER=; POSTDISPLAY= } || zle delete-char
 }
 zle -N _clear_command_line
-bindkey -M viins "^[[3~" _clear_command_line                         # Delete
+bindkey -M viins "^[[3~" _clear_command_line  # Delete

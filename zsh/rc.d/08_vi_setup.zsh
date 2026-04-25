@@ -80,11 +80,10 @@ local function zle-keymap-select() {
     case "$KEYMAP" in
         viins|main)
             # Overwrite cursor shape in replace mode
-            if [[ "$ZLE_STATE" == *overwrite* ]]; then
-                echo -ne "$underline_cursor"
-            else
-                echo -ne "$beam_cursor"
-            fi
+            case "$ZLE_STATE" in
+                *overwrite*)  echo -ne "$underline_cursor"  ;;
+                *)            echo -ne "$beam_cursor"       ;;
+            esac
             ;;
         *)
             echo -ne "$block_cursor"

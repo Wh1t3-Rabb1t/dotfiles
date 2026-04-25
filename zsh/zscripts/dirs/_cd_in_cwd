@@ -9,58 +9,59 @@
 
 emulate -L zsh
 
-local FZF_STATE_DIR="$(mktemp -d "${VI_STATE_DIR}/fzf_state_XXXXXXXXX")"
-mkdir -p "$FZF_STATE_DIR"
-trap 'rm -rf "$FZF_STATE_DIR"' EXIT
-
-local HEADER_TEMPLATE=" Cd into directory.
-Alt _ : Show dotfiles.
-Alt ' : Expand dir tree."
-
-local TOGGLE_HIDDEN_FLAG='
-    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] \
-        && rm "'"$FZF_STATE_DIR"'/hidden" \
-        || ln -s "" "'"$FZF_STATE_DIR"'/hidden"
-'
-
-local TOGGLE_CWD_FLAG='
-    [[ -L "'"$FZF_STATE_DIR"'/cwd" ]] \
-        && rm "'"$FZF_STATE_DIR"'/cwd" \
-        || ln -s "" "'"$FZF_STATE_DIR"'/cwd"
-'
+local hidden_key='?'
+local cwd_key='>'
 
 local RELOAD_OPTS='
-    local FD_CMD="fd --type=directory --max-depth=1 --color=always"
-    local HEADER="'"$HEADER_TEMPLATE"'"
+    local fd_cmd="fd --type=directory --color=always"
+    local content=" Cd into directory."
+    local label=""
 
-    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] && \
-        HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
-        FD_CMD+=" --hidden"
+    [[ -z '\$FZF_HEADER_LABEL' ]] && label=" H:n D:n " || label='\$FZF_HEADER_LABEL'
 
-    [[ -L "'"$FZF_STATE_DIR"'/cwd" ]] && \
-        HEADER="${HEADER/Expand dir tree./Collapse dir tree.}" \
-        FD_CMD="${FD_CMD/ --max-depth=1}"
+    case '\$FZF_KEY' in
+        "'"$hidden_key"'")
+            [[ '$\label' == *"H:y"* ]] && label="${label/H:y/H:n}" || label="${label/H:n/H:y}"
+            ;;
+        "'"$cwd_key"'")
+            [[ '$\label' == *"D:y"* ]] && label="${label/D:y/D:n}" || label="${label/D:n/D:y}"
+            ;;
+    esac
 
-    echo "change-header('\$HEADER')+reload('\$FD_CMD')"
+    if [[ '\$label' == *"H:n"* ]]; then
+        content+="\n'${hidden_key}' : Show dotfiles."
+    else
+        fd_cmd+=" --hidden"
+        content+="\n'${hidden_key}' : Hide dotfiles."
+    fi
+
+    if [[ '\$label' == *"D:n"* ]]; then
+        fd_cmd+=" --max-depth=1"
+        content+="\n'${cwd_key}' : Expand dir tree."
+    else
+        content+="\n'${cwd_key}' : Collapse dir tree."
+    fi
+
+    printf "%b" \
+        "change-header('\${content}')" \
+        "+change-header-label('\${label}')" \
+        "+reload('\${fd_cmd}')"
 '
 
-local selection=$( \
+local selection; selection=$(
     fd \
         --type=directory \
-        --max-depth=1 \
         --color=always \
+        --max-depth=1 \
     | fzf \
         --tac \
         --header-border=top \
-        --header=$HEADER_TEMPLATE \
-        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
-        --bind="alt-':transform:$TOGGLE_CWD_FLAG+$RELOAD_OPTS" \
+        --bind="${hidden_key}:transform:${RELOAD_OPTS}" \
+        --bind="${cwd_key}:transform:${RELOAD_OPTS}" \
+        --bind="start:transform:${RELOAD_OPTS}"
 )
 
-# Cleanup fzf state directory on exit
-[[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
-
-if [[ "$selection" ]]; then
+if [[ -n "$selection" ]]; then
     BUFFER="cd ${selection:q}"
     zle accept-line
 fi

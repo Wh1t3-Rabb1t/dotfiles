@@ -1,10 +1,18 @@
 # TODO
 
-## Priority: High
+Scripts replaced by sentinel:
+- _find_and_goto_dir
+- _find_files
+- _move_to_trash
+- _find_vim_sessions
+- _rename_fzf
 
-- Write 'trim' scrpit. If invoked with no args launch fzf and select a
-  file from the cwd, output file back onto cli with:
-  trim 'filename' 'from,00:00:00' 'to,00:00:00'
+Scripts to add:
+- alter file permissions
+- duplicate file(s)
+- move file(s)
+
+## Priority: High
 
 - Update vi mode bindings to reflect new nvim bindings.
 

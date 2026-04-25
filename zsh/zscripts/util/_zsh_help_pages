@@ -9,33 +9,28 @@
 
 emulate -L zsh
 
-local FZF_STATE_DIR="$(mktemp -d "${VI_STATE_DIR}/fzf_state_XXXXXXXXX")"
-mkdir -p "$FZF_STATE_DIR"
-trap 'rm -rf "$FZF_STATE_DIR"' EXIT
+local toggle_key='?'
 
-local HEADER_TEMPLATE=" Zsh help pages.
-Alt _ : Show dotfiles."
+local reload_fzf_opts='
+    local fd_cmd="fd --type=file --extension=md --color=always"
+    local label=" H:n "
+    local content=" Zsh help pages.\n'${toggle_key}' : Show dotfiles."
 
-local TOGGLE_HIDDEN_FLAG='
-    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] \
-        && rm "'"$FZF_STATE_DIR"'/hidden" \
-        || ln -s "" "'"$FZF_STATE_DIR"'/hidden"
+    if [[ '\$FZF_HEADER_LABEL' == *" H:n "* ]]; then
+        fd_cmd+=" --hidden"
+        label="${label/ H:n / H:y }"
+        content="${content/Show dotfiles./Hide dotfiles.}"
+    fi
+
+    printf "%b" \
+        "change-header('\${content}')" \
+        "+change-header-label('\${label}')" \
+        "+reload('\${fd_cmd}')"
 '
 
-local RELOAD_OPTS='
-    local FD_CMD="fd --type=file --extension=md --color=always"
-    local HEADER="'"$HEADER_TEMPLATE"'"
+local selection; selection=$(
+    pushd "$ZDOTDIR"
 
-    [[ -L "'"$FZF_STATE_DIR"'/hidden" ]] && \
-        HEADER="${HEADER/Show dotfiles./Hide dotfiles.}" \
-        FD_CMD+=" --hidden"
-
-    echo "change-header('\$HEADER')+reload('\$FD_CMD')"
-'
-
-pushd "$ZDOTDIR"
-
-local selection=$( \
     fd \
         --type=file \
         --extension=md \
@@ -43,14 +38,13 @@ local selection=$( \
     | fzf \
         --tac \
         --header-border=top \
-        --header=$HEADER_TEMPLATE \
-        --bind="alt-_:transform:$TOGGLE_HIDDEN_FLAG+$RELOAD_OPTS" \
+        --bind="start:transform:${reload_fzf_opts}" \
+        --bind="${toggle_key}:transform:${reload_fzf_opts}"
+
+    popd
 )
 
-# Cleanup fzf state directory on exit
-[[ -d "$FZF_STATE_DIR" ]] && rm -rf "$FZF_STATE_DIR"
-
-if [[ "$selection" ]]; then
+if [[ -n "$selection" ]]; then
     if (( ${+commands[glow]} )); then
         glow "$selection"; print "\n"
     elif (( ${+commands[bat]} )); then
@@ -61,5 +55,3 @@ if [[ "$selection" ]]; then
 
     zle redisplay
 fi
-
-popd

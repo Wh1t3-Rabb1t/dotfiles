@@ -1,12 +1,13 @@
 #!/usr/bin/env zsh
 
 ################################################################################
-# Open file / session with `neovim`.
-# If called with args, open selected args (files) with `neovim`.
-# If called without args and Session.vim exists in cwd, launch Session.vim.
-# If called without args and Session.vim does not exist in cwd, launch `neovim`
-# with Neotree open.
-# ------------------
+# Open file(s) / session with neovim.
+# -----------------------------------
+# If called:
+#   With args)  Open selected files with neovim.
+#   No args)    Session.vim exists in cwd, launch Session.vim.
+#   No args)    No Session.vim in cwd, launch neovim.
+#
 # Args:  Files to open / none
 ################################################################################
 

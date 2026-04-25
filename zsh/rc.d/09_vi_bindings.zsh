@@ -13,257 +13,257 @@
 # +-------+
 # | INDEX |
 # +-------+
-# MODE TOGGLING
-# LINE NAVIGATION
-# DELETE BINDINGS
-# DELETE MOTIONS
-# UNDO / REDO / DOT OPERATOR / REPLACE
-# SELECT IN WORD / LINE
-# UPPER / LOWER / SWAP CASE
-# COPY
-# CUT
-# CHANGE
-# PASTE
-# INCREMENT / DECREMENT INTEGERS
-# MATCH BRACKETS
-# CHANGE / DELETE SURROUNDING
-# SELECT INSIDE SURROUNDING
-# ADD SURROUNDING
+# MODE TOGGLING                         __01
+# LINE NAVIGATION                       __02
+# DELETE BINDINGS                       __03
+# DELETE MOTIONS                        __04
+# UNDO / REDO / DOT OPERATOR / REPLACE  __05
+# SELECT IN WORD / LINE                 __06
+# UPPER / LOWER / SWAP CASE             __07
+# COPY                                  __08
+# CUT                                   __09
+# CHANGE                                __10
+# PASTE                                 __11
+# INCREMENT / DECREMENT INTEGERS        __12
+# MATCH BRACKETS                        __13
+# CHANGE / DELETE SURROUNDING           __14
+# SELECT INSIDE SURROUNDING             __15
+# ADD SURROUNDING                       __16
 
 
-# MODE TOGGLING
+# MODE TOGGLING                                                           __01
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '^['       vi-insert                    # Esc
-bindkey -M vicmd 'a'        vi-add-next                  # a
-bindkey -M vicmd 'A'        vi-add-eol                   # A
-bindkey -M vicmd 's'        visual-mode                  # s
-bindkey -M vicmd 'S'        visual-line-mode             # S
-bindkey -M vicmd 'G'        _reactivate_region           # G
+bindkey -M vicmd '^['       vi-insert                     # Esc
+bindkey -M vicmd 'a'        vi-add-next                   # a
+bindkey -M vicmd 'A'        vi-add-eol                    # A
+bindkey -M vicmd 's'        visual-mode                   # s
+bindkey -M vicmd 'S'        visual-line-mode              # S
+bindkey -M vicmd 'G'        _reactivate_region            # G
 
 # Vis
-bindkey -M visual '^['      _deactivate_region           # Esc
+bindkey -M visual '^['      _deactivate_region            # Esc
 
 # Ins
-bindkey -M viins '^['       vi-cmd-mode                  # Esc
+bindkey -M viins '^['       vi-cmd-mode                   # Esc
 
 
-# LINE NAVIGATION
+# LINE NAVIGATION                                                         __02
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'i'        _up_line                     # i
-bindkey -M vicmd 'k'        _down_line                   # k
-bindkey -M vicmd 'l'        vi-forward-char              # l
-bindkey -M vicmd 't'        vi-backward-char             # t
-bindkey -M vicmd ','        _line_start                  # ,
-bindkey -M vicmd '.'        _line_end                    # .
-bindkey -M vicmd 'o'        vi-forward-word              # o
-bindkey -M vicmd 'u'        vi-backward-word             # u
-bindkey -M vicmd 'O'        vi-forward-word-end          # O
-bindkey -M vicmd 'U'        vi-backward-word-end         # U
-bindkey -M vicmd 'f'        vi-find-next-char            # f
-bindkey -M vicmd ';'        vi-repeat-find               # ;
-bindkey -M vicmd 'h'        vi-rev-repeat-find           # h
+bindkey -M vicmd 'i'        _up_line                      # i
+bindkey -M vicmd 'k'        _down_line                    # k
+bindkey -M vicmd 'l'        vi-forward-char               # l
+bindkey -M vicmd 't'        vi-backward-char              # t
+bindkey -M vicmd ','        _line_start                   # ,
+bindkey -M vicmd '.'        _line_end                     # .
+bindkey -M vicmd 'o'        vi-forward-word               # o
+bindkey -M vicmd 'u'        vi-backward-word              # u
+bindkey -M vicmd 'O'        vi-forward-word-end           # O
+bindkey -M vicmd 'U'        vi-backward-word-end          # U
+bindkey -M vicmd 'f'        vi-find-next-char             # f
+bindkey -M vicmd ';'        vi-repeat-find                # ;
+bindkey -M vicmd 'h'        vi-rev-repeat-find            # h
 
 # Vis
-bindkey -M visual 'o'       vi-forward-word              # o
-bindkey -M visual 'u'       vi-backward-word             # u
-bindkey -M visual 'O'       vi-forward-word-end          # O
-bindkey -M visual 'U'       vi-backward-word-end         # U
-bindkey -M visual 'a'       exchange-point-and-mark      # a
+bindkey -M visual 'o'       vi-forward-word               # o
+bindkey -M visual 'u'       vi-backward-word              # u
+bindkey -M visual 'O'       vi-forward-word-end           # O
+bindkey -M visual 'U'       vi-backward-word-end          # U
+bindkey -M visual 'a'       exchange-point-and-mark       # a
 
 # Ins
-bindkey -M viins '^[[H'     beginning-of-line            # Home
-bindkey -M viins '^[[F'     end-of-line                  # End
-bindkey -M viins '^[[1;3D'  vi-backward-word             # Alt Left
-bindkey -M viins '^[[1;3C'  _jump_forward_word           # Alt Right
+bindkey -M viins '^[[H'     beginning-of-line             # Home
+bindkey -M viins '^[[F'     end-of-line                   # End
+bindkey -M viins '^[[1;3D'  vi-backward-word              # Alt Left
+bindkey -M viins '^[[1;3C'  _jump_forward_word            # Alt Right
 
 
-# DELETE BINDINGS
+# DELETE BINDINGS                                                         __03
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '^?'       backward-delete-char         # BS
-bindkey -M vicmd '^[[3~'    delete-char                  # Del
-bindkey -M vicmd '^[^?'     backward-kill-word           # Alt BS
-bindkey -M vicmd '^[[3;3~'  kill-word                    # Alt Del
-bindkey -M vicmd '^H'       backward-kill-line           # Ctrl BS
-bindkey -M vicmd '^[[3;5~'  kill-line                    # Ctrl Del
-bindkey -M vicmd '^[[3;2~'  kill-whole-line              # Shift Del
+bindkey -M vicmd '^?'       backward-delete-char          # BS
+bindkey -M vicmd '^[[3~'    delete-char                   # Del
+bindkey -M vicmd '^[^?'     backward-kill-word            # Alt BS
+bindkey -M vicmd '^[[3;3~'  kill-word                     # Alt Del
+bindkey -M vicmd '^H'       backward-kill-line            # Ctrl BS
+bindkey -M vicmd '^[[3;5~'  kill-line                     # Ctrl Del
+bindkey -M vicmd '^[[3;2~'  kill-whole-line               # Shift Del
 
 # Vis
-bindkey -M visual '^?'      kill-region                  # BS
-bindkey -M visual '^[[3~'   kill-region                  # Del
+bindkey -M visual '^?'      kill-region                   # BS
+bindkey -M visual '^[[3~'   kill-region                   # Del
 
 # Ins
-bindkey -M viins '^?'       backward-delete-char         # BS
-bindkey -M viins '^[[3~'    delete-char                  # Del
-bindkey -M viins '^[^?'     backward-kill-word           # Alt BS
-bindkey -M viins '^[[3;3~'  kill-word                    # Alt Del
-bindkey -M viins '^H'       backward-kill-line           # Ctrl BS
-bindkey -M viins '^[[3;5~'  kill-line                    # Ctrl Del
-bindkey -M viins '^[[3;2~'  kill-whole-line              # Shift Del
+bindkey -M viins '^?'       backward-delete-char          # BS
+bindkey -M viins '^[[3~'    delete-char                   # Del
+bindkey -M viins '^[^?'     backward-kill-word            # Alt BS
+bindkey -M viins '^[[3;3~'  kill-word                     # Alt Del
+bindkey -M viins '^H'       backward-kill-line            # Ctrl BS
+bindkey -M viins '^[[3;5~'  kill-line                     # Ctrl Del
+bindkey -M viins '^[[3;2~'  kill-whole-line               # Shift Del
 
 
-# DELETE MOTIONS
+# DELETE MOTIONS                                                          __04
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'w'        _delete_motions              # w...
-                                                         # wt = In word
-                                                         # wu = Word left
-                                                         # wo = Word right
-                                                         # wl = Whole line
-                                                         # w, = To line start
-                                                         # w. = To line end
-                                                         # w; = Next input char
-                                                         # wh = Prev input char
+bindkey -M vicmd 'w'        _delete_motions               # w...
+                                                          # wt = In word
+                                                          # wu = Word left
+                                                          # wo = Word right
+                                                          # wl = Whole line
+                                                          # w, = To line start
+                                                          # w. = To line end
+                                                          # w; = Next input char
+                                                          # wh = Prev input char
 
 # Vis
-bindkey -M visual 'w'       kill-region                  # w
+bindkey -M visual 'w'       kill-region                   # w
 
 
-# UNDO / REDO / DOT OPERATOR / REPLACE
+# UNDO / REDO / DOT OPERATOR / REPLACE                                    __05
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'r'        _replace_chars               # r
-bindkey -M vicmd 'R'        vi-replace                   # R
-bindkey -M vicmd '\-'       vi-repeat-change             # Hyphen
-bindkey -M vicmd '^[y'      undo                         # Alt y
-bindkey -M vicmd '^[Y'      redo                         # Alt Y
+bindkey -M vicmd 'r'        _replace_chars                # r
+bindkey -M vicmd 'R'        vi-replace                    # R
+bindkey -M vicmd '_'        vi-repeat-change              # Underscore
+bindkey -M vicmd '^[y'      undo                          # Alt y
+bindkey -M vicmd '^[Y'      redo                          # Alt Y
 
 # Ins
-bindkey -M viins '^[y'      undo                         # Alt y
-bindkey -M viins '^[Y'      redo                         # Alt Y
+bindkey -M viins '^[y'      undo                          # Alt y
+bindkey -M viins '^[Y'      redo                          # Alt Y
 
 
-# SELECT IN WORD / LINE
+# SELECT IN WORD / LINE                                                   __06
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'W'        _select_in_word              # W
+bindkey -M vicmd 'm'        _select_in_word               # W
 
 # Vis
-bindkey -M visual 'W'       visual-line-mode             # W
+bindkey -M visual 'm'       visual-line-mode              # W
 
 
-# UPPER / LOWER / SWAP CASE
+# UPPER / LOWER / SWAP CASE                                               __07
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '_'        vi-swap-case                 # _
+bindkey -M vicmd '\-'       vi-swap-case                  # -
 
 # Vis
-bindkey -M visual '_'       vi-up-case                   # -
-bindkey -M visual '\-'      vi-down-case                 # _
+bindkey -M visual '_'       vi-up-case                    # _
+bindkey -M visual '\-'      vi-down-case                  # -
 
 
-# COPY
+# COPY                                                                    __08
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'c'        _copy_motions                # c...
-                                                         # ct = In word
-                                                         # cu = Word left
-                                                         # co = Word right
-                                                         # cl = Whole line
-                                                         # c, = To line start
-                                                         # c. = To line end
-                                                         # c; = Next input char
-                                                         # ch = Prev input char
+bindkey -M vicmd 'c'        _copy_motions                 # c...
+                                                          # ct = In word
+                                                          # cu = Word left
+                                                          # co = Word right
+                                                          # cl = Whole line
+                                                          # c, = To line start
+                                                          # c. = To line end
+                                                          # c; = Next input char
+                                                          # ch = Prev input char
 
 # Vis
-bindkey -M visual 'c'       _copy_to_clipboard           # c
+bindkey -M visual 'c'       _copy_to_clipboard            # c
 
 
-# CUT
+# CUT                                                                     __09
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'x'        _cut_motions                 # x...
-                                                         # xt = In word
-                                                         # xu = Word left
-                                                         # xo = Word right
-                                                         # xl = Whole line
-                                                         # x, = To line start
-                                                         # x. = To line end
-                                                         # x; = Next input char
-                                                         # xh = Prev input char
+bindkey -M vicmd 'x'        _cut_motions                  # x...
+                                                          # xt = In word
+                                                          # xu = Word left
+                                                          # xo = Word right
+                                                          # xl = Whole line
+                                                          # x, = To line start
+                                                          # x. = To line end
+                                                          # x; = Next input char
+                                                          # xh = Prev input char
 
 # Vis
-bindkey -M visual 'x'       _cut_to_clipboard            # x
+bindkey -M visual 'x'       _cut_to_clipboard             # x
 
 
-# CHANGE
+# CHANGE                                                                  __10
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'y'        _change_motions              # y...
-                                                         # yt = In word
-                                                         # yu = Word left
-                                                         # yo = Word right
-                                                         # yl = Whole line
-                                                         # y, = To line start
-                                                         # y. = To line end
-                                                         # y; = Next input char
-                                                         # yh = Prev input char
+bindkey -M vicmd 'y'        _change_motions               # y...
+                                                          # yt = In word
+                                                          # yu = Word left
+                                                          # yo = Word right
+                                                          # yl = Whole line
+                                                          # y, = To line start
+                                                          # y. = To line end
+                                                          # y; = Next input char
+                                                          # yh = Prev input char
 
 # Vis
-bindkey -M visual 'y'       vi-change                    # y
+bindkey -M visual 'y'       vi-change                     # y
 
 
-# PASTE
+# PASTE                                                                   __11
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'v'        _paste_from_clipboard        # v
-bindkey -M vicmd '^[p'      _clipboard_ring_paste        # Alt p
+bindkey -M vicmd 'v'        _paste_from_clipboard         # v
+bindkey -M vicmd '^[p'      _clipboard_ring_paste         # Alt p
 
 # Vis
-bindkey -M visual 'v'       _paste_from_clipboard_visual # v
-bindkey -M visual '^[p'     _clipboard_ring_paste_over   # Alt p
+bindkey -M visual 'v'       _paste_from_clipboard_visual  # v
+bindkey -M visual '^[p'     _clipboard_ring_paste_over    # Alt p
 
 # Ins
-bindkey -M viins '^[p'      _clipboard_ring_paste        # Alt p
+bindkey -M viins '^[p'      _clipboard_ring_paste         # Alt p
 
 
-# INCREMENT / DECREMENT INTEGERS
+# INCREMENT / DECREMENT INTEGERS                                          __12
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd 'C'        _increment_integers          # X
-bindkey -M vicmd 'X'        _decrement_integers          # C
+bindkey -M vicmd 'C'        _increment_integers           # X
+bindkey -M vicmd 'X'        _decrement_integers           # C
 
 
-# MATCH BRACKETS
+# MATCH BRACKETS                                                          __13
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd '%'        vi-match-bracket             # %
+bindkey -M vicmd '%'        vi-match-bracket              # %
 
 # Vis
-bindkey -M visual '%'       vi-match-bracket             # %
+bindkey -M visual '%'       vi-match-bracket              # %
 
 
-# CHANGE / DELETE SURROUNDING
+# CHANGE / DELETE SURROUNDING                                             __14
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd ' '        _manipulate_surrounding      # Space...
+bindkey -M vicmd ' '        _manipulate_surrounding       # Space...
 
 # The first input following Space specifies the
 # char to change FROM, the second input specifies
 # the char to change TO.
 
 
-# SELECT INSIDE SURROUNDING
+# SELECT INSIDE SURROUNDING                                               __15
 # ---------------------------------------------------------------------------- #
 # Cmd
-bindkey -M vicmd "'"        _select_in_surrounding       # '
-bindkey -M vicmd '"'        _select_in_surrounding       # "
-bindkey -M vicmd '`'        _select_in_surrounding       # `
-bindkey -M vicmd '{'        _select_in_surrounding       # {
-bindkey -M vicmd '('        _select_in_surrounding       # (
-bindkey -M vicmd '['        _select_in_surrounding       # [
-bindkey -M vicmd '<'        _select_in_surrounding       # <
+bindkey -M vicmd "'"        _select_in_surrounding        # '
+bindkey -M vicmd '"'        _select_in_surrounding        # "
+bindkey -M vicmd '`'        _select_in_surrounding        # `
+bindkey -M vicmd '{'        _select_in_surrounding        # {
+bindkey -M vicmd '('        _select_in_surrounding        # (
+bindkey -M vicmd '['        _select_in_surrounding        # [
+bindkey -M vicmd '<'        _select_in_surrounding        # <
 
 
-# ADD SURROUNDING
+# ADD SURROUNDING                                                         __16
 # ---------------------------------------------------------------------------- #
 # Vis
-bindkey -M visual "'"       _add_surrounding             # '
-bindkey -M visual '"'       _add_surrounding             # "
-bindkey -M visual '`'       _add_surrounding             # `
-bindkey -M visual '{'       _add_surrounding             # {
-bindkey -M visual '('       _add_surrounding             # (
-bindkey -M visual '['       _add_surrounding             # [
-bindkey -M visual '<'       _add_surrounding             # <
+bindkey -M visual "'"       _add_surrounding              # '
+bindkey -M visual '"'       _add_surrounding              # "
+bindkey -M visual '`'       _add_surrounding              # `
+bindkey -M visual '{'       _add_surrounding              # {
+bindkey -M visual '('       _add_surrounding              # (
+bindkey -M visual '['       _add_surrounding              # [
+bindkey -M visual '<'       _add_surrounding              # <

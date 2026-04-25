@@ -40,12 +40,12 @@ bindkey -rp -M viopp ''
 # escape key input) followed by whatever the rest of the sequence is. In other
 # words, scuffed inputs often result in a trainwreck.
 local function _noop() {return}; zle -N _noop
-local escape_sequences=( \
-    '^[[6;5~' '^[[5;5~' '^[[5;6~' '^[[6;6~' '^[[1;2A' '^[[1;2B' '^[[1;2C' \
-    '^[[1;2D' '^[[1;5A' '^[[1;5B' '^[[1;5C' '^[[1;5D' '^[[1;6A' '^[[1;6B' \
-    '^[[1;6C' '^[[1;6D' '^[[1;7A' '^[[1;7B' '^[[1;7C' '^[[1;7D' '^[[1;8A' \
-    '^[[1;8B' '^[[1;8C' '^[[1;8D' '^[[1;3A' '^[[1;3B' '^[[1;3C' '^[[1;3D' \
-    '^[[1;4A' '^[[1;4B' '^[[1;4C' '^[[1;4D' \
+local escape_sequences=(
+    '^[[6;5~' '^[[5;5~' '^[[5;6~' '^[[6;6~' '^[[1;2A' '^[[1;2B' '^[[1;2C'
+    '^[[1;2D' '^[[1;5A' '^[[1;5B' '^[[1;5C' '^[[1;5D' '^[[1;6A' '^[[1;6B'
+    '^[[1;6C' '^[[1;6D' '^[[1;7A' '^[[1;7B' '^[[1;7C' '^[[1;7D' '^[[1;8A'
+    '^[[1;8B' '^[[1;8C' '^[[1;8D' '^[[1;3A' '^[[1;3B' '^[[1;3C' '^[[1;3D'
+    '^[[1;4A' '^[[1;4B' '^[[1;4C' '^[[1;4D'
 )
 
 for m in viins vicmd visual viopp; do
@@ -77,17 +77,17 @@ local beam_cursor='\e[5 q'
 # Adjust cursor style on mode switch
 local function zle-keymap-select() {
     emulate -L zsh
-    case "${KEYMAP}" in
+    case "$KEYMAP" in
         viins|main)
             # Overwrite cursor shape in replace mode
-            if [[ "${ZLE_STATE}" == *overwrite* ]]; then
-                echo -ne $underline_cursor
+            if [[ "$ZLE_STATE" == *overwrite* ]]; then
+                echo -ne "$underline_cursor"
             else
-                echo -ne $beam_cursor
+                echo -ne "$beam_cursor"
             fi
             ;;
         *)
-            echo -ne $block_cursor
+            echo -ne "$block_cursor"
             ;;
     esac
 }
@@ -103,9 +103,9 @@ local function _deactivate_region() {
 
     # TODO: move this to zle-keymap-select
     # Don't save region coords when exiting visual line mode
-    if (( "${REGION_ACTIVE}" == 1 )); then
-        cursor_point="${CURSOR}"
-        cursor_mark="${MARK}"
+    if (( REGION_ACTIVE == 1 )); then
+        cursor_point="$CURSOR"
+        cursor_mark="$MARK"
     fi
     zle deactivate-region
 }
@@ -117,8 +117,8 @@ zle -N _deactivate_region
 local function _reactivate_region() {
     emulate -L zsh
     zle visual-mode
-    CURSOR="${cursor_point}"
-    MARK="${cursor_mark}"
+    CURSOR="$cursor_point"
+    MARK="$cursor_mark"
 }
 zle -N _reactivate_region
 
@@ -178,7 +178,7 @@ bindkey -M vicmd 'ZF' zap-to-char
 
 local function _delete_motions() {
     emulate -L zsh
-    echo -ne $underline_cursor
+    echo -ne "$underline_cursor"
 
     # Make widget repeatable with the dot operator
     zle -f vichange
@@ -186,7 +186,7 @@ local function _delete_motions() {
     # Read next typed keystroke
     local key
     read -k 1 key
-    case "${key}" in
+    case "$key" in
         't')                               # wt = Delete in word
             _select_in_word
             zle kill-region
@@ -223,12 +223,12 @@ local function _delete_motions() {
             zle -U ZB"$prev_char"
             ;;
         *)
-            echo -ne $block_cursor
+            echo -ne "$block_cursor"
             return
             ;;
     esac
 
-    echo -ne $block_cursor
+    echo -ne "$block_cursor"
 }
 zle -N _delete_motions
 
@@ -237,9 +237,9 @@ zle -N _delete_motions
 # ---------------------------------------------------------------------------- #
 local function _replace_chars() {
     emulate -L zsh
-    echo -ne $underline_cursor
+    echo -ne "$underline_cursor"
     zle vi-replace-chars
-    echo -ne $block_cursor
+    echo -ne "$block_cursor"
 }
 zle -N _replace_chars
 
@@ -259,11 +259,11 @@ zle -N _select_in_word
 local function _copy_to_clipboard() {
     emulate -L zsh
     zle vi-yank
-    echo -n "${CUTBUFFER}" | pbcopy -i
-    echo "${CUTBUFFER}" >> "${VI_CLIPBOARD_RING}"
+    echo -n "$CUTBUFFER" | pbcopy -i
+    echo "$CUTBUFFER" >> "$VI_CLIPBOARD_RING"
 
-    if [[ $(wc -l < "${VI_CLIPBOARD_RING}") -gt 100 ]]; then
-        sed -i '1d' "${VI_CLIPBOARD_RING}"
+    if [[ $(wc -l < "$VI_CLIPBOARD_RING") -gt 100 ]]; then
+        sed -i '1d' "$VI_CLIPBOARD_RING"
     fi
 }
 zle -N _copy_to_clipboard
@@ -271,19 +271,20 @@ zle -N _copy_to_clipboard
 local function _cut_to_clipboard() {
     emulate -L zsh
     zle vi-delete
-    echo -n "${CUTBUFFER}" | pbcopy -i
-    echo "${CUTBUFFER}" >> "${VI_CLIPBOARD_RING}"
+    echo -n "$CUTBUFFER" | pbcopy -i
+    echo "$CUTBUFFER" >> "$VI_CLIPBOARD_RING"
 
-    if [[ $(wc -l < "${VI_CLIPBOARD_RING}") -gt 100 ]]; then
-        sed -i '1d' "${VI_CLIPBOARD_RING}"
+    if [[ $(wc -l < "$VI_CLIPBOARD_RING") -gt 100 ]]; then
+        sed -i '1d' "$VI_CLIPBOARD_RING"
     fi
 }
 zle -N _cut_to_clipboard
 
 local function _clipboard_ring_paste() {
     emulate -L zsh
-    local selection=$( \
-        cat "${VI_CLIPBOARD_RING}" \
+    local selection
+    selection=$(
+        cat "$VI_CLIPBOARD_RING" \
         | fzf \
             --tac \
             --no-preview \
@@ -291,16 +292,16 @@ local function _clipboard_ring_paste() {
             --header='󱓦 Vi clipboard ring.'
     )
 
-    if [[ "${selection}" ]]; then
-        if [[ "${CURSOR}" < 1 ]]; then
-            LBUFFER+="${selection}"
-            CURSOR=$(( "${CURSOR}" - 1 ))
+    if [[ -n "$selection" ]]; then
+        if (( CURSOR < 1 )); then
+            LBUFFER+="$selection"
+            CURSOR=$(( CURSOR - 1 ))
         else
             BUFFER[CURSOR]+="$selection"
-            CURSOR+=$(( "${#selection}" - 1 ))
+            CURSOR+=$(( ${#selection} - 1 ))
         fi
 
-        echo -n "$selection" | pbcopy -i
+        print -- "$selection" | pbcopy -i
         POSTDISPLAY=
         zle redisplay
     fi
@@ -309,27 +310,28 @@ zle -N _clipboard_ring_paste
 
 local function _clipboard_ring_paste_over() {
     emulate -L zsh
-    local selection=$( \
-        cat "${VI_CLIPBOARD_RING}" \
+    local selection
+    selection=$(
+        cat "$VI_CLIPBOARD_RING" \
         | fzf \
             --tac \
             --no-preview
             --header-border=top \
-            --header='󱓦 Vi clipboard ring.' \
+            --header='󱓦 Vi clipboard ring.'
     )
 
-    if [[ "${selection}" ]]; then
+    if [[ -n "$selection" ]]; then
         zle kill-region
 
-        if [[ "${CURSOR}" < 1 ]]; then
-            LBUFFER+="${selection}"
-            CURSOR=$(( "${CURSOR}" - 1 ))
+        if (( CURSOR < 1 )); then
+            LBUFFER+="$selection"
+            CURSOR=$(( CURSOR - 1 ))
         else
-            BUFFER[CURSOR]+="${selection}"
-            CURSOR+=$(( "${#selection}" - 1 ))
+            BUFFER[CURSOR]+="$selection"
+            CURSOR+=$(( ${#selection} - 1 ))
         fi
 
-        echo -n "$selection" | pbcopy -i
+        print -- "$selection" | pbcopy -i
         POSTDISPLAY=
         zle redisplay
     fi
@@ -345,12 +347,12 @@ bindkey -M vicmd 'TP' vi-find-prev-char-skip
 
 local function _copy_motions() {
     emulate -L zsh
-    echo -ne $underline_cursor
+    echo -ne "$underline_cursor"
 
     # Read next typed keystroke
     local key
     read -k 1 key
-    case "${key}" in
+    case "$key" in
         't')                               # ct = Copy in word
             local mark=$CURSOR
             _select_in_word
@@ -402,12 +404,12 @@ local function _copy_motions() {
             CURSOR=$mark
             ;;
         *)
-            echo -ne $block_cursor
+            echo -ne "$block_cursor"
             return
             ;;
     esac
 
-    echo -ne $block_cursor
+    echo -ne "$block_cursor"
 }
 zle -N _copy_motions
 
@@ -416,12 +418,12 @@ zle -N _copy_motions
 # ---------------------------------------------------------------------------- #
 local function _cut_motions() {
     emulate -L zsh
-    echo -ne $underline_cursor
+    echo -ne "$underline_cursor"
 
     # Read next typed keystroke
     local key
     read -k 1 key
-    case "${key}" in
+    case "$key" in
         't')                               # xt = Cut in word
             _select_in_word
             _cut_to_clipboard
@@ -464,12 +466,12 @@ local function _cut_motions() {
             _cut_to_clipboard
             ;;
         *)
-            echo -ne $block_cursor
+            echo -ne "$block_cursor"
             return
             ;;
     esac
 
-    echo -ne $block_cursor
+    echo -ne "$block_cursor"
 }
 zle -N _cut_motions
 
@@ -478,12 +480,12 @@ zle -N _cut_motions
 # ---------------------------------------------------------------------------- #
 local function _change_motions() {
     emulate -L zsh
-    echo -ne $underline_cursor
+    echo -ne "$underline_cursor"
 
     # Read next typed keystroke
     local key
     read -k 1 key
-    case "${key}" in
+    case "$key" in
         't')                               # yt = Change in word
             _select_in_word
             zle vi-change
@@ -511,19 +513,19 @@ local function _change_motions() {
             read -k 1 next_char
             zle -U "TN${next_char}"
             zle vi-change
-            [[ $RBUFFER != *"${next_char}"* ]] \
-                && echo -ne $block_cursor
+            [[ "$RBUFFER" != *"$next_char"* ]] \
+                && echo -ne "$block_cursor"
             ;;
         'h')                               # yh = Change to previous typed char
             local prev_char
             read -k 1 prev_char
             zle -U "TP${prev_char}"
             zle vi-change
-            [[ $LBUFFER != *"${prev_char}"* ]] \
-                && echo -ne $block_cursor
+            [[ "$LBUFFER" != *"$prev_char"* ]] \
+                && echo -ne "$block_cursor"
             ;;
         *)
-            echo -ne $block_cursor
+            echo -ne "$block_cursor"
             return
             ;;
     esac
@@ -600,19 +602,19 @@ local function _manipulate_surrounding() {
 
     # Check if both inputs exist in the characters array
     for k in "${characters[@]}"; do
-        [[ "${k}" == "${key1}" ]] && found_key1=true
-        [[ "${k}" == "${key2}" ]] && found_key2=true
+        [[ "$k" == "$key1" ]] && found_key1=true
+        [[ "$k" == "$key2" ]] && found_key2=true
 
         # If both keys are found, break early
-        [[ "${found_key1}" == true && "${found_key2}" == true ]] && break
+        [[ "$found_key1" == true && "$found_key2" == true ]] && break
     done
 
     # If either key was not found in the array, return
-    [[ "${found_key1}" == false || "${found_key2}" == false ]] && return
+    [[ "$found_key1" == false || "$found_key2" == false ]] && return
 
     # If the same key was pressed twice `delete`, otherwise `change`
-    if [[ "${key1}" == "${key2}" ]]; then
-        zle -U DS"${key1}"
+    if [[ "$key1" == "$key2" ]]; then
+        zle -U DS"$key1"
     else
         zle -U CS"${key1}""${key2}"
     fi
@@ -634,7 +636,7 @@ bindkey -M visual 'Q<' select-bracketed
 local function _select_in_surrounding() {
     emulate -L zsh
     zle visual-mode
-    case "${KEYS}" in
+    case "$KEYS" in
         "'") zle -U "Q'" ;;
         '"') zle -U 'Q"' ;;
         '`') zle -U 'Q`' ;;
@@ -660,7 +662,7 @@ bindkey -M visual 'M<' add-surround
 
 local function _add_surrounding() {
     emulate -L zsh
-    case "${KEYS}" in
+    case "$KEYS" in
         "'") zle -U "M''" ;;
         '"') zle -U 'M""' ;;
         '`') zle -U 'M``' ;;
@@ -671,7 +673,7 @@ local function _add_surrounding() {
     esac
 
     # Save the region coords for `_reactivate_region` widget
-    cursor_point="${CURSOR}"
-    cursor_mark="${MARK}"
+    cursor_point="$CURSOR"
+    cursor_mark="$MARK"
 }
 zle -N _add_surrounding

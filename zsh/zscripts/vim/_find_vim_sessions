@@ -10,21 +10,21 @@
 # TODO: use a coproc to read from the subshell
 
 # If a pipeline is preceded by `coproc', it is executed as a coprocess; a two-way
-# pipe is established between it and the parent shell.  The shell can read from
+# pipe is established between it and the parent shell. The shell can read from
 # or write to the coprocess by means of the `>&p' and `<&p' redirection operators
-# or with `print -p' and `read -p'.  A pipeline cannot be preceded by both
-# `coproc' and `!'.  If job control is active, the coprocess can be treated in
+# or with `print -p' and `read -p'. A pipeline cannot be preceded by both
+# `coproc' and `!'. If job control is active, the coprocess can be treated in
 # other than input and output as an ordinary background job.
 
 emulate -L zsh
 
 local vim_sessions="${VI_STATE_DIR}/vim_sessions"
 local vim_session_swap="${VI_STATE_DIR}/vim_session_swap"
-[[ ! -f "$vim_sessions" ]] && touch "$vim_sessions"
-[[ ! -f "$vim_session_swap" ]] && touch "$vim_session_swap"
+[[ -f "$vim_sessions"     ]] || touch "$vim_sessions"
+[[ -f "$vim_session_swap" ]] || touch "$vim_session_swap"
 
 (
-    local verify_sessions=$(
+    local verify_sessions; verify_sessions=$(
         fd Session.vim \
             --extension=.vim \
             --search-path=$HOME \
@@ -34,7 +34,7 @@ local vim_session_swap="${VI_STATE_DIR}/vim_session_swap"
             --hidden \
             --no-ignore \
             --absolute-path \
-            --format={//} \
+            --format={//}
     )
 
     if [[ -n "$verify_sessions" ]]; then
@@ -50,7 +50,7 @@ local vim_session_swap="${VI_STATE_DIR}/vim_session_swap"
 local HEADER=" Open session.
 Alt r : Reload results."
 
-local selection=$(
+local selection; selection=$(
     cat "$vim_sessions" \
     | fzf \
         --tac \

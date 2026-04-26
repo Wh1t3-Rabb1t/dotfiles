@@ -23,7 +23,7 @@ TRANSFORMER='
     echo "+search:$fzf_pat"
 '
 fzf --disabled --query "$INITIAL_QUERY" \
-    --bind="start,change:transform:$TRANSFORMER" \
+    --bind="start,change:transform:${TRANSFORMER}" \
     --tac \
     --header-border=top \
     --header=" Open line. Rg searches first word, Fzf everything after." \

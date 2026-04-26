@@ -5,6 +5,7 @@
 # --------------------------------------
 # Args:
 #     None
+#
 # Exports:
 #     BUFFER
 #     CURSOR
@@ -13,10 +14,10 @@
 
 emulate -L zsh
 
-pushd "$ZSCRIPTDIR"
-
 # Search cheat sheet, ignoring files with a leading underscore
 local selection=$(
+    pushd "$ZSCRIPTDIR"
+
     fd \
         --type=file \
         --exclude='_*' \
@@ -31,9 +32,9 @@ local selection=$(
     | fzf \
         --header=' Zsh cheat sheet. Green x : Immediate execution.' \
         --header-border=top
-)
 
-popd
+    popd
+)
 
 if [[ -n "$selection" ]]; then
     # Strip everything up to, and including the slash

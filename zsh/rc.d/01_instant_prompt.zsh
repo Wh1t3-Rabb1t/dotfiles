@@ -5,8 +5,8 @@
 #  |_|_| |_|___/\__\__,_|_| |_|\__| | .__/|_|  \___/|_| |_| |_| .__/ \__|
 # ==================================|_|=======================|_|============= #
 
-# Clear screen, move cursor to the bottom
-# but don't do this under ssh or sudo sessions, as prompt already at the bottom
+# Clear screen, move cursor to the bottom.
+# (don't do this under ssh or sudo sessions, as prompt already at the bottom).
 if ! [[ -v SSH_TTY || -v SUDO_USER ]]; then
     autoload -Uz _clear_screen_soft_bottom
     _clear_screen_soft_bottom

@@ -10,7 +10,7 @@ source "${ZPLUGINDIR}/powerlevel10k/powerlevel10k.zsh-theme"
 
 # Loosely based on results from `p10k configure`
 
-# Temporarily change options.
+# Temporarily change options
 'builtin' 'local' '-a' 'p10k_config_opts'
 [[ ! -o 'aliases'         ]] || p10k_config_opts+=('aliases')
 [[ ! -o 'sh_glob'         ]] || p10k_config_opts+=('sh_glob')
@@ -20,8 +20,8 @@ source "${ZPLUGINDIR}/powerlevel10k/powerlevel10k.zsh-theme"
 () {
     emulate -L zsh -o extended_glob
 
-    # Unset all configuration options. This allows you to apply configuration changes without
-    # restarting zsh. Edit this file and source it.
+    # Unset all configuration options. This allows you to apply configuration
+    # changes without restarting zsh. Edit this file and source it.
     unset -m '(POWERLEVEL9K_*|DEFAULT_USER)~POWERLEVEL9K_GITSTATUS_DIR'
 
     # Configure left prompt

@@ -45,12 +45,14 @@ local selection; selection=$(
 )
 
 if [[ -n "$selection" ]]; then
+    local doc_file="${ZDOTDIR}/${selection}"
+
     if (( ${+commands[glow]} )); then
-        glow "$selection"; print "\n"
+        glow "$doc_file"; print "\n"
     elif (( ${+commands[bat]} )); then
-        bat --line-range=0:10000 "$selection"; print "\n"
+        bat --line-range=0:10000 "$doc_file"; print "\n"
     else
-        cat "$selection"; print "\n"
+        cat "$doc_file"; print "\n"
     fi
 
     zle redisplay

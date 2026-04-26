@@ -5,9 +5,10 @@
 #  |_|/___|_|
 # ============================================================================ #
 
-# https://junegunn.github.io/fzf/
-# https://thevaluable.dev/practical-guide-fzf-example/
-# https://vitormv.github.io/fzf-themes/
+# See:
+#   https://junegunn.github.io/fzf/
+#   https://thevaluable.dev/practical-guide-fzf-example/
+#   https://vitormv.github.io/fzf-themes/
 
 
 # Settings

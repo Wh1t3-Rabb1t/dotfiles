@@ -3,8 +3,12 @@
 ################################################################################
 # `cd` into a child dir of the cwd.
 # ---------------------------------
-# Args:     None
-# Exports:  BUFFER
+# Args:
+#     None
+# Exports:
+#     BUFFER
+#     FZF_KEY
+#     FZF_HEADER_LABEL
 ################################################################################
 
 emulate -L zsh
@@ -12,19 +16,19 @@ emulate -L zsh
 local hidden_key='?'
 local cwd_key='>'
 
-local RELOAD_OPTS='
+local reload_fzf_opts='
     local fd_cmd="fd --type=directory --color=always"
     local content=" Cd into directory."
     local label=""
 
-    [[ -z '\$FZF_HEADER_LABEL' ]] && label=" H:n D:n " || label='\$FZF_HEADER_LABEL'
+    [[ -z '\$FZF_HEADER_LABEL' ]] && label=" H:n E:n " || label='\$FZF_HEADER_LABEL'
 
     case '\$FZF_KEY' in
         "'"$hidden_key"'")
             [[ '$\label' == *"H:y"* ]] && label="${label/H:y/H:n}" || label="${label/H:n/H:y}"
             ;;
         "'"$cwd_key"'")
-            [[ '$\label' == *"D:y"* ]] && label="${label/D:y/D:n}" || label="${label/D:n/D:y}"
+            [[ '$\label' == *"E:y"* ]] && label="${label/E:y/E:n}" || label="${label/E:n/E:y}"
             ;;
     esac
 
@@ -35,7 +39,7 @@ local RELOAD_OPTS='
         content+="\n'${hidden_key}' : Hide dotfiles."
     fi
 
-    if [[ '\$label' == *"D:n"* ]]; then
+    if [[ '\$label' == *"E:n"* ]]; then
         fd_cmd+=" --max-depth=1"
         content+="\n'${cwd_key}' : Expand dir tree."
     else
@@ -56,9 +60,9 @@ local selection; selection=$(
     | fzf \
         --tac \
         --header-border=top \
-        --bind="${hidden_key}:transform:${RELOAD_OPTS}" \
-        --bind="${cwd_key}:transform:${RELOAD_OPTS}" \
-        --bind="start:transform:${RELOAD_OPTS}"
+        --bind="${hidden_key}:transform:${reload_fzf_opts}" \
+        --bind="${cwd_key}:transform:${reload_fzf_opts}" \
+        --bind="start:transform:${reload_fzf_opts}"
 )
 
 if [[ -n "$selection" ]]; then

@@ -1,11 +1,14 @@
 # TODO
 
 Scripts replaced by sentinel:
-- _find_and_goto_dir
+- _cd_to_sub_dir
 - _find_files
 - _move_to_trash
 - _find_vim_sessions
 - _rename_fzf
+- _glow_markdown
+- _preview_files
+- line counting (can count lines from files or dirs)
 
 Scripts to add:
 - alter file permissions

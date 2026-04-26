@@ -139,12 +139,12 @@ bindkey -M viins "^[[D" _cd_up_dir  # Left
 
 # CD DOWN DIR TREE
 # ---------------------------------------------------------------------------- #
-local function _cd_in_cwd_wrapper() {
+local function _cd_to_sub_dir_wrapper() {
     emulate -L zsh
-    [[ -z "$BUFFER" ]] && _cd_in_cwd || zle vi-forward-char
+    [[ -z "$BUFFER" ]] && _cd_to_sub_dir || zle vi-forward-char
 }
-zle -N _cd_in_cwd_wrapper
-bindkey -M viins "^[[C" _cd_in_cwd_wrapper  # Right
+zle -N _cd_to_sub_dir_wrapper
+bindkey -M viins "^[[C" _cd_to_sub_dir_wrapper  # Right
 
 
 # TELEPORT

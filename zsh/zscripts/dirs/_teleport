@@ -9,8 +9,7 @@
 
 emulate -L zsh
 
-local selection
-selection=$(
+local selection; selection=$(
     typeset -a lines=( "${(@f)$(z -l)}" )
 
     local line
@@ -20,7 +19,7 @@ selection=$(
         dir="${path:h}"
         base="${path:t}"
         [[ $dir == "/" ]] && sep=""
-        printf '%b\n' "${dir}${sep}\e[34m${base}\e[0m"
+        builtin printf '%b\n' "${dir}${sep}\e[34m${base}\e[0m"
     done | fzf \
         --header='󱃅 Teleport to selected directory.' \
         --header-border=top \

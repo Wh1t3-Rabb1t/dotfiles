@@ -41,9 +41,9 @@ bindkey -M viins "^[m" _preview_files      # Alt m
 # i.e. pressing semicolon ';' calls the `_zsh_cheat_sheet` widget when the
 # command line is empty, but inputs a semicolon character as normal otherwise.
 #
-# NOTE: Certain keys like Tab, or comma, are bound by plugins (fzf-tab and
+# NOTE: Certain keys like Tab, or comma, are bound by plugins (fzf-tab, and
 # zsh-autopairs in this case), so rather than inputting say; a comma to the
-# command line if the conditions for executing an 'empty-line'  binding aren't
+# command line if the conditions for executing an 'empty-line' binding aren't
 # met, we instead call the relevant zsh-autopairs widget manually so that the
 # desired behaviour will be respected. As such, plugins must be sourced prior
 # to declaring these bindings for their associated widgets to work.
@@ -91,7 +91,6 @@ local function _launch_nvim_wrapper() {
 }
 zle -N _launch_nvim_wrapper
 bindkey -M viins "^M" _launch_nvim_wrapper  # Enter
-bindkey -M vicmd "^M" _launch_nvim_wrapper  # Enter
 
 
 # ZSCRIPTS FZF

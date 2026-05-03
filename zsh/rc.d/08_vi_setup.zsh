@@ -122,6 +122,13 @@ zle -N _reactivate_region
 
 # LINE NAVIGATION
 # ---------------------------------------------------------------------------- #
+local function _open_line_normal_mode() {
+    emulate -L zsh
+    zle vi-open-line-below
+    zle vi-cmd-mode
+}
+zle -N _open_line_normal_mode
+
 local function _jump_forward_word() {
     emulate -L zsh
     zle vi-forward-word-end
@@ -129,33 +136,52 @@ local function _jump_forward_word() {
 }
 zle -N _jump_forward_word
 
-# Line navigation widgets that handle wrapped lines properly.
+# Line navigation widget that handles wrapped lines.
 #
 # NOTE: 'in bounds' checks aren't really needed as ZLE appears to handle
 # cursor boundaries automatically. e.g. Setting CURSOR to a value less
 # than 1 or greater than the number of characters held in BUFFER,
 # positions the cursor at the start, or end of BUFFER without issue.
+local function _navigate_wrapped_line() {
+    local direction="$1"
+
+    typeset -a split_line=( "${(f)BUFFER}" )
+
+    if (( ${#split_line[@]} == 1 && ${#BUFFER} > COLUMNS )); then
+        case "$direction" in
+            'up')     CURSOR=$(( CURSOR - COLUMNS ))                                   ;;
+            'down')   CURSOR=$(( CURSOR + COLUMNS ))                                   ;;
+            'start')  CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) ))                ;;
+            'end')    CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) + COLUMNS - 1 ))  ;;
+        esac
+    else
+        return 1
+    fi
+
+    return 0
+}
+
 local function _up_line() {
     emulate -L zsh
-    CURSOR=$(( CURSOR - COLUMNS ))
+    _navigate_wrapped_line 'up' || zle up-line
 }
 zle -N _up_line
 
 local function _down_line() {
     emulate -L zsh
-    CURSOR=$(( CURSOR + COLUMNS ))
+    _navigate_wrapped_line 'down' || zle down-line
 }
 zle -N _down_line
 
 local function _line_start() {
     emulate -L zsh
-    CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) ))
+    _navigate_wrapped_line 'start' || zle beginning-of-line
 }
 zle -N _line_start
 
 local function _line_end() {
     emulate -L zsh
-    CURSOR=$(( CURSOR - ( (CURSOR + 4) % COLUMNS ) + COLUMNS - 1 ))
+    _navigate_wrapped_line 'end' || zle end-of-line
 }
 zle -N _line_end
 

@@ -64,6 +64,7 @@ bindkey -M vicmd 'U'        vi-backward-word-end          # U
 bindkey -M vicmd 'f'        vi-find-next-char             # f
 bindkey -M vicmd ';'        vi-repeat-find                # ;
 bindkey -M vicmd 'h'        vi-rev-repeat-find            # h
+bindkey -M vicmd '^M'       _open_line_normal_mode        # enter
 
 # Vis
 bindkey -M visual 'o'       vi-forward-word               # o

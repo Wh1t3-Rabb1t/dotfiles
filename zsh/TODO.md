@@ -2,7 +2,7 @@
 
 ## Priority: High
 
-- Update vi mode bindings to reflect new nvim bindings.
+- Create a 'back dir' script (navigate the dir stack backwards).
 
 - Change the name of `$ZSH_VI` into something suitable for a generalized for
   a user state dir.

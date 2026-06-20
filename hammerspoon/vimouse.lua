@@ -1,6 +1,40 @@
----------------------------------------------------------------------------------------------------------------------------------------------
--- Main mouse handler function.
----------------------------------------------------------------------------------------------------------------------------------------------
+-- Mouse control module.
+--------------------------------------------------------------------------------
+
+-- local vimouse = require('vimouse')
+-- vimouse({'ctrl', 'alt'}, 'o')
+-- hs.hid.capslock.set(false)
+--
+-- local m = require('module_routes')
+-- -- m.ScreenWatcher:initiate(m.AppGrid, m.ScreenGrid, m.Var)
+--
+-- function toggleScreenWatcher(event)
+--     if event == hs.caffeinate.watcher.screensDidLock then
+--         m.ScreenWatcher:terminate()
+--         toggleWifi()
+--     elseif event == hs.caffeinate.watcher.screensDidUnlock then
+--         -- Restart the screen watcher when system wakes from sleep.
+--         local screenWatcherWakeUpDelay = hs.timer.delayed.new(2, function()
+--             m.ScreenWatcher:initiate(m.AppGrid, m.ScreenGrid, m.Var)
+--         end)
+--         screenWatcherWakeUpDelay:start()
+--         toggleWifi()
+--     end
+-- end
+-- gridWatcher = hs.caffeinate.watcher.new(toggleScreenWatcher)
+-- gridWatcher:start()
+
+
+-- -- Restart the screen watcher when system wakes from sleep.
+-- local screenWatcherWakeUpDelay = hs.timer.delayed.new(5, function()
+--     m.ScreenWatcher:initiate(m.AppGrid, m.ScreenGrid, m.Var)
+-- end)
+-- screenWatcherWakeUpDelay:start()
+
+
+
+-- Main mouse handler function
+--------------------------------------------------------------------------------
 return function(tmod, tkey)
     local log = hs.logger.new('vimouse', 'debug')
     local tapmods = {['cmd']=false, ['ctrl']=false, ['alt']=false, ['shift']=false}
@@ -30,9 +64,8 @@ return function(tmod, tkey)
     displayLayoutWatcher:start()
 
 
-    -----------------------------------------------------------------------------------------
     -- If mouse toggle is set to one key without a modifier, comment out the function below.
-    -----------------------------------------------------------------------------------------
+    --
     -- Bind a selected flag to the key used to toggle mouse control on/off.
     if type(tmod) == 'string' then
         tapmods[tmod] = true
@@ -43,9 +76,7 @@ return function(tmod, tkey)
     end
 
 
-    -----------------------------------------------------------------------------------------------------------------------------------------
-    -- Handler for dealing with flag change events.
-    -----------------------------------------------------------------------------------------------------------------------------------------
+    -- Handle flag change events
     flagHandler = hs.eventtap.new({eventTypes.flagsChanged}, function(event)
         m.MouseEvt:stopMoving()
         local flags = event:getFlags()
@@ -72,9 +103,7 @@ return function(tmod, tkey)
     end)
 
 
-    -----------------------------------------------------------------------------------------------------------------------------------------
-    -- Handler for dealing with key up/down events.
-    -----------------------------------------------------------------------------------------------------------------------------------------
+    -- Handle key up/down events
     keyStrokeHandler = hs.eventtap.new({eventTypes.keyDown, eventTypes.keyUp}, function(event)
         local coords = hs.mouse.absolutePosition()
         local code = event:getKeyCode()
@@ -87,15 +116,13 @@ return function(tmod, tkey)
         local keyIsRepeating = repeating == 1
 
 
-        -------------------------------------------------------------------------------------------------------------------------------------
-        -- Determine if the corresponding key to toggle mouse control on/off was pressed.
-        -------------------------------------------------------------------------------------------------------------------------------------
+        -- Determine whether mouse control toggle key was pressed
         if is_tapkey == true then
             for i, v in pairs(tapmods) do
                 if flags[i] == nil then
                     flags[i] = false
                 end
-                -- If the current flag is not == the mouse toggle binding then remain in mouse control mode.
+                -- Flag != the mouse toggle binding then remain in mouse control mode
                 if tapmods[i] ~= flags[i] then
                     is_tapkey = false
                     break
@@ -103,7 +130,7 @@ return function(tmod, tkey)
             end
         end
 
-        -- Toggle back to insert mode if the set key binding is pressed.
+        -- Toggle back to insert mode if the set key binding is pressed
         if is_tapkey then
             if menuIcon then
                 hs.alert('🎹', 0.6)
@@ -130,10 +157,10 @@ return function(tmod, tkey)
         end
 
 
-        -------------------------------------------------------------------------------------------------------------------------------------
         -- Enable selected keybindings or inputs while in mouse mode.
-        -------------------------------------------------------------------------------------------------------------------------------------
-        -- Check if the current input is in the corresponding table to enable selected keybindings during mouse control.
+        --
+        -- Check if the current input is in the corresponding table to enable
+        -- selected keybindings during mouse control.
         if m.EnabledBindings.cmd[key] and flags.cmd then
             return false
         elseif m.EnabledBindings.alt[key] and flags.alt then
@@ -143,10 +170,9 @@ return function(tmod, tkey)
         end
 
 
-        -------------------------------------------------------------------------------------------------------------------------------------
-        -- This block is responsible for jumping the cursor to the center of each cell in a 3x3 grid corresponding to the
-        -- dimensions of the currently focused app or screen.
-        -------------------------------------------------------------------------------------------------------------------------------------
+        -- This block is responsible for jumping the cursor to the center of
+        -- each cell in a 3x3 grid corresponding to the dimensions of the
+        -- currently focused app or screen.
         local jumpTrigger = {
             [m.Var.topLeft] = 'topLeft',
             [m.Var.topCenter] = 'topCenter',
@@ -159,9 +185,8 @@ return function(tmod, tkey)
             [m.Var.bottomRight] = 'bottomRight',
         }
 
-        ---------------------------------------------------------------------------------------------
 
-        -- Display the grid on the currently focused app.
+        -- Display the grid on the currently focused app
         if key == m.Var.showAppGrid then
             if keyIsDown then
                 selectedGrid = m.AppGrid
@@ -172,9 +197,8 @@ return function(tmod, tkey)
             end
         end
 
-        ---------------------------------------------------------------------------------------------
 
-        -- Display the grid on the currently active screen.
+        -- Display the grid on the currently active screen
         if key == m.Var.showScreenGrid then
             if keyIsDown then
                 selectedGrid = m.ScreenGrid
@@ -185,10 +209,9 @@ return function(tmod, tkey)
             end
         end
 
-        ---------------------------------------------------------------------------------------------
 
-        -- If the grid jump highlights are displayed allow the corresponding keys to trigger
-        -- a jump to the associated highlight coords.
+        -- If the grid jump highlights are displayed allow the corresponding
+        -- keys to trigger a jump to the associated highlight coords.
         local gridIsDisplayed = m.AppGrid.isDisplayed or m.ScreenGrid.isDisplayed
 
         -- Throttle all non jump based events when the grid is displayed.
@@ -218,18 +241,18 @@ return function(tmod, tkey)
             end
         end
 
-        ---------------------------------------------------------------------------------------------
 
-        -- Jump the cursor to the previous or next display with the associated bindings.
+        -- Jump the cursor to the previous or next display with the
+        -- associated bindings.
         if not gridIsDisplayed then
             if keyIsUp then
                 local currentScreen = hs.mouse.getCurrentScreen()
-                -- Jump the cursor to the center of the next screen.
+                -- Center of the next screen
                 if key == m.Var.jumpNextScreen then
                     local nextScreenCenter = hs.geometry.rectMidPoint(currentScreen:next():fullFrame())
                     m.MouseEvt:highlight(nextScreenCenter)
                 end
-                -- Jump the cursor to the center of the previous screen.
+                -- Center of the previous screen
                 if key == m.Var.jumpPreviousScreen then
                     local prevScreenCenter = hs.geometry.rectMidPoint(currentScreen:previous():fullFrame())
                     m.MouseEvt:highlight(prevScreenCenter)
@@ -238,9 +261,7 @@ return function(tmod, tkey)
         end
 
 
-        -------------------------------------------------------------------------------------------------------------------------------------
-        -- Scroll events with 'e', 'w', 'd', and 'r'.
-        -------------------------------------------------------------------------------------------------------------------------------------
+        -- Scroll events with 'e', 'w', 'd', and 'r'
         local scrollKeyTable = {
             [m.Var.scrollUp] = 'up',
             [m.Var.scrollDown] = 'down',
@@ -267,20 +288,20 @@ return function(tmod, tkey)
         end
 
 
-        -------------------------------------------------------------------------------------------------------------------------------------
-        -- Enable mouse clicking and dragging when the spacebar is held down.
-        -------------------------------------------------------------------------------------------------------------------------------------
+        -- Enable mouse clicking and dragging when the spacebar is held down
         if key == 'space' then
-            -- This prevents click inputs spamming when the space bar is held down.
+            -- Prevent click inputs spamming when space bar is held down
             if keyIsRepeating then return true end
 
-            -- Send only one mouse click if the interval between clicks is greater than the double click threshold set by the OS.
+            -- Send only one click if the interval between clicks is greater
+            -- than the double click threshold set by the OS.
             local now = hs.timer.secondsSinceEpoch()
             if now - mousepressTime > hs.eventtap.doubleClickInterval() then
                 m.MouseEvt.clicks = 1
             end
 
-            -- Send a double click event if the spacebar is pressed twice within a 0.22 second window.
+            -- Send a double click event if the spacebar is pressed twice
+            -- within a 0.22 second window.
             if keyIsDown then
                 if now - mousedownTime <= 0.22 then
                     m.MouseEvt.clicks = m.MouseEvt.clicks + 1
@@ -289,7 +310,7 @@ return function(tmod, tkey)
                 mousedownTime = hs.timer.secondsSinceEpoch()
             end
 
-            -- Set the state of the mouse button and post click events.
+            -- Set the state of the mouse button and post click events
             if keyIsDown then
                 m.MouseEvt[key] = true
                 m.MouseEvt:click('MouseDown')
@@ -300,9 +321,8 @@ return function(tmod, tkey)
         end
 
 
-        -------------------------------------------------------------------------------------------------------------------------------------
-        -- Set the up/down state of corresponding keys and call key repeat functions if the key is present in the table.
-        -------------------------------------------------------------------------------------------------------------------------------------
+        -- Set the up/down state of corresponding keys and call key repeat
+        -- functions if the key is present in the table.
         local movementKeyTable = {
             [m.Var.cursorUp] = 'up',
             [m.Var.cursorDown] = 'down',
@@ -317,17 +337,17 @@ return function(tmod, tkey)
             if movementKeyTable[key] then
                 local input = movementKeyTable[key]
                 if keyIsRepeating then return true end
-                -- Send mouse movement events when the corresponding keys are pressed.
+                -- Send mouse movement events
                 if keyIsDown then
                     m.MouseEvt[input] = true
                 elseif keyIsUp then
                     m.MouseEvt[input] = false
                 end
-                -- Call the timer function to begin posting mouse events.
+                -- Call timer function to begin posting events
                 m.MouseEvt:move()
             end
 
-            -- Cancel the movement timer function if no movement keys are held.
+            -- Cancel timer if no movement keys are held
             if not m.MouseEvt.up
                 and not m.MouseEvt.down
                 and not m.MouseEvt.left
@@ -337,12 +357,13 @@ return function(tmod, tkey)
             end
         end
 
-        -- This is a catch all to prevent any unrelated keystrokes registering if they are
-        -- pressed while mouse control mode is active.
+        -- This is a catch all to prevent any unrelated keystrokes registering
+        -- if they are pressed while mouse control mode is active.
         return true
     end)
 
-    -- Bind the flag/key passed into the function as arguments to toggle mouse control on/off.
+    -- Bind the flag/key passed into the function as arguments to toggle mouse
+    -- control on/off.
     hs.hotkey.bind(tmod, tkey, nil, function(event)
         if not menuIcon then
             hs.alert('𝕍ⅈ-𝕍ⅈ', 0.6)

@@ -6,7 +6,7 @@ return function(tmod, tkey)
     local eventTypes = hs.eventtap.event.types
     local keyStrokeHandler = nil
 
-    -- Bind a selected flag to the key used to toggle mouse control on/off.
+    -- Bind a selected flag to toggle mouse control on/off
     if type(tmod) == 'string' then
         tapmods[tmod] = true
     else
@@ -21,13 +21,13 @@ return function(tmod, tkey)
         local flags = event:getFlags()
         local is_tapkey = code == hs.keycodes.map[tkey]
 
-        -- If the mouse control toggle key is pressed set the associated flag in the table to false.
+        -- If toggle key is pressed set the flag to false
         if is_tapkey == true then
             for i, v in pairs(tapmods) do
                 if flags[i] == nil then
                     flags[i] = false
                 end
-                -- If the current flag is not == the mouse toggle binding then remain in mouse control mode.
+                -- Flag != toggle key then remain in mouse control mode
                 if tapmods[i] ~= flags[i] then
                     is_tapkey = false
                     break
@@ -35,7 +35,7 @@ return function(tmod, tkey)
             end
         end
 
-        -- Toggle back to insert mode if the set key binding is pressed.
+        -- Toggle back to insert mode if the set key binding is pressed
         if is_tapkey then
             keyStrokeHandler:stop()
             return true
@@ -48,7 +48,7 @@ return function(tmod, tkey)
         return true
     end)
 
-    -- Bind the flag/key passed into the function as arguments to toggle mouse control on/off.
+    -- Bind the flag/key passed into the function to toggle mouse control
     hs.hotkey.bind(tmod, tkey, nil, function(event)
         keyStrokeHandler:start()
     end)

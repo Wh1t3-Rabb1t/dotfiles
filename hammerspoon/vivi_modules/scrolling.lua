@@ -10,11 +10,10 @@ local Scrolling = {
     down = false,
     left = false,
     right = false,
-    -- throttleEvents = false,
 }
 
 function Scrolling:initiate()
-    -- Enable scroll speed acceleration when keys are held down.
+    -- Enable scroll speed acceleration when keys are held down
     if self.keyIsHeld then
         self.acceleration = self.acceleration + 1
         if self.acceleration > 69 then
@@ -25,7 +24,7 @@ function Scrolling:initiate()
     end
     local scrollMultiplier = 2 + math.log(self.acceleration)
 
-    -- Update relevant coords if the corresponding key is pressed.
+    -- Update relevant coords if the corresponding key is pressed
     if self.up then -- Scroll up.
         self.scrollY = math.floor(1 * scrollMultiplier)
     elseif self.down then -- Scroll down.
@@ -36,12 +35,12 @@ function Scrolling:initiate()
         self.scrollX = math.ceil(-1 * scrollMultiplier)
     end
 
-    -- Post horizontal scroll event.
+    -- Post horizontal scroll event
     if self.scrollX then
         hs.eventtap.event.newScrollEvent({self.scrollX, 0}, {}, 'line'):post()
     end
 
-    -- Post vertical scroll event.
+    -- Post vertical scroll event
     if self.scrollY then
         hs.eventtap.event.newScrollEvent({0, self.scrollY}, {}, 'line'):post()
     end
@@ -56,10 +55,10 @@ function Scrolling:terminate()
     self.down = false
     self.left = false
     self.right = false
-    -- self.throttleEvents = false
 end
 
 return Scrolling
+
 
 -------------------------------------------------------------------------------------------------------------------------------------
 

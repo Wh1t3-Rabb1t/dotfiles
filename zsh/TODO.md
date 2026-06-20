@@ -2,6 +2,24 @@
 
 ## Priority: High
 
+- Create logic in deploy script that writes this to "~/.hammerspoon/init.lua"
+
+```lua
+local os_home = os.getenv('HOME')
+local config_home = os_home .. '/.local/dotfiles/hammerspoon/'
+
+-- Read from linked dotfiles if they exist
+if config_home then
+    dofile(config_home .. 'init.lua')
+end
+```
+
+- Create a user history file. (instead of writing only commands that return 0
+  to the .zsh history file we can instead write those commands to the 'user'
+  history file and leave the .zsh history file unaltered. Be sure to delimit
+  the user history file with null bits so we can easily extract multi-line
+  commands with an fzf script).
+
 - Create a 'back dir' script (navigate the dir stack backwards).
 
 - Change the name of `$ZSH_VI` into something suitable for a generalized for

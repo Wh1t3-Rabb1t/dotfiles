@@ -17,8 +17,6 @@ local AppGrid = {
     bottomRight = {},
 }
 
---------------------------------------------------------------------------------------------------------
-
 local percentagePositions = {
     [Var.topLeft] = { x = '16.66%', y = '16.66%' },
     [Var.topCenter] = { x = '50%', y = '16.66%' },
@@ -29,8 +27,6 @@ local percentagePositions = {
     [Var.bottomCenter] = { x = '50%', y = '83.34%' },
     [Var.bottomRight] = { x = '83.34%', y = '83.34%' },
 }
-
---------------------------------------------------------------------------------------------------------
 
 local letterPercentagePositions = {
     [Var.topLeft] = { x = 0.1666, y = 0.1666 },
@@ -43,8 +39,6 @@ local letterPercentagePositions = {
     [Var.bottomRight] = { x = 0.8334, y = 0.8334 },
 }
 
---------------------------------------------------------------------------------------------------------
-
 function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
     local diameter = Var.highlightSize
     local borderSize = diameter + (diameter / 10)
@@ -55,9 +49,9 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
     local textSize = diameter / 2
     local subGridPos = subGridPlacement[position]
     local subGridSize = subGridPlacement.size
-    local letter = Var[position] -- The letter associated with each jump position.
+    local letter = Var[position]  -- The letter associated with each jump position
 
-    -- Create the outer/inner ring and position canvases.
+    -- Create the outer/inner ring and position canvases
     self[position] = {
         outerRing = hs.canvas.new({ x = posX, y = posY, w = borderSize, h = borderSize }),
         innerRing = hs.canvas.new({ x = (posX + margin), y = (posY + margin), w = diameter, h = diameter }),
@@ -73,14 +67,14 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
     local subGridJumpLetter = self[position].subGridJumpLetter
     local alteredSubJumpGrid = self[position].alteredSubJumpGrid
 
-    -- Add attributes to the jump coord highlights.
+    -- Add attributes to the jump coord highlights
     outerRing[1] = {
         type = 'ellipticalArc',
         action = 'stroke',
         strokeWidth = strokeWidth,
-        strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 }, -- Red.
-        arcRadii = false, -- Prevent the line being drawn from the center of the circle.
-        clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+        strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 },
+        arcRadii = false,   -- Prevent line being drawn from the center of the circle
+        clipToPath = true,  -- Prevent edges of the line clipping out of the canvas
         startAngle = 0,
         endAngle = 360,
     }
@@ -89,16 +83,15 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
         type = 'ellipticalArc',
         action = 'stroke',
         strokeWidth = strokeWidth,
-        strokeColor = { red = 1, green = 1, blue = 1, alpha = 1 }, -- White.
-        arcRadii = false, -- Prevent the line being drawn from the center of the circle.
-        clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+        strokeColor = { red = 1, green = 1, blue = 1, alpha = 1 },
+        arcRadii = false,   -- Prevent line being drawn from the center of the circle
+        clipToPath = true,  -- Prevent edges of the line clipping out of the canvas
         startAngle = 0,
         endAngle = 360,
     }
 
     jumpLetter[1] = {
         type = 'text',
-        -- text = letter,
         text = letter,
         textColor = { white = 1 },
         textAlignment = 'center',
@@ -114,7 +107,6 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
 
     subGridJumpLetter[1] = {
         type = 'text',
-        -- text = 'd',
         text = Var.center,
         textColor = { white = 1 },
         textAlignment = 'center',
@@ -128,7 +120,7 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
         },
     }
 
-    -- Create circular canvas objects for the subGrid jump positions.
+    -- Create circular canvas objects for the subGrid jump positions
     local count = 0
     for i, v in pairs(percentagePositions) do
         local pos = v
@@ -141,7 +133,7 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
             fillColor = { black = 1 },
             strokeColor = { white = 1 },
             strokeWidth = 2,
-            clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+            clipToPath = true,  -- Prevent line edges clipping out of the canvas
             center = pos,
             radius = Var.smallHighlightSize,
         }
@@ -152,18 +144,20 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
             fillColor = { black = 1 },
             strokeColor = { white = 1 },
             strokeWidth = 2,
-            clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+            clipToPath = true,  -- Prevent line edges clipping out of the canvas
             center = pos,
             radius = Var.smallHighlightSize,
         }
     end
 
-    -- Apply letters to the subGrid.
+    -- Apply letters to the subGrid
     local letterCount = 8
     for i, v in pairs(letterPercentagePositions) do
         local subLetter = i
         local pos = v
+
         letterCount = letterCount + 1
+
         if letterCount >= 17 then letterCount = 8 return end
 
         local radius = Var.smallHighlightSize
@@ -201,15 +195,13 @@ function AppGrid:mapCoords(position, highlightPos, subGridPlacement)
         action = 'stroke',
         strokeWidth = 1,
         strokeColor = { white = 1, alpha = 1 },
-        roundedRectRadii = { xRadius = 8, yRadius = 8 }, -- Give the rectangle rounded corners.
+        roundedRectRadii = { xRadius = 8, yRadius = 8 },  -- Rounded corners
     }
 
     -- ! From the HS docs.
     -- trackMouseEnterExit - Default false. Generates a callback when the mouse enters or exits the canvas element.
     -- For canvas and text types, the frame of the element defines the boundaries of the tracking area.
 end
-
---------------------------------------------------------------------------------------------------------
 
 local jumpPositions = {
     'topLeft',
@@ -223,8 +215,6 @@ local jumpPositions = {
     'bottomRight',
 }
 
---------------------------------------------------------------------------------------------------------
-
 function AppGrid:displayGrid()
     self.isDisplayed = true
     for i, v in ipairs(jumpPositions) do
@@ -235,8 +225,6 @@ function AppGrid:displayGrid()
         canvas.subJumpGrid:show(0)
     end
 end
-
---------------------------------------------------------------------------------------------------------
 
 function AppGrid:hideGrid()
     if self.isDisplayed then
@@ -253,8 +241,6 @@ function AppGrid:hideGrid()
     end
 end
 
---------------------------------------------------------------------------------------------------------
-
 function AppGrid:displaySubGrid(firstKeyPressed)
     for i, v in ipairs(jumpPositions) do
         local canvas = self[v]
@@ -270,7 +256,6 @@ function AppGrid:displaySubGrid(firstKeyPressed)
         end
     end
 end
-
 
 return AppGrid
 

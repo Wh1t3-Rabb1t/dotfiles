@@ -25,7 +25,6 @@ local MouseEvt = {
     fast = false,
 }
 
-----------------------------------------------------------------------------------------------------------------
 
 local function postMouseEvent(evtType, coords, modKeys, clicks)
     local evt = hs.eventtap.event.newMouseEvent(evtType, coords, modKeys)
@@ -35,10 +34,13 @@ local function postMouseEvent(evtType, coords, modKeys, clicks)
     evt:post()
 end
 
--- This function is used to display the dock and prevent out of bounds movement on the edges of the screen,
--- first get the cursors position relative to the screen it's currently on, then get the absolute position
--- and post a mouse event at those coords. This ensures that the mouse event is posted on exactly the first
--- or last pixel of the screen that it's on, regardless of monitor layout.
+
+-- This function is used to display the dock and prevent out of bounds
+-- movement on the edges of the screen, first get the cursors position
+-- relative to the screen it's currently on, then get the absolute position
+-- and post a mouse event at those coords. This ensures that the mouse event
+-- is posted on exactly the first or last pixel of the screen that it's on,
+-- regardless of monitor layout.
 local function keepCursorInBounds()
     local mousePoint = hs.mouse.getRelativePosition()
     hs.mouse.setRelativePosition(mousePoint)
@@ -50,16 +52,15 @@ local function keepCursorInBounds()
     end
 end
 
-----------------------------------------------------------------------------------------------------------------
 
 function MouseEvt:move()
-    -- If the timer is already running cancel repeated execution.
+    -- If the timer is already running cancel repeated execution
     if self.isActive then
         return
     end
     self.isActive = true
 
-    -- Begin the timer and start updating cursor coordinates.
+    -- Begin the timer and start updating cursor coordinates
     self.timer = hs.timer.new(0.017, function()
         local coords = hs.mouse.absolutePosition()
         local mousePoint = hs.mouse.getRelativePosition()
@@ -70,7 +71,7 @@ function MouseEvt:move()
         local activeScreen = hs.mouse.getCurrentScreen()
         local currentScreen = activeScreen:fullFrame()
 
-        -- Cursor speed up and acceleration.
+        -- Cursor speed up and acceleration
         if self.fast then
             distance = Var.fastSpeed
             if Var.accelerationEnabled then
@@ -82,7 +83,7 @@ function MouseEvt:move()
             self.acceleration = 1
         end
 
-        -- Cursor slow down and deceleration.
+        -- Cursor slow down and deceleration
         if self.slow then
             distance = Var.slowSpeed
             if Var.decelerationEnabled then
@@ -94,16 +95,18 @@ function MouseEvt:move()
             self.deceleration = 1
         end
 
-        -- Set the min and max speed of cursor movement after other multipliers are applied.
+        -- Set min and max movement speed after other multipliers are applied
         if distance > Var.maxSpeed then distance = Var.maxSpeed end
         if distance < Var.minSpeed then distance = Var.minSpeed end
 
-        -- Hypotenuse (calculated with the Pythagorean theorem), this is used to standardize the
-        -- cursor travel speed regardless of whether moving on one or two axis' simultaneoulsy.
+        -- Hypotenuse (calculated with the Pythagorean theorem), this is used
+        -- to standardize the cursor travel speed regardless of whether moving
+        -- on one or two axis' simultaneoulsy.
         local singleAxisSpeed = math.sqrt(distance ^ 2 + distance ^ 2)
         local doubleAxisSpeed = distance
 
-        -- If any two of the movement trigger keys are pressed at the same time, slow the cursor movement down.
+        -- If any two movement trigger keys are pressed at the same time,
+        -- slow the cursor down.
         local count = (self.up and 1 or 0) + (self.down and 1 or 0) + (self.left and 1 or 0) + (self.right and 1 or 0)
         if count >= 2 then
             distance = doubleAxisSpeed
@@ -111,19 +114,19 @@ function MouseEvt:move()
             distance = singleAxisSpeed
         end
 
-        -- Calculate the distance from the closest edge of the current screen on each axis.
+        -- Distance from the closest edge of the current screen on each axis
         local distanceFromEdgeX = math.min(coords.x - currentScreen.x, currentScreen.x + currentScreen.w - coords.x)
         local distanceFromEdgeY = math.min(coords.y - currentScreen.y, currentScreen.y + currentScreen.h - coords.y)
         local inBoundsX = (distanceFromEdgeX > distance)
         local inBoundsY = (distanceFromEdgeY > distance)
 
-        -- Update the cursor coordinates.
-        if self.up then coords.y = coords.y - distance end -- Up.
-        if self.down then coords.y = coords.y + distance end -- Down.
-        if self.left then coords.x = coords.x - distance end -- Left.
-        if self.right then coords.x = coords.x + distance end -- Right.
+        -- Update the cursor coordinates
+        if self.up then coords.y = coords.y - distance end     -- Up
+        if self.down then coords.y = coords.y + distance end   -- Down
+        if self.left then coords.x = coords.x - distance end   -- Left
+        if self.right then coords.x = coords.x + distance end  -- Right
 
-        -- Only post mouse events when within the edges of the screen to prevent out of bounds movement.
+        -- Only post events when within the edges of the screen
         if not inBoundsX or not inBoundsY then
             hs.mouse.absolutePosition(coords)
             keepCursorInBounds()
@@ -138,7 +141,6 @@ function MouseEvt:move()
     self.timer:start()
 end
 
-----------------------------------------------------------------------------------------------------------------
 
 function MouseEvt:highlight(highlightPos, subGridFocused)
     if self.space then
@@ -168,7 +170,6 @@ function MouseEvt:highlight(highlightPos, subGridFocused)
     jumpHighlight:hide(0.4)
 end
 
-----------------------------------------------------------------------------------------------------------------
 
 function MouseEvt:click(state)
     -- if self.shift then
@@ -183,7 +184,6 @@ function MouseEvt:click(state)
 end
 -- postMouseEvent(eventTypes[mouseState], hs.mouse.absolutePosition(), {}, self.clicks)
 
-----------------------------------------------------------------------------------------------------------------
 
 function MouseEvt:stopMoving()
     if self.timer then
@@ -199,16 +199,13 @@ function MouseEvt:stopMoving()
     self.acceleration = 1
 end
 
-----------------------------------------------------------------------------------------------------------------
 
 function MouseEvt:resetProperties(mouseUp)
-    -- self.mouseButton = 'left'
     self:stopMoving()
     self.clicks = 0
     self.slow = false
     self.fast = false
     self.flags = {}
-    -- if self.space then
     if mouseUp then
         self.space = false
         self:click('MouseUp')

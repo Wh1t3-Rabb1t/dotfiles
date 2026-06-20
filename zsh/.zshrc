@@ -8,6 +8,7 @@
 #    . \/////////// \//////////  \///    \/// rc
 # ============================================================================ #
 
+
 # https://thevaluable.dev/zsh-install-configure-mouseless/
 # https://htr3n.github.io/2018/07/faster-zsh/
 # https://frederic-hemberger.de/notes/speeding-up-initial-zsh-startup-with-lazy-loading/

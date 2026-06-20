@@ -1,66 +1,66 @@
 
 local Var = {
-    --------------------------------------------------------------------------------------------------------
-    -- Cursor base movent speed variables.
-    --------------------------------------------------------------------------------------------------------
-    standardSpeed = 4,    -- Cursor movement speed without multipliers.
-    slowSpeed = 3,        -- Cursor movements speed slowed down.
-    fastSpeed = 12,        -- Cursor movements speed sped up.
-    minSpeed = 1.1,         -- Minimum cursor movement speed after multipliers are applied.
-    maxSpeed = 18,        -- Maximum cursor movement speed after multipliers are applied.
 
-    --------------------------------------------------------------------------------------------------------
-    -- Cursor acceleration / deceleration multipliers and on / off toggle.
-    --------------------------------------------------------------------------------------------------------
-    decelerationMultiplier = 10,    -- Cursor speed deceleration multiplier.
-    accelerationMultiplier = 16,    -- Cursor speed acceleration multiplier.
-    accelerationEnabled = true,     -- Enable or disable cursor acceleration when fastSpeed is active.
-    decelerationEnabled = true,     -- Enable or disable cursor deceleration when slowSpeed is active.
+    -- Cursor base movent speed variables
+    ----------------------------------------------------------------------------
+    standardSpeed = 4,  -- Speed without multipliers
+    slowSpeed = 3,      -- Slowed down
+    fastSpeed = 12,     -- Sped up
+    minSpeed = 1.1,     -- Minimum speed after multipliers
+    maxSpeed = 18,      -- Maximum speed after multipliers
 
-    --------------------------------------------------------------------------------------------------------
-    -- Size of the jump coordinate highlights.
-    --------------------------------------------------------------------------------------------------------
-    highlightSize = 60,         -- Size of the initial jump coordinate highlight.
-    smallHighlightSize = 20,    -- Size of the secondary jump coordinate highlight.
 
-    --------------------------------------------------------------------------------------------------------
-    -- Scroll event key bindings.
-    --------------------------------------------------------------------------------------------------------
-    scrollUp = 'e',       -- Send a scroll up event.
-    scrollDown = 'd',     -- Send a scroll down event.
-    scrollLeft = 'w',     -- Send a scroll left event.
-    scrollRight = 'r',    -- Send a scroll right event.
+    -- Acceleration / deceleration multipliers, and toggle vars
+    ----------------------------------------------------------------------------
+    decelerationMultiplier = 10,  -- Deceleration multiplier
+    accelerationMultiplier = 16,  -- Acceleration multiplier
+    accelerationEnabled = true,   -- Enable when fastSpeed is active
+    decelerationEnabled = true,   -- Enable when slowSpeed is active
 
-    --------------------------------------------------------------------------------------------------------
-    -- Mouse event key bindings.
-    --------------------------------------------------------------------------------------------------------
-    cursorSlow = 's',    -- Slow down cursor movement.
-    cursorFast = 'f',    -- Speed up cursor movement.
-    cursorUp = 'i',      -- Move the cursor up.
-    cursorDown = 'k',    -- Move the cursor down.
-    cursorLeft = 't',    -- Move the cursor leftt.
-    cursorRight = 'l',   -- Move the cursor right.
 
-    --------------------------------------------------------------------------------------------------------
-    -- Grid jump invocation key bindings.
-    --------------------------------------------------------------------------------------------------------
-    showAppGrid = ';',       -- Display the focused apps jump grid.
-    showScreenGrid = "'",    -- Display the current screens jump grid.
-    topLeft = 'w',           -- Jump the cursor to the top left coordinate.
-    topCenter = 'e',         -- Jump the cursor to the top center coordinate.
-    topRight = 'r',          -- Jump the cursor to the top right coordinate.
-    centerLeft = 's',        -- Jump the cursor to the center left coordinate.
-    center = 'd',            -- Jump the cursor to the center coordinate.
-    centerRight = 'f',       -- Jump the cursor to the center right coordinate.
-    bottomLeft = 'x',        -- Jump the cursor to the bottom left coordinate.
-    bottomCenter = 'c',      -- Jump the cursor to the bottom center coordinate.
-    bottomRight = 'v',       -- Jump the cursor to the bottom right coordinate.
+    -- Size of the jump coordinate highlights
+    ----------------------------------------------------------------------------
+    highlightSize = 60,       -- Initial coordinate
+    smallHighlightSize = 20,  -- Secondary coordinate
 
-    --------------------------------------------------------------------------------------------------------
-    -- Jump to the next or previous monitor.
-    --------------------------------------------------------------------------------------------------------
-    jumpNextScreen = 'n',        -- Jump the cursor to the middle of the next screen.
-    jumpPreviousScreen = 'p',    -- Jump the cursor to the middle of the previous screen.
+
+    -- Scroll event key bindings
+    ----------------------------------------------------------------------------
+    scrollUp = 'e',     -- Up
+    scrollDown = 'd',   -- Down
+    scrollLeft = 'w',   -- Left
+    scrollRight = 'r',  -- Right
+
+
+    -- Mouse event key bindings
+    ----------------------------------------------------------------------------
+    cursorSlow = 's',   -- Slow down
+    cursorFast = 'f',   -- Speed up
+    cursorUp = 'i',     -- Up
+    cursorDown = 'k',   -- Down
+    cursorLeft = 't',   -- Leftt
+    cursorRight = 'l',  -- Right
+
+
+    -- Grid jump invocation key bindings
+    ----------------------------------------------------------------------------
+    showAppGrid = ';',     -- Focused apps
+    showScreenGrid = "'",  -- Current screens
+    topLeft = 'w',         -- Top left
+    topCenter = 'e',       -- Top center
+    topRight = 'r',        -- Top right
+    centerLeft = 's',      -- Center left
+    center = 'd',          -- Center
+    centerRight = 'f',     -- Center right
+    bottomLeft = 'x',      -- Bottom left
+    bottomCenter = 'c',    -- Bottom center
+    bottomRight = 'v',     -- Bottom right
+
+
+    -- Jump to the next or previous monitor
+    ----------------------------------------------------------------------------
+    jumpNextScreen = 'n',      -- Next screen
+    jumpPreviousScreen = 'p',  -- Previous screen
 }
 
 return Var

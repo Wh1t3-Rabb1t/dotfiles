@@ -17,7 +17,6 @@ local ScreenGrid = {
     bottomRight = {},
 }
 
---------------------------------------------------------------------------------------------------------
 
 local percentagePositions = {
     [Var.topLeft] = { x = '16.66%', y = '16.66%' },
@@ -30,7 +29,6 @@ local percentagePositions = {
     [Var.bottomRight] = { x = '83.34%', y = '83.34%' },
 }
 
---------------------------------------------------------------------------------------------------------
 
 local letterPercentagePositions = {
     [Var.topLeft] = { x = 0.1666, y = 0.1666 },
@@ -43,7 +41,6 @@ local letterPercentagePositions = {
     [Var.bottomRight] = { x = 0.8334, y = 0.8334 },
 }
 
---------------------------------------------------------------------------------------------------------
 
 function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
     local diameter = Var.highlightSize
@@ -55,9 +52,9 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
     local textSize = diameter / 2
     local subGridPos = subGridPlacement[position]
     local subGridSize = subGridPlacement.size
-    local letter = Var[position] -- The letter associated with each jump position.
+    local letter = Var[position]  -- The letter associated with each jump position
 
-    -- Create the outer/inner ring and position canvases.
+    -- Create the outer/inner ring and position canvases
     self[position] = {
         outerRing = hs.canvas.new({ x = posX, y = posY, w = borderSize, h = borderSize }),
         innerRing = hs.canvas.new({ x = (posX + margin), y = (posY + margin), w = diameter, h = diameter }),
@@ -73,14 +70,14 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
     local subGridJumpLetter = self[position].subGridJumpLetter
     local alteredSubJumpGrid = self[position].alteredSubJumpGrid
 
-    -- Add attributes to the jump coord highlights.
+    -- Add attributes to the jump coord highlights
     outerRing[1] = {
         type = 'ellipticalArc',
         action = 'stroke',
         strokeWidth = strokeWidth,
-        strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 }, -- Red.
-        arcRadii = false, -- Prevent the line being drawn from the center of the circle.
-        clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+        strokeColor = { red = 1, green = 0, blue = 0, alpha = 1 },
+        arcRadii = false,   -- Prevent line being drawn from the center of the circle
+        clipToPath = true,  -- Prevent edges of the line clipping out of the canvas
         startAngle = 0,
         endAngle = 360,
     }
@@ -90,15 +87,14 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
         action = 'stroke',
         strokeWidth = strokeWidth,
         strokeColor = { red = 1, green = 1, blue = 1, alpha = 1 }, -- White.
-        arcRadii = false, -- Prevent the line being drawn from the center of the circle.
-        clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+        arcRadii = false,   -- Prevent line being drawn from the center of the circle
+        clipToPath = true,  -- Prevent edges of the line clipping out of the canvas
         startAngle = 0,
         endAngle = 360,
     }
 
     jumpLetter[1] = {
         type = 'text',
-        -- text = letter,
         text = letter,
         textColor = { white = 1 },
         textAlignment = 'center',
@@ -114,7 +110,6 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
 
     subGridJumpLetter[1] = {
         type = 'text',
-        -- text = 'd',
         text = Var.center,
         textColor = { white = 1 },
         textAlignment = 'center',
@@ -128,7 +123,7 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
         },
     }
 
-    -- Create circular canvas objects for the subGrid jump positions.
+    -- Create circular canvas objects for the subGrid jump positions
     local count = 0
     for _, v in pairs(percentagePositions) do
         local pos = v
@@ -141,7 +136,7 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
             fillColor = { black = 1 },
             strokeColor = { white = 1 },
             strokeWidth = 2,
-            clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+            clipToPath = true,  -- Prevent edges of the line clipping out of the canvas
             center = pos,
             radius = Var.smallHighlightSize,
         }
@@ -152,13 +147,13 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
             fillColor = { black = 1 },
             strokeColor = { white = 1 },
             strokeWidth = 2,
-            clipToPath = true, -- Prevent the edges of the line clipping out of the canvas.
+            clipToPath = true,  -- Prevent edges of the line clipping out of the canvas
             center = pos,
             radius = Var.smallHighlightSize,
         }
     end
 
-    -- Apply letters to the subGrid.
+    -- Apply letters to the subGrid
     local letterCount = 8
     for i, v in pairs(letterPercentagePositions) do
         local subLetter = i
@@ -177,7 +172,6 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
         subJumpGrid[letterCount] = {
             type = 'text',
             text = letter .. subLetter,
-            -- text = subLetter,
             textColor = { white = 1 },
             textSize = (radius / 5 * 4),
             textFont = 'Courier',
@@ -201,7 +195,7 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
         action = 'stroke',
         strokeWidth = 1,
         strokeColor = { white = 1, alpha = 1 },
-        roundedRectRadii = { xRadius = 8, yRadius = 8 }, -- Give the rectangle rounded corners.
+        roundedRectRadii = { xRadius = 8, yRadius = 8 },  -- Give the rectangle rounded corners
     }
 
     -- ! From the HS docs.
@@ -209,7 +203,6 @@ function ScreenGrid:mapCoords(position, highlightPos, subGridPlacement)
     -- For canvas and text types, the frame of the element defines the boundaries of the tracking area.
 end
 
---------------------------------------------------------------------------------------------------------
 
 local jumpPositions = {
     'topLeft',
@@ -223,7 +216,6 @@ local jumpPositions = {
     'bottomRight',
 }
 
---------------------------------------------------------------------------------------------------------
 
 function ScreenGrid:displayGrid()
     self.isDisplayed = true
@@ -238,7 +230,6 @@ function ScreenGrid:displayGrid()
     end
 end
 
---------------------------------------------------------------------------------------------------------
 
 function ScreenGrid:hideGrid()
     if self.isDisplayed then
@@ -257,7 +248,6 @@ function ScreenGrid:hideGrid()
     end
 end
 
---------------------------------------------------------------------------------------------------------
 
 function ScreenGrid:displaySubGrid(firstKeyPressed)
     for _, v in ipairs(jumpPositions) do

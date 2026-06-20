@@ -10,23 +10,21 @@ local ScreenWatcher = {
     screenBorder = nil,
 }
 
-------------------------------------------------------------------------------------
 
 local jumpKeyTable = {
-    { key = 'topLeft', value = { 6, 1, 6, 1 } }, -- Top left.
-    { key = 'topCenter', value = { 2, 1, 6, 1 } }, -- Top center.
-    { key = 'topRight', value = { 6, 5, 6, 1 } }, -- Top right.
-    { key = 'centerLeft', value = { 6, 1, 2, 1 } }, -- Center left.
-    { key = 'center', value = { 2, 1, 2, 1 } }, -- Center.
-    { key = 'centerRight', value = { 6, 5, 2, 1 } }, -- Center right.
-    { key = 'bottomLeft', value = { 6, 1, 6, 5 } }, -- Bottom left.
-    { key = 'bottomCenter', value = { 2, 1, 6, 5 } }, -- Bottom center.
-    { key = 'bottomRight', value = { 6, 5, 6, 5 } }, -- Bottom right.
+    { key = 'topLeft', value = { 6, 1, 6, 1 } },       -- Top left
+    { key = 'topCenter', value = { 2, 1, 6, 1 } },     -- Top center
+    { key = 'topRight', value = { 6, 5, 6, 1 } },      -- Top right
+    { key = 'centerLeft', value = { 6, 1, 2, 1 } },    -- Center left
+    { key = 'center', value = { 2, 1, 2, 1 } },        -- Center
+    { key = 'centerRight', value = { 6, 5, 2, 1 } },   -- Center right
+    { key = 'bottomLeft', value = { 6, 1, 6, 5 } },    -- Bottom left
+    { key = 'bottomCenter', value = { 2, 1, 6, 5 } },  -- Bottom center
+    { key = 'bottomRight', value = { 6, 5, 6, 5 } },   -- Bottom right
 }
 
-------------------------------------------------------------------------------------
 
--- Callback for mapping the jump coordinates of the chosen screen or app frame.
+-- Map jump coordinates of the chosen screen or app frame
 local function mapJumpCoords(frame, jumpAlgo)
     local widthDiv = jumpAlgo[1]
     local widthMul = jumpAlgo[2]
@@ -38,9 +36,8 @@ local function mapJumpCoords(frame, jumpAlgo)
     return pos
 end
 
-------------------------------------------------------------------------------------
 
--- Callback for mapping the sub-jump coords that correspond to each initial point.
+-- Map the sub-jump coords that correspond to each initial point
 local function mapSubCoords(jumpCoords, gridSize)
     local function plus(num1, num2) return num1 + num2 end
     local function minus(num1, num2) return num1 - num2 end
@@ -81,9 +78,8 @@ local function mapSubCoords(jumpCoords, gridSize)
     return subPos
 end
 
-------------------------------------------------------------------------------------
 
--- Callback for caching the relevant grid coords.
+-- Cache the relevant grid coords
 local function mapGrid(ChosenModule, frame)
     local gridSize = {
         x = frame.x,
@@ -112,15 +108,14 @@ local function mapGrid(ChosenModule, frame)
         local jumpAlgo = v.value
         local jumpCoords = mapJumpCoords(frame, jumpAlgo)
         local subCoords = mapSubCoords(jumpCoords, gridSize)
-        ChosenModule.mappedCoords[position] = jumpCoords -- Save the coordinates in ChosenModule.mappedCoords table.
-        ChosenModule.subGridMappedCoords[position] = subCoords -- Save the coordinates in ChosenModule.subGridMappedCoords table.
+        ChosenModule.mappedCoords[position] = jumpCoords
+        ChosenModule.subGridMappedCoords[position] = subCoords
         ChosenModule:mapCoords(position, jumpCoords, subGridPlacement)
     end
 end
 
---------------------------------------------------------------------------------------
 
--- Pass in a reference to the AppGrid module.
+-- Pass in a reference to the AppGrid module
 function ScreenWatcher:initiate(AppGridModule, ScreenGridModule)
     -- If the timer is already running cancel repeated execution.
     if self.isActive then
@@ -146,11 +141,12 @@ function ScreenWatcher:initiate(AppGridModule, ScreenGridModule)
             if focusedWindow then
                 appFrame = focusedWindow:frame()
             else
-                return -- Avoid further execution if focusedWindow is still nil.
+                -- Avoid further execution if focusedWindow is still nil
+                return
             end
         end
 
-        -- If the currently focused app frame has changed.
+        -- If the currently focused app frame has changed
         if appFrame.w ~= self.appCachedFrame.w
             or appFrame.h ~= self.appCachedFrame.h
             or appFrame.x ~= self.appCachedFrame.x
@@ -158,31 +154,31 @@ function ScreenWatcher:initiate(AppGridModule, ScreenGridModule)
         then
             AppGridModule:hideGrid()
             self.appCachedFrame = appFrame
-            AppGridModule.mappedCoords = {} -- Clear the AppGridModule.mappedCoords table.
+            AppGridModule.mappedCoords = {}
             mapGrid(AppGridModule, self.appCachedFrame)
         end
 
-        -- If the currently focused screen frame has changed.
+        -- If the currently focused screen frame has changed
         if screenFrame.w ~= self.screenCachedFrame.w
             or screenFrame.h ~= self.screenCachedFrame.h
             or screenFrame.x ~= self.screenCachedFrame.x
             or screenFrame.y ~= self.screenCachedFrame.y
         then
-            -- Update which screen the border is on if the cursor moves to a different screen.
+            -- Update which screen the border is on if the cursor moves to a
+            -- different screen.
             if self.mouseControlEnabled then
                 self:toggleScreenBorder('on')
             end
 
             ScreenGridModule:hideGrid()
             self.screenCachedFrame = screenFrame
-            ScreenGridModule.mappedCoords = {} -- Clear the ScreenGridModule.mappedCoords table.
+            ScreenGridModule.mappedCoords = {}
             mapGrid(ScreenGridModule, self.screenCachedFrame)
         end
     end)
     windowWatcher:start()
 end
 
---------------------------------------------------------------------------------------
 
 function ScreenWatcher:createScreenBorder()
     self.displayBorders = {}
@@ -196,11 +192,10 @@ function ScreenWatcher:createScreenBorder()
             strokeWidth = 4,
             strokeColor = { white = 1, alpha = 1 },
         }
-        self.displayBorders[v] = screenBorder -- Store the canvas for each screen.
+        self.displayBorders[v] = screenBorder  -- Store the canvas for each screen
     end
 end
 
---------------------------------------------------------------------------------------
 
 function ScreenWatcher:toggleScreenBorder(state)
     local currentScreen = hs.mouse.getCurrentScreen()
@@ -217,7 +212,6 @@ function ScreenWatcher:toggleScreenBorder(state)
     end
 end
 
---------------------------------------------------------------------------------------
 
 function ScreenWatcher:terminate()
     if windowWatcher then

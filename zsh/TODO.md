@@ -2,6 +2,9 @@
 
 ## Priority: High
 
+- Recreate MonitorControl in .zsh (can just target each display rather than
+  worry about coord logic).
+
 - Create logic in deploy script that writes this to "~/.hammerspoon/init.lua"
 
 ```lua

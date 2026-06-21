@@ -14,20 +14,22 @@
 -- Update package path to include symlinked dotfiles
 --------------------------------------------------------------------------------
 local os_home = os.getenv('HOME')
-package.path = package.path .. ";" .. os_home .. "/.local/dotfiles/hammerspoon/modules/?.lua"
+package.path = package.path .. ';' .. os_home .. '/.local/dotfiles/hammerspoon/modules/?.lua'
 
 
 -- Alter display brightness (work in progress)
 --------------------------------------------------------------------------------
 local monitor = require('monitor_brightness')
 
--- monitor.init()
--- hs.hotkey.bind({}, "tab", function()
---     monitor.adjust_brightness("down")
--- end)
--- hs.hotkey.bind({ "shift" }, "tab", function()
---     monitor.adjust_brightness("up")
--- end)
+monitor.init_overlay()
+
+hs.hotkey.bind({}, 'tab', function() monitor.adjust_brightness('up') end)
+hs.hotkey.bind({ 'shift' }, 'tab', function() monitor.adjust_brightness('down') end)
+
+
+
+
+
 
 
 -- Toggle wifi on/off when locking screen

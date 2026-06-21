@@ -17,18 +17,7 @@ local os_home = os.getenv('HOME')
 package.path = package.path .. ';' .. os_home .. '/.local/dotfiles/hammerspoon/modules/?.lua'
 
 
--- Alter display brightness (work in progress)
---------------------------------------------------------------------------------
-local monitor = require('monitor_brightness')
-
-monitor.init_overlay()
-
-hs.hotkey.bind({}, 'tab', function() monitor.adjust_brightness('up') end)
-hs.hotkey.bind({ 'shift' }, 'tab', function() monitor.adjust_brightness('down') end)
-
-
-
-
+require('keymaps')
 
 
 
@@ -108,20 +97,21 @@ hs.hotkey.bind({'cmd'}, 'q', startCmdQ, stopCmdQ)
 
 -- Auto reloads HS configuration on document save
 --------------------------------------------------------------------------------
-local function reloadConfig(files)
-    local doReload = false
-    for _,file in pairs(files) do
-        if file:sub(-4) == '.lua' then
-            doReload = true
-        end
-    end
-    if doReload then
-        hs.reload()
-    end
-end
+-- local function reloadConfig(files)
+--     local doReload = false
+--     for _,file in pairs(files) do
+--         if file:sub(-4) == '.lua' then
+--             doReload = true
+--         end
+--     end
+--     if doReload then
+--         hs.reload()
+--     end
+-- end
+-- hs.pathwatcher.new(os.getenv('HOME') .. '/.local/dotfiles/hammerspoon/', reloadConfig):start()
 
-hs.pathwatcher.new(os.getenv('HOME') .. '/.local/dotfiles/hammerspoon/', reloadConfig):start()
 hs.alert.show('🔨🥄')
+
 
 
 

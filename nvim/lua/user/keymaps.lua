@@ -370,9 +370,9 @@ nvmap("j",     "J",               { desc = ' Join lines' })
 
 -- `f` and `/` SEARCH                                                        _22
 --------------------------------------------------------------------------------
-nvmap("h", ",",                 { desc = ' Prev f search result' })
-nvmap("N", "mzN",               { desc = ' Prev / search result' })
-nvmap("n", "mzn",               { desc = ' Next / search result' })
+nvmap("h", ",",                 { desc = " Prev 'f' search result" })
+nvmap("N", "mzN",               { desc = " Prev '/' search result" })
+nvmap("n", "mzn",               { desc = " Next '/' search result" })
 nmap("?",  km.toggle_search_hl, { desc = ' Toggle search highlights' })
 nmap("M",  "mz*",               { desc = ' Search for inner word' })
 vmap("M",  km.regex_selection,  { desc = ' Search for selected area' })

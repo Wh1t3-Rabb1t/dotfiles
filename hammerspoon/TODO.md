@@ -8,6 +8,7 @@
 
 ## Brightness module
 
+- Find appropriate key bindings.
 - Implement key repeating.
 
 ---

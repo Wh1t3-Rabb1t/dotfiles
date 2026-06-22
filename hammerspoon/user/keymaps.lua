@@ -1,12 +1,13 @@
 
-local monitor = require('monitor_control')
+local shader = require('shaders')
 local qtimer = require('quit_timer')
 
 local bk = hs.hotkey.bind
 
 -- MonitorControl was buggy spyware anyway
-bk({},        'tab', function() monitor.adjust_brightness('up') end)
-bk({'shift'}, 'tab', function() monitor.adjust_brightness('down') end)
+bk({},        'tab', function() shader.adjust_brightness('up') end)
+bk({'shift'}, 'tab', function() shader.adjust_brightness('down') end)
+bk({'ctrl'},  'r',   function() shader.print_brightness_values() end)
 
 -- Hot reload hammerspoon
 bk({'ctrl', 'shift'}, 'r', function() hs.reload() end)

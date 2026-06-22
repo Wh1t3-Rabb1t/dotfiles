@@ -1,165 +1,15 @@
 -- My guiding moonlight
 
--- https://www.hammerspoon.org/docs/index.html
--- https://www.hammerspoon.org/docs/hs.html
 -- https://www.lua.org/
 -- https://www.lua.org/pil/contents.html
-
--- -- DEBUG RELOAD
--- hs.hotkey.bind({ "shift" }, "tab", function()
---     hs.reload()
--- end)
-
-
--- Update package path to include symlinked dotfiles
---------------------------------------------------------------------------------
-local os_home = os.getenv('HOME')
-package.path = package.path .. ';' .. os_home .. '/.local/dotfiles/hammerspoon/modules/?.lua'
-
+-- https://www.hammerspoon.org/docs/index.html
+-- https://www.hammerspoon.org/docs/hs.html
 
 require('keymaps')
+require('console')
+require('watchers')
+require('announcer')
 
-
-
--- Toggle wifi on/off when locking screen
---------------------------------------------------------------------------------
-function f(event)
-    if event == hs.caffeinate.watcher.screensDidLock then
-        hs.wifi.setPower(false)
-    elseif event == hs.caffeinate.watcher.screensDidUnlock then
-        hs.wifi.setPower(true)
-    end
-
-    -- if event == hs.caffeinate.watcher.systemWillSleep then
-    --     bluetooth('off')
-    -- elseif event == hs.caffeinate.watcher.screensDidWake then
-    --     bluetooth('on')
-    --     hs.alert('Bluetooth is connected.')
-    -- end
-
-end
-watcher = hs.caffeinate.watcher.new(f)
-watcher:start()
-
-
--- Apply darkmode to the HS console
---------------------------------------------------------------------------------
-hs.console.darkMode(true)
-
-if hs.console.darkMode() then
-    hs.console.consoleFont({ name = 'Courier', size = 20 })
-    hs.console.consoleCommandColor({ blue = 1 })
-    hs.console.consoleResultColor({ red = 1 })
-    hs.console.windowBackgroundColor({ white = 0 })
-    hs.console.inputBackgroundColor({ white = 0 })
-    hs.console.outputBackgroundColor({ white = 0 })
-    hs.console.consolePrintColor({ white = 1 })
-    hs.console.alpha(1)
-end
-hs.console.clearConsole()
-
--- function showConsoleIfNeeded()
---     local console = hs.console.hswindow()
---     if not console or not console:isVisible() then
---         hs.openConsole()
---     end
--- end
-
-
--- Command-Q delay on quitting an application
---------------------------------------------------------------------------------
-local cmdQDelay = 0.75
-local cmdQTimer = nil
-local cmdQAlert = nil
-
-local function cmdQCleanup()
-    hs.alert.closeSpecific(cmdQAlert)
-    cmdQTimer = nil
-    cmdQAlert = nil
-end
-
-local function stopCmdQ()
-    if cmdQTimer then
-        cmdQTimer:stop()
-        cmdQCleanup()
-        hs.alert('Cancelled', 0.5)
-    end
-end
-
-local function startCmdQ()
-    local app = hs.application.frontmostApplication()
-    cmdQTimer = hs.timer.doAfter(cmdQDelay, function() app:kill(); cmdQCleanup() end)
-    cmdQAlert = hs.alert('Hold to Quit: ' .. app:name(), true)
-end
-
-hs.hotkey.bind({'cmd'}, 'q', startCmdQ, stopCmdQ)
-
-
--- Auto reloads HS configuration on document save
---------------------------------------------------------------------------------
--- local function reloadConfig(files)
---     local doReload = false
---     for _,file in pairs(files) do
---         if file:sub(-4) == '.lua' then
---             doReload = true
---         end
---     end
---     if doReload then
---         hs.reload()
---     end
--- end
--- hs.pathwatcher.new(os.getenv('HOME') .. '/.local/dotfiles/hammerspoon/', reloadConfig):start()
-
-hs.alert.show('🔨🥄')
-
-
-
-
--- Announcer for Hammerspoon
---------------------------------------------------------------------------------
--- speaker = hs.speech.new()
--- speaker:speak('Ready to rock')
-
-
--- -- Display a notification when a copy event occurs
--- --------------------------------------------------------------------------------
--- local lastPasteboardChangeCount = hs.pasteboard.changeCount()
--- local eventTypes = hs.eventtap.event.types
---
--- local function hasPasteboardChanged()
---     local currentChangeCount = hs.pasteboard.changeCount()
---     return currentChangeCount ~= lastPasteboardChangeCount
--- end
---
--- local pasteboardWatcher = hs.eventtap.new({eventTypes.keyUp, eventTypes.flagsChanged}, function(event)
---     local code = event:getKeyCode()
---     local keycodes = hs.keycodes.map
---     local flags = event:getFlags()
---     if code == keycodes['c'] and flags.cmd then
---         if hasPasteboardChanged() then
---             hs.alert('COPY', 0.4)
---         end
---         lastPasteboardChangeCount = hs.pasteboard.changeCount()  -- Update the last change count
---     end
--- end)
--- pasteboardWatcher:start()
-
-
--- -- Turn off bluetooth when system goes to sleep
--- --------------------------------------------------------------------------------
--- -- Print the error message if command fails to execute.
--- -- function checkBluetoothResult(rc, stderr, stderr)
--- function checkBluetoothResult(rc, stderr)
---     if rc ~= 0 then
---         print(string.format('Unexpected result executing `blueutil`: rc=%d stderr=%s stdout=%s', rc, stderr, stdout))
---     end
--- end
---
--- function bluetooth(power)
---     print('Setting bluetooth to ' .. power)
---     local t = hs.task.new('/opt/homebrew/bin/blueutil', checkBluetoothResult, {'--power', power})
---     t:start()
--- end
 
 
 -- -- Automatically move screenshots to the notes/images folder
@@ -185,6 +35,32 @@ hs.alert.show('🔨🥄')
 --
 -- -- Copy the file name to clipboard
 -- hs.execute("echo '" .. file .. "' | pbcopy")
+
+
+
+-- -- Display a notification when a copy event occurs
+-- --------------------------------------------------------------------------------
+-- local lastPasteboardChangeCount = hs.pasteboard.changeCount()
+-- local eventTypes = hs.eventtap.event.types
+--
+-- local function hasPasteboardChanged()
+--     local currentChangeCount = hs.pasteboard.changeCount()
+--     return currentChangeCount ~= lastPasteboardChangeCount
+-- end
+--
+-- local pasteboardWatcher = hs.eventtap.new({eventTypes.keyUp, eventTypes.flagsChanged}, function(event)
+--     local code = event:getKeyCode()
+--     local keycodes = hs.keycodes.map
+--     local flags = event:getFlags()
+--     if code == keycodes['c'] and flags.cmd then
+--         if hasPasteboardChanged() then
+--             hs.alert('COPY', 0.4)
+--         end
+--         lastPasteboardChangeCount = hs.pasteboard.changeCount()  -- Update the last change count
+--     end
+-- end)
+-- pasteboardWatcher:start()
+
 
 
 -- -- Basic app launch or focus function

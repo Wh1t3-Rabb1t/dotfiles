@@ -80,6 +80,7 @@ local function screenLayoutChangeHandler()
     local screenCount = #screens
     print('Screen layout changed. Number of connected screens: ' .. screenCount)
 end
+
 -- Create a hs.screen watcher and register the callback function
 -- local screenWatcher = hs.screen.watcher.new(screenLayoutChangeHandler)
 -- screenWatcher:start()
@@ -147,7 +148,7 @@ function combination(n, r)
 end
 function uniqueDoubleLetterSequences(n)
     local numWaysToChooseTwoLetters = combination(n, 2)
-    local numWaysToArrangeLetters = 2 -- There are two arrangements: letter1-letter2 and letter2-letter1
+    local numWaysToArrangeLetters = 2  -- There are two arrangements: letter1-letter2 and letter2-letter1
     return numWaysToChooseTwoLetters * numWaysToArrangeLetters
 end
 local numUniqueDoubleLetterSequences = uniqueDoubleLetterSequences(n)
@@ -161,70 +162,70 @@ print('Number of unique double letter sequences with ' .. n .. ' letters: ' .. n
 
 
 
-
-if key == 'o' then
-    -- if key == 'v' then
-        if keyIsUp then
-
-            -- -- This is how to access the second jump coord after the first jump has been executed.
-            -- local firstLetter = m.AppGrid.subGridMappedCoords[key]
-            -- local subJumpPos = firstLetter[key]
-            -- print(subJumpPos)
-
-            -- local awaitingSecondJumpInput = m.AppGrid.subGridMappedCoords.e.r
-            -- m.CursorJump:highlight(awaitingSecondJumpInput, m.Var)
-
-
-            -- print(m.AppGrid.subGridMappedCoords.e.r)
-
-            -- local applications = hs.application.runningApplications()
-            -- for i, app in ipairs(applications) do
-            --     local appName = app:name()
-            --     local pid = app:pid()
-            --     print('Application: ' .. appName)
-            --     print('PID: ' .. pid)
-            --     print('----------------------------------------------')
-            -- end
-
-            -- -- Get all visible windows.
-            -- -- local windows = hs.window.visibleWindows()
-            -- local windows = hs.window.allWindows()
-            -- for i, v in ipairs(windows) do
-            --     local application = v:application()
-            --     local windowTitle = v:title()
-            --     local windowFrame = v:frame()
-            --     local winFrameCenter = hs.geometry.rectMidPoint(windowFrame)
-            --     local applicationName = application:name()
-            --     print(applicationName .. ' // ' .. windowTitle)
-            --     print('X coords: ' .. windowFrame.x)
-            --     print('Y coords: ' .. windowFrame.y)
-            --     print('----------------------------------------------')
-            -- end
-
-                                -- m.CursorJump:showTestCircle(windowFrame)
-
-
-            -- -- Retrieve all connected screens.
-            -- local screens = hs.screen.allScreens()
-            -- -- Get the count of connected screens.
-            -- local screenCount = #screens
-            -- print('Number of connected screens: ' .. screenCount)
-
-            -- -- Retrieve the session properties
-            -- local properties = hs.caffeinate.sessionProperties()
-            -- -- Print the session properties
-            -- for key, value in pairs(properties) do
-            --     print(key, value)
-            -- end
-
-            -- m.ScreenWatcher:terminate()
-            -- m.AppGrid:hideGrid()
-            -- m.ScreenGrid:hideGrid()
-            -- for i, v in ipairs(mappedCoords) do
-            --     print('Key:', v.key)
-            --     print('Value-X:', v.value.x)
-            --     print('Value-Y:', v.value.y)
-            --     print('-------------------------')
-            -- end
-        end
-    end
+-- if key == 'o' then
+--     if key == 'v' then
+--         if keyIsUp then
+--
+--             -- This is how to access the second jump coord after the first jump has been executed
+--             local firstLetter = m.AppGrid.subGridMappedCoords[key]
+--             local subJumpPos = firstLetter[key]
+--             print(subJumpPos)
+--
+--             local awaitingSecondJumpInput = m.AppGrid.subGridMappedCoords.e.r
+--             m.CursorJump:highlight(awaitingSecondJumpInput, m.Var)
+--
+--             print(m.AppGrid.subGridMappedCoords.e.r)
+--
+--             local applications = hs.application.runningApplications()
+--             for i, app in ipairs(applications) do
+--                 local appName = app:name()
+--                 local pid = app:pid()
+--                 print('Application: ' .. appName)
+--                 print('PID: ' .. pid)
+--                 print('----------------------------------------------')
+--             end
+--
+--             -- Get all visible windows
+--             local windows = hs.window.visibleWindows()
+--             local windows = hs.window.allWindows()
+--             for i, v in ipairs(windows) do
+--                 local application = v:application()
+--                 local windowTitle = v:title()
+--                 local windowFrame = v:frame()
+--                 local winFrameCenter = hs.geometry.rectMidPoint(windowFrame)
+--                 local applicationName = application:name()
+--                 print(applicationName .. ' // ' .. windowTitle)
+--                 print('X coords: ' .. windowFrame.x)
+--                 print('Y coords: ' .. windowFrame.y)
+--                 print('----------------------------------------------')
+--             end
+--
+--             m.CursorJump:showTestCircle(windowFrame)
+--
+--             -- Retrieve all connected screens.
+--             local screens = hs.screen.allScreens()
+--
+--             -- Get the count of connected screens.
+--             local screenCount = #screens
+--             print('Number of connected screens: ' .. screenCount)
+--
+--             -- Retrieve the session properties
+--             local properties = hs.caffeinate.sessionProperties()
+--
+--             -- Print the session properties
+--             for key, value in pairs(properties) do
+--                 print(key, value)
+--             end
+--
+--             m.ScreenWatcher:terminate()
+--             m.AppGrid:hideGrid()
+--             m.ScreenGrid:hideGrid()
+--             for i, v in ipairs(mappedCoords) do
+--                 print('Key:', v.key)
+--                 print('Value-X:', v.value.x)
+--                 print('Value-Y:', v.value.y)
+--                 print('-------------------------')
+--             end
+--         end
+--     end
+-- end

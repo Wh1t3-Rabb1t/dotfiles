@@ -29,6 +29,7 @@ function M.adjust_brightness(direction)
     local curr_scr = hs.mouse.getCurrentScreen()
     local id = curr_scr:getUUID()
 
+    -- Init overlay it doesn't exist
     if not state.overlays[id] then
         init_overlay(curr_scr, id)
     end

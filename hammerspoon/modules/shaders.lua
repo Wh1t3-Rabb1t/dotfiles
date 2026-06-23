@@ -67,7 +67,7 @@ end
 
 -- Print brightness values on each connected screen
 --------------------------------------------------------------------------------
-function M.print_brightness_values()
+function M.print_values()
     for _, screen in ipairs(hs.screen.allScreens()) do
         local id = screen:getUUID()
         local brightness = state.brightness[id] or 100

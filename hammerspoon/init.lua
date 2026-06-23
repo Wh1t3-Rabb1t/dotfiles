@@ -7,7 +7,7 @@
 
 require('keymaps')
 require('console')
-require('watchers')
+-- require('watchers')
 require('announcer')
 
 

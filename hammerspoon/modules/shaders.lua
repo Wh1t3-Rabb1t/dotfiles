@@ -21,7 +21,7 @@ local function init_overlay(screen, id)
             green = 0,
             blue = 0,
             alpha = 0,
-        },
+        }
     })
 
     overlay:level(hs.canvas.windowLevels.overlay)
@@ -57,7 +57,7 @@ function M.adjust_brightness(direction)
     state.brightness[id] = brightness
     state.overlays[id][1].fillColor.alpha = 1 - brightness / 100
 
-    -- Display brightness value as popup
+    -- Display brightness value in popup
     hs.alert.show("Brightness: " .. brightness,
         alert_fmt,  -- Format table
         screen,     -- Target screen
@@ -72,7 +72,7 @@ function M.print_brightness_values()
         local id = screen:getUUID()
         local brightness = state.brightness[id] or 100
 
-        -- Display brightness value as popup
+        -- Display brightness value in popup
         hs.alert.show("Brightness: " .. brightness,
             alert_fmt,
             screen,

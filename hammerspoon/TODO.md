@@ -2,6 +2,10 @@
 
 ## Misc
 
+- Implements shaders, and window management under a centralized toggle switch
+  in a similar fashion to vivi. Use hs.canvas to display all bound keys
+  (i.e. which-key).
+
 - Re-incorporate bluetooth watcher.
 
 ---

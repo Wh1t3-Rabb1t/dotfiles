@@ -2,15 +2,43 @@ local M = {}
 
 local state = require('state').sys_menu
 
+-- Popup bindings
+--------------------------------------------------------------------------------
+M.bindings = {
+    -- MonitorControl was buggy spyware anyway
+    u = {
+        desc = 'Brightness Up', idx = 1,
+        action = function() require('shaders').adjust_brightness('up') end,
+    },
+    d = {
+        desc = 'Brightness Down', idx = 2,
+        action = function() require('shaders').adjust_brightness('down') end,
+    },
+    p = {
+        desc = 'Print Brightness', idx = 3,
+        action = function() require('shaders').print_brightness_values() end,
+    },
+    -- escape = {
+    --     desc = 'Cancel', idx = 4,
+    --     action = function()
+    --         menu.modal_active = false
+    --         tap:stop()
+    --         hs.alert.show("Off")
+    --         sys_menu.hide_popup()
+    --         return true
+    --     end,
+    -- },
+}
+
 -- Show popup
 --------------------------------------------------------------------------------
-function M.show_overlay()
+function M.show_popup()
     local popup = hs.canvas.new({ x = 30, y = 30, w = 220, h = 90 })
 
     local keys = {}
     local lines = {}
 
-    for k, v in pairs(state.bindings) do
+    for k, v in pairs(M.bindings) do
         table.insert(keys, { key = k, idx = v.idx, binding = v })
     end
 
@@ -44,7 +72,7 @@ end
 
 -- Hide popup
 --------------------------------------------------------------------------------
-function M.hide_overlay()
+function M.hide_popup()
     local popup = state.popup
 
     if popup then

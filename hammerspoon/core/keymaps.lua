@@ -13,7 +13,7 @@ bk({'cmd'}, 'q', qtimer.startCmdQ, qtimer.stopCmdQ)
 -- Binding popup menu
 --------------------------------------------------------------------------------
 local sys_menu = require('sys_menu')
-local menu = require('state').sys_menu
+local state = require('state').sys_menu
 
 local tap
 tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
@@ -21,14 +21,14 @@ tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
     local key = hs.keycodes.map[keycode]
 
     if key == 'escape' then
-        menu.modal_active = false
+        state.modal_active = false
         tap:stop()
         hs.alert.show("Off")
-        sys_menu.hide_overlay()
+        sys_menu.hide_popup()
         return true
     end
 
-    local action = menu.bindings[key].action
+    local action = sys_menu.bindings[key].action
     if action then
         action()
     end
@@ -37,12 +37,12 @@ tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
 end)
 
 bk({ 'ctrl' }, 'f', function()
-    if menu.modal_active then
+    if state.modal_active then
         return
     end
 
-    menu.modal_active = true
+    state.modal_active = true
     hs.alert.show("On")
-    sys_menu.show_overlay()
+    sys_menu.show_popup()
     tap:start()
 end)

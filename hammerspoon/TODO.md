@@ -8,6 +8,24 @@
 
 - Re-incorporate bluetooth watcher.
 
+- Add to zsh deploy script:
+```lua
+--
+-- Write this to "~/.hammerspoon/init.lua"
+--
+local config_dir = os.getenv('HOME') .. '/.local/dotfiles/hammerspoon/'
+local module_dir = config_dir .. 'modules/?.lua'
+local user_dir   = config_dir .. 'core/?.lua'
+
+local pkgs = ';' .. module_dir .. ';' .. user_dir
+
+-- Read from linked dotfiles and update package path
+if config_dir then
+    package.path = package.path .. pkgs
+    dofile(config_dir .. 'init.lua')
+end
+```
+
 ---
 
 ## Brightness module

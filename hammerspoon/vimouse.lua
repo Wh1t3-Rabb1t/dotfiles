@@ -64,9 +64,8 @@ return function(tmod, tkey)
     displayLayoutWatcher:start()
 
 
-    -- If mouse toggle is set to one key without a modifier, comment out the function below.
-    --
-    -- Bind a selected flag to the key used to toggle mouse control on/off.
+    -- If mouse toggle is set to a single key without a modifier, comment out the function below:
+    -- Bind a selected flag to the key used to toggle mouse control on/off
     if type(tmod) == 'string' then
         tapmods[tmod] = true
     else

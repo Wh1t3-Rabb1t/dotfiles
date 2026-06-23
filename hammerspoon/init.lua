@@ -13,6 +13,7 @@ require('announcer')
 
 
 
+
 -- -- Display a notification when a copy event occurs
 -- --------------------------------------------------------------------------------
 -- local lastPasteboardChangeCount = hs.pasteboard.changeCount()

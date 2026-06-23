@@ -12,7 +12,7 @@
 --
 local config_dir = os.getenv('HOME') .. '/.local/dotfiles/hammerspoon/'
 local module_dir = config_dir .. 'modules/?.lua'
-local user_dir   = config_dir .. 'user/?.lua'
+local user_dir   = config_dir .. 'core/?.lua'
 
 local pkgs = ';' .. module_dir .. ';' .. user_dir
 

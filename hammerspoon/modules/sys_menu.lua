@@ -54,7 +54,15 @@ M.bindings = {
 -- Show popup
 --------------------------------------------------------------------------------
 function M.show_popup()
-    local popup = hs.canvas.new({ x = 30, y = 30, w = 220, h = 90 })
+    local curr_screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
+    local frame = curr_screen:fullFrame()
+
+    local popup = hs.canvas.new({
+        x = (frame.x + 20),
+        y = (frame.y + 20),
+        w = 220,
+        h = 90
+    })
 
     local binding_menu = build_binding_menu(M.bindings)
 

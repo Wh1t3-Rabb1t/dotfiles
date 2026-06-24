@@ -2,6 +2,11 @@
 
 ## Misc
 
+- Build out functionality for sys_menu that send given keystrokes when
+  certain apps are focused; i.e. if a browser is focused, we can send it's
+  default tab switching bindings etc. This way we can build out an interactive
+  "cheat sheet" of important hotkeys and drop karabiner altogether.
+
 - Implements shaders, and window management under a centralized toggle switch
   in a similar fashion to vivi. Use hs.canvas to display all bound keys
   (i.e. which-key).

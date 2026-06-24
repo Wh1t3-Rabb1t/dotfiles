@@ -114,6 +114,7 @@ function M.handle_keys()
         end
 
         local binding = bindings[key]
+
         if binding and binding.action then
             binding.action()
         end
@@ -124,13 +125,3 @@ function M.handle_keys()
 end
 
 return M
-
-
--- Above is sourced from a different file like so:
---
---
--- -- Binding popup menu
--- --------------------------------------------------------------------------------
--- local sys_menu = require('sys_menu')
---
--- bk({ 'ctrl' }, 'f', function() sys_menu.handle_keys() end)

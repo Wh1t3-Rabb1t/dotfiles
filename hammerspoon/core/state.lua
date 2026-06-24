@@ -4,7 +4,7 @@ M.overlays = {}
 M.brightness = {}
 
 M.sys_menu = {
-    modal_active = false,
+    menu_active = false,
     popup = false,
 }
 

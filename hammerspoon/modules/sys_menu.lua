@@ -3,7 +3,27 @@ local M = {}
 local state = require('state').sys_menu
 local shader = require('shaders')
 
-local function build_binding_menu(bindings)
+-- Popup bindings
+--------------------------------------------------------------------------------
+local bindings = {
+    -- MonitorControl was buggy spyware anyway
+    u = {
+        desc = 'Brightness Up', idx = 1,
+        action = function() shader.adjust_brightness('up') end,
+    },
+    d = {
+        desc = 'Brightness Down', idx = 2,
+        action = function() shader.adjust_brightness('down') end,
+    },
+    p = {
+        desc = 'Print Brightness', idx = 3,
+        action = function() shader.print_values() end,
+    }
+}
+
+-- Build popup menu text content
+--------------------------------------------------------------------------------
+local function build_bindings_menu()
     local keys = {}
     local lines = {}
 
@@ -23,37 +43,9 @@ local function build_binding_menu(bindings)
     return fmt_text
 end
 
--- Popup bindings
---------------------------------------------------------------------------------
-M.bindings = {
-    -- MonitorControl was buggy spyware anyway
-    u = {
-        desc = 'Brightness Up', idx = 1,
-        action = function() shader.adjust_brightness('up') end,
-    },
-    d = {
-        desc = 'Brightness Down', idx = 2,
-        action = function() shader.adjust_brightness('down') end,
-    },
-    p = {
-        desc = 'Print Brightness', idx = 3,
-        action = function() shader.print_values() end,
-    },
-    -- escape = {
-    --     desc = 'Cancel', idx = 4,
-    --     action = function()
-    --         menu.modal_active = false
-    --         tap:stop()
-    --         hs.alert.show("Off")
-    --         sys_menu.hide_popup()
-    --         return true
-    --     end,
-    -- },
-}
-
 -- Show popup
 --------------------------------------------------------------------------------
-function M.show_popup()
+local function show_popup()
     local curr_screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
     local frame = curr_screen:fullFrame()
 
@@ -64,7 +56,7 @@ function M.show_popup()
         h = 90
     })
 
-    local binding_menu = build_binding_menu(M.bindings)
+    local binding_menu = build_bindings_menu()
 
     popup:appendElements(
         {
@@ -89,7 +81,7 @@ end
 
 -- Hide popup
 --------------------------------------------------------------------------------
-function M.hide_popup()
+local function hide_popup()
     local popup = state.popup
 
     if popup then
@@ -98,4 +90,47 @@ function M.hide_popup()
     end
 end
 
+-- Handle keystrokes
+--------------------------------------------------------------------------------
+function M.handle_keys()
+    if state.menu_active then
+        return
+    end
+
+    state.menu_active = true
+    show_popup()
+
+    local tap
+
+    tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
+        local keycode = event:getKeyCode()
+        local key = hs.keycodes.map[keycode]
+
+        if key == 'escape' then
+            state.menu_active = false
+            tap:stop()
+            hide_popup()
+            return true
+        end
+
+        local binding = bindings[key]
+        if binding and binding.action then
+            binding.action()
+        end
+
+        return true
+    end)
+    tap:start()
+end
+
 return M
+
+
+-- Above is sourced from a different file like so:
+--
+--
+-- -- Binding popup menu
+-- --------------------------------------------------------------------------------
+-- local sys_menu = require('sys_menu')
+--
+-- bk({ 'ctrl' }, 'f', function() sys_menu.handle_keys() end)

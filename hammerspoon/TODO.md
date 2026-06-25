@@ -1,15 +1,41 @@
 # TODO
 
+## BUGS:
+
+- When unplugging or plugging in a new display, it breaks the coords of the
+  shader that was on the original display.
+
+---
+
 ## Misc
+
+- We could display two canvases, one with the static system bindings (brightness etc)
+  the second with the app specific key redirects.
+
+```sh
+# +------------------------------+  +------------------------+
+# | [k] kitty  [i] Brave         |  | System bindings        |
+# | ---------------------------- |  | ---------------------- |
+# | [c] Copy to sys clipboard    |  | [U] Brightness (up)    |
+# | [x] Cut to sys clipboard     |  | [D] Brightness (down)  |
+# | [v] Paste from sys clipboard |  | [P] Brightness (print) |
+# +------------------------------+  +------------------------+
+```
+
+- Emulate 'which-key' from the perspective of keypresses expanding sub menus.
+  Pressing the modal key would always return to the top level menu,
+  but holding the modifier would return to the previous sub menu.
+
+- Break the menu trigger up into modal and when modifier is held (or both).
+
+- Consider sending a singe 'escape' keystoke before launching sys_menu.
+  This would exit apps in fullscreen mode and set a semi consistent ui state
+  in broswers etc.
 
 - Build out functionality for sys_menu that send given keystrokes when
   certain apps are focused; i.e. if a browser is focused, we can send it's
   default tab switching bindings etc. This way we can build out an interactive
   "cheat sheet" of important hotkeys and drop karabiner altogether.
-
-- Implements shaders, and window management under a centralized toggle switch
-  in a similar fashion to vivi. Use hs.canvas to display all bound keys
-  (i.e. which-key).
 
 - Re-incorporate bluetooth watcher.
 
@@ -37,7 +63,6 @@ end
 
 ## Brightness module
 
-- Find appropriate key bindings.
 - Implement key repeating.
 
 ---

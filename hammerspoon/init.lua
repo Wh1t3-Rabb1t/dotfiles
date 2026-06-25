@@ -4,6 +4,7 @@
 -- https://www.lua.org/pil/contents.html
 -- https://www.hammerspoon.org/docs/index.html
 -- https://www.hammerspoon.org/docs/hs.html
+-- https://learnhammerspoon.com/
 
 require('keymaps')
 require('console')

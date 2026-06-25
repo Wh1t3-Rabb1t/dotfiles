@@ -1,34 +1,16 @@
 local M = {}
 
 local state = require('state').sys_menu
-local shader = require('shaders')
-
--- Popup bindings
---------------------------------------------------------------------------------
-local bindings = {
-    -- MonitorControl was buggy spyware anyway
-    u = {
-        desc = 'Brightness Up', idx = 1,
-        action = function() shader.adjust_brightness('up') end,
-    },
-    d = {
-        desc = 'Brightness Down', idx = 2,
-        action = function() shader.adjust_brightness('down') end,
-    },
-    p = {
-        desc = 'Print Brightness', idx = 3,
-        action = function() shader.print_values() end,
-    }
-}
+local bindings = require('bindings').system
 
 -- Build popup menu text content
 --------------------------------------------------------------------------------
-local function build_bindings_menu()
+local function build_bindings_menu(input)
     local keys = {}
     local lines = {}
 
     -- Build binding menu from table
-    for k, v in pairs(bindings) do
+    for k, v in pairs(input) do
         table.insert(keys, { key = k, idx = v.idx, binding = v })
     end
 
@@ -56,7 +38,7 @@ local function show_popup()
         h = 90
     })
 
-    local binding_menu = build_bindings_menu()
+    local binding_menu = build_bindings_menu(bindings)
 
     popup:appendElements(
         {
@@ -92,7 +74,7 @@ end
 
 -- Handle keystrokes
 --------------------------------------------------------------------------------
-function M.handle_keys()
+function M.launch_menu()
     if state.menu_active then
         return
     end

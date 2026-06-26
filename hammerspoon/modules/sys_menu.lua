@@ -1,65 +1,122 @@
 local M = {}
 
+local styledtext = require("hs.styledtext")
 local state = require('state').sys_menu
 local bindings = require('bindings').system
 
--- Build popup menu text content
+
+-- Format rgb
 --------------------------------------------------------------------------------
-local function build_bindings_menu(input)
-    local keys = {}
-    local lines = {}
-
-    -- Build binding menu from table
-    for k, v in pairs(input) do
-        table.insert(keys, { key = k, idx = v.idx, binding = v })
-    end
-
-    table.sort(keys, function(a, b) return a.idx < b.idx end)
-
-    for _, item in ipairs(keys) do
-        table.insert(lines, string.format("%-2s : %s", item.key, item.binding.desc))
-    end
-
-    local fmt_text = table.concat(lines, "\n")
-
-    return fmt_text
+local function fmt_rgb(r, g, b, opacity)
+    opacity = opacity or 1.0
+    local color_table = {
+        red = r / 255,
+        green = g / 255,
+        blue = b / 255,
+        alpha = opacity
+    }
+    return color_table
 end
+
+
+-- Format menu contents
+--------------------------------------------------------------------------------
+local function fmt_menu_contents(input)
+    local keys = {}
+    local len = 0
+
+    for k, v in pairs(input) do
+        local display = ("[%s]"):format(k)
+
+        len = math.max(len, #display)
+
+        table.insert(keys, {
+            display = display,
+            idx = v.idx,
+            binding = v,
+        })
+    end
+
+    -- Sort entries in accordance with 'idx'
+    table.sort(keys, function(a, b)
+        return a.idx < b.idx
+    end)
+
+    -- Menu formatting
+    local font_style = {
+        name = 'Menlo',
+        size = 18
+    }
+    local key_style = {
+        font = font_style,
+        color = fmt_rgb(0, 255, 0),      -- Green
+    }
+    local desc_style = {
+        font = font_style,
+        color = fmt_rgb(255, 255, 255),  -- White
+    }
+
+    local text = styledtext.new("")
+
+    for i, item in ipairs(keys) do
+        local padded = item.display .. string.rep(" ", len - #item.display + 1)
+
+        text = text
+            .. styledtext.new(padded, key_style)
+            .. styledtext.new(item.binding.desc, desc_style)
+
+        if i < #keys then
+            text = text .. styledtext.new("\n", desc_style)
+        end
+    end
+
+    return text
+end
+
 
 -- Show popup
 --------------------------------------------------------------------------------
 local function show_popup()
-    local curr_screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
-    local frame = curr_screen:fullFrame()
+    local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
+    local frame = screen:fullFrame()
+
+    local canvas_width = 320
+    local canvas_height = 40
 
     local popup = hs.canvas.new({
-        x = (frame.x + 20),
-        y = (frame.y + 20),
-        w = 220,
-        h = 90
+        x = (frame.w / 2) - (canvas_width / 2),
+        y = (frame.h / 2) - (canvas_height / 2),
+        w = canvas_width,
+        h = canvas_width
     })
-
-    local binding_menu = build_bindings_menu(bindings)
 
     popup:appendElements(
         {
             type = 'rectangle',
             action = 'strokeAndFill',
-            fillColor = { alpha = 0.85 },
-            strokeColor = { white = 1 },
-            roundedRectRadii = { xRadius = 8, yRadius = 8 },
+            fillColor = fmt_rgb(24, 135, 250),
+            strokeColor = fmt_rgb(255, 255, 255),
+            roundedRectRadii = {
+                xRadius = 8,
+                yRadius = 8
+            }
         },
         {
             type = 'text',
-            text = binding_menu,
-            textSize = 18,
-            textColor = { white = 1 },
-            frame = { x = 10, y = 10, w = 200, h = 70 },
+            text = fmt_menu_contents(bindings),
+            frame = {
+                x = 10,
+                y = 10,
+                w = "100%",
+                h = "100%"
+            }
         }
     )
 
     state.popup = popup
-    popup:show()
+    popup:show(0.15)
 end
+
 
 -- Hide popup
 --------------------------------------------------------------------------------
@@ -71,6 +128,7 @@ local function hide_popup()
         state.popup = false
     end
 end
+
 
 -- Handle keystrokes
 --------------------------------------------------------------------------------

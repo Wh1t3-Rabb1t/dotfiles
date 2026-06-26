@@ -9,12 +9,14 @@ local bindings = require('bindings').system
 --------------------------------------------------------------------------------
 local function fmt_rgb(r, g, b, opacity)
     opacity = opacity or 1.0
+
     local color_table = {
         red = r / 255,
         green = g / 255,
         blue = b / 255,
         alpha = opacity
     }
+
     return color_table
 end
 
@@ -56,13 +58,12 @@ local function fmt_menu_contents(input)
         color = fmt_rgb(255, 255, 255),  -- White
     }
 
+    local fmt = "%-" .. len .. "s "
     local text = styledtext.new("")
 
     for i, item in ipairs(keys) do
-        local padded = item.display .. string.rep(" ", len - #item.display + 1)
-
         text = text
-            .. styledtext.new(padded, key_style)
+            .. styledtext.new(fmt:format(item.display), key_style)
             .. styledtext.new(item.binding.desc, desc_style)
 
         if i < #keys then
@@ -76,7 +77,7 @@ end
 
 -- Show popup
 --------------------------------------------------------------------------------
-local function show_popup()
+local function fmt_popup()
     local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
     local frame = screen:fullFrame()
 
@@ -113,20 +114,7 @@ local function show_popup()
         }
     )
 
-    state.popup = popup
-    popup:show(0.15)
-end
-
-
--- Hide popup
---------------------------------------------------------------------------------
-local function hide_popup()
-    local popup = state.popup
-
-    if popup then
-        popup:delete()
-        state.popup = false
-    end
+    return popup
 end
 
 
@@ -137,8 +125,11 @@ function M.launch_menu()
         return
     end
 
+    local popup = fmt_popup()
+
     state.menu_active = true
-    show_popup()
+    state.popup = popup
+    popup:show(0.15)
 
     local tap
 
@@ -148,8 +139,9 @@ function M.launch_menu()
 
         if key == 'escape' then
             state.menu_active = false
+            state.popup = false
+            popup:delete()
             tap:stop()
-            hide_popup()
             return true
         end
 
@@ -161,6 +153,7 @@ function M.launch_menu()
 
         return true
     end)
+
     tap:start()
 end
 

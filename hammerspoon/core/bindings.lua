@@ -16,7 +16,7 @@ M.system = {
     p = {
         desc = 'Print Brightness', idx = 3,
         action = function() shader.print_values() end,
-    }
+    },
 }
 
 return M

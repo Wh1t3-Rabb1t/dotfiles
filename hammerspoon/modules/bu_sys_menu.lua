@@ -2,27 +2,7 @@ local M = {}
 
 local styledtext = require("hs.styledtext")
 local state = require('state').sys_menu
-local shader = require('shaders')
-
-
-local bindings = {
-    u = {
-        desc = 'Brightness Up', idx = 1,
-        action = function() shader.adjust_brightness('up') end,
-    },
-    d = {
-        desc = 'Brightness Down', idx = 2,
-        action = function() shader.adjust_brightness('down') end,
-    },
-    p = {
-        desc = 'Print Brightness', idx = 3,
-        action = function() shader.print_values() end,
-    },
-    escape = {
-        desc = 'Cancel', idx = 4,
-        action = function() M.close_menu() end,
-    },
-}
+local bindings = require('bindings').system
 
 
 -- Format rgb
@@ -138,20 +118,31 @@ local function fmt_popup()
 end
 
 
--- Init
+-- Handle keystrokes
 --------------------------------------------------------------------------------
-function M.init_menu()
-    -- TODO: cache bindings lookup array and popup canvas on init
-end
+function M.launch_menu()
+    if state.menu_active then
+        return
+    end
+    state.menu_active = true
 
+    local popup = fmt_popup()
+    state.popup = popup
+    popup:show(0.15)
 
--- Create new event tap
---------------------------------------------------------------------------------
-local function create_tap()
     local tap
     tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]
+
+        if key == 'escape' then
+            state.menu_active = false
+            state.popup = false
+            popup:delete()
+            tap:stop()
+            return true
+        end
+
         local binding = bindings[key]
 
         if binding and binding.action then
@@ -160,32 +151,8 @@ local function create_tap()
 
         return true
     end)
-    return tap
-end
+    tap:start()
 
-
--- Close popup
---------------------------------------------------------------------------------
-function M.close_menu()
-    state.menu_active = false
-    state.popup:delete()
-    state.popup = nil
-    state.tap:stop()
-    state.tap = nil
-end
-
-
--- Handle keystrokes
---------------------------------------------------------------------------------
-function M.launch_menu()
-    if state.menu_active then
-        return
-    end
-    state.menu_active = true
-    state.tap = create_tap()
-    state.tap:start()
-    state.popup = fmt_popup()
-    state.popup:show(0.15)
 end
 
 return M

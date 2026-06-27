@@ -5,8 +5,8 @@ M.brightness = {}
 
 M.sys_menu = {
     menu_active = false,
-    popup = false,
-    tap = false,
+    popup = nil,
+    tap = nil,
 }
 
 return M

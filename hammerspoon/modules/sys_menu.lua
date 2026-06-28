@@ -2,6 +2,7 @@ local M = {}
 
 local styledtext = require("hs.styledtext")
 local state = require('state').sys_menu
+local cache = require('state').cache
 local shader = require('shaders')
 
 
@@ -133,15 +134,7 @@ local function fmt_popup()
             }
         }
     )
-
     return popup
-end
-
-
--- Init
---------------------------------------------------------------------------------
-function M.init_menu()
-    -- TODO: cache bindings lookup array and popup canvas on init
 end
 
 
@@ -164,14 +157,22 @@ local function create_tap()
 end
 
 
+-- Cache menu assets
+--------------------------------------------------------------------------------
+function M.cache_menu()
+    cache.tap = create_tap()
+    cache.popup = fmt_popup()
+end
+
+
 -- Close popup
 --------------------------------------------------------------------------------
 function M.close_menu()
     state.menu_active = false
-    state.popup:delete()
     state.popup = nil
-    state.tap:stop()
     state.tap = nil
+    cache.popup:delete()
+    cache.tap:stop()
 end
 
 
@@ -182,10 +183,12 @@ function M.launch_menu()
         return
     end
     state.menu_active = true
-    state.tap = create_tap()
-    state.tap:start()
-    state.popup = fmt_popup()
-    state.popup:show(0.15)
+
+    if not cache.tap or not cache.popup then
+        M.cache_menu()
+    end
+    cache.tap:start()
+    cache.popup:show(0.15)
 end
 
 return M

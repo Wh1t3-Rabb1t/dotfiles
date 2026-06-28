@@ -9,5 +9,7 @@ M.sys_menu = {
     tap = nil,
 }
 
+M.cache = {}
+
 return M
 

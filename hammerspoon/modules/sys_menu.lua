@@ -1,26 +1,31 @@
 local M = {}
 
-local styledtext = require("hs.styledtext")
-local state = require('state').sys_menu
-local cache = require('state').cache
+local state = require('state').menu
+local asset = require('state').assets
 local shader = require('shaders')
 
 
+-- Key bindings
+--------------------------------------------------------------------------------
 local bindings = {
     u = {
-        desc = 'Brightness Up', idx = 1,
+        desc = 'Brightness Up',
+        idx = 1,
         action = function() shader.adjust_brightness('up') end,
     },
     d = {
-        desc = 'Brightness Down', idx = 2,
+        desc = 'Brightness Down',
+        idx = 2,
         action = function() shader.adjust_brightness('down') end,
     },
     p = {
-        desc = 'Print Brightness', idx = 3,
+        desc = 'Print Brightness',
+        idx = 3,
         action = function() shader.print_values() end,
     },
     escape = {
-        desc = 'Cancel', idx = 4,
+        desc = 'Cancel',
+        idx = 4,
         action = function() M.close_menu() end,
     },
 }
@@ -28,7 +33,7 @@ local bindings = {
 
 -- Format rgb
 --------------------------------------------------------------------------------
-local function fmt_rgb(r, g, b, opacity)
+local function rgb(r, g, b, opacity)
     opacity = opacity or 1.0
 
     local color_table = {
@@ -44,7 +49,7 @@ end
 
 -- Format menu contents
 --------------------------------------------------------------------------------
-local function fmt_menu_contents(input)
+local function create_menu_text(input)
     local keys = {}
     local len = 0
 
@@ -72,15 +77,16 @@ local function fmt_menu_contents(input)
     }
     local key_style = {
         font = font_style,
-        color = fmt_rgb(0, 255, 0),      -- Green
+        color = rgb(0, 255, 0),      -- Green
     }
     local desc_style = {
         font = font_style,
-        color = fmt_rgb(255, 255, 255),  -- White
+        color = rgb(255, 255, 255),  -- White
     }
 
-    local fmt = "%-" .. len .. "s "
+    local styledtext = require('hs.styledtext')
     local text = styledtext.new("")
+    local fmt = "%-" .. len .. "s "
 
     for i, item in ipairs(keys) do
         text = text
@@ -96,9 +102,9 @@ local function fmt_menu_contents(input)
 end
 
 
--- Show popup
+-- Create popup
 --------------------------------------------------------------------------------
-local function fmt_popup()
+local function create_popup()
     local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
     local frame = screen:fullFrame()
 
@@ -116,8 +122,8 @@ local function fmt_popup()
         {
             type = 'rectangle',
             action = 'strokeAndFill',
-            fillColor = fmt_rgb(24, 135, 250),
-            strokeColor = fmt_rgb(255, 255, 255),
+            fillColor = rgb(24, 135, 250),
+            strokeColor = rgb(255, 255, 255),
             roundedRectRadii = {
                 xRadius = 8,
                 yRadius = 8
@@ -125,7 +131,7 @@ local function fmt_popup()
         },
         {
             type = 'text',
-            text = fmt_menu_contents(bindings),
+            text = create_menu_text(bindings),
             frame = {
                 x = 10,
                 y = 10,
@@ -138,11 +144,11 @@ local function fmt_popup()
 end
 
 
--- Create new event tap
+-- Create event tap
 --------------------------------------------------------------------------------
 local function create_tap()
-    local tap
-    tap = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(event)
+    local e = hs.eventtap
+    local tap = e.new({ e.event.types.keyDown }, function(event)
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]
         local binding = bindings[key]
@@ -157,22 +163,20 @@ local function create_tap()
 end
 
 
--- Cache menu assets
+-- Create menu assets
 --------------------------------------------------------------------------------
-function M.cache_menu()
-    cache.tap = create_tap()
-    cache.popup = fmt_popup()
+local function create_menu_assets()
+    asset.tap = create_tap()
+    asset.popup = create_popup()
 end
 
 
--- Close popup
+-- Close menu
 --------------------------------------------------------------------------------
 function M.close_menu()
     state.menu_active = false
-    state.popup = nil
-    state.tap = nil
-    cache.popup:delete()
-    cache.tap:stop()
+    asset.popup:delete()
+    asset.tap:stop()
 end
 
 
@@ -184,11 +188,11 @@ function M.launch_menu()
     end
     state.menu_active = true
 
-    if not cache.tap or not cache.popup then
-        M.cache_menu()
+    if not asset.tap or not asset.popup then
+        create_menu_assets()
     end
-    cache.tap:start()
-    cache.popup:show(0.15)
+    asset.tap:start()
+    asset.popup:show(0.15)
 end
 
 return M

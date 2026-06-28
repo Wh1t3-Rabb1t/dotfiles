@@ -3,13 +3,11 @@ local M = {}
 M.overlays = {}
 M.brightness = {}
 
-M.sys_menu = {
+M.menu = {
     menu_active = false,
-    popup = nil,
-    tap = nil,
 }
 
-M.cache = {}
+M.assets = {}
 
 return M
 

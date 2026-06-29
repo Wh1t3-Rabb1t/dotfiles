@@ -6,9 +6,9 @@ local asset = require('state').assets
 local shader = require('shaders')
 
 
--- Key bindings
+-- System key bindings (universal)
 --------------------------------------------------------------------------------
-local bindings = {
+local sys_bindings = {
     {
         key = 'u',
         desc = 'Brightness Up',
@@ -31,6 +31,42 @@ local bindings = {
     },
 }
 
+-- local brave_bindings = {
+--     {
+--         key = 'l',
+--         desc = 'Focus searchbar',
+--         action = function()
+--             M.send_keys('l', 'cmd')
+--             M.close_menu()
+--         end
+--     },
+--     {
+--         key = 't',
+--         desc = 'Left arrow',
+--         action = function() M.send_keys('left') end
+--     },
+--     {
+--         key = 'l',
+--         desc = 'Right arrow',
+--         action = function() M.send_keys('right') end
+--     },
+--     {
+--         key = 'h',
+--         desc = 'Tab left',
+--         action = function() M.send_keys('pageup', 'ctrl') end
+--     },
+--     {
+--         key = ';',
+--         desc = 'Tab right',
+--         action = function() M.send_keys('pagedown', 'ctrl') end
+--     },
+--     {
+--         key = 'w',
+--         desc = 'Close tab',
+--         action = function() M.send_keys('w', 'cmd') end
+--     },
+-- }
+
 
 -- Format rgb
 --------------------------------------------------------------------------------
@@ -50,42 +86,41 @@ end
 
 -- Format menu contents
 --------------------------------------------------------------------------------
-local function create_menu_text(input)
+local function create_menu_text(binding_tbl)
     local len = 0
 
     -- Find longest key
-    for _, binding in ipairs(input) do
+    for _, binding in ipairs(binding_tbl) do
         local display = ("[%s]"):format(binding.key)
         len = math.max(len, #display)
     end
 
+    -- Define text formatting
     local font_style = {
-        name = "Menlo",
+        name = 'Menlo',
         size = 18,
     }
-
     local key_style = {
         font = font_style,
         color = rgb(0, 255, 0),
     }
-
     local desc_style = {
         font = font_style,
         color = rgb(255, 255, 255),
     }
 
-    local styledtext = require("hs.styledtext")
+    local styledtext = require('hs.styledtext')
     local text = styledtext.new("")
     local fmt = "%-" .. len .. "s "
 
-    for i, binding in ipairs(input) do
+    for i, binding in ipairs(binding_tbl) do
         local display = ("[%s]"):format(binding.key)
 
         text = text
             .. styledtext.new(fmt:format(display), key_style)
             .. styledtext.new(binding.desc, desc_style)
 
-        if i < #input then
+        if i < #binding_tbl then
             text = text .. styledtext.new("\n", desc_style)
         end
     end
@@ -96,13 +131,13 @@ end
 
 -- Create popup
 --------------------------------------------------------------------------------
-local function create_popup()
+local function create_popup(binding_tbl)
     -- Get focused screen frame
     local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
     local frame = screen:fullFrame()
 
     -- Get dimensions of text to be rendered
-    local text = create_menu_text(bindings)
+    local text = create_menu_text(binding_tbl)
     local size = hs.drawing.getTextDrawingSize(text)
     local canvas_width = math.max(size.w)
     local canvas_height = math.max(size.h)
@@ -131,8 +166,8 @@ local function create_popup()
             frame = {
                 x = 5,
                 y = 5,
-                w = "100%",
-                h = "100%"
+                w = '100%',
+                h = '100%'
             }
         }
     )
@@ -147,6 +182,11 @@ local function create_tap()
     local e = hs.eventtap
 
     local tap = e.new({ e.event.types.keyDown }, function(event)
+        if hs.timer.secondsSinceEpoch() < state.ignore_until then
+            state.ignore_until = 0
+            return false
+        end
+
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]
         local binding = lookup[key]
@@ -162,15 +202,29 @@ local function create_tap()
 end
 
 
--- Create menu assets
+-- Create the cached bindings lookup table
 --------------------------------------------------------------------------------
-local function create_menu_assets()
-    for _, binding in ipairs(bindings) do
+local function create_lookup_table(binding_tbl)
+    for _, binding in ipairs(binding_tbl) do
         lookup[binding.key] = binding
     end
+end
 
-    asset.tap = create_tap()
-    asset.popup = create_popup()
+
+-- Send keystrokes (while bypassing active eventtap)
+--------------------------------------------------------------------------------
+function M.send_keys(key, mod)
+    state.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+
+    local modifiers = mod or {}
+
+    if type(modifiers) == 'string' then
+        modifiers = { modifiers }
+    end
+
+    hs.timer.doAfter(0, function()
+        hs.eventtap.keyStroke(modifiers, key, 0)
+    end)
 end
 
 
@@ -192,7 +246,10 @@ function M.launch_menu()
     state.menu_active = true
 
     if not asset.tap or not asset.popup then
-        create_menu_assets()
+        create_lookup_table(sys_bindings)
+
+        asset.tap = create_tap()
+        asset.popup = create_popup(sys_bindings)
     end
     asset.tap:start()
     asset.popup:show(0.15)

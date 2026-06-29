@@ -1,6 +1,7 @@
 local M = {}
 
 local state = require('state').menu
+local lookup = require('state').lookup
 local asset = require('state').assets
 local shader = require('shaders')
 
@@ -8,25 +9,25 @@ local shader = require('shaders')
 -- Key bindings
 --------------------------------------------------------------------------------
 local bindings = {
-    u = {
+    {
+        key = 'u',
         desc = 'Brightness Up',
-        idx = 1,
-        action = function() shader.adjust_brightness('up') end,
+        action = function() shader.adjust_brightness('up') end
     },
-    d = {
+    {
+        key = 'd',
         desc = 'Brightness Down',
-        idx = 2,
-        action = function() shader.adjust_brightness('down') end,
+        action = function() shader.adjust_brightness('down') end
     },
-    p = {
+    {
+        key = 'p',
         desc = 'Print Brightness',
-        idx = 3,
-        action = function() shader.print_values() end,
+        action = function() shader.print_values() end
     },
-    escape = {
+    {
+        key = 'escape',
         desc = 'Cancel',
-        idx = 4,
-        action = function() M.close_menu() end,
+        action = function() M.close_menu() end
     },
 }
 
@@ -50,50 +51,41 @@ end
 -- Format menu contents
 --------------------------------------------------------------------------------
 local function create_menu_text(input)
-    local keys = {}
     local len = 0
 
-    for k, v in pairs(input) do
-        local display = ("[%s]"):format(k)
-
+    -- Find longest key
+    for _, binding in ipairs(input) do
+        local display = ("[%s]"):format(binding.key)
         len = math.max(len, #display)
-
-        table.insert(keys, {
-            display = display,
-            idx = v.idx,
-            binding = v,
-        })
     end
 
-    -- Sort entries in accordance with 'idx'
-    table.sort(keys, function(a, b)
-        return a.idx < b.idx
-    end)
-
-    -- Menu formatting
     local font_style = {
-        name = 'Menlo',
-        size = 18
+        name = "Menlo",
+        size = 18,
     }
+
     local key_style = {
         font = font_style,
-        color = rgb(0, 255, 0),      -- Green
-    }
-    local desc_style = {
-        font = font_style,
-        color = rgb(255, 255, 255),  -- White
+        color = rgb(0, 255, 0),
     }
 
-    local styledtext = require('hs.styledtext')
+    local desc_style = {
+        font = font_style,
+        color = rgb(255, 255, 255),
+    }
+
+    local styledtext = require("hs.styledtext")
     local text = styledtext.new("")
     local fmt = "%-" .. len .. "s "
 
-    for i, item in ipairs(keys) do
-        text = text
-            .. styledtext.new(fmt:format(item.display), key_style)
-            .. styledtext.new(item.binding.desc, desc_style)
+    for i, binding in ipairs(input) do
+        local display = ("[%s]"):format(binding.key)
 
-        if i < #keys then
+        text = text
+            .. styledtext.new(fmt:format(display), key_style)
+            .. styledtext.new(binding.desc, desc_style)
+
+        if i < #input then
             text = text .. styledtext.new("\n", desc_style)
         end
     end
@@ -105,25 +97,29 @@ end
 -- Create popup
 --------------------------------------------------------------------------------
 local function create_popup()
+    -- Get focused screen frame
     local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
     local frame = screen:fullFrame()
 
-    local canvas_width = 320
-    local canvas_height = 40
+    -- Get dimensions of text to be rendered
+    local text = create_menu_text(bindings)
+    local size = hs.drawing.getTextDrawingSize(text)
+    local canvas_width = math.max(size.w)
+    local canvas_height = math.max(size.h)
 
     local popup = hs.canvas.new({
-        x = (frame.w / 2) - (canvas_width / 2),
-        y = (frame.h / 2) - (canvas_height / 2),
-        w = canvas_width,
-        h = canvas_width
+        x = (frame.w / 2),
+        y = (frame.h / 2),
+        w = (canvas_width + 10),
+        h = (canvas_height + 10),
     })
 
     popup:appendElements(
         {
             type = 'rectangle',
             action = 'strokeAndFill',
-            fillColor = rgb(24, 135, 250),
-            strokeColor = rgb(255, 255, 255),
+            fillColor = rgb(1, 2, 3),          -- Black
+            strokeColor = rgb(255, 255, 255),  -- White
             roundedRectRadii = {
                 xRadius = 8,
                 yRadius = 8
@@ -131,15 +127,16 @@ local function create_popup()
         },
         {
             type = 'text',
-            text = create_menu_text(bindings),
+            text = text,
             frame = {
-                x = 10,
-                y = 10,
+                x = 5,
+                y = 5,
                 w = "100%",
                 h = "100%"
             }
         }
     )
+
     return popup
 end
 
@@ -148,17 +145,19 @@ end
 --------------------------------------------------------------------------------
 local function create_tap()
     local e = hs.eventtap
+
     local tap = e.new({ e.event.types.keyDown }, function(event)
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]
-        local binding = bindings[key]
+        local binding = lookup[key]
 
-        if binding and binding.action then
+        if binding then
             binding.action()
         end
 
         return true
     end)
+
     return tap
 end
 
@@ -166,6 +165,10 @@ end
 -- Create menu assets
 --------------------------------------------------------------------------------
 local function create_menu_assets()
+    for _, binding in ipairs(bindings) do
+        lookup[binding.key] = binding
+    end
+
     asset.tap = create_tap()
     asset.popup = create_popup()
 end
@@ -180,7 +183,7 @@ function M.close_menu()
 end
 
 
--- Handle keystrokes
+-- Launch menu
 --------------------------------------------------------------------------------
 function M.launch_menu()
     if state.menu_active then

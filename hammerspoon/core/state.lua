@@ -8,6 +8,7 @@ M.menu = {
 }
 
 M.assets = {}
+M.lookup = {}
 
 return M
 

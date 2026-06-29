@@ -31,41 +31,41 @@ local sys_bindings = {
     },
 }
 
-local brave_bindings = {
-    {
-        key = 'l',
-        desc = 'Focus searchbar',
-        action = function()
-            M.send_keys('l', 'cmd')
-            M.close_menu()
-        end
-    },
-    {
-        key = 't',
-        desc = 'Left arrow',
-        action = function() M.send_keys('left') end
-    },
-    {
-        key = 'l',
-        desc = 'Right arrow',
-        action = function() M.send_keys('right') end
-    },
-    {
-        key = 'h',
-        desc = 'Tab left',
-        action = function() M.send_keys('pageup', 'ctrl') end
-    },
-    {
-        key = ';',
-        desc = 'Tab right',
-        action = function() M.send_keys('pagedown', 'ctrl') end
-    },
-    {
-        key = 'w',
-        desc = 'Close tab',
-        action = function() M.send_keys('w', 'cmd') end
-    },
-}
+-- local brave_bindings = {
+--     {
+--         key = 'l',
+--         desc = 'Focus searchbar',
+--         action = function()
+--             M.send_keys('l', 'cmd')
+--             M.close_menu()
+--         end
+--     },
+--     {
+--         key = 't',
+--         desc = 'Left arrow',
+--         action = function() M.send_keys('left') end
+--     },
+--     {
+--         key = 'l',
+--         desc = 'Right arrow',
+--         action = function() M.send_keys('right') end
+--     },
+--     {
+--         key = 'h',
+--         desc = 'Tab left',
+--         action = function() M.send_keys('pageup', 'ctrl') end
+--     },
+--     {
+--         key = ';',
+--         desc = 'Tab right',
+--         action = function() M.send_keys('pagedown', 'ctrl') end
+--     },
+--     {
+--         key = 'w',
+--         desc = 'Close tab',
+--         action = function() M.send_keys('w', 'cmd') end
+--     },
+-- }
 
 
 -- Format rgb
@@ -132,12 +132,19 @@ end
 -- Create popup
 --------------------------------------------------------------------------------
 local function create_popup(binding_tbl)
+    -- Get focused screen frame
+    local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
+    local frame = screen:fullFrame()
+
+    -- Get dimensions of text to be rendered
     local text = create_menu_text(binding_tbl)
     local size = hs.drawing.getTextDrawingSize(text)
     local canvas_width = math.max(size.w)
     local canvas_height = math.max(size.h)
 
     local popup = hs.canvas.new({
+        x = (frame.w / 2),
+        y = (frame.h / 2),
         w = (canvas_width + 10),
         h = (canvas_height + 10),
     })
@@ -195,9 +202,9 @@ local function create_tap()
 end
 
 
--- Pack the cached bindings lookup table
+-- Create the cached bindings lookup table
 --------------------------------------------------------------------------------
-local function pack_lookup_table(binding_tbl)
+local function create_lookup_table(binding_tbl)
     for _, binding in ipairs(binding_tbl) do
         lookup[binding.key] = binding
     end
@@ -225,34 +232,9 @@ end
 --------------------------------------------------------------------------------
 function M.close_menu()
     state.menu_active = false
-    asset.sys_popup:delete()
-    asset.brave_popup:delete()
+    asset.popup:delete()
     asset.tap:stop()
 end
-
-
-
--- TODO: needs heavy work
---
--- Calculate popup coords
---------------------------------------------------------------------------------
-function M.calc_popup_coords(app)
-    local win = hs.window.focusedWindow()
-    local frame = win:frame()
-
-    local coords = {}
-
-    if app == 'Brave Browser' then
-        coords.x = frame.x
-        coords.y = frame.y
-    else
-        coords.x = 300
-        coords.y = 400
-    end
-
-    return coords
-end
-
 
 
 -- Launch menu
@@ -263,36 +245,14 @@ function M.launch_menu()
     end
     state.menu_active = true
 
-    if not asset.tap or not asset.sys_popup then
-        pack_lookup_table(sys_bindings)
-        pack_lookup_table(brave_bindings)
+    if not asset.tap or not asset.popup then
+        create_lookup_table(sys_bindings)
 
         asset.tap = create_tap()
-        asset.sys_popup = create_popup(sys_bindings)
-        asset.brave_popup = create_popup(brave_bindings)
+        asset.popup = create_popup(sys_bindings)
     end
     asset.tap:start()
-
-
-
-    -- TODO: needs heavy work
-    --
-    -- NOTE:  could incorporate splits logic here to determine which windows
-    --       occupy which coords.
-    --
-    -- Get focused screen frame
-    -- local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
-    -- local frame = screen:fullFrame()
-    -- x = (frame.w / 2),
-    -- y = (frame.h / 2),
-    local app = hs.application.frontmostApplication():name()
-    asset.brave_popup:topLeft(M.calc_popup_coords(app))
-    asset.sys_popup:topLeft({ x = 200, y = 300 })
-
-
-
-    asset.sys_popup:show(0.15)
-    asset.brave_popup:show(0.15)
+    asset.popup:show(0.15)
 end
 
 return M

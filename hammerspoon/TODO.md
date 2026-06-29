@@ -9,18 +9,35 @@
 
 ## Misc
 
-- We could display two canvases, one with the static system bindings (brightness etc)
-  the second with the app specific key redirects.
+- We can remove all x y coord logic from canvas creation, and instead build
+  a helper function that determines focused app then passes coords to
+  'popup:topLeft(coords)' when launching the popup.
 
-```sh
-# +------------------------------+  +------------------------+
-# | [k] kitty  [i] Brave         |  | System bindings        |
-# | ---------------------------- |  | ---------------------- |
-# | [c] Copy to sys clipboard    |  | [U] Brightness (up)    |
-# | [x] Cut to sys clipboard     |  | [D] Brightness (down)  |
-# | [v] Paste from sys clipboard |  | [P] Brightness (print) |
-# +------------------------------+  +------------------------+
-```
+- When displaying the app/system canvas bindings side by side we should center
+  the app specific canvas in the center of said app, and put the system canvas
+  on the opposite side of the screen.
+  Can use this method to display the canvas at given coords:
+  ```lua
+  asset.popup:topLeft({ x = 10, y = 10 })
+  ```
+
+- Example canvas:
+  ```sh
+  # +------------------------------+  +------------------------+
+  # | [k] kitty  [i] Brave         |  | System bindings        |
+  # | ---------------------------- |  | ---------------------- |
+  # | [c] Copy to sys clipboard    |  | [U] Brightness (up)    |
+  # | [x] Cut to sys clipboard     |  | [D] Brightness (down)  |
+  # | [v] Paste from sys clipboard |  | [P] Brightness (print) |
+  # +------------------------------+  +------------------------+
+  ```
+
+- Look into the use of:
+  ```lua
+  popup:delete()
+  -- vs
+  popup:hide()
+  ```
 
 - Emulate 'which-key' from the perspective of keypresses expanding sub menus.
   Pressing the modal key would always return to the top level menu,

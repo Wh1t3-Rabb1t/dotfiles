@@ -9,6 +9,12 @@
 
 ## Misc
 
+- Determine if 'layout.init_window_data' should be called on init, or only
+  when a new window is launched / focused.
+
+- Need to incorporate a robust event queue for key inputs.
+  (when sending key stokes while the tap is active).
+
 - We can remove all x y coord logic from canvas creation, and instead build
   a helper function that determines focused app then passes coords to
   'popup:topLeft(coords)' when launching the popup.

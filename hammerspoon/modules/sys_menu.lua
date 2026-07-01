@@ -236,6 +236,7 @@ end
 --
 -- Calculate popup coords
 --------------------------------------------------------------------------------
+
 function M.calc_popup_coords(app)
     local win = hs.window.focusedWindow()
     local frame = win:frame()
@@ -253,6 +254,12 @@ function M.calc_popup_coords(app)
     return coords
 end
 
+
+-- local app_popups = {
+--     ['Brave Browser'] = asset.brave_popup,
+--     ['kitty'] = asset.kitty_popup,
+-- }
+-- local popup = app_popups[app_name]
 
 
 -- Launch menu
@@ -274,21 +281,10 @@ function M.launch_menu()
     asset.tap:start()
 
 
-
-    -- TODO: needs heavy work
-    --
-    -- NOTE:  could incorporate splits logic here to determine which windows
-    --       occupy which coords.
-    --
-    -- Get focused screen frame
-    -- local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
-    -- local frame = screen:fullFrame()
-    -- x = (frame.w / 2),
-    -- y = (frame.h / 2),
     local app = hs.application.frontmostApplication():name()
+
     asset.brave_popup:topLeft(M.calc_popup_coords(app))
     asset.sys_popup:topLeft({ x = 200, y = 300 })
-
 
 
     asset.sys_popup:show(0.15)
@@ -296,3 +292,16 @@ function M.launch_menu()
 end
 
 return M
+
+
+-- TODO: needs heavy work
+--
+-- NOTE: could incorporate splits logic here to determine which windows
+--       occupy which coords.
+--
+-- Get focused screen frame
+-- local screen = hs.mouse.getCurrentScreen() or hs.screen.primaryScreen()
+-- local frame = screen:fullFrame()
+-- x = (frame.w / 2),
+-- y = (frame.h / 2),
+

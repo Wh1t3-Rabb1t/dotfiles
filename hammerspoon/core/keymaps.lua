@@ -1,6 +1,7 @@
 
 local qtimer = require('quit_timer')
 
+
 local bk = hs.hotkey.bind
 
 -- Hot reload hammerspoon
@@ -17,10 +18,16 @@ local sys_menu = require('sys_menu')
 bk({ 'ctrl' }, 'f', function() sys_menu.launch_menu() end)
 
 
--- bk({ 'ctrl' }, 'r', function()
---     local currentAppName = hs.application.frontmostApplication():name()
---     hs.alert.show("Currently focused app: " .. currentAppName)
--- end)
+
+
+-- (WIP) Layout module
+local layout = require('layout')
+
+bk({ 'ctrl' }, 'a', function()
+    layout.init()
+end)
+
+
 
 
 ---------------------------------

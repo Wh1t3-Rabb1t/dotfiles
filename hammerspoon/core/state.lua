@@ -27,10 +27,10 @@ return M
 -- screens = {
 --     [uuid] = {
 --         divider = .50,
---         fullscreen = (win|nil),
---         slots = {
---             left  = (win|nil),
---             right = (win|nil),
+--         layout = {
+--             fullscreen = (win|nil),
+--             left_slot  = (win|nil),
+--             right_slot = (win|nil),
 --         },
 --         frame = {
 --             w = frame.w,

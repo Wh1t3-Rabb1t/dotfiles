@@ -48,46 +48,45 @@ function M.usable_frame(screen)
 end
 
 
--- Determine whether or not a winodw is "fullscreen"
+-- Determine if two coordinate tables are equal to each other
 --------------------------------------------------------------------------------
-function M.is_window_fullscreen(win_frame, screen_frame)
+function M.frames_equal(a, b)
     -- MacOS occasionally returns coords off by one pixel due to scaling,
     -- retina displays, or animations.
-    local function frames_equal(a, b)
-        return math.abs(a.x - b.x) <= 1
-           and math.abs(a.y - b.y) <= 1
-           and math.abs(a.w - b.w) <= 1
-           and math.abs(a.h - b.h) <= 1
-    end
+    return math.abs(a.x - b.x) <= 1
+       and math.abs(a.y - b.y) <= 1
+       and math.abs(a.w - b.w) <= 1
+       and math.abs(a.h - b.h) <= 1
+end
 
-    if frames_equal(win_frame, screen_frame) then
-        return true
-    else
-        return false
-    end
+
+-- Determine whether or not a winodw is "fullscreen"
+--------------------------------------------------------------------------------
+function M.is_window_fullscreen(win)
+    return M.frames_equal(
+        win:frame(),
+        M.usable_frame(win:screen())
+    )
 end
 
 
 -- Determine initial window layout
 --------------------------------------------------------------------------------
-function M.window_layout(screen_frame)
+function M.window_layout()
     local layout = {
-        fullscreen_win = nil,
-        left_win = nil,
-        right_win = nil,
+        fullscreen = nil,
+        left_slot = nil,
+        right_slot = nil,
     }
 
     local win = hs.window.frontmostWindow()
     local app = win:application():name()
 
     if state.supported_apps[app] then
-        local win_frame = win:frame()
-        local fullscreen_window = M.is_window_fullscreen(win_frame, screen_frame)
-
-        if fullscreen_window then
-            layout.fullscreen_win = win
+        if M.is_window_fullscreen(win) then
+            layout.fullscreen = win
         else
-            layout.left_win = win
+            layout.left_slot = win
         end
     end
 
@@ -99,28 +98,19 @@ end
 --------------------------------------------------------------------------------
 function M.init()
     for _, screen in ipairs(hs.screen.allScreens()) do
-        local uuid = screen:id()
-        local frame = M.usable_frame(screen)
-        local layout = M.window_layout(frame)
-
-        state.screens[uuid] = {
+        state.screens[screen:id()] = {
             divider = 0.50,
-            fullscreen = layout.fullscreen_win,
-            slots = {
-                left = layout.left_win,
-                right = layout.right_win,
-            },
-            frame = {
-                w = frame.w,
-                h = frame.h,
-                x = frame.x,
-                y = frame.y,
-            }
+            layout = M.window_layout(),
+            frame = M.usable_frame(screen),
         }
     end
 end
 
 return M
+
+
+
+
 
 
 -- hs.console.hswindow():focus()  -- debug

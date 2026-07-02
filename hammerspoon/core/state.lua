@@ -16,46 +16,27 @@ M.layout = {
         ['Brave Browser'] = true,
         ['kitty'] = true,
     },
-
-    -- 'screens' and 'windows' are packed on init
-
-    screens = {
-    -- [screen_uuid] = {
-    --     fullscreen = false,  -- might remove in favour of divider
-    --     divider = .50,
-    --     left = {
-    --         win = win,
-    --     },
-    --     right = {
-    --         win = win,
-    --     },
-    --     dimensions = {
-    --         w = ,
-    --         h = ,
-    --     },
-    --     coords = {
-    --         x = ,
-    --         x = ,
-    --     }
-    -- }
-    },
-
-    windows = {
-    -- [win] = {
-    --     screen_uuid = ,  -- (hs.screen.mainScreen():id())
-    --     position = ,     -- (left|right|fullscreen)
-    --     dimensions = {
-    --         w = ,
-    --         h = ,
-    --     },
-    --     coords = {
-    --         x = ,
-    --         x = ,
-    --     }
-    -- }
-    },
-
+    screens = {},  -- Packed on init
 }
 
 return M
 
+
+-- STRUCTURE:
+--------------
+-- screens = {
+--     [uuid] = {
+--         divider = .50,
+--         fullscreen = (win|nil),
+--         slots = {
+--             left  = (win|nil),
+--             right = (win|nil),
+--         },
+--         frame = {
+--             w = frame.w,
+--             h = frame.h,
+--             x = frame.x,
+--             y = frame.y,
+--         }
+--     }
+-- }

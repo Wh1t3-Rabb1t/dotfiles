@@ -1,9 +1,21 @@
 # TODO
 
+## STYLING (to be fully implemented):
+
+- snake_case for variables/functions.
+- UPPER_CASE for constants.
+- PascalCase for classes.
+- __snake_case for private/hidden variables.
+
+---
+
 ## BUGS:
 
 - When unplugging or plugging in a new display, it breaks the coords of the
   shader that was on the original display.
+
+- LOOK INTO: if MACOS system apps like 'system settings' will cause problems
+  trying to snap into dimensions that aren't supported.
 
 ---
 

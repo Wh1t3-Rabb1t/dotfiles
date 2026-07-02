@@ -104,6 +104,14 @@ function M.init()
             frame = M.usable_frame(screen),
         }
     end
+
+
+    -- local scr = hs.screen:primaryScreen()
+    -- local scr_1 = state.screens[scr:id()]
+    -- local left = scr_1.layout.left_slot:application():name()
+    -- hs.console.hswindow():focus()  -- debug
+    -- print("app name:  " .. left)
+
 end
 
 return M

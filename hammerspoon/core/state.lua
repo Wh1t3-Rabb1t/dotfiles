@@ -29,8 +29,8 @@ return M
 --         divider = .50,
 --         layout = {
 --             fullscreen = (win|nil),
---             left_slot  = (win|nil),
---             right_slot = (win|nil),
+--             left       = (win|nil),
+--             right      = (win|nil),
 --         },
 --         frame = {
 --             w = frame.w,

@@ -5,26 +5,32 @@ local qtimer = require('quit_timer')
 local bk = hs.hotkey.bind
 
 -- Hot reload hammerspoon
-bk({'ctrl', 'shift'}, 'r', function() hs.reload() end)
+bk({ 'ctrl', 'shift' }, 'r', function() hs.reload() end)
 
 -- Command-Q delay on quitting an application
-bk({'cmd'}, 'q', qtimer.startCmdQ, qtimer.stopCmdQ)
+bk({ 'cmd' }, 'q', qtimer.startCmdQ, qtimer.stopCmdQ)
 
 
 -- Binding popup menu
 --------------------------------------------------------------------------------
 local sys_menu = require('sys_menu')
-
-bk({ 'ctrl' }, 'f', function() sys_menu.launch_menu() end)
+bk({ 'ctrl' }, 'f', function()
+    sys_menu.launch_menu()
+end)
 
 
 
 
 -- (WIP) Layout module
 local layout = require('layout')
+layout.init()
 
 bk({ 'ctrl' }, 'a', function()
-    layout.init()
+    layout.launch_or_focus('kitty')
+end)
+
+bk({ 'ctrl' }, 's', function()
+    layout.launch_or_focus('Brave Browser')
 end)
 
 

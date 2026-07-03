@@ -10,6 +10,7 @@
 -- fullscreen window in to the adjacent container.
 
 
+
 local M = {}
 
 local state = require('state').layout
@@ -21,15 +22,98 @@ local state = require('state').layout
 --------------------------------------------------------------------------------
 function M.launch_or_focus(app)
     hs.application.launchOrFocus(app)
-    -- when launching an app we need to check if the apps frontmostWindow is
-    -- already stored in the state table.
-    --
-    -- if it is we just call:
-    --     hs.application.launchOrFocus(app)
-    --
-    -- if not we need to determine the screen it's launched on (same screen as
-    -- the current frontmostWindow) and put it into the adjacent slot, then call:
-    --     hs.application.launchOrFocus(app)
+    hs.timer.doAfter(
+        0.1,
+        function()
+            local win = hs.window.frontmostWindow()
+
+            M.window_appeared(win)
+            M.snap_windows(win)
+        end
+    )
+end
+
+
+-- Snap window into their respective slot coords
+--------------------------------------------------------------------------------
+function M.snap_windows(win)
+    local id = win:screen():id()
+    local screen = state.screens[id]
+    local layout = screen.layout
+    local frame = screen.frame
+    local divider = screen.divider
+
+    local left_width = math.floor(frame.w * divider)
+    local right_width = frame.w - left_width
+
+    if layout.left then
+        layout.left:setFrame({
+            x = frame.x,
+            y = frame.y,
+            w = left_width,
+            h = frame.h,
+        })
+    end
+
+    if layout.right then
+        layout.right:setFrame({
+            x = frame.x + left_width,
+            y = frame.y,
+            w = right_width,
+            h = frame.h,
+        })
+    end
+end
+
+
+-- Determine if a window is aligned more to the left or right of the screen
+--------------------------------------------------------------------------------
+function M.window_side(win)
+    local screen = win:screen()
+
+    if not screen then return nil end
+
+    local screen_frame = screen:fullFrame()
+    local win_frame = win:frame()
+    local screen_mid = screen_frame.x + (screen_frame.w / 2)
+    local win_mid = win_frame.x + (win_frame.w / 2)
+
+    if win_mid < screen_mid then
+        return 'left'
+    else
+        return 'right'
+    end
+end
+
+
+-- Determine newly launched/focused windows layout
+--------------------------------------------------------------------------------
+function M.window_appeared(win)
+    local id = win:screen():id()
+    local screen = state.screens[id]
+    local layout = screen.layout
+
+    -- Case 1: The new window is fullscreen
+    if M.is_window_fullscreen(win) then
+        layout.fullscreen = win
+
+        return
+    end
+
+    -- Case 2: A fullscreen window already exists
+    if layout.fullscreen then
+        local side = M.window_side(win)
+        local opposite = (side == 'left') and 'right' or 'left'
+
+        layout[side] = win
+        layout[opposite] = layout.fullscreen
+        layout.fullscreen = nil
+
+        return
+    end
+
+    -- Case 3: Normal window
+    layout[M.window_side(win)] = win
 end
 
 
@@ -50,17 +134,19 @@ end
 
 -- Determine if two coordinate tables are equal to each other
 --------------------------------------------------------------------------------
-function M.frames_equal(a, b)
+function M.frames_equal(a, b, tolerance)
     -- MacOS occasionally returns coords off by one pixel due to scaling,
-    -- retina displays, or animations.
-    return math.abs(a.x - b.x) <= 1
-       and math.abs(a.y - b.y) <= 1
-       and math.abs(a.w - b.w) <= 1
-       and math.abs(a.h - b.h) <= 1
+    -- retina displays etc.
+    tolerance = tolerance or 1
+
+    return math.abs(a.x - b.x) <= tolerance
+       and math.abs(a.y - b.y) <= tolerance
+       and math.abs(a.w - b.w) <= tolerance
+       and math.abs(a.h - b.h) <= tolerance
 end
 
 
--- Determine whether or not a winodw is "fullscreen"
+-- Determine whether or not a winodw is 'fullscreen'
 --------------------------------------------------------------------------------
 function M.is_window_fullscreen(win)
     return M.frames_equal(
@@ -75,8 +161,8 @@ end
 function M.window_layout()
     local layout = {
         fullscreen = nil,
-        left_slot = nil,
-        right_slot = nil,
+        left = nil,
+        right = nil,
     }
 
     local win = hs.window.frontmostWindow()
@@ -86,7 +172,7 @@ function M.window_layout()
         if M.is_window_fullscreen(win) then
             layout.fullscreen = win
         else
-            layout.left_slot = win
+            layout.left = win
         end
     end
 
@@ -99,26 +185,14 @@ end
 function M.init()
     for _, screen in ipairs(hs.screen.allScreens()) do
         state.screens[screen:id()] = {
-            divider = 0.50,
+            divider = 0.40,
             layout = M.window_layout(),
             frame = M.usable_frame(screen),
         }
     end
-
-
-    -- local scr = hs.screen:primaryScreen()
-    -- local scr_1 = state.screens[scr:id()]
-    -- local left = scr_1.layout.left_slot:application():name()
-    -- hs.console.hswindow():focus()  -- debug
-    -- print("app name:  " .. left)
-
 end
 
 return M
-
-
-
-
 
 
 -- hs.console.hswindow():focus()  -- debug

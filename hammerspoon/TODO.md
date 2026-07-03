@@ -21,6 +21,32 @@
 
 ## Misc
 
+- When calling 'launch or focus' if called on an app that is already focused;
+  cycle to the apps next open window (if any).
+
+- Incorporate the table of 'supported_apps' into the each of their respective
+  bindings array i.e.
+```lua
+local bindings = {
+    ['Brave Browser'] = {
+        {
+            key = ';',
+            desc = 'Tab right',
+            action = function() M.send_keys('pagedown', 'ctrl') end
+        },
+        -- ...
+    },
+    ['System'] = {
+        {
+            key = 'h',
+            desc = 'Tab left',
+            action = function() M.send_keys('pageup', 'ctrl') end
+        },
+        -- ...
+    },
+}
+```
+
 - Determine if 'layout.init_window_data' should be called on init, or only
   when a new window is launched / focused.
 

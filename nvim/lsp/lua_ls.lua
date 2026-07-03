@@ -12,7 +12,8 @@ return {
         Lua = {
             runtime = { version = 'LuaJIT' },
             diagnostics = {
-                globals = { 'vim' },  -- Stop the 'undefined global vim' warning
+                -- Recognize select globals
+                globals = { 'vim', 'hs' }
             },
             workspace = {
                 library = vim.api.nvim_get_runtime_file("", true),

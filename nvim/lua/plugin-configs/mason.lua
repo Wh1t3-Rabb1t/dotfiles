@@ -17,7 +17,6 @@ function M.config()
         ensure_installed = {
             -- Lua
             "lua-language-server",         -- Language server
-            "luacheck",                    -- Linter (maintainer passed away RIP)
 
             -- Shell
             "bash-language-server",        -- Language server

@@ -10,7 +10,6 @@
 -- fullscreen window in to the adjacent container.
 
 
-
 local M = {}
 
 local state = require('state').layout
@@ -29,8 +28,44 @@ function M.launch_or_focus(app)
 
             M.window_appeared(win)
             M.snap_windows(win)
+
+            local id = win:screen():id()
+            local screen = state.screens[id]
+            local layout = screen.layout
+            local rhs = layout.right
+            local lhs = layout.left
+
+            -- resulting ids are duplicate
+            hs.alert.show('rhs slot:  ' .. rhs:id())
+            hs.alert.show('lhs slot:  ' .. lhs:id())
+
         end
     )
+end
+
+
+-- Calculate left/right slot frames
+--------------------------------------------------------------------------------
+function M.slot_frames(screen)
+    local frame = screen.frame
+
+    local left_width = math.floor(frame.w * screen.divider)
+    local right_width = frame.w - left_width
+
+    return {
+        left = {
+            x = frame.x,
+            y = frame.y,
+            w = left_width,
+            h = frame.h,
+        },
+        right = {
+            x = frame.x + left_width,
+            y = frame.y,
+            w = right_width,
+            h = frame.h,
+        }
+    }
 end
 
 
@@ -39,29 +74,13 @@ end
 function M.snap_windows(win)
     local id = win:screen():id()
     local screen = state.screens[id]
-    local layout = screen.layout
-    local frame = screen.frame
-    local divider = screen.divider
+    local frames = M.slot_frames(screen)
 
-    local left_width = math.floor(frame.w * divider)
-    local right_width = frame.w - left_width
-
-    if layout.left then
-        layout.left:setFrame({
-            x = frame.x,
-            y = frame.y,
-            w = left_width,
-            h = frame.h,
-        })
+    if screen.layout.left then
+        screen.layout.left:setFrame(frames.left)
     end
-
-    if layout.right then
-        layout.right:setFrame({
-            x = frame.x + left_width,
-            y = frame.y,
-            w = right_width,
-            h = frame.h,
-        })
+    if screen.layout.right then
+        screen.layout.right:setFrame(frames.right)
     end
 end
 

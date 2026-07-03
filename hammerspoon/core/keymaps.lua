@@ -25,11 +25,11 @@ end)
 local layout = require('layout')
 layout.init()
 
-bk({ 'ctrl' }, 'a', function()
+bk({ 'alt' }, 'u', function()
     layout.launch_or_focus('kitty')
 end)
 
-bk({ 'ctrl' }, 's', function()
+bk({ 'alt' }, 'o', function()
     layout.launch_or_focus('Brave Browser')
 end)
 

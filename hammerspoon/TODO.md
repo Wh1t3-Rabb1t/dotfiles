@@ -19,10 +19,19 @@
 
 ---
 
-## Misc
+## Layout module:
 
 - When calling 'launch or focus' if called on an app that is already focused;
-  cycle to the apps next open window (if any).
+cycle to the apps next open window (if any).
+
+- Determine if 'layout.init_window_data' should be called on init, or only
+  when a new window is launched / focused.
+
+- Add a 1 pixel margin around each 'slot' when snapping/resizing windows.
+
+---
+
+## Misc
 
 - Incorporate the table of 'supported_apps' into the each of their respective
   bindings array i.e.
@@ -46,9 +55,6 @@ local bindings = {
     },
 }
 ```
-
-- Determine if 'layout.init_window_data' should be called on init, or only
-  when a new window is launched / focused.
 
 - Need to incorporate a robust event queue for key inputs.
   (when sending key stokes while the tap is active).

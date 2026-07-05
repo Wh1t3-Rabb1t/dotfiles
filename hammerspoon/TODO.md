@@ -21,6 +21,12 @@
 
 ## Layout module:
 
+- Move to sys_menu popup (if not screen_id then init):
+    ```lua
+    local layout = require('layout')
+    layout.init()
+    ```
+
 - BUG: When calling 'launch_or_focus' on an already focused window it
   duplicates slots.
 

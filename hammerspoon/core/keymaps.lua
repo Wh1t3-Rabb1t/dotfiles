@@ -28,23 +28,16 @@ layout.init()
 bk({ 'alt' }, 'u', function()
     layout.launch_or_focus('kitty')
 end)
-
 bk({ 'alt' }, 'o', function()
     layout.launch_or_focus('Brave Browser')
 end)
 
--- bk({ 'alt' }, 'i', function()
---     layout.debug_screen_slots()
--- end)
-
 bk({ 'alt' }, 'i', function()
-    layout.maximize_window()
+    layout.swap_window_slots()
 end)
-
 bk({ 'alt' }, 'l', function()
     layout.move_window_divider('right')
 end)
-
 bk({ 'alt' }, 't', function()
     layout.move_window_divider('left')
 end)

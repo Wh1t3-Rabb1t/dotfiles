@@ -70,6 +70,22 @@ function M.snap_windows(win)
 end
 
 
+-- Swap left/right window slots
+--------------------------------------------------------------------------------
+function M.swap_window_slots()
+    local win = hs.window.focusedWindow()
+    local id = win:screen():id()
+
+    local left = state.screens[id].layout.left
+    local right = state.screens[id].layout.right
+
+    state.screens[id].layout.left = right
+    state.screens[id].layout.right = left
+
+    M.snap_windows(win)
+end
+
+
 -- Re-align window divider
 --------------------------------------------------------------------------------
 function M.move_window_divider(direction)

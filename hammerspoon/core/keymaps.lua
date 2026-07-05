@@ -33,8 +33,20 @@ bk({ 'alt' }, 'o', function()
     layout.launch_or_focus('Brave Browser')
 end)
 
+-- bk({ 'alt' }, 'i', function()
+--     layout.debug_screen_slots()
+-- end)
+
 bk({ 'alt' }, 'i', function()
-    layout.debug_screen_slots()
+    layout.maximize_window()
+end)
+
+bk({ 'alt' }, 'l', function()
+    layout.move_window_divider('right')
+end)
+
+bk({ 'alt' }, 't', function()
+    layout.move_window_divider('left')
 end)
 
 

@@ -34,8 +34,9 @@ function M.launch_or_focus(app)
     local existing_win = hs.window.focusedWindow()
 
     hs.application.launchOrFocus(app)
+
     hs.timer.doAfter(
-        0.01,
+        0.005,
         function()
             local win = hs.window.focusedWindow()
 
@@ -45,31 +46,75 @@ function M.launch_or_focus(app)
             end
 
             M.window_appeared(existing_win, win)
+            M.snap_windows(win)
 
-            -- Snap windows into their respective slot coords
-            local id = win:screen():id()
-            local screen = state.screens[id]
-            local frames = M.slot_frames(screen)
-
-            if screen.layout.left then
-                screen.layout.left:setFrame(frames.left)
-            end
-            if screen.layout.right then
-                screen.layout.right:setFrame(frames.right)
-            end
-
-            M.debug_screen_slots()
+            -- M.debug_screen_slots()
         end
     )
 end
 
 
+-- Snap window into their respective slot coords
+--------------------------------------------------------------------------------
+function M.snap_windows(win)
+    local id = win:screen():id()
+    local screen = state.screens[id]
+    local frames = M.slot_frames(screen)
+
+    if screen.layout.left then
+        screen.layout.left:setFrame(frames.left)
+    end
+    if screen.layout.right then
+        screen.layout.right:setFrame(frames.right)
+    end
+end
+
+
+-- Re-align window divider
+--------------------------------------------------------------------------------
+function M.move_window_divider(direction)
+    local win = hs.window.focusedWindow()
+    local id = win:screen():id()
+    local num = state.screens[id].divider
+
+    if direction == 'left' then
+        num = num - 0.01
+    elseif direction == 'right' then
+        num = num + 0.01
+    end
+
+    state.screens[id].divider = math.floor(num * 100) / 100
+
+    M.snap_windows(win)
+end
+
+
+-- Maximize focused window
+--------------------------------------------------------------------------------
+function M.maximize_window()
+    local win = hs.window.focusedWindow()
+    local id = win:screen():id()
+    local layout = state.screens[id].layout
+    local frame = M.usable_frame(win:screen())
+
+    if layout.left == win then
+        layout.left = false
+    end
+    if layout.right == win then
+        layout.right = false
+    end
+
+    layout.fullscreen = win
+    layout.fullscreen:setFrame(frame)
+end
+
+
 -- Calculate left/right slot frames
 --------------------------------------------------------------------------------
-function M.slot_frames(screen)
-    local frame = screen.frame
+function M.slot_frames(screen_obj)
+    local frame = screen_obj.frame
 
-    local left_width = math.floor(frame.w * screen.divider)
+    local left_width = math.floor(frame.w * screen_obj.divider)
     local right_width = frame.w - left_width
 
     return {
@@ -143,6 +188,8 @@ function M.window_appeared(existing_win, win)
     if side == M.window_side(existing_win) then
         layout[opposite] = win
         layout[side]     = existing_win
+    else
+        layout[side] = win
     end
 end
 
@@ -191,7 +238,7 @@ end
 function M.init()
     for _, screen in ipairs(hs.screen.allScreens()) do
         state.screens[screen:id()] = {
-            divider = 0.40,
+            divider = 0.34,
             layout = {
                 fullscreen = false,
                 left = false,
@@ -202,7 +249,6 @@ function M.init()
     end
 end
 
-return M
 
 
 -- function M.init()
@@ -242,7 +288,4 @@ return M
 -- end
 
 
-
-
--- hs.console.hswindow():focus()  -- debug
--- print(win:title())
+return M

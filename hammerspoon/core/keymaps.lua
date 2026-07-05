@@ -33,6 +33,10 @@ bk({ 'alt' }, 'o', function()
     layout.launch_or_focus('Brave Browser')
 end)
 
+bk({ 'alt' }, 'i', function()
+    layout.debug_screen_slots()
+end)
+
 
 
 

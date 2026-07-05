@@ -21,8 +21,11 @@
 
 ## Layout module:
 
+- BUG: When calling 'launch_or_focus' on an already focused window it
+  duplicates slots.
+
 - When calling 'launch or focus' if called on an app that is already focused;
-cycle to the apps next open window (if any).
+  cycle to the apps next open window (if any).
 
 - Determine if 'layout.init_window_data' should be called on init, or only
   when a new window is launched / focused.

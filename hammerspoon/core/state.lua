@@ -28,9 +28,9 @@ return M
 --     [uuid] = {
 --         divider = .50,
 --         layout = {
---             fullscreen = (win|nil),
---             left       = (win|nil),
---             right      = (win|nil),
+--             fullscreen = (win|false),
+--             left       = (win|false),
+--             right      = (win|false),
 --         },
 --         frame = {
 --             w = frame.w,

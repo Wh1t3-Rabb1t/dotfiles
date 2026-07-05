@@ -5,9 +5,18 @@
 -- screen. If a new window is focused, it will only be 'snapped' into the
 -- (left|right) container if it is not fullscreen.
 --
--- If a window is fullscreen at the forefront and a new window that is NOT
--- fullscreen is focused on the same screen, snap the previously focused
+-- OLD: If a window is fullscreen at the forefront and a new window that is
+-- NOT fullscreen is focused on the same screen, snap the previously focused
 -- fullscreen window in to the adjacent container.
+
+-- NEW: If a window is fullscreen at the forefront and a new window that is
+-- NOT fullscreen is focused on the same screen, fullscreen the newly focused
+-- window.
+--
+-- The 'left' and 'right' slots are retained until explicitly overwritten
+-- (i.e. they are unaffected by the 'fullscreen' slot).
+
+-- To exit fullscreen mode: call 'move_window_divider()'
 
 
 local M = {}
@@ -36,7 +45,7 @@ function M.launch_or_focus(app)
     hs.application.launchOrFocus(app)
 
     hs.timer.doAfter(
-        0.005,
+        0.002,
         function()
             local win = hs.window.focusedWindow()
 
@@ -45,10 +54,11 @@ function M.launch_or_focus(app)
                 return
             end
 
-            M.window_appeared(existing_win, win)
-            M.snap_windows(win)
+            M.snap_windows(
+                win, M.window_appeared(existing_win, win)
+            )
 
-            -- M.debug_screen_slots()
+            M.debug_screen_slots()
         end
     )
 end
@@ -56,16 +66,20 @@ end
 
 -- Snap window into their respective slot coords
 --------------------------------------------------------------------------------
-function M.snap_windows(win)
+function M.snap_windows(win, layout)
     local id = win:screen():id()
     local screen = state.screens[id]
     local frames = M.slot_frames(screen)
 
-    if screen.layout.left then
-        screen.layout.left:setFrame(frames.left)
-    end
-    if screen.layout.right then
-        screen.layout.right:setFrame(frames.right)
+    if layout == 'fullscreen' then
+        screen.layout.fullscreen:setFrame(screen.frame)
+    elseif layout == 'split' then
+        if screen.layout.left then
+            screen.layout.left:setFrame(frames.left)
+        end
+        if screen.layout.right then
+            screen.layout.right:setFrame(frames.right)
+        end
     end
 end
 
@@ -75,14 +89,13 @@ end
 function M.swap_window_slots()
     local win = hs.window.focusedWindow()
     local id = win:screen():id()
-
     local left = state.screens[id].layout.left
     local right = state.screens[id].layout.right
 
     state.screens[id].layout.left = right
     state.screens[id].layout.right = left
 
-    M.snap_windows(win)
+    M.snap_windows(win, 'split')
 end
 
 
@@ -101,7 +114,7 @@ function M.move_window_divider(direction)
 
     state.screens[id].divider = math.floor(num * 100) / 100
 
-    M.snap_windows(win)
+    M.snap_windows(win, 'split')
 end
 
 
@@ -122,6 +135,8 @@ function M.maximize_window()
 
     layout.fullscreen = win
     layout.fullscreen:setFrame(frame)
+
+    M.debug_screen_slots()
 end
 
 
@@ -174,40 +189,73 @@ end
 --------------------------------------------------------------------------------
 function M.window_appeared(existing_win, win)
     local id = win:screen():id()
-    local focused_screen = state.screens[id]
-    local layout = focused_screen.layout
+    local layout = state.screens[id].layout
 
-    -- Case 1: The new window is fullscreen
+    -- Case 1: The new window is already fullscreen.
     if M.is_window_fullscreen(win) then
         layout.fullscreen = win
 
-        return
+        return 'fullscreen'
     end
 
+    -- Case 2: A fullscreen window already exists.
+    -- Simply replace it. Leave the split layout untouched.
+    if layout.fullscreen == existing_win then
+        layout.fullscreen = win
+
+        return 'fullscreen'
+    end
+
+    -- Case 3: Maintain/update the remembered split layout.
     local side = M.window_side(win)
-    local opposite = (side == 'left') and 'right' or 'left'
+    local opposite = (side == "left") and "right" or "left"
 
-    -- Case 2: A fullscreen window already exists
-    if layout.fullscreen then
-        layout[side]      = win
-        layout[opposite]  = layout.fullscreen
-        layout.fullscreen = false
-
-        return
-    end
-
-    -- Case 3: Normal window
-    --
-    -- If 'existing_win' occupies the same side that 'win' does,
-    -- assign 'win' to the opposite side and let 'existing_win' retain
-    -- it's place.
     if side == M.window_side(existing_win) then
+        layout[side] = existing_win
         layout[opposite] = win
-        layout[side]     = existing_win
     else
         layout[side] = win
     end
+
+    return 'split'
 end
+
+
+-- function M.window_appeared(existing_win, win)
+--     local id = win:screen():id()
+--     local focused_screen = state.screens[id]
+--     local layout = focused_screen.layout
+--
+--     -- Case 1: The new window is fullscreen
+--     if M.is_window_fullscreen(win) then
+--         layout.fullscreen = win
+--
+--         return
+--     end
+--
+--     local side = M.window_side(win)
+--     local opposite = (side == 'left') and 'right' or 'left'
+--
+--     -- Case 2: A fullscreen window already exists
+--     if layout.fullscreen then
+--         layout[side]      = win
+--         layout[opposite]  = layout.fullscreen
+--         layout.fullscreen = false
+--
+--         return
+--     end
+--
+--     -- Case 3: Normal window
+--     --
+--     -- If 'existing_win' occupies the same side that 'win' does, assign 'win'
+--     -- to the opposite side and let 'existing_win' retain it's place.
+--     if side == M.window_side(existing_win) then
+--         layout[side]     = existing_win
+--         layout[opposite] = win
+--     else
+--         layout[side]     = win
+--     end
+-- end
 
 
 -- Calculate the available screen (total screen frame minus the dock)
@@ -265,6 +313,8 @@ function M.init()
     end
 end
 
+return M
+
 
 
 -- function M.init()
@@ -302,6 +352,3 @@ end
 --         }
 --     end
 -- end
-
-
-return M

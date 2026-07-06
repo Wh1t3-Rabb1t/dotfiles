@@ -26,11 +26,12 @@ return M
 --------------
 -- screens = {
 --     [uuid] = {
---         divider = .50,
+--         divider = .50,  (0.15 .. 0.85)
+--         fullscreen_active = (true|false),
 --         layout = {
---             fullscreen = (win|false),
---             left       = (win|false),
---             right      = (win|false),
+--             maximized = (win|false),
+--             left      = (win|false),
+--             right     = (win|false),
 --         },
 --         frame = {
 --             w = frame.w,

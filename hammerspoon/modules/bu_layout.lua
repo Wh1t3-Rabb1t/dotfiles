@@ -18,17 +18,11 @@
 
 -- To exit fullscreen mode: call 'move_window_divider()'
 
--- (after screen data has been initialized)
---
--- 1. Launch or focus app
--- 2. Determine window side
--- 3. Update state table
--- 4. Snap windows
-
 
 local M = {}
 
 local state = require('state').layout
+
 
 function M.debug_screen_slots()
     local screen = hs.screen.mainScreen()
@@ -36,8 +30,6 @@ function M.debug_screen_slots()
     for k, v in pairs(scr.layout) do
         if v then
             hs.alert.show(k .. ': ' .. v:application():name())
-        else
-            hs.alert.show(k .. ': EMPTY')
         end
     end
 end
@@ -78,18 +70,21 @@ function M.window_appeared(existing_win, win)
     local id = win:screen():id()
     local layout = state.screens[id].layout
 
-    -- Case 1: The existing, or new window is maximized
-    if layout.maximized == existing_win or M.is_window_fullscreen(win) then
-        layout.maximized = win
+    -- Case 1: The new window is already fullscreen
+    if M.is_window_fullscreen(win) then
+        layout.fullscreen = win
 
-        if not layout.fullscreen_active then
-            layout.fullscreen_active = true
-        end
-
-        return 'maximized'
+        return 'fullscreen'
     end
 
-    -- Case 2: Maintain/update the remembered split layout
+    -- Case 2: A fullscreen window already exists
+    if layout.fullscreen == existing_win then
+        layout.fullscreen = win
+
+        return 'fullscreen'
+    end
+
+    -- Case 3: Maintain/update the remembered split layout
     local side = M.window_side(win)
     local opposite = (side == 'left') and 'right' or 'left'
 
@@ -112,8 +107,8 @@ function M.snap_windows(win, target_layout)
     local layout = screen.layout
     local frames = M.slot_frames(screen)
 
-    if target_layout == 'maximized' then
-        layout.maximized:setFrame(screen.frame)
+    if target_layout == 'fullscreen' then
+        layout.fullscreen:setFrame(screen.frame)
     elseif target_layout == 'split' then
         if layout.left then
             layout.left:setFrame(frames.left)
@@ -147,14 +142,6 @@ function M.move_window_divider(direction)
     local id = win:screen():id()
     local num = state.screens[id].divider
 
-
-    -- local layout = state.screens[id].layout
-    -- if layout.fullscreen then
-    --     layout.fullscreen = false
-    --     M.window_side(layout.maximized)
-    -- end
-
-
     if direction == 'left' then
         num = num - 0.01
     elseif direction == 'right' then
@@ -173,10 +160,17 @@ function M.maximize_window()
     local win = hs.window.focusedWindow()
     local id = win:screen():id()
     local layout = state.screens[id].layout
-    local frame = state.screens[id].frame
+    local frame = M.usable_frame(win:screen())
 
-    layout.maximized = win
-    layout.maximized:setFrame(frame)
+    if layout.left == win then
+        layout.left = false
+    end
+    if layout.right == win then
+        layout.right = false
+    end
+
+    layout.fullscreen = win
+    layout.fullscreen:setFrame(frame)
 
     M.debug_screen_slots()
 end
@@ -228,26 +222,41 @@ function M.window_side(win)
 end
 
 
--- Determine whether or not a winodw is maximized
+-- Calculate the available screen (total screen frame minus the dock)
+--------------------------------------------------------------------------------
+function M.usable_frame(screen)
+    local full = screen:fullFrame()
+    local usable = screen:frame()
+
+    return {
+        x = full.x,
+        y = usable.y,
+        w = full.w,
+        h = full.h - (usable.y - full.y),
+    }
+end
+
+
+-- Determine if two coordinate tables are equal to each other
+--------------------------------------------------------------------------------
+function M.frames_equal(a, b, tolerance)
+    -- MacOS occasionally returns coords off by one pixel due to scaling,
+    -- retina displays etc.
+    tolerance = tolerance or 1
+
+    return math.abs(a.x - b.x) <= tolerance
+       and math.abs(a.y - b.y) <= tolerance
+       and math.abs(a.w - b.w) <= tolerance
+       and math.abs(a.h - b.h) <= tolerance
+end
+
+
+-- Determine whether or not a winodw is 'fullscreen'
 --------------------------------------------------------------------------------
 function M.is_window_fullscreen(win)
-    local id = win:screen():id()
-    local curr_screen = state.screens[id]
-
-    local function frames_equal(a, b, tolerance)
-        -- MacOS occasionally returns coords off by one pixel due to scaling,
-        -- retina displays etc.
-        tolerance = tolerance or 1
-
-        return math.abs(a.x - b.x) <= tolerance
-           and math.abs(a.y - b.y) <= tolerance
-           and math.abs(a.w - b.w) <= tolerance
-           and math.abs(a.h - b.h) <= tolerance
-    end
-
-    return frames_equal(
+    return M.frames_equal(
         win:frame(),
-        curr_screen.frame
+        M.usable_frame(win:screen())
     )
 end
 
@@ -255,29 +264,15 @@ end
 -- Init layout table
 --------------------------------------------------------------------------------
 function M.init()
-    -- Calculate the available screen (total screen frame minus the dock)
-    local function usable_frame(screen)
-        local full = screen:fullFrame()
-        local usable = screen:frame()
-
-        return {
-            x = full.x,
-            y = usable.y,
-            w = full.w,
-            h = full.h - (usable.y - full.y),
-        }
-    end
-
     for _, screen in ipairs(hs.screen.allScreens()) do
         state.screens[screen:id()] = {
             divider = 0.36,
-            fullscreen_active = false,
             layout = {
-                maximized = false,
+                fullscreen = false,
                 left = false,
                 right = false,
             },
-            frame = usable_frame(screen),
+            frame = M.usable_frame(screen),
         }
     end
 end
@@ -321,4 +316,3 @@ return M
 --         }
 --     end
 -- end
-

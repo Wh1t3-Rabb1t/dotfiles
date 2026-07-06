@@ -21,22 +21,21 @@
 
 ## Layout module:
 
+- Implement move window to adjacent screen fn.
+
+- When calling 'launch or focus' if called on an app that is already focused;
+  cycle to the apps next open window (if any).
+
+- Add a 1 pixel margin around each 'slot' when snapping/resizing windows.
+
 - Move to sys_menu popup (if not screen_id then init):
     ```lua
     local layout = require('layout')
     layout.init()
     ```
 
-- BUG: When calling 'launch_or_focus' on an already focused window it
-  duplicates slots.
-
-- When calling 'launch or focus' if called on an app that is already focused;
-  cycle to the apps next open window (if any).
-
-- Determine if 'layout.init_window_data' should be called on init, or only
+- Determine if 'layout.init' should be called on init, or only
   when a new window is launched / focused.
-
-- Add a 1 pixel margin around each 'slot' when snapping/resizing windows.
 
 ---
 

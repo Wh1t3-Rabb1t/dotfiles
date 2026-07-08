@@ -23,7 +23,6 @@ M.layout = {
     -- screens = {
     --     [uuid] = {
     --         divider = .50,  (0.15 .. 0.85)
-    --         fullscreen_active = (true|false),
     --         layout = {
     --             maximized = (win|false),
     --             left      = (win|false),

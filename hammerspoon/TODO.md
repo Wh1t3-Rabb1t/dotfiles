@@ -21,6 +21,11 @@
 
 ## Layout module:
 
+- Might need to change window z-index level when exiting from fullsceen. (suppose
+  we are moving the divider but the other forefront window is incompantible/untracked).
+
+- Key repeating when moving the divider.
+
 - Implement move window to adjacent screen fn.
 
 - When calling 'launch or focus' if called on an app that is already focused;

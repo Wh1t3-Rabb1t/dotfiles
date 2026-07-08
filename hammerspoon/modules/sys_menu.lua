@@ -231,7 +231,6 @@ function M.close_menu()
 end
 
 
-
 -- TODO: needs heavy work
 --
 -- Calculate popup coords

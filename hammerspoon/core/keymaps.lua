@@ -47,6 +47,20 @@ end)
 
 
 
+-- bk({ 'ctrl' }, 'r', function()
+--     for k, v in ipairs(hs.hotkey.systemAssigned()) do
+--         local log_file = os.getenv('HOME') .. '/.local/state/logs/log'
+--         local file = io.open(log_file, 'a')  -- 'a' = append
+--         if not file then
+--             return
+--         end
+--         local msg = 'Key:  ' .. k .. 'Val:  ' .. v
+--         file:write(msg .. "\n")
+--         file:close()
+--     end
+-- end)
+
+
 
 ---------------------------------
 -- SYSTEM BINDINGS:

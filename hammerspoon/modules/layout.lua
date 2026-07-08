@@ -107,7 +107,8 @@ end
 --------------------------------------------------------------------------------
 function M.maximize_window()
     local win = hs.window.focusedWindow()
-    local curr_screen = state.screens[win:screen():id()]
+    local id = win:screen():id()
+    local curr_screen = state.screens[id]
     local layout = curr_screen.layout
     local frame = curr_screen.frame
 

@@ -17,27 +17,29 @@ M.layout = {
         ['kitty'] = true,
     },
     screens = {},  -- Packed on init
+
+    -- STRUCTURE:
+    --------------
+    -- screens = {
+    --     [uuid] = {
+    --         divider = .50,  (0.15 .. 0.85)
+    --         fullscreen_active = (true|false),
+    --         layout = {
+    --             maximized = (win|false),
+    --             left      = (win|false),
+    --             right     = (win|false),
+    --         },
+    --         frame = {
+    --             w = frame.w,
+    --             h = frame.h,
+    --             x = frame.x,
+    --             y = frame.y,
+    --         }
+    --     }
+    -- }
+
 }
 
 return M
 
 
--- STRUCTURE:
---------------
--- screens = {
---     [uuid] = {
---         divider = .50,  (0.15 .. 0.85)
---         fullscreen_active = (true|false),
---         layout = {
---             maximized = (win|false),
---             left      = (win|false),
---             right     = (win|false),
---         },
---         frame = {
---             w = frame.w,
---             h = frame.h,
---             x = frame.x,
---             y = frame.y,
---         }
---     }
--- }

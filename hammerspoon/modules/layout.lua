@@ -4,10 +4,6 @@
 -- The only windows that get stored are those at the forefront of the given
 -- screen. If a new window is focused, it will only be 'snapped' into the
 -- (left|right) container if it is not fullscreen.
---
--- OLD: If a window is fullscreen at the forefront and a new window that is
--- NOT fullscreen is focused on the same screen, snap the previously focused
--- fullscreen window in to the adjacent container.
 
 -- NEW: If a window is fullscreen at the forefront and a new window that is
 -- NOT fullscreen is focused on the same screen, fullscreen the newly focused
@@ -16,32 +12,10 @@
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 
--- To exit fullscreen mode: call 'move_window_divider()'
-
--- (after screen data has been initialized)
---
--- 1. Launch or focus app
--- 2. Determine window side
--- 3. Update state table
--- 4. Snap windows
-
 
 local M = {}
 
 local state = require('state').layout
-
-function M.debug_screen_slots()
-    local screen = hs.screen.mainScreen()
-    local scr = state.screens[screen:id()]
-    for k, v in pairs(scr.layout) do
-        if v then
-            hs.alert.show(k .. ': ' .. v:application():name())
-        else
-            hs.alert.show(k .. ': EMPTY')
-        end
-    end
-end
-
 
 -- TODO: move this fn elsewhere later
 --
@@ -57,44 +31,63 @@ function M.launch_or_focus(app)
         function()
             local win = hs.window.focusedWindow()
 
-            -- Exit if called on an already focused window
-            if win:id() == existing_win:id() then
-                return
-            end
+            -- -- Exit if called on an already focused window
+            -- if win:id() == existing_win:id() then
+            --     return
+            -- end
 
             M.snap_windows(
-                win, M.window_appeared(existing_win, win)
+                win,
+                M.window_appeared(existing_win, win)
             )
-
-            M.debug_screen_slots()
         end
     )
 end
 
 
--- Determine newly launched/focused windows layout
+-- Determine newly launched/focused windows layout.
+--
+-- If a window is fullscreen at the forefront and a new window that is NOT
+-- fullscreen is focused on the same screen, fullscreen the new window.
+--
+-- The 'left' and 'right' slots are retained until explicitly overwritten
+-- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
 function M.window_appeared(existing_win, win)
     local id = win:screen():id()
     local layout = state.screens[id].layout
+    local curr_screen = state.screens[id]
 
-    -- Case 1: The existing, or new window is maximized
-    if layout.maximized == existing_win or M.is_window_fullscreen(win) then
+    -- New window wants fullscreen mode
+    if M.is_window_fullscreen(win) then
+        curr_screen.fullscreen_active = true
         layout.maximized = win
-
-        if not layout.fullscreen_active then
-            layout.fullscreen_active = true
-        end
 
         return 'maximized'
     end
 
-    -- Case 2: Maintain/update the remembered split layout
+    -- Already in fullscreen mode; replace the fullscreen window only
+    if curr_screen.fullscreen_active then
+        if layout.right == win then
+            layout.left = layout.maximized
+        elseif layout.left == win then
+            layout.right = layout.maximized
+        end
+
+        layout.maximized = win
+
+        return 'maximized'
+    end
+
+    -- Normal split mode
+    if curr_screen.fullscreen_active then
+        curr_screen.fullscreen_active = false
+    end
+
     local side = M.window_side(win)
     local opposite = (side == 'left') and 'right' or 'left'
 
-    if side == M.window_side(existing_win) then
-        layout[side] = existing_win
+    if M.window_side(existing_win) == side then
         layout[opposite] = win
     else
         layout[side] = win
@@ -104,7 +97,7 @@ function M.window_appeared(existing_win, win)
 end
 
 
--- Snap window into their respective slot coords
+-- Snap windows into their respective slot coords
 --------------------------------------------------------------------------------
 function M.snap_windows(win, target_layout)
     local id = win:screen():id()
@@ -145,15 +138,9 @@ end
 function M.move_window_divider(direction)
     local win = hs.window.focusedWindow()
     local id = win:screen():id()
-    local num = state.screens[id].divider
-
-
-    -- local layout = state.screens[id].layout
-    -- if layout.fullscreen then
-    --     layout.fullscreen = false
-    --     M.window_side(layout.maximized)
-    -- end
-
+    local curr_screen = state.screens[id]
+    local num = curr_screen.divider
+    local layout = curr_screen.layout
 
     if direction == 'left' then
         num = num - 0.01
@@ -161,7 +148,26 @@ function M.move_window_divider(direction)
         num = num + 0.01
     end
 
-    state.screens[id].divider = math.floor(num * 100) / 100
+    curr_screen.divider = math.floor(num * 100) / 100
+
+    if curr_screen.fullscreen_active then
+        if direction == 'left' then
+            if layout.right == win then
+                layout.right = layout.left
+            end
+
+            state.screens[id].layout.left = win
+        elseif direction == 'right' then
+            if layout.left == win then
+                layout.left = layout.right
+            end
+
+            state.screens[id].layout.right = win
+        end
+
+        curr_screen.fullscreen_active = false
+        layout.maximized = false
+    end
 
     M.snap_windows(win, 'split')
 end
@@ -172,13 +178,13 @@ end
 function M.maximize_window()
     local win = hs.window.focusedWindow()
     local id = win:screen():id()
-    local layout = state.screens[id].layout
-    local frame = state.screens[id].frame
+    local curr_screen = state.screens[id]
+    local layout = curr_screen.layout
+    local frame = curr_screen.frame
 
+    curr_screen.fullscreen_active = true
     layout.maximized = win
     layout.maximized:setFrame(frame)
-
-    M.debug_screen_slots()
 end
 
 
@@ -286,39 +292,115 @@ return M
 
 
 
--- function M.init()
---     -- Determine initial window layout
---     local function window_layout(win)
---         -- NOTE: Defaulting to nil causes massive problems (attempt to index nil
---         -- val, something about nil pointers that I'm too dumb to know about).
---         local layout = {
---             fullscreen = false,
---             left = false,
---             right = false,
---         }
---
---         local app = win:application():name()
---
---         if state.supported_apps[app] then
---             -- Determine window alignment
---             if M.is_window_fullscreen(win) then
---                 layout.fullscreen = win
---             else
---                 layout[M.window_side(win)] = win
---             end
---         end
---
---         return layout
---     end
---
---     for _, screen in ipairs(hs.screen.allScreens()) do
---         local window = hs.window.frontmostWindow()
---
---         state.screens[screen:id()] = {
---             divider = 0.40,
---             layout = window_layout(window),
---             frame = M.usable_frame(screen),
---         }
+-- local function clear_log()
+--     local log_file = os.getenv('HOME') .. '/.local/state/logs/log'
+--     local file = io.open(log_file, 'w')
+--     if file then
+--         file:close()
 --     end
 -- end
 
+-- local function log_screen_slots(caller)
+--     local screen = hs.screen.mainScreen()
+--     local curr_screen = state.screens[screen:id()]
+--
+--     local function hs_log(msg)
+--         local log_file = os.getenv('HOME') .. '/.local/state/logs/log'
+--         local file = io.open(log_file, 'a')  -- 'a' = append
+--         if not file then
+--             return
+--         end
+--
+--         file:write(os.date("[%H:%M:%S] "))
+--         file:write(msg .. "\n")
+--         file:close()
+--     end
+--
+--     -- Section title:
+--     hs_log('-------\n' .. '           CALLER: ' .. caller)
+--
+--     for k, v in pairs(curr_screen.layout) do
+--         if v then
+--             hs_log(k .. ': ' .. v:application():name())
+--         else
+--             hs_log(k .. ': EMPTY')
+--         end
+--     end
+-- end
+
+-- log_screen_slots('launch_or_focus' .. '(' .. app .. ')')
+-- log_screen_slots('window_appeared' .. '(' .. win:application():name() .. ')')
+-- log_screen_slots('snap_windows' .. '(' .. win:application():name() .. ', ' .. target_layout .. ')')
+-- log_screen_slots('swap_window_slots' .. '(' .. win:application():name() .. ')')
+-- log_screen_slots('move_window_divider' .. '(' .. direction .. ')')
+-- log_screen_slots('maximize_window()')
+-- log_screen_slots('slot_frames(screen_obj)')
+-- log_screen_slots('window_side' .. '(' .. win:application():name() .. ')')
+
+
+-- Initial call (layout is empty)
+--------------------------------------------------------------------------------
+-- [04:16:50] -------
+--            CALLER: launch_or_focus(Brave Browser)
+-- [04:16:50] maximized: EMPTY
+-- [04:16:50] right: EMPTY
+-- [04:16:50] left: EMPTY
+-- [04:16:50] -------
+--            CALLER: window_appeared(Brave Browser)
+-- [04:16:50] maximized: EMPTY
+-- [04:16:50] right: EMPTY
+-- [04:16:50] left: EMPTY
+-- [04:16:50] -------
+--            CALLER: window_side(Brave Browser)
+-- [04:16:50] maximized: EMPTY
+-- [04:16:50] right: EMPTY
+-- [04:16:50] left: EMPTY
+-- [04:16:50] -------
+--            CALLER: window_side(kitty)
+-- [04:16:50] maximized: EMPTY
+-- [04:16:50] right: EMPTY
+-- [04:16:50] left: EMPTY
+-- [04:16:50] -------
+--            CALLER: slot_frames(screen_obj)
+-- [04:16:50] maximized: EMPTY
+-- [04:16:50] right: EMPTY
+-- [04:16:50] left: Brave Browser
+-- [04:16:50] -------
+--            CALLER: snap_windows(Brave Browser, split)
+-- [04:16:50] maximized: EMPTY
+-- [04:16:50] right: EMPTY
+-- [04:16:50] left: Brave Browser
+--
+--
+-- Second call (Brave is stored in layout.left)
+--------------------------------------------------------------------------------
+-- [04:17:37] -------
+--            CALLER: launch_or_focus(kitty)
+-- [04:17:37] maximized: EMPTY
+-- [04:17:37] right: EMPTY
+-- [04:17:37] left: Brave Browser
+-- [04:17:37] -------
+--            CALLER: window_appeared(kitty)
+-- [04:17:37] maximized: EMPTY
+-- [04:17:37] right: EMPTY
+-- [04:17:37] left: Brave Browser
+-- [04:17:37] -------
+--            CALLER: window_side(kitty)
+-- [04:17:37] maximized: EMPTY
+-- [04:17:37] right: EMPTY
+-- [04:17:37] left: Brave Browser
+-- [04:17:37] -------
+--            CALLER: window_side(Brave Browser)
+-- [04:17:37] maximized: EMPTY
+-- [04:17:37] right: EMPTY
+-- [04:17:37] left: Brave Browser
+-- [04:17:37] -------
+--            CALLER: slot_frames(screen_obj)
+-- [04:17:37] maximized: EMPTY
+-- [04:17:37] right: kitty
+-- [04:17:37] left: Brave Browser
+-- [04:17:37] -------
+--            CALLER: snap_windows(kitty, split)
+-- [04:17:37] maximized: EMPTY
+-- [04:17:37] right: kitty
+-- [04:17:37] left: Brave Browser

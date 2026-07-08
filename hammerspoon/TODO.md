@@ -21,8 +21,9 @@
 
 ## Layout module:
 
-- Might need to change window z-index level when exiting from fullsceen. (suppose
-  we are moving the divider but the other forefront window is incompantible/untracked).
+- Might need to change window z-index level when exiting from fullsceen.
+  (suppose we are moving the divider but the other forefront window is
+  incompantible/untracked).
 
 - Key repeating when moving the divider.
 
@@ -31,13 +32,11 @@
 - When calling 'launch or focus' if called on an app that is already focused;
   cycle to the apps next open window (if any).
 
-- Add a 1 pixel margin around each 'slot' when snapping/resizing windows.
-
 - Move to sys_menu popup (if not screen_id then init):
-    ```lua
-    local layout = require('layout')
-    layout.init()
-    ```
+```lua
+local layout = require('layout')
+layout.init()
+```
 
 - Determine if 'layout.init' should be called on init, or only
   when a new window is launched / focused.

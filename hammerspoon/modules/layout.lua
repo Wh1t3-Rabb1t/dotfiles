@@ -45,6 +45,78 @@ function M.launch_or_focus(app)
 end
 
 
+-- Swap left/right window slots
+--------------------------------------------------------------------------------
+function M.swap_window_slots()
+    local win = hs.window.focusedWindow()
+    local id = win:screen():id()
+    local layout = state.screens[id].layout
+    local left_slot = layout.left
+    local right_slot = layout.right
+
+    layout.left = right_slot
+    layout.right = left_slot
+
+    M.snap_windows(win, 'split')
+end
+
+
+-- Re-align window divider
+--------------------------------------------------------------------------------
+function M.move_window_divider(direction, step)
+    step = step or 0.01
+
+    local win = hs.window.focusedWindow()
+    local id = win:screen():id()
+    local curr_screen = state.screens[id]
+    local divider = curr_screen.divider
+    local layout = curr_screen.layout
+
+    if direction == 'left' then
+        divider = divider - step
+    elseif direction == 'right' then
+        divider = divider + step
+    end
+
+    local num = math.min(0.80, math.max(0.20, divider))
+    curr_screen.divider = (num * 100) / 100
+
+    if layout.maximized then
+        if direction == 'left' then
+            if layout.right == win then
+                layout.right = layout.left
+            end
+
+            layout.left = win
+        elseif direction == 'right' then
+            if layout.left == win then
+                layout.left = layout.right
+            end
+
+            layout.right = win
+        end
+
+        layout.maximized = false
+    end
+
+    M.snap_windows(win, 'split')
+end
+
+
+-- Maximize focused window
+--------------------------------------------------------------------------------
+function M.maximize_window()
+    local win = hs.window.focusedWindow()
+    local curr_screen = state.screens[win:screen():id()]
+    local layout = curr_screen.layout
+    local frame = curr_screen.frame
+
+    layout.maximized = win
+    layout.maximized:setFrame(frame)
+end
+
+
+
 -- Determine newly launched/focused windows layout.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
@@ -57,14 +129,14 @@ function M.window_appeared(existing_win, win)
     local id = win:screen():id()
     local layout = state.screens[id].layout
 
-    -- New window wants fullscreen mode
+    -- Set new window to the fullscreen slot if it fills the usable screen space
     if M.is_window_fullscreen(win) then
         layout.maximized = win
 
         return 'maximized'
     end
 
-    -- Already in fullscreen mode; replace the fullscreen window only
+    -- Already fullscreen; replace the existing fullscreen window with the new one
     if layout.maximized then
         if layout.right == win then
             layout.left = layout.maximized
@@ -95,121 +167,6 @@ function M.window_appeared(existing_win, win)
 end
 
 
--- Snap windows into their respective slot coords
---------------------------------------------------------------------------------
-function M.snap_windows(win, target_layout)
-    local id = win:screen():id()
-    local screen = state.screens[id]
-    local layout = screen.layout
-    local frames = M.slot_frames(screen)
-
-    if target_layout == 'maximized' then
-        layout.maximized:setFrame(screen.frame, 0.02)
-    elseif target_layout == 'split' then
-        if layout.left then
-            layout.left:setFrame(frames.left, 0.02)
-        end
-        if layout.right then
-            layout.right:setFrame(frames.right, 0.02)
-        end
-    end
-end
-
-
--- Swap left/right window slots
---------------------------------------------------------------------------------
-function M.swap_window_slots()
-    local win = hs.window.focusedWindow()
-    local id = win:screen():id()
-    local left = state.screens[id].layout.left
-    local right = state.screens[id].layout.right
-
-    state.screens[id].layout.left = right
-    state.screens[id].layout.right = left
-
-    M.snap_windows(win, 'split')
-end
-
-
--- Re-align window divider
---------------------------------------------------------------------------------
-function M.move_window_divider(direction)
-    local win = hs.window.focusedWindow()
-    local id = win:screen():id()
-    local curr_screen = state.screens[id]
-    local num = curr_screen.divider
-    local layout = curr_screen.layout
-
-    if direction == 'left' then
-        num = num - 0.01
-    elseif direction == 'right' then
-        num = num + 0.01
-    end
-
-    curr_screen.divider = math.floor(num * 100) / 100
-
-    if layout.maximized then
-        if direction == 'left' then
-            if layout.right == win then
-                layout.right = layout.left
-            end
-
-            layout.left = win
-        elseif direction == 'right' then
-            if layout.left == win then
-                layout.left = layout.right
-            end
-
-            layout.right = win
-        end
-
-        layout.maximized = false
-    end
-
-    M.snap_windows(win, 'split')
-end
-
-
--- Maximize focused window
---------------------------------------------------------------------------------
-function M.maximize_window()
-    local win = hs.window.focusedWindow()
-    local id = win:screen():id()
-    local curr_screen = state.screens[id]
-    local layout = curr_screen.layout
-    local frame = curr_screen.frame
-
-    layout.maximized = win
-    layout.maximized:setFrame(frame)
-end
-
-
--- Calculate left/right slot frames
---------------------------------------------------------------------------------
-function M.slot_frames(target_screen)
-    local frame = target_screen.frame
-    local left_width = math.floor(frame.w * target_screen.divider)
-    local right_width = frame.w - left_width
-
-    local frames = {
-        left = {
-            x = frame.x,
-            y = frame.y,
-            w = left_width,
-            h = frame.h,
-        },
-        right = {
-            x = frame.x + left_width,
-            y = frame.y,
-            w = right_width,
-            h = frame.h,
-        }
-    }
-
-    return frames
-end
-
-
 -- Is window aligned to the left or right of the screen
 --------------------------------------------------------------------------------
 function M.window_side(win)
@@ -231,6 +188,57 @@ function M.window_side(win)
     end
 
     return side
+end
+
+
+-- Calculate left/right slot frames
+--------------------------------------------------------------------------------
+function M.slot_frames(target_screen, border)
+    border = border or 8
+
+    local frame = target_screen.frame
+    local left_width = frame.w * target_screen.divider
+    local right_width = frame.w - left_width
+
+    -- local left_width = math.floor(frame.w * target_screen.divider)
+
+    local frames = {
+        left = {
+            x = frame.x + border,
+            y = frame.y + border,
+            w = left_width - border,
+            h = frame.h - (border * 2),
+        },
+        right = {
+            x = frame.x + left_width + border,
+            y = frame.y + border,
+            w = right_width - (border * 2),
+            h = frame.h - (border * 2),
+        }
+    }
+
+    return frames
+end
+
+
+-- Snap windows into their respective slot coords
+--------------------------------------------------------------------------------
+function M.snap_windows(win, target_layout)
+    local id = win:screen():id()
+    local screen = state.screens[id]
+    local layout = screen.layout
+    local frames = M.slot_frames(screen)
+
+    if target_layout == 'maximized' then
+        layout.maximized:setFrame(screen.frame, 0.02)
+    elseif target_layout == 'split' then
+        if layout.left then
+            layout.left:setFrame(frames.left, 0.02)
+        end
+        if layout.right then
+            layout.right:setFrame(frames.right, 0.02)
+        end
+    end
 end
 
 
@@ -280,7 +288,7 @@ function M.init()
 
     for _, screen in ipairs(hs.screen.allScreens()) do
         state.screens[screen:id()] = {
-            divider = 0.36,
+            divider = 0.35,
             layout = {
                 maximized = false,
                 left = false,
@@ -339,71 +347,3 @@ return M
 -- log_screen_slots('maximize_window()')
 -- log_screen_slots('slot_frames(screen_obj)')
 -- log_screen_slots('window_side' .. '(' .. win:application():name() .. ')')
-
-
--- Initial call (layout is empty)
---------------------------------------------------------------------------------
--- [04:16:50] -------
---            CALLER: launch_or_focus(Brave Browser)
--- [04:16:50] maximized: EMPTY
--- [04:16:50] right: EMPTY
--- [04:16:50] left: EMPTY
--- [04:16:50] -------
---            CALLER: window_appeared(Brave Browser)
--- [04:16:50] maximized: EMPTY
--- [04:16:50] right: EMPTY
--- [04:16:50] left: EMPTY
--- [04:16:50] -------
---            CALLER: window_side(Brave Browser)
--- [04:16:50] maximized: EMPTY
--- [04:16:50] right: EMPTY
--- [04:16:50] left: EMPTY
--- [04:16:50] -------
---            CALLER: window_side(kitty)
--- [04:16:50] maximized: EMPTY
--- [04:16:50] right: EMPTY
--- [04:16:50] left: EMPTY
--- [04:16:50] -------
---            CALLER: slot_frames(screen_obj)
--- [04:16:50] maximized: EMPTY
--- [04:16:50] right: EMPTY
--- [04:16:50] left: Brave Browser
--- [04:16:50] -------
---            CALLER: snap_windows(Brave Browser, split)
--- [04:16:50] maximized: EMPTY
--- [04:16:50] right: EMPTY
--- [04:16:50] left: Brave Browser
---
---
--- Second call (Brave is stored in layout.left)
---------------------------------------------------------------------------------
--- [04:17:37] -------
---            CALLER: launch_or_focus(kitty)
--- [04:17:37] maximized: EMPTY
--- [04:17:37] right: EMPTY
--- [04:17:37] left: Brave Browser
--- [04:17:37] -------
---            CALLER: window_appeared(kitty)
--- [04:17:37] maximized: EMPTY
--- [04:17:37] right: EMPTY
--- [04:17:37] left: Brave Browser
--- [04:17:37] -------
---            CALLER: window_side(kitty)
--- [04:17:37] maximized: EMPTY
--- [04:17:37] right: EMPTY
--- [04:17:37] left: Brave Browser
--- [04:17:37] -------
---            CALLER: window_side(Brave Browser)
--- [04:17:37] maximized: EMPTY
--- [04:17:37] right: EMPTY
--- [04:17:37] left: Brave Browser
--- [04:17:37] -------
---            CALLER: slot_frames(screen_obj)
--- [04:17:37] maximized: EMPTY
--- [04:17:37] right: kitty
--- [04:17:37] left: Brave Browser
--- [04:17:37] -------
---            CALLER: snap_windows(kitty, split)
--- [04:17:37] maximized: EMPTY
--- [04:17:37] right: kitty
--- [04:17:37] left: Brave Browser

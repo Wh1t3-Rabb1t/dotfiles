@@ -31,10 +31,11 @@ function M.launch_or_focus(app)
         function()
             local win = hs.window.focusedWindow()
 
-            -- -- Exit if called on an already focused window
-            -- if win:id() == existing_win:id() then
-            --     return
-            -- end
+            -- Exit if called on an already focused window
+            if win:id() == existing_win:id() then
+                M.cycle_app_specific_windows(app)
+                return
+            end
 
             M.snap_windows(
                 win,
@@ -42,6 +43,28 @@ function M.launch_or_focus(app)
             )
         end
     )
+end
+
+
+-- Cycle to the next open window of the focused app
+--------------------------------------------------------------------------------
+function M.cycle_app_specific_windows(app)
+    local application = hs.application.get(app)
+
+    if not application then
+        return
+    end
+
+    local windows = application:visibleWindows()
+    local focused = hs.window.focusedWindow()
+
+    for i, win in ipairs(windows) do
+        if win == focused then
+            local next = windows[i + 1] or windows[1]
+            next:focus()
+            return
+        end
+    end
 end
 
 

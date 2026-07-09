@@ -40,5 +40,3 @@ M.layout = {
 }
 
 return M
-
-

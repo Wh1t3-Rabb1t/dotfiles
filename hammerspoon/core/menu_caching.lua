@@ -74,8 +74,7 @@ end
 
 -- Create popup
 --------------------------------------------------------------------------------
-function M.create_popup(binding_tbl)
-    local text = M.create_menu_text(binding_tbl)
+function M.create_popup(text)
     local size = hs.drawing.getTextDrawingSize(text)
     local canvas_width = math.max(size.w)
     local canvas_height = math.max(size.h)
@@ -157,9 +156,13 @@ function M.init()
     M.pack_lookup_table(sys_bindings)
     M.pack_lookup_table(brave_bindings)
 
+    asset.sys_popup = M.create_popup(
+        M.create_menu_text(sys_bindings)
+    )
+    asset.brave_popup = M.create_popup(
+        M.create_menu_text(brave_bindings)
+    )
     asset.tap = M.create_tap()
-    asset.sys_popup = M.create_popup(sys_bindings)
-    asset.brave_popup = M.create_popup(brave_bindings)
 end
 
 return M

@@ -1,7 +1,6 @@
 
 local qtimer = require('quit_timer')
 
-
 local bk = hs.hotkey.bind
 
 -- Hot reload hammerspoon
@@ -11,54 +10,40 @@ bk({ 'ctrl', 'shift' }, 'r', function() hs.reload() end)
 bk({ 'cmd' }, 'q', qtimer.startCmdQ, qtimer.stopCmdQ)
 
 
--- Binding popup menu
---------------------------------------------------------------------------------
-local sys_menu = require('sys_menu')
-bk({ 'ctrl' }, 'f', function()
-    sys_menu.launch_menu()
-end)
-
-
-
-
--- (WIP) Layout module
-local layout = require('layout')
-layout.init()
-
-bk({ 'alt' }, 'u', function()
-    layout.launch_or_focus('kitty')
-end)
-bk({ 'alt' }, 'o', function()
-    layout.launch_or_focus('Brave Browser')
-end)
-
-bk({ 'alt' }, 'i', function()
-    layout.swap_window_slots()
-end)
-bk({ 'alt' }, 'k', function()
-    layout.maximize_window()
-end)
-bk({ 'alt' }, 'l', function()
-    layout.move_window_divider('right')
-end)
-bk({ 'alt' }, 't', function()
-    layout.move_window_divider('left')
-end)
-
-
-
--- bk({ 'ctrl' }, 'r', function()
---     for k, v in ipairs(hs.hotkey.systemAssigned()) do
---         local log_file = os.getenv('HOME') .. '/.local/state/logs/log'
---         local file = io.open(log_file, 'a')  -- 'a' = append
---         if not file then
---             return
---         end
---         local msg = 'Key:  ' .. k .. 'Val:  ' .. v
---         file:write(msg .. "\n")
---         file:close()
---     end
+-- -- Binding popup menu
+-- --------------------------------------------------------------------------------
+-- local sys_menu = require('sys_menu')
+-- bk({ 'ctrl' }, 'f', function()
+--     sys_menu.launch_menu()
 -- end)
+
+
+
+
+-- -- (WIP) Layout module
+-- local layout = require('layout')
+-- layout.init()
+
+-- bk({ 'alt' }, 'u', function()
+--     layout.launch_or_focus('kitty')
+-- end)
+-- bk({ 'alt' }, 'o', function()
+--     layout.launch_or_focus('Brave Browser')
+-- end)
+-- bk({ 'alt' }, 'i', function()
+--     layout.swap_splits()
+-- end)
+-- bk({ 'alt' }, 'k', function()
+--     layout.maximize_window()
+-- end)
+-- bk({ 'alt' }, 'l', function()
+--     layout.move_window_divider('right')
+-- end)
+-- bk({ 'alt' }, 't', function()
+--     layout.move_window_divider('left')
+-- end)
+
+
 
 
 

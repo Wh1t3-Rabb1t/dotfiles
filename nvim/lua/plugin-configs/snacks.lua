@@ -157,6 +157,7 @@ M.keys = {
     { desc = " Git B[r]owse",     "<Leader>ir", function() Snacks.gitbrowse() end, mode = { "n", "v" } },
 
     -- Search
+    { desc = " Spelling Suggestions",  "<Leader>sp", function() Snacks.picker.spelling() end },
     { desc = " Buffer Lines",          "<Leader>sl", function() Snacks.picker.lines() end },
     { desc = " Icons",                 "<Leader>si", function() Snacks.picker.icons() end },
     { desc = " Jumps",                 "<Leader>sj", function() Snacks.picker.jumps() end },
@@ -169,7 +170,7 @@ M.keys = {
     { desc = " Autocmds",              "<Leader>sa", function() Snacks.picker.autocmds() end },
     { desc = " Workspace Diagnostics", "<Leader>sd", function() Snacks.picker.diagnostics() end },
     { desc = " B[u]ffer Diagnostics",  "<Leader>su", function() Snacks.picker.diagnostics_buffer() end },
-    { desc = " Search Plugin Specs",   "<Leader>sp", function() Snacks.picker.lazy() end },
+    { desc = " Search Plugin Specs",   "<Leader>sP", function() Snacks.picker.lazy() end },
 
     -- LSP
     { desc = " LSP Symbols",                "<Leader>ls", function() Snacks.picker.lsp_symbols() end },

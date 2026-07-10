@@ -11,6 +11,8 @@
 
 ## BUGS:
 
+- There is some bug when using uppercase letters as bindings in sys_menu.
+
 - When unplugging or plugging in a new display, it breaks the coords of the
   shader that was on the original display.
 
@@ -19,7 +21,26 @@
 
 ---
 
+## Modules:
+
+- Currently all sys_menu fns have been changed from local to part of the
+  module object. (change select functions back to local wherever possible).
+
+- Cache the popup dimensions (w, h).
+
+- Integrate state.overlays etc with layout.screens.
+```lua
+    if not state.overlays[id] then
+init_overlay(screen, id)
+    end
+    ```
+
+---
+
 ## Layout module:
+
+- Incorporate base 'layouts'.
+  (set the divider value to 0.35, 0.65, or 0.5 to emulate thirds/half layouts).
 
 - Might need to change window z-index level when exiting from fullsceen.
   (suppose we are moving the divider but the other forefront window is
@@ -28,9 +49,6 @@
 - Key repeating when moving the divider.
 
 - Implement move window to adjacent screen fn.
-
-- When calling 'launch or focus' if called on an app that is already focused;
-  cycle to the apps next open window (if any).
 
 - Move to sys_menu popup (if not screen_id then init):
 ```lua

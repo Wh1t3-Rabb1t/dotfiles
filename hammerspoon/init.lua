@@ -8,9 +8,35 @@
 
 require('keymaps')
 require('console')
--- require('watchers')
 require('announcer')
+-- require('watchers')
 
+
+
+-- local asset = require('state').assets
+
+local state = require('state')
+local layout = require('layout')
+local menu_assets = require('menu_caching')
+
+-- Initialize layout module if necessary
+if not state.layout.screens[hs.screen.mainScreen():id()] then
+    layout.init()
+end
+
+-- Initialize layout module if necessary
+if not state.assets.tap or not state.assets.sys_popup then
+    menu_assets.init()
+end
+
+
+-- Binding popup menu
+--------------------------------------------------------------------------------
+local sys_menu = require('sys_menu')
+
+hs.hotkey.bind({ 'ctrl' }, 'f', function()
+    sys_menu.launch_menu()
+end)
 
 
 

@@ -1,6 +1,6 @@
 local M = {}
 
-local state = require("state")
+local state = require('state')
 
 local alert_fmt = {
     strokeWidth  = 5,
@@ -58,7 +58,7 @@ function M.adjust_brightness(direction)
     state.overlays[id][1].fillColor.alpha = 1 - brightness / 100
 
     -- Display brightness value in popup
-    hs.alert.show("Brightness: " .. brightness,
+    hs.alert.show('Brightness: ' .. brightness,
         alert_fmt,  -- Format table
         screen,     -- Target screen
         0.25        -- Alert duration (not including fade-out)

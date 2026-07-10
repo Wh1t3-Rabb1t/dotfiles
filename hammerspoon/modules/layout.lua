@@ -33,7 +33,7 @@ function M.launch_or_focus(app)
 
             -- Exit if called on an already focused window
             if win:id() == existing_win:id() then
-                M.cycle_app_specific_windows(app)
+                -- Invoke 'send_keys({"cmd"}, "`")'
                 return
             end
 
@@ -46,31 +46,9 @@ function M.launch_or_focus(app)
 end
 
 
--- Cycle to the next open window of the focused app
---------------------------------------------------------------------------------
-function M.cycle_app_specific_windows(app)
-    local application = hs.application.get(app)
-
-    if not application then
-        return
-    end
-
-    local windows = application:visibleWindows()
-    local focused = hs.window.focusedWindow()
-
-    for i, win in ipairs(windows) do
-        if win == focused then
-            local next = windows[i + 1] or windows[1]
-            next:focus()
-            return
-        end
-    end
-end
-
-
 -- Swap left/right window slots
 --------------------------------------------------------------------------------
-function M.swap_window_slots()
+function M.swap_splits()
     local win = hs.window.focusedWindow()
     local id = win:screen():id()
     local layout = state.screens[id].layout
@@ -138,7 +116,6 @@ function M.maximize_window()
     layout.maximized = win
     layout.maximized:setFrame(frame)
 end
-
 
 
 -- Determine newly launched/focused windows layout.
@@ -223,8 +200,6 @@ function M.slot_frames(target_screen, border)
     local frame = target_screen.frame
     local left_width = frame.w * target_screen.divider
     local right_width = frame.w - left_width
-
-    -- local left_width = math.floor(frame.w * target_screen.divider)
 
     local frames = {
         left = {
@@ -366,8 +341,30 @@ return M
 -- log_screen_slots('launch_or_focus' .. '(' .. app .. ')')
 -- log_screen_slots('window_appeared' .. '(' .. win:application():name() .. ')')
 -- log_screen_slots('snap_windows' .. '(' .. win:application():name() .. ', ' .. target_layout .. ')')
--- log_screen_slots('swap_window_slots' .. '(' .. win:application():name() .. ')')
+-- log_screen_slots('swap_splits' .. '(' .. win:application():name() .. ')')
 -- log_screen_slots('move_window_divider' .. '(' .. direction .. ')')
 -- log_screen_slots('maximize_window()')
 -- log_screen_slots('slot_frames(screen_obj)')
 -- log_screen_slots('window_side' .. '(' .. win:application():name() .. ')')
+
+
+-- -- Swap left/right window slots
+-- --------------------------------------------------------------------------------
+-- function M.cycle_app_specific_windows(app)
+--     local application = hs.application.get(app)
+--
+--     if not application then
+--         return
+--     end
+--
+--     local windows = application:visibleWindows()
+--     local focused = hs.window.focusedWindow()
+--
+--     for i, win in ipairs(windows) do
+--         if win == focused then
+--             local next = windows[i + 1] or windows[1]
+--             next:focus()
+--             return
+--         end
+--     end
+-- end

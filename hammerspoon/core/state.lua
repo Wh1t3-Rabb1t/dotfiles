@@ -4,7 +4,7 @@ M.overlays = {}
 M.brightness = {}
 
 M.menu = {
-    menu_active = false,
+    tap_active = false,
     ignore_until = 0,
 }
 
@@ -22,7 +22,7 @@ M.layout = {
     --------------
     -- screens = {
     --     [uuid] = {
-    --         divider = .50,  (0.15 .. 0.85)
+    --         divider = .50,  (0.20 .. 0.80)
     --         layout = {
     --             maximized = (win|false),
     --             left      = (win|false),

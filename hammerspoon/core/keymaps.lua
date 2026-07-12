@@ -7,7 +7,7 @@ local bk = hs.hotkey.bind
 bk({ 'ctrl', 'shift' }, 'r', function() hs.reload() end)
 
 -- Command-Q delay on quitting an application
-bk({ 'cmd' }, 'q', qtimer.startCmdQ, qtimer.stopCmdQ)
+bk({ 'cmd' }, 'q', qtimer.start_cmd_q, qtimer.stop_cmd_q)
 
 
 -- -- Binding popup menu

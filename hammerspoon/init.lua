@@ -11,9 +11,9 @@ require('console')
 require('announcer')
 -- require('watchers')
 
--- local asset = require('state').assets
 
 
+-- local shader = require('shaders')
 
 local state = require('state')
 local layout = require('layout')
@@ -24,31 +24,28 @@ local menu_assets = require('menu_caching')
 --------------------------------------------------------------------------------
 local sys_menu = require('sys_menu')
 
+-- Initialize state if necessary
 hs.hotkey.bind({ 'ctrl' }, 'f', function()
-    -- Initialize layout module if necessary
-    if not state.layout.screens[hs.screen.mainScreen():id()] then
+    local screen = hs.screen.mainScreen()
+    local id = screen:id()
+
+    if not state.layout.screens[id] then
         layout.init()
     end
 
-    -- Initialize layout module if necessary
     if not state.assets.tap or not state.assets.system then
         menu_assets.init()
     end
 
+
+    --
+    -- TODO: add check to see if the focused app is compatible and if so; does it's
+    -- cache exist
+    --
+
+
     sys_menu.launch_menu()
 end)
-
-
--- hs.hotkey.bind({ 'ctrl' }, 'f', function()
---     local registry = require('app_registry')
---     for _, app in pairs(registry.apps) do
---         local title = app.title
---         for _, binding in ipairs(app.bindings) do
---             hs.alert.show(binding.action)
---         end
---     end
--- end)
-
 
 
 

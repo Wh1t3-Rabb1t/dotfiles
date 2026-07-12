@@ -1,14 +1,14 @@
 local M = {}
 
 function M.hs_config(files)
-    local doReload = false
+    local do_reload = false
 
     for _,file in pairs(files) do
         if file:sub(-4) == '.lua' then
-            doReload = true
+            do_reload = true
         end
     end
-    if doReload then
+    if do_reload then
         hs.reload()
     end
 end

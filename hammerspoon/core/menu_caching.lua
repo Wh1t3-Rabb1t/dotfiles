@@ -134,7 +134,7 @@ function M.create_tap()
 end
 
 
--- Init asset cache
+-- Init
 --------------------------------------------------------------------------------
 function M.init()
     -- Cache bindings/canvases

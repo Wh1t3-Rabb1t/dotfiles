@@ -1,27 +1,39 @@
 local M = {}
 
-local cmdQDelay = 0.75
-local cmdQTimer = nil
-local cmdQAlert = nil
+local cmd_q_delay = 0.75
+local cmd_q_timer = nil
+local cmd_q_alert = nil
 
-local function cmdQCleanup()
-    hs.alert.closeSpecific(cmdQAlert)
-    cmdQTimer = nil
-    cmdQAlert = nil
+local function cmd_q_cleanup()
+    hs.alert.closeSpecific(cmd_q_alert)
+    cmd_q_timer = nil
+    cmd_q_alert = nil
 end
 
-function M.stopCmdQ()
-    if cmdQTimer then
-        cmdQTimer:stop()
-        cmdQCleanup()
+
+-- Stop quit timer
+--------------------------------------------------------------------------------
+function M.stop_cmd_q()
+    if cmd_q_timer then
+        cmd_q_timer:stop()
+        cmd_q_cleanup()
         hs.alert('Cancelled', 0.5)
     end
 end
 
-function M.startCmdQ()
+
+-- Start quit timer
+--------------------------------------------------------------------------------
+function M.start_cmd_q()
     local app = hs.application.frontmostApplication()
-    cmdQTimer = hs.timer.doAfter(cmdQDelay, function() app:kill(); cmdQCleanup() end)
-    cmdQAlert = hs.alert('Hold to Quit: ' .. app:name(), true)
+    cmd_q_timer = hs.timer.doAfter(
+        cmd_q_delay,
+        function()
+            app:kill()
+            cmd_q_cleanup()
+        end
+    )
+    cmd_q_alert = hs.alert('Hold to Quit: ' .. app:name(), true)
 end
 
 return M

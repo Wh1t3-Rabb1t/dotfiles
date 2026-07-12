@@ -16,6 +16,7 @@
 local M = {}
 
 local state = require('state').layout
+local cache = require('cache')
 
 -- TODO: move this fn elsewhere later
 --
@@ -110,9 +111,8 @@ function M.maximize_window(win)
     win = win or hs.window.focusedWindow()
 
     local id = win:screen():id()
-    local curr_screen = state.screens[id]
-    local layout = curr_screen.layout
-    local frame = curr_screen.frame
+    local layout = state.screens[id].layout
+    local frame = cache.screens[id].frame
 
     layout.maximized = win
     layout.maximized:setFrame(frame)
@@ -195,11 +195,11 @@ end
 
 -- Calculate left/right slot frames
 --------------------------------------------------------------------------------
-function M.slot_frames(target_screen, border)
+function M.slot_frames(id, border)
     border = border or 8
 
-    local frame = target_screen.frame
-    local left_width = frame.w * target_screen.divider
+    local frame = cache.screens[id].frame
+    local left_width = frame.w * state.screens[id].divider
     local right_width = frame.w - left_width
 
     local frames = {
@@ -225,12 +225,11 @@ end
 --------------------------------------------------------------------------------
 function M.snap_windows(win, target_layout)
     local id = win:screen():id()
-    local screen = state.screens[id]
-    local layout = screen.layout
-    local frames = M.slot_frames(screen)
+    local layout = state.screens[id].layout
+    local frames = M.slot_frames(id)
 
     if target_layout == 'maximized' then
-        layout.maximized:setFrame(screen.frame, 0.02)
+        layout.maximized:setFrame(cache.screens[id].frame, 0.02)
     elseif target_layout == 'split' then
         if layout.left then
             layout.left:setFrame(frames.left, 0.02)
@@ -257,22 +256,22 @@ function M.is_window_fullscreen(win)
     end
 
     local id = win:screen():id()
-    local curr_screen = state.screens[id]
+    local cached_frame = cache.screens[id].frame
 
     local frames = frames_equal(
         win:frame(),
-        curr_screen.frame
+        cached_frame
     )
 
     return frames
 end
 
 
--- Init layout table
+-- Init
 --------------------------------------------------------------------------------
 function M.init()
     -- Calculate the available screen (total screen frame minus the dock)
-    local function usable_frame(screen)
+    local function usable_screen_frame(screen)
         local full = screen:fullFrame()
         local usable = screen:frame()
 
@@ -286,20 +285,105 @@ function M.init()
         return frame
     end
 
+    local function create_overlay(screen)
+        local overlay = hs.canvas.new(screen:fullFrame())
+
+        overlay:appendElements({
+            type = 'rectangle',
+            action = 'fill',
+            fillColor = {
+                red = 0,
+                green = 0,
+                blue = 0,
+                alpha = 0,
+            }
+        })
+        overlay:level(hs.canvas.windowLevels.overlay)
+        overlay:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
+        overlay:show()
+
+        return overlay
+    end
+
+
     for _, screen in ipairs(hs.screen.allScreens()) do
-        state.screens[screen:id()] = {
+        local id = screen:id()
+
+        cache.screens[id] = {
+            overlay = create_overlay(screen),
+            frame = usable_screen_frame(screen),
+        }
+
+        state.screens[id] = {
+            brightness = 100,
             divider = 0.35,
             layout = {
                 maximized = false,
                 left = false,
                 right = false,
-            },
-            frame = usable_frame(screen),
+            }
         }
     end
 end
 
 return M
+
+
+-- function M.init()
+--     for _, screen in ipairs(hs.screen.allScreens()) do
+--         local id = screen:id()
+--
+--         state.screens[id] = {
+--             divider = 0.35,
+--             layout = {
+--                 maximized = false,
+--                 left = false,
+--                 right = false,
+--             },
+--             frame = usable_screen_frame(screen),
+--             overlay = create_overlay(screen),
+--             brightness = 100,
+--         }
+--     end
+-- end
+
+
+
+-- function M.init()
+--     -- Calculate the available screen (total screen frame minus the dock)
+--     local function usable_screen_frame(screen)
+--         local full = screen:fullFrame()
+--         local usable = screen:frame()
+--
+--         local frame = {
+--             x = full.x,
+--             y = usable.y,
+--             w = full.w,
+--             h = full.h - (usable.y - full.y),
+--         }
+--
+--         return frame
+--     end
+--
+--
+--
+--
+--     for _, screen in ipairs(hs.screen.allScreens()) do
+--         local id = screen:id()
+--
+--         state.screens[id] = {
+--             divider = 0.35,
+--             layout = {
+--                 maximized = false,
+--                 left = false,
+--                 right = false,
+--             },
+--             frame = usable_screen_frame(screen),
+--         }
+--     end
+-- end
+--
+-- return M
 
 
 

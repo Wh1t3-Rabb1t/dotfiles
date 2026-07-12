@@ -23,6 +23,10 @@
 
 ## Modules:
 
+- Fill 'cache.supported_apps' on init.
+
+- Maybe remove 'app_name' from registry if it's unnecessary.
+
 - Tie shaders data to screen data. (store in the same state table)
 
 - Currently all sys_menu fns have been changed from local to part of the

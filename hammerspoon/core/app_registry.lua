@@ -1,6 +1,6 @@
 local M = {}
 
-local shader = require('shaders')
+local shader = require('brightness')
 local layout = require('layout')
 local sys_menu = require('sys_menu')
 
@@ -9,7 +9,7 @@ M.apps = {
     -- Brave Browser --
     -------------------
     brave_browser = {
-        title = 'brave_browser',
+        title    = 'brave_browser',
         app_name = 'Brave Browser',
         bindings = {
             {
@@ -43,16 +43,13 @@ M.apps = {
                 desc   = 'Close tab',
             },
         },
-        assets = {
-            canvas = false,
-        },
     },
 
     ------------
     -- System --
     ------------
     system = {
-        title = 'system',
+        title    = 'system',
         app_name = 'system',
         bindings = {
             {
@@ -72,12 +69,12 @@ M.apps = {
             },
             {
                 key    = 'l',
-                action = 'resize_split_left',
+                action = 'resize_split_right',
                 desc   = 'Re-size splits right',
             },
             {
                 key    = 't',
-                action = 'resize_split_right',
+                action = 'resize_split_left',
                 desc   = 'Re-size splits left',
             },
             {
@@ -106,9 +103,6 @@ M.apps = {
                 desc   = 'Cancel',
             },
         },
-        assets = {
-            canvas = false,
-        },
     },
 }
 
@@ -122,7 +116,7 @@ M.actions = {
         brightness_print   = function() shader.print_values() end,
         resize_split_left  = function() layout.move_window_divider('left') end,
         resize_split_right = function() layout.move_window_divider('right') end,
-        maximize           = function() layout.maximize_window() end,
+        maximize_window    = function() layout.maximize_window() end,
         swap_splits        = function() layout.swap_splits() end,
         launch_kitty       = function() layout.launch_or_focus('kitty') end,
         launch_brave       = function() layout.launch_or_focus('Brave Browser') end,

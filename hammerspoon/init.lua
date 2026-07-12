@@ -11,23 +11,13 @@ require('console')
 require('announcer')
 -- require('watchers')
 
-
-
 -- local asset = require('state').assets
+
+
 
 local state = require('state')
 local layout = require('layout')
 local menu_assets = require('menu_caching')
-
--- Initialize layout module if necessary
-if not state.layout.screens[hs.screen.mainScreen():id()] then
-    layout.init()
-end
-
--- Initialize layout module if necessary
-if not state.assets.tap or not state.assets.sys_popup then
-    menu_assets.init()
-end
 
 
 -- Binding popup menu
@@ -35,8 +25,30 @@ end
 local sys_menu = require('sys_menu')
 
 hs.hotkey.bind({ 'ctrl' }, 'f', function()
+    -- Initialize layout module if necessary
+    if not state.layout.screens[hs.screen.mainScreen():id()] then
+        layout.init()
+    end
+
+    -- Initialize layout module if necessary
+    if not state.assets.tap or not state.assets.system then
+        menu_assets.init()
+    end
+
     sys_menu.launch_menu()
 end)
+
+
+-- hs.hotkey.bind({ 'ctrl' }, 'f', function()
+--     local registry = require('app_registry')
+--     for _, app in pairs(registry.apps) do
+--         local title = app.title
+--         for _, binding in ipairs(app.bindings) do
+--             hs.alert.show(binding.action)
+--         end
+--     end
+-- end)
+
 
 
 

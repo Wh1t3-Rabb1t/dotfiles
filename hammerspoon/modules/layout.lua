@@ -106,8 +106,9 @@ end
 
 -- Maximize focused window
 --------------------------------------------------------------------------------
-function M.maximize_window()
-    local win = hs.window.focusedWindow()
+function M.maximize_window(win)
+    win = win or hs.window.focusedWindow()
+
     local id = win:screen():id()
     local curr_screen = state.screens[id]
     local layout = curr_screen.layout
@@ -137,7 +138,7 @@ function M.window_appeared(existing_win, win)
         return 'maximized'
     end
 
-    -- Already fullscreen; replace the existing fullscreen window with the new one
+    -- Already fullscreen; replace existing fullscreen window with the new one
     if layout.maximized then
         if layout.right == win then
             layout.left = layout.maximized

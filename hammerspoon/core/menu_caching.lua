@@ -1,14 +1,10 @@
 local M = {}
 
+local registry = require('app_registry')
 local state = require('state')
 local menu = state.menu
 local lookup = state.lookup
 local asset = state.assets
-
-local bindings = require('bindings')
-local sys_bindings = bindings.sys_bindings
-local brave_bindings = bindings.brave_bindings
-local actions = bindings.actions
 
 
 -- Format rgb
@@ -119,19 +115,16 @@ function M.create_tap()
     local tap = e.new({ e.event.types.keyDown }, function(event)
         if hs.timer.secondsSinceEpoch() < menu.ignore_until then
             menu.ignore_until = 0
+
             return false
         end
 
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]
-        local binding = lookup[key]
+        local bound_action = lookup[key]
 
-        if binding then
-            local exec_action = actions[binding.action]
-
-            if exec_action then
-                exec_action()
-            end
+        if bound_action then
+            bound_action()
         end
 
         return true
@@ -141,27 +134,29 @@ function M.create_tap()
 end
 
 
--- Pack the cached bindings lookup table
---------------------------------------------------------------------------------
-function M.pack_lookup_table(binding_tbl)
-    for _, binding in ipairs(binding_tbl) do
-        lookup[binding.key] = binding
-    end
-end
-
-
 -- Init asset cache
 --------------------------------------------------------------------------------
 function M.init()
-    M.pack_lookup_table(sys_bindings)
-    M.pack_lookup_table(brave_bindings)
+    -- Cache bindings/canvases
+    for _, app in pairs(registry.apps) do
+        local bindings = app.bindings
+        local title = app.title
 
-    asset.sys_popup = M.create_popup(
-        M.create_menu_text(sys_bindings)
-    )
-    asset.brave_popup = M.create_popup(
-        M.create_menu_text(brave_bindings)
-    )
+        -- Pack lookup table
+        for _, binding in ipairs(bindings) do
+            local key = binding.key
+            local action = binding.action
+
+            lookup[key] = registry.actions[title][action]
+        end
+
+        -- Generate canvases
+        asset[title] = M.create_popup(
+            M.create_menu_text(bindings)
+        )
+    end
+
+    -- Create event tap
     asset.tap = M.create_tap()
 end
 

@@ -27,8 +27,8 @@ local asset = state.assets
 --------------------------------------------------------------------------------
 function M.close_menu()
     menu.tap_active = false
-    asset.sys_popup:delete()
-    asset.brave_popup:delete()
+    asset.system:delete()
+    asset.brave_browser:delete()
     asset.tap:stop()
 end
 
@@ -57,16 +57,16 @@ function M.launch_menu()
 
     menu.tap_active = true
     asset.tap:start()
-    asset.sys_popup:show(0.15)
-    asset.brave_popup:show(0.15)
+    asset.system:show(0.15)
+    asset.brave_browser:show(0.15)
 end
 
 return M
 
 
 -- local app = hs.application.frontmostApplication():name()
--- asset.brave_popup:topLeft(M.calc_popup_coords(app))
--- asset.sys_popup:topLeft({ x = 1200, y = 300 })
+-- asset.brave_browser:topLeft(M.calc_popup_coords(app))
+-- asset.system:topLeft({ x = 1200, y = 300 })
 
 
 

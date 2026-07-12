@@ -23,6 +23,8 @@
 
 ## Modules:
 
+- Tie shaders data to screen data. (store in the same state table)
+
 - Currently all sys_menu fns have been changed from local to part of the
   module object. (change select functions back to local wherever possible).
 
@@ -30,10 +32,10 @@
 
 - Integrate state.overlays etc with layout.screens.
 ```lua
-    if not state.overlays[id] then
-init_overlay(screen, id)
-    end
-    ```
+if not state.overlays[id] then
+    init_overlay(screen, id)
+end
+```
 
 ---
 

@@ -17,8 +17,6 @@ local state = require('state')
 local cache = require('cache')
 
 
--- TODO: move this fn elsewhere later
---
 -- Launch or focus target app
 --------------------------------------------------------------------------------
 function M.launch_or_focus(app)

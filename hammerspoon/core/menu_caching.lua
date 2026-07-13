@@ -2,9 +2,7 @@ local M = {}
 
 local registry = require('app_registry')
 local state = require('state')
-local menu = state.menu
-local lookup = state.lookup
-local asset = state.assets
+local cache = require('cache')
 
 
 -- Format rgb
@@ -113,15 +111,15 @@ function M.create_tap()
     local e = hs.eventtap
 
     local tap = e.new({ e.event.types.keyDown }, function(event)
-        if hs.timer.secondsSinceEpoch() < menu.ignore_until then
-            menu.ignore_until = 0
+        if hs.timer.secondsSinceEpoch() < state.menu.ignore_until then
+            state.menu.ignore_until = 0
 
             return false
         end
 
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]
-        local bound_action = lookup[key]
+        local bound_action = cache.lookup[key]
 
         if bound_action then
             bound_action()
@@ -147,17 +145,18 @@ function M.init()
             local key = binding.key
             local action = binding.action
 
-            lookup[key] = registry.actions[title][action]
+            cache.lookup[key] = registry.actions[title][action]
         end
 
         -- Generate canvases
-        asset[title] = M.create_popup(
-            M.create_menu_text(bindings)
-        )
+        local content = M.create_menu_text(bindings)
+        local popup = M.create_popup(content)
+
+        cache.assets[title] = popup
     end
 
     -- Create event tap
-    asset.tap = M.create_tap()
+    cache.assets.tap = M.create_tap()
 end
 
 return M

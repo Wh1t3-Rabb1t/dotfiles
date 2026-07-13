@@ -14,9 +14,8 @@
 
 local M = {}
 
-local state = require('state')
+local state = require('state').layout
 local cache = require('cache')
-
 
 -- TODO: move this fn elsewhere later
 --
@@ -403,3 +402,4 @@ return M
 --         end
 --     end
 -- end
+

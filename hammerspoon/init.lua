@@ -12,12 +12,10 @@ require('announcer')
 -- require('watchers')
 
 
-
--- local shader = require('shaders')
-
 local state = require('state')
+local cache = require('cache')
 local layout = require('layout')
-local menu_assets = require('menu_caching')
+local menu_caching = require('menu_caching')
 
 
 -- Binding popup menu
@@ -26,27 +24,34 @@ local sys_menu = require('sys_menu')
 
 -- Initialize state if necessary
 hs.hotkey.bind({ 'ctrl' }, 'f', function()
-    local screen = hs.screen.mainScreen()
-    local id = screen:id()
+    -- local screen = hs.screen.mainScreen()
+    -- local id = screen:id()
 
-    if not state.layout.screens[id] then
+    local function initialized(t)
+        local done = false
+        if type(t) == 'table' and next(t) ~= nil then
+            done = true
+        end
+        return done
+    end
+
+    -- Init layout module if required
+    if not initialized(cache.screens) or
+       not initialized(state.menu) or
+       not initialized(state.screens)
+    then
         layout.init()
     end
 
-    if not state.assets.tap or not state.assets.system then
-        menu_assets.init()
+    -- Init menu module if required
+    if not initialized(cache.assets) or
+       not initialized(cache.lookup)
+    then
+        menu_caching.init()
     end
-
-
-    --
-    -- TODO: add check to see if the focused app is compatible and if so; does it's
-    -- cache exist
-    --
-
 
     sys_menu.launch_menu()
 end)
-
 
 
 

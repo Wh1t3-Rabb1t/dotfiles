@@ -19,18 +19,20 @@
 local M = {}
 
 local state = require('state')
+local cache = require('cache')
+local assets = cache.assets
 local menu = state.menu
-local asset = state.assets
 
 
 -- Close menu
 --------------------------------------------------------------------------------
 function M.close_menu()
     menu.tap_active = false
-    asset.system:delete()
-    asset.brave_browser:delete()
-    asset.tap:stop()
+    assets.system:delete()
+    assets.brave_browser:delete()
+    assets.tap:stop()
 end
+
 
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
@@ -48,6 +50,7 @@ function M.send_keys(key, mod)
     end)
 end
 
+
 -- Launch menu
 --------------------------------------------------------------------------------
 function M.launch_menu()
@@ -56,9 +59,9 @@ function M.launch_menu()
     end
 
     menu.tap_active = true
-    asset.tap:start()
-    asset.system:show(0.15)
-    asset.brave_browser:show(0.15)
+    assets.tap:start()
+    assets.system:show(0.15)
+    assets.brave_browser:show(0.15)
 end
 
 return M
@@ -102,4 +105,3 @@ return M
 -- local frame = screen:fullFrame()
 -- x = (frame.w / 2),
 -- y = (frame.h / 2),
-

@@ -6,32 +6,20 @@
 -- https://www.hammerspoon.org/docs/hs.html
 -- https://learnhammerspoon.com/
 
+-- local bluetooth = require('bluetooth')
+-- bluetooth.init()
+
+local state = require('state')
+local cache = require('cache')
 
 require('console').init()
 require('announcer').init()
 require('wifi').init()
+require('quit_timer').init()
 
-
--- local bluetooth = require('bluetooth')
--- bluetooth.init()
-
-
-
-local state = require('state')
-local cache = require('cache')
-local layout = require('layout')
-local qtimer = require('quit_timer')
-local sys_menu = require('sys_menu')
-local popups = require('popups')
-
-local bk = hs.hotkey.bind
 
 -- Hot reload hammerspoon
-bk({ 'ctrl', 'shift' }, 'r', function() hs.reload() end)
-
--- Command-Q delay on quitting an application
-bk({ 'cmd' }, 'q', qtimer.start_cmd_q, qtimer.stop_cmd_q)
-
+hs.hotkey.bind({ 'ctrl', 'shift' }, 'r', function() hs.reload() end)
 
 
 -- SYSTEM BINDINGS:
@@ -60,10 +48,10 @@ bk({ 'cmd' }, 'q', qtimer.start_cmd_q, qtimer.stop_cmd_q)
 -- Q - Quit app
 
 
-
+local sys_menu = require('sys_menu')
 
 -- Binding popup menu
-bk({ 'ctrl' }, 'f', function()
+hs.hotkey.bind({ 'ctrl' }, 'f', function()
     local function initialized(t)
         local done = false
         if type(t) == 'table' and next(t) ~= nil then
@@ -72,19 +60,19 @@ bk({ 'ctrl' }, 'f', function()
         return done
     end
 
-    -- Init layout module if required
+    -- Init windows module if required
     if not initialized(cache.screens) or
        not initialized(state.screens) or
        not initialized(state.menu)
     then
-        layout.init()
+        require('windows').init()
     end
 
     -- Init menu module if required
     if not initialized(cache.assets) or
        not initialized(cache.lookup)
     then
-        popups.init()
+        require('popups').init()
     end
 
     sys_menu.launch_menu()

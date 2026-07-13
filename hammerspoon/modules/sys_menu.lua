@@ -20,8 +20,8 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
-local assets = cache.assets
 local menu = state.menu
+local assets = cache.assets
 
 
 -- Close menu

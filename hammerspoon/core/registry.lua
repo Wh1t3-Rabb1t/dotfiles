@@ -1,7 +1,7 @@
 local M = {}
 
 local shader = require('brightness')
-local layout = require('layout')
+local window = require('windows')
 local sys_menu = require('sys_menu')
 
 M.apps = {
@@ -114,12 +114,12 @@ M.actions = {
         brightness_up      = function() shader.adjust_brightness('up') end,
         brightness_down    = function() shader.adjust_brightness('down') end,
         brightness_print   = function() shader.print_values() end,
-        resize_split_left  = function() layout.move_window_divider('left') end,
-        resize_split_right = function() layout.move_window_divider('right') end,
-        maximize_window    = function() layout.maximize_window() end,
-        swap_splits        = function() layout.swap_splits() end,
-        launch_kitty       = function() layout.launch_or_focus('kitty') end,
-        launch_brave       = function() layout.launch_or_focus('Brave Browser') end,
+        resize_split_left  = function() window.move_window_divider('left') end,
+        resize_split_right = function() window.move_window_divider('right') end,
+        maximize_window    = function() window.maximize_window() end,
+        swap_splits        = function() window.swap_splits() end,
+        launch_kitty       = function() window.launch_or_focus('kitty') end,
+        launch_brave       = function() window.launch_or_focus('Brave Browser') end,
         close_menu         = function() sys_menu.close_menu() end,
     },
 

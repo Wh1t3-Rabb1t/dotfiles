@@ -1,13 +1,13 @@
 local M = {}
 
 local cmd_q_delay = 0.75
-local cmd_q_timer = nil
-local cmd_q_alert = nil
+local cmd_q_timer = false
+local cmd_q_alert = false
 
 local function cmd_q_cleanup()
     hs.alert.closeSpecific(cmd_q_alert)
-    cmd_q_timer = nil
-    cmd_q_alert = nil
+    cmd_q_timer = false
+    cmd_q_alert = false
 end
 
 
@@ -34,6 +34,13 @@ function M.start_cmd_q()
         end
     )
     cmd_q_alert = hs.alert('Hold to Quit: ' .. app:name(), true)
+end
+
+
+-- Init
+--------------------------------------------------------------------------------
+function M.init()
+    hs.hotkey.bind({ 'cmd' }, 'q', M.start_cmd_q, M.stop_cmd_q)
 end
 
 return M

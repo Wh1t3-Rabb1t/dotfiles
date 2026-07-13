@@ -139,6 +139,10 @@ function M.init()
     for _, app in pairs(registry.apps) do
         local bindings = app.bindings
         local title = app.title
+        local name = app.app_name
+
+        -- Populate supported apps list
+        cache.supported_apps[name] = true
 
         -- Pack lookup table
         for _, binding in ipairs(bindings) do

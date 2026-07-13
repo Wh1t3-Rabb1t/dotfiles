@@ -53,6 +53,11 @@ M.apps = {
         app_name = 'system',
         bindings = {
             {
+                key    = 'y',
+                action = 'launch_firefox',
+                desc   = 'Launch Firefox',
+            },
+            {
                 key    = 'z',
                 action = 'brightness_up',
                 desc   = 'Brightness Up',
@@ -120,6 +125,7 @@ M.actions = {
         swap_splits        = function() window.swap_splits() end,
         launch_kitty       = function() window.launch_or_focus('kitty') end,
         launch_brave       = function() window.launch_or_focus('Brave Browser') end,
+        launch_firefox     = function() window.launch_or_focus('Firefox') end,
         close_menu         = function() sys_menu.close_menu() end,
     },
 

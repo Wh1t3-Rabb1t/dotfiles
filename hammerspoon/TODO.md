@@ -23,16 +23,10 @@
 
 ## Modules:
 
-- Fill 'cache.supported_apps' on init.
-
-- Incorporate 'cache.supported_apps' into 'snap_windows' or 'window_appeared'.
-
-- Maybe remove 'app_name' from registry if it's unnecessary.
+- Cache the popup dimensions (w, h).
 
 - Currently all sys_menu fns have been changed from local to part of the
   module object. (change select functions back to local wherever possible).
-
-- Cache the popup dimensions (w, h).
 
 ---
 

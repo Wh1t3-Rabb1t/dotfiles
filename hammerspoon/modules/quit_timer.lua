@@ -40,7 +40,10 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    hs.hotkey.bind({ 'cmd' }, 'q', M.start_cmd_q, M.stop_cmd_q)
+    hs.hotkey.bind({ 'cmd' }, 'q',
+        M.start_cmd_q,
+        M.stop_cmd_q
+    )
 end
 
 return M

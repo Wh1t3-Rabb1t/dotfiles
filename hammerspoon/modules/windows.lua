@@ -28,6 +28,7 @@ function M.launch_or_focus(app)
         0.002,
         function()
             local win = hs.window.focusedWindow()
+            local app_name = win:application():name()
 
             -- Exit if called on an already focused window
             if win:id() == existing_win:id() then
@@ -35,10 +36,19 @@ function M.launch_or_focus(app)
                 return
             end
 
-            M.snap_windows(
-                win,
-                M.window_appeared(existing_win, win)
-            )
+            if cache.supported_apps[app_name] then
+                M.snap_windows(
+                    win,
+                    M.window_appeared(existing_win, win)
+                )
+            end
+
+            -- M.snap_windows(
+            --     win,
+            --     M.window_appeared(existing_win, win)
+            -- )
+
+
         end
     )
 end

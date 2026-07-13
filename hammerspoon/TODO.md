@@ -25,6 +25,10 @@
 
 - Cache the popup dimensions (w, h).
 
+- Integrate popup (x, y) with screen state.
+
+- Incorporate key sequences when in sys_menu modal mode. (i.e. <Space>lf = launch firefox)
+
 - Currently all sys_menu fns have been changed from local to part of the
   module object. (change select functions back to local wherever possible).
 
@@ -57,7 +61,8 @@ layout.init()
 ## Misc
 
 - Incorporate the table of 'supported_apps' into the each of their respective
-  bindings array i.e.
+  bindings array i.e. (probably need to re-structure the lookup table to
+  actions according to their apps).
 ```lua
 local bindings = {
     ['Brave Browser'] = {

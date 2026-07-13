@@ -12,8 +12,8 @@ local cache = require('cache')
 require('console').init()
 require('announcer').init()
 require('wifi').init()
-require('quit_timer').init()
 require('screenshots').init()
+require('quit_timer').init()
 
 
 -- Hot reload hammerspoon

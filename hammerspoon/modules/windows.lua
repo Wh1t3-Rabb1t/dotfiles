@@ -42,13 +42,6 @@ function M.launch_or_focus(app)
                     M.window_appeared(existing_win, win)
                 )
             end
-
-            -- M.snap_windows(
-            --     win,
-            --     M.window_appeared(existing_win, win)
-            -- )
-
-
         end
     )
 end

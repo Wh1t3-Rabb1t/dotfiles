@@ -1,16 +1,15 @@
 -- MENTAL MODEL:
--- -------------
+----------------
 -- The only windows that get stored are those at the forefront of the given
 -- screen. If a new window is focused, it will only be 'snapped' into the
 -- (left|right) container if it is not fullscreen.
-
--- NEW: If a window is fullscreen at the forefront and a new window that is
--- NOT fullscreen is focused on the same screen, fullscreen the newly focused
--- window.
+--
+-- If a window is fullscreen at the forefront of the current screen and a new
+-- window that is NOT fullscreen is focused on the same screen, fullscreen the
+-- newly focused window.
 --
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
-
 
 local M = {}
 

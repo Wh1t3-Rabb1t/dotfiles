@@ -9,6 +9,7 @@ M.supported_apps = {
 M.assets = {}
 M.lookup = {}
 
+-- Data for each screen is populated on init
 M.screens = {
     -- [id] = {
     --     frame = {

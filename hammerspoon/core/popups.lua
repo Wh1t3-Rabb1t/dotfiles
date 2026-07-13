@@ -1,6 +1,6 @@
 local M = {}
 
-local registry = require('app_registry')
+local registry = require('registry')
 local state = require('state')
 local cache = require('cache')
 

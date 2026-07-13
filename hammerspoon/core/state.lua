@@ -5,11 +5,7 @@ M.menu = {
     ignore_until = 0,
 }
 
--- supported_apps = {
---     ['Brave Browser'] = true,
---     ['kitty'] = true,
--- },
-
+-- Data for each screen is populated on init
 M.screens = {
     -- [id] = {
     --     divider = .50,  (0.20 .. 0.80)

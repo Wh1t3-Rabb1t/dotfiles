@@ -6,27 +6,64 @@
 -- https://www.hammerspoon.org/docs/hs.html
 -- https://learnhammerspoon.com/
 
-require('keymaps')
-require('console')
-require('announcer')
--- require('watchers')
+
+require('console').init()
+require('announcer').init()
+require('wifi').init()
+
+
+-- local bluetooth = require('bluetooth')
+-- bluetooth.init()
+
 
 
 local state = require('state')
 local cache = require('cache')
 local layout = require('layout')
-local menu_caching = require('menu_caching')
+local qtimer = require('quit_timer')
+local sys_menu = require('sys_menu')
+local popups = require('popups')
+
+local bk = hs.hotkey.bind
+
+-- Hot reload hammerspoon
+bk({ 'ctrl', 'shift' }, 'r', function() hs.reload() end)
+
+-- Command-Q delay on quitting an application
+bk({ 'cmd' }, 'q', qtimer.start_cmd_q, qtimer.stop_cmd_q)
+
+
+
+-- SYSTEM BINDINGS:
+---------------------------------
+-- k - Focus kitty
+-- i - Focus Brave
+--
+-- c - Copy to sys clipboard
+-- x - Cut to sys clipboard
+-- v - Paste from sys clipboard
+--
+-- (DON'T REQUIRE PRIME KB REAL ESTATE)
+-- U - Brightness (up)
+-- D - Brightness (down)
+-- P - Brightness (print)
+-- S - Apple spotlight
+-- D - Apple dock
+-- W - Toggle wifi
+-- B - Toggle bluetooth
+--
+-- + - Zoom in
+-- - - Zoom out
+--
+-- (requires confirmation)
+-- W - Close tab
+-- Q - Quit app
+
+
 
 
 -- Binding popup menu
---------------------------------------------------------------------------------
-local sys_menu = require('sys_menu')
-
--- Initialize state if necessary
-hs.hotkey.bind({ 'ctrl' }, 'f', function()
-    -- local screen = hs.screen.mainScreen()
-    -- local id = screen:id()
-
+bk({ 'ctrl' }, 'f', function()
     local function initialized(t)
         local done = false
         if type(t) == 'table' and next(t) ~= nil then
@@ -37,8 +74,8 @@ hs.hotkey.bind({ 'ctrl' }, 'f', function()
 
     -- Init layout module if required
     if not initialized(cache.screens) or
-       not initialized(state.menu) or
-       not initialized(state.screens)
+       not initialized(state.screens) or
+       not initialized(state.menu)
     then
         layout.init()
     end
@@ -47,11 +84,13 @@ hs.hotkey.bind({ 'ctrl' }, 'f', function()
     if not initialized(cache.assets) or
        not initialized(cache.lookup)
     then
-        menu_caching.init()
+        popups.init()
     end
 
     sys_menu.launch_menu()
 end)
+
+
 
 
 

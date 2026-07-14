@@ -4,8 +4,8 @@ M.assets = {}
 M.lookup = {}
 
 M.supported_apps = {
-    -- ['Brave Browser'] = true,
-    -- ['kitty'] = true,
+    -- ['Brave Browser'] = 'brave_browser',
+    -- ['kitty'] = 'kitty',
     -- ...
 }
 

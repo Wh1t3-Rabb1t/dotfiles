@@ -1,37 +1,9 @@
--- I want to work on writing an outline (roadmap) for the hammerspoon
--- modules I've been working on. You've already seen most of the code and
--- maybe my github too. This is a rough outline of the sections that I want
--- to integrate together:
---
--- state.lua:
---     Stores menu state, cached popus canvases, screen data, layouts etc.
---
--- layout.lua, shaders.lua etc:
---     These contain functions that will be bound to keys and executed via the
---     eventtap invoked by sys_menu. More modules will be added later.
---
--- sys_menu.lua:
---     Responsible for creating/caching the eventtap, popup menu canvases etc.
---     As such this module stands out from the rest as it is currently the
---     main orchestrator for the aforementioned modules but I think I want to
---     change that.
-
 local M = {}
 
 local state = require('state')
 local cache = require('cache')
 local menu = state.menu
 local assets = cache.assets
-
-
--- Close menu
---------------------------------------------------------------------------------
-function M.close_menu()
-    menu.tap_active = false
-    assets.system:delete()
-    assets.brave_browser:delete()
-    assets.tap:stop()
-end
 
 
 -- Send keystrokes (while bypassing active eventtap)
@@ -51,6 +23,63 @@ function M.send_keys(key, mod)
 end
 
 
+-- Get active app
+--------------------------------------------------------------------------------
+function M.supported_app(win)
+    local app_name = win:application():name()
+    local app = cache.supported_apps[app_name]
+
+    return app
+end
+
+
+-- Close menu
+--------------------------------------------------------------------------------
+function M.close_menu()
+    local app = M.supported_app(menu.active_win)
+
+    if app then
+        assets[app]:delete()
+    end
+
+    menu.tap_active = false
+    assets.system:delete()
+    assets.tap:stop()
+end
+
+
+-- TODO: needs heavy work
+--
+-- Calculate popup coords
+--------------------------------------------------------------------------------
+function M.calc_popup_coords(win)
+    local id = win:screen():id()
+
+    local curr_screen = state.screens[id]
+    local fullscreen = curr_screen.layout.maximized
+
+    if fullscreen then
+        -- put the app popup on the left/sytem on the right
+        local frame = cache.screens[id].frame
+    else
+       -- slot layout: put the apps popup within its window, put the system
+       -- popup in the adjacent window.
+    end
+
+    local coords = {}
+
+    if app == 'Brave Browser' then
+        coords.x = frame.x
+        coords.y = frame.y
+    else
+        coords.x = 300
+        coords.y = 400
+    end
+
+    return coords
+end
+
+
 -- Launch menu
 --------------------------------------------------------------------------------
 function M.launch_menu()
@@ -58,10 +87,21 @@ function M.launch_menu()
         return
     end
 
+    local win = hs.window.focusedWindow()
+    local active_window = M.supported_app(win)
+
+    if active_window then
+
+        -- local coords = M.calc_popup_coords(win)
+        -- assets[active_window]:topLeft(M.calc_popup_coords(win))
+
+        assets[active_window]:show(0.15)
+        menu.active_win = win
+    end
+
     menu.tap_active = true
-    assets.tap:start()
     assets.system:show(0.15)
-    assets.brave_browser:show(0.15)
+    assets.tap:start()
 end
 
 return M
@@ -73,26 +113,6 @@ return M
 
 
 
--- -- TODO: needs heavy work
--- --
--- -- Calculate popup coords
--- --------------------------------------------------------------------------------
--- function M.calc_popup_coords(app)
---     local win = hs.window.focusedWindow()
---     local frame = win:frame()
---
---     local coords = {}
---
---     if app == 'Brave Browser' then
---         coords.x = frame.x
---         coords.y = frame.y
---     else
---         coords.x = 300
---         coords.y = 400
---     end
---
---     return coords
--- end
 
 
 -- TODO: needs heavy work

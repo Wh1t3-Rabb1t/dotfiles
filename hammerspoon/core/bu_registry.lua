@@ -8,8 +8,9 @@ M.apps = {
     -------------------
     -- Brave Browser --
     -------------------
-    ['Brave Browser'] = {
+    brave_browser = {
         title    = 'brave_browser',
+        app_name = 'Brave Browser',
         bindings = {
             {
                 key    = "'",
@@ -47,8 +48,9 @@ M.apps = {
     ------------
     -- System --
     ------------
-    ['system'] = {
+    system = {
         title    = 'system',
+        app_name = 'system',
         bindings = {
             {
                 key    = 'y',
@@ -108,8 +110,9 @@ M.apps = {
         },
     },
 
-    ['kitty'] = {
+    kitty = {
         title    = 'kitty',
+        app_name = 'kitty',
         bindings = {
             {
                 key    = 'a',
@@ -163,3 +166,4 @@ M.actions = {
 }
 
 return M
+

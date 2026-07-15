@@ -1,8 +1,13 @@
 local M = {}
 
-M.watchers = {}
-M.assets = {}
 M.lookup = {}
+M.watchers = {}
+M.assets = {
+    -- [app_name] = {
+    --     popup = popup,
+    --     frame = frame,
+    -- }
+}
 
 -- Data for each screen is populated on init
 M.screens = {

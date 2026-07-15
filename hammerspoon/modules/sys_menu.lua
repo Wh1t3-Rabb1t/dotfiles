@@ -2,14 +2,12 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
-local menu = state.menu
-local assets = cache.assets
 
 
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
 function M.send_keys(key, mod)
-    menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+    state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
 
     local modifiers = mod or {}
 
@@ -23,26 +21,47 @@ function M.send_keys(key, mod)
 end
 
 
+-- Calculate popup coords
+--------------------------------------------------------------------------------
+function M.calc_coords(win)
+    local app_frame = win:frame()
+    local app_name = win:application():name()
+    local popup_frame = cache.assets[app_name].frame
+
+    return {
+        app = {
+            x = app_frame.x + 50,
+            y = app_frame.y + 50,
+        },
+        system = {
+            x = app_frame.x + 50,
+            y = app_frame.y + (popup_frame.h + 75),
+        }
+    }
+end
+
+
 -- Close menu
 --------------------------------------------------------------------------------
 function M.close_menu()
-    local win = hs.window.focusedWindow()
+    local win = state.menu.active_win
     local app_name = win:application():name()
 
     if cache.assets[app_name] then
-        assets[app_name]:delete()
+        cache.assets[app_name].popup:delete()
+        state.menu.active_win = false
     end
 
-    menu.tap_active = false
-    assets.system:delete()
-    assets.tap:stop()
+    state.menu.tap_active = false
+    cache.assets.system.popup:delete()
+    cache.assets.tap:stop()
 end
 
 
 -- Launch menu
 --------------------------------------------------------------------------------
 function M.launch_menu()
-    if menu.tap_active then
+    if state.menu.tap_active then
         return
     end
 
@@ -50,18 +69,26 @@ function M.launch_menu()
     local app_name = win:application():name()
 
     if cache.assets[app_name] then
+        local coords = M.calc_coords(win)
 
-        -- if active_window then
-        -- local coords = M.calc_popup_coords(win)
-        -- assets[active_window]:topLeft(M.calc_popup_coords(win))
+        cache.assets[app_name].popup:topLeft(coords.app)
+        cache.assets[app_name].popup:show(0.15)
+        cache.assets.system.popup:topLeft(coords.system)
+        cache.assets.system.popup:show(0.15)
 
-        assets[app_name]:show(0.15)
-        menu.active_win = win
+        state.menu.active_win = win
+    else
+        local frame = win:frame() or hs.mainScreen:fullFrame()
+
+        cache.assets.system.popup:topLeft({
+            x = frame.x + 50,
+            y = frame.y + 50,
+        })
+        cache.assets.system.popup:show(0.15)
     end
 
-    menu.tap_active = true
-    assets.system:show(0.15)
-    assets.tap:start()
+    state.menu.tap_active = true
+    cache.assets.tap:start()
 end
 
 return M
@@ -85,35 +112,3 @@ return M
 -- local frame = screen:fullFrame()
 -- x = (frame.w / 2),
 -- y = (frame.h / 2),
-
-
--- -- TODO: needs heavy work
--- --
--- -- Calculate popup coords
--- --------------------------------------------------------------------------------
--- function M.calc_popup_coords(win)
---     local id = win:screen():id()
---
---     local curr_screen = state.screens[id]
---     local fullscreen = curr_screen.layout.maximized
---
---     if fullscreen then
---         -- put the app popup on the left/sytem on the right
---         local frame = cache.screens[id].frame
---     else
---        -- slot layout: put the apps popup within its window, put the system
---        -- popup in the adjacent window.
---     end
---
---     local coords = {}
---
---     if app == 'Brave Browser' then
---         coords.x = frame.x
---         coords.y = frame.y
---     else
---         coords.x = 300
---         coords.y = 400
---     end
---
---     return coords
--- end

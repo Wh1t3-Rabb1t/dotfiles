@@ -17,7 +17,9 @@ require('quit_timer').init()
 
 
 -- Hot reload hammerspoon
-hs.hotkey.bind({ 'ctrl', 'shift' }, 'r', function() hs.reload() end)
+hs.hotkey.bind({ 'ctrl', 'shift' }, 'r', function()
+    hs.reload()
+end)
 
 
 -- SYSTEM BINDINGS:

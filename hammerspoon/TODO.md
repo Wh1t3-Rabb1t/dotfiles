@@ -23,6 +23,8 @@
 
 ## Modules:
 
+- In 'launch_menu()' need to check if focused window is fullsceen (exit fullsceen if it is).
+
 - Cache the popup dimensions (w, h).
 
 - Integrate popup (x, y) with screen state.

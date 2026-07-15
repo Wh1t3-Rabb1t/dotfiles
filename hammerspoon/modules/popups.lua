@@ -162,7 +162,10 @@ function M.init()
         local frame = M.popup_frame(content)
         local popup = M.create_popup(content, frame)
 
-        cache.assets[app_name] = popup
+        cache.assets[app_name] = {
+            popup = popup,
+            frame = frame,
+        }
     end
 
     -- Create event tap

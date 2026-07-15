@@ -4,128 +4,113 @@ local shader = require('brightness')
 local window = require('windows')
 local sys_menu = require('sys_menu')
 
-M.apps = {
-    -------------------
-    -- Brave Browser --
-    -------------------
-    ['Brave Browser'] = {
-        bindings = {
-            {
-                key    = "'",
-                action = 'focus_searchbar',
-                desc   = 'Focus searchbar',
-            },
-            {
-                key    = 't',
-                action = 'left_arrow',
-                desc   = 'Left arrow',
-            },
-            {
-                key    = 'l',
-                action = 'right_arrow',
-                desc   = 'Right arrow',
-            },
-            {
-                key    = 'h',
-                action = 'tab_left',
-                desc   = 'Tab left',
-            },
-            {
-                key    = ';',
-                action = 'tab_right',
-                desc   = 'Tab right',
-            },
-            {
-                key    = 'w',
-                action = 'tab_close',
-                desc   = 'Close tab',
-            },
-        },
-    },
-
-    ------------
-    -- System --
-    ------------
+M.bindings = {
     ['system'] = {
-        bindings = {
-            {
-                key    = 'y',
-                action = 'launch_firefox',
-                desc   = 'Launch Firefox',
-            },
-            {
-                key    = 'z',
-                action = 'brightness_up',
-                desc   = 'Brightness Up',
-            },
-            {
-                key    = 'j',
-                action = 'brightness_down',
-                desc   = 'Brightness Down',
-            },
-            {
-                key    = 'p',
-                action = 'brightness_print',
-                desc   = 'Print Brightness',
-            },
-            {
-                key    = 'l',
-                action = 'resize_split_right',
-                desc   = 'Re-size splits right',
-            },
-            {
-                key    = 't',
-                action = 'resize_split_left',
-                desc   = 'Re-size splits left',
-            },
-            {
-                key    = 'm',
-                action = 'maximize_window',
-                desc   = 'Maximize window',
-            },
-            {
-                key    = 's',
-                action = 'swap_splits',
-                desc   = 'Swap split positions',
-            },
-            {
-                key    = 'k',
-                action = 'launch_kitty',
-                desc   = 'Launch kitty',
-            },
-            {
-                key    = 'b',
-                action = 'launch_brave',
-                desc   = 'Launch Brave',
-            },
-            {
-                key    = 'escape',
-                action = 'close_menu',
-                desc   = 'Cancel',
-            },
+        {
+            key    = 'y',
+            action = 'launch_firefox',
+            desc   = 'Launch Firefox',
+        },
+        {
+            key    = 'z',
+            action = 'brightness_up',
+            desc   = 'Brightness Up',
+        },
+        {
+            key    = 'j',
+            action = 'brightness_down',
+            desc   = 'Brightness Down',
+        },
+        {
+            key    = 'p',
+            action = 'brightness_print',
+            desc   = 'Print Brightness',
+        },
+        {
+            key    = 'l',
+            action = 'resize_split_right',
+            desc   = 'Re-size splits right',
+        },
+        {
+            key    = 't',
+            action = 'resize_split_left',
+            desc   = 'Re-size splits left',
+        },
+        {
+            key    = 'm',
+            action = 'maximize_window',
+            desc   = 'Maximize window',
+        },
+        {
+            key    = 's',
+            action = 'swap_splits',
+            desc   = 'Swap split positions',
+        },
+        {
+            key    = 'k',
+            action = 'launch_kitty',
+            desc   = 'Launch kitty',
+        },
+        {
+            key    = 'b',
+            action = 'launch_brave',
+            desc   = 'Launch Brave',
+        },
+        {
+            key    = 'escape',
+            action = 'close_menu',
+            desc   = 'Cancel',
         },
     },
 
     ['kitty'] = {
-        bindings = {
-            {
-                key    = 'a',
-                action = 'kitty_open_split',
-                desc   = 'New split',
-            },
-            {
-                key    = 'q',
-                action = 'kitty_close_split',
-                desc   = 'Close split',
-            },
+        {
+            key    = 'a',
+            action = 'kitty_open_split',
+            desc   = 'New split',
+        },
+        {
+            key    = 'q',
+            action = 'kitty_close_split',
+            desc   = 'Close split',
+        },
+    },
+
+    ['Brave Browser'] = {
+        {
+            key    = "'",
+            action = 'focus_searchbar',
+            desc   = 'Focus searchbar',
+        },
+        {
+            key    = 't',
+            action = 'left_arrow',
+            desc   = 'Left arrow',
+        },
+        {
+            key    = 'l',
+            action = 'right_arrow',
+            desc   = 'Right arrow',
+        },
+        {
+            key    = 'h',
+            action = 'tab_left',
+            desc   = 'Tab left',
+        },
+        {
+            key    = ';',
+            action = 'tab_right',
+            desc   = 'Tab right',
+        },
+        {
+            key    = 'w',
+            action = 'tab_close',
+            desc   = 'Close tab',
         },
     },
 }
 
 M.actions = {
-    ------------
-    -- System --
-    ------------
     ['system'] = {
         brightness_up      = function() shader.adjust_brightness('up') end,
         brightness_down    = function() shader.adjust_brightness('down') end,
@@ -145,9 +130,6 @@ M.actions = {
         kitty_close_split = function() sys_menu.close_menu() end,
     },
 
-    -------------------
-    -- Brave Browser --
-    -------------------
     ['Brave Browser'] = {
         focus_searchbar = function() sys_menu.send_keys('l', 'cmd') M.close_menu() end,
         left_arrow      = function() sys_menu.send_keys('left') end,

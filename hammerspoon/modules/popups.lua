@@ -146,15 +146,13 @@ end
 --------------------------------------------------------------------------------
 function M.init()
     -- Cache bindings/canvases
-    for app_name, app in pairs(registry.apps) do
-        local bindings = app.bindings
-
-        -- Pack lookup table
+    for app, bindings in pairs(registry.bindings) do
         for _, binding in ipairs(bindings) do
             local key = binding.key
             local action = binding.action
 
-            cache.lookup[key] = registry.actions[app_name][action]
+            -- Pack lookup table
+            cache.lookup[key] = registry.actions[app][action]
         end
 
         -- Generate canvases
@@ -162,7 +160,7 @@ function M.init()
         local frame = M.popup_frame(content)
         local popup = M.create_popup(content, frame)
 
-        cache.assets[app_name] = {
+        cache.assets[app] = {
             popup = popup,
             frame = frame,
         }

@@ -1,5 +1,7 @@
 local M = {}
 
+local cache = require('cache')
+
 -- Toggle wifi on/off on screen lock/unlock
 --------------------------------------------------------------------------------
 function M.toggle_wifi(event)
@@ -13,8 +15,8 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    local wifi_watcher = hs.caffeinate.watcher.new(M.toggle_wifi)
-    wifi_watcher:start()
+    cache.watchers.wifi = hs.caffeinate.watcher.new(M.toggle_wifi)
+    cache.watchers.wifi:start()
 end
 
 return M

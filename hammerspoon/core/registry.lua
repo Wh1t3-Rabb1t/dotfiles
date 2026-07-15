@@ -9,7 +9,6 @@ M.apps = {
     -- Brave Browser --
     -------------------
     ['Brave Browser'] = {
-        title    = 'brave_browser',
         bindings = {
             {
                 key    = "'",
@@ -48,7 +47,6 @@ M.apps = {
     -- System --
     ------------
     ['system'] = {
-        title    = 'system',
         bindings = {
             {
                 key    = 'y',
@@ -109,7 +107,6 @@ M.apps = {
     },
 
     ['kitty'] = {
-        title    = 'kitty',
         bindings = {
             {
                 key    = 'a',
@@ -130,7 +127,7 @@ M.actions = {
     ------------
     -- System --
     ------------
-    system = {
+    ['system'] = {
         brightness_up      = function() shader.adjust_brightness('up') end,
         brightness_down    = function() shader.adjust_brightness('down') end,
         brightness_print   = function() shader.print_values() end,
@@ -144,7 +141,7 @@ M.actions = {
         close_menu         = function() sys_menu.close_menu() end,
     },
 
-    kitty = {
+    ['kitty'] = {
         kitty_open_split  = function() window.launch_or_focus('Firefox') end,
         kitty_close_split = function() sys_menu.close_menu() end,
     },
@@ -152,7 +149,7 @@ M.actions = {
     -------------------
     -- Brave Browser --
     -------------------
-    brave_browser = {
+    ['Brave Browser'] = {
         focus_searchbar = function() sys_menu.send_keys('l', 'cmd') M.close_menu() end,
         left_arrow      = function() sys_menu.send_keys('left') end,
         right_arrow     = function() sys_menu.send_keys('right') end,

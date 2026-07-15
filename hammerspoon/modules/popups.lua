@@ -68,15 +68,8 @@ end
 
 -- Create popup
 --------------------------------------------------------------------------------
-function M.create_popup(text)
-    local size = hs.drawing.getTextDrawingSize(text)
-    local canvas_width = math.max(size.w)
-    local canvas_height = math.max(size.h)
-
-    local popup = hs.canvas.new({
-        w = (canvas_width + 10),
-        h = (canvas_height + 10),
-    })
+function M.create_popup(content, frame)
+    local popup = hs.canvas.new(frame)
 
     popup:appendElements(
         {
@@ -91,7 +84,7 @@ function M.create_popup(text)
         },
         {
             type = 'text',
-            text = text,
+            text = content,
             frame = {
                 x = 5,
                 y = 5,
@@ -103,6 +96,23 @@ function M.create_popup(text)
 
     return popup
 end
+
+
+-- Get the width / height of the popup window
+--------------------------------------------------------------------------------
+function M.popup_frame(text)
+    local size = hs.drawing.getTextDrawingSize(text)
+    local canvas_width = math.max(size.w)
+    local canvas_height = math.max(size.h)
+
+    local frame = {
+        w = (canvas_width + 10),
+        h = (canvas_height + 10),
+    }
+
+    return frame
+end
+
 
 
 -- Create event tap
@@ -136,26 +146,23 @@ end
 --------------------------------------------------------------------------------
 function M.init()
     -- Cache bindings/canvases
-    for name, app in pairs(registry.apps) do
+    for app_name, app in pairs(registry.apps) do
         local bindings = app.bindings
-        local title = app.title
-
-        -- Populate supported apps list
-        cache.supported_apps[name] = title
 
         -- Pack lookup table
         for _, binding in ipairs(bindings) do
             local key = binding.key
             local action = binding.action
 
-            cache.lookup[key] = registry.actions[title][action]
+            cache.lookup[key] = registry.actions[app_name][action]
         end
 
         -- Generate canvases
         local content = M.create_menu_text(bindings)
-        local popup = M.create_popup(content)
+        local frame = M.popup_frame(content)
+        local popup = M.create_popup(content, frame)
 
-        cache.assets[title] = popup
+        cache.assets[app_name] = popup
     end
 
     -- Create event tap

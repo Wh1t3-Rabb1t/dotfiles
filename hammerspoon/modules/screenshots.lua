@@ -1,11 +1,14 @@
 local M = {}
 
-local screenshot_dir = os.getenv('HOME') .. '/Desktop/screenshots/'
+local cache = require('cache')
 
 local function sanitize_name(path)
     return path:gsub("%s+", "-")
 end
 
+
+-- Move screenshots to target directory
+--------------------------------------------------------------------------------
 function M.move_screenshots(files)
     for _, file in ipairs(files) do
         if file:match("Screenshot") then
@@ -13,7 +16,9 @@ function M.move_screenshots(files)
                 local new_file = sanitize_name(file)
 
                 if os.rename(file, new_file) then
+                    local screenshot_dir = os.getenv('HOME') .. '/Desktop/screenshots/'
                     local destination = screenshot_dir .. new_file:match("([^/]+)$")
+
                     os.rename(new_file, destination)
                 end
             end)
@@ -21,13 +26,16 @@ function M.move_screenshots(files)
     end
 end
 
+
+-- Init
+--------------------------------------------------------------------------------
 function M.init()
-    M.watcher = hs.pathwatcher.new(
+    cache.watchers.screenshots = hs.pathwatcher.new(
         os.getenv('HOME') .. '/Desktop/',
         M.move_screenshots
     )
 
-    M.watcher:start()
+    cache.watchers.screenshots:start()
 end
 
 return M

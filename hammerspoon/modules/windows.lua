@@ -36,7 +36,7 @@ function M.launch_or_focus(app)
                 return
             end
 
-            if cache.supported_apps[app_name] then
+            if cache.assets[app_name] then
                 M.snap_windows(
                     win,
                     M.window_appeared(existing_win, win)

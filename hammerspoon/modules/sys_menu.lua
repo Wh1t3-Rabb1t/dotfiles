@@ -23,60 +23,19 @@ function M.send_keys(key, mod)
 end
 
 
--- Get active app
---------------------------------------------------------------------------------
-function M.supported_app(win)
-    local app_name = win:application():name()
-    local app = cache.supported_apps[app_name]
-
-    return app
-end
-
-
 -- Close menu
 --------------------------------------------------------------------------------
 function M.close_menu()
-    local app = M.supported_app(menu.active_win)
+    local win = hs.window.focusedWindow()
+    local app_name = win:application():name()
 
-    if app then
-        assets[app]:delete()
+    if cache.assets[app_name] then
+        assets[app_name]:delete()
     end
 
     menu.tap_active = false
     assets.system:delete()
     assets.tap:stop()
-end
-
-
--- TODO: needs heavy work
---
--- Calculate popup coords
---------------------------------------------------------------------------------
-function M.calc_popup_coords(win)
-    local id = win:screen():id()
-
-    local curr_screen = state.screens[id]
-    local fullscreen = curr_screen.layout.maximized
-
-    if fullscreen then
-        -- put the app popup on the left/sytem on the right
-        local frame = cache.screens[id].frame
-    else
-       -- slot layout: put the apps popup within its window, put the system
-       -- popup in the adjacent window.
-    end
-
-    local coords = {}
-
-    if app == 'Brave Browser' then
-        coords.x = frame.x
-        coords.y = frame.y
-    else
-        coords.x = 300
-        coords.y = 400
-    end
-
-    return coords
 end
 
 
@@ -88,14 +47,15 @@ function M.launch_menu()
     end
 
     local win = hs.window.focusedWindow()
-    local active_window = M.supported_app(win)
+    local app_name = win:application():name()
 
-    if active_window then
+    if cache.assets[app_name] then
 
+        -- if active_window then
         -- local coords = M.calc_popup_coords(win)
         -- assets[active_window]:topLeft(M.calc_popup_coords(win))
 
-        assets[active_window]:show(0.15)
+        assets[app_name]:show(0.15)
         menu.active_win = win
     end
 
@@ -125,3 +85,35 @@ return M
 -- local frame = screen:fullFrame()
 -- x = (frame.w / 2),
 -- y = (frame.h / 2),
+
+
+-- -- TODO: needs heavy work
+-- --
+-- -- Calculate popup coords
+-- --------------------------------------------------------------------------------
+-- function M.calc_popup_coords(win)
+--     local id = win:screen():id()
+--
+--     local curr_screen = state.screens[id]
+--     local fullscreen = curr_screen.layout.maximized
+--
+--     if fullscreen then
+--         -- put the app popup on the left/sytem on the right
+--         local frame = cache.screens[id].frame
+--     else
+--        -- slot layout: put the apps popup within its window, put the system
+--        -- popup in the adjacent window.
+--     end
+--
+--     local coords = {}
+--
+--     if app == 'Brave Browser' then
+--         coords.x = frame.x
+--         coords.y = frame.y
+--     else
+--         coords.x = 300
+--         coords.y = 400
+--     end
+--
+--     return coords
+-- end

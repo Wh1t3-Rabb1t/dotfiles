@@ -1,13 +1,8 @@
 local M = {}
 
+M.watchers = {}
 M.assets = {}
 M.lookup = {}
-
-M.supported_apps = {
-    -- ['Brave Browser'] = 'brave_browser',
-    -- ['kitty'] = 'kitty',
-    -- ...
-}
 
 -- Data for each screen is populated on init
 M.screens = {

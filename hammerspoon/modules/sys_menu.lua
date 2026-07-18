@@ -58,14 +58,9 @@ function M.calc_popup_coords(win)
 end
 
 
--- Launch menu
+-- Show popups
 --------------------------------------------------------------------------------
-function M.launch_menu()
-    if state.menu.tap_active then
-        return
-    end
-
-    local win = hs.window.focusedWindow()
+function M.show_popups(win)
     local app_name = win:application():name()
 
     if cache.assets[app_name] then
@@ -75,8 +70,6 @@ function M.launch_menu()
         cache.assets[app_name].popup:show(0.15)
         cache.assets.system.popup:topLeft(coords.system)
         cache.assets.system.popup:show(0.15)
-
-        state.menu.active_win = win
     else
         local frame = win:frame() or hs.mainScreen:fullFrame()
 
@@ -86,12 +79,49 @@ function M.launch_menu()
         })
         cache.assets.system.popup:show(0.15)
     end
+end
 
+
+-- Launch menu
+--------------------------------------------------------------------------------
+function M.launch_menu()
+    if state.menu.tap_active then
+        return
+    end
+
+    local win = hs.window.focusedWindow()
+
+    M.show_popups(win)
+
+    state.menu.active_win = win
     state.menu.tap_active = true
     cache.assets.tap:start()
 end
 
 return M
+
+
+
+
+-- local app_name = win:application():name()
+-- if cache.assets[app_name] then
+--     local coords = M.calc_popup_coords(win)
+--
+--     cache.assets[app_name].popup:topLeft(coords.app)
+--     cache.assets[app_name].popup:show(0.15)
+--     cache.assets.system.popup:topLeft(coords.system)
+--     cache.assets.system.popup:show(0.15)
+--
+--     state.menu.active_win = win
+-- else
+--     local frame = win:frame() or hs.mainScreen:fullFrame()
+--
+--     cache.assets.system.popup:topLeft({
+--         x = frame.x + 50,
+--         y = frame.y + 50,
+--     })
+--     cache.assets.system.popup:show(0.15)
+-- end
 
 
 

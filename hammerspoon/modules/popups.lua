@@ -131,7 +131,7 @@ end
 
 -- Get the width / height of the popup window
 --------------------------------------------------------------------------------
-function M.popup_frame(text)
+local function popup_frame(text)
     local size = hs.drawing.getTextDrawingSize(text)
     local canvas_width = math.max(size.w)
     local canvas_height = math.max(size.h)
@@ -163,7 +163,7 @@ function M.init()
 
         -- Generate canvases
         local content = create_menu_text(bindings)
-        local frame = M.popup_frame(content)
+        local frame = popup_frame(content)
         local popup = create_popup(content, frame)
 
         cache.assets[app] = {

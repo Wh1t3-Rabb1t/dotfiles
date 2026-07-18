@@ -21,6 +21,8 @@
 
 ## Modules:
 
+- Maybe move logic in 'windows.init()' to caching.lua (screen data caching).
+
 - In 'launch_menu()' need to check if focused window is fullsceen (exit
   fullsceen if it is).
 

@@ -99,7 +99,7 @@ hs.hotkey.bind({ 'ctrl' }, 'f', function()
     if not initialized(cache.assets) or
        not initialized(cache.lookup)
     then
-        require('popups').init()
+        require('caching').init()
     end
 
     sys_menu.launch_menu()

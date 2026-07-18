@@ -7,7 +7,7 @@ local cache = require('cache')
 
 -- Format rgb
 --------------------------------------------------------------------------------
-function M.rgb(r, g, b, opacity)
+local function rgb(r, g, b, opacity)
     opacity = opacity or 1.0
 
     local color_table = {
@@ -23,7 +23,7 @@ end
 
 -- Format menu contents
 --------------------------------------------------------------------------------
-function M.create_menu_text(binding_tbl)
+local function create_menu_text(binding_tbl)
     local len = 0
 
     -- Find longest key
@@ -39,11 +39,11 @@ function M.create_menu_text(binding_tbl)
     }
     local key_style = {
         font = font_style,
-        color = M.rgb(0, 255, 0),
+        color = rgb(0, 255, 0),
     }
     local desc_style = {
         font = font_style,
-        color = M.rgb(255, 255, 255),
+        color = rgb(255, 255, 255),
     }
 
     local styledtext = require('hs.styledtext')
@@ -68,15 +68,15 @@ end
 
 -- Create popup
 --------------------------------------------------------------------------------
-function M.create_popup(content, frame)
+local function create_popup(content, frame)
     local popup = hs.canvas.new(frame)
 
     popup:appendElements(
         {
             type = 'rectangle',
             action = 'strokeAndFill',
-            fillColor = M.rgb(1, 2, 3),          -- Black
-            strokeColor = M.rgb(255, 255, 255),  -- White
+            fillColor = rgb(1, 2, 3),          -- Black
+            strokeColor = rgb(255, 255, 255),  -- White
             roundedRectRadii = {
                 xRadius = 8,
                 yRadius = 8,
@@ -98,6 +98,37 @@ function M.create_popup(content, frame)
 end
 
 
+-- Create event tap
+--------------------------------------------------------------------------------
+local function create_tap()
+    local e = hs.eventtap
+
+    local tap = e.new({ e.event.types.keyDown }, function(event)
+        if hs.timer.secondsSinceEpoch() < state.menu.ignore_until then
+            state.menu.ignore_until = 0
+
+            return false
+        end
+
+        local keycode = event:getKeyCode()
+        local key = hs.keycodes.map[keycode]
+        local focused_win = hs.window.focusedWindow()
+        local app_name = focused_win:application():name()
+
+        -- Lookup system and/or app specific actions
+        local bound_action = cache.lookup.system[key] or cache.lookup[app_name][key]
+
+        if bound_action then
+            bound_action()
+        end
+
+        return true
+    end)
+
+    return tap
+end
+
+
 -- Get the width / height of the popup window
 --------------------------------------------------------------------------------
 function M.popup_frame(text)
@@ -114,51 +145,26 @@ function M.popup_frame(text)
 end
 
 
-
--- Create event tap
---------------------------------------------------------------------------------
-function M.create_tap()
-    local e = hs.eventtap
-
-    local tap = e.new({ e.event.types.keyDown }, function(event)
-        if hs.timer.secondsSinceEpoch() < state.menu.ignore_until then
-            state.menu.ignore_until = 0
-
-            return false
-        end
-
-        local keycode = event:getKeyCode()
-        local key = hs.keycodes.map[keycode]
-        local bound_action = cache.lookup[key]
-
-        if bound_action then
-            bound_action()
-        end
-
-        return true
-    end)
-
-    return tap
-end
-
-
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
     -- Cache bindings/canvases
     for app, bindings in pairs(registry.bindings) do
+        -- Init app specific lookup table
+        cache.lookup[app] = {}
+
         for _, binding in ipairs(bindings) do
             local key = binding.key
             local action = binding.action
 
             -- Pack lookup table
-            cache.lookup[key] = registry.actions[app][action]
+            cache.lookup[app][key] = registry.actions[app][action]
         end
 
         -- Generate canvases
-        local content = M.create_menu_text(bindings)
+        local content = create_menu_text(bindings)
         local frame = M.popup_frame(content)
-        local popup = M.create_popup(content, frame)
+        local popup = create_popup(content, frame)
 
         cache.assets[app] = {
             popup = popup,
@@ -167,7 +173,7 @@ function M.init()
     end
 
     -- Create event tap
-    cache.assets.tap = M.create_tap()
+    cache.assets.tap = create_tap()
 end
 
 return M

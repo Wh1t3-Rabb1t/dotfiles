@@ -11,8 +11,6 @@
 
 ## BUGS:
 
-- There is some bug when using uppercase letters as bindings in sys_menu.
-
 - When unplugging or plugging in a new display, it breaks the coords of the
   shader that was on the original display.
 
@@ -23,13 +21,15 @@
 
 ## Modules:
 
-- In 'launch_menu()' need to check if focused window is fullsceen (exit fullsceen if it is).
+- In 'launch_menu()' need to check if focused window is fullsceen (exit
+  fullsceen if it is).
 
 - Cache the popup dimensions (w, h).
 
 - Integrate popup (x, y) with screen state.
 
-- Incorporate key sequences when in sys_menu modal mode. (i.e. <Space>lf = launch firefox)
+- Incorporate key sequences when in sys_menu modal mode. (i.e. <Space>lf =
+  launch firefox)
 
 - Currently all sys_menu fns have been changed from local to part of the
   module object. (change select functions back to local wherever possible).
@@ -48,12 +48,6 @@
 - Key repeating when moving the divider.
 
 - Implement move window to adjacent screen fn.
-
-- Move to sys_menu popup (if not screen_id then init):
-```lua
-local layout = require('layout')
-layout.init()
-```
 
 - Determine if 'layout.init' should be called on init, or only
   when a new window is launched / focused.

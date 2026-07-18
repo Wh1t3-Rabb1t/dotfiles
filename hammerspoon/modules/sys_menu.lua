@@ -21,26 +21,6 @@ function M.send_keys(key, mod)
 end
 
 
--- Calculate popup coords
---------------------------------------------------------------------------------
-function M.calc_coords(win)
-    local app_frame = win:frame()
-    local app_name = win:application():name()
-    local popup_frame = cache.assets[app_name].frame
-
-    return {
-        app = {
-            x = app_frame.x + 50,
-            y = app_frame.y + 50,
-        },
-        system = {
-            x = app_frame.x + 50,
-            y = app_frame.y + (popup_frame.h + 75),
-        }
-    }
-end
-
-
 -- Close menu
 --------------------------------------------------------------------------------
 function M.close_menu()
@@ -58,6 +38,26 @@ function M.close_menu()
 end
 
 
+-- Calculate popup coords
+--------------------------------------------------------------------------------
+function M.calc_popup_coords(win)
+    local app_frame = win:frame()
+    local app_name = win:application():name()
+    local popup_frame = cache.assets[app_name].frame
+
+    return {
+        app = {
+            x = app_frame.x + 50,
+            y = app_frame.y + 50,
+        },
+        system = {
+            x = app_frame.x + 50,
+            y = app_frame.y + (popup_frame.h + 75),
+        }
+    }
+end
+
+
 -- Launch menu
 --------------------------------------------------------------------------------
 function M.launch_menu()
@@ -69,7 +69,7 @@ function M.launch_menu()
     local app_name = win:application():name()
 
     if cache.assets[app_name] then
-        local coords = M.calc_coords(win)
+        local coords = M.calc_popup_coords(win)
 
         cache.assets[app_name].popup:topLeft(coords.app)
         cache.assets[app_name].popup:show(0.15)
@@ -92,6 +92,7 @@ function M.launch_menu()
 end
 
 return M
+
 
 
 -- local app = hs.application.frontmostApplication():name()

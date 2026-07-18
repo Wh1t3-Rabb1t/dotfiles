@@ -22,7 +22,7 @@ hs.hotkey.bind({ 'ctrl', 'shift' }, 'r', function()
 end)
 
 
--- SYSTEM BINDINGS:
+-- SYSTEM BINDINGS
 ---------------------------------
 -- k - Focus kitty
 -- i - Focus Brave
@@ -46,6 +46,33 @@ end)
 -- (requires confirmation)
 -- W - Close tab
 -- Q - Quit app
+
+
+
+
+-- Organize by caching vs runtime functions:
+--------------------------------------------
+-- WINDOWS:
+-- move_window_divider()
+-- launch_or_focus()
+-- swap_splits()
+-- maximize_window()
+-- close_menu()
+-- send_keys()
+--
+-- SHADERS:
+-- adjust_brightness()
+-- print_values()
+--
+--
+-- calc_popup_coords()
+-- window_appeared()
+-- window_side()
+-- slot_frames()
+-- snap_windows()
+-- is_window_fullscreen()
+-- usable_screen_frame()
+-- create_overlay()
 
 
 local sys_menu = require('sys_menu')

@@ -31,6 +31,13 @@ function M.adjust_brightness(direction)
     state.screens[id].brightness = brightness
     cache.screens[id].overlay[1].fillColor.alpha = 1 - brightness / 100
 
+    -- Show the overlay if not already 'visible'
+    local shader = cache.screens[id].overlay
+
+    if not shader:isShowing() then
+        shader:show()
+    end
+
     -- Display brightness value in popup
     hs.alert.show('Brightness: ' .. brightness,
         alert_fmt,  -- Format table

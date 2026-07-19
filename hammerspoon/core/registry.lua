@@ -38,8 +38,8 @@ M.bindings = {
         },
         {
             key    = 'm',
-            action = 'maximize_window',
-            desc   = 'Maximize window',
+            action = 'maximize_split',
+            desc   = 'Maximize focused split',
         },
         {
             key    = 's',
@@ -115,9 +115,9 @@ M.actions = {
         brightness_up      = function() shader.adjust_brightness('up') end,
         brightness_down    = function() shader.adjust_brightness('down') end,
         brightness_print   = function() shader.print_values() end,
-        resize_split_left  = function() window.move_window_divider('left') end,
-        resize_split_right = function() window.move_window_divider('right') end,
-        maximize_window    = function() window.maximize_window() end,
+        resize_split_left  = function() window.resize_splits('left') end,
+        resize_split_right = function() window.resize_splits('right') end,
+        maximize_split     = function() window.maximize_split() end,
         swap_splits        = function() window.swap_splits() end,
         launch_kitty       = function() window.launch_or_focus('kitty') end,
         launch_brave       = function() window.launch_or_focus('Brave Browser') end,

@@ -17,9 +17,35 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- Determine whether or not a winodw is maximized
+--------------------------------------------------------------------------------
+local function is_window_fullscreen(win)
+    local function frames_equal(a, b, tolerance)
+        -- MacOS occasionally returns coords off by one pixel due to scaling,
+        -- retina displays etc.
+        tolerance = tolerance or 1
+
+        return math.abs(a.x - b.x) <= tolerance
+           and math.abs(a.y - b.y) <= tolerance
+           and math.abs(a.w - b.w) <= tolerance
+           and math.abs(a.h - b.h) <= tolerance
+    end
+
+    local id = win:screen():id()
+    local cached_frame = cache.screens[id].frame
+
+    local frames = frames_equal(
+        win:frame(),
+        cached_frame
+    )
+
+    return frames
+end
+
+
 -- Is window aligned to the left or right of the screen
 --------------------------------------------------------------------------------
-local function window_side(win)
+local function get_window_side(win)
     local screen = win:screen()
 
     if not screen then
@@ -41,9 +67,59 @@ local function window_side(win)
 end
 
 
+-- Determine newly launched/focused windows layout.
+--
+-- If a window is fullscreen at the forefront and a new window that is NOT
+-- fullscreen is focused on the same screen, fullscreen the new window.
+--
+-- The 'left' and 'right' slots are retained until explicitly overwritten
+-- (i.e. they are unaffected by the 'fullscreen' slot).
+--------------------------------------------------------------------------------
+local function get_window_layout(existing_win, win)
+    local id = win:screen():id()
+    local layout = state.screens[id].layout
+
+    -- Set new window to the fullscreen slot if it fills the usable screen space
+    if is_window_fullscreen(win) then
+        layout.maximized = win
+
+        return 'maximized'
+    end
+
+    -- Already fullscreen; replace existing fullscreen window with the new one
+    if layout.maximized then
+        if layout.right == win then
+            layout.left = layout.maximized
+        elseif layout.left == win then
+            layout.right = layout.maximized
+        end
+
+        layout.maximized = win
+
+        return 'maximized'
+    end
+
+    -- Normal split mode
+    if layout.maximized then
+        layout.maximized = false
+    end
+
+    local side = get_window_side(win)
+    local opposite = (side == 'left') and 'right' or 'left'
+
+    if get_window_side(existing_win) == side then
+        layout[opposite] = win
+    else
+        layout[side] = win
+    end
+
+    return 'split'
+end
+
+
 -- Calculate left/right slot frames
 --------------------------------------------------------------------------------
-local function slot_frames(id, border)
+local function get_split_coords(id, border)
     border = border or 8
 
     local frame = cache.screens[id].frame
@@ -74,7 +150,7 @@ end
 local function snap_windows(win, target_layout)
     local id = win:screen():id()
     local layout = state.screens[id].layout
-    local frames = slot_frames(id)
+    local frames = get_split_coords(id)
 
     if target_layout == 'maximized' then
         layout.maximized:setFrame(cache.screens[id].frame, 0.02)
@@ -86,82 +162,6 @@ local function snap_windows(win, target_layout)
             layout.right:setFrame(frames.right, 0.02)
         end
     end
-end
-
-
--- Determine whether or not a winodw is maximized
---------------------------------------------------------------------------------
-local function is_window_fullscreen(win)
-    local function frames_equal(a, b, tolerance)
-        -- MacOS occasionally returns coords off by one pixel due to scaling,
-        -- retina displays etc.
-        tolerance = tolerance or 1
-
-        return math.abs(a.x - b.x) <= tolerance
-           and math.abs(a.y - b.y) <= tolerance
-           and math.abs(a.w - b.w) <= tolerance
-           and math.abs(a.h - b.h) <= tolerance
-    end
-
-    local id = win:screen():id()
-    local cached_frame = cache.screens[id].frame
-
-    local frames = frames_equal(
-        win:frame(),
-        cached_frame
-    )
-
-    return frames
-end
-
-
--- Determine newly launched/focused windows layout.
---
--- If a window is fullscreen at the forefront and a new window that is NOT
--- fullscreen is focused on the same screen, fullscreen the new window.
---
--- The 'left' and 'right' slots are retained until explicitly overwritten
--- (i.e. they are unaffected by the 'fullscreen' slot).
---------------------------------------------------------------------------------
-local function window_appeared(existing_win, win)
-    local id = win:screen():id()
-    local layout = state.screens[id].layout
-
-    -- Set new window to the fullscreen slot if it fills the usable screen space
-    if is_window_fullscreen(win) then
-        layout.maximized = win
-
-        return 'maximized'
-    end
-
-    -- Already fullscreen; replace existing fullscreen window with the new one
-    if layout.maximized then
-        if layout.right == win then
-            layout.left = layout.maximized
-        elseif layout.left == win then
-            layout.right = layout.maximized
-        end
-
-        layout.maximized = win
-
-        return 'maximized'
-    end
-
-    -- Normal split mode
-    if layout.maximized then
-        layout.maximized = false
-    end
-
-    local side = window_side(win)
-    local opposite = (side == 'left') and 'right' or 'left'
-
-    if window_side(existing_win) == side then
-        layout[opposite] = win
-    else
-        layout[side] = win
-    end
-
-    return 'split'
 end
 
 
@@ -189,7 +189,7 @@ function M.launch_or_focus(app)
 
                 snap_windows(
                     win,
-                    window_appeared(
+                    get_window_layout(
                         existing_win,
                         win
                     )
@@ -218,7 +218,7 @@ end
 
 -- Re-align window divider
 --------------------------------------------------------------------------------
-function M.move_window_divider(direction, step)
+function M.resize_splits(direction, step)
     step = step or 0.01
 
     local win = hs.window.focusedWindow()
@@ -260,7 +260,7 @@ end
 
 -- Maximize focused window
 --------------------------------------------------------------------------------
-function M.maximize_window(win)
+function M.maximize_split(win)
     win = win or hs.window.focusedWindow()
 
     local id = win:screen():id()
@@ -270,30 +270,6 @@ function M.maximize_window(win)
     layout.maximized = win
     layout.maximized:setFrame(frame)
 end
-
-
--- -- Init
--- --------------------------------------------------------------------------------
--- function M.init()
---     for _, screen in ipairs(hs.screen.allScreens()) do
---         local id = screen:id()
---
---         cache.screens[id] = {
---             overlay = create_overlay(screen),
---             frame = usable_screen_frame(screen),
---         }
---
---         state.screens[id] = {
---             brightness = 100,
---             divider = 0.35,
---             layout = {
---                 maximized = false,
---                 left = false,
---                 right = false,
---             }
---         }
---     end
--- end
 
 return M
 
@@ -338,15 +314,6 @@ return M
 --         end
 --     end
 -- end
-
--- log_screen_slots('launch_or_focus' .. '(' .. app .. ')')
--- log_screen_slots('window_appeared' .. '(' .. win:application():name() .. ')')
--- log_screen_slots('snap_windows' .. '(' .. win:application():name() .. ', ' .. target_layout .. ')')
--- log_screen_slots('swap_splits' .. '(' .. win:application():name() .. ')')
--- log_screen_slots('move_window_divider' .. '(' .. direction .. ')')
--- log_screen_slots('maximize_window()')
--- log_screen_slots('slot_frames(screen_obj)')
--- log_screen_slots('window_side' .. '(' .. win:application():name() .. ')')
 
 
 -- --------------------------------------------------------------------------------

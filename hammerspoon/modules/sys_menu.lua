@@ -45,7 +45,7 @@ function M.calc_popup_coords(win)
     local app_name = win:application():name()
     local popup_frame = cache.assets[app_name].frame
 
-    return {
+    local coords = {
         app = {
             x = app_frame.x + 50,
             y = app_frame.y + 50,
@@ -55,12 +55,14 @@ function M.calc_popup_coords(win)
             y = app_frame.y + (popup_frame.h + 75),
         }
     }
+
+    return coords
 end
 
 
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show_popups(win)
+local function show_popups(win)
     local app_name = win:application():name()
 
     if cache.assets[app_name] then
@@ -91,7 +93,7 @@ function M.launch_menu()
 
     local win = hs.window.focusedWindow()
 
-    M.show_popups(win)
+    show_popups(win)
 
     state.menu.active_win = win
     state.menu.tap_active = true

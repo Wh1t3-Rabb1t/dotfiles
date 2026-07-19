@@ -6,9 +6,6 @@
 -- https://www.hammerspoon.org/docs/hs.html
 -- https://learnhammerspoon.com/
 
-local state = require('state')
-local cache = require('cache')
-
 require('console').init()
 require('announcer').init()
 require('wifi').init()
@@ -19,6 +16,12 @@ require('quit_timer').init()
 -- Hot reload hammerspoon
 hs.hotkey.bind({ 'ctrl', 'shift' }, 'r', function()
     hs.reload()
+end)
+
+-- Binding popup menu
+hs.hotkey.bind({ 'ctrl' }, 'f', function()
+    require('caching').init()
+    require('sys_menu').launch_menu()
 end)
 
 
@@ -53,31 +56,31 @@ end)
 -- Organize by caching vs runtime functions:
 --------------------------------------------
 -- WINDOWS:
--- move_window_divider()
--- launch_or_focus()
--- swap_splits()
--- maximize_window()
--- close_menu()
--- send_keys()
+--   resize_splits()
+--   launch_or_focus()
+--   swap_splits()
+--   maximize_window()
+--
+--   -- LOCALS --
+--   get_window_side()
+--   get_split_coords
+--   snap_windows()
+--   is_window_fullscreen()
+--   get_window_layout()
+--
+--
+-- SYS_MENU:
+--   calc_popup_coords()
+--   close_menu()
+--   send_keys()
+--   show_popups()
 --
 -- SHADERS:
 -- adjust_brightness()
 -- print_values()
 --
 --
--- calc_popup_coords()
--- window_appeared()
--- window_side()
+--
 -- slot_frames()
--- snap_windows()
--- is_window_fullscreen()
 -- usable_screen_frame()
 -- create_overlay()
-
-
-
--- Binding popup menu
-hs.hotkey.bind({ 'ctrl' }, 'f', function()
-    require('caching').init()
-    require('sys_menu').launch_menu()
-end)

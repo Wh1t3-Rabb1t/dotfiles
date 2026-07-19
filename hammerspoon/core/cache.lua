@@ -2,6 +2,7 @@ local M = {}
 
 M.lookup = {}
 M.watchers = {}
+
 M.assets = {
     -- [app_name] = {
     --     popup = popup,

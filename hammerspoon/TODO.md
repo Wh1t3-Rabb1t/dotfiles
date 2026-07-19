@@ -21,6 +21,9 @@
 
 ## Modules:
 
+- Update cache when screens are connected/disconnected. Also check if the 'id'
+  remains the same and if not look into using 'UUID' instead.
+
 - Maybe move logic in 'windows.init()' to caching.lua (screen data caching).
 
 - In 'launch_menu()' need to check if focused window is fullsceen (exit

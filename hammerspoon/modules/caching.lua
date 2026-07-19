@@ -185,55 +185,84 @@ local function create_overlay(screen)
 end
 
 
+-- Init data for all connected screens
+--------------------------------------------------------------------------------
+local function cache_screen_data(screen)
+    local id = screen:id()
+
+    cache.screens[id] = {
+        overlay = create_overlay(screen),
+        frame = usable_screen_frame(screen),
+    }
+
+    state.screens[id] = {
+        brightness = 100,
+        divider = 0.35,
+        layout = {
+            maximized = false,
+            left = false,
+            right = false,
+        }
+    }
+end
+
+
+-- Create binding popup menus
+--------------------------------------------------------------------------------
+local function cache_binding_popups(app, bindings)
+    cache.lookup[app] = {}
+
+    -- Pack lookup table
+    for _, binding in ipairs(bindings) do
+        local key = binding.key
+        local action = binding.action
+
+        cache.lookup[app][key] = registry.actions[app][action]
+    end
+
+    local content = create_menu_text(bindings)
+    local frame = popup_frame(content)
+    local popup = create_popup(content, frame)
+
+    -- Generate canvases
+    cache.assets[app] = {
+        popup = popup,
+        frame = frame,
+    }
+end
+
+
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    -- Cache data for all connected screens
-    for _, screen in ipairs(hs.screen.allScreens()) do
-        local id = screen:id()
-
-        cache.screens[id] = {
-            overlay = create_overlay(screen),
-            frame = usable_screen_frame(screen),
-        }
-
-        state.screens[id] = {
-            brightness = 100,
-            divider = 0.35,
-            layout = {
-                maximized = false,
-                left = false,
-                right = false,
-            }
-        }
+    local function initialized(t)
+        local done = false
+        if type(t) == 'table' and next(t) ~= nil then
+            done = true
+        end
+        return done
     end
 
-    -- Cache bindings/canvases
-    for app, bindings in pairs(registry.bindings) do
-        -- Init app specific lookup table
-        cache.lookup[app] = {}
+    -- Init bindings/assets if required
+    if not initialized(cache.screens) or
+       not initialized(state.screens)
+    then
+        for _, screen in ipairs(hs.screen.allScreens()) do
+            cache_screen_data(screen)
+        end
+    end
 
-        for _, binding in ipairs(bindings) do
-            local key = binding.key
-            local action = binding.action
-
-            -- Pack lookup table
-            cache.lookup[app][key] = registry.actions[app][action]
+    -- Init bindings/assets if required
+    if not initialized(cache.assets) or
+       not initialized(cache.lookup)
+    then
+        for app, bindings in pairs(registry.bindings) do
+            cache_binding_popups(app, bindings)
         end
 
-        -- Generate canvases
-        local content = create_menu_text(bindings)
-        local frame = popup_frame(content)
-        local popup = create_popup(content, frame)
-
-        cache.assets[app] = {
-            popup = popup,
-            frame = frame,
-        }
+        -- Create event tap
+        cache.assets.tap = create_tap()
     end
-
-    -- Create event tap
-    cache.assets.tap = create_tap()
 end
 
 return M

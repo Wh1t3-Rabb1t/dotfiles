@@ -75,27 +75,9 @@ end)
 -- create_overlay()
 
 
-local sys_menu = require('sys_menu')
 
 -- Binding popup menu
 hs.hotkey.bind({ 'ctrl' }, 'f', function()
-    local function initialized(t)
-        local done = false
-        if type(t) == 'table' and next(t) ~= nil then
-            done = true
-        end
-        return done
-    end
-
-    -- Init windows module if required
-    if not initialized(cache.screens) or
-       not initialized(cache.assets) or
-       not initialized(cache.lookup) or
-       not initialized(state.screens) or
-       not initialized(state.menu)
-    then
-        require('caching').init()
-    end
-
-    sys_menu.launch_menu()
+    require('caching').init()
+    require('sys_menu').launch_menu()
 end)

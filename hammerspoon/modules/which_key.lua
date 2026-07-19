@@ -2,31 +2,6 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
-local windows = require('windows')
-
-
--- Show popups
---------------------------------------------------------------------------------
-function M.show_popups(win)
-    local app_name = win:application():name()
-
-    if cache.assets[app_name] then
-        local coords = windows.get_popup_coords(win)
-
-        cache.assets[app_name].popup:topLeft(coords.app)
-        cache.assets[app_name].popup:show(0.15)
-        cache.assets.system.popup:topLeft(coords.system)
-        cache.assets.system.popup:show(0.15)
-    else
-        local frame = win:frame() or hs.mainScreen:fullFrame()
-
-        cache.assets.system.popup:topLeft({
-            x = frame.x + 50,
-            y = frame.y + 50,
-        })
-        cache.assets.system.popup:show(0.15)
-    end
-end
 
 
 -- Send keystrokes (while bypassing active eventtap)
@@ -46,9 +21,57 @@ function M.send_keys(key, mod)
 end
 
 
--- Close menu
+-- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-function M.close_menu(win)
+function M.get_popup_coords(win)
+    local app_frame = win:frame()
+    local app_name = win:application():name()
+    local popup_frame = cache.assets[app_name].frame
+
+    local coords = {
+        app = {
+            x = app_frame.x + 50,
+            y = app_frame.y + 50,
+        },
+        system = {
+            x = app_frame.x + 50,
+            y = app_frame.y + (popup_frame.h + 75),
+        }
+    }
+
+    return coords
+end
+
+
+-- Show popups
+--------------------------------------------------------------------------------
+function M.show_popups(win)
+    local app_name = win:application():name()
+
+    if cache.assets[app_name] then
+        local coords = M.get_popup_coords(win)
+
+        cache.assets[app_name].popup:topLeft(coords.app)
+        cache.assets[app_name].popup:show(0.15)
+        cache.assets.system.popup:topLeft(coords.system)
+        cache.assets.system.popup:show(0.15)
+    else
+        local frame = win:frame() or hs.mainScreen:fullFrame()
+
+        cache.assets.system.popup:topLeft({
+            x = frame.x + 50,
+            y = frame.y + 50,
+        })
+        cache.assets.system.popup:show(0.15)
+    end
+
+    state.menu.active_win = win
+end
+
+
+-- Hide popups
+--------------------------------------------------------------------------------
+function M.hide_popups(win)
     win = win or state.menu.active_win
 
     local app_name = win:application():name()
@@ -58,9 +81,28 @@ function M.close_menu(win)
         state.menu.active_win = false
     end
 
-    state.menu.tap_active = false
     cache.assets.system.popup:delete()
-    cache.assets.tap:stop()
+end
+
+
+-- Start event tap
+--------------------------------------------------------------------------------
+function M.set_event_tap(set_to)
+    if set_to == 'on' then
+        state.menu.tap_active = true
+        cache.assets.tap:start()
+    elseif set_to == 'off' then
+        state.menu.tap_active = false
+        cache.assets.tap:stop()
+    end
+end
+
+
+-- Close menu
+--------------------------------------------------------------------------------
+function M.close_menu(win)
+    M.set_event_tap('off')
+    M.hide_popups(win)
 end
 
 
@@ -71,13 +113,8 @@ function M.launch_menu()
         return
     end
 
-    local win = hs.window.focusedWindow()
-
-    M.show_popups(win)
-
-    state.menu.active_win = win
-    state.menu.tap_active = true
-    cache.assets.tap:start()
+    M.set_event_tap('on')
+    M.show_popups(hs.window.focusedWindow())
 end
 
 return M

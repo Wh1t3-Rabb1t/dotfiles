@@ -127,7 +127,7 @@ M.actions = {
 
     ['kitty'] = {
         kitty_open_split  = function() window.launch_or_focus('Firefox') end,
-        kitty_close_split = function() which_key.close_menu() end,
+        kitty_close_split = function() which_key.close_menu(hs.window.focusedWindow()) end,
     },
 
     ['Brave Browser'] = {

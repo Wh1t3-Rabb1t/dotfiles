@@ -15,6 +15,7 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
+local which_key = require('which_key')
 
 
 -- Determine whether or not a winodw is maximized
@@ -170,55 +171,27 @@ end
 function M.launch_or_focus(app)
     local existing_win = hs.window.focusedWindow()
 
-    hs.application.launchOrFocus(app)
+    local wf
+    wf = hs.window.filter.new(app)
 
-    hs.timer.doAfter(
-        0.002,
-        function()
-            local win = hs.window.focusedWindow()
-            local app_name = win:application():name()
+    wf:subscribe(hs.window.filter.windowFocused, function(win)
+        wf:unsubscribeAll()
+        wf = nil
 
-            -- Exit if called on an already focused window
-            if win:id() == existing_win:id() then
-                -- Invoke 'send_keys({"cmd"}, "`")'
-                return
-            end
-
-            if cache.assets[app_name] then
-                state.menu.active_win = win
-
-                snap_windows(
-                    win,
-                    get_window_layout(
-                        existing_win,
-                        win
-                    )
-                )
-            end
+        if existing_win and win:id() == existing_win:id() then
+            return
         end
-    )
-end
 
+        which_key.hide_popups(existing_win)
 
--- Calculate popup coordinates relative to the focused window
---------------------------------------------------------------------------------
-function M.get_popup_coords(win)
-    local app_frame = win:frame()
-    local app_name = win:application():name()
-    local popup_frame = cache.assets[app_name].frame
+        snap_windows(
+            win, get_window_layout(existing_win, win)
+        )
 
-    local coords = {
-        app = {
-            x = app_frame.x + 50,
-            y = app_frame.y + 50,
-        },
-        system = {
-            x = app_frame.x + 50,
-            y = app_frame.y + (popup_frame.h + 75),
-        }
-    }
+        which_key.show_popups(win)
+    end)
 
-    return coords
+    hs.application.launchOrFocus(app)
 end
 
 

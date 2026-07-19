@@ -21,6 +21,12 @@
 
 ## Modules:
 
+- Add 'on_click' and 'focus ?' events to ensure state.active_win is changed
+  when required.
+
+- Refactor 'show_popups()' to return popups rather than invoke :show() from
+  within the fn.
+
 - Update cache when screens are connected/disconnected. Also check if the 'id'
   remains the same and if not look into using 'UUID' instead.
 

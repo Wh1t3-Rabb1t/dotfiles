@@ -24,28 +24,28 @@ end)
 
 -- SYSTEM BINDINGS
 ---------------------------------
--- k - Focus kitty
--- i - Focus Brave
+-- k  -  Focus kitty
+-- i  -  Focus Brave
 --
--- c - Copy to sys clipboard
--- x - Cut to sys clipboard
--- v - Paste from sys clipboard
+-- c  -  Copy to sys clipboard
+-- x  -  Cut to sys clipboard
+-- v  -  Paste from sys clipboard
 --
 -- (DON'T REQUIRE PRIME KB REAL ESTATE)
--- U - Brightness (up)
--- D - Brightness (down)
--- P - Brightness (print)
--- S - Apple spotlight
--- D - Apple dock
--- W - Toggle wifi
--- B - Toggle bluetooth
+-- U  -  Brightness (up)
+-- D  -  Brightness (down)
+-- P  -  Brightness (print)
+-- S  -  Apple spotlight
+-- D  -  Apple dock
+-- W  -  Toggle wifi
+-- B  -  Toggle bluetooth
 --
--- + - Zoom in
--- - - Zoom out
+-- +  -  Zoom in
+-- -  -  Zoom out
 --
 -- (requires confirmation)
--- W - Close tab
--- Q - Quit app
+-- W  -  Close tab
+-- Q  -  Quit app
 
 
 
@@ -89,15 +89,10 @@ hs.hotkey.bind({ 'ctrl' }, 'f', function()
 
     -- Init windows module if required
     if not initialized(cache.screens) or
+       not initialized(cache.assets) or
+       not initialized(cache.lookup) or
        not initialized(state.screens) or
        not initialized(state.menu)
-    then
-        require('windows').init()
-    end
-
-    -- Init menu module if required
-    if not initialized(cache.assets) or
-       not initialized(cache.lookup)
     then
         require('caching').init()
     end

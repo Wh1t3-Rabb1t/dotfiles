@@ -145,9 +145,69 @@ local function popup_frame(text)
 end
 
 
+-- Calculate the available screen (total screen frame minus the dock)
+--------------------------------------------------------------------------------
+local function usable_screen_frame(screen)
+    local full = screen:fullFrame()
+    local usable = screen:frame()
+
+    local frame = {
+        x = full.x,
+        y = usable.y,
+        w = full.w,
+        h = full.h - (usable.y - full.y),
+    }
+
+    return frame
+end
+
+
+-- Create overlay
+--------------------------------------------------------------------------------
+local function create_overlay(screen)
+    local overlay = hs.canvas.new(screen:fullFrame())
+
+    overlay:appendElements({
+        type = 'rectangle',
+        action = 'fill',
+        fillColor = {
+            red = 0,
+            green = 0,
+            blue = 0,
+            alpha = 0,
+        }
+    })
+    overlay:level(hs.canvas.windowLevels.overlay)
+    overlay:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
+    overlay:show()
+
+    return overlay
+end
+
+
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
+    -- Cache data for all connected screens
+    for _, screen in ipairs(hs.screen.allScreens()) do
+        local id = screen:id()
+
+        cache.screens[id] = {
+            overlay = create_overlay(screen),
+            frame = usable_screen_frame(screen),
+        }
+
+        state.screens[id] = {
+            brightness = 100,
+            divider = 0.35,
+            layout = {
+                maximized = false,
+                left = false,
+                right = false,
+            }
+        }
+    end
+
     -- Cache bindings/canvases
     for app, bindings in pairs(registry.bindings) do
         -- Init app specific lookup table

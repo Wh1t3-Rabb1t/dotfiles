@@ -16,7 +16,7 @@ local function tbl_initialized(tbl)
 end
 
 
--- Format rgb
+-- Format rgb table
 --------------------------------------------------------------------------------
 local function rgb(r, g, b, opacity)
     opacity = opacity or 1.0
@@ -192,6 +192,7 @@ end
 local function get_binding_popups(app, bindings)
     local lookup = {}
 
+    -- Pack lookup table
     for _, binding in ipairs(bindings) do
         lookup[binding.key] = registry.actions[app][binding.action]
     end

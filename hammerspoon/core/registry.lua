@@ -2,7 +2,7 @@ local M = {}
 
 local shader = require('brightness')
 local window = require('windows')
-local sys_menu = require('sys_menu')
+local which_key = require('which_key')
 
 M.bindings = {
     ['system'] = {
@@ -122,21 +122,21 @@ M.actions = {
         launch_kitty       = function() window.launch_or_focus('kitty') end,
         launch_brave       = function() window.launch_or_focus('Brave Browser') end,
         launch_firefox     = function() window.launch_or_focus('Firefox') end,
-        close_menu         = function() sys_menu.close_menu() end,
+        close_menu         = function() which_key.close_menu() end,
     },
 
     ['kitty'] = {
         kitty_open_split  = function() window.launch_or_focus('Firefox') end,
-        kitty_close_split = function() sys_menu.close_menu() end,
+        kitty_close_split = function() which_key.close_menu() end,
     },
 
     ['Brave Browser'] = {
-        focus_searchbar = function() sys_menu.send_keys('l', 'cmd') M.close_menu() end,
-        left_arrow      = function() sys_menu.send_keys('left') end,
-        right_arrow     = function() sys_menu.send_keys('right') end,
-        tab_left        = function() sys_menu.send_keys('pageup', 'ctrl') end,
-        tab_right       = function() sys_menu.send_keys('pagedown', 'ctrl') end,
-        tab_close       = function() sys_menu.send_keys('w', 'cmd') end,
+        focus_searchbar = function() which_key.send_keys('l', 'cmd') M.close_menu() end,
+        left_arrow      = function() which_key.send_keys('left') end,
+        right_arrow     = function() which_key.send_keys('right') end,
+        tab_left        = function() which_key.send_keys('pageup', 'ctrl') end,
+        tab_right       = function() which_key.send_keys('pagedown', 'ctrl') end,
+        tab_close       = function() which_key.send_keys('w', 'cmd') end,
     },
 }
 

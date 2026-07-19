@@ -21,7 +21,7 @@ end)
 -- Binding popup menu
 hs.hotkey.bind({ 'ctrl' }, 'f', function()
     require('caching').init()
-    require('sys_menu').launch_menu()
+    require('which_key').launch_menu()
 end)
 
 
@@ -69,7 +69,7 @@ end)
 --   get_window_layout()
 --
 --
--- SYS_MENU:
+-- WHICH_KEY:
 --   calc_popup_coords()
 --   close_menu()
 --   send_keys()

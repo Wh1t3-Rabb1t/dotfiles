@@ -200,6 +200,28 @@ function M.launch_or_focus(app)
 end
 
 
+-- Calculate popup coordinates relative to the focused window
+--------------------------------------------------------------------------------
+function M.calc_popup_coords(win)
+    local app_frame = win:frame()
+    local app_name = win:application():name()
+    local popup_frame = cache.assets[app_name].frame
+
+    local coords = {
+        app = {
+            x = app_frame.x + 50,
+            y = app_frame.y + 50,
+        },
+        system = {
+            x = app_frame.x + 50,
+            y = app_frame.y + (popup_frame.h + 75),
+        }
+    }
+
+    return coords
+end
+
+
 -- Swap left/right window slots
 --------------------------------------------------------------------------------
 function M.swap_splits()

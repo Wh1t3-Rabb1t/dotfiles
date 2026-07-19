@@ -33,10 +33,10 @@
 
 - Integrate popup (x, y) with screen state.
 
-- Incorporate key sequences when in sys_menu modal mode. (i.e. <Space>lf =
+- Incorporate key sequences when in which_key modal mode. (i.e. <Space>lf =
   launch firefox)
 
-- Currently all sys_menu fns have been changed from local to part of the
+- Currently all which_key fns have been changed from local to part of the
   module object. (change select functions back to local wherever possible).
 
 ---
@@ -124,11 +124,11 @@ local bindings = {
 
 - Break the menu trigger up into modal and when modifier is held (or both).
 
-- Consider sending a singe 'escape' keystoke before launching sys_menu.
+- Consider sending a singe 'escape' keystoke before launching which_key.
   This would exit apps in fullscreen mode and set a semi consistent ui state
   in broswers etc.
 
-- Build out functionality for sys_menu that send given keystrokes when
+- Build out functionality for which_key that send given keystrokes when
   certain apps are focused; i.e. if a browser is focused, we can send it's
   default tab switching bindings etc. This way we can build out an interactive
   "cheat sheet" of important hotkeys and drop karabiner altogether.

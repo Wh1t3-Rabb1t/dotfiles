@@ -9,9 +9,11 @@ local cache = require('cache')
 --------------------------------------------------------------------------------
 local function tbl_initialized(tbl)
     local done = false
+
     if type(tbl) == 'table' and next(tbl) ~= nil then
         done = true
     end
+
     return done
 end
 
@@ -39,37 +41,42 @@ local function get_menu_text(binding_tbl)
 
     -- Find longest key
     for _, binding in ipairs(binding_tbl) do
-        local display = ("[%s]"):format(binding.key)
+        local display = ("%s"):format(binding.key)
         len = math.max(len, #display)
     end
 
     -- Define text formatting
     local font_style = {
         name = 'Menlo',
-        size = 18,
+        size = 16,
     }
     local key_style = {
         font = font_style,
         color = rgb(0, 255, 0),
+    }
+    local arrow_style = {
+        font = font_style,
+        color = rgb(100, 100, 100),
     }
     local desc_style = {
         font = font_style,
         color = rgb(255, 255, 255),
     }
 
-    local styledtext = require('hs.styledtext')
-    local text = styledtext.new("")
-    local fmt = "%-" .. len .. "s "
+    local styled_text = require('hs.styledtext')
+    local text = styled_text.new("")
+    local fmt = "%" .. len .. "s "  -- "%-" (to align keys at the start)
 
     for i, binding in ipairs(binding_tbl) do
-        local display = ("[%s]"):format(binding.key)
+        local display = ("%s"):format(binding.key)
 
         text = text
-            .. styledtext.new(fmt:format(display), key_style)
-            .. styledtext.new(binding.desc, desc_style)
+            .. styled_text.new(fmt:format(display), key_style)
+            .. styled_text.new('-> ', arrow_style)
+            .. styled_text.new(binding.desc, desc_style)
 
         if i < #binding_tbl then
-            text = text .. styledtext.new("\n", desc_style)
+            text = text .. styled_text.new("\n", desc_style)
         end
     end
 

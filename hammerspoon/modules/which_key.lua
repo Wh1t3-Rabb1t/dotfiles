@@ -11,7 +11,7 @@ function M.show_popups(win)
     local app_name = win:application():name()
 
     if cache.assets[app_name] then
-        local coords = windows.calc_popup_coords(win)
+        local coords = windows.get_popup_coords(win)
 
         cache.assets[app_name].popup:topLeft(coords.app)
         cache.assets[app_name].popup:show(0.15)

@@ -202,7 +202,7 @@ end
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-function M.calc_popup_coords(win)
+function M.get_popup_coords(win)
     local app_frame = win:frame()
     local app_name = win:application():name()
     local popup_frame = cache.assets[app_name].frame

@@ -70,7 +70,7 @@ end)
 --
 --
 -- WHICH_KEY:
---   calc_popup_coords()
+--   get_popup_coords()
 --   close_menu()
 --   send_keys()
 --   show_popups()

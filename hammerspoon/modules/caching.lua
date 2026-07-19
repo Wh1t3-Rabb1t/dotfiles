@@ -36,7 +36,7 @@ end
 
 -- Format menu contents
 --------------------------------------------------------------------------------
-local function get_menu_text(binding_tbl)
+local function get_menu_text(app, binding_tbl)
     local len = 0
 
     -- Find longest key
@@ -49,6 +49,10 @@ local function get_menu_text(binding_tbl)
     local font_style = {
         name = 'Menlo',
         size = 16,
+    }
+    local title_style = {
+        font = font_style,
+        color = rgb(205, 205, 205),
     }
     local key_style = {
         font = font_style,
@@ -63,9 +67,12 @@ local function get_menu_text(binding_tbl)
         color = rgb(255, 255, 255),
     }
 
-    local styled_text = require('hs.styledtext')
-    local text = styled_text.new("")
     local fmt = "%" .. len .. "s "  -- "%-" (to align keys at the start)
+    local title_length = #app + 4
+    local underline = "\n" .. string.rep("-", title_length) .. "\n"
+    local styled_text = require('hs.styledtext')
+    local text = styled_text.new(("-- %s"):format(app), title_style)
+        .. styled_text.new(underline, title_style)
 
     for i, binding in ipairs(binding_tbl) do
         local display = ("%s"):format(binding.key)
@@ -204,7 +211,7 @@ local function get_binding_popups(app, bindings)
         lookup[binding.key] = registry.actions[app][binding.action]
     end
 
-    local content = get_menu_text(bindings)
+    local content = get_menu_text(app, bindings)
     local frame = get_popup_frame(content)
     local popup = get_popup(content, frame)
 

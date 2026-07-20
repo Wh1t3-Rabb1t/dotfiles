@@ -6,17 +6,25 @@ local cache = require('cache')
 
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
-function M.send_keys(key, mod)
-    state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+function M.send_keys(a, b)
+    local mods, key
 
-    local modifiers = mod or {}
-
-    if type(modifiers) == 'string' then
-        modifiers = { modifiers }
+    if b == nil then
+        mods = {}
+        key = a
+    else
+        mods = a or {}
+        key = b
     end
 
+    if type(mods) == 'string' then
+        mods = { mods }
+    end
+
+    state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+
     hs.timer.doAfter(0, function()
-        hs.eventtap.keyStroke(modifiers, key, 0)
+        hs.eventtap.keyStroke(mods, key, 0)
     end)
 end
 

@@ -27,9 +27,6 @@ end)
 
 -- SYSTEM BINDINGS
 ---------------------------------
--- k  -  Focus kitty
--- i  -  Focus Brave
---
 -- c  -  Copy to sys clipboard
 -- x  -  Cut to sys clipboard
 -- v  -  Paste from sys clipboard

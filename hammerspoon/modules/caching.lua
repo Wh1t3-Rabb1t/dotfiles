@@ -149,40 +149,54 @@ end
 local function get_menu_text(app, binding_tbl)
     local len = 0
 
-    -- Find longest key
-    for _, binding in ipairs(binding_tbl) do
-        local display = ("%s"):format(binding.key)
-        len = math.max(len, #display)
+    -- Find longest key across all categories
+    for _, category in ipairs(binding_tbl) do
+        for _, binding in ipairs(category.bindings) do
+            len = math.max(len, #binding.key)
+        end
     end
 
     -- Text styling
     local title_font = { name = 'Menlo-BoldItalic', size = 18 }
-    local base_font =  { name = 'Menlo',            size = 16 }
+    local base_font  = { name = 'Menlo', size = 16 }
+
     local styles = {
-        title = { font = title_font, color = rgb(205, 205, 205), },
-        key   = { font = base_font,  color = rgb(0, 255, 0) },
-        arrow = { font = base_font,  color = rgb(100, 100, 100) },
-        desc  = { font = base_font,  color = rgb(255, 255, 255) },
+        title = { font = title_font, color = rgb(205, 205, 205) },
+        group = { font = { name = 'Menlo-Bold', size = 16 }, color = rgb(150, 200, 255) },
+        key   = { font = base_font, color = rgb(0, 255, 0) },
+        arrow = { font = base_font, color = rgb(100, 100, 100) },
+        desc  = { font = base_font, color = rgb(255, 255, 255) },
     }
 
-    -- Define text formatting
-    local fmt = "%" .. len .. "s "  -- "%-" (to align keys at the start)
-    local title_length = #app + 2
-    local underline = "\n" .. string.rep("-", title_length) .. "\n"
-    local styled_text = require('hs.styledtext')
-    local text = styled_text.new(("* %s"):format(app), styles.title)
-        .. styled_text.new(underline, styles.title)
+    local fmt = "%" .. len .. "s "
+    local styled_text = require("hs.styledtext")
 
-    for i, binding in ipairs(binding_tbl) do
-        local display = ("%s"):format(binding.key)
+    local title = ("* %s"):format(app)
+    local text =
+        styled_text.new(title, styles.title)
+        .. styled_text.new("\n" .. string.rep("-", #title) .. "\n\n", styles.title)
 
+    for c, category in ipairs(binding_tbl) do
+        -- Category heading
         text = text
-            .. styled_text.new(fmt:format(display), styles.key)
-            .. styled_text.new('-> ', styles.arrow)
-            .. styled_text.new(binding.desc, styles.desc)
+            .. styled_text.new(category.category, styles.group)
+            .. styled_text.new("\n", styles.group)
 
-        if i < #binding_tbl then
-            text = text .. styled_text.new("\n", styles.desc)
+        -- Category bindings
+        for i, binding in ipairs(category.bindings) do
+            text = text
+                .. styled_text.new(fmt:format(binding.key), styles.key)
+                .. styled_text.new("-> ", styles.arrow)
+                .. styled_text.new(binding.desc, styles.desc)
+
+            if i < #category.bindings then
+                text = text .. styled_text.new("\n", styles.desc)
+            end
+        end
+
+        -- Blank line between categories
+        if c < #binding_tbl then
+            text = text .. styled_text.new("\n\n", styles.desc)
         end
     end
 
@@ -211,8 +225,10 @@ end
 local function get_binding_tbl(app, bindings)
     local lookup = {}
 
-    for _, binding in ipairs(bindings) do
-        lookup[binding.key] = registry.actions[app][binding.action]
+    for _, category in ipairs(bindings) do
+        for _, binding in ipairs(category.bindings) do
+            lookup[binding.key] = registry.actions[app][binding.action]
+        end
     end
 
     return lookup

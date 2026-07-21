@@ -23,6 +23,8 @@
 
 - Build a robust key 'queue'.
 
+- Rename certain 'get' functions to 'create'.
+
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).
 

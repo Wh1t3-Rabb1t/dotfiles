@@ -1,285 +1,312 @@
 local M = {}
 
-local shader = require('brightness')
+local brightness = require('brightness')
 local window = require('windows')
 local which_key = require('which_key')
 
 M.bindings = {
     ['system'] = {
         {
-            key    = 'y',
-            action = 'launch_firefox',
-            desc   = 'Launch Firefox',
+            category = 'Launch or focus',
+            bindings = {
+                {
+                    key    = 'y',
+                    action = 'launch_firefox',
+                    desc   = 'Launch Firefox',
+                },
+                {
+                    key    = 'k',
+                    action = 'launch_kitty',
+                    desc   = 'Launch kitty',
+                },
+                {
+                    key    = 'b',
+                    action = 'launch_brave',
+                    desc   = 'Launch Brave',
+                },
+            },
         },
         {
-            key    = 'k',
-            action = 'launch_kitty',
-            desc   = 'Launch kitty',
+            category = 'Brightness',
+            bindings = {
+                {
+                    key    = 'z',
+                    action = 'brightness_up',
+                    desc   = 'Brightness Up',
+                },
+                {
+                    key    = 'j',
+                    action = 'brightness_down',
+                    desc   = 'Brightness Down',
+                },
+                {
+                    key    = 'p',
+                    action = 'brightness_print',
+                    desc   = 'Print Brightness',
+                },
+            },
         },
         {
-            key    = 'b',
-            action = 'launch_brave',
-            desc   = 'Launch Brave',
+            category = 'Splits',
+            bindings = {
+                {
+                    key    = 'o',
+                    action = 'resize_split_right',
+                    desc   = 'Re-size splits right',
+                },
+                {
+                    key    = 'u',
+                    action = 'resize_split_left',
+                    desc   = 'Re-size splits left',
+                },
+                {
+                    key    = 'g',
+                    action = 'maximize_split',
+                    desc   = 'Maximize focused split',
+                },
+                {
+                    key    = 's',
+                    action = 'swap_splits',
+                    desc   = 'Swap split positions',
+                },
+            },
         },
         {
-            key    = 'z',
-            action = 'brightness_up',
-            desc   = 'Brightness Up',
-        },
-        {
-            key    = 'j',
-            action = 'brightness_down',
-            desc   = 'Brightness Down',
-        },
-        {
-            key    = 'p',
-            action = 'brightness_print',
-            desc   = 'Print Brightness',
-        },
-        {
-            key    = 'o',
-            action = 'resize_split_right',
-            desc   = 'Re-size splits right',
-        },
-        {
-            key    = 'u',
-            action = 'resize_split_left',
-            desc   = 'Re-size splits left',
-        },
-        {
-            key    = 'g',
-            action = 'maximize_split',
-            desc   = 'Maximize focused split',
-        },
-        {
-            key    = 's',
-            action = 'swap_splits',
-            desc   = 'Swap split positions',
-        },
-        {
-            key    = 'escape',
-            action = 'close_menu',
-            desc   = 'Cancel',
+            category = 'Cancel (quit)',
+            bindings = {
+                {
+                    key    = 'escape',
+                    action = 'close_menu',
+                    desc   = 'Cancel',
+                },
+            },
         },
     },
 
     ['kitty'] = {
-        -- SCROLLBACK
         {
-            key    = 'v',
-            action = 'paste_from_clipboard',
-            desc   = 'Paste from system clipboard',
-        },
-        {
-            key    = 'b',
-            action = 'show_last_command_output',
-            desc   = 'Open last command output in nvim',
-        },
-        {
-            key    = 'e',
-            action = 'scroll_page_up',
-            desc   = 'Page up',
-        },
-        {
-            key    = 'd',
-            action = 'scroll_page_down',
-            desc   = 'Page down',
-        },
-        -- {
-        --     key    = 'e',
-        --     mods   = 'shift',
-        --     action = 'page_up',
-        --     desc   = 'Scroll up',
-        -- },
-        -- {
-        --     key    = 'd',
-        --     mods   = 'shift',
-        --     action = 'page_down',
-        --     desc   = 'Scroll down',
-        -- },
-        -- {
-        --     key    = 'up',
-        --     mods   = 'shift',
-        --     action = 'previous_prompt',
-        --     desc   = 'Jump to the previous prompt',
-        -- },
-        -- {
-        --     key    = 'down',
-        --     mods   = 'shift',
-        --     action = 'page_down',
-        --     desc   = 'Jump to the next prompt',
-        -- },
-        -- {
-        --     key    = 'k',
-        --     mods   = 'shift',
-        --     action = 'clear_terminal',
-        --     desc   = 'Clear the scrollback',
-        -- },
-
-        -- WINDOWS
-        {
-            key    = 'm',
-            action = 'new_split',
-            desc   = 'Split the terminal window',
-        },
-        -- {
-        --     key    = 'm',
-        --     mods   = 'shift',
-        --     action = 'new_os_window',
-        --     desc   = 'Open a new terminal window',
-        -- },
-        {
-            key    = 'i',
-            action = 'split_above',
-            desc   = 'Focus the above split',
-        },
-        {
-            key    = 'k',
-            action = 'split_below',
-            desc   = 'Focus the below split',
-        },
-        {
-            key    = 'l',
-            action = 'split_right',
-            desc   = 'Focus the right split',
-        },
-        {
-            key    = 't',
-            action = 'split_left',
-            desc   = 'Focus the left split',
+            category = 'Scrollback',
+            bindings = {
+                {
+                    key    = 'v',
+                    action = 'paste_from_clipboard',
+                    desc   = 'Paste from system clipboard',
+                },
+                {
+                    key    = 'b',
+                    action = 'show_last_command_output',
+                    desc   = 'Open last command output in nvim',
+                },
+                {
+                    key    = 'e',
+                    action = 'scroll_page_up',
+                    desc   = 'Page up',
+                },
+                {
+                    key    = 'd',
+                    action = 'scroll_page_down',
+                    desc   = 'Page down',
+                },
+                -- {
+                --     key    = 'e',
+                --     mods   = 'shift',
+                --     action = 'page_up',
+                --     desc   = 'Scroll up',
+                -- },
+                -- {
+                --     key    = 'd',
+                --     mods   = 'shift',
+                --     action = 'page_down',
+                --     desc   = 'Scroll down',
+                -- },
+                -- {
+                --     key    = 'up',
+                --     mods   = 'shift',
+                --     action = 'previous_prompt',
+                --     desc   = 'Jump to the previous prompt',
+                -- },
+                -- {
+                --     key    = 'down',
+                --     mods   = 'shift',
+                --     action = 'page_down',
+                --     desc   = 'Jump to the next prompt',
+                -- },
+                -- {
+                --     key    = 'k',
+                --     mods   = 'shift',
+                --     action = 'clear_terminal',
+                --     desc   = 'Clear the scrollback',
+                -- },
+                -- {
+                --     key    = '=',
+                --     mods   = 'cmd',
+                --     action = 'zoom_in',
+                --     desc   = 'Zoom in',
+                -- },
+                -- {
+                --     key    = '-',
+                --     mods   = 'cmd',
+                --     action = 'zoom_out',
+                --     desc   = 'Zoom out',
+                -- },
+            },
         },
 
-        -- {
-        --     key    = 'i',
-        --     mods   = 'shift',
-        --     action = 'resize_split_up',
-        --     desc   = 'Resize the split up',
-        -- },
-        -- {
-        --     key    = 'k',
-        --     mods   = 'shift',
-        --     action = 'resize_split_down',
-        --     desc   = 'Resize the split down',
-        -- },
-        -- {
-        --     key    = 'l',
-        --     mods   = 'shift',
-        --     action = 'resize_split_right',
-        --     desc   = 'Resize the split right',
-        -- },
-        -- {
-        --     key    = 't',
-        --     mods   = 'shift',
-        --     action = 'resize_split_left',
-        --     desc   = 'Resize the split left',
-        -- },
-
-        -- {
-        --     key    = 'p',
-        --     mods   = 'shift',
-        --     action = 'swap_with_split',
-        --     desc   = 'Swap split',
-        -- },
-
-
         {
-            key    = 'w',
-            action = 'close_split',
-            desc   = 'Close split with confirmation',
-        },
-        -- {
-        --     key    = 'w',
-        --     mods   = 'shift',
-        --     action = 'detach_window',
-        --     desc   = 'Detach from parent os window',
-        -- },
-
-
-        -- TABS
-        {
-            key    = 'n',
-            action = 'new_tab',
-            desc   = 'Open a new tab',
-        },
-        -- {
-        --     key    = 'n',
-        --     mods   = 'shift',
-        --     action = 'set_tab_title',
-        --     desc   = 'Rename the current tab',
-        -- },
-
-        {
-            key    = ';',
-            action = 'next_tab',
-            desc   = 'Next tab',
-        },
-        {
-            key    = 'h',
-            action = 'prev_tab',
-            desc   = 'Previous tab',
-        },
-
-        -- LAYOUT
-        -- {
-        --     key    = 'r',
-        --     mods   = 'shift',
-        --     action = 'rotate_splits',
-        --     desc   = 'Rotate focused split',
-        -- },
-        {
-            key    = 'r',
-            action = 'next_layout',
-            desc   = 'Next layout',
+            category = 'Windows',
+            bindings = {
+                {
+                    key    = 'm',
+                    action = 'new_split',
+                    desc   = 'Split the terminal window',
+                },
+                -- {
+                --     key    = 'm',
+                --     mods   = 'shift',
+                --     action = 'new_os_window',
+                --     desc   = 'Open a new terminal window',
+                -- },
+                {
+                    key    = 'i',
+                    action = 'split_above',
+                    desc   = 'Focus the above split',
+                },
+                {
+                    key    = 'k',
+                    action = 'split_below',
+                    desc   = 'Focus the below split',
+                },
+                {
+                    key    = 'l',
+                    action = 'split_right',
+                    desc   = 'Focus the right split',
+                },
+                {
+                    key    = 't',
+                    action = 'split_left',
+                    desc   = 'Focus the left split',
+                },
+                -- {
+                --     key    = 'i',
+                --     mods   = 'shift',
+                --     action = 'resize_split_up',
+                --     desc   = 'Resize the split up',
+                -- },
+                -- {
+                --     key    = 'k',
+                --     mods   = 'shift',
+                --     action = 'resize_split_down',
+                --     desc   = 'Resize the split down',
+                -- },
+                -- {
+                --     key    = 'l',
+                --     mods   = 'shift',
+                --     action = 'resize_split_right',
+                --     desc   = 'Resize the split right',
+                -- },
+                -- {
+                --     key    = 't',
+                --     mods   = 'shift',
+                --     action = 'resize_split_left',
+                --     desc   = 'Resize the split left',
+                -- },
+                -- {
+                --     key    = 'p',
+                --     mods   = 'shift',
+                --     action = 'swap_with_split',
+                --     desc   = 'Swap split',
+                -- },
+                {
+                    key    = 'w',
+                    action = 'close_split',
+                    desc   = 'Close split with confirmation',
+                },
+                -- {
+                --     key    = 'w',
+                --     mods   = 'shift',
+                --     action = 'detach_window',
+                --     desc   = 'Detach from parent os window',
+                -- },
+            },
         },
 
-        -- ZOOM
-        -- {
-        --     key    = '=',
-        --     mods   = 'cmd',
-        --     action = 'zoom_in',
-        --     desc   = 'Zoom in',
-        -- },
-        -- {
-        --     key    = '-',
-        --     mods   = 'cmd',
-        --     action = 'zoom_out',
-        --     desc   = 'Zoom out',
-        -- },
+        {
+            category = 'Tabs',
+            bindings = {
+                {
+                    key    = 'n',
+                    action = 'new_tab',
+                    desc   = 'Open a new tab',
+                },
+                -- {
+                --     key    = 'n',
+                --     mods   = 'shift',
+                --     action = 'set_tab_title',
+                --     desc   = 'Rename the current tab',
+                -- },
+                {
+                    key    = ';',
+                    action = 'next_tab',
+                    desc   = 'Next tab',
+                },
+                {
+                    key    = 'h',
+                    action = 'prev_tab',
+                    desc   = 'Previous tab',
+                },
+            },
+        },
 
+        {
+            category = 'Layout',
+            bindings = {
+                -- {
+                --     key    = 'r',
+                --     mods   = 'shift',
+                --     action = 'rotate_splits',
+                --     desc   = 'Rotate focused split',
+                -- },
+                {
+                    key    = 'r',
+                    action = 'next_layout',
+                    desc   = 'Next layout',
+                },
+            },
+        },
     },
 
-    ['Brave Browser'] = {
-        {
-            key    = "'",
-            action = 'focus_searchbar',
-            desc   = 'Focus searchbar',
-        },
-        {
-            key    = 'u',
-            action = 'left_arrow',
-            desc   = 'Left arrow',
-        },
-        {
-            key    = 'o',
-            action = 'right_arrow',
-            desc   = 'Right arrow',
-        },
-        {
-            key    = 'h',
-            action = 'tab_left',
-            desc   = 'Tab left',
-        },
-        {
-            key    = ';',
-            action = 'tab_right',
-            desc   = 'Tab right',
-        },
-        {
-            key    = 'w',
-            action = 'tab_close',
-            desc   = 'Close tab',
-        },
-    },
+    -- ['Brave Browser'] = {
+    --     {
+    --         key    = "'",
+    --         action = 'focus_searchbar',
+    --         desc   = 'Focus searchbar',
+    --     },
+    --     {
+    --         key    = 'u',
+    --         action = 'left_arrow',
+    --         desc   = 'Left arrow',
+    --     },
+    --     {
+    --         key    = 'o',
+    --         action = 'right_arrow',
+    --         desc   = 'Right arrow',
+    --     },
+    --     {
+    --         key    = 'h',
+    --         action = 'tab_left',
+    --         desc   = 'Tab left',
+    --     },
+    --     {
+    --         key    = ';',
+    --         action = 'tab_right',
+    --         desc   = 'Tab right',
+    --     },
+    --     {
+    --         key    = 'w',
+    --         action = 'tab_close',
+    --         desc   = 'Close tab',
+    --     },
+    -- },
 }
 
 M.actions = {
@@ -330,9 +357,9 @@ M.actions = {
 
 
     ['system'] = {
-        brightness_up      = function() shader.adjust_brightness('up') end,
-        brightness_down    = function() shader.adjust_brightness('down') end,
-        brightness_print   = function() shader.print_values() end,
+        brightness_up      = function() brightness.adjust_brightness('up') end,
+        brightness_down    = function() brightness.adjust_brightness('down') end,
+        brightness_print   = function() brightness.print_values() end,
         resize_split_left  = function() window.resize_splits('left') end,
         resize_split_right = function() window.resize_splits('right') end,
         maximize_split     = function() window.maximize_split() end,

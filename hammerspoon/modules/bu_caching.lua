@@ -265,11 +265,11 @@ local function get_event_tap()
             return false
         end
 
-        local flags = event:getFlags()
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]
         local focused_win = hs.window.focusedWindow()
         local app_name = focused_win:application():name()
+        local flags = event:getFlags()
         local mods = {}
 
         if flags.cmd   then table.insert(mods, 'cmd') end
@@ -323,3 +323,4 @@ function M.init()
 end
 
 return M
+

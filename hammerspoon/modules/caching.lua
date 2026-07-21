@@ -18,6 +18,23 @@ local function tbl_initialized(tbl)
 end
 
 
+-- Normalize bindings with modifiers
+--------------------------------------------------------------------------------
+local function binding_id(key, mods)
+    if not mods or #mods == 0 then
+        return key
+    end
+
+    if type(mods) == "string" then
+        mods = { mods }
+    end
+
+    table.sort(mods)
+
+    return table.concat(mods, "+") .. "+" .. key
+end
+
+
 -- Format rgb table
 --------------------------------------------------------------------------------
 local function rgb(r, g, b, opacity)
@@ -214,23 +231,6 @@ local function get_binding_popups(app, bindings)
     }
 
     return binding_data
-end
-
-
--- Normalize bindings with modifiers
---------------------------------------------------------------------------------
-local function binding_id(key, mods)
-    if not mods or #mods == 0 then
-        return key
-    end
-
-    if type(mods) == "string" then
-        mods = { mods }
-    end
-
-    table.sort(mods)
-
-    return table.concat(mods, "+") .. "+" .. key
 end
 
 

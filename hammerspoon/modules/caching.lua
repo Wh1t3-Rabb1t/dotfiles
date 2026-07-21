@@ -217,6 +217,23 @@ local function get_binding_popups(app, bindings)
 end
 
 
+-- Normalize bindings with modifiers
+--------------------------------------------------------------------------------
+local function binding_id(key, mods)
+    if not mods or #mods == 0 then
+        return key
+    end
+
+    if type(mods) == "string" then
+        mods = { mods }
+    end
+
+    table.sort(mods)
+
+    return table.concat(mods, "+") .. "+" .. key
+end
+
+
 -- Pack binding lookup table
 --------------------------------------------------------------------------------
 local function get_binding_tbl(app, bindings)
@@ -224,7 +241,11 @@ local function get_binding_tbl(app, bindings)
 
     for _, category in ipairs(bindings) do
         for _, binding in ipairs(category.bindings) do
-            lookup[binding.key] = registry.actions[app][binding.action]
+            local lookup_key = binding_id(
+                binding.key,
+                binding.mods
+            )
+            lookup[lookup_key] = registry.actions[app][binding.action]
         end
     end
 
@@ -237,7 +258,7 @@ end
 local function get_event_tap()
     local e = hs.eventtap
 
-    local tap = e.new({ e.event.types.keyDown }, function(event)
+    local tap = e.new({ e.event.types.keyDown, e.event.types.flagsChanged }, function(event)
         if hs.timer.secondsSinceEpoch() < state.menu.ignore_until then
             state.menu.ignore_until = 0
 
@@ -248,9 +269,17 @@ local function get_event_tap()
         local key = hs.keycodes.map[keycode]
         local focused_win = hs.window.focusedWindow()
         local app_name = focused_win:application():name()
+        local flags = event:getFlags()
+        local mods = {}
 
-        -- Lookup system and/or app specific actions
-        local bound_action = cache.lookup.system[key] or cache.lookup[app_name][key]
+        if flags.cmd   then table.insert(mods, 'cmd') end
+        if flags.alt   then table.insert(mods, 'alt') end
+        if flags.ctrl  then table.insert(mods, 'ctrl') end
+        if flags.shift then table.insert(mods, 'shift') end
+        if flags.fn    then table.insert(mods, 'fn') end
+
+        local lookup_key = binding_id(key, mods)
+        local bound_action = cache.lookup.system[lookup_key] or cache.lookup[app_name][lookup_key]
 
         if bound_action then
             bound_action()

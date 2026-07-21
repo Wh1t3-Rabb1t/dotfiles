@@ -5,7 +5,11 @@ local window = require('windows')
 local which_key = require('which_key')
 
 M.bindings = {
+
     ['system'] = {
+        ---------------------
+        -- Launch or focus --
+        ---------------------
         {
             category = 'Launch or focus',
             bindings = {
@@ -26,6 +30,10 @@ M.bindings = {
                 },
             },
         },
+
+        ----------------
+        -- Brightness --
+        ----------------
         {
             category = 'Brightness',
             bindings = {
@@ -46,6 +54,10 @@ M.bindings = {
                 },
             },
         },
+
+        ------------
+        -- Splits --
+        ------------
         {
             category = 'Splits',
             bindings = {
@@ -71,6 +83,10 @@ M.bindings = {
                 },
             },
         },
+
+        -------------------
+        -- Cancel (quit) --
+        -------------------
         {
             category = 'Cancel (quit)',
             bindings = {
@@ -83,7 +99,12 @@ M.bindings = {
         },
     },
 
+    ----------------------------------------------------------------------------
+
     ['kitty'] = {
+        ----------------
+        -- Scrollback --
+        ----------------
         {
             category = 'Scrollback',
             bindings = {
@@ -152,8 +173,11 @@ M.bindings = {
             },
         },
 
+        ------------
+        -- Splits --
+        ------------
         {
-            category = 'Windows',
+            category = 'Splits',
             bindings = {
                 {
                     key    = 'm',
@@ -230,6 +254,9 @@ M.bindings = {
             },
         },
 
+        ----------
+        -- Tabs --
+        ----------
         {
             category = 'Tabs',
             bindings = {
@@ -257,6 +284,9 @@ M.bindings = {
             },
         },
 
+        ------------
+        -- Layout --
+        ------------
         {
             category = 'Layout',
             bindings = {
@@ -275,38 +305,57 @@ M.bindings = {
         },
     },
 
-    -- ['Brave Browser'] = {
-    --     {
-    --         key    = "'",
-    --         action = 'focus_searchbar',
-    --         desc   = 'Focus searchbar',
-    --     },
-    --     {
-    --         key    = 'u',
-    --         action = 'left_arrow',
-    --         desc   = 'Left arrow',
-    --     },
-    --     {
-    --         key    = 'o',
-    --         action = 'right_arrow',
-    --         desc   = 'Right arrow',
-    --     },
-    --     {
-    --         key    = 'h',
-    --         action = 'tab_left',
-    --         desc   = 'Tab left',
-    --     },
-    --     {
-    --         key    = ';',
-    --         action = 'tab_right',
-    --         desc   = 'Tab right',
-    --     },
-    --     {
-    --         key    = 'w',
-    --         action = 'tab_close',
-    --         desc   = 'Close tab',
-    --     },
-    -- },
+    ----------------------------------------------------------------------------
+
+    ['Brave Browser'] = {
+        ----------
+        -- Tabs --
+        ----------
+        {
+            category = 'Tabs',
+            bindings = {
+                {
+                    key    = 'h',
+                    action = 'tab_left',
+                    desc   = 'Tab left',
+                },
+                {
+                    key    = ';',
+                    action = 'tab_right',
+                    desc   = 'Tab right',
+                },
+                {
+                    key    = 'w',
+                    action = 'tab_close',
+                    desc   = 'Close tab',
+                },
+            },
+        },
+
+        ----------
+        -- Misc --
+        ----------
+        {
+            category = 'Misc',
+            bindings = {
+                {
+                    key    = "'",
+                    action = 'focus_searchbar',
+                    desc   = 'Focus searchbar',
+                },
+                {
+                    key    = 'u',
+                    action = 'left_arrow',
+                    desc   = 'Left arrow',
+                },
+                {
+                    key    = 'o',
+                    action = 'right_arrow',
+                    desc   = 'Right arrow',
+                },
+            },
+        },
+    },
 }
 
 M.actions = {

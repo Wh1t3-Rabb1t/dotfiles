@@ -158,28 +158,25 @@ local function get_menu_text(app, binding_tbl)
 
     -- Text styling
     local title_font = { name = 'Menlo-BoldItalic', size = 18 }
-    local base_font  = { name = 'Menlo', size = 16 }
+    local base_font  = { name = 'Menlo', size = 14 }
 
     local styles = {
         title = { font = title_font, color = rgb(205, 205, 205) },
-        group = { font = { name = 'Menlo-Bold', size = 16 }, color = rgb(150, 200, 255) },
-        key   = { font = base_font, color = rgb(0, 255, 0) },
-        arrow = { font = base_font, color = rgb(100, 100, 100) },
-        desc  = { font = base_font, color = rgb(255, 255, 255) },
+        group = { font = base_font,  color = rgb(150, 200, 255) },
+        key   = { font = base_font,  color = rgb(0, 255, 0) },
+        arrow = { font = base_font,  color = rgb(100, 100, 100) },
+        desc  = { font = base_font,  color = rgb(255, 255, 255) },
     }
 
-    local fmt = "%" .. len .. "s "
     local styled_text = require("hs.styledtext")
-
+    local fmt = "%" .. len .. "s "
     local title = ("* %s"):format(app)
-    local text =
-        styled_text.new(title, styles.title)
-        .. styled_text.new("\n" .. string.rep("-", #title) .. "\n\n", styles.title)
+    local text = styled_text.new(title, styles.title) .. styled_text.new("\n\n", styles.title)
 
     for c, category in ipairs(binding_tbl) do
         -- Category heading
         text = text
-            .. styled_text.new(category.category, styles.group)
+            .. styled_text.new(category.category .. ':', styles.group)
             .. styled_text.new("\n", styles.group)
 
         -- Category bindings

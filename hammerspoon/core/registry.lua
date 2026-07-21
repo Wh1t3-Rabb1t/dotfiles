@@ -400,6 +400,12 @@ return M
 --     shift+down scroll_to_prompt 1
 -- # CLEAR THE TERMINAL SCROLLBACK BY ERASING IT:
 --     super+k clear_terminal scrollback active
+-- # ZOOM (WINDOW SPECIFIC):
+--     super+equal change_font_size current +1.0
+--     super+minus change_font_size current -1.0
+-- # ZOOM (UNIVERSAL):
+--     super+shift+equal change_font_size all +1.0
+--     super+shift+minus change_font_size all -1.0
 ----------------------------------------------------------------------------
 -- # WINDOWS
 --
@@ -439,12 +445,3 @@ return M
 --     R  super+ctrl+alt+p layout_action rotate
 -- # CYCLE LAYOUTS:
 --     r  super+ctrl+alt+shift+p next_layout
-----------------------------------------------------------------------------
--- # ZOOM
---
--- # WINDOW SPECIFIC:
---     super+equal change_font_size current +1.0
---     super+minus change_font_size current -1.0
--- # UNIVERSAL:
---     super+shift+equal change_font_size all +1.0
---     super+shift+minus change_font_size all -1.0

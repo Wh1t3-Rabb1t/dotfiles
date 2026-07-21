@@ -21,6 +21,11 @@
 
 ## Modules:
 
+- Build a robust key 'queue'.
+
+- Implement an 'expand/collapse' binding for each popup (make it stateful so we
+  don't need to keep hiding unwanted popups).
+
 - Add 'on_click' and 'focus ?' events to ensure state.active_win is changed
   when required.
 

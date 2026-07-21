@@ -34,66 +34,6 @@ local function rgb(r, g, b, opacity)
 end
 
 
--- Format menu contents
---------------------------------------------------------------------------------
-local function get_menu_text(app, binding_tbl)
-    local len = 0
-
-    -- Find longest key
-    for _, binding in ipairs(binding_tbl) do
-        local display = ("%s"):format(binding.key)
-        len = math.max(len, #display)
-    end
-
-    -- Define text formatting
-    local font_style = {
-        name = 'Menlo',
-        size = 16,
-    }
-    local title_style = {
-        font = {
-            name = 'Menlo-BoldItalic',
-            size = 18,
-        },
-        color = rgb(205, 205, 205),
-    }
-    local key_style = {
-        font = font_style,
-        color = rgb(0, 255, 0),
-    }
-    local arrow_style = {
-        font = font_style,
-        color = rgb(100, 100, 100),
-    }
-    local desc_style = {
-        font = font_style,
-        color = rgb(255, 255, 255),
-    }
-
-    local fmt = "%" .. len .. "s "  -- "%-" (to align keys at the start)
-    local title_length = #app + 2
-    local underline = "\n" .. string.rep("-", title_length) .. "\n"
-    local styled_text = require('hs.styledtext')
-    local text = styled_text.new(("* %s"):format(app), title_style)
-        .. styled_text.new(underline, title_style)
-
-    for i, binding in ipairs(binding_tbl) do
-        local display = ("%s"):format(binding.key)
-
-        text = text
-            .. styled_text.new(fmt:format(display), key_style)
-            .. styled_text.new('-> ', arrow_style)
-            .. styled_text.new(binding.desc, desc_style)
-
-        if i < #binding_tbl then
-            text = text .. styled_text.new("\n", desc_style)
-        end
-    end
-
-    return text
-end
-
-
 -- Create popup
 --------------------------------------------------------------------------------
 local function get_popup(content, frame)
@@ -201,6 +141,52 @@ local function get_screen_data(screen)
     }
 
     return screen_data
+end
+
+
+-- Format menu contents
+--------------------------------------------------------------------------------
+local function get_menu_text(app, binding_tbl)
+    local len = 0
+
+    -- Find longest key
+    for _, binding in ipairs(binding_tbl) do
+        local display = ("%s"):format(binding.key)
+        len = math.max(len, #display)
+    end
+
+    -- Text styling
+    local title_font = { name = 'Menlo-BoldItalic', size = 18 }
+    local base_font =  { name = 'Menlo',            size = 16 }
+    local styles = {
+        title = { font = title_font, color = rgb(205, 205, 205), },
+        key   = { font = base_font,  color = rgb(0, 255, 0) },
+        arrow = { font = base_font,  color = rgb(100, 100, 100) },
+        desc  = { font = base_font,  color = rgb(255, 255, 255) },
+    }
+
+    -- Define text formatting
+    local fmt = "%" .. len .. "s "  -- "%-" (to align keys at the start)
+    local title_length = #app + 2
+    local underline = "\n" .. string.rep("-", title_length) .. "\n"
+    local styled_text = require('hs.styledtext')
+    local text = styled_text.new(("* %s"):format(app), styles.title)
+        .. styled_text.new(underline, styles.title)
+
+    for i, binding in ipairs(binding_tbl) do
+        local display = ("%s"):format(binding.key)
+
+        text = text
+            .. styled_text.new(fmt:format(display), styles.key)
+            .. styled_text.new('-> ', styles.arrow)
+            .. styled_text.new(binding.desc, styles.desc)
+
+        if i < #binding_tbl then
+            text = text .. styled_text.new("\n", styles.desc)
+        end
+    end
+
+    return text
 end
 
 

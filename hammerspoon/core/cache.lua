@@ -1,7 +1,12 @@
 local M = {}
 
-M.lookup = {}
 M.watchers = {}
+
+M.lookup = {
+    -- [app_name] = {
+    --
+    -- }
+}
 
 M.assets = {
     -- [app_name] = {

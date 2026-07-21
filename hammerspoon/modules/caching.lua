@@ -207,26 +207,29 @@ end
 -- Create binding popup menus
 --------------------------------------------------------------------------------
 local function get_binding_popups(app, bindings)
-    local lookup = {}
-
-    -- Pack lookup table
-    for _, binding in ipairs(bindings) do
-        lookup[binding.key] = registry.actions[app][binding.action]
-    end
-
     local content = get_menu_text(app, bindings)
     local frame = get_popup_frame(content)
     local popup = get_popup(content, frame)
 
     local binding_data = {
-        lookup = lookup,
-        assets = {
-            popup = popup,
-            frame = frame,
-        }
+        popup = popup,
+        frame = frame,
     }
 
     return binding_data
+end
+
+
+-- Pack binding lookup table
+--------------------------------------------------------------------------------
+local function get_binding_tbl(app, bindings)
+    local lookup = {}
+
+    for _, binding in ipairs(bindings) do
+        lookup[binding.key] = registry.actions[app][binding.action]
+    end
+
+    return lookup
 end
 
 
@@ -282,10 +285,8 @@ function M.init()
        not tbl_initialized(cache.lookup)
     then
         for app, bindings in pairs(registry.bindings) do
-            local binding_data = get_binding_popups(app, bindings)
-
-            cache.lookup[app] = binding_data.lookup
-            cache.assets[app] = binding_data.assets
+            cache.lookup[app] = get_binding_tbl(app, bindings)
+            cache.assets[app] = get_binding_popups(app, bindings)
         end
 
         -- Create event tap

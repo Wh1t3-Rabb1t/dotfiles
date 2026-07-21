@@ -37,17 +37,17 @@ M.bindings = {
             desc   = 'Print Brightness',
         },
         {
-            key    = 'l',
+            key    = 'o',
             action = 'resize_split_right',
             desc   = 'Re-size splits right',
         },
         {
-            key    = 't',
+            key    = 'u',
             action = 'resize_split_left',
             desc   = 'Re-size splits left',
         },
         {
-            key    = 'm',
+            key    = 'g',
             action = 'maximize_split',
             desc   = 'Maximize focused split',
         },

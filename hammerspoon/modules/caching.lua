@@ -161,6 +161,76 @@ local function get_screen_data(screen)
 end
 
 
+-- Format bindings with mods
+--------------------------------------------------------------------------------
+local function format_binding(binding)
+    local mods = binding.mods or {}
+    local key = binding.key
+
+    local shift_chars = {
+        ['`'] = '~',
+        ['1'] = '!',
+        ['2'] = '@',
+        ['3'] = '#',
+        ['4'] = '$',
+        ['5'] = '%',
+        ['6'] = '^',
+        ['7'] = '&',
+        ['8'] = '*',
+        ['9'] = '(',
+        ['0'] = ')',
+        ['-'] = '_',
+        ['='] = '+',
+        ['['] = '{',
+        [']'] = '}',
+        ['\\'] = '|',
+        [';'] = ':',
+        ["'"] = '"',
+        [','] = '<',
+        ['.'] = '>',
+        ['/'] = '?',
+    }
+
+    local mod_names = {
+        cmd   = 'cmd',
+        ctrl  = 'ctrl',
+        alt   = 'alt',
+        shift = 'shift',
+        fn    = 'fn',
+    }
+
+    -- Shift is represented directly where possible
+    local has_shift = false
+
+    for _, mod in ipairs(mods) do
+        if mod == 'shift' then
+            has_shift = true
+            break
+        end
+    end
+
+    if has_shift then
+        if key:match("^[a-z]$") then
+            key = key:upper()
+        elseif shift_chars[key] then
+            key = shift_chars[key]
+        end
+    end
+
+    local parts = {}
+
+    for _, mod in ipairs(mods) do
+        if mod ~= 'shift' then
+            table.insert(parts, mod_names[mod] or mod)
+        end
+    end
+
+    table.insert(parts, key)
+
+    return table.concat(parts, " ")
+end
+
+
 -- Format menu contents
 --------------------------------------------------------------------------------
 local function get_menu_text(app, binding_tbl)
@@ -169,7 +239,7 @@ local function get_menu_text(app, binding_tbl)
     -- Find longest key across all categories
     for _, category in ipairs(binding_tbl) do
         for _, binding in ipairs(category.bindings) do
-            len = math.max(len, #binding.key)
+            len = math.max(len, #format_binding(binding))
         end
     end
 
@@ -190,6 +260,7 @@ local function get_menu_text(app, binding_tbl)
     local title = ("* %s"):format(app)
     local text = styled_text.new(title, styles.title) .. styled_text.new("\n\n", styles.title)
 
+
     for c, category in ipairs(binding_tbl) do
         -- Category heading
         text = text
@@ -198,8 +269,10 @@ local function get_menu_text(app, binding_tbl)
 
         -- Category bindings
         for i, binding in ipairs(category.bindings) do
+            local display = format_binding(binding)
+
             text = text
-                .. styled_text.new(fmt:format(binding.key), styles.key)
+                .. styled_text.new(fmt:format(display), styles.key)
                 .. styled_text.new("-> ", styles.arrow)
                 .. styled_text.new(binding.desc, styles.desc)
 

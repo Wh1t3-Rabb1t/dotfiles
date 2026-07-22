@@ -21,6 +21,8 @@
 
 ## Modules:
 
+- Put modifiers in bindings popup.
+
 - Build a robust key 'queue'.
 
 - Need handling for certain kitty actions to ensure that nvim or broot etc.

@@ -44,7 +44,6 @@ M.bindings = {
                 },
                 {
                     key    = 'j',
-                    mods   = { 'shift' },
                     action = 'brightness_down',
                     desc   = 'Down',
                 },

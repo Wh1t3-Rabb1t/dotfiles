@@ -113,11 +113,11 @@ M.bindings = {
                     action = 'paste_from_clipboard',
                     desc   = 'Paste',
                 },
-                {
-                    key    = 'b',
-                    action = 'show_last_command_output',
-                    desc   = 'Open last cmd output',
-                },
+                -- {
+                --     key    = 'b',
+                --     action = 'show_last_command_output',
+                --     desc   = 'Open last cmd output',
+                -- },
                 {
                     key    = 'e',
                     action = 'scroll_page_up',
@@ -128,36 +128,36 @@ M.bindings = {
                     action = 'scroll_page_down',
                     desc   = 'Page down',
                 },
-                -- {
-                --     key    = 'e',
-                --     mods   = 'shift',
-                --     action = 'page_up',
-                --     desc   = 'Scroll up',
-                -- },
-                -- {
-                --     key    = 'd',
-                --     mods   = 'shift',
-                --     action = 'page_down',
-                --     desc   = 'Scroll down',
-                -- },
-                -- {
-                --     key    = 'up',
-                --     mods   = 'shift',
-                --     action = 'previous_prompt',
-                --     desc   = 'Jump to the previous prompt',
-                -- },
-                -- {
-                --     key    = 'down',
-                --     mods   = 'shift',
-                --     action = 'page_down',
-                --     desc   = 'Jump to the next prompt',
-                -- },
-                -- {
-                --     key    = 'k',
-                --     mods   = 'shift',
-                --     action = 'clear_terminal',
-                --     desc   = 'Clear the scrollback',
-                -- },
+                {
+                    key    = 'e',
+                    mods   = { 'shift' },
+                    action = 'page_up',
+                    desc   = 'Scroll up',
+                },
+                {
+                    key    = 'd',
+                    mods   = { 'shift' },
+                    action = 'page_down',
+                    desc   = 'Scroll down',
+                },
+                {
+                    key    = 'up',
+                    mods   = { 'shift' },
+                    action = 'prev_prompt',
+                    desc   = 'Jump to the previous prompt',
+                },
+                {
+                    key    = 'down',
+                    mods   = { 'shift' },
+                    action = 'next_prompt',
+                    desc   = 'Jump to the next prompt',
+                },
+                {
+                    key    = 'c',
+                    mods   = { 'shift' },
+                    action = 'clear_terminal',
+                    desc   = 'Clear the scrollback',
+                },
                 -- {
                 --     key    = '=',
                 --     mods   = 'cmd',
@@ -184,12 +184,12 @@ M.bindings = {
                     action = 'new_split',
                     desc   = 'New split',
                 },
-                -- {
-                --     key    = 'm',
-                --     mods   = 'shift',
-                --     action = 'new_os_window',
-                --     desc   = 'New window',
-                -- },
+                {
+                    key    = 'm',
+                    mods   = { 'shift' },
+                    action = 'new_os_window',
+                    desc   = 'New window',
+                },
                 {
                     key    = 'i',
                     action = 'split_above',
@@ -210,36 +210,36 @@ M.bindings = {
                     action = 'split_left',
                     desc   = 'Focus left',
                 },
-                -- {
-                --     key    = 'i',
-                --     mods   = 'shift',
-                --     action = 'resize_split_up',
-                --     desc   = 'Resize up',
-                -- },
-                -- {
-                --     key    = 'k',
-                --     mods   = 'shift',
-                --     action = 'resize_split_down',
-                --     desc   = 'Resize down',
-                -- },
-                -- {
-                --     key    = 'l',
-                --     mods   = 'shift',
-                --     action = 'resize_split_right',
-                --     desc   = 'Resize right',
-                -- },
-                -- {
-                --     key    = 't',
-                --     mods   = 'shift',
-                --     action = 'resize_split_left',
-                --     desc   = 'Resize left',
-                -- },
-                -- {
-                --     key    = 'p',
-                --     mods   = 'shift',
-                --     action = 'swap_with_split',
-                --     desc   = 'Swap split',
-                -- },
+                {
+                    key    = 'i',
+                    mods   = { 'shift' },
+                    action = 'resize_split_up',
+                    desc   = 'Resize up',
+                },
+                {
+                    key    = 'k',
+                    mods   = { 'shift' },
+                    action = 'resize_split_down',
+                    desc   = 'Resize down',
+                },
+                {
+                    key    = 'l',
+                    mods   = { 'shift' },
+                    action = 'resize_split_right',
+                    desc   = 'Resize right',
+                },
+                {
+                    key    = 't',
+                    mods   = { 'shift' },
+                    action = 'resize_split_left',
+                    desc   = 'Resize left',
+                },
+                {
+                    key    = 'p',
+                    mods   = { 'shift' },
+                    action = 'swap_with_split',
+                    desc   = 'Swap split',
+                },
                 {
                     key    = 'w',
                     action = 'close_split',
@@ -247,7 +247,7 @@ M.bindings = {
                 },
                 -- {
                 --     key    = 'w',
-                --     mods   = 'shift',
+                --     mods   = { 'shift' },
                 --     action = 'detach_window',
                 --     desc   = 'Detach from parent os window',
                 -- },
@@ -265,12 +265,6 @@ M.bindings = {
                     action = 'new_tab',
                     desc   = 'Open new',
                 },
-                -- {
-                --     key    = 'n',
-                --     mods   = 'shift',
-                --     action = 'set_tab_title',
-                --     desc   = 'Rename',
-                -- },
                 {
                     key    = ';',
                     action = 'next_tab',
@@ -290,12 +284,12 @@ M.bindings = {
         {
             category = 'Layout',
             bindings = {
-                -- {
-                --     key    = 'r',
-                --     mods   = 'shift',
-                --     action = 'rotate_splits',
-                --     desc   = 'Rotate split',
-                -- },
+                {
+                    key    = 'r',
+                    mods   = { 'shift' },
+                    action = 'rotate_splits',
+                    desc   = 'Rotate split',
+                },
                 {
                     key    = 'r',
                     action = 'next_layout',
@@ -424,6 +418,10 @@ M.actions = {
         show_last_command_output = function() which_key.send_keys({'alt'}, 'b') end,
         scroll_page_up           = function() which_key.send_keys({'shift'}, 'pageup') end,
         scroll_page_down         = function() which_key.send_keys({'shift'}, 'pagedown') end,
+        page_up                  = function() which_key.send_keys('pageup') end,
+        page_down                = function() which_key.send_keys('pagedown') end,
+        next_prompt              = function() which_key.send_keys({'shift'}, 'up') end,
+        prev_prompt              = function() which_key.send_keys({'shift'}, 'down') end,
         clear_terminal           = function() which_key.send_keys({'shift'}, 'k') end,
         new_split                = function() which_key.send_keys({'cmd', 'ctrl', 'alt'}, 'm') end,
         new_window               = function() which_key.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm') end,
@@ -431,15 +429,24 @@ M.actions = {
         split_below              = function() which_key.send_keys({'ctrl', 'alt'}, 'down') end,
         split_left               = function() which_key.send_keys({'ctrl', 'alt'}, 'left') end,
         split_right              = function() which_key.send_keys({'ctrl', 'alt'}, 'right') end,
+        resize_split_up          = function() which_key.send_keys({'ctrl', 'alt', 'shift'}, 'up') end,
+        resize_split_down        = function() which_key.send_keys({'ctrl', 'alt', 'shift'}, 'down') end,
+        resize_split_left        = function() which_key.send_keys({'ctrl', 'alt', 'shift'}, 'left') end,
+        resize_split_right       = function() which_key.send_keys({'ctrl', 'alt', 'shift'}, 'right') end,
+        swap_with_split          = function()
+            which_key.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'z')
+            which_key.close_menu()
+        end,
         close_split              = function() which_key.send_keys({'cmd', 'ctrl', 'alt'}, 'w') end,
         new_tab                  = function() which_key.send_keys({'cmd', 'ctrl', 'alt'}, 'n') end,
         next_tab                 = function() which_key.send_keys({'ctrl'}, 'end') end,
         prev_tab                 = function() which_key.send_keys({'ctrl'}, 'home') end,
+        rotate_splits            = function() which_key.send_keys({'cmd', 'ctrl', 'alt'}, 'p') end,
         next_layout              = function() which_key.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') end,
     },
 
     ['Brave Browser'] = {
-        focus_searchbar = function() which_key.send_keys('cmd', 'l') which_key.close_menu() end,
+        focus_searchbar = function() which_key.send_keys({'cmd'}, 'l') which_key.close_menu() end,
         left_arrow      = function() which_key.send_keys('left') end,
         right_arrow     = function() which_key.send_keys('right') end,
         tab_left        = function() which_key.send_keys({'ctrl'}, 'pageup') end,
@@ -458,66 +465,3 @@ M.actions = {
 }
 
 return M
-
-
--- # SCROLLBACK
---
--- # LAUNCH IN NVIM:
---     alt+b       show_last_command_output
---     alt+shift+b show_scrollback
--- # PAGE UP/DOWN:
---     e  shift+page_up scroll_page_up
---     d  shift+page_down scroll_page_down
--- # UP/DOWN MULTIPLE LINES AT A TIME:
---     E  page_up combine : scroll_line_up : scroll_line_up : scroll_line_up : scroll_line_up : scroll_line_up : scroll_line_up
---     D  page_down combine : scroll_line_down : scroll_line_down : scroll_line_down : scroll_line_down : scroll_line_down : scroll_line_down
--- # NEXT/PREVIOUS PROMPT:
---     shift+up scroll_to_prompt -1
---     shift+down scroll_to_prompt 1
--- # CLEAR THE TERMINAL SCROLLBACK BY ERASING IT:
---     super+k clear_terminal scrollback active
--- # ZOOM (WINDOW SPECIFIC):
---     super+equal change_font_size current +1.0
---     super+minus change_font_size current -1.0
--- # ZOOM (UNIVERSAL):
---     super+shift+equal change_font_size all +1.0
---     super+shift+minus change_font_size all -1.0
-----------------------------------------------------------------------------
--- # WINDOWS
---
--- # LAUNCH:
---     super+ctrl+alt+m launch --location=split --cwd=current --window-title current
---     super+ctrl+alt+shift+m new_os_window
--- # NAVIGATE:
---     i  ctrl+alt+up neighboring_window top
---     k  ctrl+alt+down neighboring_window bottom
---     t  ctrl+alt+left neighboring_window left
---     l  ctrl+alt+right neighboring_window right
--- # RESIZE:
---     I  ctrl+alt+shift+up kitten relative_resize.py up
---     K  ctrl+alt+shift+down kitten relative_resize.py down
---     T  ctrl+alt+shift+left kitten relative_resize.py left
---     L  ctrl+alt+shift+right kitten relative_resize.py right
--- # SWAP POSITIONS:
---     P  super+ctrl+alt+shift+z swap_with_window
--- # CLOSE:
---     w  super+ctrl+alt+w close_window_with_confirmation
--- # DETACH FROM PARENT OS WINDOW:
---     W  super+ctrl+alt+shift+w detach_window
-----------------------------------------------------------------------------
--- # TABS
---
--- # LAUNCH:
---     n  super+ctrl+alt+n new_tab
--- # RENAME:
---     N  super+ctrl+alt+shift+n set_tab_title
--- # NAVIGATE:
---     ;  ctrl+end next_tab
---     h  ctrl+home previous_tab
-----------------------------------------------------------------------------
--- # LAYOUT
---
--- # ROTATE THE CURRENT SPLIT:
---     R  super+ctrl+alt+p layout_action rotate
--- # CYCLE LAYOUTS:
---     r  super+ctrl+alt+shift+p next_layout

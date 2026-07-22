@@ -163,6 +163,7 @@ end
 
 -- Format bindings with mods
 --------------------------------------------------------------------------------
+
 local function format_binding(binding)
     local mods = binding.mods or {}
     local key = binding.key
@@ -196,31 +197,28 @@ local function format_binding(binding)
         ctrl  = 'ctrl',
         alt   = 'alt',
         shift = 'shift',
-        fn    = 'fn',
+        -- fn    = 'fn',
     }
 
-    -- Shift is represented directly where possible
-    local has_shift = false
+    local consume_shift = false
 
     for _, mod in ipairs(mods) do
         if mod == 'shift' then
-            has_shift = true
+            if key:match("^[a-z]$") then
+                key = key:upper()
+                consume_shift = true
+            elseif shift_chars[key] then
+                key = shift_chars[key]
+                consume_shift = true
+            end
             break
-        end
-    end
-
-    if has_shift then
-        if key:match("^[a-z]$") then
-            key = key:upper()
-        elseif shift_chars[key] then
-            key = shift_chars[key]
         end
     end
 
     local parts = {}
 
     for _, mod in ipairs(mods) do
-        if mod ~= 'shift' then
+        if mod ~= 'shift' or not consume_shift then
             table.insert(parts, mod_names[mod] or mod)
         end
     end
@@ -259,7 +257,6 @@ local function get_menu_text(app, binding_tbl)
     local fmt = "%" .. len .. "s "
     local title = ("* %s"):format(app)
     local text = styled_text.new(title, styles.title) .. styled_text.new("\n\n", styles.title)
-
 
     for c, category in ipairs(binding_tbl) do
         -- Category heading
@@ -349,7 +346,6 @@ local function get_event_tap()
         if flags.alt   then table.insert(mods, 'alt') end
         if flags.ctrl  then table.insert(mods, 'ctrl') end
         if flags.shift then table.insert(mods, 'shift') end
-        if flags.fn    then table.insert(mods, 'fn') end
 
         local lookup_key = binding_id(key, mods)
         local bound_action = cache.lookup.system[lookup_key] or cache.lookup[app_name][lookup_key]

@@ -23,6 +23,10 @@
 
 - Build a robust key 'queue'.
 
+- Need to ensure the combined popup height does not exceed screen height.
+
+- Add popup opacity fns.
+
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).
 

@@ -19,7 +19,7 @@ hs.hotkey.bind({ 'ctrl', 'shift' }, 'r', function()
 end)
 
 -- Binding popup menu
-hs.hotkey.bind({ 'ctrl' }, 'f', function()
+hs.hotkey.bind({ 'cmd', 'ctrl', 'alt', 'shift' }, 'space', function()
     require('caching').init()
     require('which_key').launch_menu()
 end)

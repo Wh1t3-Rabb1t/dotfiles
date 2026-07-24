@@ -111,11 +111,11 @@ function M.show_popups(win)
 
     table.insert(popups, cache.assets.system)
 
-    local coords = M.get_popup_coords(win, popups, 'top_right')
+    local coords = M.get_popup_coords(win, popups, 'bottom_right')
 
-    for i, popup in ipairs(popups) do
-        popup.popup:topLeft(coords[i])
-        popup.popup:show(0.15)
+    for i, v in ipairs(popups) do
+        v.popup:topLeft(coords[i])
+        v.popup:show(0.15)
     end
 
     state.menu.active_win = win

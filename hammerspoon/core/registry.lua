@@ -427,11 +427,6 @@ M.actions = {
     -- Media:
     --   Toggle (play/pause)
     --
-    -- Brightness:
-    --   Up
-    --   Down
-    --   Print
-    --
     -- Wifi:
     --   Toggle (on/off)
     --
@@ -441,9 +436,6 @@ M.actions = {
     --   Paste
     --
     -- Windows:
-    --   ,  Resize_split_left
-    --   .  Resize_split_right
-    --   m  Maximize_split
     --   n  Win_to_next_screen
 
 

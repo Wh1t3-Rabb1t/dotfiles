@@ -23,7 +23,8 @@
 
 - Build a robust key 'queue'.
 
-- Need to ensure the combined popup height does not exceed screen height.
+- When entering fullscreen let's see if it's possible to apply the shader value
+  to the fullscreen 'workspace' (or whatever mac calls it).
 
 - Add popup opacity fns.
 

@@ -252,16 +252,16 @@ local function fmt_menu_text(app, binding_tbl)
         desc  = { font = base_font,  color = rgb(255, 255, 255) },
     }
 
-    local styled_text = require("hs.styledtext")
-    local fmt = "%" .. len .. "s "
-    local title = ("* %s"):format(app)
-    local text = styled_text.new(title, styles.title) .. styled_text.new("\n\n", styles.title)
+    local styled_text = require('hs.styledtext')
+    local fmt = '%' .. len .. 's '
+    local title = ('* %s'):format(app)
+    local text = styled_text.new(title, styles.title) .. styled_text.new('\n\n', styles.title)
 
     for c, category in ipairs(binding_tbl) do
         -- Category heading
         text = text
             .. styled_text.new(category.category .. ':', styles.group)
-            .. styled_text.new("\n", styles.group)
+            .. styled_text.new('\n', styles.group)
 
         -- Category bindings
         for i, binding in ipairs(category.bindings) do
@@ -269,17 +269,17 @@ local function fmt_menu_text(app, binding_tbl)
 
             text = text
                 .. styled_text.new(fmt:format(display), styles.key)
-                .. styled_text.new("-> ", styles.arrow)
+                .. styled_text.new('-> ', styles.arrow)
                 .. styled_text.new(binding.desc, styles.desc)
 
             if i < #category.bindings then
-                text = text .. styled_text.new("\n", styles.desc)
+                text = text .. styled_text.new('\n', styles.desc)
             end
         end
 
         -- Blank line between categories
         if c < #binding_tbl then
-            text = text .. styled_text.new("\n\n", styles.desc)
+            text = text .. styled_text.new('\n\n', styles.desc)
         end
     end
 

@@ -29,6 +29,72 @@ function M.send_keys(a, b)
 end
 
 
+-- Calculate vertical layout dimensions
+--------------------------------------------------------------------------------
+function M.vertical_layout(popups, spacing)
+    spacing = spacing or 25
+
+    local width = 0
+    local height = 0
+
+    for i, popup in ipairs(popups) do
+        width = math.max(width, popup.frame.w)
+        height = height + popup.frame.h
+
+        if i < #popups then
+            height = height + spacing
+        end
+    end
+
+    local coords = {}
+    local y = 0
+
+    for i, popup in ipairs(popups) do
+        coords[i] = {
+            x = 0,
+            y = y,
+        }
+
+        y = y + popup.frame.h + spacing
+    end
+
+    return width, height, coords
+end
+
+
+-- Calculate horizontal layout dimensions
+--------------------------------------------------------------------------------
+function M.horizontal_layout(popups, spacing)
+    spacing = spacing or 25
+
+    local width = 0
+    local height = 0
+
+    for i, popup in ipairs(popups) do
+        width = width + popup.frame.w
+        height = math.max(height, popup.frame.h)
+
+        if i < #popups then
+            width = width + spacing
+        end
+    end
+
+    local coords = {}
+    local x = 0
+
+    for i, popup in ipairs(popups) do
+        coords[i] = {
+            x = x,
+            y = 0,
+        }
+
+        x = x + popup.frame.w + spacing
+    end
+
+    return width, height, coords
+end
+
+
 -- Get anchor position relative to the focused window
 --------------------------------------------------------------------------------
 function M.get_anchor(frame, width, height, corner)
@@ -60,38 +126,38 @@ end
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-function M.get_popup_coords(win, popups, corner)
+function M.get_popup_coords(win, popups, corner, layout)
     corner = corner or 'top_right'
+    layout = layout or 'auto'
 
     local app_frame = win:frame()
+    local screen_frame = cache.screens[win:screen():id()].frame
 
-    local width = 0
-    local height = 0
+    local width, height, coords
     local spacing = 25
 
-    -- Find the width of the widest popup and the total stack height
-    for i, popup in ipairs(popups) do
-        width = math.max(width, popup.frame.w)
-        height = height + popup.frame.h
+    -- Vertical
+    if layout == 'vertical' then
+        width, height, coords = M.vertical_layout(popups, spacing)
 
-        if i < #popups then
-            height = height + spacing
+    -- Horizontal
+    elseif layout == 'horizontal' then
+        width, height, coords = M.horizontal_layout(popups, spacing)
+
+    -- Auto
+    else
+        width, height, coords = M.vertical_layout(popups, spacing)
+
+        if height > screen_frame.h then
+            width, height, coords = M.horizontal_layout(popups, spacing)
         end
     end
 
     local anchor = M.get_anchor(app_frame, width, height, corner)
 
-    -- Calculate the top-left coordinate for each popup
-    local coords = {}
-    local y = anchor.y
-
-    for i, popup in ipairs(popups) do
-        coords[i] = {
-            x = anchor.x,
-            y = y,
-        }
-
-        y = y + popup.frame.h + spacing
+    for _, coord in ipairs(coords) do
+        coord.x = coord.x + anchor.x
+        coord.y = coord.y + anchor.y
     end
 
     return coords

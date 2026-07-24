@@ -19,7 +19,7 @@ M.bindings = {
                     desc   = 'Firefox',
                 },
                 {
-                    key    = 'k',
+                    key    = 'a',
                     action = 'launch_kitty',
                     desc   = 'kitty',
                 },
@@ -64,12 +64,12 @@ M.bindings = {
                 {
                     key    = 'o',
                     action = 'resize_split_right',
-                    desc   = 'Re-size right',
+                    desc   = 'Resize right',
                 },
                 {
                     key    = 'u',
                     action = 'resize_split_left',
-                    desc   = 'Re-size left',
+                    desc   = 'Resize left',
                 },
                 {
                     key    = 'g',
@@ -108,11 +108,11 @@ M.bindings = {
         {
             category = 'Scrollback',
             bindings = {
-                {
-                    key    = 'v',
-                    action = 'paste_from_clipboard',
-                    desc   = 'Paste',
-                },
+                -- {
+                --     key    = 'v',
+                --     action = 'paste_from_clipboard',
+                --     desc   = 'Paste',
+                -- },
                 -- {
                 --     key    = 'b',
                 --     action = 'show_last_command_output',
@@ -128,36 +128,36 @@ M.bindings = {
                     action = 'scroll_page_down',
                     desc   = 'Page down',
                 },
-                {
-                    key    = 'e',
-                    mods   = { 'shift' },
-                    action = 'page_up',
-                    desc   = 'Scroll up',
-                },
-                {
-                    key    = 'd',
-                    mods   = { 'shift' },
-                    action = 'page_down',
-                    desc   = 'Scroll down',
-                },
-                {
-                    key    = 'up',
-                    mods   = { 'shift' },
-                    action = 'prev_prompt',
-                    desc   = 'Jump to the previous prompt',
-                },
-                {
-                    key    = 'down',
-                    mods   = { 'shift' },
-                    action = 'next_prompt',
-                    desc   = 'Jump to the next prompt',
-                },
-                {
-                    key    = 'c',
-                    mods   = { 'shift' },
-                    action = 'clear_terminal',
-                    desc   = 'Clear the scrollback',
-                },
+                -- {
+                --     key    = 'e',
+                --     mods   = { 'shift' },
+                --     action = 'page_up',
+                --     desc   = 'Scroll up',
+                -- },
+                -- {
+                --     key    = 'd',
+                --     mods   = { 'shift' },
+                --     action = 'page_down',
+                --     desc   = 'Scroll down',
+                -- },
+                -- {
+                --     key    = 'up',
+                --     mods   = { 'shift' },
+                --     action = 'prev_prompt',
+                --     desc   = 'Previous prompt',
+                -- },
+                -- {
+                --     key    = 'down',
+                --     mods   = { 'shift' },
+                --     action = 'next_prompt',
+                --     desc   = 'Next prompt',
+                -- },
+                -- {
+                --     key    = 'c',
+                --     mods   = { 'shift' },
+                --     action = 'clear_terminal',
+                --     desc   = 'Clear scrollback',
+                -- },
                 -- {
                 --     key    = '=',
                 --     mods   = 'cmd',
@@ -180,35 +180,24 @@ M.bindings = {
             category = 'Splits',
             bindings = {
                 {
-                    key    = 'm',
-                    action = 'new_split',
-                    desc   = 'New split',
-                },
-                {
-                    key    = 'm',
-                    mods   = { 'shift' },
-                    action = 'new_os_window',
-                    desc   = 'New window',
-                },
-                {
                     key    = 'i',
                     action = 'split_above',
-                    desc   = 'Focus above',
+                    desc   = 'Up',
                 },
                 {
                     key    = 'k',
                     action = 'split_below',
-                    desc   = 'Focus below',
+                    desc   = 'Down',
                 },
                 {
                     key    = 'l',
                     action = 'split_right',
-                    desc   = 'Focus right',
+                    desc   = 'Right',
                 },
                 {
                     key    = 't',
                     action = 'split_left',
-                    desc   = 'Focus left',
+                    desc   = 'Left',
                 },
                 {
                     key    = 'i',
@@ -238,10 +227,22 @@ M.bindings = {
                     key    = 'p',
                     mods   = { 'shift' },
                     action = 'swap_with_split',
-                    desc   = 'Swap split',
+                    desc   = 'Swap splits',
+                },
+                {
+                    key    = 'm',
+                    action = 'new_split',
+                    desc   = 'New split',
+                },
+                {
+                    key    = 'm',
+                    mods   = { 'shift' },
+                    action = 'new_os_window',
+                    desc   = 'New window',
                 },
                 {
                     key    = 'w',
+                    mods   = { 'shift' },
                     action = 'close_split',
                     desc   = 'Close',
                 },
@@ -437,7 +438,7 @@ M.actions = {
             which_key.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'z')
             which_key.close_menu()
         end,
-        close_split              = function() which_key.send_keys({'cmd', 'ctrl', 'alt'}, 'w') end,
+        close_split              = function() which_key.send_keys({'cmd', 'shift'}, 'd') end,
         new_tab                  = function() which_key.send_keys({'cmd', 'ctrl', 'alt'}, 'n') end,
         next_tab                 = function() which_key.send_keys({'ctrl'}, 'end') end,
         prev_tab                 = function() which_key.send_keys({'ctrl'}, 'home') end,

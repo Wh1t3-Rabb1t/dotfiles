@@ -25,13 +25,13 @@ local function binding_id(key, mods)
         return key
     end
 
-    if type(mods) == "string" then
+    if type(mods) == 'string' then
         mods = { mods }
     end
 
     table.sort(mods)
 
-    return table.concat(mods, "+") .. "+" .. key
+    return table.concat(mods, '+') .. '+' .. key
 end
 
 
@@ -53,7 +53,7 @@ end
 
 -- Create popup
 --------------------------------------------------------------------------------
-local function get_popup(content, frame)
+local function create_popup(content, frame)
     local popup = hs.canvas.new(frame)
 
     popup:appendElements(
@@ -118,8 +118,9 @@ end
 
 -- Create overlay
 --------------------------------------------------------------------------------
-local function get_overlay(screen)
-    local overlay = hs.canvas.new(screen:fullFrame())
+local function create_overlay(screen)
+    local frame = screen:fullFrame()
+    local overlay = hs.canvas.new(frame)
 
     overlay:appendElements({
         type = 'rectangle',
@@ -143,7 +144,7 @@ end
 local function get_screen_data(screen)
     local screen_data = {
         cache = {
-            overlay = get_overlay(screen),
+            overlay = create_overlay(screen),
             frame = get_usable_frame(screen),
         },
         state = {
@@ -163,8 +164,7 @@ end
 
 -- Format bindings with mods
 --------------------------------------------------------------------------------
-
-local function format_binding(binding)
+local function fmt_key_combinations(binding)
     local mods = binding.mods or {}
     local key = binding.key
 
@@ -197,14 +197,13 @@ local function format_binding(binding)
         ctrl  = 'ctrl',
         alt   = 'alt',
         shift = 'shift',
-        -- fn    = 'fn',
     }
 
     local consume_shift = false
 
     for _, mod in ipairs(mods) do
         if mod == 'shift' then
-            if key:match("^[a-z]$") then
+            if key:match('^[a-z]$') then
                 key = key:upper()
                 consume_shift = true
             elseif shift_chars[key] then
@@ -225,19 +224,19 @@ local function format_binding(binding)
 
     table.insert(parts, key)
 
-    return table.concat(parts, " ")
+    return table.concat(parts, ' ')
 end
 
 
 -- Format menu contents
 --------------------------------------------------------------------------------
-local function get_menu_text(app, binding_tbl)
+local function fmt_menu_text(app, binding_tbl)
     local len = 0
 
     -- Find longest key across all categories
     for _, category in ipairs(binding_tbl) do
         for _, binding in ipairs(category.bindings) do
-            len = math.max(len, #format_binding(binding))
+            len = math.max(len, #fmt_key_combinations(binding))
         end
     end
 
@@ -266,7 +265,7 @@ local function get_menu_text(app, binding_tbl)
 
         -- Category bindings
         for i, binding in ipairs(category.bindings) do
-            local display = format_binding(binding)
+            local display = fmt_key_combinations(binding)
 
             text = text
                 .. styled_text.new(fmt:format(display), styles.key)
@@ -290,10 +289,10 @@ end
 
 -- Create binding popup menus
 --------------------------------------------------------------------------------
-local function get_binding_popups(app, bindings)
-    local content = get_menu_text(app, bindings)
+local function fmt_binding_popups(app, bindings)
+    local content = fmt_menu_text(app, bindings)
     local frame = get_popup_frame(content)
-    local popup = get_popup(content, frame)
+    local popup = create_popup(content, frame)
 
     local binding_data = {
         popup = popup,
@@ -306,7 +305,7 @@ end
 
 -- Pack binding lookup table
 --------------------------------------------------------------------------------
-local function get_binding_tbl(app, bindings)
+local function fmt_binding_tbl(app, bindings)
     local lookup = {}
 
     for _, category in ipairs(bindings) do
@@ -325,7 +324,7 @@ end
 
 -- Create event tap
 --------------------------------------------------------------------------------
-local function get_event_tap()
+local function create_event_tap()
     local e = hs.eventtap
 
     local tap = e.new({ e.event.types.keyDown, e.event.types.flagsChanged }, function(event)
@@ -382,12 +381,12 @@ function M.init()
        not tbl_initialized(cache.lookup)
     then
         for app, bindings in pairs(registry.bindings) do
-            cache.lookup[app] = get_binding_tbl(app, bindings)
-            cache.assets[app] = get_binding_popups(app, bindings)
+            cache.lookup[app] = fmt_binding_tbl(app, bindings)
+            cache.assets[app] = fmt_binding_popups(app, bindings)
         end
 
         -- Create event tap
-        cache.assets.tap = get_event_tap()
+        cache.assets.tap = create_event_tap()
     end
 end
 

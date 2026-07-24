@@ -26,8 +26,6 @@
 - Need handling for certain kitty actions to ensure that nvim or broot etc.
   doesn't receive the keystrokes.
 
-- Rename certain 'get' functions to 'create'.
-
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).
 

@@ -317,6 +317,18 @@ M.bindings = {
                     action = 'reload',
                     desc   = 'Reload',
                 },
+                {
+                    key    = 'u',
+                    mods   = { 'shift' },
+                    action = 'back',
+                    desc   = 'Back',
+                },
+                {
+                    key    = 'o',
+                    mods   = { 'shift' },
+                    action = 'forward',
+                    desc   = 'Forward',
+                },
             },
         },
 
@@ -428,24 +440,11 @@ M.actions = {
     --   Cut
     --   Paste
     --
-    --
-    -- Scrolling:
-    --   e  Up
-    --   d  Down
-    --   s  Left
-    --   f  Right
-    --
     -- Windows:
     --   ,  Resize_split_left
     --   .  Resize_split_right
     --   m  Maximize_split
     --   n  Win_to_next_screen
-    --   p  Swap_splits
-    --
-    -- Apps:
-    --   kitty
-    --   b  Brave Browser
-    --   Firefox
 
 
     ['system'] = {
@@ -501,16 +500,6 @@ M.actions = {
     },
 
     ['Brave Browser'] = {
-        -- Tabs
-        tab_left        = function() which_key.send_keys({'ctrl'}, 'pageup') end,
-        tab_right       = function() which_key.send_keys({'ctrl'}, 'pagedown') end,
-        move_tab_left   = function() which_key.send_keys({'ctrl', 'shift'}, 'pageup') end,
-        move_tab_right  = function() which_key.send_keys({'ctrl', 'shift'}, 'pagedown') end,
-        search_tabs     = function() which_key.send_keys({'cmd', 'shift'}, 'a') end,
-        new_tab         = function() which_key.send_keys({'cmd'}, 't') end,
-        reopen_closed   = function() which_key.send_keys({'cmd', 'shift'}, 't') end,
-        close_tab       = function() which_key.send_keys({'cmd'}, 'w') end,
-
         -- Page
         up_arrow        = function() which_key.send_keys('up') end,
         down_arrow      = function() which_key.send_keys('down') end,
@@ -520,20 +509,25 @@ M.actions = {
         page_down       = function() which_key.send_keys('pagedown') end,
         page_top        = function() which_key.send_keys('home') end,
         page_bottom     = function() which_key.send_keys('end') end,
-        search_text     = function() which_key.send_keys({'cmd'}, 'f') end,
+        search_text     = function() which_key.send_keys({'cmd'}, 'f') which_key.close_menu() end,
         reload          = function() which_key.send_keys({'cmd'}, 'r') end,
+        back            = function() which_key.send_keys({'cmd'}, '[') end,
+        forward         = function() which_key.send_keys({'cmd'}, ']') end,
+
+        -- Tabs
+        tab_left        = function() which_key.send_keys({'ctrl'}, 'pageup') end,
+        tab_right       = function() which_key.send_keys({'ctrl'}, 'pagedown') end,
+        move_tab_left   = function() which_key.send_keys({'ctrl', 'shift'}, 'pageup') end,
+        move_tab_right  = function() which_key.send_keys({'ctrl', 'shift'}, 'pagedown') end,
+        search_tabs     = function() which_key.send_keys({'cmd', 'shift'}, 'a') which_key.close_menu() end,
+        new_tab         = function() which_key.send_keys({'cmd'}, 't') end,
+        reopen_closed   = function() which_key.send_keys({'cmd', 'shift'}, 't') end,
+        close_tab       = function() which_key.send_keys({'cmd'}, 'w') end,
 
         -- Misc
         focus_searchbar = function() which_key.send_keys({'cmd'}, 'l') which_key.close_menu() end,
         add_bookmark    = function() which_key.send_keys({'cmd'}, 'd') end,
         open_history    = function() which_key.send_keys({'cmd'}, 'h') end,
-
-        -- scroll_up
-        -- scroll_down
-        -- scroll_left
-        -- scroll_right
-        -- page_back       = function() which_key.send_keys('[', 'cmd') end,
-        -- page_forward    = function() which_key.send_keys(']', 'cmd') end,
     },
 }
 

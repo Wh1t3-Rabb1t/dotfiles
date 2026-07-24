@@ -23,21 +23,19 @@
 
 - Build a robust key 'queue'.
 
+- Implement an 'expand/collapse' binding for each popup (make it stateful so we
+  don't need to keep hiding unwanted popups).
+
 - On certain actions (like search for text in Brave etc) create an action
   that we can bind to 'enter' that will relaunch the popup menu (i.e. enter
   'insert' mode briefly to search etc.)
 
-- Need handling for certain kitty actions to ensure that nvim or broot etc.
-  doesn't receive the keystrokes.
-
-- Implement an 'expand/collapse' binding for each popup (make it stateful so we
-  don't need to keep hiding unwanted popups).
+- ?? Implement scrolling in Brave (might not be worth it because; need to set
+  mouse coords to within the window frame and left/right arrows usually scroll
+  left/right anyway).
 
 - Add 'on_click' and 'focus ?' events to ensure state.active_win is changed
   when required.
-
-- Refactor 'show_popups()' to return popups rather than invoke :show() from
-  within the fn.
 
 - Update cache when screens are connected/disconnected. Also check if the 'id'
   remains the same and if not look into using 'UUID' instead.

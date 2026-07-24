@@ -29,22 +29,62 @@ function M.send_keys(a, b)
 end
 
 
+-- Get anchor position relative to the focused window
+--------------------------------------------------------------------------------
+function M.get_anchor(frame, width, height, corner)
+    local padding = 50
+
+    if corner == 'top_left' then
+        return {
+            x = frame.x + padding,
+            y = frame.y + padding,
+        }
+    elseif corner == 'top_right' then
+        return {
+            x = frame.x + frame.w - width - padding,
+            y = frame.y + padding,
+        }
+    elseif corner == 'bottom_left' then
+        return {
+            x = frame.x + padding,
+            y = frame.y + frame.h - height - padding,
+        }
+    elseif corner == 'bottom_right' then
+        return {
+            x = frame.x + frame.w - width - padding,
+            y = frame.y + frame.h - height - padding,
+        }
+    end
+end
+
+
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-function M.get_popup_coords(win)
+function M.get_popup_coords(win, corner)
+    corner = corner or 'top_right'
+
+    local spacing = 25
+
     local app_frame = win:frame()
     local app_name = win:application():name()
-    local popup_frame = cache.assets[app_name].frame
+
+    local app_popup = cache.assets[app_name].frame
+    local sys_popup = cache.assets.system.frame
+
+    local width = math.max(app_popup.w, sys_popup.w)
+    local height = app_popup.h + spacing + sys_popup.h
+
+    local anchor = M.get_anchor(app_frame, width, height, corner)
 
     local coords = {
         app = {
-            x = app_frame.x + 50,
-            y = app_frame.y + 50,
+            x = anchor.x,
+            y = anchor.y,
         },
         system = {
-            x = app_frame.x + 50,
-            y = app_frame.y + (popup_frame.h + 75),
-        }
+            x = anchor.x,
+            y = anchor.y + app_popup.h + spacing,
+        },
     }
 
     return coords
@@ -57,7 +97,7 @@ function M.show_popups(win)
     local app_name = win:application():name()
 
     if cache.assets[app_name] then
-        local coords = M.get_popup_coords(win)
+        local coords = M.get_popup_coords(win, 'top_right')
 
         cache.assets[app_name].popup:topLeft(coords.app)
         cache.assets[app_name].popup:show(0.15)

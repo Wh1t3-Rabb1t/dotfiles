@@ -23,6 +23,10 @@
 
 - Build a robust key 'queue'.
 
+- On certain actions (like search for text in Brave etc) create an action
+  that we can bind to 'enter' that will relaunch the popup menu (i.e. enter
+  'insert' mode briefly to search etc.)
+
 - Need handling for certain kitty actions to ensure that nvim or broot etc.
   doesn't receive the keystrokes.
 

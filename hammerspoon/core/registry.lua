@@ -19,7 +19,7 @@ M.bindings = {
                     desc   = 'Firefox',
                 },
                 {
-                    key    = 'a',
+                    key    = 'v',
                     action = 'launch_kitty',
                     desc   = 'kitty',
                 },
@@ -91,6 +91,18 @@ M.bindings = {
             category = 'Cancel (quit)',
             bindings = {
                 {
+                    key    = 'z',
+                    mods   = { 'shift' },
+                    action = 'zoom_in',
+                    desc   = 'Zoom in',
+                },
+                {
+                    key    = 'j',
+                    mods   = { 'shift' },
+                    action = 'zoom_out',
+                    desc   = 'Zoom out',
+                },
+                {
                     key    = 'escape',
                     action = 'close_menu',
                     desc   = 'Cancel',
@@ -110,25 +122,13 @@ M.bindings = {
             bindings = {
                 {
                     key    = 'e',
-                    action = 'scroll_page_up',
+                    action = 'page_up',
                     desc   = 'Page up',
                 },
                 {
                     key    = 'd',
-                    action = 'scroll_page_down',
+                    action = 'page_down',
                     desc   = 'Page down',
-                },
-                {
-                    key    = 'z',
-                    mods   = { 'shift' },
-                    action = 'zoom_in',
-                    desc   = 'Zoom in',
-                },
-                {
-                    key    = 'j',
-                    mods   = { 'shift' },
-                    action = 'zoom_out',
-                    desc   = 'Zoom out',
                 },
             },
         },
@@ -258,6 +258,69 @@ M.bindings = {
 
     ['Brave Browser'] = {
         ----------
+        -- Page --
+        ----------
+        {
+            category = 'Page',
+            bindings = {
+                {
+                    key    = 'i',
+                    action = 'up_arrow',
+                    desc   = 'Up arrow',
+                },
+                {
+                    key    = 'k',
+                    action = 'down_arrow',
+                    desc   = 'Down arrow',
+                },
+                {
+                    key    = 't',
+                    action = 'left_arrow',
+                    desc   = 'Left arrow',
+                },
+                {
+                    key    = 'l',
+                    action = 'right_arrow',
+                    desc   = 'Right arrow',
+                },
+                {
+                    key    = 'e',
+                    action = 'page_up',
+                    desc   = 'Up',
+                },
+                {
+                    key    = 'd',
+                    action = 'page_down',
+                    desc   = 'Down',
+                },
+                {
+                    key    = 'e',
+                    mods   = { 'shift' },
+                    action = 'page_top',
+                    desc   = 'Top',
+                },
+                {
+                    key    = 'd',
+                    mods   = { 'shift' },
+                    action = 'page_bottom',
+                    desc   = 'Bottom',
+                },
+                {
+                    key    = 'f',
+                    mods   = { 'shift' },
+                    action = 'search_text',
+                    desc   = 'Search for text',
+                },
+                {
+                    key    = 'r',
+                    mods   = { 'shift' },
+                    action = 'reload',
+                    desc   = 'Reload',
+                },
+            },
+        },
+
+        ----------
         -- Tabs --
         ----------
         {
@@ -274,8 +337,36 @@ M.bindings = {
                     desc   = 'Right',
                 },
                 {
+                    key    = 'h',
+                    mods   = { 'shift' },
+                    action = 'move_tab_left',
+                    desc   = 'Swap with left',
+                },
+                {
+                    key    = ';',
+                    mods   = { 'shift' },
+                    action = 'move_tab_right',
+                    desc   = 'Swap with right',
+                },
+                {
+                    key    = '/',
+                    action = 'search_tabs',
+                    desc   = 'Search tabs',
+                },
+                {
+                    key    = 'm',
+                    action = 'new_tab',
+                    desc   = 'Open',
+                },
+                {
+                    key    = 'm',
+                    mods   = { 'shift' },
+                    action = 'reopen_closed',
+                    desc   = 'Re-open closed',
+                },
+                {
                     key    = 'w',
-                    action = 'tab_close',
+                    action = 'close_tab',
                     desc   = 'Close',
                 },
             },
@@ -293,15 +384,18 @@ M.bindings = {
                     desc   = 'Focus searchbar',
                 },
                 {
-                    key    = 'u',
-                    action = 'left_arrow',
-                    desc   = 'Left arrow',
+                    key    = 'b',
+                    mods   = { 'shift' },
+                    action = 'add_bookmark',
+                    desc   = 'Add bookmark',
                 },
                 {
-                    key    = 'o',
-                    action = 'right_arrow',
-                    desc   = 'Right arrow',
+                    key    = 'p',
+                    mods   = { 'shift' },
+                    action = 'open_history',
+                    desc   = 'Open history',
                 },
+
             },
         },
     },
@@ -372,15 +466,15 @@ M.actions = {
         swap_splits        = function() window.swap_splits() end,
 
         -- Misc
+        zoom_in            = function() which_key.send_keys({'cmd'}, '=') end,
+        zoom_out           = function() which_key.send_keys({'cmd'}, '-') end,
         close_menu         = function() which_key.close_menu() end,
     },
 
     ['kitty'] = {
         -- Scrollback
-        scroll_page_up     = function() which_key.send_keys({'shift'}, 'pageup') end,
-        scroll_page_down   = function() which_key.send_keys({'shift'}, 'pagedown') end,
-        zoom_in            = function() which_key.send_keys({'cmd'}, '=') end,
-        zoom_out           = function() which_key.send_keys({'cmd'}, '-') end,
+        page_up            = function() which_key.send_keys({'shift'}, 'pageup') end,
+        page_down          = function() which_key.send_keys({'shift'}, 'pagedown') end,
 
         -- Splits
         new_split          = function() which_key.send_keys({'cmd', 'ctrl', 'alt'}, 'm') end,
@@ -407,12 +501,32 @@ M.actions = {
     },
 
     ['Brave Browser'] = {
-        focus_searchbar = function() which_key.send_keys({'cmd'}, 'l') which_key.close_menu() end,
-        left_arrow      = function() which_key.send_keys('left') end,
-        right_arrow     = function() which_key.send_keys('right') end,
+        -- Tabs
         tab_left        = function() which_key.send_keys({'ctrl'}, 'pageup') end,
         tab_right       = function() which_key.send_keys({'ctrl'}, 'pagedown') end,
-        tab_close       = function() which_key.send_keys({'cmd'}, 'w') end,
+        move_tab_left   = function() which_key.send_keys({'ctrl', 'shift'}, 'pageup') end,
+        move_tab_right  = function() which_key.send_keys({'ctrl', 'shift'}, 'pagedown') end,
+        search_tabs     = function() which_key.send_keys({'cmd', 'shift'}, 'a') end,
+        new_tab         = function() which_key.send_keys({'cmd'}, 't') end,
+        reopen_closed   = function() which_key.send_keys({'cmd', 'shift'}, 't') end,
+        close_tab       = function() which_key.send_keys({'cmd'}, 'w') end,
+
+        -- Page
+        up_arrow        = function() which_key.send_keys('up') end,
+        down_arrow      = function() which_key.send_keys('down') end,
+        left_arrow      = function() which_key.send_keys('left') end,
+        right_arrow     = function() which_key.send_keys('right') end,
+        page_up         = function() which_key.send_keys('pageup') end,
+        page_down       = function() which_key.send_keys('pagedown') end,
+        page_top        = function() which_key.send_keys('home') end,
+        page_bottom     = function() which_key.send_keys('end') end,
+        search_text     = function() which_key.send_keys({'cmd'}, 'f') end,
+        reload          = function() which_key.send_keys({'cmd'}, 'r') end,
+
+        -- Misc
+        focus_searchbar = function() which_key.send_keys({'cmd'}, 'l') which_key.close_menu() end,
+        add_bookmark    = function() which_key.send_keys({'cmd'}, 'd') end,
+        open_history    = function() which_key.send_keys({'cmd'}, 'h') end,
 
         -- scroll_up
         -- scroll_down
@@ -420,8 +534,6 @@ M.actions = {
         -- scroll_right
         -- page_back       = function() which_key.send_keys('[', 'cmd') end,
         -- page_forward    = function() which_key.send_keys(']', 'cmd') end,
-        -- zoom_in         = function() which_key.send_keys('+', 'cmd') end,
-        -- zoom_out        = function() which_key.send_keys('-', 'cmd') end,
     },
 }
 

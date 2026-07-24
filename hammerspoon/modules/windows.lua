@@ -207,7 +207,11 @@ function M.swap_splits()
     layout.left = right_slot
     layout.right = left_slot
 
+    which_key.hide_popups(win)
+
     snap_windows(win, 'split')
+
+    which_key.show_popups(win)
 end
 
 
@@ -262,8 +266,12 @@ function M.maximize_split(win)
     local layout = state.screens[id].layout
     local frame = cache.screens[id].frame
 
+    which_key.hide_popups(win)
+
     layout.maximized = win
     layout.maximized:setFrame(frame)
+
+    which_key.show_popups(win)
 end
 
 return M

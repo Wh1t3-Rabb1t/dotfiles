@@ -23,10 +23,10 @@
 
 - Build a robust key 'queue'.
 
+- Add popup opacity fns.
+
 - When entering fullscreen let's see if it's possible to apply the shader value
   to the fullscreen 'workspace' (or whatever mac calls it).
-
-- Add popup opacity fns.
 
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).

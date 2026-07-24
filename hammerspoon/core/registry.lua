@@ -5,11 +5,8 @@ local window = require('windows')
 local which_key = require('which_key')
 
 M.bindings = {
-
     ['system'] = {
-        ---------------------
-        -- Launch or focus --
-        ---------------------
+        -- Launch or focus
         {
             category = 'Launch or focus',
             bindings = {
@@ -31,9 +28,7 @@ M.bindings = {
             },
         },
 
-        ----------------
-        -- Brightness --
-        ----------------
+        -- Brightness
         {
             category = 'Brightness',
             bindings = {
@@ -55,9 +50,7 @@ M.bindings = {
             },
         },
 
-        ------------
-        -- Splits --
-        ------------
+        -- Splits
         {
             category = 'Splits',
             bindings = {
@@ -84,9 +77,7 @@ M.bindings = {
             },
         },
 
-        ----------
-        -- Misc --
-        ----------
+        -- Misc
         {
             category = 'Cancel (quit)',
             bindings = {
@@ -111,12 +102,8 @@ M.bindings = {
         },
     },
 
-    ----------------------------------------------------------------------------
-
     ['kitty'] = {
-        ----------------
-        -- Scrollback --
-        ----------------
+        -- Scrollback
         {
             category = 'Scrollback',
             bindings = {
@@ -133,9 +120,7 @@ M.bindings = {
             },
         },
 
-        ------------
-        -- Splits --
-        ------------
+        -- Splits
         {
             category = 'Splits',
             bindings = {
@@ -209,9 +194,7 @@ M.bindings = {
             },
         },
 
-        ----------
-        -- Tabs --
-        ----------
+        -- Tabs
         {
             category = 'Tabs',
             bindings = {
@@ -233,9 +216,7 @@ M.bindings = {
             },
         },
 
-        ------------
-        -- Layout --
-        ------------
+        -- Layout
         {
             category = 'Layout',
             bindings = {
@@ -254,12 +235,8 @@ M.bindings = {
         },
     },
 
-    ----------------------------------------------------------------------------
-
     ['Brave Browser'] = {
-        ----------
-        -- Page --
-        ----------
+        -- Page
         {
             category = 'Page',
             bindings = {
@@ -332,9 +309,7 @@ M.bindings = {
             },
         },
 
-        ----------
-        -- Tabs --
-        ----------
+        -- Tabs
         {
             category = 'Tabs',
             bindings = {
@@ -384,9 +359,7 @@ M.bindings = {
             },
         },
 
-        ----------
-        -- Misc --
-        ----------
+        -- Misc
         {
             category = 'Misc',
             bindings = {

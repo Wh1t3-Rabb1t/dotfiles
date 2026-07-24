@@ -95,10 +95,10 @@ function M.horizontal_layout(popups, spacing)
 end
 
 
--- Get anchor position relative to the focused window
+-- Get popup anchor position
 --------------------------------------------------------------------------------
 function M.get_anchor(frame, width, height, corner)
-    local padding = 50
+    local padding = 25
 
     if corner == 'top_left' then
         return {
@@ -166,7 +166,9 @@ end
 
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show_popups(win)
+function M.show_popups(win, position)
+    position = position or 'bottom_right'
+
     local app_name = win:application():name()
 
     local popups = {}
@@ -177,7 +179,7 @@ function M.show_popups(win)
 
     table.insert(popups, cache.assets.system)
 
-    local coords = M.get_popup_coords(win, popups, 'bottom_right')
+    local coords = M.get_popup_coords(win, popups, position)
 
     for i, v in ipairs(popups) do
         v.popup:topLeft(coords[i])

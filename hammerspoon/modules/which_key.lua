@@ -60,32 +60,39 @@ end
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-function M.get_popup_coords(win, corner)
+function M.get_popup_coords(win, popups, corner)
     corner = corner or 'top_right'
 
+    local app_frame = win:frame()
+
+    local width = 0
+    local height = 0
     local spacing = 25
 
-    local app_frame = win:frame()
-    local app_name = win:application():name()
+    -- Find the width of the widest popup and the total stack height
+    for i, popup in ipairs(popups) do
+        width = math.max(width, popup.frame.w)
+        height = height + popup.frame.h
 
-    local app_popup = cache.assets[app_name].frame
-    local sys_popup = cache.assets.system.frame
-
-    local width = math.max(app_popup.w, sys_popup.w)
-    local height = app_popup.h + spacing + sys_popup.h
+        if i < #popups then
+            height = height + spacing
+        end
+    end
 
     local anchor = M.get_anchor(app_frame, width, height, corner)
 
-    local coords = {
-        app = {
+    -- Calculate the top-left coordinate for each popup
+    local coords = {}
+    local y = anchor.y
+
+    for i, popup in ipairs(popups) do
+        coords[i] = {
             x = anchor.x,
-            y = anchor.y,
-        },
-        system = {
-            x = anchor.x,
-            y = anchor.y + app_popup.h + spacing,
-        },
-    }
+            y = y,
+        }
+
+        y = y + popup.frame.h + spacing
+    end
 
     return coords
 end
@@ -96,21 +103,19 @@ end
 function M.show_popups(win)
     local app_name = win:application():name()
 
+    local popups = {}
+
     if cache.assets[app_name] then
-        local coords = M.get_popup_coords(win, 'top_right')
+        table.insert(popups, cache.assets[app_name])
+    end
 
-        cache.assets[app_name].popup:topLeft(coords.app)
-        cache.assets[app_name].popup:show(0.15)
-        cache.assets.system.popup:topLeft(coords.system)
-        cache.assets.system.popup:show(0.15)
-    else
-        local frame = win:frame() or hs.mainScreen:fullFrame()
+    table.insert(popups, cache.assets.system)
 
-        cache.assets.system.popup:topLeft({
-            x = frame.x + 50,
-            y = frame.y + 50,
-        })
-        cache.assets.system.popup:show(0.15)
+    local coords = M.get_popup_coords(win, popups, 'top_right')
+
+    for i, popup in ipairs(popups) do
+        popup.popup:topLeft(coords[i])
+        popup.popup:show(0.15)
     end
 
     state.menu.active_win = win

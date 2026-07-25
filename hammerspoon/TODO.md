@@ -21,9 +21,11 @@
 
 ## Modules:
 
-- Build a robust key 'queue'.
-
 - Add popup opacity fns.
+
+- On certain actions (like search for text in Brave etc) create an action
+  that we can bind to 'enter' that will relaunch the popup menu (i.e. enter
+  'insert' mode briefly to search etc.)
 
 - When entering fullscreen let's see if it's possible to apply the shader value
   to the fullscreen 'workspace' (or whatever mac calls it).
@@ -31,9 +33,7 @@
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).
 
-- On certain actions (like search for text in Brave etc) create an action
-  that we can bind to 'enter' that will relaunch the popup menu (i.e. enter
-  'insert' mode briefly to search etc.)
+- Build a robust key 'queue'.
 
 - ?? Implement scrolling in Brave (might not be worth it because; need to set
   mouse coords to within the window frame and left/right arrows usually scroll

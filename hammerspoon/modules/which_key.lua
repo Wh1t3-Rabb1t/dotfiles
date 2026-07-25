@@ -17,10 +17,6 @@ function M.send_keys(a, b)
         key = b
     end
 
-    if type(mods) == 'string' then
-        mods = { mods }
-    end
-
     state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
 
     hs.timer.doAfter(0, function()
@@ -29,69 +25,67 @@ function M.send_keys(a, b)
 end
 
 
--- Calculate vertical layout dimensions
+-- Get popups x and y coords
 --------------------------------------------------------------------------------
-function M.vertical_layout(popups, spacing)
+function M.get_x_y(popups, spacing, layout)
     spacing = spacing or 25
-
-    local width = 0
-    local height = 0
-
-    for i, popup in ipairs(popups) do
-        width = math.max(width, popup.frame.w)
-        height = height + popup.frame.h
-
-        if i < #popups then
-            height = height + spacing
-        end
-    end
-
-    local coords = {}
-    local y = 0
-
-    for i, popup in ipairs(popups) do
-        coords[i] = {
-            x = 0,
-            y = y,
-        }
-
-        y = y + popup.frame.h + spacing
-    end
-
-    return width, height, coords
-end
-
-
--- Calculate horizontal layout dimensions
---------------------------------------------------------------------------------
-function M.horizontal_layout(popups, spacing)
-    spacing = spacing or 25
-
-    local width = 0
-    local height = 0
-
-    for i, popup in ipairs(popups) do
-        width = width + popup.frame.w
-        height = math.max(height, popup.frame.h)
-
-        if i < #popups then
-            width = width + spacing
-        end
-    end
 
     local coords = {}
     local x = 0
+    local y = 0
 
     for i, popup in ipairs(popups) do
-        coords[i] = {
-            x = x,
-            y = 0,
-        }
-
-        x = x + popup.frame.w + spacing
+        if layout == 'horizontal' then
+            coords[i] = {
+                x = x,
+                y = 0,
+            }
+            x = x + popup.frame.w + spacing
+        elseif layout == 'vertical' then
+            coords[i] = {
+                x = 0,
+                y = y,
+            }
+            y = y + popup.frame.h + spacing
+        end
     end
 
-    return width, height, coords
+    return coords
+end
+
+
+-- Get popups width and height
+--------------------------------------------------------------------------------
+function M.get_w_h(popups, spacing, layout)
+    spacing = spacing or 25
+
+    local width = 0
+    local height = 0
+
+    for i, popup in ipairs(popups) do
+        if layout == 'vertical' then
+            width = math.max(width, popup.frame.w)
+            height = height + popup.frame.h
+
+            if i < #popups then
+                height = height + spacing
+            end
+        elseif layout == 'horizontal' then
+            width = width + popup.frame.w
+            height = math.max(height, popup.frame.h)
+
+            if i < #popups then
+                width = width + spacing
+            end
+        end
+    end
+
+    local dimensions = {
+        w = width,
+        h = height,
+    }
+
+    return dimensions
 end
 
 
@@ -99,61 +93,50 @@ end
 --------------------------------------------------------------------------------
 function M.get_anchor(frame, width, height, corner)
     local padding = 25
+    local anchor = {}
 
     if corner == 'top_left' then
-        return {
-            x = frame.x + padding,
-            y = frame.y + padding,
-        }
+        anchor.x = frame.x + padding
+        anchor.y = frame.y + padding
     elseif corner == 'top_right' then
-        return {
-            x = frame.x + frame.w - width - padding,
-            y = frame.y + padding,
-        }
+        anchor.x = frame.x + frame.w - width - padding
+        anchor.y = frame.y + padding
     elseif corner == 'bottom_left' then
-        return {
-            x = frame.x + padding,
-            y = frame.y + frame.h - height - padding,
-        }
+        anchor.x = frame.x + padding
+        anchor.y = frame.y + frame.h - height - padding
     elseif corner == 'bottom_right' then
-        return {
-            x = frame.x + frame.w - width - padding,
-            y = frame.y + frame.h - height - padding,
-        }
+        anchor.x = frame.x + frame.w - width - padding
+        anchor.y = frame.y + frame.h - height - padding
     end
+
+    return anchor
 end
 
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-function M.get_popup_coords(win, popups, corner, layout)
+function M.get_popup_coords(win, popups, corner)
     corner = corner or 'top_right'
-    layout = layout or 'auto'
 
     local app_frame = win:frame()
-    local screen_frame = cache.screens[win:screen():id()].frame
+    local id = win:screen():id()
+    local screen_frame = cache.screens[id].frame
 
-    local width, height, coords
+    local coords
+    local dimensions
     local spacing = 25
 
-    -- Vertical
-    if layout == 'vertical' then
-        width, height, coords = M.vertical_layout(popups, spacing)
+    dimensions = M.get_w_h(popups, spacing, 'vertical')
 
-    -- Horizontal
-    elseif layout == 'horizontal' then
-        width, height, coords = M.horizontal_layout(popups, spacing)
-
-    -- Auto
+    -- Arrange popups side by side if the stack height exceeds the screen height
+    if dimensions.h > screen_frame.h then
+        dimensions = M.get_w_h(popups, spacing, 'horizontal')
+        coords = M.get_x_y(popups, spacing, 'horizontal')
     else
-        width, height, coords = M.vertical_layout(popups, spacing)
-
-        if height > screen_frame.h then
-            width, height, coords = M.horizontal_layout(popups, spacing)
-        end
+        coords = M.get_x_y(popups, spacing, 'vertical')
     end
 
-    local anchor = M.get_anchor(app_frame, width, height, corner)
+    local anchor = M.get_anchor(app_frame, dimensions.w, dimensions.h, corner)
 
     for _, coord in ipairs(coords) do
         coord.x = coord.x + anchor.x

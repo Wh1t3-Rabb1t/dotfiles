@@ -21,11 +21,12 @@
 
 ## Modules:
 
-- Add popup opacity fns.
+- Add cycle popup layout fns (very easy just pass 'top_left' etc to other fns).
 
 - On certain actions (like search for text in Brave etc) create an action
   that we can bind to 'enter' that will relaunch the popup menu (i.e. enter
   'insert' mode briefly to search etc.)
+  Maybe use a modal binding for this.
 
 - When entering fullscreen let's see if it's possible to apply the shader value
   to the fullscreen 'workspace' (or whatever mac calls it).

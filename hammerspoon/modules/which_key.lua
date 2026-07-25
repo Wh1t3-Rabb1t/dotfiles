@@ -27,7 +27,7 @@ end
 
 -- Set popup opacity
 --------------------------------------------------------------------------------
-function M.set_popup_opacity(direction, win)
+function M.popup_opacity(direction, win)
     win = win or state.menu.active_win
 
     local step = 0.1

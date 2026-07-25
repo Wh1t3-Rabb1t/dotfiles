@@ -429,8 +429,8 @@ M.actions = {
         launch_firefox     = function() window.launch_or_focus('Firefox') end,
 
         -- Brightness
-        opacity_up         = function() which_key.set_popup_opacity('up') end,
-        opacity_down         = function() which_key.set_popup_opacity('down') end,
+        opacity_up         = function() which_key.popup_opacity('up') end,
+        opacity_down         = function() which_key.popup_opacity('down') end,
 
         brightness_up      = function() brightness.adjust_brightness('up') end,
         brightness_down    = function() brightness.adjust_brightness('down') end,

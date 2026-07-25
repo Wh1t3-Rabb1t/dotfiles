@@ -33,6 +33,16 @@ M.bindings = {
             category = 'Brightness',
             bindings = {
                 {
+                    key    = 'r',
+                    action = 'opacity_up',
+                    desc   = 'Opacity up',
+                },
+                {
+                    key    = 'f',
+                    action = 'opacity_down',
+                    desc   = 'Opacity down',
+                },
+                {
                     key    = 'z',
                     action = 'brightness_up',
                     desc   = 'Up',
@@ -79,7 +89,7 @@ M.bindings = {
 
         -- Misc
         {
-            category = 'Cancel (quit)',
+            category = 'Misc',
             bindings = {
                 {
                     key    = 'z',
@@ -419,6 +429,9 @@ M.actions = {
         launch_firefox     = function() window.launch_or_focus('Firefox') end,
 
         -- Brightness
+        opacity_up         = function() which_key.set_popup_opacity('up') end,
+        opacity_down         = function() which_key.set_popup_opacity('down') end,
+
         brightness_up      = function() brightness.adjust_brightness('up') end,
         brightness_down    = function() brightness.adjust_brightness('down') end,
         brightness_print   = function() brightness.print_values() end,

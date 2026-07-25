@@ -25,6 +25,35 @@ function M.send_keys(a, b)
 end
 
 
+-- Set popup opacity
+--------------------------------------------------------------------------------
+function M.set_popup_opacity(direction, win)
+    win = win or state.menu.active_win
+
+    local step = 0.1
+    local opacity = state.menu.opacity
+
+    if direction == 'up' then
+        opacity = math.min(opacity + step, 1.0)
+    elseif direction == 'down' then
+        opacity = math.max(opacity - step, 0.1)
+    end
+
+    local app_name = win:application():name()
+
+    -- App specific popup (if supported)
+    if cache.assets[app_name] then
+        cache.assets[app_name].popup:alpha(opacity)
+    end
+
+    -- System popup
+    cache.assets.system.popup:alpha(opacity)
+
+    -- Update state/cache
+    state.menu.opacity = opacity
+end
+
+
 -- Get popups x and y coords
 --------------------------------------------------------------------------------
 function M.get_x_y(popups, spacing, layout)
@@ -93,6 +122,7 @@ end
 --------------------------------------------------------------------------------
 function M.get_anchor(frame, width, height, corner)
     local padding = 25
+
     local anchor = {}
 
     if corner == 'top_left' then
@@ -122,9 +152,10 @@ function M.get_popup_coords(win, popups, corner)
     local id = win:screen():id()
     local screen_frame = cache.screens[id].frame
 
-    local coords
-    local dimensions
     local spacing = 25
+
+    local coords = {}
+    local dimensions = {}
 
     dimensions = M.get_w_h(popups, spacing, 'vertical')
 
@@ -152,20 +183,24 @@ end
 function M.show_popups(win, position)
     position = position or 'bottom_right'
 
-    local app_name = win:application():name()
-
     local popups = {}
 
+    local app_name = win:application():name()
+
+    -- App specific popup (if supported)
     if cache.assets[app_name] then
         table.insert(popups, cache.assets[app_name])
     end
 
+    -- System popup
     table.insert(popups, cache.assets.system)
 
     local coords = M.get_popup_coords(win, popups, position)
+    local opacity = state.menu.opacity
 
     for i, v in ipairs(popups) do
         v.popup:topLeft(coords[i])
+        v.popup:alpha(opacity)
         v.popup:show(0.15)
     end
 

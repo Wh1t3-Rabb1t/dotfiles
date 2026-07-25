@@ -3,8 +3,8 @@ local M = {}
 M.menu = {
     tap_active = false,    -- (true|false)
     active_win = false,    -- (win|false)
-    layout = 'maximized',  -- (maximized|split)
     ignore_until = 0,
+    opacity = 1,
 }
 
 -- Data for each screen is populated on init

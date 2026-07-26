@@ -217,7 +217,7 @@ end
 -- Show popups
 --------------------------------------------------------------------------------
 function M.show_popups(win, corner)
-    corner = corner or 'bottom_right'
+    corner = corner or state.menu.corner
 
     local popups = {}
 

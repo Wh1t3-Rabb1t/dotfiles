@@ -33,16 +33,6 @@ M.bindings = {
             category = 'Brightness',
             bindings = {
                 {
-                    key    = 'r',
-                    action = 'opacity_up',
-                    desc   = 'Opacity up',
-                },
-                {
-                    key    = 'f',
-                    action = 'opacity_down',
-                    desc   = 'Opacity down',
-                },
-                {
                     key    = 'z',
                     action = 'brightness_up',
                     desc   = 'Up',
@@ -87,16 +77,34 @@ M.bindings = {
             },
         },
 
-        -- Misc
+        -- Popups
         {
-            category = 'Misc',
+            category = 'Popups',
             bindings = {
                 {
                     key    = 'r',
                     mods   = { 'shift' },
                     action = 'cycle_popup_corner',
-                    desc   = 'Cycle popup corners',
+                    desc   = 'Cycle positions',
                 },
+                {
+                    key    = 'r',
+                    action = 'opacity_up',
+                    desc   = 'Opacity up',
+                },
+                {
+                    key    = 'f',
+                    action = 'opacity_down',
+                    desc   = 'Opacity down',
+                },
+            },
+        },
+
+
+        -- Misc
+        {
+            category = 'Misc',
+            bindings = {
                 {
                     key    = 'z',
                     mods   = { 'shift' },
@@ -435,9 +443,6 @@ M.actions = {
         launch_firefox     = function() window.launch_or_focus('Firefox') end,
 
         -- Brightness
-        opacity_up         = function() which_key.popup_opacity('up') end,
-        opacity_down       = function() which_key.popup_opacity('down') end,
-
         brightness_up      = function() brightness.adjust_brightness('up') end,
         brightness_down    = function() brightness.adjust_brightness('down') end,
         brightness_print   = function() brightness.print_values() end,
@@ -448,8 +453,12 @@ M.actions = {
         maximize_split     = function() window.maximize_split() end,
         swap_splits        = function() window.swap_splits() end,
 
-        -- Misc
+        -- Popup
+        opacity_up         = function() which_key.popup_opacity('up') end,
+        opacity_down       = function() which_key.popup_opacity('down') end,
         cycle_popup_corner = function() which_key.cycle_popup_corner() end,
+
+        -- Misc
         zoom_in            = function() which_key.send_keys({'cmd'}, '=') end,
         zoom_out           = function() which_key.send_keys({'cmd'}, '-') end,
         close_menu         = function() which_key.close_menu() end,

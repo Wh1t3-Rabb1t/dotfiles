@@ -92,6 +92,12 @@ M.bindings = {
             category = 'Misc',
             bindings = {
                 {
+                    key    = 'r',
+                    mods   = { 'shift' },
+                    action = 'cycle_popup_corner',
+                    desc   = 'Cycle popup corners',
+                },
+                {
                     key    = 'z',
                     mods   = { 'shift' },
                     action = 'zoom_in',
@@ -430,7 +436,7 @@ M.actions = {
 
         -- Brightness
         opacity_up         = function() which_key.popup_opacity('up') end,
-        opacity_down         = function() which_key.popup_opacity('down') end,
+        opacity_down       = function() which_key.popup_opacity('down') end,
 
         brightness_up      = function() brightness.adjust_brightness('up') end,
         brightness_down    = function() brightness.adjust_brightness('down') end,
@@ -443,6 +449,7 @@ M.actions = {
         swap_splits        = function() window.swap_splits() end,
 
         -- Misc
+        cycle_popup_corner = function() which_key.cycle_popup_corner() end,
         zoom_in            = function() which_key.send_keys({'cmd'}, '=') end,
         zoom_out           = function() which_key.send_keys({'cmd'}, '-') end,
         close_menu         = function() which_key.close_menu() end,

@@ -1,8 +1,9 @@
 local M = {}
 
 M.menu = {
-    tap_active = false,    -- (true|false)
-    active_win = false,    -- (win|false)
+    tap_active = false,      -- (true|false)
+    active_win = false,      -- (win|false)
+    corner = 'bottom_right',
     ignore_until = 0,
     opacity = 1,
 }

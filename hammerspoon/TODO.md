@@ -21,8 +21,6 @@
 
 ## Modules:
 
-- Add cycle popup layout fns (very easy just pass 'top_left' etc to other fns).
-
 - On certain actions (like search for text in Brave etc) create an action
   that we can bind to 'enter' that will relaunch the popup menu (i.e. enter
   'insert' mode briefly to search etc.)

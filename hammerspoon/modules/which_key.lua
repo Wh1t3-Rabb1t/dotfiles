@@ -7,7 +7,8 @@ local cache = require('cache')
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
 function M.send_keys(a, b)
-    local mods, key
+    local mods
+    local key
 
     if b == nil then
         mods = {}
@@ -25,6 +26,41 @@ function M.send_keys(a, b)
 end
 
 
+-- Cycle popup corner positions
+--------------------------------------------------------------------------------
+function M.cycle_popup_corner(win)
+    win = win or state.menu.active_win
+
+    local corners = {
+        'bottom_right',
+        'top_right',
+        'bottom_left',
+        'top_left',
+    }
+
+    local current_corner = state.menu.corner
+    local current_index = 1
+
+    -- Find the index of the current corner
+    for i, c in ipairs(corners) do
+        if c == current_corner then
+            current_index = i
+            break
+        end
+    end
+
+    -- Calculate the next index, wrapping around using modulo arithmetic
+    local new_index = (current_index % #corners) + 1
+    local new_corner = corners[new_index]
+
+    -- Update state
+    state.menu.corner = new_corner
+
+    M.hide_popups(win)
+    M.show_popups(win, new_corner)
+end
+
+
 -- Set popup opacity
 --------------------------------------------------------------------------------
 function M.popup_opacity(direction, win)
@@ -32,6 +68,7 @@ function M.popup_opacity(direction, win)
 
     local step = 0.1
     local opacity = state.menu.opacity
+    local app_name = win:application():name()
 
     if direction == 'up' then
         opacity = math.min(opacity + step, 1.0)
@@ -39,7 +76,8 @@ function M.popup_opacity(direction, win)
         opacity = math.max(opacity - step, 0.1)
     end
 
-    local app_name = win:application():name()
+    -- Update state
+    state.menu.opacity = opacity
 
     -- App specific popup (if supported)
     if cache.assets[app_name] then
@@ -48,9 +86,6 @@ function M.popup_opacity(direction, win)
 
     -- System popup
     cache.assets.system.popup:alpha(opacity)
-
-    -- Update state/cache
-    state.menu.opacity = opacity
 end
 
 
@@ -60,6 +95,7 @@ function M.get_x_y(popups, spacing, layout)
     spacing = spacing or 25
 
     local coords = {}
+
     local x = 0
     local y = 0
 
@@ -146,7 +182,7 @@ end
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
 function M.get_popup_coords(win, popups, corner)
-    corner = corner or 'top_right'
+    corner = corner or 'bottom_right'
 
     local app_frame = win:frame()
     local id = win:screen():id()
@@ -180,8 +216,8 @@ end
 
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show_popups(win, position)
-    position = position or 'bottom_right'
+function M.show_popups(win, corner)
+    corner = corner or 'bottom_right'
 
     local popups = {}
 
@@ -195,7 +231,7 @@ function M.show_popups(win, position)
     -- System popup
     table.insert(popups, cache.assets.system)
 
-    local coords = M.get_popup_coords(win, popups, position)
+    local coords = M.get_popup_coords(win, popups, corner)
     local opacity = state.menu.opacity
 
     for i, v in ipairs(popups) do
@@ -204,6 +240,7 @@ function M.show_popups(win, position)
         v.popup:show(0.15)
     end
 
+    -- Update state
     state.menu.active_win = win
 end
 

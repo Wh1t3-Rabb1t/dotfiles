@@ -106,6 +106,12 @@ M.bindings = {
                     desc   = 'Cycle positions',
                 },
                 {
+                    key    = 'a',
+                    mods   = { 'shift' },
+                    action = 'cycle_popup_layout',
+                    desc   = 'Cycle stacking',
+                },
+                {
                     key    = 'r',
                     action = 'opacity_up',
                     desc   = 'Opacity up',
@@ -479,6 +485,7 @@ M.actions = {
         opacity_up         = function() which_key.popup_opacity('up') end,
         opacity_down       = function() which_key.popup_opacity('down') end,
         cycle_popup_corner = function() which_key.cycle_popup_corner() end,
+        cycle_popup_layout = function() which_key.cycle_popup_layout() end,
 
         -- Misc
         zoom_in            = function() which_key.send_keys({'cmd'}, '=') end,

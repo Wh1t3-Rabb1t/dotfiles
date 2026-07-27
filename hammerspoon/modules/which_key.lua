@@ -103,6 +103,22 @@ function M.cycle_popup_corner(win)
 end
 
 
+-- Cycle popup layout (vertical/horizontal stacking)
+--------------------------------------------------------------------------------
+function M.cycle_popup_layout(win)
+    win = win or state.menu.active_win
+
+    local layout = state.menu.stack
+    local new_layout = (layout == 'vertical') and 'horizontal' or 'vertical'
+
+    -- Update state
+    state.menu.stack = new_layout
+
+    M.hide_popups(win)
+    M.show_popups(win, state.menu.corner, new_layout)
+end
+
+
 -- Set popup opacity
 --------------------------------------------------------------------------------
 function M.popup_opacity(direction, win)
@@ -134,12 +150,10 @@ end
 -- Get popups x and y coords
 --------------------------------------------------------------------------------
 function M.get_x_y(popups, spacing, layout)
-    spacing = spacing or 25
-
-    local coords = {}
-
     local x = 0
     local y = 0
+
+    local coords = {}
 
     for i, popup in ipairs(popups) do
         if layout == 'horizontal' then
@@ -147,12 +161,14 @@ function M.get_x_y(popups, spacing, layout)
                 x = x,
                 y = 0,
             }
+
             x = x + popup.frame.w + spacing
         elseif layout == 'vertical' then
             coords[i] = {
                 x = 0,
                 y = y,
             }
+
             y = y + popup.frame.h + spacing
         end
     end
@@ -164,8 +180,6 @@ end
 -- Get popups width and height
 --------------------------------------------------------------------------------
 function M.get_w_h(popups, spacing, layout)
-    spacing = spacing or 25
-
     local width = 0
     local height = 0
 
@@ -223,9 +237,7 @@ end
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-function M.get_popup_coords(win, popups, corner)
-    corner = corner or 'bottom_right'
-
+function M.get_popup_coords(win, popups, corner, layout)
     local app_frame = win:frame()
     local id = win:screen():id()
     local screen_frame = cache.screens[id].frame
@@ -235,14 +247,14 @@ function M.get_popup_coords(win, popups, corner)
     local coords = {}
     local dimensions = {}
 
-    dimensions = M.get_w_h(popups, spacing, 'vertical')
+    dimensions = M.get_w_h(popups, spacing, layout)
 
     -- Arrange popups side by side if the stack height exceeds the screen height
     if dimensions.h > screen_frame.h then
         dimensions = M.get_w_h(popups, spacing, 'horizontal')
         coords = M.get_x_y(popups, spacing, 'horizontal')
     else
-        coords = M.get_x_y(popups, spacing, 'vertical')
+        coords = M.get_x_y(popups, spacing, layout)
     end
 
     local anchor = M.get_anchor(app_frame, dimensions.w, dimensions.h, corner)
@@ -258,8 +270,9 @@ end
 
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show_popups(win, corner)
+function M.show_popups(win, corner, layout)
     corner = corner or state.menu.corner
+    layout = layout or state.menu.stack
 
     local popups = {}
 
@@ -273,7 +286,7 @@ function M.show_popups(win, corner)
     -- System popup
     table.insert(popups, cache.assets.system)
 
-    local coords = M.get_popup_coords(win, popups, corner)
+    local coords = M.get_popup_coords(win, popups, corner, layout)
     local opacity = state.menu.opacity
 
     for i, v in ipairs(popups) do

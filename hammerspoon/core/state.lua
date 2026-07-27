@@ -4,6 +4,7 @@ M.menu = {
     tap_active = false,      -- (true|false)
     active_win = false,      -- (win|false)
     corner = 'bottom_right',
+    stack = 'vertical',
     ignore_until = 0,
     opacity = 1,
 }

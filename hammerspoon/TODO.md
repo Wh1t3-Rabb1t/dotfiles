@@ -21,13 +21,6 @@
 
 ## Modules:
 
-- Implement an 'expand/collapse' binding for each popup (make it stateful so we
-  don't need to keep hiding unwanted popups).
-
-- Cache the popup dimensions (w, h).
-
-- Integrate popup (x, y) with screen state.
-
 - When entering fullscreen let's see if it's possible to apply the shader value
   to the fullscreen 'workspace' (or whatever mac calls it).
 
@@ -42,8 +35,10 @@
 - In 'launch_menu()' need to check if focused window is fullsceen (exit
   fullsceen if it is).
 
-- Currently all which_key fns have been changed from local to part of the
-  module object. (change select functions back to local wherever possible).
+- Implement an 'expand/collapse' binding for each popup (make it stateful so we
+  don't need to keep hiding unwanted popups).
+
+- ? Integrate popup (x, y) with screen state.
 
 ---
 
@@ -67,45 +62,6 @@
 
 ## Misc
 
-- Incorporate the table of 'supported_apps' into the each of their respective
-  bindings array i.e. (probably need to re-structure the lookup table to
-  actions according to their apps).
-```lua
-local bindings = {
-    ['Brave Browser'] = {
-        {
-            key = ';',
-            desc = 'Tab right',
-            action = function() M.send_keys('pagedown', 'ctrl') end
-        },
-        -- ...
-    },
-    ['System'] = {
-        {
-            key = 'h',
-            desc = 'Tab left',
-            action = function() M.send_keys('pageup', 'ctrl') end
-        },
-        -- ...
-    },
-}
-```
-
-- Need to incorporate a robust event queue for key inputs.
-  (when sending key stokes while the tap is active).
-
-- We can remove all x y coord logic from canvas creation, and instead build
-  a helper function that determines focused app then passes coords to
-  'popup:topLeft(coords)' when launching the popup.
-
-- When displaying the app/system canvas bindings side by side we should center
-  the app specific canvas in the center of said app, and put the system canvas
-  on the opposite side of the screen.
-  Can use this method to display the canvas at given coords:
-  ```lua
-  asset.popup:topLeft({ x = 10, y = 10 })
-  ```
-
 - Example canvas:
   ```sh
   # +------------------------------+  +------------------------+
@@ -124,20 +80,9 @@ local bindings = {
   popup:hide()
   ```
 
-- Emulate 'which-key' from the perspective of keypresses expanding sub menus.
-  Pressing the modal key would always return to the top level menu,
-  but holding the modifier would return to the previous sub menu.
-
-- Break the menu trigger up into modal and when modifier is held (or both).
-
 - Consider sending a singe 'escape' keystoke before launching which_key.
   This would exit apps in fullscreen mode and set a semi consistent ui state
   in broswers etc.
-
-- Build out functionality for which_key that send given keystrokes when
-  certain apps are focused; i.e. if a browser is focused, we can send it's
-  default tab switching bindings etc. This way we can build out an interactive
-  "cheat sheet" of important hotkeys and drop karabiner altogether.
 
 - Re-incorporate bluetooth watcher.
 
@@ -160,12 +105,6 @@ if config_dir then
     dofile(config_dir .. 'init.lua')
 end
 ```
-
----
-
-## Brightness module
-
-- Implement key repeating.
 
 ---
 

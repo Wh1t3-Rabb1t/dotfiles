@@ -4,6 +4,196 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- Get popups x and y coords
+--------------------------------------------------------------------------------
+local function get_x_y(popups, spacing, layout)
+    local x = 0
+    local y = 0
+
+    local coords = {}
+
+    for i, popup in ipairs(popups) do
+        if layout == 'horizontal' then
+            coords[i] = {
+                x = x,
+                y = 0,
+            }
+
+            x = x + popup.frame.w + spacing
+        elseif layout == 'vertical' then
+            coords[i] = {
+                x = 0,
+                y = y,
+            }
+
+            y = y + popup.frame.h + spacing
+        end
+    end
+
+    return coords
+end
+
+
+-- Get popups width and height
+--------------------------------------------------------------------------------
+local function get_w_h(popups, spacing, layout)
+    local width = 0
+    local height = 0
+
+    for i, popup in ipairs(popups) do
+        if layout == 'vertical' then
+            width = math.max(width, popup.frame.w)
+            height = height + popup.frame.h
+
+            if i < #popups then
+                height = height + spacing
+            end
+        elseif layout == 'horizontal' then
+            width = width + popup.frame.w
+            height = math.max(height, popup.frame.h)
+
+            if i < #popups then
+                width = width + spacing
+            end
+        end
+    end
+
+    local dimensions = {
+        w = width,
+        h = height,
+    }
+
+    return dimensions
+end
+
+
+-- Get popup anchor position
+--------------------------------------------------------------------------------
+local function get_anchor(frame, width, height, corner)
+    local padding = 25
+
+    local anchor = {}
+
+    if corner == 'top_left' then
+        anchor.x = frame.x + padding
+        anchor.y = frame.y + padding
+    elseif corner == 'top_right' then
+        anchor.x = frame.x + frame.w - width - padding
+        anchor.y = frame.y + padding
+    elseif corner == 'bottom_left' then
+        anchor.x = frame.x + padding
+        anchor.y = frame.y + frame.h - height - padding
+    elseif corner == 'bottom_right' then
+        anchor.x = frame.x + frame.w - width - padding
+        anchor.y = frame.y + frame.h - height - padding
+    end
+
+    return anchor
+end
+
+
+-- Get currently displayed popups
+--------------------------------------------------------------------------------
+local function get_active_popups(win)
+    local app_name = win:application():name()
+
+    local popups = {}
+
+    -- App specific popup (if supported)
+    if cache.assets[app_name] then
+        table.insert(popups, cache.assets[app_name])
+    end
+
+    -- System popup
+    table.insert(popups, cache.assets.system)
+
+    return popups
+end
+
+
+-- Calculate popup coordinates relative to the focused window
+--------------------------------------------------------------------------------
+local function get_popup_coords(win, popups, corner, layout)
+    local app_frame = win:frame()
+    local id = win:screen():id()
+    local screen_frame = cache.screens[id].frame
+
+    local spacing = 25
+
+    local coords = {}
+    local dimensions = {}
+
+    dimensions = get_w_h(popups, spacing, layout)
+
+    -- Arrange popups side by side if the stack height exceeds the screen height
+    if dimensions.h > screen_frame.h then
+        dimensions = get_w_h(popups, spacing, 'horizontal')
+        coords = get_x_y(popups, spacing, 'horizontal')
+    else
+        coords = get_x_y(popups, spacing, layout)
+    end
+
+    local anchor = get_anchor(app_frame, dimensions.w, dimensions.h, corner)
+
+    for _, coord in ipairs(coords) do
+        coord.x = coord.x + anchor.x
+        coord.y = coord.y + anchor.y
+    end
+
+    return coords
+end
+
+
+-- Show popups
+--------------------------------------------------------------------------------
+local function show_popups(win, corner, layout)
+    corner = corner or state.menu.corner
+    layout = layout or state.menu.stack
+
+    local popups = get_active_popups(win)
+    local coords = get_popup_coords(win, popups, corner, layout)
+    local opacity = state.menu.opacity
+
+    for i, v in ipairs(popups) do
+        v.popup:topLeft(coords[i])
+        v.popup:alpha(opacity)
+        v.popup:show(0.15)
+    end
+
+    -- Update state
+    state.menu.active_win = win
+end
+
+
+-- Hide popups
+--------------------------------------------------------------------------------
+local function hide_popups(win)
+    win = win or state.menu.active_win
+
+    local app_name = win:application():name()
+
+    if cache.assets[app_name] then
+        cache.assets[app_name].popup:delete()
+        state.menu.active_win = false
+    end
+
+    cache.assets.system.popup:delete()
+end
+
+
+-- Toggle event tap
+--------------------------------------------------------------------------------
+local function set_event_tap(set_to)
+    if set_to == 'on' then
+        state.menu.tap_active = true
+        cache.assets.tap:start()
+    elseif set_to == 'off' then
+        state.menu.tap_active = false
+        cache.assets.tap:stop()
+    end
+end
+
+
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
 function M.send_keys(a, b)
@@ -45,8 +235,8 @@ function M.temporary_insert()
     M.close_menu()
 
     local pos = {
-        x = frame.x + 50,
-        y = frame.y + 50,
+        x = frame.x + 10,
+        y = frame.y + 10,
     }
 
     insert_popup:topLeft(pos)
@@ -98,8 +288,8 @@ function M.cycle_popup_corner(win)
     -- Update state
     state.menu.corner = new_corner
 
-    M.hide_popups(win)
-    M.show_popups(win, new_corner)
+    hide_popups(win)
+    show_popups(win, new_corner)
 end
 
 
@@ -114,8 +304,8 @@ function M.cycle_popup_layout(win)
     -- Update state
     state.menu.stack = new_layout
 
-    M.hide_popups(win)
-    M.show_popups(win, state.menu.corner, new_layout)
+    hide_popups(win)
+    show_popups(win, state.menu.corner, new_layout)
 end
 
 
@@ -147,193 +337,11 @@ function M.popup_opacity(direction, win)
 end
 
 
--- Get popups x and y coords
---------------------------------------------------------------------------------
-function M.get_x_y(popups, spacing, layout)
-    local x = 0
-    local y = 0
-
-    local coords = {}
-
-    for i, popup in ipairs(popups) do
-        if layout == 'horizontal' then
-            coords[i] = {
-                x = x,
-                y = 0,
-            }
-
-            x = x + popup.frame.w + spacing
-        elseif layout == 'vertical' then
-            coords[i] = {
-                x = 0,
-                y = y,
-            }
-
-            y = y + popup.frame.h + spacing
-        end
-    end
-
-    return coords
-end
-
-
--- Get popups width and height
---------------------------------------------------------------------------------
-function M.get_w_h(popups, spacing, layout)
-    local width = 0
-    local height = 0
-
-    for i, popup in ipairs(popups) do
-        if layout == 'vertical' then
-            width = math.max(width, popup.frame.w)
-            height = height + popup.frame.h
-
-            if i < #popups then
-                height = height + spacing
-            end
-        elseif layout == 'horizontal' then
-            width = width + popup.frame.w
-            height = math.max(height, popup.frame.h)
-
-            if i < #popups then
-                width = width + spacing
-            end
-        end
-    end
-
-    local dimensions = {
-        w = width,
-        h = height,
-    }
-
-    return dimensions
-end
-
-
--- Get popup anchor position
---------------------------------------------------------------------------------
-function M.get_anchor(frame, width, height, corner)
-    local padding = 25
-
-    local anchor = {}
-
-    if corner == 'top_left' then
-        anchor.x = frame.x + padding
-        anchor.y = frame.y + padding
-    elseif corner == 'top_right' then
-        anchor.x = frame.x + frame.w - width - padding
-        anchor.y = frame.y + padding
-    elseif corner == 'bottom_left' then
-        anchor.x = frame.x + padding
-        anchor.y = frame.y + frame.h - height - padding
-    elseif corner == 'bottom_right' then
-        anchor.x = frame.x + frame.w - width - padding
-        anchor.y = frame.y + frame.h - height - padding
-    end
-
-    return anchor
-end
-
-
--- Calculate popup coordinates relative to the focused window
---------------------------------------------------------------------------------
-function M.get_popup_coords(win, popups, corner, layout)
-    local app_frame = win:frame()
-    local id = win:screen():id()
-    local screen_frame = cache.screens[id].frame
-
-    local spacing = 25
-
-    local coords = {}
-    local dimensions = {}
-
-    dimensions = M.get_w_h(popups, spacing, layout)
-
-    -- Arrange popups side by side if the stack height exceeds the screen height
-    if dimensions.h > screen_frame.h then
-        dimensions = M.get_w_h(popups, spacing, 'horizontal')
-        coords = M.get_x_y(popups, spacing, 'horizontal')
-    else
-        coords = M.get_x_y(popups, spacing, layout)
-    end
-
-    local anchor = M.get_anchor(app_frame, dimensions.w, dimensions.h, corner)
-
-    for _, coord in ipairs(coords) do
-        coord.x = coord.x + anchor.x
-        coord.y = coord.y + anchor.y
-    end
-
-    return coords
-end
-
-
--- Show popups
---------------------------------------------------------------------------------
-function M.show_popups(win, corner, layout)
-    corner = corner or state.menu.corner
-    layout = layout or state.menu.stack
-
-    local popups = {}
-
-    local app_name = win:application():name()
-
-    -- App specific popup (if supported)
-    if cache.assets[app_name] then
-        table.insert(popups, cache.assets[app_name])
-    end
-
-    -- System popup
-    table.insert(popups, cache.assets.system)
-
-    local coords = M.get_popup_coords(win, popups, corner, layout)
-    local opacity = state.menu.opacity
-
-    for i, v in ipairs(popups) do
-        v.popup:topLeft(coords[i])
-        v.popup:alpha(opacity)
-        v.popup:show(0.15)
-    end
-
-    -- Update state
-    state.menu.active_win = win
-end
-
-
--- Hide popups
---------------------------------------------------------------------------------
-function M.hide_popups(win)
-    win = win or state.menu.active_win
-
-    local app_name = win:application():name()
-
-    if cache.assets[app_name] then
-        cache.assets[app_name].popup:delete()
-        state.menu.active_win = false
-    end
-
-    cache.assets.system.popup:delete()
-end
-
-
--- Start event tap
---------------------------------------------------------------------------------
-function M.set_event_tap(set_to)
-    if set_to == 'on' then
-        state.menu.tap_active = true
-        cache.assets.tap:start()
-    elseif set_to == 'off' then
-        state.menu.tap_active = false
-        cache.assets.tap:stop()
-    end
-end
-
-
 -- Close menu
 --------------------------------------------------------------------------------
 function M.close_menu(win)
-    M.set_event_tap('off')
-    M.hide_popups(win)
+    set_event_tap('off')
+    hide_popups(win)
 end
 
 
@@ -344,8 +352,8 @@ function M.launch_menu()
         return
     end
 
-    M.set_event_tap('on')
-    M.show_popups(hs.window.focusedWindow())
+    set_event_tap('on')
+    show_popups(hs.window.focusedWindow())
 end
 
 return M

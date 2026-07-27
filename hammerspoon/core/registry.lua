@@ -4,6 +4,10 @@ local brightness = require('brightness')
 local window = require('windows')
 local which_key = require('which_key')
 
+
+-- These are temporarily bound to actions after the eventtap has been stopped,
+-- then unbound once the eventtap is restarted. Therefor the don't have
+-- corresponding actions in the action table.
 M.insert_bindings = {
     ['insert'] = {
         {
@@ -427,7 +431,6 @@ M.bindings = {
                     action = 'open_history',
                     desc   = 'Open history',
                 },
-
             },
         },
     },
@@ -458,11 +461,6 @@ M.actions = {
     -- Windows:
     --   n  Win_to_next_screen
 
-
-    -- ['insert'] = {
-    --     relaunch_menu   = function() window.launch_or_focus('kitty') end,
-    --     cancel_relaunch = function() window.launch_or_focus('kitty') end,
-    -- },
 
     ['system'] = {
         -- Launch or focus

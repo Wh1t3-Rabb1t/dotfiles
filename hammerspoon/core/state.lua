@@ -9,6 +9,11 @@ M.menu = {
     opacity = 1,
 }
 
+M.key_queue = {
+    items = {},
+    running = false,
+}
+
 -- Data for each screen is populated on init
 M.screens = {
     -- [id] = {

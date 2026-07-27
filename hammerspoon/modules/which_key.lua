@@ -146,7 +146,7 @@ end
 
 -- Show popups
 --------------------------------------------------------------------------------
-local function show_popups(win, corner, layout)
+function M.show_popups(win, corner, layout)
     corner = corner or state.menu.corner
     layout = layout or state.menu.stack
 
@@ -167,7 +167,7 @@ end
 
 -- Hide popups
 --------------------------------------------------------------------------------
-local function hide_popups(win)
+function M.hide_popups(win)
     win = win or state.menu.active_win
 
     local app_name = win:application():name()
@@ -194,6 +194,34 @@ local function set_event_tap(set_to)
 end
 
 
+-- Process key queue
+--------------------------------------------------------------------------------
+local function process_queue()
+    if state.key_queue.running then
+        return
+    end
+
+    state.key_queue.running = true
+
+    local function next_key()
+        local item = table.remove(state.key_queue.items, 1)
+
+        if not item then
+            state.key_queue.running = false
+            return
+        end
+
+        state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+
+        hs.eventtap.keyStroke(item.mods, item.key, 0)
+
+        hs.timer.doAfter(0.01, next_key)
+    end
+
+    next_key()
+end
+
+
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
 function M.send_keys(a, b)
@@ -208,12 +236,34 @@ function M.send_keys(a, b)
         key = b
     end
 
-    state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+    table.insert(state.key_queue.items, {
+        mods = mods,
+        key = key,
+    })
 
-    hs.timer.doAfter(0, function()
-        hs.eventtap.keyStroke(mods, key, 0)
-    end)
+    process_queue()
 end
+
+
+-- function M.send_keys(a, b)
+--     local mods
+--     local key
+--
+--     if b == nil then
+--         mods = {}
+--         key = a
+--     else
+--         mods = a or {}
+--         key = b
+--     end
+--
+--     state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+--
+--     hs.timer.doAfter(0, function()
+--         hs.eventtap.keyStroke(mods, key, 0)
+--     end)
+-- end
+
 
 
 -- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
@@ -288,8 +338,8 @@ function M.cycle_popup_corner(win)
     -- Update state
     state.menu.corner = new_corner
 
-    hide_popups(win)
-    show_popups(win, new_corner)
+    M.hide_popups(win)
+    M.show_popups(win, new_corner)
 end
 
 
@@ -304,8 +354,8 @@ function M.cycle_popup_layout(win)
     -- Update state
     state.menu.stack = new_layout
 
-    hide_popups(win)
-    show_popups(win, state.menu.corner, new_layout)
+    M.hide_popups(win)
+    M.show_popups(win, state.menu.corner, new_layout)
 end
 
 
@@ -341,7 +391,7 @@ end
 --------------------------------------------------------------------------------
 function M.close_menu(win)
     set_event_tap('off')
-    hide_popups(win)
+    M.hide_popups(win)
 end
 
 
@@ -353,7 +403,7 @@ function M.launch_menu()
     end
 
     set_event_tap('on')
-    show_popups(hs.window.focusedWindow())
+    M.show_popups(hs.window.focusedWindow())
 end
 
 return M

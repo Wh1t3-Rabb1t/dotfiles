@@ -21,22 +21,17 @@
 
 ## Modules:
 
-- On certain actions (like search for text in Brave etc) create an action
-  that we can bind to 'enter' that will relaunch the popup menu (i.e. enter
-  'insert' mode briefly to search etc.)
-  Maybe use a modal binding for this.
+- Implement an 'expand/collapse' binding for each popup (make it stateful so we
+  don't need to keep hiding unwanted popups).
+
+- Cache the popup dimensions (w, h).
+
+- Integrate popup (x, y) with screen state.
 
 - When entering fullscreen let's see if it's possible to apply the shader value
   to the fullscreen 'workspace' (or whatever mac calls it).
 
-- Implement an 'expand/collapse' binding for each popup (make it stateful so we
-  don't need to keep hiding unwanted popups).
-
 - Build a robust key 'queue'.
-
-- ?? Implement scrolling in Brave (might not be worth it because; need to set
-  mouse coords to within the window frame and left/right arrows usually scroll
-  left/right anyway).
 
 - Add 'on_click' and 'focus ?' events to ensure state.active_win is changed
   when required.
@@ -46,13 +41,6 @@
 
 - In 'launch_menu()' need to check if focused window is fullsceen (exit
   fullsceen if it is).
-
-- Cache the popup dimensions (w, h).
-
-- Integrate popup (x, y) with screen state.
-
-- Incorporate key sequences when in which_key modal mode. (i.e. <Space>lf =
-  launch firefox)
 
 - Currently all which_key fns have been changed from local to part of the
   module object. (change select functions back to local wherever possible).

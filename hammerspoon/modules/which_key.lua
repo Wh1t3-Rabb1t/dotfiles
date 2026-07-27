@@ -26,6 +26,48 @@ function M.send_keys(a, b)
 end
 
 
+-- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
+--------------------------------------------------------------------------------
+function M.temporary_insert()
+    local win = state.menu.active_win or hs.window.focusedWindow()
+    local frame = win:frame()
+    local opacity = state.menu.opacity
+    local insert_popup = cache.assets.insert.popup
+
+    local function end_insert_mode(hotkeys, popup)
+        for _, hk in ipairs(hotkeys) do
+            hk:disable()
+        end
+
+        popup:hide()
+    end
+
+    M.close_menu()
+
+    local pos = {
+        x = frame.x + 50,
+        y = frame.y + 50,
+    }
+
+    insert_popup:topLeft(pos)
+    insert_popup:alpha(opacity)
+    insert_popup:show(0.15)
+
+    local hotkeys = {}
+
+    hotkeys[1] = hs.hotkey.bind({}, 'return', function()
+        end_insert_mode(hotkeys, insert_popup)
+
+        hs.eventtap.keyStroke({}, 'return')
+        M.launch_menu()
+    end)
+
+    hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
+        end_insert_mode(hotkeys, insert_popup)
+    end)
+end
+
+
 -- Cycle popup corner positions
 --------------------------------------------------------------------------------
 function M.cycle_popup_corner(win)

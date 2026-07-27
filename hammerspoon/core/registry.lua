@@ -4,6 +4,24 @@ local brightness = require('brightness')
 local window = require('windows')
 local which_key = require('which_key')
 
+M.insert_bindings = {
+    ['insert'] = {
+        {
+            category = 'Bound until invoked',
+            bindings = {
+                {
+                    key  = 'Enter',
+                    desc = 'Relaunch menu',
+                },
+                {
+                    key  = 'Escape',
+                    desc = 'Cancel',
+                },
+            },
+        },
+    },
+}
+
 M.bindings = {
     ['system'] = {
         -- Launch or focus
@@ -99,7 +117,6 @@ M.bindings = {
                 },
             },
         },
-
 
         -- Misc
         {
@@ -436,6 +453,11 @@ M.actions = {
     --   n  Win_to_next_screen
 
 
+    -- ['insert'] = {
+    --     relaunch_menu   = function() window.launch_or_focus('kitty') end,
+    --     cancel_relaunch = function() window.launch_or_focus('kitty') end,
+    -- },
+
     ['system'] = {
         -- Launch or focus
         launch_kitty       = function() window.launch_or_focus('kitty') end,
@@ -503,7 +525,12 @@ M.actions = {
         page_down       = function() which_key.send_keys('pagedown') end,
         page_top        = function() which_key.send_keys('home') end,
         page_bottom     = function() which_key.send_keys('end') end,
-        search_text     = function() which_key.send_keys({'cmd'}, 'f') which_key.close_menu() end,
+
+        search_text = function()
+            which_key.send_keys({'cmd'}, 'f')
+            which_key.temporary_insert()
+        end,
+
         reload          = function() which_key.send_keys({'cmd'}, 'r') end,
         back            = function() which_key.send_keys({'cmd'}, '[') end,
         forward         = function() which_key.send_keys({'cmd'}, ']') end,
@@ -513,13 +540,22 @@ M.actions = {
         tab_right       = function() which_key.send_keys({'ctrl'}, 'pagedown') end,
         move_tab_left   = function() which_key.send_keys({'ctrl', 'shift'}, 'pageup') end,
         move_tab_right  = function() which_key.send_keys({'ctrl', 'shift'}, 'pagedown') end,
-        search_tabs     = function() which_key.send_keys({'cmd', 'shift'}, 'a') which_key.close_menu() end,
+
+        search_tabs = function()
+            which_key.send_keys({'cmd', 'shift'}, 'a')
+            which_key.temporary_insert()
+        end,
+
         new_tab         = function() which_key.send_keys({'cmd'}, 't') end,
         reopen_closed   = function() which_key.send_keys({'cmd', 'shift'}, 't') end,
         close_tab       = function() which_key.send_keys({'cmd'}, 'w') end,
 
         -- Misc
-        focus_searchbar = function() which_key.send_keys({'cmd'}, 'l') which_key.close_menu() end,
+        focus_searchbar = function()
+            which_key.send_keys({'cmd'}, 'l')
+            which_key.temporary_insert()
+        end,
+
         add_bookmark    = function() which_key.send_keys({'cmd'}, 'd') end,
         open_history    = function() which_key.send_keys({'cmd'}, 'h') end,
     },

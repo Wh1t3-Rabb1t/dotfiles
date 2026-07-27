@@ -12,7 +12,6 @@ require('wifi').init()
 require('screenshots').init()
 require('quit_timer').init()
 
-
 -- Hot reload hammerspoon
 hs.hotkey.bind({ 'ctrl', 'shift' }, 'r', function()
     hs.reload()

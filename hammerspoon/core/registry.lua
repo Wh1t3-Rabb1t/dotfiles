@@ -530,12 +530,12 @@ M.actions = {
         page_down       = function() which_key.send_keys('pagedown') end,
         page_top        = function() which_key.send_keys('home') end,
         page_bottom     = function() which_key.send_keys('end') end,
-
         search_text = function()
-            which_key.send_keys({'cmd'}, 'f')
-            which_key.temporary_insert()
+            which_key.process_queue(
+                function() which_key.send_keys({'cmd'}, 'f') end,
+                function() which_key.temporary_insert() end
+            )
         end,
-
         reload          = function() which_key.send_keys({'cmd'}, 'r') end,
         back            = function() which_key.send_keys({'cmd'}, '[') end,
         forward         = function() which_key.send_keys({'cmd'}, ']') end,
@@ -545,24 +545,25 @@ M.actions = {
         tab_right       = function() which_key.send_keys({'ctrl'}, 'pagedown') end,
         move_tab_left   = function() which_key.send_keys({'ctrl', 'shift'}, 'pageup') end,
         move_tab_right  = function() which_key.send_keys({'ctrl', 'shift'}, 'pagedown') end,
-
         search_tabs = function()
-            which_key.send_keys({'cmd', 'shift'}, 'a')
-            which_key.temporary_insert()
+            which_key.process_queue(
+                function() which_key.send_keys({'cmd', 'shift'}, 'a') end,
+                function() which_key.temporary_insert() end
+            )
         end,
-
         new_tab         = function() which_key.send_keys({'cmd'}, 't') end,
         reopen_closed   = function() which_key.send_keys({'cmd', 'shift'}, 't') end,
         close_tab       = function() which_key.send_keys({'cmd'}, 'w') end,
 
         -- Misc
         focus_searchbar = function()
-            which_key.send_keys({'cmd'}, 'l')
-            which_key.temporary_insert()
+            which_key.process_queue(
+                function() which_key.send_keys({'cmd'}, 'l') end,
+                function() which_key.temporary_insert() end
+            )
         end,
-
-        add_bookmark    = function() which_key.send_keys({'cmd'}, 'd') end,
-        open_history    = function() which_key.send_keys({'cmd'}, 'h') end,
+        add_bookmark = function() which_key.send_keys({'cmd'}, 'd') end,
+        open_history = function() which_key.send_keys({'cmd'}, 'h') end,
     },
 }
 

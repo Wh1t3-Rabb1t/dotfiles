@@ -144,6 +144,19 @@ local function get_popup_coords(win, popups, corner, layout)
 end
 
 
+-- Toggle event tap
+--------------------------------------------------------------------------------
+local function set_event_tap(set_to)
+    if set_to == 'on' then
+        state.menu.tap_active = true
+        cache.assets.tap:start()
+    elseif set_to == 'off' then
+        state.menu.tap_active = false
+        cache.assets.tap:stop()
+    end
+end
+
+
 -- Show popups
 --------------------------------------------------------------------------------
 function M.show_popups(win, corner, layout)
@@ -181,44 +194,35 @@ function M.hide_popups(win)
 end
 
 
--- Toggle event tap
+-- Process function queue
 --------------------------------------------------------------------------------
-local function set_event_tap(set_to)
-    if set_to == 'on' then
-        state.menu.tap_active = true
-        cache.assets.tap:start()
-    elseif set_to == 'off' then
-        state.menu.tap_active = false
-        cache.assets.tap:stop()
+function M.process_queue(...)
+    local jobs = { ... }
+
+    for _, job in ipairs(jobs) do
+        table.insert(state.key_queue.items, job)
     end
-end
 
-
--- Process key queue
---------------------------------------------------------------------------------
-local function process_queue()
     if state.key_queue.running then
         return
     end
 
     state.key_queue.running = true
 
-    local function next_key()
-        local item = table.remove(state.key_queue.items, 1)
+    local function next_job()
+        local job = table.remove(state.key_queue.items, 1)
 
-        if not item then
+        if not job then
             state.key_queue.running = false
             return
         end
 
-        state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
+        job()
 
-        hs.eventtap.keyStroke(item.mods, item.key, 0)
-
-        hs.timer.doAfter(0.01, next_key)
+        hs.timer.doAfter(0.01, next_job)
     end
 
-    next_key()
+    next_job()
 end
 
 
@@ -236,34 +240,10 @@ function M.send_keys(a, b)
         key = b
     end
 
-    table.insert(state.key_queue.items, {
-        mods = mods,
-        key = key,
-    })
+    state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.02
 
-    process_queue()
+    hs.eventtap.keyStroke(mods, key, 0)
 end
-
-
--- function M.send_keys(a, b)
---     local mods
---     local key
---
---     if b == nil then
---         mods = {}
---         key = a
---     else
---         mods = a or {}
---         key = b
---     end
---
---     state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.05
---
---     hs.timer.doAfter(0, function()
---         hs.eventtap.keyStroke(mods, key, 0)
---     end)
--- end
-
 
 
 -- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch

@@ -21,10 +21,14 @@
 
 ## Modules:
 
+- Build a robust key 'queue'.
+
+- Refactor 'launch_or_focus' etc. to run everything through 'process_queue(...)'
+  so that we can launch/focus an app and wait for the app to focus ect before
+  creating the new popup.
+
 - When entering fullscreen let's see if it's possible to apply the shader value
   to the fullscreen 'workspace' (or whatever mac calls it).
-
-- Build a robust key 'queue'.
 
 - Add 'on_click' and 'focus ?' events to ensure state.active_win is changed
   when required.

@@ -21,7 +21,8 @@
 
 ## Modules:
 
-- Build a robust key 'queue'.
+- temporary_insert() needs to signify that it's active in state otherwise
+  relaunching the menu without unbinding 'enter' and 'escape' will get weird.
 
 - Refactor 'launch_or_focus' etc. to run everything through 'process_queue(...)'
   so that we can launch/focus an app and wait for the app to focus ect before

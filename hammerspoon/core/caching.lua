@@ -325,12 +325,6 @@ local function create_event_tap()
     local e = hs.eventtap
 
     local tap = e.new({ e.event.types.keyDown, e.event.types.flagsChanged }, function(event)
-        if hs.timer.secondsSinceEpoch() < state.menu.ignore_until then
-            state.menu.ignore_until = 0
-
-            return false
-        end
-
         local flags = event:getFlags()
         local keycode = event:getKeyCode()
         local key = hs.keycodes.map[keycode]

@@ -5,11 +5,10 @@ M.menu = {
     active_win = false,      -- (win|false)
     corner = 'bottom_right',
     stack = 'vertical',
-    ignore_until = 0,
     opacity = 1,
 }
 
-M.key_queue = {
+M.action_queue = {
     items = {},
     running = false,
 }

@@ -194,97 +194,68 @@ function M.hide_popups(win)
 end
 
 
--- Process function queue
---------------------------------------------------------------------------------
-function M.process_queue(...)
-    local jobs = { ... }
-
-    for _, job in ipairs(jobs) do
-        table.insert(state.key_queue.items, job)
-    end
-
-    if state.key_queue.running then
-        return
-    end
-
-    state.key_queue.running = true
-
-    local function next_job()
-        local job = table.remove(state.key_queue.items, 1)
-
-        if not job then
-            state.key_queue.running = false
-            return
-        end
-
-        job()
-
-        hs.timer.doAfter(0.01, next_job)
-    end
-
-    next_job()
-end
-
-
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
-function M.send_keys(a, b)
-    local mods
-    local key
+function M.send_keys(mods, key)
+    local job = function(done)
+        set_event_tap('off')
 
-    if b == nil then
-        mods = {}
-        key = a
-    else
-        mods = a or {}
-        key = b
+        hs.eventtap.keyStroke(mods, key, 0)
+
+        set_event_tap('on')
+
+        done()
     end
 
-    state.menu.ignore_until = hs.timer.secondsSinceEpoch() + 0.02
-
-    hs.eventtap.keyStroke(mods, key, 0)
+    return job
 end
 
 
 -- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
 --------------------------------------------------------------------------------
 function M.temporary_insert()
-    local win = state.menu.active_win or hs.window.focusedWindow()
-    local frame = win:frame()
-    local opacity = state.menu.opacity
-    local insert_popup = cache.assets.insert.popup
+    local job = function(done)
+        local win = state.menu.active_win or hs.window.focusedWindow()
+        local frame = win:frame()
+        local opacity = state.menu.opacity
+        local insert_popup = cache.assets.insert.popup
 
-    local function end_insert_mode(hotkeys, popup)
-        for _, hk in ipairs(hotkeys) do
-            hk:disable()
+        local function end_insert_mode(hotkeys, popup)
+            for _, hk in ipairs(hotkeys) do
+                hk:disable()
+            end
+
+            popup:hide()
         end
 
-        popup:hide()
+        M.close_menu()
+
+        local pos = {
+            x = frame.x + 10,
+            y = frame.y + 10,
+        }
+
+        insert_popup:topLeft(pos)
+        insert_popup:alpha(opacity)
+        insert_popup:show(0.15)
+
+        local hotkeys = {}
+
+        hotkeys[1] = hs.hotkey.bind({}, 'return', function()
+            end_insert_mode(hotkeys, insert_popup)
+
+            hs.eventtap.keyStroke({}, 'return')
+            M.launch_menu()
+        end)
+
+        hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
+            end_insert_mode(hotkeys, insert_popup)
+        end)
+
+        done()
     end
 
-    M.close_menu()
-
-    local pos = {
-        x = frame.x + 10,
-        y = frame.y + 10,
-    }
-
-    insert_popup:topLeft(pos)
-    insert_popup:alpha(opacity)
-    insert_popup:show(0.15)
-
-    local hotkeys = {}
-
-    hotkeys[1] = hs.hotkey.bind({}, 'return', function()
-        end_insert_mode(hotkeys, insert_popup)
-
-        hs.eventtap.keyStroke({}, 'return')
-        M.launch_menu()
-    end)
-
-    hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
-        end_insert_mode(hotkeys, insert_popup)
-    end)
+    return job
 end
 
 

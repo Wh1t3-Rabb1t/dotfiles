@@ -21,6 +21,12 @@
 
 ## Modules:
 
+- Need to separate all bound actions into sub actions which are orchestrated
+  via the action queue.
+
+- ? Need to create a key queue for the eventtap as well so that one keystroke
+  can't be processed until the current logic is finished executing.
+
 - temporary_insert() needs to signify that it's active in state otherwise
   relaunching the menu without unbinding 'enter' and 'escape' will get weird.
 

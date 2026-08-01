@@ -1,7 +1,6 @@
 local M = {}
 
 local brightness = require('brightness')
-local window = require('windows')
 local wk = require('which_key')
 local util = require('util')
 
@@ -465,9 +464,9 @@ M.actions = {
 
     ['system'] = {
         -- Launch or focus
-        launch_kitty       = function() window.launch_or_focus('kitty') end,
-        launch_brave       = function() window.launch_or_focus('Brave Browser') end,
-        launch_firefox     = function() window.launch_or_focus('Firefox') end,
+        launch_kitty       = function() wk.launch_or_focus('kitty') end,
+        launch_brave       = function() wk.launch_or_focus('Brave Browser') end,
+        launch_firefox     = function() wk.launch_or_focus('Firefox') end,
 
         -- Brightness
         brightness_up      = function() brightness.adjust_brightness('up') end,
@@ -475,10 +474,10 @@ M.actions = {
         brightness_print   = function() brightness.print_values() end,
 
         -- Splits
-        resize_split_left  = function() window.resize_splits('left') end,
-        resize_split_right = function() window.resize_splits('right') end,
-        maximize_split     = function() window.maximize_split() end,
-        swap_splits        = function() window.swap_splits() end,
+        resize_split_left  = function() wk.resize_splits('left') end,
+        resize_split_right = function() wk.resize_splits('right') end,
+        maximize_split     = function() wk.maximize_split() end,
+        swap_splits        = function() wk.swap_splits() end,
 
         -- Popup
         opacity_up         = function() wk.popup_opacity('up') end,
@@ -489,7 +488,7 @@ M.actions = {
         -- Misc
         zoom_in            = function() util.queue(wk.send_keys({'cmd'}, '=')) end,
         zoom_out           = function() util.queue(wk.send_keys({'cmd'}, '-')) end,
-        close_menu         = function() wk.close_menu() end,
+        close_menu         = function() util.queue(wk.close_menu()) end,
     },
 
     ['kitty'] = {
@@ -531,12 +530,7 @@ M.actions = {
         page_down       = function() util.queue(wk.send_keys({}, 'pagedown')) end,
         page_top        = function() util.queue(wk.send_keys({}, 'home')) end,
         page_bottom     = function() util.queue(wk.send_keys({}, 'end')) end,
-        search_text = function()
-            util.queue(
-                wk.send_keys({'cmd'}, 'f'),
-                wk.temporary_insert()
-            )
-        end,
+        search_text     = function() wk.search_brave_text() end,
         reload          = function() util.queue(wk.send_keys({'cmd'}, 'r')) end,
         back            = function() util.queue(wk.send_keys({'cmd'}, '[')) end,
         forward         = function() util.queue(wk.send_keys({'cmd'}, ']')) end,
@@ -546,25 +540,15 @@ M.actions = {
         tab_right       = function() util.queue(wk.send_keys({'ctrl'}, 'pagedown')) end,
         move_tab_left   = function() util.queue(wk.send_keys({'ctrl', 'shift'}, 'pageup')) end,
         move_tab_right  = function() util.queue(wk.send_keys({'ctrl', 'shift'}, 'pagedown')) end,
-        search_tabs = function()
-            util.queue(
-                wk.send_keys({'cmd', 'shift'}, 'a'),
-                wk.temporary_insert()
-            )
-        end,
+        search_tabs     = function() wk.search_brave_tabs() end,
         new_tab         = function() util.queue(wk.send_keys({'cmd'}, 't')) end,
         reopen_closed   = function() util.queue(wk.send_keys({'cmd', 'shift'}, 't')) end,
         close_tab       = function() util.queue(wk.send_keys({'cmd'}, 'w')) end,
 
         -- Misc
-        focus_searchbar = function()
-            util.queue(
-                wk.send_keys({'cmd'}, 'l'),
-                wk.temporary_insert()
-            )
-        end,
-        add_bookmark = function() util.queue(wk.send_keys({'cmd'}, 'd')) end,
-        open_history = function() util.queue(wk.send_keys({'cmd'}, 'h')) end,
+        focus_searchbar = function() wk.focus_brave_searchbar() end,
+        add_bookmark    = function() util.queue(wk.send_keys({'cmd'}, 'd')) end,
+        open_history    = function() util.queue(wk.send_keys({'cmd'}, 'h')) end,
     },
 }
 

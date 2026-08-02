@@ -21,6 +21,11 @@
 
 ## Modules:
 
+- Add shift layer bindings for brave (select text etc).
+
+- Maybe move all 'which_key' local functions into utils.lua and have which_key
+  as the orchestrator file that queues actions.
+
 - Need to separate all bound actions into sub actions which are orchestrated
   via the action queue.
 

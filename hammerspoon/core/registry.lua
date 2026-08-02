@@ -106,14 +106,14 @@ M.bindings = {
                 {
                     key    = 'r',
                     mods   = { 'shift' },
-                    action = 'cycle_popup_corner',
+                    action = 'cycle_menu_pos',
                     desc   = 'Cycle positions',
                 },
                 {
                     key    = 'a',
                     mods   = { 'shift' },
-                    action = 'cycle_popup_layout',
-                    desc   = 'Cycle stacking',
+                    action = 'cycle_menu_layout',
+                    desc   = 'Cycle menu stacking',
                 },
                 {
                     key    = 'r',
@@ -480,10 +480,10 @@ M.actions = {
         swap_splits        = function() wk.swap_splits() end,
 
         -- Popup
-        opacity_up         = function() wk.popup_opacity('up') end,
-        opacity_down       = function() wk.popup_opacity('down') end,
-        cycle_popup_corner = function() wk.cycle_popup_corner() end,
-        cycle_popup_layout = function() wk.cycle_popup_layout() end,
+        opacity_up        = function() wk.menu_opacity('up') end,
+        opacity_down      = function() wk.menu_opacity('down') end,
+        cycle_menu_pos    = function() wk.cycle_menu_pos() end,
+        cycle_menu_layout = function() wk.cycle_menu_layout() end,
 
         -- Misc
         zoom_in            = function() util.queue(wk.send_keys({'cmd'}, '=')) end,

@@ -2,11 +2,13 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
-local util = require('util')
 local splits = require('splits')
-local menu = require('menu')
+local popups = require('popups')
 
 
+
+-- TODO: refactor and move elsewhere
+--
 -- Launch or focus target app
 --------------------------------------------------------------------------------
 function M.launch_or_focus(app)
@@ -23,96 +25,66 @@ function M.launch_or_focus(app)
             return
         end
 
-        menu.hide(existing_win)
+        popups.hide(existing_win)
 
         splits.snap(
             win, splits.get_layout(existing_win, win)
         )
 
-        menu.show(win)
+        popups.show(win)
     end)
 
     hs.application.launchOrFocus(app)
 end
 
 
--- Swap left/right window slots
+
+-- Process action queue
 --------------------------------------------------------------------------------
-function M.swap_splits()
-    local win = hs.window.focusedWindow()
-    local id = win:screen():id()
-    local layout = state.screens[id].layout
-    local left_slot = layout.left
-    local right_slot = layout.right
+function M.queue(...)
+    local jobs = { ... }
 
-    layout.left = right_slot
-    layout.right = left_slot
-
-    menu.hide(win)
-
-    splits.snap(win, 'split')
-
-    menu.show(win)
-end
-
-
--- Re-align window divider
---------------------------------------------------------------------------------
-function M.resize_splits(direction, step)
-    step = step or 0.01
-
-    local win = hs.window.focusedWindow()
-    local id = win:screen():id()
-    local curr_screen = state.screens[id]
-    local divider = curr_screen.divider
-    local layout = curr_screen.layout
-
-    if direction == 'left' then
-        divider = divider - step
-    elseif direction == 'right' then
-        divider = divider + step
+    for _, job in ipairs(jobs) do
+        table.insert(state.action_queue.items, job)
     end
 
-    local num = math.min(0.80, math.max(0.20, divider))
-    curr_screen.divider = (num * 100) / 100
+    if state.action_queue.running then
+        return
+    end
 
-    if layout.maximized then
-        if direction == 'left' then
-            if layout.right == win then
-                layout.right = layout.left
-            end
+    state.action_queue.running = true
 
-            layout.left = win
-        elseif direction == 'right' then
-            if layout.left == win then
-                layout.left = layout.right
-            end
+    local function next_job()
+        local job = table.remove(state.action_queue.items, 1)
 
-            layout.right = win
+        if not job then
+            state.action_queue.running = false
+            return
         end
 
-        layout.maximized = false
+        job(next_job)
     end
 
-    splits.snap(win, 'split')
+    next_job()
 end
 
 
--- Maximize focused window
+-- Toggle event tap
 --------------------------------------------------------------------------------
-function M.maximize_split(win)
-    win = win or hs.window.focusedWindow()
+function M.turn_eventtap(set_to)
+    local job = function (done)
+        if set_to == 'on' then
+            state.menu.tap_active = true
+            cache.assets.tap:start()
+        elseif set_to == 'off' then
+            state.menu.tap_active = false
+            cache.assets.tap:stop()
+        end
 
-    local id = win:screen():id()
-    local layout = state.screens[id].layout
-    local frame = cache.screens[id].frame
+        done()
+    end
 
-    menu.hide(win)
-
-    layout.maximized = win
-    layout.maximized:setFrame(frame)
-
-    menu.show(win)
+    return job
 end
 
 
@@ -120,11 +92,13 @@ end
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     local job = function(done)
-        menu.turn_eventtap('off')
+        state.menu.tap_active = false
+        cache.assets.tap:stop()
 
         hs.eventtap.keyStroke(mods, key, 0)
 
-        menu.turn_eventtap('on')
+        state.menu.tap_active = true
+        cache.assets.tap:start()
 
         done()
     end
@@ -179,130 +153,18 @@ function M.temporary_insert()
 end
 
 
--- Cycle menu corner positions
---------------------------------------------------------------------------------
-function M.cycle_menu_pos(win)
-    win = win or state.menu.active_win
-
-    local corners = {
-        'bottom_right',
-        'top_right',
-        'bottom_left',
-        'top_left',
-    }
-
-    local current_corner = state.menu.corner
-    local current_index = 1
-
-    -- Find the index of the current corner
-    for i, c in ipairs(corners) do
-        if c == current_corner then
-            current_index = i
-            break
-        end
-    end
-
-    -- Calculate the next index, wrapping around using modulo arithmetic
-    local new_index = (current_index % #corners) + 1
-    local new_corner = corners[new_index]
-
-    -- Update state
-    state.menu.corner = new_corner
-
-    menu.hide(win)
-    menu.show(win, new_corner)
-end
-
-
--- Cycle menu layout (vertical/horizontal stacking)
---------------------------------------------------------------------------------
-function M.cycle_menu_layout(win)
-    win = win or state.menu.active_win
-
-    local layout = state.menu.stack
-    local new_layout = (layout == 'vertical') and 'horizontal' or 'vertical'
-
-    -- Update state
-    state.menu.stack = new_layout
-
-    menu.hide(win)
-    menu.show(win, state.menu.corner, new_layout)
-end
-
-
--- Set menu opacity
---------------------------------------------------------------------------------
-function M.menu_opacity(direction, win)
-    win = win or state.menu.active_win
-
-    local step = 0.1
-    local opacity = state.menu.opacity
-    local app_name = win:application():name()
-
-    if direction == 'up' then
-        opacity = math.min(opacity + step, 1.0)
-    elseif direction == 'down' then
-        opacity = math.max(opacity - step, 0.1)
-    end
-
-    -- Update state
-    state.menu.opacity = opacity
-
-    -- App specific popup (if supported)
-    if cache.assets[app_name] then
-        cache.assets[app_name].popup:alpha(opacity)
-    end
-
-    -- System popup
-    cache.assets.system.popup:alpha(opacity)
-end
-
-
--- Focus searchbar (Brave Browser)
---------------------------------------------------------------------------------
-function M.focus_brave_searchbar()
-    util.queue(
-        M.send_keys({'cmd'}, 'l'),
-        M.close_menu(),
-        M.temporary_insert()
-    )
-end
-
-
--- Search tabs (Brave Browser)
---------------------------------------------------------------------------------
-function M.search_brave_tabs()
-    util.queue(
-        M.send_keys({'cmd', 'shift'}, 'a'),
-        M.close_menu(),
-        M.temporary_insert()
-    )
-end
-
-
--- Search text (Brave Browser)
---------------------------------------------------------------------------------
-function M.search_brave_text()
-    util.queue(
-        M.send_keys({'cmd'}, 'f'),
-        M.close_menu(),
-        M.temporary_insert()
-    )
-end
-
-
--- Close menu
---------------------------------------------------------------------------------
-function M.close_menu(win)
-    local job = function (done)
-        menu.turn_eventtap('off')
-        menu.hide(win)
-
-        done()
-    end
-
-    return job
-end
+-- -- Close menu
+-- --------------------------------------------------------------------------------
+-- function M.close_menu(win)
+--     local job = function (done)
+--         util.turn_eventtap('off')
+--         popups.hide(win)
+--
+--         done()
+--     end
+--
+--     return job
+-- end
 
 
 -- Launch menu
@@ -312,8 +174,10 @@ function M.launch_menu()
         return
     end
 
-    menu.turn_eventtap('on')
-    menu.show(hs.window.focusedWindow())
+    M.queue(
+        M.turn_eventtap('on'),
+        popups.show(hs.window.focusedWindow())
+    )
 end
 
 return M

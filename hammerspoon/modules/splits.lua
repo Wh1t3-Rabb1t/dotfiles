@@ -4,20 +4,23 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- Compare the dimensions of two frame objects
+--------------------------------------------------------------------------------
+local function frames_equal(a, b, tolerance)
+    -- MacOS occasionally returns coords off by one pixel due to scaling,
+    -- retina displays etc.
+    tolerance = tolerance or 1
+
+    return math.abs(a.x - b.x) <= tolerance
+       and math.abs(a.y - b.y) <= tolerance
+       and math.abs(a.w - b.w) <= tolerance
+       and math.abs(a.h - b.h) <= tolerance
+end
+
+
 -- Determine whether or not a winodw is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
-    local function frames_equal(a, b, tolerance)
-        -- MacOS occasionally returns coords off by one pixel due to scaling,
-        -- retina displays etc.
-        tolerance = tolerance or 1
-
-        return math.abs(a.x - b.x) <= tolerance
-           and math.abs(a.y - b.y) <= tolerance
-           and math.abs(a.w - b.w) <= tolerance
-           and math.abs(a.h - b.h) <= tolerance
-    end
-
     local id = win:screen():id()
     local cached_frame = cache.screens[id].frame
 
@@ -56,7 +59,7 @@ end
 
 -- Calculate left/right slot frames
 --------------------------------------------------------------------------------
-local function get_split_coords(id, border)
+local function get_coords(id, border)
     border = border or 8
 
     local frame = cache.screens[id].frame
@@ -135,20 +138,113 @@ end
 -- Snap windows into their respective slot coords
 --------------------------------------------------------------------------------
 function M.snap(win, target_layout)
-    local id = win:screen():id()
-    local layout = state.screens[id].layout
-    local frames = get_split_coords(id)
+    local job = function(done)
+        local id = win:screen():id()
+        local layout = state.screens[id].layout
+        local frames = get_coords(id)
 
-    if target_layout == 'maximized' then
-        layout.maximized:setFrame(cache.screens[id].frame, 0.02)
-    elseif target_layout == 'split' then
-        if layout.left then
-            layout.left:setFrame(frames.left, 0.02)
+        if target_layout == 'maximized' then
+            layout.maximized:setFrame(cache.screens[id].frame, 0.02)
+        elseif target_layout == 'split' then
+            if layout.left then
+                layout.left:setFrame(frames.left, 0.02)
+            end
+            if layout.right then
+                layout.right:setFrame(frames.right, 0.02)
+            end
         end
-        if layout.right then
-            layout.right:setFrame(frames.right, 0.02)
-        end
+
+        done()
     end
+
+    return job
+end
+
+
+-- Swap left/right window slots
+--------------------------------------------------------------------------------
+function M.swap(win)
+    win = win or hs.window.focusedWindow()
+
+    local job = function(done)
+        local id = win:screen():id()
+        local layout = state.screens[id].layout
+        local left_slot = layout.left
+        local right_slot = layout.right
+
+        layout.left = right_slot
+        layout.right = left_slot
+
+        done()
+    end
+
+    return job
+end
+
+
+-- Re-align window divider
+--------------------------------------------------------------------------------
+function M.resize(direction, step)
+    step = step or 0.01
+
+    local job = function(done)
+        local win = hs.window.focusedWindow()
+        local id = win:screen():id()
+        local curr_screen = state.screens[id]
+        local divider = curr_screen.divider
+        local layout = curr_screen.layout
+
+        if direction == 'left' then
+            divider = divider - step
+        elseif direction == 'right' then
+            divider = divider + step
+        end
+
+        local num = math.min(0.80, math.max(0.20, divider))
+        curr_screen.divider = (num * 100) / 100
+
+        if layout.maximized then
+            if direction == 'left' then
+                if layout.right == win then
+                    layout.right = layout.left
+                end
+
+                layout.left = win
+            elseif direction == 'right' then
+                if layout.left == win then
+                    layout.left = layout.right
+                end
+
+                layout.right = win
+            end
+
+            layout.maximized = false
+        end
+
+        done()
+    end
+
+    return job
+end
+
+
+-- Maximize focused window
+--------------------------------------------------------------------------------
+function M.maximize(win)
+    win = win or hs.window.focusedWindow()
+
+    local job = function(done)
+        local id = win:screen():id()
+        local layout = state.screens[id].layout
+        local frame = cache.screens[id].frame
+
+        layout.maximized = win
+        layout.maximized:setFrame(frame)
+
+        done()
+    end
+
+    return job
 end
 
 return M

@@ -21,6 +21,8 @@
 
 ## Modules:
 
+- Make 'splits.get_layout()' local once we refactor 'launch_or_focus()'.
+
 - Add shift layer bindings for brave (select text etc).
 
 - Maybe move all 'which_key' local functions into utils.lua and have which_key

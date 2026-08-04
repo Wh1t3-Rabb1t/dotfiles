@@ -21,7 +21,7 @@ end
 -- Determine whether or not a winodw is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
-    local id = win:screen():id()
+    local id           = win:screen():id()
     local cached_frame = cache.screens[id].frame
 
     local frames = frames_equal(
@@ -43,9 +43,9 @@ local function get_side(win)
     end
 
     local screen_frame = screen:fullFrame()
-    local win_frame = win:frame()
-    local screen_mid = screen_frame.x + (screen_frame.w / 2)
-    local win_mid = win_frame.x + (win_frame.w / 2)
+    local win_frame    = win:frame()
+    local screen_mid   = screen_frame.x + (screen_frame.w / 2)
+    local win_mid      = win_frame.x + (win_frame.w / 2)
 
     local side = 'right'
 
@@ -62,8 +62,8 @@ end
 local function get_coords(id, border)
     border = border or 8
 
-    local frame = cache.screens[id].frame
-    local left_width = frame.w * state.screens[id].divider
+    local frame       = cache.screens[id].frame
+    local left_width  = frame.w * state.screens[id].divider
     local right_width = frame.w - left_width
 
     local frames = {
@@ -93,8 +93,8 @@ end
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
-function M.get_layout(existing_win, win)
-    local id = win:screen():id()
+local function get_layout(existing_win, win)
+    local id     = win:screen():id()
     local layout = state.screens[id].layout
 
     -- Set new window to the fullscreen slot if it fills the usable screen space
@@ -122,7 +122,7 @@ function M.get_layout(existing_win, win)
         layout.maximized = false
     end
 
-    local side = get_side(win)
+    local side     = get_side(win)
     local opposite = (side == 'left') and 'right' or 'left'
 
     if get_side(existing_win) == side then
@@ -137,9 +137,10 @@ end
 
 -- Snap windows into their respective slot coords
 --------------------------------------------------------------------------------
-function M.snap(win, target_layout)
-    local job = function(done)
-        local id = win:screen():id()
+function M.snap(target_layout)
+    return function(done)
+        local win    = state.menu.curr_win or hs.window.focusedWindow()
+        local id     = win:screen():id()
         local layout = state.screens[id].layout
         local frames = get_coords(id)
 
@@ -156,43 +157,37 @@ function M.snap(win, target_layout)
 
         done()
     end
-
-    return job
 end
 
 
 -- Swap left/right window slots
 --------------------------------------------------------------------------------
-function M.swap(win)
-    win = win or hs.window.focusedWindow()
-
-    local job = function(done)
-        local id = win:screen():id()
+function M.swap()
+    return function(done)
+        local win    = state.menu.curr_win or hs.window.focusedWindow()
+        local id     = win:screen():id()
         local layout = state.screens[id].layout
-        local left_slot = layout.left
-        local right_slot = layout.right
+        local lhs    = layout.left
+        local rhs    = layout.right
 
-        layout.left = right_slot
-        layout.right = left_slot
+        layout.left  = rhs
+        layout.right = lhs
 
         done()
     end
-
-    return job
 end
 
 
 -- Re-align window divider
 --------------------------------------------------------------------------------
-function M.resize(direction, step)
-    step = step or 0.01
-
-    local job = function(done)
-        local win = hs.window.focusedWindow()
-        local id = win:screen():id()
-        local curr_screen = state.screens[id]
-        local divider = curr_screen.divider
-        local layout = curr_screen.layout
+function M.resize(direction, step_val)
+    return function(done)
+        local step    = step_val or 0.01
+        local win     = state.menu.curr_win or hs.window.focusedWindow()
+        local id      = win:screen():id()
+        local screen  = state.screens[id]
+        local divider = screen.divider
+        local layout  = screen.layout
 
         if direction == 'left' then
             divider = divider - step
@@ -201,7 +196,7 @@ function M.resize(direction, step)
         end
 
         local num = math.min(0.80, math.max(0.20, divider))
-        curr_screen.divider = (num * 100) / 100
+        screen.divider = (num * 100) / 100
 
         if layout.maximized then
             if direction == 'left' then
@@ -223,28 +218,67 @@ function M.resize(direction, step)
 
         done()
     end
-
-    return job
 end
 
 
 -- Maximize focused window
 --------------------------------------------------------------------------------
-function M.maximize(win)
-    win = win or hs.window.focusedWindow()
-
-    local job = function(done)
-        local id = win:screen():id()
+function M.maximize()
+    return function(done)
+        local win    = state.menu.curr_win or hs.window.focusedWindow()
+        local id     = win:screen():id()
         local layout = state.screens[id].layout
-        local frame = cache.screens[id].frame
+        local frame  = cache.screens[id].frame
 
         layout.maximized = win
         layout.maximized:setFrame(frame)
 
         done()
     end
+end
 
-    return job
+
+-- Launch or focus target app
+--------------------------------------------------------------------------------
+function M.launch_or_focus(app)
+    return function(done)
+        local wf = hs.window.filter.new(app)
+
+        wf:subscribe(hs.window.filter.windowFocused, function(win)
+            wf:unsubscribeAll()
+            wf = nil
+
+            state.menu.new_win = win
+            done()
+        end)
+
+        hs.application.launchOrFocus(app)
+    end
+end
+
+
+-- Snap newly launched or focused windows into place
+--------------------------------------------------------------------------------
+function M.snap_new()
+    return function(done)
+        local existing = state.menu.curr_win
+        local new      = state.menu.new_win
+
+        if existing and new and existing:id() == new:id() then
+            done()
+            return
+        end
+
+        local layout = get_layout(existing, new)
+
+        M.snap(layout)
+
+        -- Update curr_win with newly focused window
+        state.menu.curr_win = new
+        state.menu.new_win  = false
+
+        done()
+    end
 end
 
 return M

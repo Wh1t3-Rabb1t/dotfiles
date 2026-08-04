@@ -2,41 +2,7 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
-local splits = require('splits')
 local popups = require('popups')
-
-
-
--- TODO: refactor and move elsewhere
---
--- Launch or focus target app
---------------------------------------------------------------------------------
-function M.launch_or_focus(app)
-    local existing_win = hs.window.focusedWindow()
-
-    local wf
-    wf = hs.window.filter.new(app)
-
-    wf:subscribe(hs.window.filter.windowFocused, function(win)
-        wf:unsubscribeAll()
-        wf = nil
-
-        if existing_win and win:id() == existing_win:id() then
-            return
-        end
-
-        popups.hide(existing_win)
-
-        splits.snap(
-            win, splits.get_layout(existing_win, win)
-        )
-
-        popups.show(win)
-    end)
-
-    hs.application.launchOrFocus(app)
-end
-
 
 
 -- Process action queue
@@ -72,7 +38,7 @@ end
 -- Toggle event tap
 --------------------------------------------------------------------------------
 function M.turn_eventtap(set_to)
-    local job = function (done)
+    return function (done)
         if set_to == 'on' then
             state.menu.tap_active = true
             cache.assets.tap:start()
@@ -83,15 +49,13 @@ function M.turn_eventtap(set_to)
 
         done()
     end
-
-    return job
 end
 
 
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
-    local job = function(done)
+    return function(done)
         state.menu.tap_active = false
         cache.assets.tap:stop()
 
@@ -102,26 +66,24 @@ function M.send_keys(mods, key)
 
         done()
     end
-
-    return job
 end
 
 
 -- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
 --------------------------------------------------------------------------------
 function M.temporary_insert()
-    local job = function(done)
-        local win = state.menu.active_win or hs.window.focusedWindow()
-        local frame = win:frame()
+    return function(done)
+        local win     = state.menu.curr_win or hs.window.focusedWindow()
+        local frame   = win:frame()
         local opacity = state.menu.opacity
-        local insert_popup = cache.assets.insert.popup
+        local popup   = cache.assets.insert.popup
 
-        local function end_insert_mode(hotkeys, popup)
+        local function end_insert_mode(hotkeys, active_popup)
             for _, hk in ipairs(hotkeys) do
                 hk:disable()
             end
 
-            popup:hide()
+            active_popup:hide()
         end
 
         local pos = {
@@ -129,27 +91,25 @@ function M.temporary_insert()
             y = frame.y + 10,
         }
 
-        insert_popup:topLeft(pos)
-        insert_popup:alpha(opacity)
-        insert_popup:show(0.15)
+        popup:topLeft(pos)
+        popup:alpha(opacity)
+        popup:show(0.15)
 
         local hotkeys = {}
 
         hotkeys[1] = hs.hotkey.bind({}, 'return', function()
-            end_insert_mode(hotkeys, insert_popup)
+            end_insert_mode(hotkeys, popup)
 
             hs.eventtap.keyStroke({}, 'return')
             M.launch_menu()
         end)
 
         hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
-            end_insert_mode(hotkeys, insert_popup)
+            end_insert_mode(hotkeys, popup)
         end)
 
         done()
     end
-
-    return job
 end
 
 

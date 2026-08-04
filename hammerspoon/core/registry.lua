@@ -4,7 +4,6 @@ local brightness = require('brightness')
 local wk = require('which_key')
 local splits = require('splits')
 local popups = require('popups')
-local state = require('state')
 
 
 -- These are temporarily bound to actions after the eventtap has been stopped,
@@ -438,71 +437,89 @@ M.bindings = {
     },
 }
 
+
+-- !! These could all be bound behind a leader key (space)
+--
+-- Spotlight:
+--   /  Launch
+--
+-- Volume:
+--   Up
+--   Down
+--   Mute
+--
+-- Media:
+--   Toggle (play/pause)
+--
+-- Wifi:
+--   Toggle (on/off)
+--
+-- Clipboard:
+--   Copy
+--   Cut
+--   Paste
+--
+-- Windows:
+--   n  Win_to_next_screen
 M.actions = {
-    -- !! These could all be bound behind a leader key (space)
-    --
-    -- Spotlight:
-    --   /  Launch
-    --
-    -- Volume:
-    --   Up
-    --   Down
-    --   Mute
-    --
-    -- Media:
-    --   Toggle (play/pause)
-    --
-    -- Wifi:
-    --   Toggle (on/off)
-    --
-    -- Clipboard:
-    --   Copy
-    --   Cut
-    --   Paste
-    --
-    -- Windows:
-    --   n  Win_to_next_screen
-
-
     ['system'] = {
         -- Launch or focus
-        launch_kitty       = function() wk.launch_or_focus('kitty') end,
-        launch_brave       = function() wk.launch_or_focus('Brave Browser') end,
-        launch_firefox     = function() wk.launch_or_focus('Firefox') end,
+        launch_kitty = function()
+            wk.queue(
+                popups.hide(),
+                splits.launch_or_focus('kitty'),
+                splits.snap_new(),
+                popups.show()
+            )
+        end,
+        launch_brave = function()
+            wk.queue(
+                popups.hide(),
+                splits.launch_or_focus('Brave Browser'),
+                splits.snap_new(),
+                popups.show()
+            )
+        end,
+        launch_firefox = function()
+            wk.queue(
+                popups.hide(),
+                splits.launch_or_focus('Firefox'),
+                splits.snap_new(),
+                popups.show()
+            )
+        end,
 
         -- Brightness
-        brightness_up      = function() brightness.adjust_brightness('up') end,
-        brightness_down    = function() brightness.adjust_brightness('down') end,
-        brightness_print   = function() brightness.print_values() end,
+        brightness_up    = function() wk.queue(brightness.adjust('up')) end,
+        brightness_down  = function() wk.queue(brightness.adjust('down')) end,
+        brightness_print = function() wk.queue(brightness.print_values()) end,
 
         -- Splits
         maximize_split = function()
-            local win = hs.window.focusedWindow()
             wk.queue(
-                popups.hide(win),
+                popups.hide(),
                 splits.maximize(),
-                popups.show(win)
+                popups.show()
+            )
+        end,
+        swap_splits = function()
+            wk.queue(
+                popups.hide(),
+                splits.swap(),
+                splits.snap('split'),
+                popups.show()
             )
         end,
         resize_split_left = function()
             wk.queue(
                 splits.resize('left'),
-                splits.snap(hs.window.focusedWindow(), 'split')
+                splits.snap('split')
             )
         end,
         resize_split_right = function()
             wk.queue(
                 splits.resize('right'),
-                splits.snap(hs.window.focusedWindow(), 'split')
-            )
-        end,
-        swap_splits = function()
-            local win = hs.window.focusedWindow()
-            wk.queue(
-                popups.hide(win),
-                splits.swap(win),
-                splits.snap(win, 'split'),
-                popups.show(win)
+                splits.snap('split')
             )
         end,
 
@@ -513,23 +530,20 @@ M.actions = {
         opacity_down = function()
             wk.queue(popups.opacity('down'))
         end,
+
         cycle_corner_pos = function()
-            local win = state.menu.active_win
-
             wk.queue(
+                popups.hide(),
                 popups.cycle_corner_pos(),
-                popups.hide(win),
-                popups.show(win, state.menu.corner)
-
+                popups.show()
             )
         end,
-        cycle_stacking = function()
-            local win = state.menu.active_win
 
+        cycle_stacking = function()
             wk.queue(
-                popups.cycle_stacking(win),
-                popups.hide(win),
-                popups.show(win, state.menu.corner, state.menu.stack)
+                popups.hide(),
+                popups.cycle_stacking(),
+                popups.show()
             )
         end,
 

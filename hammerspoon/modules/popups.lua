@@ -37,19 +37,19 @@ end
 -- Get the current popups width and height
 --------------------------------------------------------------------------------
 local function get_w_h(popups, spacing, layout)
-    local width = 0
+    local width  = 0
     local height = 0
 
     for i, popup in ipairs(popups) do
         if layout == 'vertical' then
-            width = math.max(width, popup.frame.w)
+            width  = math.max(width, popup.frame.w)
             height = height + popup.frame.h
 
             if i < #popups then
                 height = height + spacing
             end
         elseif layout == 'horizontal' then
-            width = width + popup.frame.w
+            width  = width + popup.frame.w
             height = math.max(height, popup.frame.h)
 
             if i < #popups then
@@ -113,24 +113,24 @@ end
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-local function get_coords(win, popups, corner, layout)
-    local app_frame = win:frame()
-    local id = win:screen():id()
+local function get_coords(win, popups, corner, stack)
+    local app_frame    = win:frame()
+    local id           = win:screen():id()
     local screen_frame = cache.screens[id].frame
 
     local spacing = 25
 
-    local coords = {}
+    local coords     = {}
     local dimensions = {}
 
-    dimensions = get_w_h(popups, spacing, layout)
+    dimensions = get_w_h(popups, spacing, stack)
 
     -- Arrange popups side by side if the stack height exceeds the screen height
     if dimensions.h > screen_frame.h then
         dimensions = get_w_h(popups, spacing, 'horizontal')
         coords = get_x_y(popups, spacing, 'horizontal')
     else
-        coords = get_x_y(popups, spacing, layout)
+        coords = get_x_y(popups, spacing, stack)
     end
 
     local anchor = get_anchor(app_frame, dimensions.w, dimensions.h, corner)
@@ -146,10 +146,8 @@ end
 
 -- Cycle menu corner positions
 --------------------------------------------------------------------------------
-function M.cycle_corner_pos(win)
-    win = win or state.menu.active_win
-
-    local job = function(done)
+function M.cycle_corner_pos()
+    return function(done)
         local corners = {
             'bottom_right',
             'top_right',
@@ -158,7 +156,7 @@ function M.cycle_corner_pos(win)
         }
 
         local current_corner = state.menu.corner
-        local current_index = 1
+        local current_index  = 1
 
         -- Find the index of the current corner
         for i, c in ipairs(corners) do
@@ -169,49 +167,40 @@ function M.cycle_corner_pos(win)
         end
 
         -- Calculate the next index, wrapping around using modulo arithmetic
-        local new_index = (current_index % #corners) + 1
+        local new_index  = (current_index % #corners) + 1
         local new_corner = corners[new_index]
 
         -- Update state
         state.menu.corner = new_corner
-        state.menu.active_win = win
 
         done()
     end
-
-    return job
 end
 
 
 -- Cycle menu layout (vertical/horizontal stacking)
 --------------------------------------------------------------------------------
-function M.cycle_stacking(win)
-    win = win or state.menu.active_win
-
-    local job = function(done)
-        local layout = state.menu.stack
-        local new_layout = (layout == 'vertical') and 'horizontal' or 'vertical'
+function M.cycle_stacking()
+    return function(done)
+        local stack     = state.menu.stack
+        local new_stack = (stack == 'vertical') and 'horizontal' or 'vertical'
 
         -- Update state
-        state.menu.stack = new_layout
-        state.menu.active_win = win
+        state.menu.stack = new_stack
 
         done()
     end
-
-    return job
 end
 
 
 -- Set poppup opacity
 --------------------------------------------------------------------------------
-function M.opacity(direction, win)
-    win = win or state.menu.active_win
-
-    local job = function(done)
-        local step = 0.1
+function M.opacity(direction, target_win)
+    return function(done)
+        local win     = target_win or state.menu.curr_win
+        local app     = win:application():name()
         local opacity = state.menu.opacity
-        local app_name = win:application():name()
+        local step    = 0.1
 
         if direction == 'up' then
             opacity = math.min(opacity + step, 1.0)
@@ -219,34 +208,51 @@ function M.opacity(direction, win)
             opacity = math.max(opacity - step, 0.1)
         end
 
-        -- Update state
-        state.menu.opacity = opacity
-
         -- App specific popup (if supported)
-        if cache.assets[app_name] then
-            cache.assets[app_name].popup:alpha(opacity)
+        if cache.assets[app] then
+            cache.assets[app].popup:alpha(opacity)
         end
 
         -- System popup
         cache.assets.system.popup:alpha(opacity)
 
+        -- Update state
+        state.menu.opacity = opacity
+
         done()
     end
+end
 
-    return job
+
+-- Hide popups
+--------------------------------------------------------------------------------
+function M.hide()
+    return function(done)
+        local win = state.menu.curr_win or hs.window.focusedWindow()
+        local app = win:application():name()
+
+        if cache.assets[app] then
+            cache.assets[app].popup:delete()
+        end
+
+        cache.assets.system.popup:delete()
+
+        done()
+    end
 end
 
 
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show(win, corner, layout)
-    corner = corner or state.menu.corner
-    layout = layout or state.menu.stack
+function M.show(target_win, target_corner, target_stack)
+    return function(done)
+        local win    = target_win    or state.menu.curr_win
+        local corner = target_corner or state.menu.corner
+        local stack  = target_stack  or state.menu.stack
 
-    local job = function(done)
-        local popups = get_current(win)
-        local coords = get_coords(win, popups, corner, layout)
         local opacity = state.menu.opacity
+        local popups  = get_current(win)
+        local coords  = get_coords(win, popups, corner, stack)
 
         for i, v in ipairs(popups) do
             v.popup:topLeft(coords[i])
@@ -254,35 +260,11 @@ function M.show(win, corner, layout)
             v.popup:show(0.15)
         end
 
-        -- Update state
-        state.menu.active_win = win
+        -- Update state with focused window
+        state.menu.curr_win = win
 
         done()
     end
-
-    return job
-end
-
-
--- Hide popups
---------------------------------------------------------------------------------
-function M.hide(win)
-    win = win or state.menu.active_win
-
-    local job = function(done)
-        local app_name = win:application():name()
-
-        if cache.assets[app_name] then
-            cache.assets[app_name].popup:delete()
-            state.menu.active_win = false
-        end
-
-        cache.assets.system.popup:delete()
-
-        done()
-    end
-
-    return job
 end
 
 return M

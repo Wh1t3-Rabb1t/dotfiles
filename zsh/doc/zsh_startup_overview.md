@@ -16,15 +16,15 @@ not defined, Zsh will use the user's home directory.
 
 The [configuration files][1] are read in the following order:
 
-1.  _`/etc/zshenv`_
-2.  _`${ZDOTDIR:-$HOME}/.zshenv`_
-3.  _`/etc/zprofile`_
-4.  _`${ZDOTDIR:-$HOME}/.zprofile`_
-5.  _`/etc/zshrc`_
-6.  _`${ZDOTDIR:-$HOME}/.zshrc`_
-7.  _`${ZDOTDIR:-$HOME}/.zpreztorc`_
-8.  _`/etc/zlogin`_
-9.  _`${ZDOTDIR:-$HOME}/.zlogin`_
+01. _`/etc/zshenv`_
+02. _`${ZDOTDIR:-$HOME}/.zshenv`_
+03. _`/etc/zprofile`_
+04. _`${ZDOTDIR:-$HOME}/.zprofile`_
+05. _`/etc/zshrc`_
+06. _`${ZDOTDIR:-$HOME}/.zshrc`_
+07. _`${ZDOTDIR:-$HOME}/.zpreztorc`_
+08. _`/etc/zlogin`_
+09. _`${ZDOTDIR:-$HOME}/.zlogin`_
 10. _`${ZDOTDIR:-$HOME}/.zlogout`_
 11. _`/etc/zlogout`_
 

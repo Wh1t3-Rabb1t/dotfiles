@@ -21,31 +21,18 @@
 
 ## Modules:
 
-- Make 'splits.get_layout()' local once we refactor 'launch_or_focus()'.
+- Work on potentially consolidating 'splits.snap()' 'splits.snap_new()'.
 
 - Add shift layer bindings for brave (select text etc).
-
-- Maybe move all 'which_key' local functions into utils.lua and have which_key
-  as the orchestrator file that queues actions.
-
-- Need to separate all bound actions into sub actions which are orchestrated
-  via the action queue.
-
-- ? Need to create a key queue for the eventtap as well so that one keystroke
-  can't be processed until the current logic is finished executing.
 
 - temporary_insert() needs to signify that it's active in state otherwise
   relaunching the menu without unbinding 'enter' and 'escape' will get weird.
 
-- Refactor 'launch_or_focus' etc. to run everything through 'process_queue(...)'
-  so that we can launch/focus an app and wait for the app to focus ect before
-  creating the new popup.
-
 - When entering fullscreen let's see if it's possible to apply the shader value
   to the fullscreen 'workspace' (or whatever mac calls it).
 
-- Add 'on_click' and 'focus ?' events to ensure state.active_win is changed
-  when required.
+- Add 'on_click' (needs to be mouse up not mouse down evt) and 'focus ?' events
+  to ensure state.curr_win is changed when required.
 
 - Update cache when screens are connected/disconnected. Also check if the 'id'
   remains the same and if not look into using 'UUID' instead.

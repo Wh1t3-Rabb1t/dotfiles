@@ -1,15 +1,16 @@
 local M = {}
 
 M.menu = {
-    tap_active = false,      -- (true|false)
-    active_win = false,      -- (win|false)
-    corner = 'bottom_right',
-    stack = 'vertical',
-    opacity = 1,
+    tap_active = false,  -- (true|false)
+    curr_win   = false,  -- (win|false)
+    new_win    = false,  -- (win|false)
+    corner     = 'bottom_right',
+    stack      = 'vertical',
+    opacity    = 1,
 }
 
 M.action_queue = {
-    items = {},
+    items   = {},
     running = false,
 }
 

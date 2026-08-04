@@ -37,9 +37,9 @@ local function rgb(r, g, b, opacity)
     opacity = opacity or 1.0
 
     local color_table = {
-        red = r / 255,
+        red   = r / 255,
         green = g / 255,
-        blue = b / 255,
+        blue  = b / 255,
         alpha = opacity,
     }
 
@@ -54,9 +54,9 @@ local function create_popup(content, frame)
 
     popup:appendElements(
         {
-            type = 'rectangle',
-            action = 'strokeAndFill',
-            fillColor = rgb(1, 2, 3),          -- Black
+            type        = 'rectangle',
+            action      = 'strokeAndFill',
+            fillColor   = rgb(1, 2, 3),        -- Black
             strokeColor = rgb(255, 255, 255),  -- White
             roundedRectRadii = {
                 xRadius = 8,
@@ -82,8 +82,8 @@ end
 -- Get the width / height of the popup window
 --------------------------------------------------------------------------------
 local function get_popup_frame(text)
-    local size = hs.drawing.getTextDrawingSize(text)
-    local canvas_width = math.max(size.w)
+    local size          = hs.drawing.getTextDrawingSize(text)
+    local canvas_width  = math.max(size.w)
     local canvas_height = math.max(size.h)
 
     local frame = {
@@ -98,7 +98,7 @@ end
 -- Calculate the available screen (total screen frame minus the dock)
 --------------------------------------------------------------------------------
 local function get_usable_frame(screen)
-    local full = screen:fullFrame()
+    local full   = screen:fullFrame()
     local usable = screen:frame()
 
     local frame = {
@@ -119,12 +119,12 @@ local function create_overlay(screen)
     local overlay = hs.canvas.new(frame)
 
     overlay:appendElements({
-        type = 'rectangle',
-        action = 'fill',
+        type      = 'rectangle',
+        action    = 'fill',
         fillColor = {
-            red = 0,
+            red   = 0,
             green = 0,
-            blue = 0,
+            blue  = 0,
             alpha = 0,
         }
     })
@@ -141,15 +141,15 @@ local function get_screen_data(screen)
     local screen_data = {
         cache = {
             overlay = create_overlay(screen),
-            frame = get_usable_frame(screen),
+            frame   = get_usable_frame(screen),
         },
         state = {
             brightness = 100,
-            divider = 0.35,
-            layout = {
+            divider    = 0.35,
+            layout     = {
                 maximized = false,
-                left = false,
-                right = false,
+                left      = false,
+                right     = false,
             }
         }
     }
@@ -180,12 +180,12 @@ local function fmt_key_combinations(binding)
         ['='] = '+',
         ['['] = '{',
         [']'] = '}',
-        ['\\'] = '|',
         [';'] = ':',
         ["'"] = '"',
         [','] = '<',
         ['.'] = '>',
         ['/'] = '?',
+        ['\\'] = '|',
     }
 
     local mod_names = {
@@ -249,9 +249,9 @@ local function fmt_menu_text(app, binding_tbl)
     }
 
     local styled_text = require('hs.styledtext')
-    local fmt = '  %' .. len .. 's '
+    local fmt   = '  %' .. len .. 's '
     local title = ('* %s'):format(app)
-    local text = styled_text.new(title, styles.title) .. styled_text.new('\n\n', styles.title)
+    local text  = styled_text.new(title, styles.title) .. styled_text.new('\n\n', styles.title)
 
     for c, category in ipairs(binding_tbl) do
         -- Category heading
@@ -288,8 +288,8 @@ end
 --------------------------------------------------------------------------------
 local function fmt_binding_popups(app, bindings)
     local content = fmt_menu_text(app, bindings)
-    local frame = get_popup_frame(content)
-    local popup = create_popup(content, frame)
+    local frame   = get_popup_frame(content)
+    local popup   = create_popup(content, frame)
 
     local binding_data = {
         popup = popup,
@@ -325,11 +325,11 @@ local function create_event_tap()
     local e = hs.eventtap
 
     local tap = e.new({ e.event.types.keyDown, e.event.types.flagsChanged }, function(event)
-        local flags = event:getFlags()
-        local keycode = event:getKeyCode()
-        local key = hs.keycodes.map[keycode]
+        local flags       = event:getFlags()
+        local keycode     = event:getKeyCode()
+        local key         = hs.keycodes.map[keycode]
         local focused_win = hs.window.focusedWindow()
-        local app_name = focused_win:application():name()
+        local app_name    = focused_win:application():name()
         local mods = {}
 
         if flags.cmd   then table.insert(mods, 'cmd') end
@@ -337,7 +337,7 @@ local function create_event_tap()
         if flags.ctrl  then table.insert(mods, 'ctrl') end
         if flags.shift then table.insert(mods, 'shift') end
 
-        local lookup_key = binding_id(key, mods)
+        local lookup_key   = binding_id(key, mods)
         local bound_action = cache.lookup.system[lookup_key] or cache.lookup[app_name][lookup_key]
 
         if bound_action then
@@ -359,7 +359,7 @@ function M.init()
        not tbl_initialized(state.screens)
     then
         for _, screen in ipairs(hs.screen.allScreens()) do
-            local id = screen:id()
+            local id          = screen:id()
             local screen_data = get_screen_data(screen)
 
             cache.screens[id] = screen_data.cache

@@ -35,6 +35,43 @@ function M.queue(...)
 end
 
 
+-- local function process_actions(...)
+--     for _, job in ipairs({ ... }) do
+--         table.insert(state.action_queue.items, job)
+--     end
+--
+--     if state.action_queue.running then
+--         return
+--     end
+--
+--     state.action_queue.running = true
+--
+--     local function next_job()
+--         local job = table.remove(state.action_queue.items, 1)
+--
+--         if not job then
+--             state.action_queue.running = false
+--             return
+--         end
+--
+--         job(next_job)
+--     end
+--
+--     next_job()
+-- end
+--
+--
+-- function M.queue(...)
+--     local jobs = { ... }
+--
+--     return function()
+--         process_actions(table.unpack(jobs))
+--     end
+-- end
+
+
+
+
 -- Toggle event tap
 --------------------------------------------------------------------------------
 function M.turn_eventtap(set_to)

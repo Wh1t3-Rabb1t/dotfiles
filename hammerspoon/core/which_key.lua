@@ -10,66 +10,31 @@ local popups = require('popups')
 function M.queue(...)
     local jobs = { ... }
 
-    for _, job in ipairs(jobs) do
-        table.insert(state.action_queue.items, job)
-    end
+    return function()
+        for _, job in ipairs(jobs) do
+            table.insert(state.action_queue.items, job)
+        end
 
-    if state.action_queue.running then
-        return
-    end
-
-    state.action_queue.running = true
-
-    local function next_job()
-        local job = table.remove(state.action_queue.items, 1)
-
-        if not job then
-            state.action_queue.running = false
+        if state.action_queue.running then
             return
         end
 
-        job(next_job)
+        state.action_queue.running = true
+
+        local function next_job()
+            local job = table.remove(state.action_queue.items, 1)
+
+            if not job then
+                state.action_queue.running = false
+                return
+            end
+
+            job(next_job)
+        end
+
+        next_job()
     end
-
-    next_job()
 end
-
-
--- local function process_actions(...)
---     for _, job in ipairs({ ... }) do
---         table.insert(state.action_queue.items, job)
---     end
---
---     if state.action_queue.running then
---         return
---     end
---
---     state.action_queue.running = true
---
---     local function next_job()
---         local job = table.remove(state.action_queue.items, 1)
---
---         if not job then
---             state.action_queue.running = false
---             return
---         end
---
---         job(next_job)
---     end
---
---     next_job()
--- end
---
---
--- function M.queue(...)
---     local jobs = { ... }
---
---     return function()
---         process_actions(table.unpack(jobs))
---     end
--- end
-
-
 
 
 -- Toggle event tap
@@ -171,10 +136,23 @@ function M.launch_menu()
         return
     end
 
-    M.queue(
+    local init_fn = M.queue(
         M.turn_eventtap('on'),
         popups.show(hs.window.focusedWindow())
     )
+
+    init_fn()
 end
+
+-- function M.launch_menu()
+--     if state.menu.tap_active then
+--         return
+--     end
+--
+--     M.queue(
+--         M.turn_eventtap('on'),
+--         popups.show(hs.window.focusedWindow())
+--     )
+-- end
 
 return M

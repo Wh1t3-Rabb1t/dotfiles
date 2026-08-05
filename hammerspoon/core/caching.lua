@@ -325,11 +325,12 @@ local function create_event_tap()
     local e = hs.eventtap
 
     local tap = e.new({ e.event.types.keyDown, e.event.types.flagsChanged }, function(event)
-        local flags       = event:getFlags()
-        local keycode     = event:getKeyCode()
-        local key         = hs.keycodes.map[keycode]
-        local focused_win = hs.window.focusedWindow()
-        local app_name    = focused_win:application():name()
+        local flags   = event:getFlags()
+        local keycode = event:getKeyCode()
+        local key     = hs.keycodes.map[keycode]
+        local win     = hs.window.focusedWindow()
+        local app     = win:application():name()
+
         local mods = {}
 
         if flags.cmd   then table.insert(mods, 'cmd') end
@@ -338,7 +339,7 @@ local function create_event_tap()
         if flags.shift then table.insert(mods, 'shift') end
 
         local lookup_key   = binding_id(key, mods)
-        local bound_action = cache.lookup.system[lookup_key] or cache.lookup[app_name][lookup_key]
+        local bound_action = cache.lookup.system[lookup_key] or cache.lookup[app][lookup_key]
 
         if bound_action then
             bound_action()

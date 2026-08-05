@@ -4,6 +4,7 @@ local brightness = require('brightness')
 local wk = require('which_key')
 local splits = require('splits')
 local popups = require('popups')
+local wifi = require('wifi')
 
 
 -- These are temporarily bound to actions after the eventtap has been stopped,
@@ -144,6 +145,11 @@ M.bindings = {
                     mods   = { 'shift' },
                     action = 'zoom_out',
                     desc   = 'Zoom out',
+                },
+                {
+                    key    = 'w',
+                    action = 'toggle_wifi',
+                    desc   = 'Toggle wifi status',
                 },
                 {
                     key    = 'escape',
@@ -553,6 +559,9 @@ M.actions = {
         end,
         zoom_out = function()
             wk.queue(wk.send_keys({'cmd'}, '-'))
+        end,
+        toggle_wifi = function()
+            wk.queue(wifi.toggle_wifi())
         end,
         close_menu = function()
             wk.queue(

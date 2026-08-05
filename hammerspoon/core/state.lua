@@ -1,5 +1,9 @@
 local M = {}
 
+M.system = {
+    wifi = true
+}
+
 M.menu = {
     tap_active = false,  -- (true|false)
     curr_win   = false,  -- (win|false)

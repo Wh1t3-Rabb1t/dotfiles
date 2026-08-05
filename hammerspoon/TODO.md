@@ -21,6 +21,9 @@
 
 ## Modules:
 
+- Update/refactor outdated modules like cmd_q. (integrate with central state,
+  only export certain fns etc).
+
 - Work on potentially consolidating 'splits.snap()' 'splits.snap_new()'.
 
 - Add shift layer bindings for brave (select text etc).

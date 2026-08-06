@@ -23,12 +23,6 @@ hs.hotkey.bind({ 'cmd', 'ctrl', 'alt', 'shift' }, 'space', function()
     require('which_key').launch_menu()
 end)
 
--- -- Binding popup menu
--- hs.hotkey.bind({ 'cmd', 'ctrl', 'alt', 'shift' }, 'space', function()
---     require('caching').init()
---     require('which_key').launch_menu()
--- end)
-
 
 -- SYSTEM BINDINGS
 ---------------------------------

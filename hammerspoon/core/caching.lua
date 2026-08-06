@@ -302,7 +302,7 @@ end
 
 -- Queue chained actions (i.e. launch window then display related popup)
 --------------------------------------------------------------------------------
-local function queue(...)
+local function queue_actions(...)
     local actions = { ... }
 
     return function()
@@ -350,9 +350,7 @@ local function fmt_binding_tbl(app, bindings)
                 binding.key,
                 binding.mods
             )
-            lookup[lookup_key] = queue(
-                registry.actions[app][binding.action]
-            )
+            lookup[lookup_key] = queue_actions(binding.action)
         end
     end
 

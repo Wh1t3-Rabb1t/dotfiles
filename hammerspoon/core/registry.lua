@@ -1,5 +1,26 @@
 local M = {}
 
+-- !! These could all be bound behind a leader key (space)
+--
+-- Spotlight:
+--   /  Launch
+--
+-- Volume:
+--   Up
+--   Down
+--   Mute
+--
+-- Media:
+--   Toggle (play/pause)
+--
+-- Clipboard:
+--   Copy
+--   Cut
+--   Paste
+--
+-- Windows:
+--   n  Win_to_next_screen
+
 local brightness = require('brightness')
 local wk = require('which_key')
 local splits = require('splits')
@@ -35,19 +56,34 @@ M.bindings = {
             category = 'Launch or focus',
             bindings = {
                 {
-                    key    = 'y',
-                    action = 'launch_firefox',
                     desc   = 'Firefox',
+                    key    = 'y',
+                    action = {
+                        popups.hide(),
+                        splits.launch_or_focus('Firefox'),
+                        splits.snap_new(),
+                        popups.show()
+                    },
                 },
                 {
-                    key    = 'v',
-                    action = 'launch_kitty',
                     desc   = 'kitty',
+                    key    = 'v',
+                    action = {
+                        popups.hide(),
+                        splits.launch_or_focus('kitty'),
+                        splits.snap_new(),
+                        popups.show()
+                    },
                 },
                 {
-                    key    = 'b',
-                    action = 'launch_brave',
                     desc   = 'Brave Browser',
+                    key    = 'b',
+                    action = {
+                        popups.hide(),
+                        splits.launch_or_focus('Brave Browser'),
+                        splits.snap_new(),
+                        popups.show()
+                    },
                 },
             },
         },
@@ -57,19 +93,19 @@ M.bindings = {
             category = 'Brightness',
             bindings = {
                 {
-                    key    = 'z',
-                    action = 'brightness_up',
                     desc   = 'Up',
+                    key    = 'z',
+                    action = brightness.adjust('up'),
                 },
                 {
-                    key    = 'j',
-                    action = 'brightness_down',
                     desc   = 'Down',
+                    key    = 'j',
+                    action = brightness.adjust('down'),
                 },
                 {
-                    key    = 'p',
-                    action = 'brightness_print',
                     desc   = 'Print',
+                    key    = 'p',
+                    action = brightness.print_values(),
                 },
             },
         },
@@ -79,24 +115,39 @@ M.bindings = {
             category = 'Splits',
             bindings = {
                 {
-                    key    = 'o',
-                    action = 'resize_split_right',
                     desc   = 'Resize right',
+                    key    = 'o',
+                    action = {
+                        splits.resize('right'),
+                        splits.snap('split')
+                    },
                 },
                 {
-                    key    = 'u',
-                    action = 'resize_split_left',
                     desc   = 'Resize left',
+                    key    = 'u',
+                    action = {
+                        splits.resize('left'),
+                        splits.snap('split')
+                    },
                 },
                 {
-                    key    = 'g',
-                    action = 'maximize_split',
                     desc   = 'Maximize',
+                    key    = 'g',
+                    action = {
+                        popups.hide(),
+                        splits.maximize(),
+                        popups.show()
+                    },
                 },
                 {
-                    key    = 's',
-                    action = 'swap_splits',
                     desc   = 'Swap positions',
+                    key    = 's',
+                    action = {
+                        popups.hide(),
+                        splits.swap(),
+                        splits.snap('split'),
+                        popups.show()
+                    },
                 },
             },
         },
@@ -106,26 +157,34 @@ M.bindings = {
             category = 'Popups',
             bindings = {
                 {
+                    desc   = 'Cycle positions',
                     key    = 'r',
                     mods   = { 'shift' },
-                    action = 'cycle_corner_pos',
-                    desc   = 'Cycle positions',
+                    action = {
+                        popups.hide(),
+                        popups.cycle_corner_pos(),
+                        popups.show()
+                    },
                 },
                 {
+                    desc   = 'Cycle menu stacking',
                     key    = 'a',
                     mods   = { 'shift' },
-                    action = 'cycle_stacking',
-                    desc   = 'Cycle menu stacking',
+                    action = {
+                        popups.hide(),
+                        popups.cycle_stacking(),
+                        popups.show()
+                    },
                 },
                 {
-                    key    = 'r',
-                    action = 'opacity_up',
                     desc   = 'Opacity up',
+                    key    = 'r',
+                    action = popups.opacity('up'),
                 },
                 {
-                    key    = 'f',
-                    action = 'opacity_down',
                     desc   = 'Opacity down',
+                    key    = 'f',
+                    action = popups.opacity('down'),
                 },
             },
         },
@@ -135,26 +194,29 @@ M.bindings = {
             category = 'Misc',
             bindings = {
                 {
+                    desc   = 'Zoom in',
                     key    = 'z',
                     mods   = { 'shift' },
-                    action = 'zoom_in',
-                    desc   = 'Zoom in',
+                    action = wk.send_keys({'cmd'}, '='),
                 },
                 {
+                    desc   = 'Zoom out',
                     key    = 'j',
                     mods   = { 'shift' },
-                    action = 'zoom_out',
-                    desc   = 'Zoom out',
+                    action = wk.send_keys({'cmd'}, '-'),
                 },
                 {
-                    key    = 'w',
-                    action = 'toggle_wifi',
                     desc   = 'Toggle wifi on/off',
+                    key    = 'w',
+                    action = wifi.toggle_wifi(),
                 },
                 {
-                    key    = 'escape',
-                    action = 'close_menu',
                     desc   = 'Cancel',
+                    key    = 'escape',
+                    action = {
+                        wk.turn_eventtap('off'),
+                        popups.hide()
+                    },
                 },
             },
         },
@@ -166,14 +228,14 @@ M.bindings = {
             category = 'Scrollback',
             bindings = {
                 {
-                    key    = 'e',
-                    action = 'page_up',
                     desc   = 'Page up',
+                    key    = 'e',
+                    action = wk.send_keys({'shift'}, 'pageup'),
                 },
                 {
-                    key    = 'd',
-                    action = 'page_down',
                     desc   = 'Page down',
+                    key    = 'd',
+                    action = wk.send_keys({'shift'}, 'pagedown'),
                 },
             },
         },
@@ -183,71 +245,71 @@ M.bindings = {
             category = 'Splits',
             bindings = {
                 {
-                    key    = 'i',
-                    action = 'focus_split_above',
                     desc   = 'Up',
+                    key    = 'i',
+                    action = wk.send_keys({'ctrl', 'alt'}, 'up'),
                 },
                 {
-                    key    = 'k',
-                    action = 'focus_split_below',
                     desc   = 'Down',
+                    key    = 'k',
+                    action = wk.send_keys({'ctrl', 'alt'}, 'down'),
                 },
                 {
-                    key    = 'l',
-                    action = 'focus_split_right',
                     desc   = 'Right',
+                    key    = 'l',
+                    action = wk.send_keys({'ctrl', 'alt'}, 'right'),
                 },
                 {
-                    key    = 't',
-                    action = 'focus_split_left',
                     desc   = 'Left',
+                    key    = 't',
+                    action = wk.send_keys({'ctrl', 'alt'}, 'left'),
                 },
                 {
+                    desc   = 'Resize up',
                     key    = 'i',
                     mods   = { 'shift' },
-                    action = 'resize_split_up',
-                    desc   = 'Resize up',
+                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'up'),
                 },
                 {
+                    desc   = 'Resize down',
                     key    = 'k',
                     mods   = { 'shift' },
-                    action = 'resize_split_down',
-                    desc   = 'Resize down',
+                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'down'),
                 },
                 {
+                    desc   = 'Resize right',
                     key    = 'l',
                     mods   = { 'shift' },
-                    action = 'resize_split_right',
-                    desc   = 'Resize right',
+                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'right'),
                 },
                 {
+                    desc   = 'Resize left',
                     key    = 't',
                     mods   = { 'shift' },
-                    action = 'resize_split_left',
-                    desc   = 'Resize left',
+                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'left'),
                 },
                 {
-                    key    = 'm',
-                    action = 'new_split',
                     desc   = 'New split',
+                    key    = 'm',
+                    action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm'),
                 },
                 {
+                    desc   = 'New window',
                     key    = 'm',
                     mods   = { 'shift' },
-                    action = 'new_os_window',
-                    desc   = 'New window',
+                    action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm'),
                 },
                 {
+                    desc   = 'Detach split',
                     key    = 'n',
                     mods   = { 'shift' },
-                    action = 'detach_split',
-                    desc   = 'Detach split',
+                    action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'),
                 },
                 {
+                    desc   = 'Close',
                     key    = 'w',
                     mods   = { 'shift' },
-                    action = 'close_split',
-                    desc   = 'Close',
+                    action = wk.send_keys({'cmd', 'shift'}, 'd'),
                 },
             },
         },
@@ -257,19 +319,19 @@ M.bindings = {
             category = 'Tabs',
             bindings = {
                 {
-                    key    = ';',
-                    action = 'next_tab',
                     desc   = 'Next',
+                    key    = ';',
+                    action = wk.send_keys({'ctrl'}, 'end'),
                 },
                 {
-                    key    = 'h',
-                    action = 'prev_tab',
                     desc   = 'Previous',
+                    key    = 'h',
+                    action = wk.send_keys({'ctrl'}, 'home'),
                 },
                 {
-                    key    = 'n',
-                    action = 'new_tab',
                     desc   = 'Open',
+                    key    = 'n',
+                    action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'n'),
                 },
             },
         },
@@ -279,15 +341,15 @@ M.bindings = {
             category = 'Layout',
             bindings = {
                 {
+                    desc   = 'Rotate splits',
                     key    = 'r',
                     mods   = { 'shift' },
-                    action = 'rotate_splits',
-                    desc   = 'Rotate split',
+                    action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p'),
                 },
                 {
-                    key    = 'r',
-                    action = 'next_layout',
                     desc   = 'Next',
+                    key    = 'r',
+                    action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p'),
                 },
             },
         },
@@ -299,70 +361,55 @@ M.bindings = {
             category = 'Page',
             bindings = {
                 {
-                    key    = 'i',
-                    action = 'up_arrow',
-                    desc   = 'Up arrow',
-                },
-                {
-                    key    = 'k',
-                    action = 'down_arrow',
-                    desc   = 'Down arrow',
-                },
-                {
-                    key    = 't',
-                    action = 'left_arrow',
-                    desc   = 'Left arrow',
-                },
-                {
-                    key    = 'l',
-                    action = 'right_arrow',
-                    desc   = 'Right arrow',
-                },
-                {
-                    key    = 'e',
-                    action = 'page_up',
                     desc   = 'Up',
+                    key    = 'e',
+                    action = wk.send_keys({}, 'pageup'),
                 },
                 {
-                    key    = 'd',
-                    action = 'page_down',
                     desc   = 'Down',
+                    key    = 'd',
+                    action = wk.send_keys({}, 'pagedown'),
                 },
                 {
+                    desc   = 'Top',
                     key    = 'e',
                     mods   = { 'shift' },
-                    action = 'page_top',
-                    desc   = 'Top',
+                    action = wk.send_keys({}, 'home'),
                 },
                 {
+                    desc   = 'Bottom',
                     key    = 'd',
                     mods   = { 'shift' },
-                    action = 'page_bottom',
-                    desc   = 'Bottom',
+                    action = wk.send_keys({}, 'end'),
                 },
                 {
+                    desc   = 'Search for text',
                     key    = 'f',
                     mods   = { 'shift' },
-                    action = 'search_text',
-                    desc   = 'Search for text',
+                    action = {
+                        wk.send_keys({'cmd'}, 'f'),
+                        wk.turn_eventtap('off'),
+                        popups.hide(),
+                        wk.temporary_insert()
+                    },
                 },
                 {
+                    desc   = 'Reload',
                     key    = 'r',
                     mods   = { 'shift' },
-                    action = 'reload',
-                    desc   = 'Reload',
+                    action = wk.send_keys({'cmd'}, 'r'),
                 },
                 {
+                    desc   = 'Back',
                     key    = 'u',
                     mods   = { 'shift' },
-                    action = 'back',
-                    desc   = 'Back',
+                    action = wk.send_keys({'cmd'}, '['),
                 },
                 {
+                    desc   = 'Forward',
                     key    = 'o',
                     mods   = { 'shift' },
-                    action = 'forward',
-                    desc   = 'Forward',
+                    action = wk.send_keys({'cmd'}, ']'),
                 },
             },
         },
@@ -372,47 +419,52 @@ M.bindings = {
             category = 'Tabs',
             bindings = {
                 {
-                    key    = 'h',
-                    action = 'tab_left',
                     desc   = 'Left',
+                    key    = 'h',
+                    action = wk.send_keys({'ctrl'}, 'pageup'),
                 },
                 {
-                    key    = ';',
-                    action = 'tab_right',
                     desc   = 'Right',
+                    key    = ';',
+                    action = wk.send_keys({'ctrl'}, 'pagedown'),
                 },
                 {
+                    desc   = 'Swap with left',
                     key    = 'h',
                     mods   = { 'shift' },
-                    action = 'move_tab_left',
-                    desc   = 'Swap with left',
+                    action = wk.send_keys({'ctrl', 'shift'}, 'pageup'),
                 },
                 {
+                    desc   = 'Swap with right',
                     key    = ';',
                     mods   = { 'shift' },
-                    action = 'move_tab_right',
-                    desc   = 'Swap with right',
+                    action = wk.send_keys({'ctrl', 'shift'}, 'pagedown'),
                 },
                 {
-                    key    = '/',
-                    action = 'search_tabs',
                     desc   = 'Search tabs',
+                    key    = '/',
+                    action = {
+                        wk.send_keys({'cmd', 'shift'}, 'a'),
+                        wk.turn_eventtap('off'),
+                        popups.hide(),
+                        wk.temporary_insert()
+                    },
                 },
                 {
-                    key    = 'm',
-                    action = 'new_tab',
                     desc   = 'Open',
+                    key    = 'm',
+                    action = wk.send_keys({'cmd'}, 't'),
                 },
                 {
+                    desc   = 'Re-open closed',
                     key    = 'm',
                     mods   = { 'shift' },
-                    action = 'reopen_closed',
-                    desc   = 'Re-open closed',
+                    action = wk.send_keys({'cmd', 'shift'}, 't'),
                 },
                 {
-                    key    = 'w',
-                    action = 'close_tab',
                     desc   = 'Close',
+                    key    = 'w',
+                    action = wk.send_keys({'cmd'}, 'w'),
                 },
             },
         },
@@ -422,196 +474,49 @@ M.bindings = {
             category = 'Misc',
             bindings = {
                 {
-                    key    = "'",
-                    action = 'focus_searchbar',
-                    desc   = 'Focus searchbar',
+                    desc   = 'Up arrow',
+                    key    = 'i',
+                    action = wk.send_keys({}, 'up'),
                 },
                 {
+                    desc   = 'Down arrow',
+                    key    = 'k',
+                    action = wk.send_keys({}, 'down'),
+                },
+                {
+                    desc   = 'Left arrow',
+                    key    = 't',
+                    action = wk.send_keys({}, 'left'),
+                },
+                {
+                    desc   = 'Right arrow',
+                    key    = 'l',
+                    action = wk.send_keys({}, 'right'),
+                },
+                {
+                    desc   = 'Focus searchbar',
+                    key    = "'",
+                    action = {
+                        wk.send_keys({'cmd'}, 'l'),
+                        wk.turn_eventtap('off'),
+                        popups.hide(),
+                        wk.temporary_insert()
+                    },
+                },
+                {
+                    desc   = 'Add bookmark',
                     key    = 'b',
                     mods   = { 'shift' },
-                    action = 'add_bookmark',
-                    desc   = 'Add bookmark',
+                    action = wk.send_keys({'cmd'}, 'd'),
                 },
                 {
+                    desc   = 'Open history',
                     key    = 'p',
                     mods   = { 'shift' },
-                    action = 'open_history',
-                    desc   = 'Open history',
+                    action = wk.send_keys({'cmd'}, 'h'),
                 },
             },
         },
-    },
-}
-
-
--- !! These could all be bound behind a leader key (space)
---
--- Spotlight:
---   /  Launch
---
--- Volume:
---   Up
---   Down
---   Mute
---
--- Media:
---   Toggle (play/pause)
---
--- Wifi:
---   Toggle (on/off)
---
--- Clipboard:
---   Copy
---   Cut
---   Paste
---
--- Windows:
---   n  Win_to_next_screen
-M.actions = {
-    ['system'] = {
-        -- Launch or focus
-        launch_kitty = {
-            popups.hide(),
-            splits.launch_or_focus('kitty'),
-            splits.snap_new(),
-            popups.show()
-        },
-        launch_brave = {
-            popups.hide(),
-            splits.launch_or_focus('Brave Browser'),
-            splits.snap_new(),
-            popups.show()
-        },
-        launch_firefox = {
-            popups.hide(),
-            splits.launch_or_focus('Firefox'),
-            splits.snap_new(),
-            popups.show()
-        },
-
-        -- Brightness
-        brightness_up    = brightness.adjust('up'),
-        brightness_down  = brightness.adjust('down'),
-        brightness_print = brightness.print_values(),
-
-        -- Splits
-        maximize_split = {
-            popups.hide(),
-            splits.maximize(),
-            popups.show()
-        },
-        swap_splits = {
-            popups.hide(),
-            splits.swap(),
-            splits.snap('split'),
-            popups.show()
-        },
-        resize_split_left = {
-            splits.resize('left'),
-            splits.snap('split')
-        },
-        resize_split_right = {
-            splits.resize('right'),
-            splits.snap('split')
-        },
-
-        -- Popup
-        opacity_up       = popups.opacity('up'),
-        opacity_down     = popups.opacity('down'),
-        cycle_corner_pos = {
-            popups.hide(),
-            popups.cycle_corner_pos(),
-            popups.show()
-        },
-        cycle_stacking = {
-            popups.hide(),
-            popups.cycle_stacking(),
-            popups.show()
-        },
-
-        -- Misc
-        zoom_in     = wk.send_keys({'cmd'}, '='),
-        zoom_out    = wk.send_keys({'cmd'}, '-'),
-        toggle_wifi = wifi.toggle_wifi(),
-        close_menu  = {
-            wk.turn_eventtap('off'),
-            popups.hide()
-        },
-    },
-
-    ['kitty'] = {
-        -- Scrollback
-        page_up            = wk.send_keys({'shift'}, 'pageup'),
-        page_down          = wk.send_keys({'shift'}, 'pagedown'),
-
-        -- Splits
-        new_split          = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm'),
-        new_os_window      = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm'),
-        focus_split_above  = wk.send_keys({'ctrl', 'alt'}, 'up'),
-        focus_split_below  = wk.send_keys({'ctrl', 'alt'}, 'down'),
-        focus_split_left   = wk.send_keys({'ctrl', 'alt'}, 'left'),
-        focus_split_right  = wk.send_keys({'ctrl', 'alt'}, 'right'),
-        resize_split_up    = wk.send_keys({'ctrl', 'alt', 'shift'}, 'up'),
-        resize_split_down  = wk.send_keys({'ctrl', 'alt', 'shift'}, 'down'),
-        resize_split_left  = wk.send_keys({'ctrl', 'alt', 'shift'}, 'left'),
-        resize_split_right = wk.send_keys({'ctrl', 'alt', 'shift'}, 'right'),
-        detach_split       = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'),
-        close_split        = wk.send_keys({'cmd', 'shift'}, 'd'),
-
-        -- Tabs
-        next_tab           = wk.send_keys({'ctrl'}, 'end'),
-        prev_tab           = wk.send_keys({'ctrl'}, 'home'),
-        new_tab            = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'n'),
-
-        -- Layout
-        rotate_splits      = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p'),
-        next_layout        = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p'),
-    },
-
-    ['Brave Browser'] = {
-        -- Page
-        up_arrow    = wk.send_keys({}, 'up'),
-        down_arrow  = wk.send_keys({}, 'down'),
-        left_arrow  = wk.send_keys({}, 'left'),
-        right_arrow = wk.send_keys({}, 'right'),
-        page_up     = wk.send_keys({}, 'pageup'),
-        page_down   = wk.send_keys({}, 'pagedown'),
-        page_top    = wk.send_keys({}, 'home'),
-        page_bottom = wk.send_keys({}, 'end'),
-        search_text = {
-            wk.send_keys({'cmd'}, 'f'),
-            wk.turn_eventtap('off'),
-            popups.hide(),
-            wk.temporary_insert()
-        },
-        reload  = wk.send_keys({'cmd'}, 'r'),
-        back    = wk.send_keys({'cmd'}, '['),
-        forward = wk.send_keys({'cmd'}, ']'),
-
-        -- Tabs
-        tab_left       = wk.send_keys({'ctrl'}, 'pageup'),
-        tab_right      = wk.send_keys({'ctrl'}, 'pagedown'),
-        move_tab_left  = wk.send_keys({'ctrl', 'shift'}, 'pageup'),
-        move_tab_right = wk.send_keys({'ctrl', 'shift'}, 'pagedown'),
-        search_tabs    = {
-            wk.send_keys({'cmd', 'shift'}, 'a'),
-            wk.turn_eventtap('off'),
-            popups.hide(),
-            wk.temporary_insert()
-        },
-        new_tab       = wk.send_keys({'cmd'}, 't'),
-        reopen_closed = wk.send_keys({'cmd', 'shift'}, 't'),
-        close_tab     = wk.send_keys({'cmd'}, 'w'),
-
-        -- Misc
-        focus_searchbar = {
-            wk.send_keys({'cmd'}, 'l'),
-            wk.turn_eventtap('off'),
-            popups.hide(),
-            wk.temporary_insert()
-        },
-        add_bookmark = wk.send_keys({'cmd'}, 'd'),
-        open_history = wk.send_keys({'cmd'}, 'h'),
     },
 }
 

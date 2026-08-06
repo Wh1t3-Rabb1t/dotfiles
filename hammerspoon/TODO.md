@@ -1,5 +1,7 @@
 # TODO
 
+---
+
 ## STYLING (to be fully implemented):
 
 - snake_case for variables/functions.
@@ -21,12 +23,12 @@
 
 ## Modules:
 
-- Create a simple (y/n) confirmation popup module for certain actions
-  (i.e. quit app).
-
 - Consolidate all hotkeys together (hot reload hs, launch wk, quit timer).
 
 - Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
+
+- Create a simple (y/n) confirmation popup module for certain actions
+  (i.e. quit app).
 
 - Update/refactor outdated modules like cmd_q. (integrate with central state,
   only export certain fns etc).
@@ -54,7 +56,6 @@
 
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).
-
 
 ---
 

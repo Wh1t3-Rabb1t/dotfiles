@@ -21,10 +21,14 @@
 
 ## Modules:
 
+- Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
+
 - Update/refactor outdated modules like cmd_q. (integrate with central state,
   only export certain fns etc).
 
-- Work on potentially consolidating 'splits.snap()' 'splits.snap_new()'.
+- Integrate popup (x, y) with screen state and temporary_insert popup x, y.
+
+- Work on consolidating 'splits.snap()' 'splits.snap_new()'.
 
 - Add shift layer bindings for brave (select text etc).
 
@@ -46,7 +50,6 @@
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).
 
-- ? Integrate popup (x, y) with screen state.
 
 ---
 

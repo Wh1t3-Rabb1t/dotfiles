@@ -300,6 +300,45 @@ local function fmt_binding_popups(app, bindings)
 end
 
 
+-- Queue chained actions (i.e. launch window then display related popup)
+--------------------------------------------------------------------------------
+local function queue(...)
+    local actions = { ... }
+
+    return function()
+        for _, action in ipairs(actions) do
+            if type(action) == 'function' then
+                table.insert(state.action_queue.items, action)
+
+            elseif type(action) == 'table' then
+                for _, job in ipairs(action) do
+                    table.insert(state.action_queue.items, job)
+                end
+            end
+        end
+
+        if state.action_queue.running then
+            return
+        end
+
+        state.action_queue.running = true
+
+        local function next_job()
+            local job = table.remove(state.action_queue.items, 1)
+
+            if not job then
+                state.action_queue.running = false
+                return
+            end
+
+            job(next_job)
+        end
+
+        next_job()
+    end
+end
+
+
 -- Pack binding lookup table
 --------------------------------------------------------------------------------
 local function fmt_binding_tbl(app, bindings)
@@ -311,7 +350,9 @@ local function fmt_binding_tbl(app, bindings)
                 binding.key,
                 binding.mods
             )
-            lookup[lookup_key] = registry.actions[app][binding.action]
+            lookup[lookup_key] = queue(
+                registry.actions[app][binding.action]
+            )
         end
     end
 

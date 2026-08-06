@@ -115,20 +115,6 @@ function M.temporary_insert()
 end
 
 
--- -- Close menu
--- --------------------------------------------------------------------------------
--- function M.close_menu(win)
---     local job = function (done)
---         util.turn_eventtap('off')
---         popups.hide(win)
---
---         done()
---     end
---
---     return job
--- end
-
-
 -- Launch menu
 --------------------------------------------------------------------------------
 function M.launch_menu()

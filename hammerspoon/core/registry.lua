@@ -470,148 +470,148 @@ M.bindings = {
 M.actions = {
     ['system'] = {
         -- Launch or focus
-        launch_kitty = wk.queue(
+        launch_kitty = {
             popups.hide(),
             splits.launch_or_focus('kitty'),
             splits.snap_new(),
             popups.show()
-        ),
-        launch_brave = wk.queue(
+        },
+        launch_brave = {
             popups.hide(),
             splits.launch_or_focus('Brave Browser'),
             splits.snap_new(),
             popups.show()
-        ),
-        launch_firefox = wk.queue(
+        },
+        launch_firefox = {
             popups.hide(),
             splits.launch_or_focus('Firefox'),
             splits.snap_new(),
             popups.show()
-        ),
+        },
 
         -- Brightness
-        brightness_up    = wk.queue(brightness.adjust('up')),
-        brightness_down  = wk.queue(brightness.adjust('down')),
-        brightness_print = wk.queue(brightness.print_values()),
+        brightness_up    = brightness.adjust('up'),
+        brightness_down  = brightness.adjust('down'),
+        brightness_print = brightness.print_values(),
 
         -- Splits
-        maximize_split = wk.queue(
+        maximize_split = {
             popups.hide(),
             splits.maximize(),
             popups.show()
-        ),
-        swap_splits = wk.queue(
+        },
+        swap_splits = {
             popups.hide(),
             splits.swap(),
             splits.snap('split'),
             popups.show()
-        ),
-        resize_split_left = wk.queue(
+        },
+        resize_split_left = {
             splits.resize('left'),
             splits.snap('split')
-        ),
-        resize_split_right = wk.queue(
+        },
+        resize_split_right = {
             splits.resize('right'),
             splits.snap('split')
-        ),
+        },
 
         -- Popup
-        opacity_up       = wk.queue(popups.opacity('up')),
-        opacity_down     = wk.queue(popups.opacity('down')),
-        cycle_corner_pos = wk.queue(
+        opacity_up       = popups.opacity('up'),
+        opacity_down     = popups.opacity('down'),
+        cycle_corner_pos = {
             popups.hide(),
             popups.cycle_corner_pos(),
             popups.show()
-        ),
-        cycle_stacking = wk.queue(
+        },
+        cycle_stacking = {
             popups.hide(),
             popups.cycle_stacking(),
             popups.show()
-        ),
+        },
 
         -- Misc
-        zoom_in     = wk.queue(wk.send_keys({'cmd'}, '=')),
-        zoom_out    = wk.queue(wk.send_keys({'cmd'}, '-')),
-        toggle_wifi = wk.queue(wifi.toggle_wifi()),
-        close_menu  = wk.queue(
+        zoom_in     = wk.send_keys({'cmd'}, '='),
+        zoom_out    = wk.send_keys({'cmd'}, '-'),
+        toggle_wifi = wifi.toggle_wifi(),
+        close_menu  = {
             wk.turn_eventtap('off'),
             popups.hide()
-        ),
+        },
     },
 
     ['kitty'] = {
         -- Scrollback
-        page_up            = wk.queue(wk.send_keys({'shift'}, 'pageup')),
-        page_down          = wk.queue(wk.send_keys({'shift'}, 'pagedown')),
+        page_up            = wk.send_keys({'shift'}, 'pageup'),
+        page_down          = wk.send_keys({'shift'}, 'pagedown'),
 
         -- Splits
-        new_split          = wk.queue(wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')),
-        new_os_window      = wk.queue(wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm')),
-        focus_split_above  = wk.queue(wk.send_keys({'ctrl', 'alt'}, 'up')),
-        focus_split_below  = wk.queue(wk.send_keys({'ctrl', 'alt'}, 'down')),
-        focus_split_left   = wk.queue(wk.send_keys({'ctrl', 'alt'}, 'left')),
-        focus_split_right  = wk.queue(wk.send_keys({'ctrl', 'alt'}, 'right')),
-        resize_split_up    = wk.queue(wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')),
-        resize_split_down  = wk.queue(wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')),
-        resize_split_left  = wk.queue(wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')),
-        resize_split_right = wk.queue(wk.send_keys({'ctrl', 'alt', 'shift'}, 'right')),
-        detach_split       = wk.queue(wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w')),
-        close_split        = wk.queue(wk.send_keys({'cmd', 'shift'}, 'd')),
+        new_split          = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm'),
+        new_os_window      = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm'),
+        focus_split_above  = wk.send_keys({'ctrl', 'alt'}, 'up'),
+        focus_split_below  = wk.send_keys({'ctrl', 'alt'}, 'down'),
+        focus_split_left   = wk.send_keys({'ctrl', 'alt'}, 'left'),
+        focus_split_right  = wk.send_keys({'ctrl', 'alt'}, 'right'),
+        resize_split_up    = wk.send_keys({'ctrl', 'alt', 'shift'}, 'up'),
+        resize_split_down  = wk.send_keys({'ctrl', 'alt', 'shift'}, 'down'),
+        resize_split_left  = wk.send_keys({'ctrl', 'alt', 'shift'}, 'left'),
+        resize_split_right = wk.send_keys({'ctrl', 'alt', 'shift'}, 'right'),
+        detach_split       = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'),
+        close_split        = wk.send_keys({'cmd', 'shift'}, 'd'),
 
         -- Tabs
-        next_tab           = wk.queue(wk.send_keys({'ctrl'}, 'end')),
-        prev_tab           = wk.queue(wk.send_keys({'ctrl'}, 'home')),
-        new_tab            = wk.queue(wk.send_keys({'cmd', 'ctrl', 'alt'}, 'n')),
+        next_tab           = wk.send_keys({'ctrl'}, 'end'),
+        prev_tab           = wk.send_keys({'ctrl'}, 'home'),
+        new_tab            = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'n'),
 
         -- Layout
-        rotate_splits      = wk.queue(wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')),
-        next_layout        = wk.queue(wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p')),
+        rotate_splits      = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p'),
+        next_layout        = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p'),
     },
 
     ['Brave Browser'] = {
         -- Page
-        up_arrow    = wk.queue(wk.send_keys({}, 'up')),
-        down_arrow  = wk.queue(wk.send_keys({}, 'down')),
-        left_arrow  = wk.queue(wk.send_keys({}, 'left')),
-        right_arrow = wk.queue(wk.send_keys({}, 'right')),
-        page_up     = wk.queue(wk.send_keys({}, 'pageup')),
-        page_down   = wk.queue(wk.send_keys({}, 'pagedown')),
-        page_top    = wk.queue(wk.send_keys({}, 'home')),
-        page_bottom = wk.queue(wk.send_keys({}, 'end')),
-        search_text = wk.queue(
+        up_arrow    = wk.send_keys({}, 'up'),
+        down_arrow  = wk.send_keys({}, 'down'),
+        left_arrow  = wk.send_keys({}, 'left'),
+        right_arrow = wk.send_keys({}, 'right'),
+        page_up     = wk.send_keys({}, 'pageup'),
+        page_down   = wk.send_keys({}, 'pagedown'),
+        page_top    = wk.send_keys({}, 'home'),
+        page_bottom = wk.send_keys({}, 'end'),
+        search_text = {
             wk.send_keys({'cmd'}, 'f'),
             wk.turn_eventtap('off'),
             popups.hide(),
             wk.temporary_insert()
-        ),
-        reload  = wk.queue(wk.send_keys({'cmd'}, 'r')),
-        back    = wk.queue(wk.send_keys({'cmd'}, '[')),
-        forward = wk.queue(wk.send_keys({'cmd'}, ']')),
+        },
+        reload  = wk.send_keys({'cmd'}, 'r'),
+        back    = wk.send_keys({'cmd'}, '['),
+        forward = wk.send_keys({'cmd'}, ']'),
 
         -- Tabs
-        tab_left       = wk.queue(wk.send_keys({'ctrl'}, 'pageup')),
-        tab_right      = wk.queue(wk.send_keys({'ctrl'}, 'pagedown')),
-        move_tab_left  = wk.queue(wk.send_keys({'ctrl', 'shift'}, 'pageup')),
-        move_tab_right = wk.queue(wk.send_keys({'ctrl', 'shift'}, 'pagedown')),
-        search_tabs    = wk.queue(
+        tab_left       = wk.send_keys({'ctrl'}, 'pageup'),
+        tab_right      = wk.send_keys({'ctrl'}, 'pagedown'),
+        move_tab_left  = wk.send_keys({'ctrl', 'shift'}, 'pageup'),
+        move_tab_right = wk.send_keys({'ctrl', 'shift'}, 'pagedown'),
+        search_tabs    = {
             wk.send_keys({'cmd', 'shift'}, 'a'),
             wk.turn_eventtap('off'),
             popups.hide(),
             wk.temporary_insert()
-        ),
-        new_tab       = wk.queue(wk.send_keys({'cmd'}, 't')),
-        reopen_closed = wk.queue(wk.send_keys({'cmd', 'shift'}, 't')),
-        close_tab     = wk.queue(wk.send_keys({'cmd'}, 'w')),
+        },
+        new_tab       = wk.send_keys({'cmd'}, 't'),
+        reopen_closed = wk.send_keys({'cmd', 'shift'}, 't'),
+        close_tab     = wk.send_keys({'cmd'}, 'w'),
 
         -- Misc
-        focus_searchbar = wk.queue(
+        focus_searchbar = {
             wk.send_keys({'cmd'}, 'l'),
             wk.turn_eventtap('off'),
             popups.hide(),
             wk.temporary_insert()
-        ),
-        add_bookmark = wk.queue(wk.send_keys({'cmd'}, 'd')),
-        open_history = wk.queue(wk.send_keys({'cmd'}, 'h')),
+        },
+        add_bookmark = wk.send_keys({'cmd'}, 'd'),
+        open_history = wk.send_keys({'cmd'}, 'h'),
     },
 }
 

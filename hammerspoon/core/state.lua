@@ -1,13 +1,8 @@
 local M = {}
 
-M.system = {
-    wifi = true
-}
-
 M.menu = {
     tap_active = false,  -- (true|false)
     curr_win   = false,  -- (win|false)
-    new_win    = false,  -- (win|false)
     corner     = 'bottom_right',
     stack      = 'vertical',
     opacity    = 1,

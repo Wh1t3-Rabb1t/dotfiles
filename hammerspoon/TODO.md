@@ -35,8 +35,6 @@
 
 - Integrate popup (x, y) with screen state and temporary_insert popup x, y.
 
-- Work on consolidating 'splits.snap()' 'splits.snap_new()'.
-
 - Add shift layer bindings for brave (select text etc).
 
 - temporary_insert() needs to signify that it's active in state otherwise

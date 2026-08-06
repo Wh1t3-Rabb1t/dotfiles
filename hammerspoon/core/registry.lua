@@ -59,7 +59,7 @@ M.apps = {
                     action = {
                         popups.hide(),
                         splits.launch_or_focus('Firefox'),
-                        splits.snap_new(),
+                        splits.snap(),
                         popups.show()
                     },
                 },
@@ -69,7 +69,7 @@ M.apps = {
                     action = {
                         popups.hide(),
                         splits.launch_or_focus('kitty'),
-                        splits.snap_new(),
+                        splits.snap(),
                         popups.show()
                     },
                 },
@@ -79,31 +79,9 @@ M.apps = {
                     action = {
                         popups.hide(),
                         splits.launch_or_focus('Brave Browser'),
-                        splits.snap_new(),
+                        splits.snap(),
                         popups.show()
                     },
-                },
-            },
-        },
-
-        -- Brightness
-        {
-            category = 'Brightness',
-            bindings = {
-                {
-                    desc   = 'Up',
-                    key    = 'z',
-                    action = brightness.adjust('up'),
-                },
-                {
-                    desc   = 'Down',
-                    key    = 'j',
-                    action = brightness.adjust('down'),
-                },
-                {
-                    desc   = 'Print',
-                    key    = 'p',
-                    action = brightness.print_values(),
                 },
             },
         },
@@ -117,7 +95,7 @@ M.apps = {
                     key    = 'o',
                     action = {
                         splits.resize('right'),
-                        splits.snap('split')
+                        splits.snap()
                     },
                 },
                 {
@@ -125,7 +103,7 @@ M.apps = {
                     key    = 'u',
                     action = {
                         splits.resize('left'),
-                        splits.snap('split')
+                        splits.snap()
                     },
                 },
                 {
@@ -134,6 +112,7 @@ M.apps = {
                     action = {
                         popups.hide(),
                         splits.maximize(),
+                        splits.snap(),
                         popups.show()
                     },
                 },
@@ -143,7 +122,7 @@ M.apps = {
                     action = {
                         popups.hide(),
                         splits.swap(),
-                        splits.snap('split'),
+                        splits.snap(),
                         popups.show()
                     },
                 },
@@ -183,6 +162,28 @@ M.apps = {
                     desc   = 'Opacity down',
                     key    = 'f',
                     action = popups.opacity('down'),
+                },
+            },
+        },
+
+        -- Brightness
+        {
+            category = 'Brightness',
+            bindings = {
+                {
+                    desc   = 'Up',
+                    key    = 'z',
+                    action = brightness.adjust('up'),
+                },
+                {
+                    desc   = 'Down',
+                    key    = 'j',
+                    action = brightness.adjust('down'),
+                },
+                {
+                    desc   = 'Print',
+                    key    = 'p',
+                    action = brightness.print_values(),
                 },
             },
         },
@@ -519,3 +520,5 @@ M.apps = {
 }
 
 return M
+
+

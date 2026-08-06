@@ -361,9 +361,12 @@ end
 -- Create event tap
 --------------------------------------------------------------------------------
 local function create_event_tap()
-    local e = hs.eventtap
+    local event_types = {
+        hs.eventtap.event.types.keyDown,
+        hs.eventtap.event.types.flagsChanged
+    }
 
-    local tap = e.new({ e.event.types.keyDown, e.event.types.flagsChanged }, function(event)
+    local tap = hs.eventtap.new(event_types, function(event)
         local flags   = event:getFlags()
         local keycode = event:getKeyCode()
         local key     = hs.keycodes.map[keycode]

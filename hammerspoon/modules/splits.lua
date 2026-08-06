@@ -242,11 +242,18 @@ end
 --------------------------------------------------------------------------------
 function M.launch_or_focus(app)
     return function(done)
+        local focused = hs.window.focusedWindow()
+
+        if focused and focused:application():name() == app then
+            state.menu.new_win = focused
+            done()
+            return
+        end
+
         local wf = hs.window.filter.new(app)
 
         wf:subscribe(hs.window.filter.windowFocused, function(win)
             wf:unsubscribeAll()
-            wf = nil
 
             state.menu.new_win = win
             done()

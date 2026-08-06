@@ -21,6 +21,11 @@
 
 ## Modules:
 
+- Create a simple (y/n) confirmation popup module for certain actions
+  (i.e. quit app).
+
+- Consolidate all hotkeys together (hot reload hs, launch wk, quit timer).
+
 - Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
 
 - Update/refactor outdated modules like cmd_q. (integrate with central state,

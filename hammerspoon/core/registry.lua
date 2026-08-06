@@ -28,7 +28,7 @@ local splits = require('splits')
 local popups = require('popups')
 local wifi = require('wifi')
 
-M.bindings = {
+M.apps = {
     -- These are temporarily bound to actions after the eventtap has been
     -- stopped, then unbound once the eventtap is restarted. Therefor the
     -- don't have corresponding actions in the action table.

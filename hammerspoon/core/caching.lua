@@ -412,7 +412,7 @@ function M.init()
        not tbl_initialized(cache.lookup)
     then
         -- Main eventtap bindings
-        for app, bindings in pairs(registry.bindings) do
+        for app, bindings in pairs(registry.apps) do
             if app == 'insert' then
                 cache.assets[app] = fmt_binding_popups(app, bindings)
             else

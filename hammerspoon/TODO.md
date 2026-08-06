@@ -21,8 +21,6 @@
 
 ## Modules:
 
-- Drop 'queue' fn from 'which_key' and find a cleaner way to launch the menu.
-
 - Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
 
 - Update/refactor outdated modules like cmd_q. (integrate with central state,

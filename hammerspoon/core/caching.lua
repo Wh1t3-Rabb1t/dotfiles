@@ -341,7 +341,7 @@ end
 
 -- Pack binding lookup table
 --------------------------------------------------------------------------------
-local function fmt_binding_tbl(app, bindings)
+local function fmt_binding_tbl(bindings)
     local lookup = {}
 
     for _, category in ipairs(bindings) do
@@ -413,13 +413,12 @@ function M.init()
     then
         -- Main eventtap bindings
         for app, bindings in pairs(registry.bindings) do
-            cache.lookup[app] = fmt_binding_tbl(app, bindings)
-            cache.assets[app] = fmt_binding_popups(app, bindings)
-        end
-
-        -- Temporary bindings invoked when entering 'insert'
-        for app, bindings in pairs(registry.insert_bindings) do
-            cache.assets[app] = fmt_binding_popups(app, bindings)
+            if app == 'insert' then
+                cache.assets[app] = fmt_binding_popups(app, bindings)
+            else
+                cache.lookup[app] = fmt_binding_tbl(bindings)
+                cache.assets[app] = fmt_binding_popups(app, bindings)
+            end
         end
 
         -- Create event tap

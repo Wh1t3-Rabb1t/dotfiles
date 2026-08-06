@@ -28,10 +28,11 @@ local splits = require('splits')
 local popups = require('popups')
 local wifi = require('wifi')
 
-M.bindings = {
-    -- These are temporarily bound to actions after the eventtap has been
-    -- stopped, then unbound once the eventtap is restarted. Therefor the
-    -- don't have corresponding actions in the action table.
+
+-- These are temporarily bound to actions after the eventtap has been stopped,
+-- then unbound once the eventtap is restarted. Therefor the don't have
+-- corresponding actions in the action table.
+M.insert_bindings = {
     ['insert'] = {
         {
             category = 'Bound until invoked',
@@ -47,7 +48,9 @@ M.bindings = {
             },
         },
     },
+}
 
+M.bindings = {
     ['system'] = {
         -- Launch or focus
         {
@@ -519,3 +522,4 @@ M.bindings = {
 }
 
 return M
+

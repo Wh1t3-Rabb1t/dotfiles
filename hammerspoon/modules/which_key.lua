@@ -235,7 +235,7 @@ function M.menu_opacity(direction, target_win)
         local app     = win:application():name()
         local opacity = state.menu.opacity
 
-        local step    = 0.1
+        local step = 0.1
 
         if direction == 'up' then
             opacity = math.min(opacity + step, 1.0)
@@ -359,7 +359,9 @@ function M.launch_menu()
 
     local init_fn = M.show_menu(hs.window.focusedWindow())
 
-    init_fn()
+    init_fn(function()
+        -- Call done()
+    end)
 end
 
 return M

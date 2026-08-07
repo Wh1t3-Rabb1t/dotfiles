@@ -8,6 +8,9 @@
 
 require('console').init()
 require('announcer').init()
+
 require('wifi').init()
 require('screenshots').init()
+
 require('hotkeys').init()
+

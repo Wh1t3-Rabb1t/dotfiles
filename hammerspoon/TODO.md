@@ -23,6 +23,12 @@
 
 ## Modules:
 
+- Need a special case for launching which-key menu with no windows open and
+  the Finder desktop focused.
+
+- Consider binding 'escape' to temporary_insert() and (cancel|exit) to the same
+  key as launch_menu().
+
 - Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
 
 - Might need to change window z-index level when exiting from fullsceen.

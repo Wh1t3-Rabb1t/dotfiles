@@ -115,7 +115,7 @@ end
 -- Create overlay
 --------------------------------------------------------------------------------
 local function create_overlay(screen)
-    local frame = screen:fullFrame()
+    local frame   = screen:fullFrame()
     local overlay = hs.canvas.new(frame)
 
     overlay:appendElements({
@@ -162,7 +162,7 @@ end
 --------------------------------------------------------------------------------
 local function fmt_key_combinations(binding)
     local mods = binding.mods or {}
-    local key = binding.key
+    local key  = binding.key
 
     local shift_chars = {
         ['`'] = '~',
@@ -249,9 +249,10 @@ local function fmt_menu_text(app, binding_tbl)
     }
 
     local styled_text = require('hs.styledtext')
-    local fmt   = '  %' .. len .. 's '
-    local title = ('* %s'):format(app)
-    local text  = styled_text.new(title, styles.title) .. styled_text.new('\n\n', styles.title)
+    local fmt         = ' %' .. len .. 's '
+    local title       = ('* %s'):format(app)
+    local text        = styled_text.new(title, styles.title)
+                     .. styled_text.new('\n\n', styles.title)
 
     for c, category in ipairs(binding_tbl) do
         -- Category heading
@@ -267,7 +268,7 @@ local function fmt_menu_text(app, binding_tbl)
                 .. styled_text.new(fmt:format(display), styles.key)
                 .. styled_text.new('-> ', styles.arrow)
                 .. styled_text.new(binding.desc, styles.desc)
-                .. '  '
+                .. ' '
 
             if i < #category.bindings then
                 text = text .. styled_text.new('\n', styles.desc)
@@ -370,8 +371,9 @@ local function create_event_tap()
         local flags   = event:getFlags()
         local keycode = event:getKeyCode()
         local key     = hs.keycodes.map[keycode]
-        local win     = hs.window.focusedWindow()
-        local app     = win:application():name()
+
+        local win = hs.window.focusedWindow()
+        local app = win:application():name()
 
         local mods = {}
 
@@ -381,7 +383,9 @@ local function create_event_tap()
         if flags.shift then table.insert(mods, 'shift') end
 
         local lookup_key   = binding_id(key, mods)
-        local bound_action = cache.lookup.system[lookup_key] or cache.lookup[app][lookup_key]
+        local app_lookup   = cache.lookup[app] or {}
+        local bound_action = cache.lookup.system[lookup_key]
+                          or app_lookup[lookup_key]
 
         if bound_action then
             bound_action()

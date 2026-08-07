@@ -14,11 +14,6 @@ local M = {}
 -- Media:
 --   Toggle (play/pause)
 --
--- Clipboard:
---   Copy
---   Cut
---   Paste
---
 -- Misc:
 --   Toggle bluetooth
 --   Quit app
@@ -31,9 +26,11 @@ local wifi       = require('wifi')
 
 M.apps = {
     -- These are temporarily bound to actions after the eventtap has been
-    -- stopped, then unbound once the eventtap is restarted. Therefor the
-    -- don't have corresponding actions in the action table.
+    -- stopped, then unbound once the eventtap is restarted. Therefor they
+    -- don't have corresponding actions.
+    ----------------------------------------------------------------------------
     ['insert'] = {
+    ----------------------------------------------------------------------------
         {
             category = 'Bound until invoked',
             bindings = {
@@ -49,7 +46,9 @@ M.apps = {
         },
     },
 
+    ----------------------------------------------------------------------------
     ['system'] = {
+    ----------------------------------------------------------------------------
         -- Launch or focus
         {
             category = 'Launch or focus',
@@ -84,6 +83,11 @@ M.apps = {
                         wk.show_menu()
                     },
                 },
+                -- {
+                --     desc   = 'degug splits',
+                --     key    = '.',
+                --     action = splits.degug_splits(),
+                -- },
             },
         },
 
@@ -123,13 +127,13 @@ M.apps = {
                 },
                 {
                     desc   = 'Move to next screen',
-                    key    = 'c',
+                    key    = 'n',
+                    mods   = {'shift'},
                     action = {
                         wk.hide_menu(),
                         splits.move_to_screen(),
                         splits.snap(),
                         wk.show_menu()
-
                     },
                 },
                 {
@@ -178,6 +182,28 @@ M.apps = {
                     desc   = 'Opacity down',
                     key    = 'f',
                     action = wk.menu_opacity('down'),
+                },
+            },
+        },
+
+        -- Clipboard
+        {
+            category = 'Clipboard',
+            bindings = {
+                {
+                    desc   = 'Copy',
+                    key    = 'c',
+                    action = wk.send_keys({'cmd'}, 'c'),
+                },
+                {
+                    desc   = 'Paste',
+                    key    = 'v',
+                    action = wk.send_keys({'cmd'}, 'v'),
+                },
+                {
+                    desc   = 'Cut',
+                    key    = 'x',
+                    action = wk.send_keys({'cmd'}, 'x'),
                 },
             },
         },
@@ -237,7 +263,9 @@ M.apps = {
         },
     },
 
+    ----------------------------------------------------------------------------
     ['kitty'] = {
+    ----------------------------------------------------------------------------
         -- Scrollback
         {
             category = 'Scrollback',
@@ -370,7 +398,9 @@ M.apps = {
         },
     },
 
+    ----------------------------------------------------------------------------
     ['Brave Browser'] = {
+    ----------------------------------------------------------------------------
         -- Page
         {
             category = 'Page',

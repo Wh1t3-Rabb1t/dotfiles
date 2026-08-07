@@ -260,6 +260,24 @@ function M.snap()
     end
 end
 
+function M.degug_splits()
+    return function(done)
+        local screen = hs.mouse.getCurrentScreen()
+        local id     = screen:id()
+        local layout = state.screens[id].layout
+
+        local lhs = layout.left:application():name()
+        local rhs = layout.right:application():name()
+
+        hs.alert.show('lhs: ' .. lhs)
+        hs.alert.show('rhs: ' .. rhs)
+
+        -- for _, screen in ipairs(hs.screen.allScreens()) do
+        -- end
+
+        done()
+    end
+end
 
 -- Launch or focus target app
 --------------------------------------------------------------------------------

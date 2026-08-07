@@ -4,7 +4,7 @@ M.watchers = {}
 
 M.lookup = {
     -- [app_name] = {
-    --
+    --     key = action,
     -- }
 }
 

@@ -36,14 +36,9 @@ end
 -- Is window aligned to the left or right of the screen
 --------------------------------------------------------------------------------
 local function get_side(win)
-    local screen = win:screen()
-
-    if not screen then
-        return false
-    end
-
-    local screen_frame = screen:fullFrame()
     local win_frame    = win:frame()
+    local screen       = win:screen()
+    local screen_frame = screen:fullFrame()
     local screen_mid   = screen_frame.x + (screen_frame.w / 2)
     local win_mid      = win_frame.x + (win_frame.w / 2)
 
@@ -85,7 +80,22 @@ local function get_coords(id, border)
 end
 
 
--- Determine newly launched/focused windows layout.
+-- Remove windows from layout state
+--------------------------------------------------------------------------------
+local function remove_window(layout, win)
+    if layout.left == win then
+        layout.left = false
+    end
+    if layout.right == win then
+        layout.right = false
+    end
+    if layout.maximized == win then
+        layout.maximized = false
+    end
+end
+
+
+-- Assign windows to layout state.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
 -- fullscreen is focused on the same screen, fullscreen the new window.
@@ -93,18 +103,13 @@ end
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
-local function set_layout(existing_win, win)
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
-
-    -- Set new window to the fullscreen slot if it fills the usable screen space
+local function assign_window(layout, existing, win)
     if is_fullscreen(win) then
         layout.maximized = win
 
         return
     end
 
-    -- Already fullscreen; replace existing fullscreen window with the new one
     if layout.maximized then
         if layout.right == win then
             layout.left = layout.maximized
@@ -117,15 +122,12 @@ local function set_layout(existing_win, win)
         return
     end
 
-    -- Normal split mode
-    if layout.maximized then
-        layout.maximized = false
-    end
+    layout.maximized = false
 
-    local side     = get_side(win)
-    local opposite = (side == 'left') and 'right' or 'left'
+    local side = get_side(win)
 
-    if get_side(existing_win) == side then
+    if existing and get_side(existing) == side then
+        local opposite = (side == 'left') and 'right' or 'left'
         layout[opposite] = win
     else
         layout[side] = win
@@ -133,18 +135,15 @@ local function set_layout(existing_win, win)
 end
 
 
--- Swap left/right window slots
+-- Maximize focused window
 --------------------------------------------------------------------------------
-function M.swap()
+function M.maximize()
     return function(done)
         local win    = state.menu.curr_win or hs.window.focusedWindow()
         local id     = win:screen():id()
         local layout = state.screens[id].layout
-        local lhs    = layout.left
-        local rhs    = layout.right
 
-        layout.left  = rhs
-        layout.right = lhs
+        layout.maximized = win
 
         done()
     end
@@ -171,6 +170,7 @@ function M.resize(direction, step_val)
         local num = math.min(0.80, math.max(0.20, divider))
         screen.divider = (num * 100) / 100
 
+        -- If window is maximized, snap back to splits layout
         if layout.maximized then
             if direction == 'left' then
                 if layout.right == win then
@@ -194,15 +194,40 @@ function M.resize(direction, step_val)
 end
 
 
--- Maximize focused window
+-- Swap left/right window slots
 --------------------------------------------------------------------------------
-function M.maximize()
+function M.swap()
     return function(done)
         local win    = state.menu.curr_win or hs.window.focusedWindow()
         local id     = win:screen():id()
         local layout = state.screens[id].layout
+        local lhs    = layout.left
+        local rhs    = layout.right
 
-        layout.maximized = win
+        layout.left  = rhs
+        layout.right = lhs
+
+        done()
+    end
+end
+
+
+-- Move window to the next/previous connected screen
+--------------------------------------------------------------------------------
+function M.move_to_screen()
+    return function(done)
+        local win  = state.menu.curr_win or hs.window.focusedWindow()
+        local curr_screen  = win:screen()
+        local next_screen = curr_screen:next()
+
+        local old_layout = state.screens[curr_screen:id()].layout
+        local new_layout = state.screens[next_screen:id()].layout
+
+        remove_window(old_layout, win)
+
+        win:moveToScreen(next_screen)
+
+        assign_window(new_layout, nil, win)
 
         done()
     end
@@ -244,7 +269,10 @@ function M.launch_or_focus(app)
             state.menu.curr_win = new
 
             if existing and new and existing:id() ~= new:id() then
-                set_layout(existing, new)
+                local id     = new:screen():id()
+                local layout = state.screens[id].layout
+
+                assign_window(layout, existing, new)
             end
 
             done()
@@ -252,6 +280,7 @@ function M.launch_or_focus(app)
 
         if existing and existing:application():name() == app then
             finish(existing)
+
             return
         end
 

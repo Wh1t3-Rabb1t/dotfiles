@@ -23,6 +23,10 @@
 
 ## Modules:
 
+- Might need to change window z-index level when exiting from fullsceen.
+  (suppose we are moving the divider but the other forefront window is
+  incompantible/untracked).
+
 - Consolidate all hotkeys together (hot reload hs, launch wk, quit timer).
 
 - Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
@@ -55,23 +59,8 @@
 - Implement an 'expand/collapse' binding for each popup (make it stateful so we
   don't need to keep hiding unwanted popups).
 
----
-
-## Layout module:
-
 - Incorporate base 'layouts'.
   (set the divider value to 0.35, 0.65, or 0.5 to emulate thirds/half layouts).
-
-- Might need to change window z-index level when exiting from fullsceen.
-  (suppose we are moving the divider but the other forefront window is
-  incompantible/untracked).
-
-- Key repeating when moving the divider.
-
-- Implement move window to adjacent screen fn.
-
-- Determine if 'layout.init' should be called on init, or only
-  when a new window is launched / focused.
 
 ---
 

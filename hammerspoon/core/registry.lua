@@ -23,10 +23,10 @@ local M = {}
 
 
 local brightness = require('brightness')
-local wk = require('which_key')
-local splits = require('splits')
-local popups = require('popups')
-local wifi = require('wifi')
+local wk         = require('which_key')
+local splits     = require('splits')
+local popups     = require('popups')
+local wifi       = require('wifi')
 
 M.apps = {
     -- These are temporarily bound to actions after the eventtap has been
@@ -94,16 +94,20 @@ M.apps = {
                     desc   = 'Resize right',
                     key    = 'o',
                     action = {
+                        popups.hide(),
                         splits.resize('right'),
-                        splits.snap()
+                        splits.snap(),
+                        popups.show()
                     },
                 },
                 {
                     desc   = 'Resize left',
                     key    = 'u',
                     action = {
+                        popups.hide(),
                         splits.resize('left'),
-                        splits.snap()
+                        splits.snap(),
+                        popups.show()
                     },
                 },
                 {
@@ -114,6 +118,17 @@ M.apps = {
                         splits.maximize(),
                         splits.snap(),
                         popups.show()
+                    },
+                },
+                {
+                    desc   = 'Move to next screen',
+                    key    = 'c',
+                    action = {
+                        popups.hide(),
+                        splits.move_to_screen(),
+                        splits.snap(),
+                        popups.show()
+
                     },
                 },
                 {
@@ -520,5 +535,3 @@ M.apps = {
 }
 
 return M
-
-

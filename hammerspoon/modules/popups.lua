@@ -200,6 +200,7 @@ function M.opacity(direction, target_win)
         local win     = target_win or state.menu.curr_win
         local app     = win:application():name()
         local opacity = state.menu.opacity
+
         local step    = 0.1
 
         if direction == 'up' then

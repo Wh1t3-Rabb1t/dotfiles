@@ -23,13 +23,11 @@
 
 ## Modules:
 
+- Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
+
 - Might need to change window z-index level when exiting from fullsceen.
   (suppose we are moving the divider but the other forefront window is
   incompantible/untracked).
-
-- Consolidate all hotkeys together (hot reload hs, launch wk, quit timer).
-
-- Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
 
 - Create a simple (y/n) confirmation popup module for certain actions
   (i.e. quit app).
@@ -38,8 +36,6 @@
   only export certain fns etc).
 
 - Integrate popup (x, y) with screen state and temporary_insert popup x, y.
-
-- Add shift layer bindings for brave (select text etc).
 
 - temporary_insert() needs to signify that it's active in state otherwise
   relaunching the menu without unbinding 'enter' and 'escape' will get weird.

@@ -107,6 +107,7 @@ local function assign_window(layout, existing, win)
     if is_fullscreen(win) then
         layout.maximized = win
 
+        -- Exit early
         return
     end
 
@@ -119,6 +120,7 @@ local function assign_window(layout, existing, win)
 
         layout.maximized = win
 
+        -- Exit early
         return
     end
 

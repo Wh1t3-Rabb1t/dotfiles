@@ -144,6 +144,40 @@ local function get_coords(win, popups, corner, stack)
 end
 
 
+-- Send keystrokes (while bypassing active eventtap)
+--------------------------------------------------------------------------------
+function M.send_keys(mods, key)
+    return function(done)
+        state.menu.tap_active = false
+        cache.assets.tap:stop()
+
+        hs.eventtap.keyStroke(mods, key, 0)
+
+        state.menu.tap_active = true
+        cache.assets.tap:start()
+
+        done()
+    end
+end
+
+
+-- Toggle event tap
+--------------------------------------------------------------------------------
+function M.turn_eventtap(set_to)
+    return function (done)
+        if set_to == 'on' then
+            state.menu.tap_active = true
+            cache.assets.tap:start()
+        elseif set_to == 'off' then
+            state.menu.tap_active = false
+            cache.assets.tap:stop()
+        end
+
+        done()
+    end
+end
+
+
 -- Cycle menu corner positions
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
@@ -195,7 +229,7 @@ end
 
 -- Set poppup opacity
 --------------------------------------------------------------------------------
-function M.opacity(direction, target_win)
+function M.menu_opacity(direction, target_win)
     return function(done)
         local win     = target_win or state.menu.curr_win
         local app     = win:application():name()
@@ -225,9 +259,53 @@ function M.opacity(direction, target_win)
 end
 
 
+-- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
+--------------------------------------------------------------------------------
+function M.temporary_insert()
+    return function(done)
+        local win     = state.menu.curr_win or hs.window.focusedWindow()
+        local frame   = win:frame()
+        local opacity = state.menu.opacity
+        local popup   = cache.assets.insert.popup
+
+        local function end_insert_mode(hotkeys, active_popup)
+            for _, hk in ipairs(hotkeys) do
+                hk:disable()
+            end
+
+            active_popup:hide()
+        end
+
+        local pos = {
+            x = frame.x + 10,
+            y = frame.y + 10,
+        }
+
+        popup:topLeft(pos)
+        popup:alpha(opacity)
+        popup:show(0.15)
+
+        local hotkeys = {}
+
+        hotkeys[1] = hs.hotkey.bind({}, 'return', function()
+            end_insert_mode(hotkeys, popup)
+
+            hs.eventtap.keyStroke({}, 'return')
+            M.launch_menu()
+        end)
+
+        hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
+            end_insert_mode(hotkeys, popup)
+        end)
+
+        done()
+    end
+end
+
+
 -- Hide popups
 --------------------------------------------------------------------------------
-function M.hide()
+function M.hide_menu()
     return function(done)
         local win = state.menu.curr_win or hs.window.focusedWindow()
         local app = win:application():name()
@@ -245,7 +323,7 @@ end
 
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show(target_win, target_corner, target_stack)
+function M.show_menu(target_win, target_corner, target_stack)
     return function(done)
         local win    = target_win    or state.menu.curr_win
         local corner = target_corner or state.menu.corner
@@ -266,6 +344,22 @@ function M.show(target_win, target_corner, target_stack)
 
         done()
     end
+end
+
+
+-- Launch menu
+--------------------------------------------------------------------------------
+function M.launch_menu()
+    if state.menu.tap_active then
+        return
+    end
+
+    state.menu.tap_active = true
+    cache.assets.tap:start()
+
+    local init_fn = M.show_menu(hs.window.focusedWindow())
+
+    init_fn()
 end
 
 return M

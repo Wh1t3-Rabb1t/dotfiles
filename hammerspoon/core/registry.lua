@@ -2,8 +2,9 @@ local M = {}
 
 -- !! These could all be bound behind a leader key (space)
 --
--- Spotlight:
---   /  Launch
+-- Apple:
+--   Spotlight
+--   Dock
 --
 -- Volume:
 --   Up
@@ -18,14 +19,14 @@ local M = {}
 --   Cut
 --   Paste
 --
--- Windows:
---   n  Win_to_next_screen
+-- Misc:
+--   Toggle bluetooth
+--   Quit app
 
 
 local brightness = require('brightness')
 local wk         = require('which_key')
 local splits     = require('splits')
-local popups     = require('popups')
 local wifi       = require('wifi')
 
 M.apps = {
@@ -57,30 +58,30 @@ M.apps = {
                     desc   = 'Firefox',
                     key    = 'y',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.launch_or_focus('Firefox'),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
                     },
                 },
                 {
                     desc   = 'kitty',
                     key    = 'v',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.launch_or_focus('kitty'),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
                     },
                 },
                 {
                     desc   = 'Brave Browser',
                     key    = 'b',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.launch_or_focus('Brave Browser'),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
                     },
                 },
             },
@@ -94,40 +95,40 @@ M.apps = {
                     desc   = 'Resize right',
                     key    = 'o',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.resize('right'),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
                     },
                 },
                 {
                     desc   = 'Resize left',
                     key    = 'u',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.resize('left'),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
                     },
                 },
                 {
                     desc   = 'Maximize',
                     key    = 'g',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.maximize(),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
                     },
                 },
                 {
                     desc   = 'Move to next screen',
                     key    = 'c',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.move_to_screen(),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
 
                     },
                 },
@@ -135,10 +136,10 @@ M.apps = {
                     desc   = 'Swap positions',
                     key    = 's',
                     action = {
-                        popups.hide(),
+                        wk.hide_menu(),
                         splits.swap(),
                         splits.snap(),
-                        popups.show()
+                        wk.show_menu()
                     },
                 },
             },
@@ -151,32 +152,32 @@ M.apps = {
                 {
                     desc   = 'Cycle positions',
                     key    = 'r',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = {
-                        popups.hide(),
-                        popups.cycle_corner_pos(),
-                        popups.show()
+                        wk.hide_menu(),
+                        wk.cycle_corner_pos(),
+                        wk.show_menu()
                     },
                 },
                 {
                     desc   = 'Cycle menu stacking',
                     key    = 'a',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = {
-                        popups.hide(),
-                        popups.cycle_stacking(),
-                        popups.show()
+                        wk.hide_menu(),
+                        wk.cycle_stacking(),
+                        wk.show_menu()
                     },
                 },
                 {
                     desc   = 'Opacity up',
                     key    = 'r',
-                    action = popups.opacity('up'),
+                    action = wk.menu_opacity('up'),
                 },
                 {
                     desc   = 'Opacity down',
                     key    = 'f',
-                    action = popups.opacity('down'),
+                    action = wk.menu_opacity('down'),
                 },
             },
         },
@@ -210,13 +211,13 @@ M.apps = {
                 {
                     desc   = 'Zoom in',
                     key    = 'z',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd'}, '='),
                 },
                 {
                     desc   = 'Zoom out',
                     key    = 'j',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd'}, '-'),
                 },
                 {
@@ -229,7 +230,7 @@ M.apps = {
                     key    = 'escape',
                     action = {
                         wk.turn_eventtap('off'),
-                        popups.hide()
+                        wk.hide_menu()
                     },
                 },
             },
@@ -281,25 +282,25 @@ M.apps = {
                 {
                     desc   = 'Resize up',
                     key    = 'i',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'up'),
                 },
                 {
                     desc   = 'Resize down',
                     key    = 'k',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'down'),
                 },
                 {
                     desc   = 'Resize right',
                     key    = 'l',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'right'),
                 },
                 {
                     desc   = 'Resize left',
                     key    = 't',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'left'),
                 },
                 {
@@ -310,19 +311,19 @@ M.apps = {
                 {
                     desc   = 'New window',
                     key    = 'm',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm'),
                 },
                 {
                     desc   = 'Detach split',
                     key    = 'n',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'),
                 },
                 {
                     desc   = 'Close',
                     key    = 'w',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd', 'shift'}, 'd'),
                 },
             },
@@ -357,7 +358,7 @@ M.apps = {
                 {
                     desc   = 'Rotate splits',
                     key    = 'r',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p'),
                 },
                 {
@@ -387,42 +388,42 @@ M.apps = {
                 {
                     desc   = 'Top',
                     key    = 'e',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({}, 'home'),
                 },
                 {
                     desc   = 'Bottom',
                     key    = 'd',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({}, 'end'),
                 },
                 {
                     desc   = 'Search for text',
                     key    = 'f',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = {
                         wk.send_keys({'cmd'}, 'f'),
                         wk.turn_eventtap('off'),
-                        popups.hide(),
+                        wk.hide_menu(),
                         wk.temporary_insert()
                     },
                 },
                 {
                     desc   = 'Reload',
                     key    = 'r',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd'}, 'r'),
                 },
                 {
                     desc   = 'Back',
                     key    = 'u',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd'}, '['),
                 },
                 {
                     desc   = 'Forward',
                     key    = 'o',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd'}, ']'),
                 },
             },
@@ -445,13 +446,13 @@ M.apps = {
                 {
                     desc   = 'Swap with left',
                     key    = 'h',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'ctrl', 'shift'}, 'pageup'),
                 },
                 {
                     desc   = 'Swap with right',
                     key    = ';',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'ctrl', 'shift'}, 'pagedown'),
                 },
                 {
@@ -460,7 +461,7 @@ M.apps = {
                     action = {
                         wk.send_keys({'cmd', 'shift'}, 'a'),
                         wk.turn_eventtap('off'),
-                        popups.hide(),
+                        wk.hide_menu(),
                         wk.temporary_insert()
                     },
                 },
@@ -472,7 +473,7 @@ M.apps = {
                 {
                     desc   = 'Re-open closed',
                     key    = 'm',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd', 'shift'}, 't'),
                 },
                 {
@@ -483,9 +484,9 @@ M.apps = {
             },
         },
 
-        -- Misc
+        -- Navigation
         {
-            category = 'Misc',
+            category = 'Navigation',
             bindings = {
                 {
                     desc   = 'Up arrow',
@@ -498,36 +499,48 @@ M.apps = {
                     action = wk.send_keys({}, 'down'),
                 },
                 {
-                    desc   = 'Left arrow',
+                    desc   = 'Focus prev',
                     key    = 't',
-                    action = wk.send_keys({}, 'left'),
+                    action = wk.send_keys({'shift'}, 'tab'),
                 },
                 {
-                    desc   = 'Right arrow',
+                    desc   = 'Focus next',
                     key    = 'l',
-                    action = wk.send_keys({}, 'right'),
+                    action = wk.send_keys({}, 'tab'),
                 },
+            },
+        },
+
+        -- Misc
+        {
+            category = 'Misc',
+            bindings = {
                 {
                     desc   = 'Focus searchbar',
                     key    = "'",
                     action = {
                         wk.send_keys({'cmd'}, 'l'),
                         wk.turn_eventtap('off'),
-                        popups.hide(),
+                        wk.hide_menu(),
                         wk.temporary_insert()
                     },
                 },
                 {
                     desc   = 'Add bookmark',
                     key    = 'b',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd'}, 'd'),
                 },
                 {
                     desc   = 'Open history',
                     key    = 'p',
-                    mods   = { 'shift' },
+                    mods   = {'shift'},
                     action = wk.send_keys({'cmd'}, 'h'),
+                },
+                {
+                    desc   = 'Confirm',
+                    key    = 'return',
+                    action = wk.send_keys({}, 'return'),
                 },
             },
         },

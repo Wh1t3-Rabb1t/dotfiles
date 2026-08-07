@@ -16,7 +16,7 @@ end
 
 -- Stop quit timer
 --------------------------------------------------------------------------------
-local function stop_cmd_q()
+function M.stop_cmd_q()
     if cmd_q_timer then
         cmd_q_timer:stop()
         cmd_q_cleanup()
@@ -27,7 +27,7 @@ end
 
 -- Start quit timer
 --------------------------------------------------------------------------------
-local function start_cmd_q()
+function M.start_cmd_q()
     local app = hs.application.frontmostApplication()
     cmd_q_timer = hs.timer.doAfter(
         cmd_q_delay,
@@ -37,16 +37,6 @@ local function start_cmd_q()
         end
     )
     cmd_q_alert = hs.alert('Hold to Quit: ' .. app:name(), true)
-end
-
-
--- Init
---------------------------------------------------------------------------------
-function M.init()
-    hs.hotkey.bind({'cmd'}, 'q',
-        start_cmd_q,
-        stop_cmd_q
-    )
 end
 
 return M

@@ -144,6 +144,7 @@ local function get_coords(win, popups, corner, stack)
 end
 
 
+--------------------------------------------------------------------------------
 -- Send keystrokes (while bypassing active eventtap)
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
@@ -161,6 +162,7 @@ function M.send_keys(mods, key)
 end
 
 
+--------------------------------------------------------------------------------
 -- Toggle event tap
 --------------------------------------------------------------------------------
 function M.turn_eventtap(set_to)
@@ -178,6 +180,7 @@ function M.turn_eventtap(set_to)
 end
 
 
+--------------------------------------------------------------------------------
 -- Cycle menu corner positions
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
@@ -212,6 +215,7 @@ function M.cycle_corner_pos()
 end
 
 
+--------------------------------------------------------------------------------
 -- Cycle menu layout (vertical/horizontal stacking)
 --------------------------------------------------------------------------------
 function M.cycle_stacking()
@@ -227,6 +231,7 @@ function M.cycle_stacking()
 end
 
 
+--------------------------------------------------------------------------------
 -- Set poppup opacity
 --------------------------------------------------------------------------------
 function M.menu_opacity(direction, target_win)
@@ -259,6 +264,7 @@ function M.menu_opacity(direction, target_win)
 end
 
 
+--------------------------------------------------------------------------------
 -- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
 --------------------------------------------------------------------------------
 function M.temporary_insert()
@@ -303,6 +309,7 @@ function M.temporary_insert()
 end
 
 
+--------------------------------------------------------------------------------
 -- Hide popups
 --------------------------------------------------------------------------------
 function M.hide_menu()
@@ -321,6 +328,7 @@ function M.hide_menu()
 end
 
 
+--------------------------------------------------------------------------------
 -- Show popups
 --------------------------------------------------------------------------------
 function M.show_menu(target_win, target_corner, target_stack)
@@ -347,6 +355,7 @@ function M.show_menu(target_win, target_corner, target_stack)
 end
 
 
+--------------------------------------------------------------------------------
 -- Launch menu
 --------------------------------------------------------------------------------
 function M.launch_menu()

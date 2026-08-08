@@ -1,5 +1,6 @@
 local M = {}
 
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
@@ -19,7 +20,7 @@ end
 return M
 
 
--- function showConsoleIfNeeded()
+-- function show_console_if_needed()
 --     local console = hs.console.hswindow()
 --     if not console or not console:isVisible() then
 --         hs.openConsole()

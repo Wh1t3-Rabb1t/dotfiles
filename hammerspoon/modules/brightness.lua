@@ -12,6 +12,7 @@ local alert_fmt = {
 }
 
 
+--------------------------------------------------------------------------------
 -- Adjust brightness (shader opacity values)
 --------------------------------------------------------------------------------
 function M.adjust(direction)
@@ -51,6 +52,7 @@ function M.adjust(direction)
 end
 
 
+--------------------------------------------------------------------------------
 -- Print brightness values on each connected screen
 --------------------------------------------------------------------------------
 function M.print_values()

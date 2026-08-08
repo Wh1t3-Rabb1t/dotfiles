@@ -18,7 +18,6 @@ local M = {}
 --   Toggle bluetooth
 --   Quit app
 
-
 local brightness = require('brightness')
 local wk         = require('which_key')
 local splits     = require('splits')

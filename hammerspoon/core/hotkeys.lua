@@ -1,9 +1,9 @@
 local M = {}
 
-local caching = require('caching')
-local splits  = require('splits')
-local qt      = require('quit_timer')
-local wk      = require('which_key')
+local bootstrap = require('bootstrap')
+local splits    = require('splits')
+local qt        = require('quit_timer')
+local wk        = require('which_key')
 
 local keys = {
     {
@@ -26,7 +26,7 @@ local keys = {
         key    = 'space',
         mods   = {'cmd', 'ctrl', 'alt', 'shift'},
         action = function()
-            caching.init()
+            bootstrap.init()
             splits.init()
             wk.launch_menu()
         end,

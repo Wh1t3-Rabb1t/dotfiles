@@ -8,9 +8,5 @@
 
 require('console').init()
 require('announcer').init()
-
-require('wifi').init()
-require('screenshots').init()
-
+require('watchers').init()
 require('hotkeys').init()
-

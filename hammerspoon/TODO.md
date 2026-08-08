@@ -29,17 +29,12 @@
 - Consider binding 'escape' to temporary_insert() and (cancel|exit) to the same
   key as launch_menu().
 
-- Consolidate 'screenshots' and 'wifi' inits into a new 'watchers' init module.
-
 - Might need to change window z-index level when exiting from fullsceen.
   (suppose we are moving the divider but the other forefront window is
   incompantible/untracked).
 
 - Create a simple (y/n) confirmation popup module for certain actions
   (i.e. quit app).
-
-- Update/refactor outdated modules like cmd_q. (integrate with central state,
-  only export certain fns etc).
 
 - Integrate popup (x, y) with screen state and temporary_insert popup x, y.
 

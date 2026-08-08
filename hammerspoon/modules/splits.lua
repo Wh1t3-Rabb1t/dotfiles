@@ -260,24 +260,6 @@ function M.snap()
     end
 end
 
-function M.degug_splits()
-    return function(done)
-        local screen = hs.mouse.getCurrentScreen()
-        local id     = screen:id()
-        local layout = state.screens[id].layout
-
-        local lhs = layout.left:application():name()
-        local rhs = layout.right:application():name()
-
-        hs.alert.show('lhs: ' .. lhs)
-        hs.alert.show('rhs: ' .. rhs)
-
-        -- for _, screen in ipairs(hs.screen.allScreens()) do
-        -- end
-
-        done()
-    end
-end
 
 -- Launch or focus target app
 --------------------------------------------------------------------------------
@@ -314,5 +296,45 @@ function M.launch_or_focus(app)
         hs.application.launchOrFocus(app)
     end
 end
+
+
+-- Init
+--------------------------------------------------------------------------------
+function M.init()
+    local win = hs.window.focusedWindow()
+    local app = win:application():name()
+
+    if cache.assets[app] then
+        local id     = win:screen():id()
+        local layout = state.screens[id].layout
+
+        assign_window(layout, nil, win)
+    end
+end
+
+
+function M.debug_splits()
+    return function(done)
+        local screen = hs.mouse.getCurrentScreen()
+        local id     = screen:id()
+        local layout = state.screens[id].layout
+
+        if layout.left then
+            local lhs = layout.left:application():name()
+            print('lhs: ' .. lhs)
+        end
+        if layout.right then
+            local rhs = layout.right:application():name()
+            print('rhs: ' .. rhs)
+        end
+        if layout.maximized then
+            local max = layout.maximized:application():name()
+            print('max: ' .. max)
+        end
+
+        done()
+    end
+end
+
 
 return M

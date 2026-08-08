@@ -65,7 +65,7 @@ M.apps = {
                 },
                 {
                     desc   = 'kitty',
-                    key    = 'v',
+                    key    = '.',
                     action = {
                         wk.hide_menu(),
                         splits.launch_or_focus('kitty'),
@@ -75,7 +75,7 @@ M.apps = {
                 },
                 {
                     desc   = 'Brave Browser',
-                    key    = 'b',
+                    key    = ',',
                     action = {
                         wk.hide_menu(),
                         splits.launch_or_focus('Brave Browser'),
@@ -83,11 +83,11 @@ M.apps = {
                         wk.show_menu()
                     },
                 },
-                -- {
-                --     desc   = 'degug splits',
-                --     key    = '.',
-                --     action = splits.degug_splits(),
-                -- },
+                {
+                    desc   = 'debug splits',
+                    key    = 'a',
+                    action = splits.debug_splits(),
+                },
             },
         },
 

@@ -1,16 +1,16 @@
 local M = {}
 
 local registry = require('registry')
-local state = require('state')
-local cache = require('cache')
+local state    = require('state')
+local cache    = require('cache')
 
 
 -- Check if tables have been initialized
 --------------------------------------------------------------------------------
-local function tbl_initialized(tbl)
+local function tbl(obj)
     local done = false
 
-    if type(tbl) == 'table' and next(tbl) ~= nil then
+    if type(obj) == 'table' and next(obj) ~= nil then
         done = true
     end
 
@@ -402,9 +402,7 @@ end
 --------------------------------------------------------------------------------
 function M.init()
     -- Init screen data if required
-    if not tbl_initialized(cache.screens) or
-       not tbl_initialized(state.screens)
-    then
+    if not tbl(cache.screens) or not tbl(state.screens) then
         for _, screen in ipairs(hs.screen.allScreens()) do
             local id          = screen:id()
             local screen_data = get_screen_data(screen)
@@ -412,12 +410,11 @@ function M.init()
             cache.screens[id] = screen_data.cache
             state.screens[id] = screen_data.state
         end
+
     end
 
     -- Init bindings/assets if required
-    if not tbl_initialized(cache.assets) or
-       not tbl_initialized(cache.lookup)
-    then
+    if not tbl(cache.assets) or not tbl(cache.lookup) then
         -- Main eventtap bindings
         for app, bindings in pairs(registry.apps) do
             if app == 'insert' then

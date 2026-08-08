@@ -1,6 +1,7 @@
 local M = {}
 
 local caching = require('caching')
+local splits  = require('splits')
 local qt      = require('quit_timer')
 local wk      = require('which_key')
 
@@ -26,6 +27,7 @@ local keys = {
         mods   = {'cmd', 'ctrl', 'alt', 'shift'},
         action = function()
             caching.init()
+            splits.init()
             wk.launch_menu()
         end,
     },

@@ -142,10 +142,20 @@ M.apps = {
                 },
                 {
                     desc   = 'Cycle open',
-                    key    = 'a',
+                    key    = 'p',
                     action = {
                         wk.hide_menu(),
                         windows.cycle_open(),
+                        wk.show_menu(),
+                    },
+                },
+                {
+                    desc   = 'Cycle app windows',
+                    key    = 'p',
+                    mods   = {'shift'},
+                    action = {
+                        wk.hide_menu(),
+                        windows.cycle_app_specific(),
                         wk.show_menu(),
                     },
                 },
@@ -178,12 +188,14 @@ M.apps = {
                 },
                 {
                     desc   = 'Opacity up',
-                    key    = 'r',
+                    key    = 'g',
+                    mods   = {'shift'},
                     action = wk.menu_opacity('up'),
                 },
                 {
                     desc   = 'Opacity down',
                     key    = 'f',
+                    mods   = {'shift'},
                     action = wk.menu_opacity('down'),
                 },
             },
@@ -228,6 +240,7 @@ M.apps = {
                 {
                     desc   = 'Print',
                     key    = 'p',
+                    mods   = {'shift'},
                     action = brightness.print_values(),
                 },
             },

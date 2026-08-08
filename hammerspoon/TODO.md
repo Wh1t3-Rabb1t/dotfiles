@@ -23,6 +23,10 @@
 
 ## Modules:
 
+- Sync popups.show() with the current screen (i.e. showing a popup for an app
+  with windows on each screen is inconsistent, sometimes appears on the
+  unfocused window).
+
 - Consider binding 'escape' to temporary_insert() and (cancel|exit) to the same
   key as launch_menu().
 

@@ -267,12 +267,60 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle focus between all open windows
+-- Cycle between all open windows
 --------------------------------------------------------------------------------
 function M.cycle_open()
     return function(done)
         local wins    = state.wins
         local focused = hs.window.focusedWindow()
+
+        local current_index
+
+        for i, win in ipairs(wins) do
+            if win:id() == focused:id() then
+                current_index = i
+                break
+            end
+        end
+
+        if not current_index then
+            done()
+            return
+        end
+
+        local next_index = current_index % #wins + 1
+        local next_win   = wins[next_index]
+
+        next_win:focus()
+
+        -- Update state
+        state.menu.curr_win = next_win
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Cycle between the currently focused apps open windows
+--------------------------------------------------------------------------------
+function M.cycle_app_specific()
+    return function(done)
+        local focused = hs.window.focusedWindow()
+
+        if not focused then
+            done()
+            return
+        end
+
+        local app    = focused:application():name()
+        local filter = hs.window.filter.new(app)
+        local wins   = filter:getWindows()
+
+        if #wins < 2 then
+            done()
+            return
+        end
 
         local current_index
 
@@ -346,6 +394,7 @@ function M.init()
     local win = hs.window.focusedWindow()
     local app = win:application():name()
 
+    -- Init layout if the focused window is compatible
     if cache.assets[app] then
         local id     = win:screen():id()
         local layout = state.screens[id].layout
@@ -353,6 +402,7 @@ function M.init()
         assign_window(layout, nil, win)
     end
 
+    -- Cache all (visible) open windows
     state.wins = hs.window.filter.default:getWindows()
 end
 

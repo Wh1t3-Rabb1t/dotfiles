@@ -23,6 +23,9 @@
 
 ## Modules:
 
+- Work on refactoring the registry structure to make bound keys easier to
+  read/manage.
+
 - Sync popups.show() with the current screen (i.e. showing a popup for an app
   with windows on each screen is inconsistent, sometimes appears on the
   unfocused window).

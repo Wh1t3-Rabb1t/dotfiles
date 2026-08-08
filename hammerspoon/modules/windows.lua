@@ -4,6 +4,34 @@ local state = require('state')
 local cache = require('cache')
 
 
+
+
+function M.debug_splits()
+    return function(done)
+        local screen = hs.mouse.getCurrentScreen()
+        local id     = screen:id()
+        local layout = state.screens[id].layout
+
+        if layout.left then
+            local lhs = layout.left:application():name()
+            print('id: ' .. id  .. '  lhs: ' .. lhs)
+        end
+        if layout.right then
+            local rhs = layout.right:application():name()
+            print('id: ' .. id  .. '  rhs: ' .. rhs)
+        end
+        if layout.maximized then
+            local max = layout.maximized:application():name()
+            print('id: ' .. id  .. '  max: ' .. max)
+        end
+
+        done()
+    end
+end
+
+
+
+
 -- Compare the dimensions of two frame objects
 --------------------------------------------------------------------------------
 local function frames_equal(a, b, tolerance)
@@ -405,33 +433,5 @@ function M.init()
     -- Cache all (visible) open windows
     state.wins = hs.window.filter.default:getWindows()
 end
-
-
-
-
-
-function M.debug_splits()
-    return function(done)
-        local screen = hs.mouse.getCurrentScreen()
-        local id     = screen:id()
-        local layout = state.screens[id].layout
-
-        if layout.left then
-            local lhs = layout.left:application():name()
-            print('id: ' .. id  .. '  lhs: ' .. lhs)
-        end
-        if layout.right then
-            local rhs = layout.right:application():name()
-            print('id: ' .. id  .. '  rhs: ' .. rhs)
-        end
-        if layout.maximized then
-            local max = layout.maximized:application():name()
-            print('id: ' .. id  .. '  max: ' .. max)
-        end
-
-        done()
-    end
-end
-
 
 return M

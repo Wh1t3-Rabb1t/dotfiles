@@ -23,6 +23,38 @@ local wk         = require('which_key')
 local windows    = require('windows')
 local wifi       = require('wifi')
 
+
+
+-- WIP: (functions to recreate M.apps table)
+--
+-- category('system')
+--
+-- sub_category('Launch or focus')
+-- bind({}, 'y', 'Firefox')
+-- bind({}, ',', 'Brave Browser')
+-- bind({}, '.', 'kitty')
+--
+-- sub_category('Windows')
+-- bind({}, 'o', 'Resize right')
+-- bind({}, 'u', 'Resize left')
+-- bind({}, 'g', 'Maximize')
+
+-- {
+--     desc = 'Resize right',
+--     key = 'o',
+--     action = { wk.hide_menu(), windows.resize('right'), windows.snap(), wk.show_menu() },
+-- },{
+--     desc = 'Resize left',
+--     key = 'u',
+--     action = { wk.hide_menu(), windows.resize('left'), windows.snap(), wk.show_menu() },
+-- },{
+--     desc = 'Maximize',
+--     key = 'g',
+--     action = { wk.hide_menu(), windows.maximize(), windows.snap(), wk.show_menu() },
+-- },
+
+
+
 M.apps = {
     -- These are temporarily bound to actions after the eventtap has been
     -- stopped, then unbound once the eventtap is restarted. Therefor they

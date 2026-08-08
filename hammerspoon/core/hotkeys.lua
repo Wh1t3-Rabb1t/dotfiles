@@ -1,7 +1,7 @@
 local M = {}
 
 local bootstrap = require('bootstrap')
-local splits    = require('splits')
+local windows   = require('windows')
 local qt        = require('quit_timer')
 local wk        = require('which_key')
 
@@ -27,7 +27,7 @@ local keys = {
         mods   = {'cmd', 'ctrl', 'alt', 'shift'},
         action = function()
             bootstrap.init()
-            splits.init()
+            windows.init()
             wk.launch_menu()
         end,
     },

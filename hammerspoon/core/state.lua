@@ -13,6 +13,11 @@ M.action_queue = {
     running = false,
 }
 
+M.wins = {
+    -- win = id,
+    -- ...
+}
+
 -- Data for each screen is populated on init
 M.screens = {
     -- [id] = {
@@ -23,6 +28,7 @@ M.screens = {
     --         right     = (win|false),
     --     },
     --     brightness = (1..100),
+    --     wins = { ... },
     -- }
 }
 

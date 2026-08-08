@@ -23,9 +23,6 @@
 
 ## Modules:
 
-- Need a special case for launching which-key menu with no windows open and
-  the Finder desktop focused.
-
 - Consider binding 'escape' to temporary_insert() and (cancel|exit) to the same
   key as launch_menu().
 
@@ -61,7 +58,7 @@
 
 ---
 
-## Misc
+## Misc:
 
 - Example canvas:
   ```sh

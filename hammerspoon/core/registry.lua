@@ -20,7 +20,7 @@ local M = {}
 
 local brightness = require('brightness')
 local wk         = require('which_key')
-local splits     = require('splits')
+local windows    = require('windows')
 local wifi       = require('wifi')
 
 M.apps = {
@@ -57,9 +57,9 @@ M.apps = {
                     key    = 'y',
                     action = {
                         wk.hide_menu(),
-                        splits.launch_or_focus('Firefox'),
-                        splits.snap(),
-                        wk.show_menu()
+                        windows.launch_or_focus('Firefox'),
+                        windows.snap(),
+                        wk.show_menu(),
                     },
                 },
                 {
@@ -67,9 +67,9 @@ M.apps = {
                     key    = '.',
                     action = {
                         wk.hide_menu(),
-                        splits.launch_or_focus('kitty'),
-                        splits.snap(),
-                        wk.show_menu()
+                        windows.launch_or_focus('kitty'),
+                        windows.snap(),
+                        wk.show_menu(),
                     },
                 },
                 {
@@ -77,30 +77,25 @@ M.apps = {
                     key    = ',',
                     action = {
                         wk.hide_menu(),
-                        splits.launch_or_focus('Brave Browser'),
-                        splits.snap(),
-                        wk.show_menu()
+                        windows.launch_or_focus('Brave Browser'),
+                        windows.snap(),
+                        wk.show_menu(),
                     },
-                },
-                {
-                    desc   = 'debug splits',
-                    key    = 'a',
-                    action = splits.debug_splits(),
                 },
             },
         },
 
-        -- Splits
+        -- Windows
         {
-            category = 'Splits',
+            category = 'Windows',
             bindings = {
                 {
                     desc   = 'Resize right',
                     key    = 'o',
                     action = {
                         wk.hide_menu(),
-                        splits.resize('right'),
-                        splits.snap(),
+                        windows.resize('right'),
+                        windows.snap(),
                         wk.show_menu()
                     },
                 },
@@ -109,8 +104,8 @@ M.apps = {
                     key    = 'u',
                     action = {
                         wk.hide_menu(),
-                        splits.resize('left'),
-                        splits.snap(),
+                        windows.resize('left'),
+                        windows.snap(),
                         wk.show_menu()
                     },
                 },
@@ -119,8 +114,8 @@ M.apps = {
                     key    = 'g',
                     action = {
                         wk.hide_menu(),
-                        splits.maximize(),
-                        splits.snap(),
+                        windows.maximize(),
+                        windows.snap(),
                         wk.show_menu()
                     },
                 },
@@ -130,8 +125,8 @@ M.apps = {
                     mods   = {'shift'},
                     action = {
                         wk.hide_menu(),
-                        splits.move_to_screen(),
-                        splits.snap(),
+                        windows.move_to_screen(),
+                        windows.snap(),
                         wk.show_menu()
                     },
                 },
@@ -140,9 +135,18 @@ M.apps = {
                     key    = 's',
                     action = {
                         wk.hide_menu(),
-                        splits.swap(),
-                        splits.snap(),
+                        windows.swap(),
+                        windows.snap(),
                         wk.show_menu()
+                    },
+                },
+                {
+                    desc   = 'Cycle open',
+                    key    = 'a',
+                    action = {
+                        wk.hide_menu(),
+                        windows.cycle_open(),
+                        wk.show_menu(),
                     },
                 },
             },
@@ -230,7 +234,7 @@ M.apps = {
         },
 
         -- Misc
-        {
+{
             category = 'Misc',
             bindings = {
                 {
@@ -248,6 +252,7 @@ M.apps = {
                 {
                     desc   = 'Toggle wifi on/off',
                     key    = 'w',
+                    mods   = {'shift'},
                     action = wifi.toggle_wifi(),
                 },
                 {

@@ -222,8 +222,8 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
-        local win  = state.menu.curr_win or hs.window.focusedWindow()
-        local curr_screen  = win:screen()
+        local win         = state.menu.curr_win or hs.window.focusedWindow()
+        local curr_screen = win:screen()
         local next_screen = curr_screen:next()
 
         local old_layout = state.screens[curr_screen:id()].layout
@@ -260,6 +260,41 @@ function M.snap()
                 layout.right:setFrame(frames.right, 0.02)
             end
         end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Cycle focus between all open windows
+--------------------------------------------------------------------------------
+function M.cycle_open()
+    return function(done)
+        local wins    = state.wins
+        local focused = hs.window.focusedWindow()
+
+        local current_index
+
+        for i, win in ipairs(wins) do
+            if win:id() == focused:id() then
+                current_index = i
+                break
+            end
+        end
+
+        if not current_index then
+            done()
+            return
+        end
+
+        local next_index = current_index % #wins + 1
+        local next_win   = wins[next_index]
+
+        next_win:focus()
+
+        -- Update state
+        state.menu.curr_win = next_win
 
         done()
     end
@@ -317,7 +352,12 @@ function M.init()
 
         assign_window(layout, nil, win)
     end
+
+    state.wins = hs.window.filter.default:getWindows()
 end
+
+
+
 
 
 function M.debug_splits()
@@ -328,15 +368,15 @@ function M.debug_splits()
 
         if layout.left then
             local lhs = layout.left:application():name()
-            print('lhs: ' .. lhs)
+            print('id: ' .. id  .. '  lhs: ' .. lhs)
         end
         if layout.right then
             local rhs = layout.right:application():name()
-            print('rhs: ' .. rhs)
+            print('id: ' .. id  .. '  rhs: ' .. rhs)
         end
         if layout.maximized then
             local max = layout.maximized:application():name()
-            print('max: ' .. max)
+            print('id: ' .. id  .. '  max: ' .. max)
         end
 
         done()

@@ -6,7 +6,7 @@ local cache = require('cache')
 
 
 
-function M.debug_splits()
+function M.debug_slots()
     return function(done)
         local screen = hs.mouse.getCurrentScreen()
         local id     = screen:id()
@@ -14,15 +14,15 @@ function M.debug_splits()
 
         if layout.left then
             local lhs = layout.left:application():name()
-            print('id: ' .. id  .. '  lhs: ' .. lhs)
+            hs.alert.show('id: ' .. id  .. '  lhs: ' .. lhs)
         end
         if layout.right then
             local rhs = layout.right:application():name()
-            print('id: ' .. id  .. '  rhs: ' .. rhs)
+            hs.alert.show('id: ' .. id  .. '  rhs: ' .. rhs)
         end
         if layout.maximized then
             local max = layout.maximized:application():name()
-            print('id: ' .. id  .. '  max: ' .. max)
+            hs.alert.show('id: ' .. id  .. '  max: ' .. max)
         end
 
         done()

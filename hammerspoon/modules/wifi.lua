@@ -1,7 +1,5 @@
 local M = {}
 
-local state = require('state')
-
 
 --------------------------------------------------------------------------------
 -- Toggle wifi (on/off)
@@ -27,10 +25,8 @@ end
 function M.toggle_wifi_on_screenlock(event)
     if event == hs.caffeinate.watcher.screensDidLock then
         hs.wifi.setPower(false)
-        state.system.wifi = false
     elseif event == hs.caffeinate.watcher.screensDidUnlock then
         hs.wifi.setPower(true)
-        state.system.wifi = true
     end
 end
 

@@ -23,6 +23,18 @@
 
 ## Modules:
 
+- Create a cycle app function that cycles calls between:
+      launch_or_focus('kitty')
+      and
+      launch_or_focus('Brave Browser')
+
+- Incorporate opposite direction for window/app specific window cycling.
+
+- Certain kitty actions are temporarily commented out in the registry.
+
+- Look into creating a window watcher that updates state/cache when windows
+  are opened/closed.
+
 - Work on refactoring the registry structure to make bound keys easier to
   read/manage.
 
@@ -33,7 +45,7 @@
 - Consider binding 'escape' to temporary_insert() and (cancel|exit) to the same
   key as launch_menu().
 
-- Might need to change window z-index level when exiting from fullsceen.
+- Might need to change window z-index level when exiting from fullscreen.
   (suppose we are moving the divider but the other forefront window is
   incompantible/untracked).
 

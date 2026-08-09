@@ -20,7 +20,7 @@ local M = {}
 
 local brightness = require('brightness')
 local wk         = require('which_key')
-local windows    = require('windows')
+local win        = require('windows')
 local wifi       = require('wifi')
 
 
@@ -39,20 +39,6 @@ local wifi       = require('wifi')
 -- bind({}, 'u', 'Resize left')
 -- bind({}, 'g', 'Maximize')
 
--- {
---     desc = 'Resize right',
---     key = 'o',
---     action = { wk.hide_menu(), windows.resize('right'), windows.snap(), wk.show_menu() },
--- },{
---     desc = 'Resize left',
---     key = 'u',
---     action = { wk.hide_menu(), windows.resize('left'), windows.snap(), wk.show_menu() },
--- },{
---     desc = 'Maximize',
---     key = 'g',
---     action = { wk.hide_menu(), windows.maximize(), windows.snap(), wk.show_menu() },
--- },
-
 
 
 M.apps = {
@@ -65,13 +51,11 @@ M.apps = {
         {
             category = 'Bound until invoked',
             bindings = {
-                {
-                    desc = 'Relaunch menu',
-                    key  = 'Enter',
+                {   -- return (enter)
+                    desc = 'Relaunch menu', key = 'Enter',
                 },
-                {
-                    desc = 'Cancel',
-                    key  = 'Escape',
+                {   -- escape
+                    desc = 'Cancel', key = 'Escape',
                 },
             },
         },
@@ -84,35 +68,20 @@ M.apps = {
         {
             category = 'Launch or focus',
             bindings = {
-                {
+                {   -- y
                     desc   = 'Firefox',
                     key    = 'y',
-                    action = {
-                        wk.hide_menu(),
-                        windows.launch_or_focus('Firefox'),
-                        windows.snap(),
-                        wk.show_menu(),
-                    },
+                    action = { wk.hide_menu(), win.launch_or_focus('Firefox'), win.snap(), wk.show_menu() },
                 },
-                {
+                {   -- .
                     desc   = 'kitty',
                     key    = '.',
-                    action = {
-                        wk.hide_menu(),
-                        windows.launch_or_focus('kitty'),
-                        windows.snap(),
-                        wk.show_menu(),
-                    },
+                    action = { wk.hide_menu(), win.launch_or_focus('kitty'), win.snap(), wk.show_menu() },
                 },
-                {
+                {   -- ,
                     desc   = 'Brave Browser',
                     key    = ',',
-                    action = {
-                        wk.hide_menu(),
-                        windows.launch_or_focus('Brave Browser'),
-                        windows.snap(),
-                        wk.show_menu(),
-                    },
+                    action = { wk.hide_menu(), win.launch_or_focus('Brave Browser'), win.snap(), wk.show_menu() },
                 },
             },
         },
@@ -121,75 +90,46 @@ M.apps = {
         {
             category = 'Windows',
             bindings = {
-                {
+                {   -- f
                     desc   = 'Resize right',
-                    key    = 'o',
-                    action = {
-                        wk.hide_menu(),
-                        windows.resize('right'),
-                        windows.snap(),
-                        wk.show_menu()
-                    },
+                    key    = 'f',
+                    action = { wk.hide_menu(), win.resize('right'), win.snap(), wk.show_menu() },
                 },
-                {
+                {   -- s
                     desc   = 'Resize left',
-                    key    = 'u',
-                    action = {
-                        wk.hide_menu(),
-                        windows.resize('left'),
-                        windows.snap(),
-                        wk.show_menu()
-                    },
+                    key    = 's',
+                    action = { wk.hide_menu(), win.resize('left'), win.snap(), wk.show_menu() },
                 },
-                {
+                {   -- g
                     desc   = 'Maximize',
                     key    = 'g',
-                    action = {
-                        wk.hide_menu(),
-                        windows.maximize(),
-                        windows.snap(),
-                        wk.show_menu()
-                    },
+                    action = { wk.hide_menu(), win.maximize(), win.snap(), wk.show_menu() },
                 },
-                {
-                    desc   = 'Move to next screen',
-                    key    = 'n',
-                    mods   = {'shift'},
-                    action = {
-                        wk.hide_menu(),
-                        windows.move_to_screen(),
-                        windows.snap(),
-                        wk.show_menu()
-                    },
-                },
-                {
+                {   -- G
                     desc   = 'Swap positions',
-                    key    = 's',
-                    action = {
-                        wk.hide_menu(),
-                        windows.swap(),
-                        windows.snap(),
-                        wk.show_menu()
-                    },
+                    key    = 'g', mods = { 'shift' },
+                    action = { wk.hide_menu(), win.swap(), win.snap(), wk.show_menu() },
                 },
-                {
+                {   -- p
+                    desc   = 'Move to next screen',
+                    key    = 'p',
+                    action = { wk.hide_menu(), win.move_to_screen(), win.snap(), wk.show_menu() },
+                },
+
+                {   -- _
+                    desc   = 'DEBUG',
+                    key    = '-', mods = { 'shift' },
+                    action = win.debug_slots(),
+                },
+                {   -- n
                     desc   = 'Cycle open',
-                    key    = 'p',
-                    action = {
-                        wk.hide_menu(),
-                        windows.cycle_open(),
-                        wk.show_menu(),
-                    },
+                    key    = 'n',
+                    action = { wk.hide_menu(), win.cycle_open(), wk.show_menu() },
                 },
-                {
+                {   -- N
                     desc   = 'Cycle app windows',
-                    key    = 'p',
-                    mods   = {'shift'},
-                    action = {
-                        wk.hide_menu(),
-                        windows.cycle_app_specific(),
-                        wk.show_menu(),
-                    },
+                    key    = 'n', mods = { 'shift' },
+                    action = { wk.hide_menu(), win.cycle_app_specific(), wk.show_menu() },
                 },
             },
         },
@@ -198,36 +138,24 @@ M.apps = {
         {
             category = 'Popups',
             bindings = {
-                {
+                {   -- R
                     desc   = 'Cycle positions',
-                    key    = 'r',
-                    mods   = {'shift'},
-                    action = {
-                        wk.hide_menu(),
-                        wk.cycle_corner_pos(),
-                        wk.show_menu()
-                    },
+                    key    = 'r', mods = { 'shift' },
+                    action = { wk.hide_menu(), wk.cycle_corner_pos(), wk.show_menu() },
                 },
-                {
+                {   -- A
                     desc   = 'Cycle menu stacking',
-                    key    = 'a',
-                    mods   = {'shift'},
-                    action = {
-                        wk.hide_menu(),
-                        wk.cycle_stacking(),
-                        wk.show_menu()
-                    },
+                    key    = 'a', mods = { 'shift' },
+                    action = { wk.hide_menu(), wk.cycle_stacking(), wk.show_menu() },
                 },
-                {
+                {   -- O
                     desc   = 'Opacity up',
-                    key    = 'g',
-                    mods   = {'shift'},
+                    key    = 'o', mods = { 'shift' },
                     action = wk.menu_opacity('up'),
                 },
-                {
+                {   -- U
                     desc   = 'Opacity down',
-                    key    = 'f',
-                    mods   = {'shift'},
+                    key    = 'u', mods = { 'shift' },
                     action = wk.menu_opacity('down'),
                 },
             },
@@ -237,20 +165,20 @@ M.apps = {
         {
             category = 'Clipboard',
             bindings = {
-                {
+                {   -- c
                     desc   = 'Copy',
                     key    = 'c',
                     action = wk.send_keys({'cmd'}, 'c'),
                 },
-                {
-                    desc   = 'Paste',
-                    key    = 'v',
-                    action = wk.send_keys({'cmd'}, 'v'),
-                },
-                {
+                {   -- x
                     desc   = 'Cut',
                     key    = 'x',
                     action = wk.send_keys({'cmd'}, 'x'),
+                },
+                {   -- v
+                    desc   = 'Paste',
+                    key    = 'v',
+                    action = wk.send_keys({'cmd'}, 'v'),
                 },
             },
         },
@@ -259,54 +187,47 @@ M.apps = {
         {
             category = 'Brightness',
             bindings = {
-                {
+                {   -- z
                     desc   = 'Up',
                     key    = 'z',
                     action = brightness.adjust('up'),
                 },
-                {
+                {   -- j
                     desc   = 'Down',
                     key    = 'j',
                     action = brightness.adjust('down'),
                 },
-                {
+                {   -- P
                     desc   = 'Print',
-                    key    = 'p',
-                    mods   = {'shift'},
+                    key    = 'p', mods = { 'shift' },
                     action = brightness.print_values(),
                 },
             },
         },
 
         -- Misc
-{
+        {
             category = 'Misc',
             bindings = {
-                {
+                {   -- Z
                     desc   = 'Zoom in',
-                    key    = 'z',
-                    mods   = {'shift'},
+                    key    = 'z', mods = { 'shift' },
                     action = wk.send_keys({'cmd'}, '='),
                 },
-                {
+                {   -- J
                     desc   = 'Zoom out',
-                    key    = 'j',
-                    mods   = {'shift'},
+                    key    = 'j', mods = { 'shift' },
                     action = wk.send_keys({'cmd'}, '-'),
                 },
-                {
+                {   -- W
                     desc   = 'Toggle wifi on/off',
-                    key    = 'w',
-                    mods   = {'shift'},
+                    key    = 'w', mods = { 'shift' },
                     action = wifi.toggle_wifi(),
                 },
-                {
+                {   -- escape
                     desc   = 'Cancel',
                     key    = 'escape',
-                    action = {
-                        wk.turn_eventtap('off'),
-                        wk.hide_menu()
-                    },
+                    action = { wk.turn_eventtap('off'), wk.hide_menu() },
                 },
             },
         },
@@ -319,12 +240,12 @@ M.apps = {
         {
             category = 'Scrollback',
             bindings = {
-                {
+                {   -- e
                     desc   = 'Page up',
                     key    = 'e',
                     action = wk.send_keys({'shift'}, 'pageup'),
                 },
-                {
+                {   -- d
                     desc   = 'Page down',
                     key    = 'd',
                     action = wk.send_keys({'shift'}, 'pagedown'),
@@ -336,71 +257,64 @@ M.apps = {
         {
             category = 'Splits',
             bindings = {
-                {
+                {   -- i
                     desc   = 'Up',
                     key    = 'i',
                     action = wk.send_keys({'ctrl', 'alt'}, 'up'),
                 },
-                {
+                {   -- k
                     desc   = 'Down',
                     key    = 'k',
                     action = wk.send_keys({'ctrl', 'alt'}, 'down'),
                 },
-                {
+                {   -- l
                     desc   = 'Right',
                     key    = 'l',
                     action = wk.send_keys({'ctrl', 'alt'}, 'right'),
                 },
-                {
+                {   -- t
                     desc   = 'Left',
                     key    = 't',
                     action = wk.send_keys({'ctrl', 'alt'}, 'left'),
                 },
-                {
+                {   -- I
                     desc   = 'Resize up',
-                    key    = 'i',
-                    mods   = {'shift'},
+                    key    = 'i', mods = { 'shift' },
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'up'),
                 },
-                {
+                {   -- K
                     desc   = 'Resize down',
-                    key    = 'k',
-                    mods   = {'shift'},
+                    key    = 'k', mods = { 'shift' },
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'down'),
                 },
-                {
+                {   -- L
                     desc   = 'Resize right',
-                    key    = 'l',
-                    mods   = {'shift'},
+                    key    = 'l', mods = { 'shift' },
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'right'),
                 },
-                {
+                {   -- T
                     desc   = 'Resize left',
-                    key    = 't',
-                    mods   = {'shift'},
+                    key    = 't', mods = { 'shift' },
                     action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'left'),
                 },
-                {
+                {   -- m
                     desc   = 'New split',
                     key    = 'm',
                     action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm'),
                 },
-                {
-                    desc   = 'New window',
-                    key    = 'm',
-                    mods   = {'shift'},
-                    action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm'),
-                },
-                {
+                -- {
+                --     desc   = 'New window',
+                --     key    = 'n', mods = { 'shift' },
+                --     action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm'),
+                -- },
+                {   -- M
                     desc   = 'Detach split',
-                    key    = 'n',
-                    mods   = {'shift'},
+                    key    = 'm', mods = { 'shift' },
                     action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'),
                 },
-                {
+                {   -- W
                     desc   = 'Close',
-                    key    = 'w',
-                    mods   = {'shift'},
+                    key    = 'w', mods = { 'shift' },
                     action = wk.send_keys({'cmd', 'shift'}, 'd'),
                 },
             },
@@ -410,21 +324,21 @@ M.apps = {
         {
             category = 'Tabs',
             bindings = {
-                {
+                {   -- ;
                     desc   = 'Next',
                     key    = ';',
                     action = wk.send_keys({'ctrl'}, 'end'),
                 },
-                {
+                {   -- h
                     desc   = 'Previous',
                     key    = 'h',
                     action = wk.send_keys({'ctrl'}, 'home'),
                 },
-                {
-                    desc   = 'Open',
-                    key    = 'n',
-                    action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'n'),
-                },
+                -- {
+                --     desc   = 'Open',
+                --     key    = 'n',
+                --     action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'n'),
+                -- },
             },
         },
 
@@ -432,13 +346,12 @@ M.apps = {
         {
             category = 'Layout',
             bindings = {
-                {
+                {   -- R
                     desc   = 'Rotate splits',
-                    key    = 'r',
-                    mods   = {'shift'},
+                    key    = 'r', mods = { 'shift' },
                     action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p'),
                 },
-                {
+                {   -- r
                     desc   = 'Next',
                     key    = 'r',
                     action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p'),
@@ -454,56 +367,45 @@ M.apps = {
         {
             category = 'Page',
             bindings = {
-                {
+                {   -- e
                     desc   = 'Up',
                     key    = 'e',
                     action = wk.send_keys({}, 'pageup'),
                 },
-                {
+                {   -- d
                     desc   = 'Down',
                     key    = 'd',
                     action = wk.send_keys({}, 'pagedown'),
                 },
-                {
+                {   -- E
                     desc   = 'Top',
-                    key    = 'e',
-                    mods   = {'shift'},
+                    key    = 'e', mods = { 'shift' },
                     action = wk.send_keys({}, 'home'),
                 },
-                {
+                {   -- D
                     desc   = 'Bottom',
-                    key    = 'd',
-                    mods   = {'shift'},
+                    key    = 'd', mods = { 'shift' },
                     action = wk.send_keys({}, 'end'),
                 },
-                {
+                {   -- F
                     desc   = 'Search for text',
-                    key    = 'f',
-                    mods   = {'shift'},
-                    action = {
-                        wk.send_keys({'cmd'}, 'f'),
-                        wk.turn_eventtap('off'),
-                        wk.hide_menu(),
-                        wk.temporary_insert()
-                    },
+                    key    = 'f', mods = { 'shift' },
+                    action = { wk.send_keys({'cmd'}, 'f'), wk.turn_eventtap('off'), wk.hide_menu(), wk.temporary_insert() },
                 },
-                {
+                {   -- R
                     desc   = 'Reload',
-                    key    = 'r',
-                    mods   = {'shift'},
+                    key    = 'r', mods = { 'shift' },
                     action = wk.send_keys({'cmd'}, 'r'),
                 },
-                {
-                    desc   = 'Back',
-                    key    = 'u',
-                    mods   = {'shift'},
-                    action = wk.send_keys({'cmd'}, '['),
-                },
-                {
+                {   -- O
                     desc   = 'Forward',
-                    key    = 'o',
-                    mods   = {'shift'},
+                    key    = 'o', mods = { 'shift' },
                     action = wk.send_keys({'cmd'}, ']'),
+                },
+                {   -- U
+                    desc   = 'Back',
+                    key    = 'u', mods = { 'shift' },
+                    action = wk.send_keys({'cmd'}, '['),
                 },
             },
         },
@@ -512,50 +414,42 @@ M.apps = {
         {
             category = 'Tabs',
             bindings = {
-                {
+                {   -- h
                     desc   = 'Left',
                     key    = 'h',
                     action = wk.send_keys({'ctrl'}, 'pageup'),
                 },
-                {
+                {   -- ;
                     desc   = 'Right',
                     key    = ';',
                     action = wk.send_keys({'ctrl'}, 'pagedown'),
                 },
-                {
+                {   -- H
                     desc   = 'Swap with left',
-                    key    = 'h',
-                    mods   = {'shift'},
+                    key    = 'h', mods = { 'shift' },
                     action = wk.send_keys({'ctrl', 'shift'}, 'pageup'),
                 },
-                {
+                {   -- :
                     desc   = 'Swap with right',
-                    key    = ';',
-                    mods   = {'shift'},
+                    key    = ';', mods = { 'shift' },
                     action = wk.send_keys({'ctrl', 'shift'}, 'pagedown'),
                 },
-                {
+                {   -- /
                     desc   = 'Search tabs',
                     key    = '/',
-                    action = {
-                        wk.send_keys({'cmd', 'shift'}, 'a'),
-                        wk.turn_eventtap('off'),
-                        wk.hide_menu(),
-                        wk.temporary_insert()
-                    },
+                    action = { wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_eventtap('off'), wk.hide_menu(), wk.temporary_insert() },
                 },
-                {
+                {   -- m
                     desc   = 'Open',
                     key    = 'm',
                     action = wk.send_keys({'cmd'}, 't'),
                 },
-                {
+                {   -- M
                     desc   = 'Re-open closed',
-                    key    = 'm',
-                    mods   = {'shift'},
+                    key    = 'm', mods = { 'shift' },
                     action = wk.send_keys({'cmd', 'shift'}, 't'),
                 },
-                {
+                {   -- w
                     desc   = 'Close',
                     key    = 'w',
                     action = wk.send_keys({'cmd'}, 'w'),
@@ -567,25 +461,25 @@ M.apps = {
         {
             category = 'Navigation',
             bindings = {
-                {
+                {   -- i
                     desc   = 'Up arrow',
                     key    = 'i',
                     action = wk.send_keys({}, 'up'),
                 },
-                {
+                {   -- k
                     desc   = 'Down arrow',
                     key    = 'k',
                     action = wk.send_keys({}, 'down'),
                 },
-                {
-                    desc   = 'Focus prev',
-                    key    = 't',
-                    action = wk.send_keys({'shift'}, 'tab'),
-                },
-                {
+                {   -- l
                     desc   = 'Focus next',
                     key    = 'l',
                     action = wk.send_keys({}, 'tab'),
+                },
+                {   -- t
+                    desc   = 'Focus prev',
+                    key    = 't',
+                    action = wk.send_keys({'shift'}, 'tab'),
                 },
             },
         },
@@ -594,29 +488,22 @@ M.apps = {
         {
             category = 'Misc',
             bindings = {
-                {
+                {   -- '
                     desc   = 'Focus searchbar',
                     key    = "'",
-                    action = {
-                        wk.send_keys({'cmd'}, 'l'),
-                        wk.turn_eventtap('off'),
-                        wk.hide_menu(),
-                        wk.temporary_insert()
-                    },
+                    action = { wk.send_keys({'cmd'}, 'l'), wk.turn_eventtap('off'), wk.hide_menu(), wk.temporary_insert() },
                 },
-                {
+                {   -- B
                     desc   = 'Add bookmark',
-                    key    = 'b',
-                    mods   = {'shift'},
+                    key    = 'b', mods = { 'shift' },
                     action = wk.send_keys({'cmd'}, 'd'),
                 },
-                {
+                {   -- P
                     desc   = 'Open history',
-                    key    = 'p',
-                    mods   = {'shift'},
+                    key    = 'p', mods = { 'shift' },
                     action = wk.send_keys({'cmd'}, 'h'),
                 },
-                {
+                {   -- return (enter)
                     desc   = 'Confirm',
                     key    = 'return',
                     action = wk.send_keys({}, 'return'),

@@ -23,17 +23,18 @@
 
 ## Modules:
 
-- Create a cycle app function that cycles calls between:
-      launch_or_focus('kitty')
-      and
-      launch_or_focus('Brave Browser')
+- Restructure state.wins and state.app_wins into one table 'wins.all' and
+  'wins[app]'. Also restructure such that each table contains its win idx.
 
-- Incorporate opposite direction for window/app specific window cycling.
-
-- Certain kitty actions are temporarily commented out in the registry.
+- Set up window open/closed fns that update state.wins when windows are
+  opened, closed, focused (through either kb, or click).
 
 - Look into creating a window watcher that updates state/cache when windows
   are opened/closed.
+
+- Research automatically setting up 'brave://settings/system/shortcuts'.
+
+- Certain kitty actions are temporarily commented out in the registry.
 
 - Work on refactoring the registry structure to make bound keys easier to
   read/manage.

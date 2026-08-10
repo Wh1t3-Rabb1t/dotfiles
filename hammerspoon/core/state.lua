@@ -1,11 +1,13 @@
 local M = {}
 
 M.menu = {
-    tap_active = false,  -- (true|false)
-    curr_win   = false,  -- (win|false)
-    corner     = 'bottom_right',
-    stack      = 'horizontal',
-    opacity    = 1,
+    tap_active  = false,  -- (true|false)
+    curr_win    = false,  -- (win|false)
+    corner      = 'bottom_right',
+    stack       = 'horizontal',
+    opacity     = 1,
+    win_idx = 1,
+    -- app_win_idx = 1,  -- need one for each app
 }
 
 M.action_queue = {
@@ -13,7 +15,19 @@ M.action_queue = {
     running = false,
 }
 
+M.app_wins = {
+    -- ['Brave Browser'] = { ... },
+    -- ['kitty'] = { ... },
+    -- ...
+}
+
 M.wins = {
+    -- win = id,
+    -- ...
+}
+
+M.win_idx = {
+    -- main = 1,
     -- win = id,
     -- ...
 }

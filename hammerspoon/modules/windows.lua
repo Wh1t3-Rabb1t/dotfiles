@@ -165,6 +165,23 @@ local function assign_window(layout, existing, win)
 end
 
 
+-- Iterate index of focused windows
+--------------------------------------------------------------------------------
+local function iterate_window_index(wins, idx, direction)
+    local count = #wins or 0
+
+    if direction == 'next' then
+        idx = idx % count + 1
+    elseif direction == 'prev' then
+        idx = (idx - 2) % count + 1
+    else
+        return false
+    end
+
+    return idx
+end
+
+
 --------------------------------------------------------------------------------
 -- Maximize focused window
 --------------------------------------------------------------------------------
@@ -295,89 +312,6 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between all open windows
---------------------------------------------------------------------------------
-function M.cycle_open()
-    return function(done)
-        local wins    = state.wins
-        local focused = hs.window.focusedWindow()
-
-        local current_index
-
-        for i, win in ipairs(wins) do
-            if win:id() == focused:id() then
-                current_index = i
-                break
-            end
-        end
-
-        if not current_index then
-            done()
-            return
-        end
-
-        local next_index = current_index % #wins + 1
-        local next_win   = wins[next_index]
-
-        next_win:focus()
-
-        -- Update state
-        state.menu.curr_win = next_win
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Cycle between the currently focused apps open windows
---------------------------------------------------------------------------------
-function M.cycle_app_specific()
-    return function(done)
-        local focused = hs.window.focusedWindow()
-
-        if not focused then
-            done()
-            return
-        end
-
-        local app    = focused:application():name()
-        local filter = hs.window.filter.new(app)
-        local wins   = filter:getWindows()
-
-        if #wins < 2 then
-            done()
-            return
-        end
-
-        local current_index
-
-        for i, win in ipairs(wins) do
-            if win:id() == focused:id() then
-                current_index = i
-                break
-            end
-        end
-
-        if not current_index then
-            done()
-            return
-        end
-
-        local next_index = current_index % #wins + 1
-        local next_win   = wins[next_index]
-
-        next_win:focus()
-
-        -- Update state
-        state.menu.curr_win = next_win
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
 -- Launch or focus target app
 --------------------------------------------------------------------------------
 function M.launch_or_focus(app)
@@ -416,6 +350,152 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Cycle between all open windows
+--------------------------------------------------------------------------------
+function M.cycle_open(direction)
+    return function(done)
+        local wins     = state.wins
+        local curr_idx = state.win_idx.main
+        local idx      = iterate_window_index(wins, curr_idx, direction)
+
+        -- Update state and focus new window
+        if idx then
+            local new_win = wins[idx]
+
+            state.win_idx.main = idx
+            state.menu.curr_win    = new_win
+
+            new_win:focus()
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Cycle between the currently focused apps open windows
+--------------------------------------------------------------------------------
+function M.cycle_app_specific(direction)
+    return function(done)
+        local focused = state.menu.curr_win
+
+        if not focused then
+            done()
+            return
+        end
+
+        local app  = focused:application():name()
+        local wins = state.app_wins[app]
+
+        if #wins < 2 then
+            done()
+            return
+        end
+
+        local curr_idx = state.win_idx[app]
+        local idx      = iterate_window_index(wins, curr_idx, direction)
+
+        -- Update state and focus new window
+        if idx then
+            local new_win = wins[idx]
+
+            state.win_idx[app]  = idx
+            state.menu.curr_win = new_win
+
+            new_win:focus()
+        end
+
+        -- -- DEBUG
+        -- print(
+        --     "\n",
+        --     "idx:", curr_idx,
+        --     "→", idx,
+        --     "\n",
+        --     "wins:", #wins,
+        --     "\n",
+        --     "focused:", focused:id(),
+        --     "\n",
+        --     "target:", wins[idx]:id(),
+        --     "\n",
+        --     "state:", state.menu.curr_win and state.menu.curr_win:id()
+        -- )
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Cycle focus between main apps (the twin cats)
+--------------------------------------------------------------------------------
+function M.cycle_main_apps()
+    return function(done)
+        local existing = hs.window.focusedWindow()
+
+        local target_app = 'kitty'
+
+        if existing and existing:application():name() == 'kitty' then
+            target_app = 'Brave Browser'
+        end
+
+        local wf = hs.window.filter.new(target_app)
+
+        wf:subscribe(
+            hs.window.filter.windowFocused,
+            function(target_win)
+                wf:unsubscribeAll()
+                wf = nil
+
+                local id     = target_win:screen():id()
+                local layout = state.screens[id].layout
+
+                assign_window(layout, existing, target_win)
+
+                state.menu.curr_win = target_win
+
+                done()
+            end
+        )
+
+        hs.application.launchOrFocus(target_app)
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Get all open windows
+--------------------------------------------------------------------------------
+function M.get_open_windows()
+    local open_apps = hs.application.runningApplications()
+    local all_wins  = {}
+    local app_wins  = {}
+
+    for _, app in ipairs(open_apps) do
+        local name = app:name()
+        local wins = {}
+
+        for _, win in ipairs(app:allWindows()) do
+            if win:isStandard() and win:isVisible() then
+                table.insert(all_wins, win)
+                table.insert(wins, win)
+            end
+        end
+
+        if #wins > 0 then
+            app_wins[name]      = wins
+            state.win_idx[name] = 1
+        end
+    end
+
+    state.wins     = all_wins
+    state.app_wins = app_wins
+
+    state.win_idx.main = 1
+end
+
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
@@ -430,8 +510,7 @@ function M.init()
         assign_window(layout, nil, win)
     end
 
-    -- Cache all (visible) open windows
-    state.wins = hs.window.filter.default:getWindows()
+    M.get_open_windows()
 end
 
 return M

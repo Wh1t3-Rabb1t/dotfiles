@@ -234,7 +234,7 @@ end
 --------------------------------------------------------------------------------
 -- Set poppup opacity
 --------------------------------------------------------------------------------
-function M.menu_opacity(direction, target_win)
+function M.opacity(direction, target_win)
     return function(done)
         local win     = target_win or state.menu.curr_win
         local app     = win:application():name()
@@ -297,7 +297,7 @@ function M.temporary_insert()
             end_insert_mode(hotkeys, popup)
 
             hs.eventtap.keyStroke({}, 'return')
-            M.launch_menu()
+            M.launch()
         end)
 
         hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
@@ -312,7 +312,7 @@ end
 --------------------------------------------------------------------------------
 -- Hide popups
 --------------------------------------------------------------------------------
-function M.hide_menu()
+function M.hide()
     return function(done)
         local win = state.menu.curr_win or hs.window.focusedWindow()
         local app = win:application():name()
@@ -331,7 +331,7 @@ end
 --------------------------------------------------------------------------------
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show_menu(target_win, target_corner, target_stack)
+function M.show(target_win, target_corner, target_stack)
     return function(done)
         local win    = target_win    or state.menu.curr_win
         local corner = target_corner or state.menu.corner
@@ -358,7 +358,7 @@ end
 --------------------------------------------------------------------------------
 -- Launch menu
 --------------------------------------------------------------------------------
-function M.launch_menu()
+function M.launch()
     if state.menu.tap_active then
         return
     end
@@ -366,7 +366,7 @@ function M.launch_menu()
     state.menu.tap_active = true
     cache.assets.tap:start()
 
-    local init_fn = M.show_menu(hs.window.focusedWindow())
+    local init_fn = M.show(hs.window.focusedWindow())
 
     init_fn(function()
         -- Call done()

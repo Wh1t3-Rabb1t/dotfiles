@@ -24,23 +24,6 @@ local win        = require('windows')
 local wifi       = require('wifi')
 
 
-
--- WIP: (functions to recreate M.apps table)
---
--- category('system')
---
--- sub_category('Launch or focus')
--- bind({}, 'y', 'Firefox')
--- bind({}, ',', 'Brave Browser')
--- bind({}, '.', 'kitty')
---
--- sub_category('Windows')
--- bind({}, 'o', 'Resize right')
--- bind({}, 'u', 'Resize left')
--- bind({}, 'g', 'Maximize')
-
-
-
 M.apps = {
     -- These are temporarily bound to actions after the eventtap has been
     -- stopped, then unbound once the eventtap is restarted. Therefor they
@@ -52,10 +35,12 @@ M.apps = {
             category = 'Bound until invoked',
             bindings = {
                 {   -- return (enter)
-                    desc = 'Relaunch menu', key = 'Enter',
+                    desc = 'Relaunch menu',
+                    key = 'Enter',
                 },
                 {   -- escape
-                    desc = 'Cancel', key = 'Escape',
+                    desc = 'Cancel',
+                    key = 'Escape',
                 },
             },
         },
@@ -71,18 +56,18 @@ M.apps = {
                 {   -- y
                     desc   = 'Firefox',
                     key    = 'y',
-                    action = { wk.hide_menu(), win.launch_or_focus('Firefox'), win.snap(), wk.show_menu() },
+                    action = { wk.hide(), win.launch_or_focus('Firefox'), win.snap(), wk.show() },
                 },
-                {   -- .
-                    desc   = 'kitty',
-                    key    = '.',
-                    action = { wk.hide_menu(), win.launch_or_focus('kitty'), win.snap(), wk.show_menu() },
-                },
-                {   -- ,
-                    desc   = 'Brave Browser',
-                    key    = ',',
-                    action = { wk.hide_menu(), win.launch_or_focus('Brave Browser'), win.snap(), wk.show_menu() },
-                },
+                -- {   -- .
+                --     desc   = 'kitty',
+                --     key    = '.',
+                --     action = { wk.hide(), win.launch_or_focus('kitty'), win.snap(), wk.show() },
+                -- },
+                -- {   -- ,
+                --     desc   = 'Brave Browser',
+                --     key    = ',',
+                --     action = { wk.hide(), win.launch_or_focus('Brave Browser'), win.snap(), wk.show() },
+                -- },
             },
         },
 
@@ -90,46 +75,65 @@ M.apps = {
         {
             category = 'Windows',
             bindings = {
+                -- {   -- _
+                --     desc   = 'DEBUG',
+                --     key    = '-', mods = { 'shift' },
+                --     action = win.debug_slots(),
+                -- },
+
+                {   -- _
+                    desc   = 'Cycle cat apps',
+                    key    = '-', mods = { 'shift' },
+                    action = { wk.hide(), win.cycle_main_apps(), wk.show() },
+                },
+
+                {   -- n
+                    desc   = 'Cycle next open',
+                    key    = 'n',
+                    action = { wk.hide(), win.cycle_open('next'), wk.show() },
+                },
+                {   -- N
+                    desc   = 'Cycle prev open',
+                    key    = 'n', mods = { 'shift' },
+                    action = { wk.hide(), win.cycle_open('prev'), wk.show() },
+                },
+
+                {   -- o
+                    desc   = 'Next app window',
+                    key    = 'o',
+                    action = { wk.hide(), win.cycle_app_specific('next'), wk.show() },
+                },
+                {   -- u
+                    desc   = 'Prev app window',
+                    key    = 'u',
+                    action = { wk.hide(), win.cycle_app_specific('prev'), wk.show() },
+                },
+
+
                 {   -- f
                     desc   = 'Resize right',
                     key    = 'f',
-                    action = { wk.hide_menu(), win.resize('right'), win.snap(), wk.show_menu() },
+                    action = { wk.hide(), win.resize('right'), win.snap(), wk.show() },
                 },
                 {   -- s
                     desc   = 'Resize left',
                     key    = 's',
-                    action = { wk.hide_menu(), win.resize('left'), win.snap(), wk.show_menu() },
+                    action = { wk.hide(), win.resize('left'), win.snap(), wk.show() },
                 },
                 {   -- g
                     desc   = 'Maximize',
                     key    = 'g',
-                    action = { wk.hide_menu(), win.maximize(), win.snap(), wk.show_menu() },
+                    action = { wk.hide(), win.maximize(), win.snap(), wk.show() },
                 },
                 {   -- G
                     desc   = 'Swap positions',
                     key    = 'g', mods = { 'shift' },
-                    action = { wk.hide_menu(), win.swap(), win.snap(), wk.show_menu() },
+                    action = { wk.hide(), win.swap(), win.snap(), wk.show() },
                 },
                 {   -- p
                     desc   = 'Move to next screen',
                     key    = 'p',
-                    action = { wk.hide_menu(), win.move_to_screen(), win.snap(), wk.show_menu() },
-                },
-
-                {   -- _
-                    desc   = 'DEBUG',
-                    key    = '-', mods = { 'shift' },
-                    action = win.debug_slots(),
-                },
-                {   -- n
-                    desc   = 'Cycle open',
-                    key    = 'n',
-                    action = { wk.hide_menu(), win.cycle_open(), wk.show_menu() },
-                },
-                {   -- N
-                    desc   = 'Cycle app windows',
-                    key    = 'n', mods = { 'shift' },
-                    action = { wk.hide_menu(), win.cycle_app_specific(), wk.show_menu() },
+                    action = { wk.hide(), win.move_to_screen(), win.snap(), wk.show() },
                 },
             },
         },
@@ -141,22 +145,22 @@ M.apps = {
                 {   -- R
                     desc   = 'Cycle positions',
                     key    = 'r', mods = { 'shift' },
-                    action = { wk.hide_menu(), wk.cycle_corner_pos(), wk.show_menu() },
+                    action = { wk.hide(), wk.cycle_corner_pos(), wk.show() },
                 },
                 {   -- A
                     desc   = 'Cycle menu stacking',
                     key    = 'a', mods = { 'shift' },
-                    action = { wk.hide_menu(), wk.cycle_stacking(), wk.show_menu() },
+                    action = { wk.hide(), wk.cycle_stacking(), wk.show() },
                 },
                 {   -- O
                     desc   = 'Opacity up',
                     key    = 'o', mods = { 'shift' },
-                    action = wk.menu_opacity('up'),
+                    action = wk.opacity('up'),
                 },
                 {   -- U
                     desc   = 'Opacity down',
                     key    = 'u', mods = { 'shift' },
-                    action = wk.menu_opacity('down'),
+                    action = wk.opacity('down'),
                 },
             },
         },
@@ -227,7 +231,7 @@ M.apps = {
                 {   -- escape
                     desc   = 'Cancel',
                     key    = 'escape',
-                    action = { wk.turn_eventtap('off'), wk.hide_menu() },
+                    action = { wk.turn_eventtap('off'), wk.hide() },
                 },
             },
         },
@@ -361,6 +365,8 @@ M.apps = {
     },
 
     ----------------------------------------------------------------------------
+    -- brave://settings/system/shortcuts
+    --
     ['Brave Browser'] = {
     ----------------------------------------------------------------------------
         -- Page
@@ -390,7 +396,7 @@ M.apps = {
                 {   -- F
                     desc   = 'Search for text',
                     key    = 'f', mods = { 'shift' },
-                    action = { wk.send_keys({'cmd'}, 'f'), wk.turn_eventtap('off'), wk.hide_menu(), wk.temporary_insert() },
+                    action = { wk.send_keys({'cmd'}, 'f'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
                 },
                 {   -- R
                     desc   = 'Reload',
@@ -437,7 +443,7 @@ M.apps = {
                 {   -- /
                     desc   = 'Search tabs',
                     key    = '/',
-                    action = { wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_eventtap('off'), wk.hide_menu(), wk.temporary_insert() },
+                    action = { wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
                 },
                 {   -- m
                     desc   = 'Open',
@@ -491,7 +497,7 @@ M.apps = {
                 {   -- '
                     desc   = 'Focus searchbar',
                     key    = "'",
-                    action = { wk.send_keys({'cmd'}, 'l'), wk.turn_eventtap('off'), wk.hide_menu(), wk.temporary_insert() },
+                    action = { wk.send_keys({'cmd'}, 'l'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
                 },
                 {   -- B
                     desc   = 'Add bookmark',

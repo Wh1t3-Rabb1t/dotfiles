@@ -8,27 +8,24 @@ local wk        = require('which_key')
 local keys = {
     {
         -- Hot reload hammerspoon
-        key       = 'r',
-        mods      = {'ctrl', 'shift'},
+        key       = 'r', mods = { 'ctrl', 'shift' },
         action    = function()
             hs.reload()
         end,
     },
     {
         -- Quit app timer
-        key       = 'q',
-        mods      = {'cmd'},
+        key       = 'q', mods = { 'cmd' },
         action    = qt.start_cmd_q,
         on_key_up = qt.stop_cmd_q,
     },
     {
         -- Which key launcher
-        key    = 'space',
-        mods   = {'cmd', 'ctrl', 'alt', 'shift'},
+        key    = 'space', mods = { 'cmd', 'ctrl', 'alt', 'shift' },
         action = function()
             bootstrap.init()
             windows.init()
-            wk.launch_menu()
+            wk.launch()
         end,
     },
 }

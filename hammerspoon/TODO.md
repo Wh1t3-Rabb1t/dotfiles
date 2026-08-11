@@ -13,6 +13,9 @@
 
 ## BUGS:
 
+- When calling windows.init() with the desktop open; it causes an hs crash
+  (attempted to index nil val 'win').
+
 - When unplugging or plugging in a new display, it breaks the coords of the
   shader that was on the original display.
 
@@ -23,7 +26,13 @@
 
 ## Modules:
 
-- Restructure state.wins and state.app_wins into one table 'wins.all' and
+- Add a rectangle border around the currently focused window. (create and
+  destroy as window changes).
+
+- Add action that dispays each open window with a number attached that can
+  be temporarily bound to jump to said window (i.e. press 2 to jump to win #2).
+
+- Restructure 'state.wins' and 'state.app_wins' into one table 'wins.all' and
   'wins[app]'. Also restructure such that each table contains its win idx.
 
 - Set up window open/closed fns that update state.wins when windows are

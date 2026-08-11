@@ -314,7 +314,7 @@ end
 --------------------------------------------------------------------------------
 function M.hide()
     return function(done)
-        local win = state.menu.curr_win or hs.window.focusedWindow()
+        local win = state.menu.curr_win
         local app = win:application():name()
 
         if cache.assets[app] then
@@ -331,11 +331,11 @@ end
 --------------------------------------------------------------------------------
 -- Show popups
 --------------------------------------------------------------------------------
-function M.show(target_win, target_corner, target_stack)
+function M.show()
     return function(done)
-        local win    = target_win    or state.menu.curr_win
-        local corner = target_corner or state.menu.corner
-        local stack  = target_stack  or state.menu.stack
+        local win    = state.menu.curr_win
+        local corner = state.menu.corner
+        local stack  = state.menu.stack
 
         local opacity = state.menu.opacity
         local popups  = get_current(win)
@@ -346,9 +346,6 @@ function M.show(target_win, target_corner, target_stack)
             v.popup:alpha(opacity)
             v.popup:show(0.15)
         end
-
-        -- Update state with focused window
-        state.menu.curr_win = win
 
         done()
     end
@@ -363,14 +360,19 @@ function M.launch()
         return
     end
 
-    state.menu.tap_active = true
-    cache.assets.tap:start()
+    local focused = hs.window.focusedWindow()
 
-    local init_fn = M.show(hs.window.focusedWindow())
+    if focused then
+        state.menu.curr_win   = focused
+        state.menu.tap_active = true
+        cache.assets.tap:start()
 
-    init_fn(function()
-        -- Call done()
-    end)
+        local init_fn = M.show()
+
+        init_fn(function()
+            -- Call done()
+        end)
+    end
 end
 
 return M

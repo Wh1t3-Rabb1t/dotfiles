@@ -23,7 +23,6 @@ local wk         = require('which_key')
 local win        = require('windows')
 local wifi       = require('wifi')
 
-
 M.apps = {
     -- These are temporarily bound to actions after the eventtap has been
     -- stopped, then unbound once the eventtap is restarted. Therefor they
@@ -36,11 +35,11 @@ M.apps = {
             bindings = {
                 {   -- return (enter)
                     desc = 'Relaunch menu',
-                    key = 'Enter',
+                    key  = 'Enter',
                 },
                 {   -- escape
                     desc = 'Cancel',
-                    key = 'Escape',
+                    key  = 'Escape',
                 },
             },
         },

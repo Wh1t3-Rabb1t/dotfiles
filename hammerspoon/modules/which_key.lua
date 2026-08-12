@@ -234,9 +234,9 @@ end
 --------------------------------------------------------------------------------
 -- Set poppup opacity
 --------------------------------------------------------------------------------
-function M.opacity(direction, target_win)
+function M.opacity(direction)
     return function(done)
-        local win     = target_win or state.menu.curr_win
+        local win     = state.menu.curr_win
         local app     = win:application():name()
         local opacity = state.menu.opacity
 
@@ -269,7 +269,7 @@ end
 --------------------------------------------------------------------------------
 function M.temporary_insert()
     return function(done)
-        local win     = state.menu.curr_win or hs.window.focusedWindow()
+        local win     = state.menu.curr_win
         local frame   = win:frame()
         local opacity = state.menu.opacity
         local popup   = cache.assets.insert.popup

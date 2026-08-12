@@ -216,7 +216,7 @@ end
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
-        local win    = state.menu.curr_win or hs.window.focusedWindow()
+        local win    = state.menu.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
 
@@ -233,7 +233,7 @@ end
 function M.resize(direction, step_val)
     return function(done)
         local step    = step_val or 0.01
-        local win     = state.menu.curr_win or hs.window.focusedWindow()
+        local win     = state.menu.curr_win
         local id      = win:screen():id()
         local screen  = state.screens[id]
         local divider = screen.divider
@@ -277,7 +277,7 @@ end
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
-        local win    = state.menu.curr_win or hs.window.focusedWindow()
+        local win    = state.menu.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
         local lhs    = layout.left
@@ -296,7 +296,7 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
-        local win         = state.menu.curr_win or hs.window.focusedWindow()
+        local win         = state.menu.curr_win
         local curr_screen = win:screen()
         local next_screen = curr_screen:next()
 
@@ -445,12 +445,12 @@ function M.cycle_app_specific(direction)
 
         -- Update state and focus new window
         if new_idx then
-            local new_win = wins[new_idx]
+            local win = wins[new_idx]
 
             state.wins[app].idx = new_idx
-            state.menu.curr_win = new_win
+            state.menu.curr_win = win
 
-            new_win:focus()
+            win:focus()
         end
 
         done()
@@ -469,12 +469,12 @@ function M.cycle_open(direction)
 
         -- Update state and focus new window
         if new_idx then
-            local new_win = wins[new_idx]
+            local win = wins[new_idx]
 
             state.wins.all.idx  = new_idx
-            state.menu.curr_win = new_win
+            state.menu.curr_win = win
 
-            new_win:focus()
+            win:focus()
         end
 
         done()

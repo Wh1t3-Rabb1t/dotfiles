@@ -1,21 +1,9 @@
 local M = {}
 
 local registry = require('registry')
+local util     = require('util')
 local state    = require('state')
 local cache    = require('cache')
-
-
--- Check if tables have been initialized
---------------------------------------------------------------------------------
-local function tbl(obj)
-    local done = false
-
-    if type(obj) == 'table' and next(obj) ~= nil then
-        done = true
-    end
-
-    return done
-end
 
 
 -- Normalize bindings with modifiers
@@ -92,69 +80,6 @@ local function get_popup_frame(text)
     }
 
     return frame
-end
-
-
--- Calculate the available screen (total screen frame minus the dock)
---------------------------------------------------------------------------------
-local function get_usable_frame(screen)
-    local full   = screen:fullFrame()
-    local usable = screen:frame()
-
-    local frame = {
-        x = full.x,
-        y = usable.y,
-        w = full.w,
-        h = full.h - (usable.y - full.y),
-    }
-
-    return frame
-end
-
-
--- Create overlay
---------------------------------------------------------------------------------
-local function create_overlay(screen)
-    local frame   = screen:fullFrame()
-    local overlay = hs.canvas.new(frame)
-
-    overlay:appendElements({
-        type      = 'rectangle',
-        action    = 'fill',
-        fillColor = {
-            red   = 0,
-            green = 0,
-            blue  = 0,
-            alpha = 0,
-        }
-    })
-    overlay:level(hs.canvas.windowLevels.overlay)
-    overlay:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
-
-    return overlay
-end
-
-
--- Init data for all connected screens
---------------------------------------------------------------------------------
-local function get_screen_data(screen)
-    local screen_data = {
-        cache = {
-            overlay = create_overlay(screen),
-            frame   = get_usable_frame(screen),
-        },
-        state = {
-            brightness = 100,
-            divider    = 0.35,
-            layout     = {
-                maximized = false,
-                left      = false,
-                right     = false,
-            }
-        }
-    }
-
-    return screen_data
 end
 
 
@@ -402,20 +327,8 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    -- Init screen data if required
-    if not tbl(cache.screens) or not tbl(state.screens) then
-        for _, screen in ipairs(hs.screen.allScreens()) do
-            local id          = screen:id()
-            local screen_data = get_screen_data(screen)
-
-            cache.screens[id] = screen_data.cache
-            state.screens[id] = screen_data.state
-        end
-
-    end
-
     -- Init bindings/assets if required
-    if not tbl(cache.assets) or not tbl(cache.lookup) then
+    if not util.tbl(cache.assets) or not util.tbl(cache.lookup) then
         -- Main eventtap bindings
         for app, bindings in pairs(registry.apps) do
             if app == 'insert' then

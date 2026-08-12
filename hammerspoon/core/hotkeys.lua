@@ -1,9 +1,10 @@
 local M = {}
 
-local bootstrap = require('bootstrap')
-local win       = require('windows')
-local qt        = require('quit_timer')
-local wk        = require('which_key')
+local popups  = require('popups')
+local screens = require('screens')
+local windows = require('windows')
+local qt      = require('quit_timer')
+local wk      = require('which_key')
 
 local keys = {
     {
@@ -23,8 +24,9 @@ local keys = {
         -- Which key launcher
         key    = 'space', mods = { 'cmd', 'ctrl', 'alt', 'shift' },
         action = function()
-            bootstrap.init()
-            win.init()
+            screens.init()
+            windows.init()
+            popups.init()
             wk.launch()
         end,
     },

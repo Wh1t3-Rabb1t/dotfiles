@@ -1,5 +1,14 @@
 # TODO
 
+## IMMEDIATE TASKS:
+
+- Alter lookup/eventtap to only support 'shift' and 'leader' key.
+
+- Add leader key capability to registry bindings.
+
+- Add a rectangle border around the currently focused window. (create and
+  destroy as window changes).
+
 ---
 
 ## STYLING (to be fully implemented):
@@ -26,17 +35,11 @@
 
 ## Modules:
 
-- Add a rectangle border around the currently focused window. (create and
-  destroy as window changes).
+- Set up window open/closed fns that update state.wins when windows are
+  opened, closed, focused (through either kb, or click).
 
 - Add action that dispays each open window with a number attached that can
   be temporarily bound to jump to said window (i.e. press 2 to jump to win #2).
-
-- Restructure 'state.wins' and 'state.app_wins' into one table 'wins.all' and
-  'wins[app]'. Also restructure such that each table contains its win idx.
-
-- Set up window open/closed fns that update state.wins when windows are
-  opened, closed, focused (through either kb, or click).
 
 - Look into creating a window watcher that updates state/cache when windows
   are opened/closed.
@@ -44,9 +47,6 @@
 - Research automatically setting up 'brave://settings/system/shortcuts'.
 
 - Certain kitty actions are temporarily commented out in the registry.
-
-- Work on refactoring the registry structure to make bound keys easier to
-  read/manage.
 
 - Sync popups.show() with the current screen (i.e. showing a popup for an app
   with windows on each screen is inconsistent, sometimes appears on the

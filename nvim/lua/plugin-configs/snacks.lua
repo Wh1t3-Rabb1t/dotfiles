@@ -12,19 +12,19 @@ local M = {}
 M.opts = {
     -- Disabled
     dashboard = { enabled = false },
-    bigfile = { enabled = false },
+    bigfile   = { enabled = false },
     quickfile = { enabled = false },
-    scope = { enabled = false },
-    scroll = { enabled = false },
-    words = { enabled = false },  -- Default off, toggle on/off via keybindings
+    scope     = { enabled = false },
+    scroll    = { enabled = false },
+    words     = { enabled = false },  -- Default off, toggle on/off via keybindings
 
     -- Enabled
-    explorer = { enabled = true },
-    notifier = { enabled = true },
+    explorer     = { enabled = true },
+    notifier     = { enabled = true },
     statuscolumn = { enabled = true },
-    git = { enabled = true },
-    indent = { enabled = true },
-    input = { enabled = true },
+    git          = { enabled = true },
+    indent       = { enabled = true },
+    input        = { enabled = true },
 
     -- WINDOW STYLES
     -- (doc: "https://github.com/folke/snacks.nvim/blob/main/docs/styles.md")
@@ -38,11 +38,11 @@ M.opts = {
     -- PICKER CONFIG
     -- (source: "snacks.nvim/lua/snacks/picker/config/defaults.lua")
     picker = {
-        prompt = " ",
-        finder = "explorer",
-        focus = "input",    -- (input,list)
-        auto_close = true,  -- 'true' is required to prevent window hanging on select
-        jump = { close = true },
+        prompt     = " ",
+        finder     = "explorer",
+        focus      = "input",   -- (input,list)
+        auto_close = true,      -- 'true' is required to prevent window hanging on select
+        jump       = { close = true },
 
         sources = {
             keymaps = {
@@ -56,8 +56,8 @@ M.opts = {
         },
 
         matcher = {
-            fuzzy = true,       -- Use fuzzy matching
-            smartcase = true,   -- Use smartcase
+            fuzzy      = true,  -- Use fuzzy matching
+            smartcase  = true,  -- Use smartcase
             ignorecase = true,  -- Use ignorecase
         },
 
@@ -204,13 +204,13 @@ M.keys = {
         "<Leader>sN",
         function()
             Snacks.win({
-                file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
-                width = 0.6,
+                file   = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
+                width  = 0.6,
                 height = 0.6,
                 wo = {
-                    spell = false,
-                    wrap = false,
-                    signcolumn = "yes",
+                    spell        = false,
+                    wrap         = false,
+                    signcolumn   = "yes",
                     statuscolumn = " ",
                     conceallevel = 3,
                 }
@@ -227,7 +227,7 @@ M.init = function()
     if not status_ok then return end
 
     vim.api.nvim_create_autocmd("User", {
-        pattern = "VeryLazy",
+        pattern  = "VeryLazy",
         callback = function()
             -- Setup some globals for debugging (lazy-loaded)
             _G.dd = function(...)

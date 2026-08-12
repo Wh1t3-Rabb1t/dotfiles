@@ -10,7 +10,7 @@ return {
         'scss',
     },
     settings = {
-        css = { validate = true },
+        css  = { validate = true },
         scss = { validate = true },
     }
 }

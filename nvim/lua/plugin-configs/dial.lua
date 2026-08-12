@@ -65,78 +65,78 @@ function M.config()
             augend.constant.alias.bool,
             augend.constant.new({
                 elements = { "and", "or" },
-                word = true,  -- If false, "sand" is incremented into "sor", etc.
-                cyclic = true,
+                word     = true,  -- If false, "sand" is incremented into "sor", etc.
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "&&", "||" },
-                word = false,
-                cyclic = true,
+                word     = false,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "==", "!=" },
-                word = false,
-                cyclic = true,
+                word     = false,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "<", ">" },
-                word = false,
-                cyclic = true,
+                word     = false,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "++", "+=", "-=", "*=", "--" },
-                word = false,
-                cyclic = true,
+                word     = false,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "on", "off" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "ON", "OFF" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "horizontal", "vertical" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "forward", "backward" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "up", "down", "left", "right" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "Up", "Down", "Left", "Right" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "mon", "tue", "wed", "thu", "fri", "sat", "sun" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             }),
             augend.constant.new({
                 elements = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" },
-                word = true,
-                cyclic = true,
+                word     = true,
+                cyclic   = true,
             })
         }
     })

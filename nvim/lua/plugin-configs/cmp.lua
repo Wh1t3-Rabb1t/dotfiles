@@ -17,8 +17,8 @@ M.cmd_line_keys = {
 -- CMD LINE CONFIG
 --------------------------------------------------------------------------------
 function M.cmd_line_config()
-    local cmp = require("cmp")
-    local map = require("cmp").mapping
+    local cmp     = require("cmp")
+    local map     = require("cmp").mapping
     local sendkey = vim.api.nvim_feedkeys
 
     -- `/` cmdline setup
@@ -154,7 +154,7 @@ function M.config()
         window = {
             completion = { side_padding = 1 },
             documentation = {  -- No limit on doc win size
-                max_width = 0,
+                max_width  = 0,
                 max_height = 0,
             }
         },
@@ -175,7 +175,7 @@ function M.config()
         -- Key mappings
         mapping = map.preset.insert({
             ["<A-f>"] = map.complete(),            -- Show completion suggestions
-            ["<Up>"] = map.select_prev_item({      -- Previous suggestion
+            ["<Up>"]  = map.select_prev_item({     -- Previous suggestion
                 behavior = cmp.SelectBehavior.Select
             }),
             ["<Down>"] = map.select_next_item({    -- Next suggestion
@@ -183,16 +183,16 @@ function M.config()
             }),
             ["<S-Up>"] = map.select_prev_item({    -- Scroll multiple suggestions up
                 behavior = cmp.SelectBehavior.Select,
-                count = 10,
+                count    = 10,
             }),
             ["<S-Down>"] = map.select_next_item({  -- Scroll multiple suggestions down
                 behavior = cmp.SelectBehavior.Select,
-                count = 10,
+                count    = 10,
             }),
-            ["<PageUp>"] = map.scroll_docs(-4),    -- Scroll docs up
+            ["<PageUp>"]   = map.scroll_docs(-4),  -- Scroll docs up
             ["<PageDown>"] = map.scroll_docs(4),   -- Scroll docs down
-            ["<Tab>"] = map.confirm({}),           -- Confirm selection
-            ["<CR>"] = cmp.mapping(function(fallback)
+            ["<Tab>"]      = map.confirm({}),      -- Confirm selection
+            ["<CR>"]       = cmp.mapping(function(fallback)
                 if cmp.visible() and cmp.get_selected_entry() then
                     cmp.confirm({})
                 else
@@ -204,32 +204,32 @@ function M.config()
         -- Sources for autocompletion
         sources = require("cmp").config.sources({
             {   -- Snippet engine
-                name = "luasnip",
+                name        = "luasnip",
                 group_index = 1,
             },
             {   -- LSP signatures
-                name = "nvim_lsp_signature_help",
+                name        = "nvim_lsp_signature_help",
                 group_index = 2,
             },
             {   -- LSP
-                name = "nvim_lsp",
+                name        = "nvim_lsp",
                 group_index = 3,
             },
             {   -- Vim api
-                name = "nvim_lua",
+                name        = "nvim_lua",
                 group_index = 4,
             },
             {   -- File system paths
-                name = "path",
-                group_index = 5,
+                name           = "path",
+                group_index    = 5,
                 max_item_count = 10,
             },
             {   -- Text within current buffer
-                name = "buffer",
-                group_index = 6,
+                name           = "buffer",
+                group_index    = 6,
                 max_item_count = 10,
                 keyword_length = 3,
-                dup = 0,
+                dup            = 0,
                 option = {
                     get_bufnrs = function()
                         return vim.api.nvim_buf_line_count(0) < 7500
@@ -239,19 +239,19 @@ function M.config()
                 }
             },
             {   -- `rg` files in cwd
-                name = "rg",
-                group_index = 7,
+                name           = "rg",
+                group_index    = 7,
                 max_item_count = 5,
                 keyword_length = 3,
-                dup = 0,
+                dup            = 0,
             },
             {   -- Spelling (vim.o.spell must be `true` to work)
-                name = "spell",
-                group_index = 8,
+                name           = "spell",
+                group_index    = 8,
                 max_item_count = 10,
                 keyword_length = 4,
                 option = {
-                    keep_all_entries = false,
+                    keep_all_entries  = false,
                     enable_in_context = function()
                         return true
                     end
@@ -269,13 +269,13 @@ function M.config()
                 end
 
                 local source_labels = {
-                    luasnip = "[luaSnip]",
+                    luasnip  = "[luaSnip]",
                     nvim_lsp = "[LSP]",
                     nvim_lua = "[nvLua]",
-                    path = "[Path]",
-                    buffer = "[Buf]",
-                    rg = "[rg]",
-                    spell = "[Eng]",
+                    path     = "[Path]",
+                    buffer   = "[Buf]",
+                    rg       = "[rg]",
+                    spell    = "[Eng]",
                 }
 
                 item.menu = source_labels[entry.source.name] or ""

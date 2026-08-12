@@ -40,22 +40,22 @@ function M.config()
         ui = {
             check_outdated_packages_on_open = true,
             icons = {
-                package_installed = "✓",
-                package_pending = "➜",
+                package_installed   = "✓",
+                package_pending     = "➜",
                 package_uninstalled = "✗",
             },
             keymaps = {
-                toggle_package_expand = "<CR>",       -- Expand a package
-                install_package = "I",                -- Install package
-                update_package = "u",                 -- Reinstall/update the package
-                check_package_version = "c",          -- Check for new version of package
-                update_all_packages = "U",            -- Update all installed packages
-                check_outdated_packages = "C",        -- Check which installed packages are outdated
-                uninstall_package = "X",              -- Uninstall package
-                cancel_installation = "<C-c>",        -- Cancel package installation
-                apply_language_filter = "<C-f>",      -- Apply language filter
-                toggle_package_install_log = "<CR>",  -- Toggle viewing package installation log
-                toggle_help = "?",                    -- Toggle help view
+                toggle_package_expand      = "<CR>",   -- Expand a package
+                install_package            = "I",      -- Install package
+                update_package             = "u",      -- Reinstall/update the package
+                check_package_version      = "c",      -- Check for new version of package
+                update_all_packages        = "U",      -- Update all installed packages
+                check_outdated_packages    = "C",      -- Check which installed packages are outdated
+                uninstall_package          = "X",      -- Uninstall package
+                cancel_installation        = "<C-c>",  -- Cancel package installation
+                apply_language_filter      = "<C-f>",  -- Apply language filter
+                toggle_package_install_log = "<CR>",   -- Toggle viewing package installation log
+                toggle_help                = "?",      -- Toggle help view
             }
         }
     }

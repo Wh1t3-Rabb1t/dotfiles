@@ -46,15 +46,15 @@
 -- don't require wrapping though.
 
 local map = require("util.utils").map
-local km = require("util.keymap_funcs")
+local km  = require("util.keymap_funcs")
 
-local nmap = function(...) map("n", ...) end
-local vmap = function(...) map("x", ...) end
-local imap = function(...) map("i", ...) end
-local cmap = function(...) map("c", ...) end
-local nvmap = function(...) map({ "n", "v" }, ...) end
-local nxmap = function(...) map({ "n", "v", "x" }, ...) end
-local nimap = function(...) map({ "n", "i" }, ...) end
+local nmap   = function(...) map("n", ...) end
+local vmap   = function(...) map("x", ...) end
+local imap   = function(...) map("i", ...) end
+local cmap   = function(...) map("c", ...) end
+local nvmap  = function(...) map({ "n", "v" }, ...) end
+local nxmap  = function(...) map({ "n", "v", "x" }, ...) end
+local nimap  = function(...) map({ "n", "i" }, ...) end
 local nvomap = function(...) map({ "n", "v", "o" }, ...) end
 
 -- Remove most default keymaps

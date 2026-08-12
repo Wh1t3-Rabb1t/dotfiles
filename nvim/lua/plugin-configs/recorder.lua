@@ -25,15 +25,15 @@ function M.config()
     require("recorder").setup({
         mapping = {
             startStopRecording = "q",
-            playMacro = "Q",
-            switchSlot = "<Leader>;<C-q>",
-            editMacro = "<Leader>;cq",
-            deleteAllMacros = "<Leader>;dq",
-            yankMacro = "<Leader>;yq",
+            playMacro          = "Q",
+            switchSlot         = "<Leader>;<C-q>",
+            editMacro          = "<Leader>;cq",
+            deleteAllMacros    = "<Leader>;dq",
+            yankMacro          = "<Leader>;yq",
             -- !! This should be a string you don't use in insert mode during a macro
-            addBreakPoint = "z#z#z#",
+            addBreakPoint      = "z#z#z#",
         },
-        clear = false,  -- Clears all macros-slots on startup
+        clear             = false,  -- Clears all macros-slots on startup
         lessNotifications = false,
     })
 end

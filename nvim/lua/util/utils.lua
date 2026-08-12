@@ -10,7 +10,11 @@ local M = {}
 -- REMAP KEYS
 --------------------------------------------------------------------------------
 function M.map(mode, lhs, rhs, opts)
-    local options = { noremap = true, silent = true, nowait = true }
+    local options = {
+        noremap = true,
+        silent  = true,
+        nowait  = true
+    }
 
     -- Silent is detrimental to cmd line bindings
     if mode == "c" then
@@ -28,7 +32,7 @@ end
 -- WINDOW COUNT
 --------------------------------------------------------------------------------
 function M.open_win_count()
-    local wins = vim.api.nvim_tabpage_list_wins(0)
+    local wins         = vim.api.nvim_tabpage_list_wins(0)
     local visible_wins = 0
 
     for _, win in ipairs(wins) do

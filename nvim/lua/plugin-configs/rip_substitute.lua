@@ -34,15 +34,15 @@ function M.config()
     -- Setup
     require("rip-substitute").setup {
         popupWin = {
-            title = "Rip-Substitute",
+            title    = "Rip-Substitute",
             position = "top",  -- (top,bottom)
         },
         prefill = {
-            visual = "selectionFirstLine",  -- Cannot be false
+            visual                      = "selectionFirstLine",  -- Cannot be false
             startInReplaceLineIfPrefill = true,
         },
         keymaps = {  -- Normal & visual mode, if not stated otherwise
-            confirmAndSubstituteInBuffer = "<A-r>",
+            confirmAndSubstituteInBuffer           = "<A-r>",
             insertModeConfirmAndSubstituteInBuffer = "<A-r>",
         }
     }

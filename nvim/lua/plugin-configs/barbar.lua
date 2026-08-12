@@ -83,24 +83,24 @@ function M.config()
             vim.cmd.mksession { bang = attr.bang, args = attr.fargs }
         end,
         {
-            bang = true,
+            bang     = true,
             complete = "file",
-            desc = "Save barbar with :mksession",
-            nargs = "?"
+            desc     = "Save barbar with :mksession",
+            nargs    = "?"
         }
     )
 
     -- Setup
     require("barbar").setup({
-        animation = false,                     -- Enable/disable animations
-        clickable = false,                     -- Left-click: go to buffer, Middle-click: delete buffer
-        exclude_ft = { "checkhealth", "qf" },  -- Exclude buffers by filetype
-        focus_on_close = "right",              -- Previous, left, right
-        highlight_inactive_file_icons = true,  -- Highlighting unfocused buffer icons
+        animation                     = false,                    -- Enable/disable animations
+        clickable                     = false,                    -- Left-click: go to buffer, Middle-click: delete buffer
+        exclude_ft                    = { "checkhealth", "qf" },  -- Exclude buffers by filetype
+        focus_on_close                = "right",                  -- Previous, left, right
+        highlight_inactive_file_icons = true,                     -- Highlighting unfocused buffer icons
         icons = {
-            button = "",
+            button    = "",
             separator = {
-                left = "",
+                left  = "",
                 right = "│",
             },
 
@@ -112,15 +112,15 @@ function M.config()
             -- Supports all the base icon options, plus `modified` and `pinned`.
             inactive = {
                 separator = {
-                    left = "",
+                    left  = "",
                     right = "│",
                 }
             }
         },
-        maximum_padding = 1,  -- Sets the maximum padding width for each tab
-        minimum_padding = 1,  -- Sets the minimum padding width for each tab
-        maximum_length = 30,  -- Sets the maximum buffer name length
-        minimum_length = 0,   -- Sets the minimum buffer name length
+        maximum_padding = 1,   -- Sets the maximum padding width for each tab
+        minimum_padding = 1,   -- Sets the minimum padding width for each tab
+        maximum_length  = 30,  -- Sets the maximum buffer name length
+        minimum_length  = 0,   -- Sets the minimum buffer name length
     })
 end
 

@@ -14,31 +14,35 @@ function M.config()
     if not status_ok then return end
 
     local icons = {
-        clock = "",
-        component_separator_left = "╱",
+        clock                     = "",
+        component_separator_left  = "╱",
         component_separator_right = "╱",
-        section_separator_left = "",
-        section_separator_right = "",
-        location_icon = " ",
-        diagnostics_error = " ",
-        diagnostics_warn = " ",
-        diagnostics_info = " ",
-        diagnostics_hint = " ",
-        diff_added = " ",
-        diff_removed = " ",
-        diff_modified = " ",
-        modified = function() return "●" end,
-        vim_logo = function() return "" end,
+        section_separator_left    = "",
+        section_separator_right   = "",
+        location_icon             = " ",
+        diagnostics_error         = " ",
+        diagnostics_warn          = " ",
+        diagnostics_info          = " ",
+        diagnostics_hint          = " ",
+        diff_added                = " ",
+        diff_removed              = " ",
+        diff_modified             = " ",
+        modified = function()
+            return "●"
+        end,
+        vim_logo = function()
+            return ""
+        end,
         get_vim_mode = function()
             local vim_mode = vim.fn.mode()
             local mode_icon = {
-                ["n"] = "❮",
-                ["i"] = "❯",
-                ["v"] = "V",
-                ["V"] = "L",
+                ["n"]    = "❮",
+                ["i"]    = "❯",
+                ["v"]    = "V",
+                ["V"]    = "L",
                 ["\x16"] = "B",  -- Vblock escape sequence
-                ["c"] = "󰞷",
-                ["R"] = "▶",
+                ["c"]    = "󰞷",
+                ["R"]    = "▶",
             }
             -- Return search icon when fzf is active
             return mode_icon[vim_mode] or ""
@@ -50,7 +54,7 @@ function M.config()
     }
 
     -- Color overrides
-    local hl = require("catppuccin.palettes").get_palette()
+    local hl            = require("catppuccin.palettes").get_palette()
     local lualine_theme = require("lualine.themes.powerline_dark")
     lualine_theme = {
         normal = {
@@ -60,12 +64,12 @@ function M.config()
         },
         insert = {
             a = { fg = hl.crust, bg = hl.sky },
-            b = { fg = hl.sky, bg = hl.surface1 },
+            b = { fg = hl.sky,   bg = hl.surface1 },
             c = { fg = hl.peach, bg = hl.crust, gui = "italic" },
         },
         visual = {
             a = { fg = hl.crust, bg = hl.sky },
-            b = { fg = hl.sky, bg = "#125ef4" },
+            b = { fg = hl.sky,   bg = "#125ef4" },
             c = { fg = hl.peach, bg = "#06338d", gui = "italic" },
         },
         replace = {
@@ -75,7 +79,7 @@ function M.config()
         },
         command = {
             a = { fg = hl.crust, bg = hl.sky },
-            b = { fg = hl.sky, bg = "#d20f39" },
+            b = { fg = hl.sky,   bg = "#d20f39" },
             c = { fg = hl.peach, bg = "#4d0615" },
         },
         inactive = {
@@ -88,17 +92,17 @@ function M.config()
         options = {
             theme = lualine_theme,
             component_separators = {
-                left = icons.component_separator_left,
+                left  = icons.component_separator_left,
                 right = icons.component_separator_right,
             },
             section_separators = {
-                left = icons.section_separator_left,
+                left  = icons.section_separator_left,
                 right = icons.section_separator_right,
             },
             globalstatus = false,
-            refresh = { tabline = 100000 },
+            refresh      = { tabline = 100000 },
             disabled_filetypes = {
-                winbar = { "snacks_picker_list" },
+                winbar     = { "snacks_picker_list" },
                 statusline = { "snacks_picker_list" },
             }
         },
@@ -111,8 +115,8 @@ function M.config()
                 {
                     "location",
                     separator = "",
-                    padding = 0,
-                    icon = { icons.location_icon, align="left" }
+                    padding   = 0,
+                    icon      = { icons.location_icon, align="left" }
                 },
                 "progress",
             },
@@ -121,20 +125,20 @@ function M.config()
                     "diagnostics",
                     symbols = {
                         error = icons.diagnostics_error,
-                        warn = icons.diagnostics_warn,
-                        info = icons.diagnostics_info,
-                        hint = icons.diagnostics_hint,
+                        warn  = icons.diagnostics_warn,
+                        info  = icons.diagnostics_info,
+                        hint  = icons.diagnostics_hint,
                     }
                 },
                 {
                     "diff",
                     symbols = {
-                        added = icons.diff_added,
+                        added    = icons.diff_added,
                         modified = icons.diff_modified,
-                        removed = icons.diff_removed,
+                        removed  = icons.diff_removed,
                     },
                     separator = "",
-                    padding = { left = 1, right = 0 },
+                    padding   = { left = 1, right = 0 },
                 },
                 {
                     "branch",
@@ -152,9 +156,9 @@ function M.config()
             lualine_c = {
                 {
                     "filename",
-                    file_status = true,      -- File status (readonly status, modified status)
+                    file_status    = true,   -- File status (readonly status, modified status)
                     newfile_status = false,  -- New file status (new means no write after created)
-                    path = 1,
+                    path           = 1,
                 }
             },
             lualine_x = { "lsp_status" },
@@ -170,13 +174,15 @@ function M.config()
                 {
                     function()
                         -- Hack to ensure 'snacks_picker_list' is ignored
-                        if vim.bo.buftype == "nofile" then return "" end
+                        if vim.bo.buftype == "nofile" then
+                            return ""
+                        end
                         return vim.fn.expand("%:t")
                     end,
                     "filename",
-                    file_status = true,
+                    file_status    = true,
                     newfile_status = false,
-                    path = 1,
+                    path           = 1,
                 }
             },
             lualine_x = {},

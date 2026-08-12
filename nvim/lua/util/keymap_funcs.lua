@@ -155,7 +155,7 @@ end
 
 function M.regex_selection()
     vim.cmd('normal! ""y')
-    local selection = vim.fn.getreg('"')
+    local selection         = vim.fn.getreg('"')
     local escaped_selection = vim.fn.escape(selection, "\\/.*$^~[]")
 
     -- Replace newlines with literal "\n" so multi-line searches work
@@ -163,7 +163,7 @@ function M.regex_selection()
 
     -- Build the search command and feed it as keypresses
     local search_cmd = "/" .. escaped_selection .. "\n"
-    local keys = vim.api.nvim_replace_termcodes(search_cmd, true, false, true)
+    local keys       = vim.api.nvim_replace_termcodes(search_cmd, true, false, true)
     vim.api.nvim_feedkeys(keys, 'n', false)
     vim.fn.setreg('"', '')
 end
@@ -172,13 +172,13 @@ end
 -- MARKS                                                                     _09
 --------------------------------------------------------------------------------
 function M.toggle_mark()
-    local buf = 0
+    local buf      = 0
     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
 
     -- PASS 1: Remove mark if it exists on this line
     for i = string.byte("a"), string.byte("z") do
         local mark = string.char(i)
-        local pos = vim.fn.getpos("'" .. mark)
+        local pos  = vim.fn.getpos("'" .. mark)
 
         if pos[2] == row then
             vim.api.nvim_buf_del_mark(buf, mark)
@@ -190,7 +190,7 @@ function M.toggle_mark()
     -- PASS 2: Add first available mark
     for i = string.byte("a"), string.byte("z") do
         local mark = string.char(i)
-        local pos = vim.fn.getpos("'" .. mark)
+        local pos  = vim.fn.getpos("'" .. mark)
 
         if pos[2] == 0 then
             vim.api.nvim_buf_set_mark(buf, mark, row, col, {})
@@ -203,27 +203,27 @@ function M.toggle_mark()
 end
 
 function M.jump_to_mark_above()
-    local current_row = vim.api.nvim_win_get_cursor(0)[1]
-    local best_mark = nil
+    local current_row   = vim.api.nvim_win_get_cursor(0)[1]
+    local best_mark     = nil
     local fallback_mark = nil
-    local best_row = -1
-    local fallback_row = -1  -- Max row (bottom-most)
+    local best_row      = -1
+    local fallback_row  = -1  -- Max row (bottom-most)
 
     for i = string.byte("a"), string.byte("z") do
         local mark = string.char(i)
-        local pos = vim.fn.getpos("'" .. mark)
-        local row = pos[2]
+        local pos  = vim.fn.getpos("'" .. mark)
+        local row  = pos[2]
 
         if row > 0 then
             -- Normal case (above)
             if row < current_row and row > best_row then
-                best_row = row
+                best_row  = row
                 best_mark = mark
             end
 
             -- Fallback (bottom-most mark)
             if row > fallback_row then
-                fallback_row = row
+                fallback_row  = row
                 fallback_mark = mark
             end
         end
@@ -237,27 +237,27 @@ function M.jump_to_mark_above()
 end
 
 function M.jump_to_mark_below()
-    local current_row = vim.api.nvim_win_get_cursor(0)[1]
-    local best_mark = nil
+    local current_row   = vim.api.nvim_win_get_cursor(0)[1]
+    local best_mark     = nil
     local fallback_mark = nil
-    local best_row = math.huge
-    local fallback_row = math.huge  -- Min row (top-most)
+    local best_row      = math.huge
+    local fallback_row  = math.huge  -- Min row (top-most)
 
     for i = string.byte("a"), string.byte("z") do
         local mark = string.char(i)
-        local pos = vim.fn.getpos("'" .. mark)
-        local row = pos[2]
+        local pos  = vim.fn.getpos("'" .. mark)
+        local row  = pos[2]
 
         if row > 0 then
             -- Normal case (below)
             if row > current_row and row < best_row then
-                best_row = row
+                best_row  = row
                 best_mark = mark
             end
 
             -- Fallback (top-most mark)
             if row < fallback_row then
-                fallback_row = row
+                fallback_row  = row
                 fallback_mark = mark
             end
         end
@@ -275,15 +275,15 @@ end
 --------------------------------------------------------------------------------
 function M.add_line_to_quickfix()
     -- Add line under cursor to the quickfix list
-    local line = vim.api.nvim_get_current_line()
+    local line  = vim.api.nvim_get_current_line()
     local bufnr = vim.api.nvim_get_current_buf()
-    local lnum = vim.api.nvim_win_get_cursor(0)[1]
+    local lnum  = vim.api.nvim_win_get_cursor(0)[1]
 
     -- Create a quickfix entry
     local item = {
         bufnr = bufnr,
-        lnum = lnum,
-        text = line,
+        lnum  = lnum,
+        text  = line,
     }
 
     -- Append the entry to the quickfix list
@@ -315,18 +315,18 @@ function M.navigate_horizontally(direction)
     local explorer_id
     local explorer_width
     local no_resize = false
-    local width = vim.o.columns
+    local width     = vim.o.columns
     local get_width = vim.api.nvim_win_get_width
     local set_width = vim.api.nvim_win_set_width
 
     for _, winid in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
         local bufnr = vim.api.nvim_win_get_buf(winid)
-        local ft = vim.bo[bufnr].filetype
+        local ft    = vim.bo[bufnr].filetype
 
         if ft == "snacks_picker_list" then
-            explorer_id = winid
+            explorer_id    = winid
             explorer_width = get_width(winid)
-            width = width - explorer_width
+            width          = width - explorer_width
         end
 
         if explorer_id then
@@ -337,7 +337,7 @@ function M.navigate_horizontally(direction)
         end
     end
 
-    local initial_win = vim.fn.winnr()
+    local initial_win       = vim.fn.winnr()
     local initial_win_width = get_width(0)
 
     vim.cmd("wincmd " .. direction)
@@ -346,8 +346,8 @@ function M.navigate_horizontally(direction)
     if no_resize == true then return end
 
     local moving_onto_screen_edge = vim.fn.winnr() == initial_win
-    local current_win_width = get_width(0)
-    local maximized_win_width = width - 12
+    local current_win_width       = get_width(0)
+    local maximized_win_width     = width - 12
 
     if moving_onto_screen_edge then
         if current_win_width < maximized_win_width then
@@ -385,7 +385,7 @@ local cached_win_height
 
 function M.navigate_vertically(direction)
     local excluded_ft = { "lazy", "mason" }
-    local keys = { ["k"] = "<Up>", ["j"] = "<Down>" }
+    local keys        = { ["k"] = "<Up>", ["j"] = "<Down>" }
 
     -- Enable arrow key navigation in desired buffers
     if vim.tbl_contains(excluded_ft, vim.bo.filetype) then
@@ -396,7 +396,7 @@ function M.navigate_vertically(direction)
     if util.open_win_count() == 1 then return end
 
     local qf_id
-    local qf_length = 0
+    local qf_length  = 0
     local get_height = vim.api.nvim_win_get_height
     local set_height = vim.api.nvim_win_set_height
 
@@ -404,13 +404,17 @@ function M.navigate_vertically(direction)
     for _, win in ipairs(vim.fn.getwininfo()) do
         if win.quickfix == 1 then
             local num = #vim.fn.getqflist()
-            if num < 10 then qf_length = 10 else qf_length = num end
+            if num < 10 then
+                qf_length = 10
+            else
+                qf_length = num
+            end
             qf_id = win.winid
             break
         end
     end
 
-    local initial_win = vim.fn.winnr()
+    local initial_win        = vim.fn.winnr()
     local initial_win_height = get_height(0)
 
     vim.cmd("wincmd " .. direction)
@@ -418,8 +422,8 @@ function M.navigate_vertically(direction)
     if vim.bo.filetype == "qf" then return end
 
     local moving_onto_screen_edge = vim.fn.winnr() == initial_win
-    local current_win_height = get_height(0)
-    local maximized_win_height = (vim.o.lines - vim.o.cmdheight - qf_length) - 6
+    local current_win_height      = get_height(0)
+    local maximized_win_height    = (vim.o.lines - vim.o.cmdheight - qf_length) - 6
 
     if moving_onto_screen_edge then
         if current_win_height < maximized_win_height then
@@ -447,9 +451,9 @@ function M.relative_resize(direction)
     if util.open_win_count() == 1 then return end
 
     local function neighbor(target)
-        local cur = vim.fn.winnr()
+        local cur     = vim.fn.winnr()
         local cur_pos = vim.fn.win_screenpos(0)
-        local comp = vim.fn.winnr(target)
+        local comp    = vim.fn.winnr(target)
 
         if cur == comp then return false end
 
@@ -535,8 +539,12 @@ end
 -- SAVE CHANGES                                                              _12
 --------------------------------------------------------------------------------
 function M.save_changes()
-    local current_ft = vim.o.filetype
-    local excluded_ft = { "diff", "lazy", "mason" }
+    local current_ft  = vim.o.filetype
+    local excluded_ft = {
+        "diff",
+        "lazy",
+        "mason"
+    }
 
     -- Don't save when certain filetypes are focused
     if vim.tbl_contains(excluded_ft, current_ft) or vim.o.binary then

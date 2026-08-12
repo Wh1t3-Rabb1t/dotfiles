@@ -7,7 +7,7 @@ return {
     },
     filetypes = { 'html' },
     embeddedLanguages = {
-        css = true,
+        css        = true,
         javascript = true,
     }
 }

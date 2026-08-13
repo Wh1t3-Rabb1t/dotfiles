@@ -1,521 +1,454 @@
-local M = {}
-
--- !! These could all be bound behind a leader key (space)
---
--- Apple:
---   Spotlight
---   Dock
---
--- Volume:
---   Up
---   Down
---   Mute
---
--- Media:
---   Toggle (play/pause)
---
--- Misc:
---   Toggle bluetooth
---   Quit app
+local M = {
+    apps = {}
+}
 
 local brightness = require('brightness')
 local wk         = require('which_key')
 local win        = require('windows')
 local wifi       = require('wifi')
 
-M.apps = {
-    -- These are temporarily bound to actions after the eventtap has been
-    -- stopped, then unbound once the eventtap is restarted. Therefor they
-    -- don't have corresponding actions.
-    ----------------------------------------------------------------------------
-    ['insert'] = {
-    ----------------------------------------------------------------------------
-        {
-            category = 'Bound until invoked',
-            bindings = {
-                {   -- return (enter)
-                    desc = 'Relaunch menu',
-                    key  = 'Enter',
-                },
-                {   -- escape
-                    desc = 'Cancel',
-                    key  = 'Escape',
-                },
-            },
-        },
-    },
+local current_app
+local current_category
 
-    ----------------------------------------------------------------------------
-    ['system'] = {
-    ----------------------------------------------------------------------------
-        -- Launch or focus
-        {
-            category = 'Launch or focus',
-            bindings = {
-                {   -- y
-                    desc   = 'Firefox',
-                    key    = 'y',
-                    action = { wk.hide(), win.launch_or_focus('Firefox'), win.snap(), wk.show() },
-                },
-                -- {   -- .
-                --     desc   = 'kitty',
-                --     key    = '.',
-                --     action = { wk.hide(), win.launch_or_focus('kitty'), win.snap(), wk.show() },
-                -- },
-                -- {   -- ,
-                --     desc   = 'Brave Browser',
-                --     key    = ',',
-                --     action = { wk.hide(), win.launch_or_focus('Brave Browser'), win.snap(), wk.show() },
-                -- },
-            },
-        },
-
-        -- Windows
-        {
-            category = 'Windows',
-            bindings = {
-                -- {   -- _
-                --     desc   = 'DEBUG',
-                --     key    = '-', mods = { 'shift' },
-                --     action = win.debug_slots(),
-                -- },
-
-                {   -- _
-                    desc   = 'Cycle cat apps',
-                    key    = '-', mods = { 'shift' },
-                    action = { wk.hide(), win.cycle_main_apps(), wk.show() },
-                },
-
-                {   -- n
-                    desc   = 'Cycle next open',
-                    key    = 'n',
-                    action = { wk.hide(), win.cycle_open('next'), wk.show() },
-                },
-                {   -- N
-                    desc   = 'Cycle prev open',
-                    key    = 'n', mods = { 'shift' },
-                    action = { wk.hide(), win.cycle_open('prev'), wk.show() },
-                },
-
-                {   -- o
-                    desc   = 'Next app window',
-                    key    = 'o',
-                    action = { wk.hide(), win.cycle_app_specific('next'), wk.show() },
-                },
-                {   -- u
-                    desc   = 'Prev app window',
-                    key    = 'u',
-                    action = { wk.hide(), win.cycle_app_specific('prev'), wk.show() },
-                },
-
-
-                {   -- f
-                    desc   = 'Resize right',
-                    key    = 'f',
-                    action = { wk.hide(), win.resize('right'), win.snap(), wk.show() },
-                },
-                {   -- s
-                    desc   = 'Resize left',
-                    key    = 's',
-                    action = { wk.hide(), win.resize('left'), win.snap(), wk.show() },
-                },
-                {   -- g
-                    desc   = 'Maximize',
-                    key    = 'g',
-                    action = { wk.hide(), win.maximize(), win.snap(), wk.show() },
-                },
-                {   -- G
-                    desc   = 'Swap positions',
-                    key    = 'g', mods = { 'shift' },
-                    action = { wk.hide(), win.swap(), win.snap(), wk.show() },
-                },
-                {   -- p
-                    desc   = 'Move to next screen',
-                    key    = 'p',
-                    action = { wk.hide(), win.move_to_screen(), win.snap(), wk.show() },
-                },
-            },
-        },
-
-        -- Popups
-        {
-            category = 'Popups',
-            bindings = {
-                {   -- R
-                    desc   = 'Cycle positions',
-                    key    = 'r', mods = { 'shift' },
-                    action = { wk.hide(), wk.cycle_corner_pos(), wk.show() },
-                },
-                {   -- A
-                    desc   = 'Cycle menu stacking',
-                    key    = 'a', mods = { 'shift' },
-                    action = { wk.hide(), wk.cycle_stacking(), wk.show() },
-                },
-                {   -- O
-                    desc   = 'Opacity up',
-                    key    = 'o', mods = { 'shift' },
-                    action = wk.opacity('up'),
-                },
-                {   -- U
-                    desc   = 'Opacity down',
-                    key    = 'u', mods = { 'shift' },
-                    action = wk.opacity('down'),
-                },
-            },
-        },
-
-        -- Clipboard
-        {
-            category = 'Clipboard',
-            bindings = {
-                {   -- c
-                    desc   = 'Copy',
-                    key    = 'c',
-                    action = wk.send_keys({'cmd'}, 'c'),
-                },
-                {   -- x
-                    desc   = 'Cut',
-                    key    = 'x',
-                    action = wk.send_keys({'cmd'}, 'x'),
-                },
-                {   -- v
-                    desc   = 'Paste',
-                    key    = 'v',
-                    action = wk.send_keys({'cmd'}, 'v'),
-                },
-            },
-        },
-
-        -- Brightness
-        {
-            category = 'Brightness',
-            bindings = {
-                {   -- z
-                    desc   = 'Up',
-                    key    = 'z',
-                    action = brightness.adjust('up'),
-                },
-                {   -- j
-                    desc   = 'Down',
-                    key    = 'j',
-                    action = brightness.adjust('down'),
-                },
-                {   -- P
-                    desc   = 'Print',
-                    key    = 'p', mods = { 'shift' },
-                    action = brightness.print_values(),
-                },
-            },
-        },
-
-        -- Misc
-        {
-            category = 'Misc',
-            bindings = {
-                {   -- Z
-                    desc   = 'Zoom in',
-                    key    = 'z', mods = { 'shift' },
-                    action = wk.send_keys({'cmd'}, '='),
-                },
-                {   -- J
-                    desc   = 'Zoom out',
-                    key    = 'j', mods = { 'shift' },
-                    action = wk.send_keys({'cmd'}, '-'),
-                },
-                {   -- W
-                    desc   = 'Toggle wifi on/off',
-                    key    = 'w', mods = { 'shift' },
-                    action = wifi.toggle_wifi(),
-                },
-                {   -- escape
-                    desc   = 'Cancel',
-                    key    = 'escape',
-                    action = { wk.turn_eventtap('off'), wk.hide() },
-                },
-            },
-        },
-    },
-
-    ----------------------------------------------------------------------------
-    ['kitty'] = {
-    ----------------------------------------------------------------------------
-        -- Scrollback
-        {
-            category = 'Scrollback',
-            bindings = {
-                {   -- e
-                    desc   = 'Page up',
-                    key    = 'e',
-                    action = wk.send_keys({'shift'}, 'pageup'),
-                },
-                {   -- d
-                    desc   = 'Page down',
-                    key    = 'd',
-                    action = wk.send_keys({'shift'}, 'pagedown'),
-                },
-            },
-        },
-
-        -- Splits
-        {
-            category = 'Splits',
-            bindings = {
-                {   -- i
-                    desc   = 'Up',
-                    key    = 'i',
-                    action = wk.send_keys({'ctrl', 'alt'}, 'up'),
-                },
-                {   -- k
-                    desc   = 'Down',
-                    key    = 'k',
-                    action = wk.send_keys({'ctrl', 'alt'}, 'down'),
-                },
-                {   -- l
-                    desc   = 'Right',
-                    key    = 'l',
-                    action = wk.send_keys({'ctrl', 'alt'}, 'right'),
-                },
-                {   -- t
-                    desc   = 'Left',
-                    key    = 't',
-                    action = wk.send_keys({'ctrl', 'alt'}, 'left'),
-                },
-                {   -- I
-                    desc   = 'Resize up',
-                    key    = 'i', mods = { 'shift' },
-                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'up'),
-                },
-                {   -- K
-                    desc   = 'Resize down',
-                    key    = 'k', mods = { 'shift' },
-                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'down'),
-                },
-                {   -- L
-                    desc   = 'Resize right',
-                    key    = 'l', mods = { 'shift' },
-                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'right'),
-                },
-                {   -- T
-                    desc   = 'Resize left',
-                    key    = 't', mods = { 'shift' },
-                    action = wk.send_keys({'ctrl', 'alt', 'shift'}, 'left'),
-                },
-                {   -- m
-                    desc   = 'New split',
-                    key    = 'm',
-                    action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm'),
-                },
-                -- {
-                --     desc   = 'New window',
-                --     key    = 'n', mods = { 'shift' },
-                --     action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm'),
-                -- },
-                {   -- M
-                    desc   = 'Detach split',
-                    key    = 'm', mods = { 'shift' },
-                    action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'),
-                },
-                {   -- W
-                    desc   = 'Close',
-                    key    = 'w', mods = { 'shift' },
-                    action = wk.send_keys({'cmd', 'shift'}, 'd'),
-                },
-            },
-        },
-
-        -- Tabs
-        {
-            category = 'Tabs',
-            bindings = {
-                {   -- ;
-                    desc   = 'Next',
-                    key    = ';',
-                    action = wk.send_keys({'ctrl'}, 'end'),
-                },
-                {   -- h
-                    desc   = 'Previous',
-                    key    = 'h',
-                    action = wk.send_keys({'ctrl'}, 'home'),
-                },
-                -- {
-                --     desc   = 'Open',
-                --     key    = 'n',
-                --     action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'n'),
-                -- },
-            },
-        },
-
-        -- Layout
-        {
-            category = 'Layout',
-            bindings = {
-                {   -- R
-                    desc   = 'Rotate splits',
-                    key    = 'r', mods = { 'shift' },
-                    action = wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p'),
-                },
-                {   -- r
-                    desc   = 'Next',
-                    key    = 'r',
-                    action = wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p'),
-                },
-            },
-        },
-    },
-
-    ----------------------------------------------------------------------------
-    -- brave://settings/system/shortcuts
-    --
-    ['Brave Browser'] = {
-    ----------------------------------------------------------------------------
-        -- Page
-        {
-            category = 'Page',
-            bindings = {
-                {   -- e
-                    desc   = 'Up',
-                    key    = 'e',
-                    action = wk.send_keys({}, 'pageup'),
-                },
-                {   -- d
-                    desc   = 'Down',
-                    key    = 'd',
-                    action = wk.send_keys({}, 'pagedown'),
-                },
-                {   -- E
-                    desc   = 'Top',
-                    key    = 'e', mods = { 'shift' },
-                    action = wk.send_keys({}, 'home'),
-                },
-                {   -- D
-                    desc   = 'Bottom',
-                    key    = 'd', mods = { 'shift' },
-                    action = wk.send_keys({}, 'end'),
-                },
-                {   -- F
-                    desc   = 'Search for text',
-                    key    = 'f', mods = { 'shift' },
-                    action = { wk.send_keys({'cmd'}, 'f'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
-                },
-                {   -- R
-                    desc   = 'Reload',
-                    key    = 'r', mods = { 'shift' },
-                    action = wk.send_keys({'cmd'}, 'r'),
-                },
-                {   -- O
-                    desc   = 'Forward',
-                    key    = 'o', mods = { 'shift' },
-                    action = wk.send_keys({'cmd'}, ']'),
-                },
-                {   -- U
-                    desc   = 'Back',
-                    key    = 'u', mods = { 'shift' },
-                    action = wk.send_keys({'cmd'}, '['),
-                },
-            },
-        },
-
-        -- Tabs
-        {
-            category = 'Tabs',
-            bindings = {
-                {   -- h
-                    desc   = 'Left',
-                    key    = 'h',
-                    action = wk.send_keys({'ctrl'}, 'pageup'),
-                },
-                {   -- ;
-                    desc   = 'Right',
-                    key    = ';',
-                    action = wk.send_keys({'ctrl'}, 'pagedown'),
-                },
-                {   -- H
-                    desc   = 'Swap with left',
-                    key    = 'h', mods = { 'shift' },
-                    action = wk.send_keys({'ctrl', 'shift'}, 'pageup'),
-                },
-                {   -- :
-                    desc   = 'Swap with right',
-                    key    = ';', mods = { 'shift' },
-                    action = wk.send_keys({'ctrl', 'shift'}, 'pagedown'),
-                },
-                {   -- /
-                    desc   = 'Search tabs',
-                    key    = '/',
-                    action = { wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
-                },
-                {   -- m
-                    desc   = 'Open',
-                    key    = 'm',
-                    action = wk.send_keys({'cmd'}, 't'),
-                },
-                {   -- M
-                    desc   = 'Re-open closed',
-                    key    = 'm', mods = { 'shift' },
-                    action = wk.send_keys({'cmd', 'shift'}, 't'),
-                },
-                {   -- w
-                    desc   = 'Close',
-                    key    = 'w',
-                    action = wk.send_keys({'cmd'}, 'w'),
-                },
-            },
-        },
-
-        -- Navigation
-        {
-            category = 'Navigation',
-            bindings = {
-                {   -- i
-                    desc   = 'Up arrow',
-                    key    = 'i',
-                    action = wk.send_keys({}, 'up'),
-                },
-                {   -- k
-                    desc   = 'Down arrow',
-                    key    = 'k',
-                    action = wk.send_keys({}, 'down'),
-                },
-                {   -- l
-                    desc   = 'Focus next',
-                    key    = 'l',
-                    action = wk.send_keys({}, 'tab'),
-                },
-                {   -- t
-                    desc   = 'Focus prev',
-                    key    = 't',
-                    action = wk.send_keys({'shift'}, 'tab'),
-                },
-            },
-        },
-
-        -- Misc
-        {
-            category = 'Misc',
-            bindings = {
-                {   -- '
-                    desc   = 'Focus searchbar',
-                    key    = "'",
-                    action = { wk.send_keys({'cmd'}, 'l'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
-                },
-                {   -- B
-                    desc   = 'Add bookmark',
-                    key    = 'b', mods = { 'shift' },
-                    action = wk.send_keys({'cmd'}, 'd'),
-                },
-                {   -- P
-                    desc   = 'Open history',
-                    key    = 'p', mods = { 'shift' },
-                    action = wk.send_keys({'cmd'}, 'h'),
-                },
-                {   -- return (enter)
-                    desc   = 'Confirm',
-                    key    = 'return',
-                    action = wk.send_keys({}, 'return'),
-                },
-            },
-        },
-    },
+local shift_chars = {
+    ['~'] = '`',
+    ['!'] = '1',
+    ['@'] = '2',
+    ['#'] = '3',
+    ['$'] = '4',
+    ['%'] = '5',
+    ['^'] = '6',
+    ['&'] = '7',
+    ['*'] = '8',
+    ['('] = '9',
+    [')'] = '0',
+    ['_'] = '-',
+    ['+'] = '=',
+    ['{'] = '[',
+    ['}'] = ']',
+    [':'] = ';',
+    ['"'] = "'",
+    ['<'] = ',',
+    ['>'] = '.',
+    ['?'] = '/',
+    ['|'] = '\\',
 }
 
+
+-- Add application group
+--------------------------------------------------------------------------------
+local function add_app(name)
+    local app = {}
+
+    M.apps[name] = app
+    current_app  = app
+end
+
+
+-- Add app group sub categories
+--------------------------------------------------------------------------------
+local function add_category(name)
+    local category = {
+        category = name,
+        bindings = {},
+    }
+
+    table.insert(current_app, category)
+    current_category = category
+end
+
+
+-- Add shift to the mod table
+--------------------------------------------------------------------------------
+local function add_shift(mods)
+    local result = {}
+
+    if mods then
+        for i, mod in ipairs(mods) do
+            result[i] = mod
+        end
+    end
+
+    table.insert(result, 'shift')
+
+    return result
+end
+
+
+-- Construct binding entry for temporary insert mode
+--------------------------------------------------------------------------------
+local function insert_bind(...)
+    for _, args in ipairs({...}) do
+        table.insert(current_category.bindings, {
+            key  = args[1],
+            desc = args[2],
+        })
+    end
+end
+
+
+-- Construct binding entry
+--------------------------------------------------------------------------------
+local function bind(...)
+    for _, args in ipairs({...}) do
+        local key
+        local mods
+        local desc
+        local action_start
+
+        -- If a modifier was passed along with the key
+        if type(args[1]) == 'table' then
+            mods         = args[1]
+            key          = args[2]
+            desc         = args[3]
+            action_start = 4
+        else
+            key          = args[1]
+            desc         = args[2]
+            action_start = 3
+        end
+
+
+        -- Uppercase letters and shifted punctuation implicitly mean shift
+        if #key == 1 then
+            if key:match('%u') then
+                key  = key:lower()
+                mods = add_shift(mods)
+            elseif shift_chars[key] then
+                key  = shift_chars[key]
+                mods = add_shift(mods)
+            end
+        end
+
+        local action_count = #args - action_start + 1
+
+        local binding = {
+            key  = key,
+            desc = desc,
+        }
+
+        if mods then
+            binding.mods = mods
+        end
+
+        -- If one action is passed, store it as a function
+        if action_count == 1 then
+            binding.action = args[action_start]
+
+        -- If multiple actions are passed, store them as a table of functions
+        elseif action_count > 1 then
+            binding.action = {}
+
+            for i = action_start, #args do
+                table.insert(binding.action, args[i])
+            end
+        end
+
+        table.insert(current_category.bindings, binding)
+    end
+end
+
+
+-------------------------------------------------------------------------------+
+add_app('insert')                                                           -- |
+-------------------------------------------------------------------------------+
+
+-- These are temporarily bound to actions after the eventtap has been stopped,
+-- then unbound once the eventtap is restarted. Therefor they don't have
+-- corresponding actions.
+
+add_category('Bound until invoked')  ------------------------------------------+
+insert_bind(
+    { 'enter',  'Relaunch menu' },
+    { 'escape', 'Cancel'        }
+)
+
+
+-------------------------------------------------------------------------------+
+add_app('system')                                                           -- |
+-------------------------------------------------------------------------------+
+
+add_category('Launch or focus')  ----------------------------------------------+
+bind(
+    { 'y', 'Firefox', wk.hide(), win.launch_or_focus('Firefox'), win.snap(), wk.show() }
+    -- { '', 'Brave Browser', wk.hide(), win.launch_or_focus('Brave Browser'), win.snap(), wk.show() },
+    -- { '', 'kitty',         wk.hide(), win.launch_or_focus('kitty'), win.snap(), wk.show()         },
+)
+
+add_category('Windows')  ------------------------------------------------------+
+bind(
+    { '_', 'Cycle cat apps',      wk.hide(), win.cycle_main_apps(), wk.show()            },
+    { 'n', 'Cycle next open',     wk.hide(), win.cycle_open('next'), wk.show()           },
+    { 'N', 'Cycle prev open',     wk.hide(), win.cycle_open('prev'), wk.show()           },
+    { 'o', 'Next app window',     wk.hide(), win.cycle_app_specific('next'), wk.show()   },
+    { 'u', 'Prev app window',     wk.hide(), win.cycle_app_specific('prev'), wk.show()   },
+    { 'f', 'Resize right',        wk.hide(), win.resize('right'), win.snap(), wk.show()  },
+    { 's', 'Resize left',         wk.hide(), win.resize('left'), win.snap(), wk.show()   },
+    { 'g', 'Maximize',            wk.hide(), win.maximize(), win.snap(), wk.show()       },
+    { 'G', 'Swap positions',      wk.hide(), win.swap(), win.snap(), wk.show()           },
+    { 'p', 'Move to next screen', wk.hide(), win.move_to_screen(), win.snap(), wk.show() }
+)
+
+add_category('Popups')  -------------------------------------------------------+
+bind(
+    { 'R', 'Cycle positions',     wk.hide(), wk.cycle_corner_pos(), wk.show() },
+    { 'A', 'Cycle menu stacking', wk.hide(), wk.cycle_stacking(), wk.show()   },
+    { 'O', 'Opacity up',          wk.opacity('up')                            },
+    { 'U', 'Opacity down',        wk.opacity('down')                          }
+)
+
+add_category('Clipboard')  ----------------------------------------------------+
+bind(
+    { 'c', 'Copy',   wk.send_keys({'cmd'}, 'c') },
+    { 'x', 'Cut',    wk.send_keys({'cmd'}, 'x') },
+    { 'v', 'Paste',  wk.send_keys({'cmd'}, 'v') }
+)
+
+add_category('Brightness')  ---------------------------------------------------+
+bind(
+    { 'z', 'Up',    brightness.adjust('up')   },
+    { 'j', 'Down',  brightness.adjust('down') },
+    { 'P', 'Print', brightness.print_values() }
+)
+
+add_category('Misc')  ---------------------------------------------------------+
+bind(
+    { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=')         },
+    { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')         },
+    { 'W',      'Toggle wifi on/off', wifi.toggle_wifi()                 },
+    { 'escape', 'Cancel',             wk.turn_eventtap('off'), wk.hide() }
+)
+
+
+-------------------------------------------------------------------------------+
+add_app('kitty')                                                            -- |
+-------------------------------------------------------------------------------+
+
+add_category('Scrollback')  ---------------------------------------------------+
+bind(
+    { 'e', 'Page up',   wk.send_keys({'shift'}, 'pageup')   },
+    { 'd', 'Page down', wk.send_keys({'shift'}, 'pagedown') }
+)
+
+add_category('Splits')  -------------------------------------------------------+
+bind(
+    { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up') },
+    { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down') },
+    { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right') },
+    { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left') },
+    { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up') },
+    { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down') },
+    { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right') },
+    { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left') },
+    { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm') },
+    -- { '', 'New window',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm') },
+    { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w') },
+    { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd') }
+)
+
+add_category('Tabs')  ---------------------------------------------------------+
+bind(
+    { ';', 'Next',     wk.send_keys({'ctrl'}, 'end')  },
+    { 'h', 'Previous', wk.send_keys({'ctrl'}, 'home') }
+    -- bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
+)
+
+add_category('Layout')  -------------------------------------------------------+
+bind(
+    { 'R', 'Rotate splits', wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')  },
+    { 'r', 'Next layout',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') }
+)
+
+
+-------------------------------------------------------------------------------+
+add_app('Brave Browser')                                                    -- |
+-------------------------------------------------------------------------------+
+
+add_category('Page')  ---------------------------------------------------------+
+bind(
+    { 'e', 'Up',      wk.send_keys({}, 'pageup') },
+    { 'd', 'Down',    wk.send_keys({}, 'pagedown') },
+    { 'E', 'Top',     wk.send_keys({}, 'home') },
+    { 'D', 'Bottom',  wk.send_keys({}, 'end') },
+    { 'F', 'Search',  wk.send_keys({'cmd'}, 'f'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
+    { 'R', 'Reload',  wk.send_keys({'cmd'}, 'r') }
+    -- { '', 'Forward', wk.send_keys({'cmd'}, ']') },
+    -- { '', 'Back',    wk.send_keys({'cmd'}, '[') },
+)
+
+add_category('Tabs')  ---------------------------------------------------------+
+bind(
+    { 'h', 'Left',            wk.send_keys({'ctrl'}, 'pageup') },
+    { ';', 'Right',           wk.send_keys({'ctrl'}, 'pagedown') },
+    { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup') },
+    { ':', 'Swap with right', wk.send_keys({'ctrl', 'shift'}, 'pagedown') },
+    { '/', 'Search tabs',     wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
+    { 'm', 'Open',            wk.send_keys({'cmd'}, 't') },
+    { 'M', 'Re-open closed',  wk.send_keys({'cmd', 'shift'}, 't') },
+    { 'w', 'Close',           wk.send_keys({'cmd'}, 'w') }
+)
+
+add_category('Navigation')  ---------------------------------------------------+
+bind(
+    { 'i', 'Up arrow',    wk.send_keys({}, 'up') },
+    { 'k', 'Down arrow',  wk.send_keys({}, 'down') },
+    { 'l', 'Focus next',  wk.send_keys({}, 'tab') },
+    { 't', 'Focus prev',  wk.send_keys({'shift'}, 'tab') }
+)
+
+add_category('Misc')  ---------------------------------------------------------+
+bind(
+    { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
+    { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd') },
+    { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h') },
+    { 'return', 'Confirm',         wk.send_keys({}, 'return') }
+)
+
 return M
+
+
+
+-------+
+-- DOC |
+-------+
+--
+-- Example data structure that is produced by the functions below:
+--
+-- ('...' Denotes continued entries in the table)
+--
+-- -----------------------------------------------------------------------------
+-- add_app('insert')
+-- add_category('Bound until invoked')
+-- insert_bind(
+--     { 'enter',  'Relaunch menu' },
+--     { 'escape', 'Cancel'        }
+-- )
+-- add_app('system')
+-- add_category('Windows')
+-- bind(
+--     { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()  },
+--     { 'n', 'Cycle next open', wk.hide(), win.cycle_open('next'), wk.show() },
+--     { 'N', 'Cycle prev open', wk.hide(), win.cycle_open('prev'), wk.show() },
+-- )
+-- add_category('Popups')
+-- bind(
+--     { 'R', 'Cycle positions',     wk.hide(), wk.cycle_corner_pos(), wk.show() },
+--     { 'A', 'Cycle menu stacking', wk.hide(), wk.cycle_stacking(), wk.show()   },
+-- )
+-- add_app('kitty')
+-- add_category('Scrollback')
+-- bind(
+--     { 'e', 'Page up',   wk.send_keys({'shift'}, 'pageup')   },
+--     { 'd', 'Page down', wk.send_keys({'shift'}, 'pagedown') }
+-- )
+-- add_category('Splits')
+-- bind(
+--     { 'i', 'Up',   wk.send_keys({'ctrl', 'alt'}, 'up') },
+--     { 'k', 'Down', wk.send_keys({'ctrl', 'alt'}, 'down') },
+-- )
+-- -----------------------------------------------------------------------------
+--
+-- M.apps = {
+--     ['insert'] = {
+--         {
+--             category = 'Bound until invoked',
+--             bindings = {
+--                 {   -- return (enter)
+--                     desc = 'Relaunch menu',
+--                     key  = 'Enter',
+--                 },
+--                 {   -- escape
+--                     desc = 'Cancel',
+--                     key  = 'Escape',
+--                 }
+--             }
+--         }
+--     },
+--
+--     ['system'] = {
+--         {
+--             category = 'Windows',
+--             bindings = {
+--                 {
+--                     desc   = 'Cycle cat apps',
+--                     key    = '-',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), win.cycle_main_apps(), wk.show() },
+--                 },
+--                 {
+--                     desc   = 'Cycle next open',
+--                     key    = 'n',
+--                     action = { wk.hide(), win.cycle_open('next'), wk.show() },
+--                 },
+--                 {
+--                     desc   = 'Cycle prev open',
+--                     key    = 'n',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), win.cycle_open('prev'), wk.show() },
+--                 },
+--
+--                 ...
+--             }
+--         },
+--         {
+--             category = 'Popups',
+--             bindings = {
+--                 {
+--                     desc   = 'Cycle positions',
+--                     key    = 'r',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), wk.cycle_corner_pos(), wk.show() },
+--                 },
+--                 {
+--                     desc   = 'Cycle menu stacking',
+--                     key    = 'a',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), wk.cycle_stacking(), wk.show() },
+--                 },
+--
+--                 ...
+--             }
+--         },
+--
+--         ...
+--     },
+--
+--     ['kitty'] = {
+--         {
+--             category = 'Scrollback',
+--             bindings = {
+--                 {
+--                     desc   = 'Page up',
+--                     key    = 'e',
+--                     action = wk.send_keys({'shift'}, 'pageup'),
+--                 },
+--                 {
+--                     desc   = 'Page down',
+--                     key    = 'd',
+--                     action = wk.send_keys({'shift'}, 'pagedown'),
+--                 },
+--
+--                 ...
+--             }
+--         },
+--         {
+--             category = 'Splits',
+--             bindings = {
+--                 {
+--                     desc   = 'Up',
+--                     key    = 'i',
+--                     action = wk.send_keys({'ctrl', 'alt'}, 'up'),
+--                 },
+--                 {
+--                     desc   = 'Down',
+--                     key    = 'k',
+--                     action = wk.send_keys({'ctrl', 'alt'}, 'down'),
+--                 },
+--
+--                 ...
+--             }
+--         },
+--
+--         ...
+--     }
+-- }

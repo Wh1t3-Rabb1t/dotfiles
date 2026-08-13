@@ -1,8 +1,6 @@
 local M = {}
 
--- local registry = require('scratch')
-local registry = require('test_registry')
-
+local registry = require('registry')
 local util     = require('util')
 local state    = require('state')
 local cache    = require('cache')

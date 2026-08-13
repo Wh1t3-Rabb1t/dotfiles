@@ -2,12 +2,30 @@
 
 ## IMMEDIATE TASKS:
 
-- Alter lookup/eventtap to only support 'shift' and 'leader' key.
+- Alter lookup/eventtap to support 'leader' key.
 
 - Add leader key capability to registry bindings.
 
 - Add a rectangle border around the currently focused window. (create and
   destroy as window changes).
+
+- Refactor bind() fn from registry. Final desired formatting:
+```lua
+-- * Need to assume every arg after 'desc' is an action, and if more than one
+--   action is passed; pack the actions into a table.
+--
+-- * And obviously need to update bind() to accept a list or args.
+bind(
+    { {'cmd'}, 'a', 'Example a',        wk.hide(), win.cycle_main_apps(), wk.show()          },
+    { {'cmd', 'alt'}, 'a', 'Example b', win.example_single_action()                          },
+    { '_', 'Cycle cat apps',            wk.hide(), win.cycle_main_apps(), wk.show()          },
+    { 'n', 'Cycle next open',           wk.hide(), win.cycle_open('next'), wk.show()         },
+    { 'N', 'Cycle prev open',           wk.hide(), win.cycle_open('prev'), wk.show()         },
+    { 'o', 'Next app window',           wk.hide(), win.cycle_app_specific('next'), wk.show() },
+    { 'u', 'Prev app window',           wk.hide(), win.cycle_app_specific('prev'), wk.show() },
+    { 'G', 'Swap positions',            wk.hide(), win.swap(), win.snap(), wk.show()         },
+)
+```
 
 ---
 

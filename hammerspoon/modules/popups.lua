@@ -1,6 +1,8 @@
 local M = {}
 
-local registry = require('registry')
+-- local registry = require('scratch')
+local registry = require('test_registry')
+
 local util     = require('util')
 local state    = require('state')
 local cache    = require('cache')
@@ -125,10 +127,10 @@ local function fmt_key_combinations(binding)
     for _, mod in ipairs(mods) do
         if mod == 'shift' then
             if key:match('^[a-z]$') then
-                key = key:upper()
+                key           = key:upper()
                 consume_shift = true
             elseif shift_chars[key] then
-                key = shift_chars[key]
+                key           = shift_chars[key]
                 consume_shift = true
             end
             break
@@ -232,28 +234,30 @@ local function queue_actions(...)
     local actions = { ... }
 
     return function()
+        local aq = state.action_queue
+
         for _, action in ipairs(actions) do
             if type(action) == 'function' then
-                table.insert(state.action_queue.items, action)
+                table.insert(aq.items, action)
 
             elseif type(action) == 'table' then
                 for _, job in ipairs(action) do
-                    table.insert(state.action_queue.items, job)
+                    table.insert(aq.items, job)
                 end
             end
         end
 
-        if state.action_queue.running then
+        if aq.running then
             return
         end
 
-        state.action_queue.running = true
+        aq.running = true
 
         local function next_job()
-            local job = table.remove(state.action_queue.items, 1)
+            local job = table.remove(aq.items, 1)
 
             if not job then
-                state.action_queue.running = false
+                aq.running = false
                 return
             end
 

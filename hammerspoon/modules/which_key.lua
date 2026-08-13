@@ -333,11 +333,11 @@ end
 --------------------------------------------------------------------------------
 function M.show()
     return function(done)
-        local win    = state.menu.curr_win
-        local corner = state.menu.corner
-        local stack  = state.menu.stack
-
+        local win     = state.menu.curr_win
+        local corner  = state.menu.corner
+        local stack   = state.menu.stack
         local opacity = state.menu.opacity
+
         local popups  = get_current(win)
         local coords  = get_coords(win, popups, corner, stack)
 

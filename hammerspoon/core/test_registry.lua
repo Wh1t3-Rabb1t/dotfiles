@@ -1,6 +1,6 @@
-local M
-
-M.apps = {}
+local M = {
+    apps = {}
+}
 
 local brightness = require('brightness')
 local wk         = require('which_key')
@@ -10,6 +10,7 @@ local wifi       = require('wifi')
 local current_app
 local current_category
 
+-- Add application group
 --------------------------------------------------------------------------------
 local function add_app(name)
     local app = {}
@@ -18,6 +19,8 @@ local function add_app(name)
     current_app  = app
 end
 
+
+-- Add app group sub categories
 --------------------------------------------------------------------------------
 local function add_category(name)
     local category = {
@@ -29,12 +32,83 @@ local function add_category(name)
     current_category = category
 end
 
+
+-- Add shift to the mod table
 --------------------------------------------------------------------------------
-local function bind(key, desc, action)
+local function add_shift(mods)
+    local result = {}
+
+    if mods then
+        for i, mod in ipairs(mods) do
+            result[i] = mod
+        end
+    end
+
+    table.insert(result, 'shift')
+
+    return result
+end
+
+-- Construct binding entry
+--------------------------------------------------------------------------------
+local function bind(key_or_mods, key_or_desc, desc_or_action, action)
+    local key
+    local mods
+    local desc
+
+    if type(key_or_mods) == 'table' then
+        mods = key_or_mods
+        key  = key_or_desc
+        desc = desc_or_action
+    else
+        key    = key_or_mods
+        desc   = key_or_desc
+        action = desc_or_action
+    end
+
+    local shift_chars = {
+        ['~'] = '`',
+        ['!'] = '1',
+        ['@'] = '2',
+        ['#'] = '3',
+        ['$'] = '4',
+        ['%'] = '5',
+        ['^'] = '6',
+        ['&'] = '7',
+        ['*'] = '8',
+        ['('] = '9',
+        [')'] = '0',
+        ['_'] = '-',
+        ['+'] = '=',
+        ['{'] = '[',
+        ['}'] = ']',
+        [':'] = ';',
+        ['"'] = "'",
+        ['<'] = ',',
+        ['>'] = '.',
+        ['?'] = '/',
+        ['|'] = '\\',
+    }
+
+    -- Uppercase letters and shifted punctuation implicitly mean shift
+    if #key == 1 then
+        if key:match('%u') then
+            key  = key:lower()
+            mods = add_shift(mods)
+        elseif shift_chars[key] then
+            key  = shift_chars[key]
+            mods = add_shift(mods)
+        end
+    end
+
     local binding = {
         key  = key,
         desc = desc,
     }
+
+    if mods then
+        binding.mods = mods
+    end
 
     if action then
         binding.action = action
@@ -44,16 +118,13 @@ local function bind(key, desc, action)
 end
 
 
--- TODO: maybe refactor bind function to assume any argument after 3 are part
--- of a single table i.e instead of
--- 'y', 'Firefox', { wk.hide(), win.launch_or_focus('Firefox'), win.snap(), wk.show() }
---
--- 'y', 'Firefox', wk.hide(), win.launch_or_focus('Firefox'), win.snap(), wk.show()
-
-
 -------------------------------------------------------------------------------+
 add_app('insert')                                                           -- |
 -------------------------------------------------------------------------------+
+
+-- These are temporarily bound to actions after the eventtap has been stopped,
+-- then unbound once the eventtap is restarted. Therefor they don't have
+-- corresponding actions.
 
 add_category('Bound until invoked')
 --
@@ -188,3 +259,142 @@ bind('P',      'Open history',    wk.send_keys({'cmd'}, 'h'))
 bind('return', 'Confirm',         wk.send_keys({}, 'return'))
 
 return M
+
+
+-------+
+-- DOC |
+-------+
+--
+-- Example data structure that is produced by the functions below:
+--
+-- ('...' Denotes continued entries in the table)
+--
+-- -----------------------------------------------------------------------------
+-- add_app('insert')
+-- add_category('Bound until invoked')
+-- bind('enter',  'Relaunch menu')
+-- bind('escape', 'Cancel')
+--
+-- add_app('system')
+-- add_category('Windows')
+-- bind('_', 'Cycle cat apps',  { wk.hide(), win.cycle_main_apps(), wk.show() })
+-- bind('n', 'Cycle next open', { wk.hide(), win.cycle_open('next'), wk.show() })
+-- bind('N', 'Cycle prev open', { wk.hide(), win.cycle_open('prev'), wk.show() })
+-- add_category('Popups')
+-- bind('R', 'Cycle positions',     { wk.hide(), wk.cycle_corner_pos(), wk.show() })
+-- bind('A', 'Cycle menu stacking', { wk.hide(), wk.cycle_stacking(), wk.show() })
+--
+-- add_app('kitty')
+-- add_category('Scrollback')
+-- add_category('Splits')
+-- bind('e', 'Page up',   wk.send_keys({'shift'}, 'pageup'))
+-- bind('d', 'Page down', wk.send_keys({'shift'}, 'pagedown'))
+-- bind('i', 'Up',   wk.send_keys({'ctrl', 'alt'}, 'up'))
+-- bind('k', 'Down', wk.send_keys({'ctrl', 'alt'}, 'down'))
+-- -----------------------------------------------------------------------------
+--
+-- M.apps = {
+--     ['insert'] = {
+--         {
+--             category = 'Bound until invoked',
+--             bindings = {
+--                 {   -- return (enter)
+--                     desc = 'Relaunch menu',
+--                     key  = 'Enter',
+--                 },
+--                 {   -- escape
+--                     desc = 'Cancel',
+--                     key  = 'Escape',
+--                 }
+--             }
+--         }
+--     },
+--
+--     ['system'] = {
+--         {
+--             category = 'Windows',
+--             bindings = {
+--                 {
+--                     desc   = 'Cycle cat apps',
+--                     key    = '-',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), win.cycle_main_apps(), wk.show() },
+--                 },
+--                 {
+--                     desc   = 'Cycle next open',
+--                     key    = 'n',
+--                     action = { wk.hide(), win.cycle_open('next'), wk.show() },
+--                 },
+--                 {
+--                     desc   = 'Cycle prev open',
+--                     key    = 'n',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), win.cycle_open('prev'), wk.show() },
+--                 },
+--
+--                 ...
+--             }
+--         },
+--         {
+--             category = 'Popups',
+--             bindings = {
+--                 {
+--                     desc   = 'Cycle positions',
+--                     key    = 'r',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), wk.cycle_corner_pos(), wk.show() },
+--                 },
+--                 {
+--                     desc   = 'Cycle menu stacking',
+--                     key    = 'a',
+--                     mods   = { 'shift' },
+--                     action = { wk.hide(), wk.cycle_stacking(), wk.show() },
+--                 },
+--
+--                 ...
+--             }
+--         },
+--
+--         ...
+--     },
+--
+--     ['kitty'] = {
+--         {
+--             category = 'Scrollback',
+--             bindings = {
+--                 {
+--                     desc   = 'Page up',
+--                     key    = 'e',
+--                     action = wk.send_keys({'shift'}, 'pageup'),
+--                 },
+--                 {
+--                     desc   = 'Page down',
+--                     key    = 'd',
+--                     action = wk.send_keys({'shift'}, 'pagedown'),
+--                 },
+--
+--                 ...
+--             }
+--         },
+--         {
+--             category = 'Splits',
+--             bindings = {
+--                 {
+--                     desc   = 'Up',
+--                     key    = 'i',
+--                     action = wk.send_keys({'ctrl', 'alt'}, 'up'),
+--                 },
+--                 {
+--                     desc   = 'Down',
+--                     key    = 'k',
+--                     action = wk.send_keys({'ctrl', 'alt'}, 'down'),
+--                 },
+--
+--                 ...
+--             }
+--         },
+--
+--         ...
+--     }
+-- }
+

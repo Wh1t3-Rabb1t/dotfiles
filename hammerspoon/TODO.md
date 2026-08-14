@@ -2,9 +2,7 @@
 
 ## IMMEDIATE TASKS:
 
-- Alter lookup/eventtap to support 'leader' key.
-
-- Add leader key capability to registry bindings.
+- Alter lookup/eventtap/registry to support 'leader' key.
 
 - Add a rectangle border around the currently focused window. (create and
   destroy as window changes).
@@ -45,6 +43,8 @@
       Media: (Play/Pause)
       Toggle bluetooth
       Quit app
+
+- Ensure window indexes are synced to focused window.
 
 - Set up window open/closed fns that update state.wins when windows are
   opened, closed, focused (through either kb, or click).

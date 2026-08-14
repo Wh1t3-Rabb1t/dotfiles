@@ -15,11 +15,7 @@ M.action_queue = {
     running = false,
 }
 
-
-
-
--- M.open_apps = {
-M.wins = {
+M.open_apps = {
     -- ['all'] = {
     --     idx = 1,
     --     wins = { ... },
@@ -34,19 +30,6 @@ M.wins = {
     -- },
     -- ...
 }
-
-
--- M.app_wins = {
---     -- ['Brave Browser'] = { ... },
---     -- ['kitty'] = { ... },
---     -- ...
--- }
---
--- M.win_idx = {
---     -- main = 1,
---     -- win = id,
---     -- ...
--- }
 
 -- Data for each screen is populated on init
 M.screens = {

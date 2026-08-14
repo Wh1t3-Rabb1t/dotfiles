@@ -428,7 +428,7 @@ function M.cycle_app_specific(direction)
         end
 
         local app  = focused:application():name()
-        local wins = state.wins[app].wins
+        local wins = state.open_apps[app].wins
 
         if not wins then
             hs.alert.show('Window is not tracked by state.lua')
@@ -440,15 +440,15 @@ function M.cycle_app_specific(direction)
             return
         end
 
-        local idx     = state.wins[app].idx
+        local idx     = state.open_apps[app].idx
         local new_idx = iterate_window_index(wins, idx, direction)
 
         -- Update state and focus new window
         if new_idx then
             local win = wins[new_idx]
 
-            state.wins[app].idx = new_idx
-            state.menu.curr_win = win
+            state.open_apps[app].idx = new_idx
+            state.menu.curr_win      = win
 
             win:focus()
         end
@@ -463,16 +463,16 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local wins    = state.wins.all.wins
-        local idx     = state.wins.all.idx
+        local wins    = state.open_apps.all.wins
+        local idx     = state.open_apps.all.idx
         local new_idx = iterate_window_index(wins, idx, direction)
 
         -- Update state and focus new window
         if new_idx then
             local win = wins[new_idx]
 
-            state.wins.all.idx  = new_idx
-            state.menu.curr_win = win
+            state.open_apps.all.idx = new_idx
+            state.menu.curr_win     = win
 
             win:focus()
         end
@@ -497,9 +497,7 @@ function M.init()
         assign_window(layout, nil, win)
     end
 
-    local all_wins = get_open_windows()
-
-    state.wins = all_wins
+    state.open_apps = get_open_windows()
 end
 
 return M

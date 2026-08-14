@@ -278,6 +278,7 @@ local function fmt_binding_tbl(bindings)
                 binding.key,
                 binding.mods
             )
+
             lookup[lookup_key] = queue_actions(binding.action)
         end
     end

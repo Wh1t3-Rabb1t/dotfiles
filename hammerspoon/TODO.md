@@ -31,9 +31,20 @@
 - LOOK INTO: if MACOS system apps like 'system settings' will cause problems
   trying to snap into dimensions that aren't supported.
 
+- Low priority: Passing an uppercase key along with 'shift' in the mod table
+  breaks in the eventtap (shift should be assumed if passed twice. really shift
+  should only be passed once in your own dotfiles you fkng bellend).
+
 ---
 
-## Modules:
+## Module todo:
+
+- Consider adding:
+      Apple: (Spotlight|Dock)
+      Volume: (Up|Down|Mute)
+      Media: (Play/Pause)
+      Toggle bluetooth
+      Quit app
 
 - Set up window open/closed fns that update state.wins when windows are
   opened, closed, focused (through either kb, or click).

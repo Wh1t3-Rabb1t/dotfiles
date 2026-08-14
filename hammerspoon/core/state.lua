@@ -1,13 +1,13 @@
 local M = {}
 
+-- Commented out entries are populated on init
+
 M.menu = {
-    tap_active  = false,  -- (true|false)
-    curr_win    = false,  -- (win|false)
-    corner      = 'bottom_right',
-    stack       = 'horizontal',
-    opacity     = 1,
-    win_idx = 1,
-    -- app_win_idx = 1,  -- need one for each app
+    curr_win   = false,  -- (win|false)
+    tap_active = false,  -- (true|false)
+    corner     = 'bottom_right',
+    stack      = 'horizontal',
+    opacity    = 1,
 }
 
 M.action_queue = {
@@ -15,34 +15,33 @@ M.action_queue = {
     running = false,
 }
 
-M.open_apps = {
+M.apps = {
     -- ['all'] = {
-    --     idx = 1,
+    --     idx  = 1,
     --     wins = { ... },
     -- },
     -- ['Brave Browser'] = {
-    --     idx = 1,
+    --     idx  = 1,
     --     wins = { ... },
     -- },
     -- ['kitty'] = {
-    --     idx = 1,
+    --     idx  = 1,
     --     wins = { ... },
     -- },
     -- ...
 }
 
--- Data for each screen is populated on init
 M.screens = {
     -- [id] = {
-    --     divider = .50,  (0.20 .. 0.80)
+    --     brightness = (1..100),
+    --     divider    = .50,  (0.20 .. 0.80)
     --     layout = {
     --         maximized = (win|false),
     --         left      = (win|false),
     --         right     = (win|false),
-    --     },
-    --     brightness = (1..100),
-    --     wins = { ... },
+    --     }
     -- }
+    -- ...
 }
 
 return M

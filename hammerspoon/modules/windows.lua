@@ -179,35 +179,36 @@ end
 -- Get all open windows
 --------------------------------------------------------------------------------
 local function get_open_windows()
-    local open_apps = hs.application.runningApplications()
-    local wins      = {}
+    local running_apps = hs.application.runningApplications()
+
+    local windows = {}
 
     -- All open windows
-    wins.all = {
+    windows.all = {
         idx  = 1,
         wins = {},
     }
 
-    for _, app in ipairs(open_apps) do
+    for _, app in ipairs(running_apps) do
         local name     = app:name()
         local app_wins = {}
 
         for _, win in ipairs(app:allWindows()) do
             if win:isStandard() and win:isVisible() then
-                table.insert(wins.all.wins, win)
+                table.insert(windows.all.wins, win)
                 table.insert(app_wins, win)
             end
         end
 
         if #app_wins > 0 then
-            wins[name] = {
+            windows[name] = {
                 idx  = 1,
                 wins = app_wins,
             }
         end
     end
 
-    return wins
+    return windows
 end
 
 
@@ -428,7 +429,7 @@ function M.cycle_app_specific(direction)
         end
 
         local app  = focused:application():name()
-        local wins = state.open_apps[app].wins
+        local wins = state.apps[app].wins
 
         if not wins then
             hs.alert.show('Window is not tracked by state.lua')
@@ -440,15 +441,15 @@ function M.cycle_app_specific(direction)
             return
         end
 
-        local idx     = state.open_apps[app].idx
+        local idx     = state.apps[app].idx
         local new_idx = iterate_window_index(wins, idx, direction)
 
         -- Update state and focus new window
         if new_idx then
             local win = wins[new_idx]
 
-            state.open_apps[app].idx = new_idx
-            state.menu.curr_win      = win
+            state.apps[app].idx = new_idx
+            state.menu.curr_win = win
 
             win:focus()
         end
@@ -463,16 +464,16 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local wins    = state.open_apps.all.wins
-        local idx     = state.open_apps.all.idx
+        local wins    = state.apps.all.wins
+        local idx     = state.apps.all.idx
         local new_idx = iterate_window_index(wins, idx, direction)
 
         -- Update state and focus new window
         if new_idx then
             local win = wins[new_idx]
 
-            state.open_apps.all.idx = new_idx
-            state.menu.curr_win     = win
+            state.apps.all.idx  = new_idx
+            state.menu.curr_win = win
 
             win:focus()
         end
@@ -497,7 +498,7 @@ function M.init()
         assign_window(layout, nil, win)
     end
 
-    state.open_apps = get_open_windows()
+    state.apps = get_open_windows()
 end
 
 return M

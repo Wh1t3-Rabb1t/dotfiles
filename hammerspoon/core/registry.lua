@@ -25,10 +25,10 @@ end
 
 -- Construct binding entry for temporary insert mode
 --------------------------------------------------------------------------------
-local function insert_bind(...)
+local function insert_bind( ... )
     local binding_field = {}
 
-    for _, args in ipairs({...}) do
+    for _, args in ipairs({ ... }) do
         table.insert(binding_field, {
             key  = args[1],
             desc = args[2],
@@ -41,7 +41,7 @@ end
 
 -- Construct binding entry
 --------------------------------------------------------------------------------
-local function bind(...)
+local function bind( ... )
     local shift_chars = {
         ['~'] = '`',
         ['!'] = '1',
@@ -68,7 +68,7 @@ local function bind(...)
 
     local binding_field = {}
 
-    for _, args in ipairs({...}) do
+    for _, args in ipairs({ ... }) do
         local key
         local mods
         local desc
@@ -210,56 +210,70 @@ M.apps = {
         },
     },
 
-    ------------------+
-    ['kitty'] = {  -- |
-    ------------------+
-        {
-            category = 'Scrollback',
-            bindings = bind(
-                { 'e', 'Page up',   wk.send_keys({'shift'}, 'pageup')   },
-                { 'd', 'Page down', wk.send_keys({'shift'}, 'pagedown') }
-            ),
-        },
-        {
-            category = 'Splits',
-            bindings = bind(
-                { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')                },
-                { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')              },
-                { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')             },
-                { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left')              },
-                { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')       },
-                { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')     },
-                { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right')    },
-                { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')     },
-                { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
-                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w') },
-                { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }
-
-                -- { '', 'New window',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm') },
-            ),
-        },
-        {
-            category = 'Tabs',
-            bindings = bind(
-                { ';', 'Next',     wk.send_keys({'ctrl'}, 'end')  },
-                { 'h', 'Previous', wk.send_keys({'ctrl'}, 'home') }
-
-                -- bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
-            ),
-        },
-        {
-            category = 'Layout',
-            bindings = bind(
-                { 'R', 'Rotate splits', wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')          },
-                { 'r', 'Next layout',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') }
-            ),
-        },
-    },
-
     --------------------------+
     ['Brave Browser'] = {  -- |
     --------------------------+
         -- brave://settings/system/shortcuts
+        --
+        -- Test these:
+        --   Dev tools inspect                (Command Shift c|Command Alt c)
+        --   Dev tools toggle                 F12
+        --   Move Tab to New Window
+        --   New Split View with Current Tab  Command Alt n
+        --   Find next                        Command g
+        --   Find previous                    Command Shift g
+        --   Stop                             Command .
+        --   New Private Window               Command Shift n
+        --   Reopen Closed Tab                Command Shift t
+        --   New Split View with Current Tab  Command Alt n
+        --   Collapse Tabs                    Command Shift l
+        --   Add new tab to group             Command Control c
+        --   Create new tab group             Command Control p
+        --   Focus next tab group             Command Control x
+        --   Focus previous tab group         Command Control z
+        --   Close tab group                  Command Control w
+        --   View Source                      Command Alt u
+        --   Focus next pane                  Command Alt ArrowDown
+        --   Focus previous pane              Command Alt ArrowUp
+        --   Developer Tools                  Command Alt i
+        --   JavaScript Console               Command Alt j
+        --   Show Bookmarks Bar               Command Shift b
+        --   Show history                     Command y
+        --   Show bookmark manager            Command Alt b
+        --   Options                          Command ,
+        --   Reading Mode                     Command Alt r
+        --   New Private Window with Tor      Command Alt n
+        --   Toggle tab mute                  Control m
+        --   Toggle sidebar                   Command b
+        --   Quick Commands                   Command Shift p
+        --   Remove tab from current group
+        --   Unsplit Tabs
+        --   Swap Tab Positions
+        --   Toggle sidebar position
+        --   Focus web contents pane
+        --   Take Screenshot
+        --   Focus bookmarks
+        --   Show all windows
+        --   Name Window
+        --   Open in PWA window
+        --   Move Tab to New Window
+        --   Mute site
+        --   Pin tab
+        --   Group tab
+        --   Open Guest Profile
+        --   Toggle Focus Mode
+        --   Focus toolbar
+        --   Focus menu bar
+        --   Inspect Devices
+        --   Show performance settings
+        --   Task Manager
+        --   Open all bookmarks
+        --   Open Bookmarks Manager
+        --   Bookmark bar add to bookmarks bar
+        --   Bookmark bar remove from bookmarks bar
+        --   Toggle JavaScript
+        --   Move group to new window
+        --   Toggle vertical tabs expanded
         {
             category = 'Page',
             bindings = bind(
@@ -303,6 +317,52 @@ M.apps = {
                 { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd')                                                            },
                 { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h')                                                            },
                 { 'return', 'Confirm',         wk.send_keys({}, 'return')                                                            }
+            ),
+        },
+    },
+
+    ------------------+
+    ['kitty'] = {  -- |
+    ------------------+
+        {
+            category = 'Scrollback',
+            bindings = bind(
+                { 'e', 'Page up',   wk.send_keys({'shift'}, 'pageup')   },
+                { 'd', 'Page down', wk.send_keys({'shift'}, 'pagedown') }
+            ),
+        },
+        {
+            category = 'Splits',
+            bindings = bind(
+                { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')                },
+                { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')              },
+                { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')             },
+                { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left')              },
+                { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')       },
+                { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')     },
+                { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right')    },
+                { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')     },
+                { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
+                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w') },
+                { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }
+
+                -- { '', 'New window',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm') },
+            ),
+        },
+        {
+            category = 'Tabs',
+            bindings = bind(
+                { ';', 'Next',     wk.send_keys({'ctrl'}, 'end')  },
+                { 'h', 'Previous', wk.send_keys({'ctrl'}, 'home') }
+
+                -- bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
+            ),
+        },
+        {
+            category = 'Layout',
+            bindings = bind(
+                { 'R', 'Rotate splits', wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')          },
+                { 'r', 'Next layout',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') }
             ),
         },
     },

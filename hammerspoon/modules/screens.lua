@@ -29,8 +29,8 @@ local function create_overlay(screen)
     local overlay = hs.canvas.new(frame)
 
     overlay:appendElements({
-        type      = 'rectangle',
-        action    = 'fill',
+        type   = 'rectangle',
+        action = 'fill',
         fillColor = {
             red   = 0,
             green = 0,
@@ -56,7 +56,7 @@ local function get_screen_data(screen)
         state = {
             brightness = 100,
             divider    = 0.35,
-            layout     = {
+            layout = {
                 maximized = false,
                 left      = false,
                 right     = false,

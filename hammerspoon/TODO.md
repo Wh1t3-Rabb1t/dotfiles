@@ -2,10 +2,14 @@
 
 ## IMMEDIATE TASKS:
 
-- Alter lookup/eventtap/registry to support 'leader' key.
-
 - Add a rectangle border around the currently focused window. (create and
   destroy as window changes).
+
+- Alter lookup/eventtap/registry to support 'leader' key.
+
+- Create a 'mouse_click_explosion()' fn that animates a series of circles
+  ranging from small to large, that can be cached, then looped and displayed
+  for a short duration; each with a lower opacity until transparent.
 
 ---
 
@@ -37,12 +41,24 @@
 
 ## Module todo:
 
+- For 'Brave' we could create a 'cycle_focus' action that sends keystrokes to
+  cycle focus between things like:
+  ```txt
+  Focus next pane                  Command Alt ArrowDown
+  Focus previous pane              Command Alt ArrowUp
+  Focus web contents pane
+  ```
+
 - Consider adding:
       Apple: (Spotlight|Dock)
       Volume: (Up|Down|Mute)
       Media: (Play/Pause)
       Toggle bluetooth
       Quit app
+
+- Consider expanding upon the state.open_apps.wins tables to contain window
+  specific data i.e. opacity, coords etc. (actually maybe not coords because
+  they'll need to sync with screen[id].layout coords).
 
 - Ensure window indexes are synced to focused window.
 

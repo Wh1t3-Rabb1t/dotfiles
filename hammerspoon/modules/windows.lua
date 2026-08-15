@@ -4,6 +4,18 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- function refresh_window_state()
+--     local curr_wind = state.menu.curr_win
+--     local borders = state.apps.all.borders
+--     local wins    = state.apps.all.wins
+--     local idx     = state.apps.all.idx
+--     -- local border = state.apps.borders[id]
+--     if border then
+--         border:delete()
+--         state.wins.borders[id] = nil
+--     end
+-- end
+
 
 -- function M.debug_slots()
 --     return function(done)
@@ -147,32 +159,74 @@ local function assign_window(layout, existing, win)
     local side = get_side(win)
 
     if existing and get_side(existing) == side then
-        local opposite = (side == 'left') and 'right' or 'left'
-        layout[opposite] = win
-    else
-        layout[side] = win
+        side = (side == 'left') and 'right' or 'left'
     end
+
+    layout[side] = win
 end
 
 
--- Iterate index of focused windows
+-- Iterate focused window
 --------------------------------------------------------------------------------
-local function iterate_window_index(wins, idx, direction)
-    local count = #wins
+local function iterate_windows(app, direction)
+    local wins = state.apps[app].wins
+    local idx  = state.apps[app].idx
+
+    local new_idx = idx
+    local count   = #wins
 
     if count == 0 then
         return false
     end
 
+    -- Iterate window index
     if direction == 'next' then
-        idx = idx % count + 1
+        new_idx = new_idx % count + 1
     elseif direction == 'prev' then
-        idx = (idx - 2) % count + 1
+        new_idx = (new_idx - 2) % count + 1
     else
         return false
     end
 
-    return idx
+    -- Update window borders
+    local borders = state.apps[app].borders
+
+    local old_border = borders[idx]
+    local border     = borders[new_idx]
+
+    if old_border then
+        old_border:hide()
+    end
+    if border then
+        border:show()
+    end
+
+    -- Update focused window and its index
+    local win = wins[new_idx]
+
+    state.apps[app].idx = new_idx
+    state.menu.curr_win = win
+
+    win:focus()
+end
+
+
+-- Create border canvases for each open window
+--------------------------------------------------------------------------------
+local function create_border(win)
+    local canvas = hs.canvas.new(win:frame())
+
+    canvas:appendElements({
+        type        = 'rectangle',
+        action      = 'stroke',
+        strokeColor = { white = 1, alpha = 1 },
+        strokeWidth = 3,
+    })
+
+    canvas:level(hs.canvas.windowLevels.overlay)
+    canvas:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
+
+    return canvas
 end
 
 
@@ -185,25 +239,33 @@ local function get_open_windows()
 
     -- All open windows
     windows.all = {
-        idx  = 1,
-        wins = {},
+        idx     = 1,
+        wins    = {},
+        borders = {},
     }
 
     for _, app in ipairs(running_apps) do
-        local name     = app:name()
-        local app_wins = {}
+        local name        = app:name()
+        local app_wins    = {}
+        local app_borders = {}
 
         for _, win in ipairs(app:allWindows()) do
             if win:isStandard() and win:isVisible() then
                 table.insert(windows.all.wins, win)
                 table.insert(app_wins, win)
+
+                local border = create_border(win)
+
+                table.insert(windows.all.borders, border)
+                table.insert(app_borders, border)
             end
         end
 
         if #app_wins > 0 then
             windows[name] = {
-                idx  = 1,
-                wins = app_wins,
+                idx     = 1,
+                wins    = app_wins,
+                borders = app_borders,
             }
         end
     end
@@ -423,36 +485,15 @@ function M.cycle_app_specific(direction)
     return function(done)
         local focused = state.menu.curr_win
 
-        if not focused then
-            done()
-            return
-        end
-
         local app  = focused:application():name()
         local wins = state.apps[app].wins
-
-        if not wins then
-            hs.alert.show('Window is not tracked by state.lua')
-            return
-        end
 
         if #wins < 2 then
             done()
             return
         end
 
-        local idx     = state.apps[app].idx
-        local new_idx = iterate_window_index(wins, idx, direction)
-
-        -- Update state and focus new window
-        if new_idx then
-            local win = wins[new_idx]
-
-            state.apps[app].idx = new_idx
-            state.menu.curr_win = win
-
-            win:focus()
-        end
+        iterate_windows(app, direction)
 
         done()
     end
@@ -464,19 +505,7 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local wins    = state.apps.all.wins
-        local idx     = state.apps.all.idx
-        local new_idx = iterate_window_index(wins, idx, direction)
-
-        -- Update state and focus new window
-        if new_idx then
-            local win = wins[new_idx]
-
-            state.apps.all.idx  = new_idx
-            state.menu.curr_win = win
-
-            win:focus()
-        end
+        iterate_windows('all', direction)
 
         done()
     end

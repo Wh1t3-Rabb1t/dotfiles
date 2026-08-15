@@ -1,10 +1,10 @@
 local M = {}
 
-local popups  = require('popups')
-local screens = require('screens')
-local windows = require('windows')
-local qt      = require('quit_timer')
-local wk      = require('which_key')
+local screens   = require('screens')
+local windows   = require('windows')
+local qt        = require('quit_timer')
+local wk_assets = require('which_key_assets')
+local wk        = require('which_key')
 
 local keys = {
     {
@@ -26,7 +26,7 @@ local keys = {
         action = function()
             screens.init()
             windows.init()
-            popups.init()
+            wk_assets.init()
             wk.launch()
         end,
     },

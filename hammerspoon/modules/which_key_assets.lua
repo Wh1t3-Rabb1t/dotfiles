@@ -69,7 +69,7 @@ end
 
 -- Get the width / height of the popup window
 --------------------------------------------------------------------------------
-local function get_popup_frame(text)
+local function fmt_popup_frame(text)
     local size          = hs.drawing.getTextDrawingSize(text)
     local canvas_width  = math.max(size.w)
     local canvas_height = math.max(size.h)
@@ -168,7 +168,7 @@ local function fmt_menu_text(app, binding_tbl)
     local styles = {
         title = { font = title_font, color = rgb(205, 205, 205) },
         group = { font = base_font,  color = rgb(150, 200, 255) },
-        key   = { font = base_font,  color = rgb(0, 255, 0) },
+        key   = { font = base_font,  color = rgb(0, 255, 0)     },
         arrow = { font = base_font,  color = rgb(100, 100, 100) },
         desc  = { font = base_font,  color = rgb(255, 255, 255) },
     }
@@ -214,7 +214,7 @@ end
 --------------------------------------------------------------------------------
 local function fmt_binding_popups(app, bindings)
     local content = fmt_menu_text(app, bindings)
-    local frame   = get_popup_frame(content)
+    local frame   = fmt_popup_frame(content)
     local popup   = create_popup(content, frame)
 
     local binding_data = {

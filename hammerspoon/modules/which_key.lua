@@ -207,7 +207,6 @@ function M.cycle_corner_pos()
         local new_index  = (current_index % #corners) + 1
         local new_corner = corners[new_index]
 
-        -- Update state
         state.menu.corner = new_corner
 
         done()
@@ -223,7 +222,6 @@ function M.cycle_stacking()
         local stack     = state.menu.stack
         local new_stack = (stack == 'vertical') and 'horizontal' or 'vertical'
 
-        -- Update state
         state.menu.stack = new_stack
 
         done()
@@ -256,7 +254,6 @@ function M.opacity(direction)
         -- System popup
         cache.assets.system.popup:alpha(opacity)
 
-        -- Update state
         state.menu.opacity = opacity
 
         done()
@@ -338,8 +335,8 @@ function M.show()
         local stack   = state.menu.stack
         local opacity = state.menu.opacity
 
-        local popups  = get_current(win)
-        local coords  = get_coords(win, popups, corner, stack)
+        local popups = get_current(win)
+        local coords = get_coords(win, popups, corner, stack)
 
         for i, v in ipairs(popups) do
             v.popup:topLeft(coords[i])

@@ -11,6 +11,9 @@
   ranging from small to large, that can be cached, then looped and displayed
   for a short duration; each with a lower opacity until transparent.
 
+- Create a small debugging fn that prints all open windows along with their
+  idx so we can sync focused win idx with state rather that falling back to 1.
+
 ---
 
 ## STYLING (to be fully implemented):
@@ -40,6 +43,12 @@
 ---
 
 ## Module todo:
+
+- Need to update the 'state.apps.all.idx' even when cycling app specific
+  windows etc.
+
+- Name a kitty tab 'Broot' and create a bunch of modal bindings to send
+  hard to remember actions. (if app == 'kitty' and win:title() == 'Broot').
 
 - For 'Brave' we could create a 'cycle_focus' action that sends keystrokes to
   cycle focus between things like:

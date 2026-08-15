@@ -2,6 +2,8 @@
 
 ## IMMEDIATE TASKS:
 
+- Remove border:hide() logic from wk.hide().
+
 - Add a rectangle border around the currently focused window. (create and
   destroy as window changes).
 

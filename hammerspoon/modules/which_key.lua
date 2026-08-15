@@ -314,11 +314,25 @@ function M.hide()
         local win = state.menu.curr_win
         local app = win:application():name()
 
+        -- Delete popup
         if cache.assets[app] then
             cache.assets[app].popup:delete()
         end
 
         cache.assets.system.popup:delete()
+
+
+
+        -- Hide window border
+        local idx     = state.apps.all.idx
+        local borders = state.apps.all.borders
+        local border  = borders[idx]
+
+        if border then
+            border:hide()
+        end
+
+
 
         done()
     end

@@ -17,16 +17,17 @@ M.action_queue = {
 
 M.apps = {
     -- ['all'] = {
-    --     idx  = 1,
-    --     wins = { ... },
+    --     idx     = 1,
+    --     wins    = { ... },
+    --     borders = { ... },
     -- },
     -- ['Brave Browser'] = {
-    --     idx  = 1,
-    --     wins = { ... },
+    --     idx     = 1,
+    --     wins    = { ... },
     -- },
     -- ['kitty'] = {
-    --     idx  = 1,
-    --     wins = { ... },
+    --     idx     = 1,
+    --     wins    = { ... },
     -- },
     -- ...
 }

@@ -166,48 +166,90 @@ local function assign_window(layout, existing, win)
 end
 
 
+-- Find a windows index in the state table
+--------------------------------------------------------------------------------
+local function find_window_index(wins, target)
+    for i, win in ipairs(wins) do
+        if win == target then
+            return i
+        end
+    end
+end
+
+
+-- Sync app specific window indexes when focused
+--------------------------------------------------------------------------------
+local function sync_app_index(win)
+    local app       = win:application():name()
+    local app_state = state.apps[app]
+
+    if not app_state then
+        return
+    end
+
+    local idx = find_window_index(app_state.wins, win)
+
+    if idx then
+        app_state.idx = idx
+    end
+end
+
+
 -- Iterate focused window
 --------------------------------------------------------------------------------
 local function iterate_windows(app, direction)
-    local wins = state.apps[app].wins
-    local idx  = state.apps[app].idx
-
-    local new_idx = idx
-    local count   = #wins
+    local wins  = state.apps[app].wins
+    local idx   = state.apps[app].idx
+    local count = #wins
 
     if count == 0 then
         return false
     end
 
-    -- Iterate window index
+    local new_idx
+
     if direction == 'next' then
-        new_idx = new_idx % count + 1
+        new_idx = idx % count + 1
     elseif direction == 'prev' then
-        new_idx = (new_idx - 2) % count + 1
+        new_idx = (idx - 2) % count + 1
     else
         return false
     end
 
-    -- Update window borders
-    local borders = state.apps[app].borders
-
-    local old_border = borders[idx]
-    local border     = borders[new_idx]
-
-    if old_border then
-        old_border:hide()
-    end
-    if border then
-        border:show()
-    end
-
-    -- Update focused window and its index
     local win = wins[new_idx]
 
-    state.apps[app].idx = new_idx
+    -- 'all' is always the authoritative index
+    local all_idx
+
+    if app == 'all' then
+        all_idx = new_idx
+    else
+        all_idx = find_window_index(
+            state.apps.all.wins,
+            win
+        )
+    end
+
+    -- Update border using the 'all' index
+    local borders = state.apps.all.borders
+
+    local old_border = borders[state.apps.all.idx]
+    local new_border = borders[all_idx]
+
+    if old_border then old_border:hide() end
+    if new_border then new_border:show() end
+
+    -- 'all' always tracks the focused window
+    state.apps.all.idx = all_idx
+
+    -- Sync app index if current app is compatible
+    sync_app_index(win)
+
     state.menu.curr_win = win
 
     win:focus()
+
+    return true
 end
 
 
@@ -247,7 +289,6 @@ local function get_open_windows()
     for _, app in ipairs(running_apps) do
         local name        = app:name()
         local app_wins    = {}
-        local app_borders = {}
 
         for _, win in ipairs(app:allWindows()) do
             if win:isStandard() and win:isVisible() then
@@ -257,7 +298,6 @@ local function get_open_windows()
                 local border = create_border(win)
 
                 table.insert(windows.all.borders, border)
-                table.insert(app_borders, border)
             end
         end
 
@@ -265,7 +305,6 @@ local function get_open_windows()
             windows[name] = {
                 idx     = 1,
                 wins    = app_wins,
-                borders = app_borders,
             }
         end
     end
@@ -483,15 +522,20 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
-        local focused = state.menu.curr_win
+        local focused   = state.menu.curr_win
+        local app       = focused:application():name()
+        local app_state = state.apps[app]
 
-        local app  = focused:application():name()
-        local wins = state.apps[app].wins
-
-        if #wins < 2 then
+        if not app_state or #app_state.wins < 2 then
             done()
             return
         end
+
+        -- Establish the app idx from the focused window
+        app_state.idx = find_window_index(
+            app_state.wins,
+            focused
+        )
 
         iterate_windows(app, direction)
 
@@ -505,6 +549,20 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
+        local focused   = state.menu.curr_win
+        local all_state = state.apps.all
+
+        if #all_state.wins < 2 then
+            done()
+            return
+        end
+
+        -- Establish 'all' idx from the focused window
+        all_state.idx = find_window_index(
+            all_state.wins,
+            focused
+        )
+
         iterate_windows('all', direction)
 
         done()

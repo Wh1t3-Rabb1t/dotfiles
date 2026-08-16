@@ -1,11 +1,14 @@
 local M = {}
 
+-- Commented out entries are populated on init
+
 M.watchers = {}
 
 M.lookup = {
     -- [app_name] = {
     --     key = action,
     -- }
+    -- ...
 }
 
 M.assets = {
@@ -13,9 +16,9 @@ M.assets = {
     --     popup = popup,
     --     frame = frame,
     -- }
+    -- ...
 }
 
--- Data for each screen is populated on init
 M.screens = {
     -- [id] = {
     --     frame = {
@@ -26,6 +29,7 @@ M.screens = {
     --     },
     --     overlay = (canvas),
     -- }
+    -- ...
 }
 
 return M

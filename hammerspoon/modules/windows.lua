@@ -180,17 +180,17 @@ end
 -- Sync app specific window indexes when focused
 --------------------------------------------------------------------------------
 local function sync_app_index(win)
-    local app       = win:application():name()
-    local app_state = state.apps[app]
+    local app  = win:application():name()
+    local apps = state.apps[app]
 
-    if not app_state then
+    if not apps then
         return
     end
 
-    local idx = find_window_index(app_state.wins, win)
+    local idx = find_window_index(apps.wins, win)
 
     if idx then
-        app_state.idx = idx
+        apps.idx = idx
     end
 end
 
@@ -410,7 +410,7 @@ end
 --------------------------------------------------------------------------------
 function M.snap()
     return function(done)
-        local win    = state.menu.curr_win or hs.window.focusedWindow()
+        local win    = state.menu.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
         local frames = get_coords(id)
@@ -511,20 +511,17 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
-        local focused   = state.menu.curr_win
-        local app       = focused:application():name()
-        local app_state = state.apps[app]
+        local win  = state.menu.curr_win
+        local app  = win:application():name()
+        local apps = state.apps[app]
 
-        if not app_state or #app_state.wins < 2 then
+        if not apps or #apps.wins < 2 then
             done()
             return
         end
 
         -- Establish the app idx from the focused window
-        app_state.idx = find_window_index(
-            app_state.wins,
-            focused
-        )
+        apps.idx = find_window_index(apps.wins, win)
 
         iterate_windows(app, direction)
 
@@ -538,19 +535,16 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local focused   = state.menu.curr_win
-        local all_state = state.apps.all
+        local win  = state.menu.curr_win
+        local apps = state.apps.all
 
-        if #all_state.wins < 2 then
+        if #apps.wins < 2 then
             done()
             return
         end
 
         -- Establish 'all' idx from the focused window
-        all_state.idx = find_window_index(
-            all_state.wins,
-            focused
-        )
+        apps.idx = find_window_index(apps.wins, win)
 
         iterate_windows('all', direction)
 

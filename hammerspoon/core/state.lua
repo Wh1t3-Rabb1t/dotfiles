@@ -3,7 +3,6 @@ local M = {}
 -- Commented out entries are populated on init
 
 M.menu = {
-    curr_win   = false,  -- (win|false)
     tap_active = false,  -- (true|false)
     corner     = 'bottom_right',
     stack      = 'horizontal',
@@ -17,9 +16,10 @@ M.action_queue = {
 
 M.apps = {
     -- ['all'] = {
-    --     idx     = 1,
-    --     wins    = { ... },
-    --     borders = { ... },
+    --     idx      = 1,
+    --     curr_win = win,
+    --     wins     = { ... },
+    --     borders  = { ... },
     -- },
     -- ['Brave Browser'] = {
     --     idx     = 1,

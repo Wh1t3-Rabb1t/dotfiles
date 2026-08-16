@@ -38,6 +38,7 @@ local function create_overlay(screen)
             alpha = 0,
         }
     })
+
     overlay:level(hs.canvas.windowLevels.overlay)
     overlay:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
 

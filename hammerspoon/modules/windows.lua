@@ -1,11 +1,12 @@
 local M = {}
 
+local util  = require('util')
 local state = require('state')
 local cache = require('cache')
 
 
 -- function refresh_window_state()
---     local curr_wind = state.menu.curr_win
+--     local curr_wind = state.apps.all.curr_win
 --     local borders = state.apps.all.borders
 --     local wins    = state.apps.all.wins
 --     local idx     = state.apps.all.idx
@@ -233,8 +234,8 @@ local function iterate_windows(app, direction)
     -- Sync app index if current app is compatible
     sync_app_index(win)
 
-    apps.idx            = new_idx
-    state.menu.curr_win = win
+    apps.idx      = new_idx
+    apps.curr_win = win
 
     win:focus()
 
@@ -263,16 +264,17 @@ end
 
 -- Get all open windows
 --------------------------------------------------------------------------------
-local function get_open_windows()
+local function get_open_windows(focused)
     local running_apps = hs.application.runningApplications()
 
     local windows = {}
 
     -- All open windows
     windows.all = {
-        idx     = 1,
-        wins    = {},
-        borders = {},
+        idx      = 1,
+        curr_win = focused,
+        wins     = {},
+        borders  = {},
     }
 
     for _, app in ipairs(running_apps) do
@@ -307,7 +309,7 @@ end
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
-        local win    = state.menu.curr_win
+        local win    = state.apps.all.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
 
@@ -324,7 +326,7 @@ end
 function M.resize(direction, step_val)
     return function(done)
         local step    = step_val or 0.01
-        local win     = state.menu.curr_win
+        local win     = state.apps.all.curr_win
         local id      = win:screen():id()
         local screen  = state.screens[id]
         local divider = screen.divider
@@ -368,7 +370,7 @@ end
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
-        local win    = state.menu.curr_win
+        local win    = state.apps.all.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
         local lhs    = layout.left
@@ -387,7 +389,7 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
-        local win         = state.menu.curr_win
+        local win         = state.apps.all.curr_win
         local curr_screen = win:screen()
         local next_screen = curr_screen:next()
 
@@ -410,7 +412,7 @@ end
 --------------------------------------------------------------------------------
 function M.snap()
     return function(done)
-        local win    = state.menu.curr_win
+        local win    = state.apps.all.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
         local frames = get_coords(id)
@@ -439,7 +441,7 @@ function M.launch_or_focus(app)
         local existing = hs.window.focusedWindow()
 
         local function finish(new)
-            state.menu.curr_win = new
+            state.apps.all.curr_win = new
 
             if existing and new and existing:id() ~= new:id() then
                 local id     = new:screen():id()
@@ -495,7 +497,7 @@ function M.cycle_main_apps()
 
                 assign_window(layout, existing, target_win)
 
-                state.menu.curr_win = target_win
+                state.apps.all.curr_win = target_win
 
                 done()
             end
@@ -511,7 +513,7 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
-        local win  = state.menu.curr_win
+        local win  = state.apps.all.curr_win
         local app  = win:application():name()
         local apps = state.apps[app]
 
@@ -521,7 +523,10 @@ function M.cycle_app_specific(direction)
         end
 
         -- Establish the app idx from the focused window
-        apps.idx = find_window_index(apps.wins, win)
+        apps.idx = find_window_index(
+            apps.wins,
+            win
+        )
 
         iterate_windows(app, direction)
 
@@ -535,7 +540,6 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local win  = state.menu.curr_win
         local apps = state.apps.all
 
         if #apps.wins < 2 then
@@ -544,9 +548,39 @@ function M.cycle_open(direction)
         end
 
         -- Establish 'all' idx from the focused window
-        apps.idx = find_window_index(apps.wins, win)
+        apps.idx = find_window_index(
+            apps.wins,
+            apps.curr_win
+        )
 
         iterate_windows('all', direction)
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Toggle border visibility
+------------------------------------------------------------------------------
+function M.border(toggle)
+    return function(done)
+        local apps   = state.apps.all
+
+        apps.idx = find_window_index(
+            apps.wins,
+            apps.curr_win
+        )
+
+        local border = apps.borders[apps.idx]
+
+        if border then
+            if toggle == 'show' then
+                border:show()
+            elseif toggle == 'hide' then
+                border:hide()
+            end
+        end
 
         done()
     end
@@ -560,6 +594,10 @@ function M.init()
     local win = hs.window.focusedWindow()
     local app = win:application():name()
 
+    if not util.tbl(state.apps) then
+        state.apps = get_open_windows(win)
+    end
+
     -- Init layout if the focused window is compatible
     if cache.assets[app] then
         local id     = win:screen():id()
@@ -568,7 +606,11 @@ function M.init()
         assign_window(layout, nil, win)
     end
 
-    state.apps = get_open_windows()
+    -- Show window border
+    local init_fn = M.border('show')
+    init_fn(function()
+        -- Call done()
+    end)
 end
 
 return M

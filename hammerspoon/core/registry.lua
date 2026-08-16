@@ -202,10 +202,11 @@ M.apps = {
         {
             category = 'Misc',
             bindings = bind(
-                { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=')         },
-                { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')         },
-                { 'W',      'Toggle wifi on/off', wifi.toggle_wifi()                 },
-                { 'escape', 'Cancel',             wk.turn_eventtap('off'), wk.hide() }
+                { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=')                       },
+                { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')                       },
+                { 'W',      'Toggle wifi on/off', wifi.toggle_wifi()                               },
+                { 'escape', 'Cancel',             wk.turn_tap('off'), win.border('hide'), wk.hide() }
+                -- { 'escape', 'Cancel',             wk.turn_tap('off'), wk.hide() }
             ),
         },
     },
@@ -277,12 +278,12 @@ M.apps = {
         {
             category = 'Page',
             bindings = bind(
-                { 'e', 'Up',      wk.send_keys({}, 'pageup')                                                            },
-                { 'd', 'Down',    wk.send_keys({}, 'pagedown')                                                          },
-                { 'E', 'Top',     wk.send_keys({}, 'home')                                                              },
-                { 'D', 'Bottom',  wk.send_keys({}, 'end')                                                               },
-                { 'F', 'Search',  wk.send_keys({'cmd'}, 'f'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
-                { 'R', 'Reload',  wk.send_keys({'cmd'}, 'r')                                                            }
+                { 'e', 'Up',      wk.send_keys({}, 'pageup')                                             },
+                { 'd', 'Down',    wk.send_keys({}, 'pagedown')                                           },
+                { 'E', 'Top',     wk.send_keys({}, 'home')                                               },
+                { 'D', 'Bottom',  wk.send_keys({}, 'end')                                                },
+                { 'F', 'Search',  wk.send_keys({'cmd'}, 'f'), wk.turn_tap('off'), wk.hide(), wk.insert() },
+                { 'R', 'Reload',  wk.send_keys({'cmd'}, 'r')                                             }
 
                 -- { '', 'Forward', wk.send_keys({'cmd'}, ']') },
                 -- { '', 'Back',    wk.send_keys({'cmd'}, '[') },
@@ -291,14 +292,14 @@ M.apps = {
         {
             category = 'Tabs',
             bindings = bind(
-                { 'h', 'Left',            wk.send_keys({'ctrl'}, 'pageup')                                                               },
-                { ';', 'Right',           wk.send_keys({'ctrl'}, 'pagedown')                                                             },
-                { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup')                                                      },
-                { ':', 'Swap with right', wk.send_keys({'ctrl', 'shift'}, 'pagedown')                                                    },
-                { '/', 'Search tabs',     wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
-                { 'm', 'Open',            wk.send_keys({'cmd'}, 't')                                                                     },
-                { 'M', 'Re-open closed',  wk.send_keys({'cmd', 'shift'}, 't')                                                            },
-                { 'w', 'Close',           wk.send_keys({'cmd'}, 'w')                                                                     }
+                { 'h', 'Left',            wk.send_keys({'ctrl'}, 'pageup')                                                },
+                { ';', 'Right',           wk.send_keys({'ctrl'}, 'pagedown')                                              },
+                { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup')                                       },
+                { ':', 'Swap with right', wk.send_keys({'ctrl', 'shift'}, 'pagedown')                                     },
+                { '/', 'Search tabs',     wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_tap('off'), wk.hide(), wk.insert() },
+                { 'm', 'Open',            wk.send_keys({'cmd'}, 't')                                                      },
+                { 'M', 'Re-open closed',  wk.send_keys({'cmd', 'shift'}, 't')                                             },
+                { 'w', 'Close',           wk.send_keys({'cmd'}, 'w')                                                      }
             ),
         },
         {
@@ -313,10 +314,10 @@ M.apps = {
         {
             category = 'Misc',
             bindings = bind(
-                { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.turn_eventtap('off'), wk.hide(), wk.temporary_insert() },
-                { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd')                                                            },
-                { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h')                                                            },
-                { 'return', 'Confirm',         wk.send_keys({}, 'return')                                                            }
+                { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.turn_tap('off'), wk.hide(), wk.insert() },
+                { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd')                                             },
+                { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h')                                             },
+                { 'return', 'Confirm',         wk.send_keys({}, 'return')                                             }
             ),
         },
     },

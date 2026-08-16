@@ -165,7 +165,7 @@ end
 --------------------------------------------------------------------------------
 -- Toggle event tap
 --------------------------------------------------------------------------------
-function M.turn_eventtap(set_to)
+function M.turn_tap(set_to)
     return function (done)
         if set_to == 'on' then
             state.menu.tap_active = true
@@ -234,7 +234,7 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
-        local win     = state.menu.curr_win
+        local win     = state.apps.all.curr_win
         local app     = win:application():name()
         local opacity = state.menu.opacity
 
@@ -264,9 +264,9 @@ end
 --------------------------------------------------------------------------------
 -- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
 --------------------------------------------------------------------------------
-function M.temporary_insert()
+function M.insert()
     return function(done)
-        local win     = state.menu.curr_win
+        local win     = state.apps.all.curr_win
         local frame   = win:frame()
         local opacity = state.menu.opacity
         local popup   = cache.assets.insert.popup
@@ -311,7 +311,7 @@ end
 --------------------------------------------------------------------------------
 function M.hide()
     return function(done)
-        local win = state.menu.curr_win
+        local win = state.apps.all.curr_win
         local app = win:application():name()
 
         -- Delete popup
@@ -320,19 +320,6 @@ function M.hide()
         end
 
         cache.assets.system.popup:delete()
-
-
-
-        -- Hide window border
-        local idx     = state.apps.all.idx
-        local borders = state.apps.all.borders
-        local border  = borders[idx]
-
-        if border then
-            border:hide()
-        end
-
-
 
         done()
     end
@@ -344,7 +331,7 @@ end
 --------------------------------------------------------------------------------
 function M.show()
     return function(done)
-        local win     = state.menu.curr_win
+        local win     = state.apps.all.curr_win
         local corner  = state.menu.corner
         local stack   = state.menu.stack
         local opacity = state.menu.opacity
@@ -371,19 +358,14 @@ function M.launch()
         return
     end
 
-    local focused = hs.window.focusedWindow()
+    state.menu.tap_active = true
+    cache.assets.tap:start()
 
-    if focused then
-        state.menu.curr_win   = focused
-        state.menu.tap_active = true
-        cache.assets.tap:start()
-
-        local init_fn = M.show()
-
-        init_fn(function()
-            -- Call done()
-        end)
-    end
+    -- Show popup
+    local init_fn = M.show()
+    init_fn(function()
+        -- Call done()
+    end)
 end
 
 return M

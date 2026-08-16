@@ -2,8 +2,6 @@
 
 ## IMMEDIATE TASKS:
 
-- Remove border:hide() logic from wk.hide().
-
 - Add a rectangle border around the currently focused window. (create and
   destroy as window changes).
 
@@ -29,8 +27,11 @@
 
 ## BUGS:
 
+- Incorporate a window filter for all window switching actions to ensure that
+  there are no subtle races when hiding/showing popups.
+
 - When calling windows.init() with the desktop open; it causes an hs crash
-  (attempted to index nil val 'win').
+  (attempted to index nil val 'win'). Could launch a kitty window as default.
 
 - When unplugging or plugging in a new display, it breaks the coords of the
   shader that was on the original display.
@@ -46,8 +47,7 @@
 
 ## Module todo:
 
-- Need to update the 'state.apps.all.idx' even when cycling app specific
-  windows etc.
+- Maybe rm launch_or_focus(app) in favour of apple spotlight to launch apps.
 
 - Name a kitty tab 'Broot' and create a bunch of modal bindings to send
   hard to remember actions. (if app == 'kitty' and win:title() == 'Broot').

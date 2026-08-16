@@ -200,6 +200,7 @@ end
 local function iterate_windows(app, direction)
     local wins  = state.apps[app].wins
     local idx   = state.apps[app].idx
+    local apps  = state.apps.all
     local count = #wins
 
     if count == 0 then
@@ -218,33 +219,21 @@ local function iterate_windows(app, direction)
 
     local win = wins[new_idx]
 
-    -- 'all' is always the authoritative index
-    local all_idx
-
-    if app == 'all' then
-        all_idx = new_idx
-    else
-        all_idx = find_window_index(
-            state.apps.all.wins,
-            win
-        )
+    if app ~= 'all' then
+        new_idx = find_window_index(apps.wins, win)
     end
 
     -- Update border using the 'all' index
-    local borders = state.apps.all.borders
-
-    local old_border = borders[state.apps.all.idx]
-    local new_border = borders[all_idx]
+    local old_border = apps.borders[apps.idx]
+    local new_border = apps.borders[new_idx]
 
     if old_border then old_border:hide() end
     if new_border then new_border:show() end
 
-    -- 'all' always tracks the focused window
-    state.apps.all.idx = all_idx
-
     -- Sync app index if current app is compatible
     sync_app_index(win)
 
+    apps.idx            = new_idx
     state.menu.curr_win = win
 
     win:focus()
@@ -287,8 +276,8 @@ local function get_open_windows()
     }
 
     for _, app in ipairs(running_apps) do
-        local name        = app:name()
-        local app_wins    = {}
+        local name     = app:name()
+        local app_wins = {}
 
         for _, win in ipairs(app:allWindows()) do
             if win:isStandard() and win:isVisible() then
@@ -303,8 +292,8 @@ local function get_open_windows()
 
         if #app_wins > 0 then
             windows[name] = {
-                idx     = 1,
-                wins    = app_wins,
+                idx  = 1,
+                wins = app_wins,
             }
         end
     end

@@ -2,8 +2,7 @@
 
 ## IMMEDIATE TASKS:
 
-- Add a rectangle border around the currently focused window. (create and
-  destroy as window changes).
+- Create and destroy window border as window changes/opens/closes.
 
 - Alter lookup/eventtap/registry to support 'leader' key.
 

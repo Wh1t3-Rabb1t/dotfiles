@@ -116,27 +116,6 @@ local function get_coords(id, border)
 end
 
 
--- Snap windows into their respective slot coords
---------------------------------------------------------------------------------
-local function snap_layout()
-    local win    = state.apps.all.curr_win
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
-    local frames = get_coords(id)
-
-    if layout.maximized then
-        layout.maximized:setFrame(cache.screens[id].frame, 0.02)
-    else
-        if layout.left then
-            layout.left:setFrame(frames.left, 0.02)
-        end
-        if layout.right then
-            layout.right:setFrame(frames.right, 0.02)
-        end
-    end
-end
-
-
 -- Remove windows from layout state
 --------------------------------------------------------------------------------
 local function remove_window(layout, win)
@@ -334,8 +313,6 @@ function M.maximize()
 
         layout.maximized = win
 
-        snap_layout()
-
         done()
     end
 end
@@ -381,8 +358,6 @@ function M.resize(direction, step_val)
             layout.maximized = false
         end
 
-        snap_layout()
-
         done()
     end
 end
@@ -401,8 +376,6 @@ function M.swap()
 
         layout.left  = rhs
         layout.right = lhs
-
-        snap_layout()
 
         done()
     end
@@ -427,7 +400,31 @@ function M.move_to_screen()
 
         assign_window(new_layout, nil, win)
 
-        snap_layout()
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Snap windows into their respective slot coords
+--------------------------------------------------------------------------------
+function M.snap()
+    return function(done)
+        local win    = state.apps.all.curr_win
+        local id     = win:screen():id()
+        local layout = state.screens[id].layout
+        local frames = get_coords(id)
+
+        if layout.maximized then
+            layout.maximized:setFrame(cache.screens[id].frame, 0.02)
+        else
+            if layout.left then
+                layout.left:setFrame(frames.left, 0.02)
+            end
+            if layout.right then
+                layout.right:setFrame(frames.right, 0.02)
+            end
+        end
 
         done()
     end
@@ -449,8 +446,6 @@ function M.launch_or_focus(app)
                 local layout = state.screens[id].layout
 
                 assign_window(layout, existing, new)
-
-                snap_layout()
             end
 
             done()
@@ -615,3 +610,4 @@ function M.init()
 end
 
 return M
+

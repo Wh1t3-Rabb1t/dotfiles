@@ -151,28 +151,33 @@ M.apps = {
     ['system'] = {  -- |
     -------------------+
         -- MacOS default keybindings:  https://support.apple.com/en-ca/102650
-        {
-            category = 'Launch or focus',
-            bindings = bind(
-                { 'y', 'Firefox', wk.hide(), win.launch_or_focus('Firefox'), win.snap(), wk.show() }
-            ),
-        },
+        -- {
+        --     category = 'Launch or focus',
+        --     bindings = bind(
+        --         { 'y', 'Firefox', wk.hide(), win.launch_or_focus('Firefox'), wk.show() }
+        --     ),
+        -- },
         {
             category = 'Windows',
             bindings = bind(
-                { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()            },
-                { 'o', 'Next open',       wk.hide(), win.cycle_open('next'), wk.show()           },
-                { 'u', 'Prev open',       wk.hide(), win.cycle_open('prev'), wk.show()           },
-                { 'O', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show()   },
-                { 'U', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show()   },
-                { 'f', 'Resize right',    wk.hide(), win.resize('right'), win.snap(), wk.show()  },
-                { 's', 'Resize left',     wk.hide(), win.resize('left'), win.snap(), wk.show()   },
-                { 'g', 'Maximize',        wk.hide(), win.maximize(), win.snap(), wk.show()       },
-                { 'G', 'Swap positions',  wk.hide(), win.swap(), win.snap(), wk.show()           },
-                { 'p', 'To next screen',  wk.hide(), win.move_to_screen(), win.snap(), wk.show() },
-                { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n')                             },
-                { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't')                             },
-                { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w')                             }
+                { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()          },
+                { 'o', 'Next open',       wk.hide(), win.cycle_open('next'), wk.show()         },
+                { 'u', 'Prev open',       wk.hide(), win.cycle_open('prev'), wk.show()         },
+                { 'O', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
+                { 'U', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
+                { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n')                           },
+                { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't')                           },
+                { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w')                           }
+            ),
+        },
+        {
+            category = 'Layout',
+            bindings = bind(
+                { 'f', 'Resize right',   wk.hide(), win.resize('right'), wk.show()  },
+                { 's', 'Resize left',    wk.hide(), win.resize('left'), wk.show()   },
+                { 'g', 'Maximize',       wk.hide(), win.maximize(), wk.show()       },
+                { 'G', 'Swap positions', wk.hide(), win.swap(), wk.show()           },
+                { 'p', 'To next screen', wk.hide(), win.move_to_screen(), wk.show() }
             ),
         },
         {

@@ -1,0 +1,7 @@
+-- Need to store certain macOS default key combos in the system table
+-- i.e.
+--
+-- cmd + n
+-- cmd + w
+-- cmd + t ? (can bind kitty split open to cmd + t)
+-- cmd + t

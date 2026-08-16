@@ -22,7 +22,7 @@
   "nvim-recorder": { "branch": "main", "commit": "0ef1a24293323b3db2f56edca196f662b6551b1b" },
   "nvim-rip-substitute": { "branch": "main", "commit": "e3e1696bf934af7ae9130daabcafa07d9176d195" },
   "nvim-surround": { "branch": "main", "commit": "2e93e154de9ff326def6480a4358bfc149d5da2c" },
-  "nvim-treesitter": { "branch": "main", "commit": "a1bcffc8095c142ad1f7a9671a4ae180333f9209" },
+  "nvim-treesitter": { "branch": "main", "commit": "074aa4422bf029908338e855d0c0f71470a971bb" },
   "nvim-web-devicons": { "branch": "master", "commit": "2ae6958df7ced50baac5035cec0c15799eedfbf7" },
   "snacks.nvim": { "branch": "main", "commit": "e6fd58c82f2f3fcddd3fe81703d47d6d48fc7b9f" }
 }

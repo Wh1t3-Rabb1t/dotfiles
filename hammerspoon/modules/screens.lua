@@ -1,6 +1,5 @@
 local M = {}
 
-local util  = require('util')
 local state = require('state')
 local cache = require('cache')
 
@@ -74,14 +73,12 @@ end
 --------------------------------------------------------------------------------
 function M.init()
     -- Init screen data if required
-    if not util.tbl(cache.screens) or not util.tbl(state.screens) then
-        for _, screen in ipairs(hs.screen.allScreens()) do
-            local id          = screen:id()
-            local screen_data = get_screen_data(screen)
+    for _, screen in ipairs(hs.screen.allScreens()) do
+        local id          = screen:id()
+        local screen_data = get_screen_data(screen)
 
-            cache.screens[id] = screen_data.cache
-            state.screens[id] = screen_data.state
-        end
+        cache.screens[id] = screen_data.cache
+        state.screens[id] = screen_data.state
     end
 end
 

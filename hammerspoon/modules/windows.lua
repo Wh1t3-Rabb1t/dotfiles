@@ -1,6 +1,5 @@
 local M = {}
 
-local util  = require('util')
 local state = require('state')
 local cache = require('cache')
 
@@ -278,7 +277,6 @@ local function get_open_windows(focused)
     }
 
     for _, app in ipairs(running_apps) do
-        local name     = app:name()
         local app_wins = {}
 
         for _, win in ipairs(app:allWindows()) do
@@ -293,7 +291,7 @@ local function get_open_windows(focused)
         end
 
         if #app_wins > 0 then
-            windows[name] = {
+            windows[app:name()] = {
                 idx  = 1,
                 wins = app_wins,
             }
@@ -565,7 +563,7 @@ end
 ------------------------------------------------------------------------------
 function M.border(toggle)
     return function(done)
-        local apps   = state.apps.all
+        local apps = state.apps.all
 
         apps.idx = find_window_index(
             apps.wins,
@@ -594,9 +592,7 @@ function M.init()
     local win = hs.window.focusedWindow()
     local app = win:application():name()
 
-    if not util.tbl(state.apps) then
-        state.apps = get_open_windows(win)
-    end
+    state.apps = get_open_windows(win)
 
     -- Init layout if the focused window is compatible
     if cache.assets[app] then

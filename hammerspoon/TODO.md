@@ -47,6 +47,9 @@
 
 ## Module todo:
 
+- Re-implement lazy caching of screens/windows (need a watcher to check for
+  changes even when the menu is not active).
+
 - Maybe rm launch_or_focus(app) in favour of apple spotlight to launch apps.
 
 - Name a kitty tab 'Broot' and create a bunch of modal bindings to send

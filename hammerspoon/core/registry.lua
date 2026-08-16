@@ -150,28 +150,29 @@ M.apps = {
     -------------------+
     ['system'] = {  -- |
     -------------------+
+        -- MacOS default keybindings:  https://support.apple.com/en-ca/102650
         {
             category = 'Launch or focus',
             bindings = bind(
                 { 'y', 'Firefox', wk.hide(), win.launch_or_focus('Firefox'), win.snap(), wk.show() }
-
-                -- { '', 'Brave Browser', wk.hide(), win.launch_or_focus('Brave Browser'), win.snap(), wk.show() },
-                -- { '', 'kitty',         wk.hide(), win.launch_or_focus('kitty'), win.snap(), wk.show()         },
             ),
         },
         {
             category = 'Windows',
             bindings = bind(
-                { '_', 'Cycle cat apps',      wk.hide(), win.cycle_main_apps(), wk.show()            },
-                { 'n', 'Cycle next open',     wk.hide(), win.cycle_open('next'), wk.show()           },
-                { 'N', 'Cycle prev open',     wk.hide(), win.cycle_open('prev'), wk.show()           },
-                { 'o', 'Next app window',     wk.hide(), win.cycle_app_specific('next'), wk.show()   },
-                { 'u', 'Prev app window',     wk.hide(), win.cycle_app_specific('prev'), wk.show()   },
-                { 'f', 'Resize right',        wk.hide(), win.resize('right'), win.snap(), wk.show()  },
-                { 's', 'Resize left',         wk.hide(), win.resize('left'), win.snap(), wk.show()   },
-                { 'g', 'Maximize',            wk.hide(), win.maximize(), win.snap(), wk.show()       },
-                { 'G', 'Swap positions',      wk.hide(), win.swap(), win.snap(), wk.show()           },
-                { 'p', 'Move to next screen', wk.hide(), win.move_to_screen(), win.snap(), wk.show() }
+                { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()            },
+                { 'o', 'Next open',       wk.hide(), win.cycle_open('next'), wk.show()           },
+                { 'u', 'Prev open',       wk.hide(), win.cycle_open('prev'), wk.show()           },
+                { 'O', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show()   },
+                { 'U', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show()   },
+                { 'f', 'Resize right',    wk.hide(), win.resize('right'), win.snap(), wk.show()  },
+                { 's', 'Resize left',     wk.hide(), win.resize('left'), win.snap(), wk.show()   },
+                { 'g', 'Maximize',        wk.hide(), win.maximize(), win.snap(), wk.show()       },
+                { 'G', 'Swap positions',  wk.hide(), win.swap(), win.snap(), wk.show()           },
+                { 'p', 'To next screen',  wk.hide(), win.move_to_screen(), win.snap(), wk.show() },
+                { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n')                             },
+                { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't')                             },
+                { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w')                             }
             ),
         },
         {
@@ -179,8 +180,8 @@ M.apps = {
             bindings = bind(
                 { 'R', 'Cycle positions',     wk.hide(), wk.cycle_corner_pos(), wk.show() },
                 { 'A', 'Cycle menu stacking', wk.hide(), wk.cycle_stacking(), wk.show()   },
-                { 'O', 'Opacity up',          wk.opacity('up')                            },
-                { 'U', 'Opacity down',        wk.opacity('down')                          }
+                { 'V', 'Opacity up',          wk.opacity('up')                            },
+                { 'Y', 'Opacity down',        wk.opacity('down')                          }
             ),
         },
         {
@@ -202,11 +203,10 @@ M.apps = {
         {
             category = 'Misc',
             bindings = bind(
-                { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=')                       },
-                { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')                       },
-                { 'W',      'Toggle wifi on/off', wifi.toggle_wifi()                               },
+                { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=')                        },
+                { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')                        },
+                { 'X',      'Toggle wifi on/off', wifi.toggle_wifi()                                },
                 { 'escape', 'Cancel',             wk.turn_tap('off'), win.border('hide'), wk.hide() }
-                -- { 'escape', 'Cancel',             wk.turn_tap('off'), wk.hide() }
             ),
         },
     },
@@ -297,9 +297,9 @@ M.apps = {
                 { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup')                                       },
                 { ':', 'Swap with right', wk.send_keys({'ctrl', 'shift'}, 'pagedown')                                     },
                 { '/', 'Search tabs',     wk.send_keys({'cmd', 'shift'}, 'a'), wk.turn_tap('off'), wk.hide(), wk.insert() },
-                { 'm', 'Open',            wk.send_keys({'cmd'}, 't')                                                      },
-                { 'M', 'Re-open closed',  wk.send_keys({'cmd', 'shift'}, 't')                                             },
-                { 'w', 'Close',           wk.send_keys({'cmd'}, 'w')                                                      }
+                { 'M', 'Re-open closed',  wk.send_keys({'cmd', 'shift'}, 't')                                             }
+
+                -- { 'm', 'Open',            wk.send_keys({'cmd'}, 't')                                                      },
             ),
         },
         {
@@ -343,10 +343,10 @@ M.apps = {
                 { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')     },
                 { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right')    },
                 { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')     },
-                { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
-                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w') },
-                { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }
+                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w') }
 
+                -- { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
+                -- { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }
                 -- { '', 'New window',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm') },
             ),
         },

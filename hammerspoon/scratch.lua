@@ -5,3 +5,119 @@
 -- cmd + w
 -- cmd + t ? (can bind kitty split open to cmd + t)
 -- cmd + t
+
+
+-- When multiple windows of the same app are open, hs.window:focus() can fail to raise the intended target.
+-- This happens because macOS accessibility APIs sometimes misinterpret requests for background windows,
+-- defaulting focus back to the app's currently active window on your main screen.Why the Bug HappensmacOS
+-- Focus Restrictions: The operating system tightly controls application activation, making it difficult to
+-- force-focus a non-key window belonging to an already active app.API Confusion: Hammerspoon calls native
+-- accessibility hooks that can target the parent application process rather than the specific window UUID
+-- if another window from that same app is already frontmost.How to Fix or Workaround ItRaise Application
+-- First: Bring the application layer forward using hs.application:activate() before calling the focus
+-- method on the specific window object.Raise the Window Explicitly: Use win:raise() right before or alongside
+-- win:focus() to force the window server to redraw and elevate the specific frame.Alternative Scripting Logic:
+-- Loop through the target application's windows array cleanly instead of relying on a raw single-line :focus() command.
+
+
+-- local ax = hs.axuielement.windowElement(win)
+-- local name = win:application():name()
+-- print(name .. ' attributeNames: ' .. hs.inspect(ax:attributeNames()))
+-- print(name .. ' actionNames: ' .. hs.inspect(ax:actionNames()))
+
+-- Hammerspoon attributeNames: {
+--     "AXFocused",
+--     "AXFullScreen",
+--     "AXTitle",
+--     "AXChildrenInNavigationOrder",
+--     "AXFrame",
+--     "AXPosition",
+--     "AXGrowArea",
+--     "AXMinimizeButton",
+--     "AXDocument",
+--     "AXSections",
+--     "AXCloseButton",
+--     "AXMain",
+--     "AXActivationPoint",
+--     "AXFullScreenButton",
+--     "AXProxy",
+--     "AXDefaultButton",
+--     "AXMinimized",
+--     "AXChildren",
+--     "AXRole",
+--     "AXParent",
+--     "AXTitleUIElement",
+--     "AXCancelButton",
+--     "AXModal",
+--     "AXSubrole",
+--     "AXZoomButton",
+--     "AXRoleDescription",
+--     "AXSize",
+--     "AXToolbarButton",
+--     "AXIdentifier"
+-- }
+-- Hammerspoon actionNames: { "AXRaise" }
+
+-- kitty attributeNames: {
+--     "AXFocused",
+--     "AXFullScreen",
+--     "AXTitle",
+--     "AXChildrenInNavigationOrder",
+--     "AXFrame",
+--     "AXPosition",
+--     "AXGrowArea",
+--     "AXMinimizeButton",
+--     "AXDocument",
+--     "AXSections",
+--     "AXCloseButton",
+--     "AXMain",
+--     "AXActivationPoint",
+--     "AXFullScreenButton",
+--     "AXProxy",
+--     "AXDefaultButton",
+--     "AXMinimized",
+--     "AXChildren",
+--     "AXRole",
+--     "AXParent",
+--     "AXTitleUIElement",
+--     "AXCancelButton",
+--     "AXModal",
+--     "AXSubrole",
+--     "AXZoomButton",
+--     "AXRoleDescription",
+--     "AXSize",
+--     "AXToolbarButton"
+-- }
+-- kitty actionNames: { "AXRaise" }
+
+-- Brave Browser attributeNames: {
+--     "AXFocused",
+--     "AXFullScreen",
+--     "AXTitle",
+--     "AXChildrenInNavigationOrder",
+--     "AXFrame",
+--     "AXPosition",
+--     "AXGrowArea",
+--     "AXMinimizeButton",
+--     "AXDocument",
+--     "AXSections",
+--     "AXCloseButton",
+--     "AXMain",
+--     "AXActivationPoint",
+--     "AXFullScreenButton",
+--     "AXProxy",
+--     "AXDefaultButton",
+--     "AXMinimized",
+--     "AXChildren",
+--     "AXRole",
+--     "AXParent",
+--     "AXTitleUIElement",
+--     "AXCancelButton",
+--     "AXModal",
+--     "AXSubrole",
+--     "AXZoomButton",
+--     "AXRoleDescription",
+--     "AXSize",
+--     "AXToolbarButton"
+-- }
+-- Brave Browser actionNames: { "AXRaise" }

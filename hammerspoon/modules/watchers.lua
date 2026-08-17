@@ -9,21 +9,21 @@ local screenshots = require('screenshots')
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    local home = os.getenv('HOME')
+    local watchers = cache.watchers
 
     -- Wifi toggling on screen lock/unlock
-    cache.watchers.wifi = hs.caffeinate.watcher.new(
+    watchers.wifi = hs.caffeinate.watcher.new(
         wifi.toggle_wifi_on_screenlock
     )
 
     -- Move screenshots automatically when taken
-    cache.watchers.screenshots = hs.pathwatcher.new(
-        home .. '/Desktop/',
+    watchers.screenshots = hs.pathwatcher.new(
+        os.getenv('HOME') .. '/Desktop/',
         screenshots.move_screenshots
     )
 
     -- Start watchers
-    for _, watcher in pairs(cache.watchers) do
+    for _, watcher in pairs(watchers) do
         watcher:start()
     end
 end

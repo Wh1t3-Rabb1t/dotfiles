@@ -216,35 +216,6 @@ local function sync_app_index(win)
 end
 
 
-
-
--- local function force_focus(window)
---     window:application():activate()
---     window:raise()
---     local f = win:frame()
---     hs.eventtap.leftClick({
---         x = f.x + f.w / 2,
---         y = f.y + 8,
---     })
---     return hs.window.focusedWindow() == window
--- end
--- force_focus(win)
-
-local function force_focus(win)
-    local ax = hs.axuielement.windowElement(win)
-
-    win:application():activate()
-
-    if not ax then
-        return false
-    end
-
-    ax:setAttributeValue('AXMain', true)
-    ax:setAttributeValue('AXFocused', true)
-
-    return hs.window.focusedWindow():id() == win:id()
-end
-
 -- Iterate focused window
 --------------------------------------------------------------------------------
 local function iterate_windows(app, direction)
@@ -273,15 +244,20 @@ local function iterate_windows(app, direction)
         new_idx = find_window_index(apps.wins, win)
     end
 
+    -- Update border using the 'all' index
+    local old_border = apps.borders[apps.idx]
+    local new_border = apps.borders[new_idx]
+
+    if old_border then old_border:hide() end
+    if new_border then new_border:show() end
+
     -- Sync app index if current app is compatible
     sync_app_index(win)
 
     apps.idx      = new_idx
     apps.curr_win = win
 
-    -- win:focus()
-
-    force_focus(win)
+    win:focus()
 
     return true
 end
@@ -586,31 +562,6 @@ function M.cycle_open(direction)
     end
 end
 
---------------------------------------------------------------------------------
--- Init
---------------------------------------------------------------------------------
-function M.init()
-    local win = hs.window.focusedWindow()
-    local app = win:application():name()
-
-    state.apps = get_open_windows(win)
-
-    -- Init layout if the focused window is compatible
-    if cache.assets[app] then
-        local id     = win:screen():id()
-        local layout = state.screens[id].layout
-
-        assign_window(layout, nil, win)
-    end
-
-    -- -- Show window border
-    -- local init_fn = M.border('show')
-    -- init_fn(function()
-    --     -- Call done()
-    -- end)
-
-end
-
 
 --------------------------------------------------------------------------------
 -- Toggle border visibility
@@ -639,4 +590,29 @@ function M.border(toggle)
 end
 
 
+--------------------------------------------------------------------------------
+-- Init
+--------------------------------------------------------------------------------
+function M.init()
+    local win = hs.window.focusedWindow()
+    local app = win:application():name()
+
+    state.apps = get_open_windows(win)
+
+    -- Init layout if the focused window is compatible
+    if cache.assets[app] then
+        local id     = win:screen():id()
+        local layout = state.screens[id].layout
+
+        assign_window(layout, nil, win)
+    end
+
+    -- Show window border
+    local init_fn = M.border('show')
+    init_fn(function()
+        -- Call done()
+    end)
+end
+
 return M
+

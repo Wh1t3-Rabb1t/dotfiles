@@ -189,7 +189,7 @@ end
 
 -- Find a windows index in the state table
 --------------------------------------------------------------------------------
-local function find_window_index(wins, target)
+local function get_window_index(wins, target)
     for i, win in ipairs(wins) do
         if win == target then
             return i
@@ -208,7 +208,7 @@ local function sync_app_index(win)
         return
     end
 
-    local idx = find_window_index(apps.wins, win)
+    local idx = get_window_index(apps.wins, win)
 
     if idx then
         apps.idx = idx
@@ -216,36 +216,34 @@ local function sync_app_index(win)
 end
 
 
-
-
--- local function force_focus(window)
---     window:application():activate()
---     window:raise()
---     local f = win:frame()
---     hs.eventtap.leftClick({
---         x = f.x + f.w / 2,
---         y = f.y + 8,
---     })
---     return hs.window.focusedWindow() == window
--- end
--- force_focus(win)
-
+-- Force focus of new windows.
+--
+-- Need to ensure Apples window server has updated before mutating state and
+-- :focus() is buggy as hell when targeting apps with multiple windows open.
+--------------------------------------------------------------------------------
 local function force_focus(win)
     local ax = hs.axuielement.windowElement(win)
-
-    win:application():activate()
 
     if not ax then
         return false
     end
 
+    win:application():activate()
+
     ax:setAttributeValue('AXMain', true)
     ax:setAttributeValue('AXFocused', true)
 
-    return hs.window.focusedWindow():id() == win:id()
+    local focused = hs.window.focusedWindow()
+
+    if focused and focused:id() == win:id() then
+        return true
+    end
+
+    return false
 end
 
--- Iterate focused window
+
+-- Iterate focus between open windows
 --------------------------------------------------------------------------------
 local function iterate_windows(app, direction)
     local wins  = state.apps[app].wins
@@ -269,19 +267,25 @@ local function iterate_windows(app, direction)
 
     local win = wins[new_idx]
 
-    if app ~= 'all' then
-        new_idx = find_window_index(apps.wins, win)
+    if force_focus(win) then
+        if app ~= 'all' then
+            new_idx = get_window_index(apps.wins, win)
+        end
+
+        sync_app_index(win)  -- Sync app index if compatible
+
+        -- Update borders
+        local old_border = apps.borders[apps.idx]
+        local new_border = apps.borders[new_idx]
+
+        if old_border then old_border:hide() end
+        if new_border then new_border:show() end
+
+        apps.idx      = new_idx
+        apps.curr_win = win
+    else
+        return false
     end
-
-    -- Sync app index if current app is compatible
-    sync_app_index(win)
-
-    apps.idx      = new_idx
-    apps.curr_win = win
-
-    -- win:focus()
-
-    force_focus(win)
 
     return true
 end
@@ -343,7 +347,11 @@ local function get_open_windows(focused)
         end
     end
 
-    return windows
+    if #windows.all.wins > 0 then
+        return windows
+    else
+        return false
+    end
 end
 
 
@@ -549,12 +557,6 @@ function M.cycle_app_specific(direction)
             return
         end
 
-        -- Establish the app idx from the focused window
-        apps.idx = find_window_index(
-            apps.wins,
-            win
-        )
-
         iterate_windows(app, direction)
 
         done()
@@ -574,41 +576,10 @@ function M.cycle_open(direction)
             return
         end
 
-        -- Establish 'all' idx from the focused window
-        apps.idx = find_window_index(
-            apps.wins,
-            apps.curr_win
-        )
-
         iterate_windows('all', direction)
 
         done()
     end
-end
-
---------------------------------------------------------------------------------
--- Init
---------------------------------------------------------------------------------
-function M.init()
-    local win = hs.window.focusedWindow()
-    local app = win:application():name()
-
-    state.apps = get_open_windows(win)
-
-    -- Init layout if the focused window is compatible
-    if cache.assets[app] then
-        local id     = win:screen():id()
-        local layout = state.screens[id].layout
-
-        assign_window(layout, nil, win)
-    end
-
-    -- -- Show window border
-    -- local init_fn = M.border('show')
-    -- init_fn(function()
-    --     -- Call done()
-    -- end)
-
 end
 
 
@@ -619,7 +590,7 @@ function M.border(toggle)
     return function(done)
         local apps = state.apps.all
 
-        apps.idx = find_window_index(
+        apps.idx = get_window_index(
             apps.wins,
             apps.curr_win
         )
@@ -638,5 +609,39 @@ function M.border(toggle)
     end
 end
 
+
+--------------------------------------------------------------------------------
+-- Init
+--------------------------------------------------------------------------------
+function M.init()
+    local win = hs.window.focusedWindow()
+    local app = win:application():name()
+
+    local all_wins = get_open_windows(win)
+
+    if all_wins then
+        state.apps = all_wins
+
+        -- Establish 'all' idx from the focused window
+        state.apps.all.idx = get_window_index(
+            state.apps.all.wins,
+            state.apps.all.curr_win
+        )
+    end
+
+    -- Init layout if the focused window is compatible
+    if cache.assets[app] then
+        local id     = win:screen():id()
+        local layout = state.screens[id].layout
+
+        assign_window(layout, nil, win)
+    end
+
+    -- Show window border
+    local init_fn = M.border('show')
+    init_fn(function()
+        -- Call done()
+    end)
+end
 
 return M

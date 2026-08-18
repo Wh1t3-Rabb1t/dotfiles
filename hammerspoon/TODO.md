@@ -2,6 +2,8 @@
 
 ## IMMEDIATE TASKS:
 
+- Update 'all' and 'app' indexes when calling 'cycle_main_apps()'.
+
 - Create and destroy window border as window changes/opens/closes.
 
 - Alter lookup/eventtap/registry to support 'leader' key.
@@ -25,9 +27,6 @@
 ---
 
 ## BUGS:
-
-- Incorporate a window filter for all window switching actions to ensure that
-  there are no subtle races when hiding/showing popups.
 
 - When calling windows.init() with the desktop open; it causes an hs crash
   (attempted to index nil val 'win'). Could launch a kitty window as default.

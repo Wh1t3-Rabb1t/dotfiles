@@ -257,12 +257,12 @@ local function iterate_windows(app, direction)
 
     local new_idx
 
-    if not direction then
-        new_idx = idx
-    elseif direction == 'next' then
+    if direction == 'next' then
         new_idx = idx % count + 1
     elseif direction == 'prev' then
         new_idx = (idx - 2) % count + 1
+    else
+        return false
     end
 
     local win = wins[new_idx]
@@ -645,3 +645,4 @@ function M.init()
 end
 
 return M
+

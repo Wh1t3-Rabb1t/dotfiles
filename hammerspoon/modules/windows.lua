@@ -221,19 +221,56 @@ end
 -- Need to ensure Apples window server has updated before mutating state and
 -- :focus() is buggy as hell when targeting apps with multiple windows open.
 --------------------------------------------------------------------------------
-local function force_focus(win)
+-- local function force_focus(win)
+--     local ax = hs.axuielement.windowElement(win)
+--
+--     if not ax then
+--         return false
+--     end
+--
+--     win:application():activate()
+--
+--     ax:setAttributeValue('AXMain', true)
+--     ax:setAttributeValue('AXFocused', true)
+--
+--     ax:performAction('AXRaise')
+--
+--     local focused = hs.window.focusedWindow()
+--
+--     if focused and focused:id() == win:id() then
+--         return true
+--     end
+--
+--     return false
+-- end
+
+
+local function test_force_focus(win)
     local ax = hs.axuielement.windowElement(win)
 
     if not ax then
         return false
     end
 
+    print(
+        '\n________ BEFORE ________' ..
+        '\nAXMain:    ' .. tostring(ax:attributeValue('AXMain'))
+    )
+
     win:application():activate()
 
+    ax:performAction('AXRaise')
     ax:setAttributeValue('AXMain', true)
-    ax:setAttributeValue('AXFocused', true)
+    -- ax:setAttributeValue('AXFocused', true)
 
     local focused = hs.window.focusedWindow()
+
+    print(
+        '\n________ AFTER ________\n' ..
+        '\nAXMain:    ' .. tostring(ax:attributeValue('AXMain')) ..
+        '\nHS focused:', focused and focused:id(),
+        '\ntarget:    ', win:id() .. '\n'
+    )
 
     if focused and focused:id() == win:id() then
         return true
@@ -257,17 +294,20 @@ local function iterate_windows(app, direction)
 
     local new_idx
 
-    if not direction then
-        new_idx = idx
-    elseif direction == 'next' then
+    if direction == 'next' then
         new_idx = idx % count + 1
     elseif direction == 'prev' then
         new_idx = (idx - 2) % count + 1
+    else
+        return false
     end
 
     local win = wins[new_idx]
 
-    if force_focus(win) then
+    if test_force_focus(win) then
+
+    -- if force_focus(win) then
+
         if app ~= 'all' then
             new_idx = get_window_index(apps.wins, win)
         end

@@ -2,6 +2,20 @@
 
 ## Priority: High
 
+- Homebrew:
+```txt
+==> mpv
+The global configuration directory is no /opt/homebrew/etc/mpx/
+You may need to migrate any data in previous /opt/homebrew/etc/mpv/mpv/
+
+
+==> ruby
+By default, binaries installed by gem wil be placed into:
+    /opt/homebrew/lib/ruby/gems/4.0.0/bin
+
+You may want to add this to your PATH.
+```
+
 - Recreate MonitorControl in .zsh (can just target each display rather than
   worry about coord logic).
 

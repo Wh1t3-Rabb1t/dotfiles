@@ -212,6 +212,7 @@ M.apps = {
                 { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')                        },
                 { 'X',      'Toggle wifi on/off', wifi.toggle_wifi()                                },
                 { 'escape', 'Cancel',             wk.turn_tap('off'), win.border('hide'), wk.hide() }
+                -- { 'escape', 'Cancel',             wk.turn_tap('off'), wk.hide() }
             ),
         },
     },

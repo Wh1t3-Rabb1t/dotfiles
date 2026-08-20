@@ -245,31 +245,48 @@ end
 -- end
 
 
+local function activate_if_needed(win)
+    local app = win:application()
+    local ok  = app:activate()
+
+    return ok
+end
+
 local function test_force_focus(win)
     local ax = hs.axuielement.windowElement(win)
 
-    if not ax then
-        return false
-    end
+    if not ax then return false end
 
     print(
         '\n________ BEFORE ________' ..
         '\nAXMain:    ' .. tostring(ax:attributeValue('AXMain'))
     )
 
-    win:application():activate()
+    activate_if_needed(win)
+
+    print('\nAFTER APP FRONTMOST:', hs.application.frontmostApplication():pid())
+
+    print(
+        tostring(win:application():name()),
+        'AXMain settable:',
+        ax:isAttributeSettable('AXMain')
+    )
+    print(
+        tostring(win:application():name()),
+        'AXFocused settable:',
+        ax:isAttributeSettable('AXFocused')
+    )
 
     ax:performAction('AXRaise')
     ax:setAttributeValue('AXMain', true)
-    -- ax:setAttributeValue('AXFocused', true)
 
     local focused = hs.window.focusedWindow()
 
     print(
-        '\n________ AFTER ________\n' ..
+        '\n________ AFTER ________' ..
         '\nAXMain:    ' .. tostring(ax:attributeValue('AXMain')) ..
         '\nHS focused:', focused and focused:id(),
-        '\ntarget:    ', win:id() .. '\n'
+        '\ntarget:    ', win:id() .. '\n\n'
     )
 
     if focused and focused:id() == win:id() then
@@ -389,9 +406,9 @@ local function get_open_windows(focused)
 
     if #windows.all.wins > 0 then
         return windows
-    else
-        return false
     end
+
+    return false
 end
 
 

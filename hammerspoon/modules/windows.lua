@@ -4,6 +4,37 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- function M.window_watcher(win)
+--     local app = win:application()
+--
+--     if not app then
+--         return
+--     end
+--
+--     local watcher = app:newWatcher(function(element, event)
+--         local focused = hs.window.focusedWindow()
+--
+--         print(
+--             'UI EVENT:',
+--             event,
+--             '\n',
+--             'element = ', element,
+--             'focused = ', focused and focused:id(),
+--             '\n'
+--         )
+--     end)
+--
+--     watcher:start({
+--         hs.uielement.watcher.applicationActivated,
+--         hs.uielement.watcher.applicationDeactivated,
+--         hs.uielement.watcher.mainWindowChanged,
+--         hs.uielement.watcher.focusedWindowChanged,
+--     })
+--
+--     return watcher
+-- end
+
+
 -- function refresh_window_state()
 --     local curr_wind = state.apps.all.curr_win
 --     local borders = state.apps.all.borders
@@ -216,88 +247,27 @@ local function sync_app_index(win)
 end
 
 
--- Force focus of new windows.
---
--- Need to ensure Apples window server has updated before mutating state and
--- :focus() is buggy as hell when targeting apps with multiple windows open.
+-- Force focus of a target window via mouse click
 --------------------------------------------------------------------------------
--- local function force_focus(win)
---     local ax = hs.axuielement.windowElement(win)
---
---     if not ax then
---         return false
---     end
---
---     win:application():activate()
---
---     ax:setAttributeValue('AXMain', true)
---     ax:setAttributeValue('AXFocused', true)
---
---     ax:performAction('AXRaise')
---
---     local focused = hs.window.focusedWindow()
---
---     if focused and focused:id() == win:id() then
---         return true
---     end
---
---     return false
--- end
-
-
-local function activate_if_needed(win)
-    local app = win:application()
-    local ok  = app:activate()
-
-    return ok
-end
-
-local function test_force_focus(win)
-    local ax = hs.axuielement.windowElement(win)
-
-    if not ax then return false end
-
-    print(
-        '\n________ BEFORE ________' ..
-        '\nAXMain:    ' .. tostring(ax:attributeValue('AXMain'))
-    )
-
-    activate_if_needed(win)
-
-    print('\nAFTER APP FRONTMOST:', hs.application.frontmostApplication():pid())
-
-    print(
-        tostring(win:application():name()),
-        'AXMain settable:',
-        ax:isAttributeSettable('AXMain')
-    )
-    print(
-        tostring(win:application():name()),
-        'AXFocused settable:',
-        ax:isAttributeSettable('AXFocused')
-    )
-
-    ax:performAction('AXRaise')
-    ax:setAttributeValue('AXMain', true)
-
-    local focused = hs.window.focusedWindow()
-
-    print(
-        '\n________ AFTER ________' ..
-        '\nAXMain:    ' .. tostring(ax:attributeValue('AXMain')) ..
-        '\nHS focused:', focused and focused:id(),
-        '\ntarget:    ', win:id() .. '\n\n'
-    )
-
-    if focused and focused:id() == win:id() then
-        return true
+local function click_window(win)
+    if not win then
+        return
     end
 
-    return false
+    local frame = win:frame()
+
+    local coords = {
+        x = frame.x + (frame.w / 2),
+        y = frame.y + (frame.h / 2)
+    }
+
+    hs.eventtap.leftClick(coords, 0)
 end
 
 
 -- Iterate focus between open windows
+--
+-- aka 'THE HAALAND'
 --------------------------------------------------------------------------------
 local function iterate_windows(app, direction)
     local wins  = state.apps[app].wins
@@ -321,28 +291,34 @@ local function iterate_windows(app, direction)
 
     local win = wins[new_idx]
 
-    if test_force_focus(win) then
+    win:application():activate()
 
-    -- if force_focus(win) then
+    local ax = hs.axuielement.windowElement(win)
 
-        if app ~= 'all' then
-            new_idx = get_window_index(apps.wins, win)
-        end
+    ax:performAction('AXRaise')
+    ax:setAttributeValue('AXMain', true)
 
-        sync_app_index(win)  -- Sync app index if compatible
+    local focused = hs.window.focusedWindow()
 
-        -- Update borders
-        local old_border = apps.borders[apps.idx]
-        local new_border = apps.borders[new_idx]
-
-        if old_border then old_border:hide() end
-        if new_border then new_border:show() end
-
-        apps.idx      = new_idx
-        apps.curr_win = win
-    else
-        return false
+    if focused and focused:id() ~= win:id() then
+        click_window(win)
     end
+
+    if app ~= 'all' then
+        new_idx = get_window_index(apps.wins, win)
+    end
+
+    sync_app_index(win)  -- Sync app index if compatible
+
+    -- Update borders
+    local old_border = apps.borders[apps.idx]
+    local new_border = apps.borders[new_idx]
+
+    if old_border then old_border:hide() end
+    if new_border then new_border:show() end
+
+    apps.idx      = new_idx
+    apps.curr_win = win
 
     return true
 end

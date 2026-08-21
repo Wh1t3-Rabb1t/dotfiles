@@ -2,14 +2,6 @@
 
 ## IMMEDIATE TASKS:
 
-- I think calling 'win:application():activate()' is breaking window cycling
-  when called (removing it from the fn and cycling between different windows
-  of the same app seems fine). We need to implement a check that only invokes
-  'win:application():activate()' when changing to a window of a different app.
-
-- There may be a race in calling 'win:application():activate()', (i.e. the
-  application hasn't yet taken focus).
-
 - In window.resize() we can set a timer equal to double the key repeat value
   to throttle the consecutive inputs (debounce).
 

@@ -1,8 +1,64 @@
+-- Switching between brave windows (using mouse clicks):
+--------------------------------------------------------
+-- 2026-08-20 19:36:20: UI EVENT:   AXFocusedWindowChanged
+-- element =    hs.window: (99+) offlinekattpaccino - Twitch - Brave - Music (0x9086eddf8)  focused =   3661
+--
+-- 2026-08-20 19:36:20: UI EVENT:   AXMainWindowChanged
+-- element =    hs.window: (99+) offlinekattpaccino - Twitch - Brave - Music (0x9086ed978)  focused =   3661
+--
+-- 2026-08-20 19:36:23: UI EVENT:   AXFocusedWindowChanged
+-- element =    hs.window: Fix Window Watcher - Brave - Music (0x9086ef238) focused =   3551
+--
+-- 2026-08-20 19:36:23: UI EVENT:   AXMainWindowChanged
+-- element =    hs.window: Fix Window Watcher - Brave - Music (0x9086ee478) focused =   3551
+--
+-- 2026-08-20 19:36:36: UI EVENT:   AXApplicationDeactivated
+-- element =    hs.application: Brave Browser (0x908148338) focused =   652
+
+
+-- Switching between a kitty and Brave window. (i.e. kitty, Brave, kitty, Brave):
+---------------------------------------------------------------------------------
+-- 2026-08-20 19:38:41: UI EVENT:   AXApplicationDeactivated
+-- element =    hs.application: kitty (0x908095178) focused =   3551
+--
+-- 2026-08-20 19:38:43: UI EVENT:   AXApplicationActivated
+-- element =    hs.application: kitty (0x9080960b8) focused =   3638
+--
+-- 2026-08-20 19:38:45: UI EVENT:   AXApplicationDeactivated
+-- element =    hs.application: kitty (0x9080976b8) focused =   3551
+--
+-- 2026-08-20 19:38:46: UI EVENT:   AXApplicationActivated
+-- element =    hs.application: kitty (0x9080952b8) focused =   3638
+--
+-- 2026-08-20 19:38:49: UI EVENT:   AXApplicationDeactivated
+-- element =    hs.application: kitty (0x9081ebbf8) focused =   652
+
+--------------------------------------------------------------------------------
+
+print(hs.uielement)
+print(hs.uielement.watcher)
+print(hs.uielement.watcher.focusedWindowChanged)
+
+local el = hs.uielement.focusedElement()
+print(el)
+print(el and el:isApplication())
+print(el and el:isWindow())
+
+-- 2026-08-20 19:00:34: -- Loading extension: uielement
+-- 2026-08-20 19:00:34: table: 0x90815c100
+-- 2026-08-20 19:00:34: table: 0x90815ff40
+-- 2026-08-20 19:00:34: AXFocusedWindowChanged
+-- 2026-08-20 19:00:34: hs.uielement: 0x90828b7b8
+-- 2026-08-20 19:00:34: false
+-- 2026-08-20 19:00:34: false
+
+--------------------------------------------------------------------------------
+
 -- Need to store certain macOS default key combos in the system table
 -- i.e.
 --
--- cmd + n
 -- cmd + w
+-- cmd + n
 -- cmd + t ? (can bind kitty split open to cmd + t)
 -- cmd + t
 

@@ -68,7 +68,7 @@ end
 
 -- 2. Log window identity much more aggressively.
 -------------------------------------------------
--- When cycling same-app windows, log:
+-- When cycling same-app windows:
 
 function M.same_app_window_id(win)
     print(
@@ -91,15 +91,20 @@ function M.same_app_window_id(win)
     end
 end
 
+
 -- 3. Check isValid() on both hs.window and AX object.
 ------------------------------------------------------
--- Check before an operation:
---
--- print('HS valid:', win:isValid())
--- print('AX valid:', ax:isValid())
---
 -- Hammerspoon explicitly notes that an AX element can become invalid
 -- independently of your Lua reference.
+--
+-- Check before an operation:
+
+function M._window_and_ax_validity(win)
+    local ax = hs.axuielement.windowElement(win)
+
+    print('HS valid:', win:isValid())
+    print('AX valid:', ax:isValid())
+end
 
 
 -- 4. Log whether the target is actually visible/minimized.

@@ -250,18 +250,35 @@ end
 -- Force focus of a target window via mouse click
 --------------------------------------------------------------------------------
 local function click_window(win)
-    if not win then
-        return
-    end
-
     local frame = win:frame()
 
     local coords = {
-        x = frame.x + (frame.w / 2),
-        y = frame.y + (frame.h / 2)
+        start = hs.mouse.absolutePosition(),
+        click = {
+            x = frame.x + (frame.w / 2),
+            y = frame.y + (frame.h / 2)
+        }
     }
 
-    hs.eventtap.leftClick(coords, 0)
+    hs.eventtap.leftClick(coords.click, 0)
+    hs.mouse.absolutePosition(coords.start)
+end
+
+
+
+--------------------------------------------------------------------------------
+local function iterate_window_idx(app, direction)
+    local wins  = state.apps[app].wins
+    local idx   = state.apps[app].idx
+    local count = #wins
+
+    if direction == 'next' then
+        idx = idx % count + 1
+    elseif direction == 'prev' then
+        idx = (idx - 2) % count + 1
+    end
+
+    return idx
 end
 
 
@@ -269,27 +286,9 @@ end
 --
 -- aka 'THE HAALAND'
 --------------------------------------------------------------------------------
-local function iterate_windows(app, direction)
-    local wins  = state.apps[app].wins
-    local idx   = state.apps[app].idx
-    local apps  = state.apps.all
-    local count = #wins
-
-    if count == 0 then
-        return false
-    end
-
-    local new_idx
-
-    if direction == 'next' then
-        new_idx = idx % count + 1
-    elseif direction == 'prev' then
-        new_idx = (idx - 2) % count + 1
-    else
-        return false
-    end
-
-    local win = wins[new_idx]
+local function focus_window(app, new_idx)
+    local wins = state.apps[app].wins
+    local win  = wins[new_idx]
 
     win:application():activate()
 
@@ -304,23 +303,24 @@ local function iterate_windows(app, direction)
         click_window(win)
     end
 
-    if app ~= 'all' then
-        new_idx = get_window_index(apps.wins, win)
-    end
+    -- -- App specific iteration
+    -- if app ~= 'all' then
+    --     new_idx = get_window_index(all_apps.wins, win)
+    -- end
+    --
+    -- sync_app_index(win)  -- Sync app index if compatible
+    --
+    -- -- Update borders
+    -- local old_border = all_apps.borders[all_apps.idx]
+    -- local new_border = all_apps.borders[new_idx]
+    --
+    -- if old_border then old_border:hide() end
+    -- if new_border then new_border:show() end
+    --
+    -- all_apps.idx      = new_idx
+    -- all_apps.curr_win = win
 
-    sync_app_index(win)  -- Sync app index if compatible
-
-    -- Update borders
-    local old_border = apps.borders[apps.idx]
-    local new_border = apps.borders[new_idx]
-
-    if old_border then old_border:hide() end
-    if new_border then new_border:show() end
-
-    apps.idx      = new_idx
-    apps.curr_win = win
-
-    return true
+    return win
 end
 
 
@@ -544,11 +544,12 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_main_apps()
     return function(done)
-        local existing = hs.window.focusedWindow()
+        local win = state.apps.all.curr_win
+        -- local existing = hs.window.focusedWindow()
 
         local target_app = 'kitty'
 
-        if existing and existing:application():name() == 'kitty' then
+        if win and win:application():name() == 'kitty' then
             target_app = 'Brave Browser'
         end
 
@@ -563,7 +564,7 @@ function M.cycle_main_apps()
                 local id     = target_win:screen():id()
                 local layout = state.screens[id].layout
 
-                assign_window(layout, existing, target_win)
+                assign_window(layout, win, target_win)
 
                 state.apps.all.curr_win = target_win
 
@@ -581,16 +582,35 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
-        local win  = state.apps.all.curr_win
-        local app  = win:application():name()
-        local apps = state.apps[app]
+        local app_win = state.apps.all.curr_win
+        local app     = app_win:application():name()
+        local apps    = state.apps[app]
 
         if not apps or #apps.wins < 2 then
             done()
             return
         end
 
-        iterate_windows(app, direction)
+        local all_apps = state.apps.all
+        local new_idx  = iterate_window_idx(app, direction)
+        local win      = focus_window(app, new_idx)
+
+        -- App specific iteration
+        if app ~= 'all' then
+            new_idx = get_window_index(all_apps.wins, win)
+        end
+
+        sync_app_index(win)  -- Sync app index if compatible
+
+        -- Update borders
+        local old_border = all_apps.borders[all_apps.idx]
+        local new_border = all_apps.borders[new_idx]
+
+        if old_border then old_border:hide() end
+        if new_border then new_border:show() end
+
+        all_apps.idx      = new_idx
+        all_apps.curr_win = win
 
         done()
     end
@@ -602,14 +622,27 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local apps = state.apps.all
+        local all_apps = state.apps.all
 
-        if #apps.wins < 2 then
+        if #all_apps.wins < 2 then
             done()
             return
         end
 
-        iterate_windows('all', direction)
+        local new_idx = iterate_window_idx('all', direction)
+        local win     = focus_window('all', new_idx)
+
+        sync_app_index(win)  -- Sync app index if compatible
+
+        -- Update borders
+        local old_border = all_apps.borders[all_apps.idx]
+        local new_border = all_apps.borders[new_idx]
+
+        if old_border then old_border:hide() end
+        if new_border then new_border:show() end
+
+        all_apps.idx      = new_idx
+        all_apps.curr_win = win
 
         done()
     end

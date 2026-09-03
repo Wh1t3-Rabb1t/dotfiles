@@ -1,0 +1,26 @@
+/* Calendar */
+
+/*
+	TODO: 
+	Write a wrapper that transforms the output before printing to stdout.
+	Can also use a tiny dsl i.e. 
+	    @ 12:20 denotes a time (the @ is the signifier).
+	    (some text) denotes a sidenote.
+*/
+
+Monday	Wash socks and boxers
+	Wash floor
+Tuesday	Wash towel
+Sunday	Church
+
+1		Pay rent
+15		Check subscriptions
+
+1/1		New Year's Day
+2/14		Valentine's Day
+Easter-2	Good Friday
+Easter+1	Easter Monday
+3/17		St. Patrick's Day
+7/1		Canada Day
+10/31		Halloween
+12/25		Christmas Day

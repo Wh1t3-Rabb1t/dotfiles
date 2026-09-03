@@ -1,3 +1,4 @@
+
 -- Switching between brave windows (using mouse clicks):
 --------------------------------------------------------
 -- 2026-08-20 19:36:20: UI EVENT:   AXFocusedWindowChanged

@@ -68,6 +68,19 @@ autocmd("FileType", {
 })
 
 
+-- Insert tabs in calendar files
+--------------------------------------------------------------------------------
+autocmd("FileType", {
+    group    = augroup("CalendarFileTabs", { clear = true }),
+    pattern  = "calendar",
+    callback = function()
+        vim.bo.expandtab  = false
+        vim.bo.tabstop    = 4
+        vim.bo.shiftwidth = 4
+    end
+})
+
+
 -- TOGGLE SPELL SUGGESTIONS WHEN ENTERING / LEAVING INSERT MODE
 --------------------------------------------------------------------------------
 autocmd("InsertEnter", {
@@ -105,19 +118,22 @@ autocmd("TextYankPost", {
 -- TRIM TRAILING WHITESPACE AND CONVERT TABS TO SPACES PRE SAVE
 --------------------------------------------------------------------------------
 autocmd("BufWritePre", {
-    group    = augroup("TrimWhiteSpaceAndRetab", { clear = true }),
+    group = augroup("TrimWhiteSpaceAndRetab", { clear = true }),
     callback = function()
-        -- Save the current view state
-        local current_view = vim.fn.winsaveview()
+        local calendar = vim.fn.expand("$HOME/.local/dotfiles/calendar/calendar")
 
-        -- Save file, trim trailing whitespace, convert tabs to spaces
+        if vim.fn.expand("%:p") == calendar then
+            return
+        end
+
+        local starting_view = vim.fn.winsaveview()
+
         vim.cmd([[
             :keeppatterns %s/\s\+$//e
             :retab
         ]])
 
-        -- Restore view state
-        vim.fn.winrestview(current_view)
+        vim.fn.winrestview(starting_view)
     end
 })
 
@@ -129,6 +145,7 @@ autocmd("BufWritePost", {
     callback = function()
         local filename = vim.fn.expand("%:.")
         local cwd      = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
+
         print("Changes saved: " .. cwd .. "/" .. filename .. " │ " .. os.date())
     end
 })

@@ -65,7 +65,8 @@ export GOPATH="${XDG_DATA_HOME}/go"
 
 # Zsh
 export ZPLUGINDIR="${ZDOTDIR}/.plugins"
-export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
+export ZSCRIPTDIR="${ZDOTDIR}/modules/scripts"
+# export ZSCRIPTDIR="${ZDOTDIR}/zscripts"
 export VI_STATE_DIR="${XDG_STATE_HOME}/zsh-vi"
 export VI_CLIPBOARD_RING="${VI_STATE_DIR}/clipboard_ring"
 export ZSH_STAGE="${VI_STATE_DIR}/staging_area"

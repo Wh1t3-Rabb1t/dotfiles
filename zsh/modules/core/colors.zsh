@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 #             _
 #    ___ ___ | | ___  _ __ ___
 #   / __/ _ \| |/ _ \| '__/ __|
@@ -15,4 +17,3 @@
 if (( ${+commands[vivid]} )); then
     export LS_COLORS="$(vivid generate solarized-dark)"
 fi
-

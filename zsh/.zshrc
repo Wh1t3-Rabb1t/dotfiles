@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 #                          /\\\
 #                          \/\\\
 #  /\\\\\\\\\\\ /\\\\\\\\\\ \/\\\
@@ -18,6 +20,7 @@
 
 # ZSCRIPTS
 # ---------------------------------------------------------------------------- #
+local zscripts
 for zscripts in $ZSCRIPTDIR $ZSCRIPTDIR/*(N/); do
     fpath=($zscripts $fpath)
     autoload -Uz $fpath[1]/*(.:t)
@@ -27,7 +30,26 @@ unset zscripts
 
 # RC
 # ---------------------------------------------------------------------------- #
-for conffile in "${ZDOTDIR}"/rc.d/*; do
-    source "$conffile"
+typeset -a zsh_rc=(
+    "${ZDOTDIR}/modules/p10k/instant_prompt.zsh"
+    "${ZDOTDIR}/modules/core/opts.zsh"
+    "${ZDOTDIR}/modules/core/history.zsh"
+    "${ZDOTDIR}/modules/core/autoload.zsh"
+    "${ZDOTDIR}/modules/p10k/config.zsh"
+    "${ZDOTDIR}/modules/core/colors.zsh"
+    "${ZDOTDIR}/modules/core/completion.zsh"
+    "${ZDOTDIR}/modules/vi/init.zsh"
+    "${ZDOTDIR}/modules/vi/bindings.zsh"
+    "${ZDOTDIR}/modules/plugins/init.zsh"
+    "${ZDOTDIR}/modules/fzf/config.zsh"
+    "${ZDOTDIR}/modules/fzf/fzf_tab.zsh"
+    "${ZDOTDIR}/modules/core/bindings.zsh"
+    "${ZDOTDIR}/modules/core/aliases.zsh"
+    "${ZDOTDIR}/modules/calendar/init.zsh"
+)
+
+local conffile
+for conf_file in "${zsh_rc[@]}"; do
+    source "$conf_file"
 done
 unset conffile

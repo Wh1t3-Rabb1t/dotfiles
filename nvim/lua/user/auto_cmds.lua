@@ -118,14 +118,8 @@ autocmd("TextYankPost", {
 -- TRIM TRAILING WHITESPACE AND CONVERT TABS TO SPACES PRE SAVE
 --------------------------------------------------------------------------------
 autocmd("BufWritePre", {
-    group = augroup("TrimWhiteSpaceAndRetab", { clear = true }),
+    group    = augroup("TrimWhiteSpaceAndRetab", { clear = true }),
     callback = function()
-        local calendar = vim.fn.expand("$HOME/.local/dotfiles/calendar/calendar")
-
-        if vim.fn.expand("%:p") == calendar then
-            return
-        end
-
         local starting_view = vim.fn.winsaveview()
 
         vim.cmd([[

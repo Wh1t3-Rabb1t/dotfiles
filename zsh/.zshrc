@@ -48,8 +48,8 @@ typeset -a zsh_rc=(
     "${ZDOTDIR}/modules/calendar/init.zsh"
 )
 
-local conffile
-for conf_file in "${zsh_rc[@]}"; do
-    source "$conf_file"
+local rc_segment
+for rc_segment in "${zsh_rc[@]}"; do
+    source "$rc_segment"
 done
-unset conffile
+unset rc_segment

@@ -50,6 +50,8 @@ local function _dl_yt_video() {
         return 1
     fi
 
+    # --download-sections "*02:41:00-07:37:50" \
+
     yt-dlp \
         --format-sort "res:${height},vcodec:av01,vcodec:vp9,fps:30" \
         --format "bv+ba/b" \

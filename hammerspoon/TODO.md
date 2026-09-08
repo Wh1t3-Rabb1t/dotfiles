@@ -5,8 +5,6 @@
 - In window.resize() we can set a timer equal to double the key repeat value
   to throttle the consecutive inputs (debounce).
 
-- Update 'all' and 'app' indexes when calling 'cycle_main_apps()'.
-
 - Create and destroy window border as window changes/opens/closes.
 
 - Alter lookup/eventtap/registry to support 'leader' key.

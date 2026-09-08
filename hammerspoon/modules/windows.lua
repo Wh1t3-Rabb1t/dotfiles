@@ -553,23 +553,37 @@ function M.cycle_app_specific(direction)
             return
         end
 
+        local focused = hs.window.focusedWindow()
         local new_idx = iterate_window_idx(app, direction)
         local win     = focus_window(app, new_idx)
 
         if win then
-            -- App specific iteration
-            if app ~= 'all' then
-                new_idx = get_window_idx(all_apps.wins, win)
-            end
+            -- Need to set this to the index of the 'all' table because we use
+            -- the app specific index table to iterate the window within the
+            -- same app group.
+            new_idx = get_window_idx(all_apps.wins, win)
 
             update_borders(all_apps.idx, new_idx)
             update_window_state(win, new_idx)
         else
-            -- Revert focus back to original window
-            focus_window(
-                app,
-                iterate_window_idx(app)
-            )
+            -- Revert focus back to initial window
+            focused:application():activate()
+
+            -- Wait for MacOS window server to refresh
+            for _ = 1, 100 do
+                win = focus_window(app, new_idx)
+
+                if win then
+                    new_idx = get_window_idx(all_apps.wins, win)
+
+                    update_borders(all_apps.idx, new_idx)
+                    update_window_state(win, new_idx)
+
+                    break
+                end
+
+                hs.timer.usleep(5000)
+            end
         end
 
         done()
@@ -589,6 +603,7 @@ function M.cycle_open(direction)
             return
         end
 
+        local focused = hs.window.focusedWindow()
         local new_idx = iterate_window_idx('all', direction)
         local win     = focus_window('all', new_idx)
 
@@ -596,11 +611,22 @@ function M.cycle_open(direction)
             update_borders(all_apps.idx, new_idx)
             update_window_state(win, new_idx)
         else
-            -- Revert focus back to original window
-            focus_window(
-                'all',
-                iterate_window_idx('all')
-            )
+            -- Revert focus back to initial window
+            focused:application():activate()
+
+            -- Wait for MacOS window server to refresh
+            for _ = 1, 100 do
+                win = focus_window('all', new_idx)
+
+                if win then
+                    update_borders(all_apps.idx, new_idx)
+                    update_window_state(win, new_idx)
+
+                    break
+                end
+
+                hs.timer.usleep(5000)
+            end
         end
 
         done()

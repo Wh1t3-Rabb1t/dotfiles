@@ -59,6 +59,24 @@ local cache = require('cache')
 
 
 
+-- Create border canvases for each open window
+--------------------------------------------------------------------------------
+local function create_border(win)
+    local canvas = hs.canvas.new(win:frame())
+
+    canvas:appendElements({
+        type        = 'rectangle',
+        action      = 'stroke',
+        strokeColor = { white = 1, alpha = 1 },
+        strokeWidth = 3,
+    })
+
+    canvas:level(hs.canvas.windowLevels.overlay)
+    canvas:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
+
+    return canvas
+end
+
 
 -- Compare the dimensions of two frame objects
 --------------------------------------------------------------------------------
@@ -86,6 +104,111 @@ local function is_fullscreen(win)
     )
 
     return frames
+end
+
+
+-- Remove windows from layout state
+--------------------------------------------------------------------------------
+local function remove_window(layout, win)
+    if layout.left      == win then layout.left      = false end
+    if layout.right     == win then layout.right     = false end
+    if layout.maximized == win then layout.maximized = false end
+end
+
+
+-- Iterate window index
+--------------------------------------------------------------------------------
+local function iterate_window_idx(app_name, direction)
+    local wins  = state.apps[app_name].wins
+    local idx   = state.apps[app_name].idx
+    local count = #wins
+
+    if direction == 'next' then
+        idx = idx % count + 1
+    elseif direction == 'prev' then
+        idx = (idx - 2) % count + 1
+    end
+
+    return idx
+end
+
+
+-- Find a windows index in the state table
+--------------------------------------------------------------------------------
+local function get_window_idx(wins, target)
+    for i, win in ipairs(wins) do
+        if win == target then
+            return i
+        end
+    end
+end
+
+
+-- Iterate focus between open windows
+--------------------------------------------------------------------------------
+local function get_new_window(app_name, idx)
+    local wins = state.apps[app_name].wins
+    local win  = wins[idx]
+
+    win:application():activate()
+
+    local ax = hs.axuielement.windowElement(win)
+
+    ax:performAction('AXRaise')
+    ax:setAttributeValue('AXMain', true)
+
+    local focused = hs.window.focusedWindow()
+
+    if focused:id() ~= win:id() then
+        win = false
+    end
+
+    return win
+end
+
+
+-- Get all open windows
+--------------------------------------------------------------------------------
+local function get_open_windows(focused)
+    local running_apps = hs.application.runningApplications()
+
+    local windows = {}
+
+    -- All open windows
+    windows.all = {
+        idx      = 1,
+        curr_win = focused,
+        wins     = {},
+        borders  = {},
+    }
+
+    for _, app in ipairs(running_apps) do
+        local app_wins = {}
+
+        for _, win in ipairs(app:allWindows()) do
+            if win:isStandard() and win:isVisible() then
+                table.insert(windows.all.wins, win)
+                table.insert(app_wins, win)
+
+                local border = create_border(win)
+
+                table.insert(windows.all.borders, border)
+            end
+        end
+
+        if #app_wins > 0 then
+            windows[app:name()] = {
+                idx  = 1,
+                wins = app_wins,
+            }
+        end
+    end
+
+    if #windows.all.wins > 0 then
+        return windows
+    else
+        return false
+    end
 end
 
 
@@ -136,35 +259,6 @@ local function get_coords(id, border)
 end
 
 
--- Snap windows into their respective slot coords
---------------------------------------------------------------------------------
-local function snap_layout()
-    local win    = state.apps.all.curr_win
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
-    local frames = get_coords(id)
-
-    if layout.maximized then
-        layout.maximized:setFrame(cache.screens[id].frame, 0.02)
-    else
-        if layout.left then
-            layout.left:setFrame(frames.left, 0.02)
-        end
-        if layout.right then
-            layout.right:setFrame(frames.right, 0.02)
-        end
-    end
-end
-
-
--- Remove windows from layout state
---------------------------------------------------------------------------------
-local function remove_window(layout, win)
-    if layout.left      == win then layout.left      = false end
-    if layout.right     == win then layout.right     = false end
-    if layout.maximized == win then layout.maximized = false end
-end
-
 
 -- Assign windows to layout state.
 --
@@ -174,12 +268,11 @@ end
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
-local function assign_window(layout, existing, win)
+local function update_layout(layout, existing, win)
     if is_fullscreen(win) then
         layout.maximized = win
 
-        -- Exit early
-        return
+        return  -- Exit early
     end
 
     if layout.maximized then
@@ -191,8 +284,7 @@ local function assign_window(layout, existing, win)
 
         layout.maximized = win
 
-        -- Exit early
-        return
+        return  -- Exit early
     end
 
     layout.maximized = false
@@ -204,57 +296,6 @@ local function assign_window(layout, existing, win)
     end
 
     layout[side] = win
-end
-
-
--- Find a windows index in the state table
---------------------------------------------------------------------------------
-local function get_window_idx(wins, target)
-    for i, win in ipairs(wins) do
-        if win == target then
-            return i
-        end
-    end
-end
-
-
--- Iterate window index
---------------------------------------------------------------------------------
-local function iterate_window_idx(app, direction)
-    local wins  = state.apps[app].wins
-    local idx   = state.apps[app].idx
-    local count = #wins
-
-    if direction == 'next' then
-        idx = idx % count + 1
-    elseif direction == 'prev' then
-        idx = (idx - 2) % count + 1
-    end
-
-    return idx
-end
-
-
--- Iterate focus between open windows
---------------------------------------------------------------------------------
-local function focus_window(app, new_idx)
-    local wins = state.apps[app].wins
-    local win  = wins[new_idx]
-
-    win:application():activate()
-
-    local ax = hs.axuielement.windowElement(win)
-
-    ax:performAction('AXRaise')
-    ax:setAttributeValue('AXMain', true)
-
-    local focused = hs.window.focusedWindow()
-
-    if focused:id() ~= win:id() then
-        win = false
-    end
-
-    return win
 end
 
 
@@ -273,79 +314,36 @@ end
 
 -- Update focused window state
 --------------------------------------------------------------------------------
-local function update_window_state(win, new_idx)
-    local all_apps    = state.apps.all
-    local app         = win:application():name()
-    local focused_app = state.apps[app]
+local function update_window_state(win, idx)
+    local apps     = state.apps.all
+    local app_name = win:application():name()
+    local curr_app = state.apps[app_name]
 
-    focused_app.idx = get_window_idx(focused_app.wins, win)
+    curr_app.idx = get_window_idx(curr_app.wins, win)
 
-    all_apps.idx      = new_idx
-    all_apps.curr_win = win
+    apps.idx      = idx
+    apps.curr_win = win
 end
 
 
--- Create border canvases for each open window
+-- Snap windows into their respective slot coords
 --------------------------------------------------------------------------------
-local function create_border(win)
-    local canvas = hs.canvas.new(win:frame())
+local function snap_layout()
+    local win    = state.apps.all.curr_win
+    local id     = win:screen():id()
+    local layout = state.screens[id].layout
+    local frames = get_coords(id)
 
-    canvas:appendElements({
-        type        = 'rectangle',
-        action      = 'stroke',
-        strokeColor = { white = 1, alpha = 1 },
-        strokeWidth = 3,
-    })
-
-    canvas:level(hs.canvas.windowLevels.overlay)
-    canvas:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
-
-    return canvas
-end
-
-
--- Get all open windows
---------------------------------------------------------------------------------
-local function get_open_windows(focused)
-    local running_apps = hs.application.runningApplications()
-
-    local windows = {}
-
-    -- All open windows
-    windows.all = {
-        idx      = 1,
-        curr_win = focused,
-        wins     = {},
-        borders  = {},
-    }
-
-    for _, app in ipairs(running_apps) do
-        local app_wins = {}
-
-        for _, win in ipairs(app:allWindows()) do
-            if win:isStandard() and win:isVisible() then
-                table.insert(windows.all.wins, win)
-                table.insert(app_wins, win)
-
-                local border = create_border(win)
-
-                table.insert(windows.all.borders, border)
-            end
+    if layout.maximized then
+        layout.maximized:setFrame(cache.screens[id].frame, 0.02)
+    else
+        if layout.left then
+            layout.left:setFrame(frames.left, 0.02)
         end
-
-        if #app_wins > 0 then
-            windows[app:name()] = {
-                idx  = 1,
-                wins = app_wins,
-            }
+        if layout.right then
+            layout.right:setFrame(frames.right, 0.02)
         end
     end
-
-    if #windows.all.wins > 0 then
-        return windows
-    end
-
-    return false
 end
 
 
@@ -386,6 +384,7 @@ function M.resize(direction, step_val)
         end
 
         local num = math.min(0.80, math.max(0.20, divider))
+
         screen.divider = (num * 100) / 100
 
         -- If window is maximized, snap back to splits layout
@@ -451,7 +450,7 @@ function M.move_to_screen()
 
         win:moveToScreen(next_screen)
 
-        assign_window(new_layout, nil, win)
+        update_layout(new_layout, nil, win)
 
         snap_layout()
 
@@ -474,7 +473,7 @@ function M.launch_or_focus(app)
                 local id     = new:screen():id()
                 local layout = state.screens[id].layout
 
-                assign_window(layout, existing, new)
+                update_layout(layout, existing, new)
 
                 snap_layout()
             end
@@ -505,8 +504,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_main_apps()
     return function(done)
-        local win = state.apps.all.curr_win
-        -- local existing = hs.window.focusedWindow()
+        local apps = state.apps.all
+        local win  = apps.curr_win
 
         local target_app = 'kitty'
 
@@ -524,10 +523,11 @@ function M.cycle_main_apps()
 
                 local id     = target_win:screen():id()
                 local layout = state.screens[id].layout
+                local idx    = get_window_idx(apps.wins, target_win)
 
-                assign_window(layout, win, target_win)
-
-                state.apps.all.curr_win = target_win
+                update_layout(layout, win, target_win)
+                update_borders(apps.idx, idx)
+                update_window_state(target_win, idx)
 
                 done()
             end
@@ -543,41 +543,40 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
-        local all_apps = state.apps.all
-        local app_win  = all_apps.curr_win
-        local app      = app_win:application():name()
-        local apps     = state.apps[app]
+        local apps     = state.apps.all
+        local app_name = apps.curr_win:application():name()
+        local curr_app = state.apps[app_name]
 
-        if not apps or #apps.wins < 2 then
+        if not curr_app or #curr_app.wins < 2 then
             done()
             return
         end
 
         local focused = hs.window.focusedWindow()
-        local new_idx = iterate_window_idx(app, direction)
-        local win     = focus_window(app, new_idx)
+        local idx     = iterate_window_idx(app_name, direction)
+        local win     = get_new_window(app_name, idx)
 
         if win then
             -- Need to set this to the index of the 'all' table because we use
             -- the app specific index table to iterate the window within the
             -- same app group.
-            new_idx = get_window_idx(all_apps.wins, win)
+            idx = get_window_idx(apps.wins, win)
 
-            update_borders(all_apps.idx, new_idx)
-            update_window_state(win, new_idx)
+            update_borders(apps.idx, idx)
+            update_window_state(win, idx)
         else
             -- Revert focus back to initial window
             focused:application():activate()
 
             -- Wait for MacOS window server to refresh
             for _ = 1, 100 do
-                win = focus_window(app, new_idx)
+                win = get_new_window(app_name, idx)
 
                 if win then
-                    new_idx = get_window_idx(all_apps.wins, win)
+                    idx = get_window_idx(apps.wins, win)
 
-                    update_borders(all_apps.idx, new_idx)
-                    update_window_state(win, new_idx)
+                    update_borders(apps.idx, idx)
+                    update_window_state(win, idx)
 
                     break
                 end
@@ -596,31 +595,31 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local all_apps = state.apps.all
+        local apps = state.apps.all
 
-        if #all_apps.wins < 2 then
+        if #apps.wins < 2 then
             done()
             return
         end
 
         local focused = hs.window.focusedWindow()
-        local new_idx = iterate_window_idx('all', direction)
-        local win     = focus_window('all', new_idx)
+        local idx     = iterate_window_idx('all', direction)
+        local win     = get_new_window('all', idx)
 
         if win then
-            update_borders(all_apps.idx, new_idx)
-            update_window_state(win, new_idx)
+            update_borders(apps.idx, idx)
+            update_window_state(win, idx)
         else
             -- Revert focus back to initial window
             focused:application():activate()
 
             -- Wait for MacOS window server to refresh
             for _ = 1, 100 do
-                win = focus_window('all', new_idx)
+                win = get_new_window('all', idx)
 
                 if win then
-                    update_borders(all_apps.idx, new_idx)
-                    update_window_state(win, new_idx)
+                    update_borders(apps.idx, idx)
+                    update_window_state(win, idx)
 
                     break
                 end
@@ -665,8 +664,8 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    local win = hs.window.focusedWindow()
-    local app = win:application():name()
+    local win      = hs.window.focusedWindow()
+    local app_name = win:application():name()
 
     local all_wins = get_open_windows(win)
 
@@ -681,11 +680,11 @@ function M.init()
     end
 
     -- Init layout if the focused window is compatible
-    if cache.assets[app] then
+    if cache.assets[app_name] then
         local id     = win:screen():id()
         local layout = state.screens[id].layout
 
-        assign_window(layout, nil, win)
+        update_layout(layout, nil, win)
     end
 
     -- Show window border

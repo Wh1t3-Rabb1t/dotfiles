@@ -25,10 +25,35 @@ local cache = require('cache')
 --     end)
 --
 --     watcher:start({
+--         ------------------------------
+--         -- APPLICATION LEVEL EVENTS --
+--         ------------------------------
+--         -- See hs.application.watcher for more events you can watch
 --         hs.uielement.watcher.applicationActivated,
 --         hs.uielement.watcher.applicationDeactivated,
+--         hs.uielement.watcher.applicationHidden,
+--         hs.uielement.watcher.applicationShown,
+--
+--         -- These events are watched on the application level, but send the relevant child element to the handler
 --         hs.uielement.watcher.mainWindowChanged,
---         hs.uielement.watcher.focusedWindowChanged,
+--         hs.uielement.watcher.focusedWindowChanged,  -- Note that the application may not be activated itself
+--         hs.uielement.watcher.focusedElementChanged,
+--
+--         -------------------------
+--         -- WINDOW LEVEL EVENTS --
+--         -------------------------
+--         hs.uielement.watcher.windowCreated,  -- You should watch for this event on the application, or the parent window
+--         hs.uielement.watcher.windowMoved,
+--         hs.uielement.watcher.windowResized,
+--         hs.uielement.watcher.windowMinimized,
+--         hs.uielement.watcher.windowUnminimized,
+--
+--         --------------------------
+--         -- ELEMENT LEVEL EVENTS --
+--         --------------------------
+--         -- These work on all UI elements, including windows.
+--         hs.uielement.watcher.elementDestroyed,  -- The element was destroyed
+--         hs.uielement.watcher.titleChanged,      -- The element's title was changed
 --     })
 --
 --     return watcher
@@ -206,9 +231,9 @@ local function get_open_windows(focused)
 
     if #windows.all.wins > 0 then
         return windows
+    else
+        return false
     end
-
-    return false
 end
 
 
@@ -272,8 +297,7 @@ local function update_layout(layout, existing, win)
     if is_fullscreen(win) then
         layout.maximized = win
 
-        -- Exit early
-        return
+        return  -- Exit early
     end
 
     if layout.maximized then
@@ -285,8 +309,7 @@ local function update_layout(layout, existing, win)
 
         layout.maximized = win
 
-        -- Exit early
-        return
+        return  -- Exit early
     end
 
     layout.maximized = false
@@ -386,6 +409,7 @@ function M.resize(direction, step_val)
         end
 
         local num = math.min(0.80, math.max(0.20, divider))
+
         screen.divider = (num * 100) / 100
 
         -- If window is maximized, snap back to splits layout
@@ -661,6 +685,45 @@ function M.border(toggle)
 end
 
 
+function M.window_watcher(win)
+    local app = win:application()
+
+    local watcher = app:newWatcher(function(element, event)
+        local focused = hs.window.focusedWindow()
+
+        print(
+            'UI EVENT:',
+            event,
+            '\n',
+            'element = ', element,
+            'focused = ', focused and focused:id(),
+            '\n'
+        )
+    end)
+
+    watcher:start({
+        -- APPLICATION LEVEL EVENTS
+        hs.uielement.watcher.applicationActivated,
+        hs.uielement.watcher.applicationDeactivated,
+
+        -- These events are watched on the application level, but send the relevant child element to the handler
+        hs.uielement.watcher.mainWindowChanged,
+        hs.uielement.watcher.focusedWindowChanged,  -- Note that the application may not be activated itself
+
+        -- WINDOW LEVEL EVENTS
+        hs.uielement.watcher.windowCreated,  -- You should watch for this event on the application, or the parent window
+        hs.uielement.watcher.windowMoved,
+        hs.uielement.watcher.windowResized,
+
+        -- ELEMENT LEVEL EVENTS
+        -- These work on all UI elements, including windows
+        hs.uielement.watcher.elementDestroyed,  -- The element was destroyed
+    })
+
+    return watcher
+end
+
+
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
@@ -693,6 +756,11 @@ function M.init()
     init_fn(function()
         -- Call done()
     end)
+
+
+    -- M.window_watcher(win)
+
+
 end
 
 return M

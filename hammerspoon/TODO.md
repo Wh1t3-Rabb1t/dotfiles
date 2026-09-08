@@ -2,10 +2,11 @@
 
 ## IMMEDIATE TASKS:
 
+- SETUP WINDOW WATCHER: Create and destroy window border as window
+  changes/opens/closes.
+
 - In window.resize() we can set a timer equal to double the key repeat value
   to throttle the consecutive inputs (debounce).
-
-- Create and destroy window border as window changes/opens/closes.
 
 - Alter lookup/eventtap/registry to support 'leader' key.
 

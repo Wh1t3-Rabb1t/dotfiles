@@ -59,6 +59,24 @@ local cache = require('cache')
 --     return watcher
 -- end
 
+-- Watch window level events
+--------------------------------------------------------------------------------
+-- local function create_window_watcher(win)
+--     local id = win:id()
+--
+--     local watcher = win:newWatcher(function(element, event)
+--         -- print('WINDOW:', id, event)
+--         print('oioi')
+--     end)
+--
+--     watcher:start({
+--         hs.uielement.watcher.elementDestroyed,
+--     })
+--
+--     return watcher
+--     -- cache.watchers.windows[id] = watcher
+-- end
+
 
 -- function M.debug_slots()
 --     return function(done)
@@ -82,6 +100,58 @@ local cache = require('cache')
 -- end
 
 
+
+-- Update window borders
+--------------------------------------------------------------------------------
+local function update_borders(old_idx, new_idx)
+    local apps = state.apps.all
+
+    local old_border = apps.borders[old_idx]
+    local new_border = apps.borders[new_idx]
+
+    if old_border then old_border:hide() end
+    if new_border then new_border:show() end
+end
+
+
+-- Update focused window state
+--------------------------------------------------------------------------------
+local function update_window_state(win, idx)
+    local apps     = state.apps.all
+    local app_name = win:application():name()
+    local curr_app = state.apps[app_name]
+
+    curr_app.idx = get_window_idx(curr_app.wins, win)
+
+    apps.idx      = idx
+    apps.curr_win = win
+end
+
+
+-- Watch application level events
+--------------------------------------------------------------------------------
+local function create_app_watcher(app)
+    local watcher = app:newWatcher(function(element, event)
+
+        local win  = hs.window.focusedWindow()
+        local apps = state.apps.all
+
+        update_borders(apps.idx, apps.swap_idx)
+        update_window_state(win, apps.swap_idx)
+
+        -- print('APP:', app:name(), event)
+    end)
+
+    watcher:start({
+        -- hs.uielement.watcher.applicationActivated,
+        -- hs.uielement.watcher.applicationDeactivated,
+        -- hs.uielement.watcher.mainWindowChanged,
+        hs.uielement.watcher.focusedWindowChanged,
+        -- hs.uielement.watcher.windowCreated,
+    })
+
+    return watcher
+end
 
 
 -- Create border canvases for each open window
@@ -175,21 +245,28 @@ local function get_new_window(app_name, idx)
     local wins = state.apps[app_name].wins
     local win  = wins[idx]
 
-    win:application():activate()
-
-    local ax = hs.axuielement.windowElement(win)
-
-    ax:performAction('AXRaise')
-    ax:setAttributeValue('AXMain', true)
-
-    local focused = hs.window.focusedWindow()
-
-    if focused:id() ~= win:id() then
-        win = false
-    end
-
     return win
 end
+
+-- local function get_new_window(app_name, idx)
+--     local wins = state.apps[app_name].wins
+--     local win  = wins[idx]
+--
+--     win:application():activate()
+--
+--     local ax = hs.axuielement.windowElement(win)
+--
+--     ax:performAction('AXRaise')
+--     ax:setAttributeValue('AXMain', true)
+--
+--     local focused = hs.window.focusedWindow()
+--
+--     if focused:id() ~= win:id() then
+--         win = false
+--     end
+--
+--     return win
+-- end
 
 
 -- Get all open windows
@@ -202,6 +279,7 @@ local function get_open_windows(focused)
     -- All open windows
     windows.all = {
         idx      = 1,
+        swap_idx = 1,
         curr_win = focused,
         wins     = {},
         borders  = {},
@@ -223,8 +301,9 @@ local function get_open_windows(focused)
 
         if #app_wins > 0 then
             windows[app:name()] = {
-                idx  = 1,
-                wins = app_wins,
+                idx     = 1,
+                wins    = app_wins,
+                watcher = create_app_watcher(app),
             }
         end
     end
@@ -284,7 +363,6 @@ local function get_coords(id, border)
 end
 
 
-
 -- Assign windows to layout state.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
@@ -321,33 +399,6 @@ local function update_layout(layout, existing, win)
     end
 
     layout[side] = win
-end
-
-
--- Update window borders
---------------------------------------------------------------------------------
-local function update_borders(old_idx, new_idx)
-    local apps = state.apps.all
-
-    local old_border = apps.borders[old_idx]
-    local new_border = apps.borders[new_idx]
-
-    if old_border then old_border:hide() end
-    if new_border then new_border:show() end
-end
-
-
--- Update focused window state
---------------------------------------------------------------------------------
-local function update_window_state(win, idx)
-    local apps     = state.apps.all
-    local app_name = win:application():name()
-    local curr_app = state.apps[app_name]
-
-    curr_app.idx = get_window_idx(curr_app.wins, win)
-
-    apps.idx      = idx
-    apps.curr_win = win
 end
 
 
@@ -627,35 +678,56 @@ function M.cycle_open(direction)
             return
         end
 
-        local focused = hs.window.focusedWindow()
-        local idx     = iterate_window_idx('all', direction)
-        local win     = get_new_window('all', idx)
+        local idx = iterate_window_idx('all', direction)
+        local win = get_new_window('all', idx)
 
-        if win then
-            update_borders(apps.idx, idx)
-            update_window_state(win, idx)
-        else
-            -- Revert focus back to initial window
-            focused:application():activate()
+        apps.swap_idx = idx
 
-            -- Wait for MacOS window server to refresh
-            for _ = 1, 100 do
-                win = get_new_window('all', idx)
-
-                if win then
-                    update_borders(apps.idx, idx)
-                    update_window_state(win, idx)
-
-                    break
-                end
-
-                hs.timer.usleep(5000)
-            end
-        end
+        win:focus()
 
         done()
     end
 end
+
+
+-- function M.cycle_open(direction)
+--     return function(done)
+--         local apps = state.apps.all
+--
+--         if #apps.wins < 2 then
+--             done()
+--             return
+--         end
+--
+--         local focused = hs.window.focusedWindow()
+--         local idx     = iterate_window_idx('all', direction)
+--         local win     = get_new_window('all', idx)
+--
+--         if win then
+--             update_borders(apps.idx, idx)
+--             update_window_state(win, idx)
+--         else
+--             -- Revert focus back to initial window
+--             focused:application():activate()
+--
+--             -- Wait for MacOS window server to refresh
+--             for _ = 1, 100 do
+--                 win = get_new_window('all', idx)
+--
+--                 if win then
+--                     update_borders(apps.idx, idx)
+--                     update_window_state(win, idx)
+--
+--                     break
+--                 end
+--
+--                 hs.timer.usleep(5000)
+--             end
+--         end
+--
+--         done()
+--     end
+-- end
 
 
 --------------------------------------------------------------------------------
@@ -682,45 +754,6 @@ function M.border(toggle)
 
         done()
     end
-end
-
-
-function M.window_watcher(win)
-    local app = win:application()
-
-    local watcher = app:newWatcher(function(element, event)
-        local focused = hs.window.focusedWindow()
-
-        print(
-            'UI EVENT:',
-            event,
-            '\n',
-            'element = ', element,
-            'focused = ', focused and focused:id(),
-            '\n'
-        )
-    end)
-
-    watcher:start({
-        -- APPLICATION LEVEL EVENTS
-        hs.uielement.watcher.applicationActivated,
-        hs.uielement.watcher.applicationDeactivated,
-
-        -- These events are watched on the application level, but send the relevant child element to the handler
-        hs.uielement.watcher.mainWindowChanged,
-        hs.uielement.watcher.focusedWindowChanged,  -- Note that the application may not be activated itself
-
-        -- WINDOW LEVEL EVENTS
-        hs.uielement.watcher.windowCreated,  -- You should watch for this event on the application, or the parent window
-        hs.uielement.watcher.windowMoved,
-        hs.uielement.watcher.windowResized,
-
-        -- ELEMENT LEVEL EVENTS
-        -- These work on all UI elements, including windows
-        hs.uielement.watcher.elementDestroyed,  -- The element was destroyed
-    })
-
-    return watcher
 end
 
 
@@ -756,11 +789,6 @@ function M.init()
     init_fn(function()
         -- Call done()
     end)
-
-
-    -- M.window_watcher(win)
-
-
 end
 
 return M

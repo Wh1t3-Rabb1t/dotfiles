@@ -25,13 +25,56 @@ local cache = require('cache')
 --     end)
 --
 --     watcher:start({
+--         ------------------------------
+--         -- APPLICATION LEVEL EVENTS --
+--         ------------------------------
+--         -- See hs.application.watcher for more events you can watch
 --         hs.uielement.watcher.applicationActivated,
 --         hs.uielement.watcher.applicationDeactivated,
+--         hs.uielement.watcher.applicationHidden,
+--         hs.uielement.watcher.applicationShown,
+--
+--         -- These events are watched on the application level, but send the relevant child element to the handler
 --         hs.uielement.watcher.mainWindowChanged,
---         hs.uielement.watcher.focusedWindowChanged,
+--         hs.uielement.watcher.focusedWindowChanged,  -- Note that the application may not be activated itself
+--         hs.uielement.watcher.focusedElementChanged,
+--
+--         -------------------------
+--         -- WINDOW LEVEL EVENTS --
+--         -------------------------
+--         hs.uielement.watcher.windowCreated,  -- You should watch for this event on the application, or the parent window
+--         hs.uielement.watcher.windowMoved,
+--         hs.uielement.watcher.windowResized,
+--         hs.uielement.watcher.windowMinimized,
+--         hs.uielement.watcher.windowUnminimized,
+--
+--         --------------------------
+--         -- ELEMENT LEVEL EVENTS --
+--         --------------------------
+--         -- These work on all UI elements, including windows.
+--         hs.uielement.watcher.elementDestroyed,  -- The element was destroyed
+--         hs.uielement.watcher.titleChanged,      -- The element's title was changed
 --     })
 --
 --     return watcher
+-- end
+
+-- Watch window level events
+--------------------------------------------------------------------------------
+-- local function create_window_watcher(win)
+--     local id = win:id()
+--
+--     local watcher = win:newWatcher(function(element, event)
+--         -- print('WINDOW:', id, event)
+--         print('oioi')
+--     end)
+--
+--     watcher:start({
+--         hs.uielement.watcher.elementDestroyed,
+--     })
+--
+--     return watcher
+--     -- cache.watchers.windows[id] = watcher
 -- end
 
 
@@ -167,6 +210,30 @@ local function get_new_window(app_name, idx)
 end
 
 
+-- Watch application level events
+--------------------------------------------------------------------------------
+local function create_app_watcher(app)
+    local watcher = app:newWatcher(function(element, event)
+
+        -- if event == 'AXFocusedWindowChanged' then
+        --     print('hello')
+        -- end
+
+        print('APP:', app:name(), event)
+    end)
+
+    watcher:start({
+        hs.uielement.watcher.applicationActivated,
+        hs.uielement.watcher.applicationDeactivated,
+        hs.uielement.watcher.mainWindowChanged,
+        hs.uielement.watcher.focusedWindowChanged,
+        hs.uielement.watcher.windowCreated,
+    })
+
+    return watcher
+end
+
+
 -- Get all open windows
 --------------------------------------------------------------------------------
 local function get_open_windows(focused)
@@ -198,8 +265,9 @@ local function get_open_windows(focused)
 
         if #app_wins > 0 then
             windows[app:name()] = {
-                idx  = 1,
-                wins = app_wins,
+                idx     = 1,
+                wins    = app_wins,
+                watcher = create_app_watcher(app),
             }
         end
     end
@@ -257,7 +325,6 @@ local function get_coords(id, border)
 
     return frames
 end
-
 
 
 -- Assign windows to layout state.

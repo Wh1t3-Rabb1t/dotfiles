@@ -17,6 +17,7 @@ M.action_queue = {
 M.apps = {
     -- ['all'] = {
     --     idx      = 1,
+    --     swap_idx = 1,
     --     curr_win = win,
     --     wins     = { ... },
     --     borders  = { ... },
@@ -24,10 +25,12 @@ M.apps = {
     -- ['Brave Browser'] = {
     --     idx     = 1,
     --     wins    = { ... },
+    --     watcher = { ... },
     -- },
     -- ['kitty'] = {
     --     idx     = 1,
     --     wins    = { ... },
+    --     watcher = { ... },
     -- },
     -- ...
 }

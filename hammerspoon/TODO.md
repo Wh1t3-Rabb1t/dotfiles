@@ -2,6 +2,8 @@
 
 ## IMMEDIATE TASKS:
 
+- Register screen layouts on init if screen has windows.
+
 - Alter lookup/eventtap/registry to support 'leader' key.
 
 - Create a 'mouse_click_explosion()' fn that animates a series of circles

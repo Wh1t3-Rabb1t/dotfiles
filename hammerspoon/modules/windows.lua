@@ -102,24 +102,6 @@ local cache = require('cache')
 
 
 
--- Create border canvases for each open window
---------------------------------------------------------------------------------
-local function create_border(win)
-    local canvas = hs.canvas.new(win:frame())
-
-    canvas:appendElements({
-        type        = 'rectangle',
-        action      = 'stroke',
-        strokeColor = { white = 1, alpha = 1 },
-        strokeWidth = 3,
-    })
-
-    canvas:level(hs.canvas.windowLevels.overlay)
-    canvas:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
-
-    return canvas
-end
-
 
 -- Compare the dimensions of two frame objects
 --------------------------------------------------------------------------------
@@ -221,7 +203,6 @@ local function get_open_windows(focused)
     windows.all = {
         idx      = 1,
         curr_win = focused,
-        border   = create_border(focused),
         wins     = {},
     }
 
@@ -337,13 +318,30 @@ local function update_layout(layout, existing_win, win)
 end
 
 
--- Update window borders
+-- Create/update window borders
 --------------------------------------------------------------------------------
 local function update_borders(win)
-    state.apps.all.border:hide()
-    state.apps.all.border:delete()
-    state.apps.all.border = create_border(win)
-    state.apps.all.border:show()
+    local border = state.apps.all.border
+
+    if not border then
+        border = hs.canvas.new(win:frame())
+
+        border:appendElements({
+            type        = 'rectangle',
+            action      = 'stroke',
+            strokeColor = { white = 1, alpha = 1 },
+            strokeWidth = 3,
+        })
+
+        border:level(hs.canvas.windowLevels.overlay)
+        border:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
+
+        state.apps.all.border = border
+    else
+        border:frame(win:frame())
+    end
+
+    border:show()
 end
 
 
@@ -648,6 +646,15 @@ function M.cycle_open(direction)
 
         if win then
             update_window_state(win, idx)
+
+
+            -- wip
+            local id     = win:screen():id()
+            local layout = state.screens[id].layout
+            update_layout(layout, focused, win)
+            -- wip
+
+
             update_borders(win)
         else
             -- Revert focus back to initial window
@@ -659,6 +666,15 @@ function M.cycle_open(direction)
 
                 if win then
                     update_window_state(win, idx)
+
+
+                    -- wip
+                    local id     = win:screen():id()
+                    local layout = state.screens[id].layout
+                    update_layout(layout, focused, win)
+                    -- wip
+
+
                     update_borders(win)
 
                     break
@@ -721,8 +737,8 @@ function M.init()
     end
 
     -- Show window border
-    if state.apps.all.border then
-        state.apps.all.border:show()
+    if win then
+        update_borders(win)
     end
 end
 

@@ -4,23 +4,6 @@ local state = require('state')
 local cache = require('cache')
 
 
--- Calculate the available screen (total screen frame minus the dock)
---------------------------------------------------------------------------------
-local function get_usable_frame(screen)
-    local full   = screen:fullFrame()
-    local usable = screen:frame()
-
-    local frame = {
-        x = full.x,
-        y = usable.y,
-        w = full.w,
-        h = full.h - (usable.y - full.y),
-    }
-
-    return frame
-end
-
-
 -- Create overlay
 --------------------------------------------------------------------------------
 local function create_overlay(screen)
@@ -45,10 +28,27 @@ local function create_overlay(screen)
 end
 
 
+-- Calculate the available screen (total screen frame minus the dock)
+--------------------------------------------------------------------------------
+local function get_usable_frame(screen)
+    local full   = screen:fullFrame()
+    local usable = screen:frame()
+
+    local frame = {
+        x = full.x,
+        y = usable.y,
+        w = full.w,
+        h = full.h - (usable.y - full.y),
+    }
+
+    return frame
+end
+
+
 -- Init data for all connected screens
 --------------------------------------------------------------------------------
 local function get_screen_data(screen)
-    local screen_data = {
+    local data = {
         cache = {
             overlay = create_overlay(screen),
             frame   = get_usable_frame(screen),
@@ -64,7 +64,7 @@ local function get_screen_data(screen)
         }
     }
 
-    return screen_data
+    return data
 end
 
 

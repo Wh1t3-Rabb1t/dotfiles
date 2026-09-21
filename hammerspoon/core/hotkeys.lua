@@ -9,8 +9,8 @@ local wk        = require('which_key')
 local keys = {
     {
         -- Hot reload hammerspoon
-        key       = 'r', mods = { 'ctrl', 'shift' },
-        action    = function()
+        key    = 'r', mods = { 'ctrl', 'shift' },
+        action = function()
             hs.reload()
         end,
     },

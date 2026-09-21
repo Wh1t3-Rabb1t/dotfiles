@@ -2,17 +2,6 @@
 
 ## IMMEDIATE TASKS:
 
-- SETUP WINDOW WATCHER: Create and destroy window border as window
-  changes/opens/closes.
-  (Look into making the window watcher an independent module and incorporating
-  popup changes when window focus changes).
-
-- Maybe incorporate the win and border tables together (might be a better idea
-  than relying on border indexing).
-
-- In window.resize() we can set a timer equal to double the key repeat value
-  to throttle the consecutive inputs (debounce).
-
 - Alter lookup/eventtap/registry to support 'leader' key.
 
 - Create a 'mouse_click_explosion()' fn that animates a series of circles

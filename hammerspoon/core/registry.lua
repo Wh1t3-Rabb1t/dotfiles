@@ -165,7 +165,15 @@ M.apps = {
                 { 'u', 'Prev open',       wk.hide(), win.cycle_open('prev'), wk.show()         },
                 { 'O', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
                 { 'U', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
+
+                -- new_win
+                -- { 'n', 'Open window',     wk.hide(), win.register_window() },
+                -- { 'n', 'Open window',     wk.hide(), win.register_window(), wk.show() },
+                -- { 'n', 'Open window',     wk.hide(), wk.send_keys({'cmd'}, 'n'), win.register_window() },
+
+
                 { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n')                           },
+
                 { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't')                           },
                 { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w')                           }
             ),
@@ -348,6 +356,8 @@ M.apps = {
                 { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')     },
                 { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right')    },
                 { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')     },
+
+                -- new_win
                 { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w') }
 
                 -- { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },

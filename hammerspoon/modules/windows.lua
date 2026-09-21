@@ -101,58 +101,6 @@ local cache = require('cache')
 
 
 
--- Update window borders
---------------------------------------------------------------------------------
-local function update_borders(old_idx, new_idx)
-    local apps = state.apps.all
-
-    local old_border = apps.borders[old_idx]
-    local new_border = apps.borders[new_idx]
-
-    if old_border then old_border:hide() end
-    if new_border then new_border:show() end
-end
-
-
--- Update focused window state
---------------------------------------------------------------------------------
-local function update_window_state(win, idx)
-    local apps     = state.apps.all
-    local app_name = win:application():name()
-    local curr_app = state.apps[app_name]
-
-    curr_app.idx = get_window_idx(curr_app.wins, win)
-
-    apps.idx      = idx
-    apps.curr_win = win
-end
-
-
--- Watch application level events
---------------------------------------------------------------------------------
-local function create_app_watcher(app)
-    local watcher = app:newWatcher(function(element, event)
-
-        local win  = hs.window.focusedWindow()
-        local apps = state.apps.all
-
-        update_borders(apps.idx, apps.swap_idx)
-        update_window_state(win, apps.swap_idx)
-
-        -- print('APP:', app:name(), event)
-    end)
-
-    watcher:start({
-        -- hs.uielement.watcher.applicationActivated,
-        -- hs.uielement.watcher.applicationDeactivated,
-        -- hs.uielement.watcher.mainWindowChanged,
-        hs.uielement.watcher.focusedWindowChanged,
-        -- hs.uielement.watcher.windowCreated,
-    })
-
-    return watcher
-end
-
 
 -- Create border canvases for each open window
 --------------------------------------------------------------------------------
@@ -245,28 +193,21 @@ local function get_new_window(app_name, idx)
     local wins = state.apps[app_name].wins
     local win  = wins[idx]
 
+    win:application():activate()
+
+    local ax = hs.axuielement.windowElement(win)
+
+    ax:performAction('AXRaise')
+    ax:setAttributeValue('AXMain', true)
+
+    local focused = hs.window.focusedWindow()
+
+    if focused:id() ~= win:id() then
+        win = false
+    end
+
     return win
 end
-
--- local function get_new_window(app_name, idx)
---     local wins = state.apps[app_name].wins
---     local win  = wins[idx]
---
---     win:application():activate()
---
---     local ax = hs.axuielement.windowElement(win)
---
---     ax:performAction('AXRaise')
---     ax:setAttributeValue('AXMain', true)
---
---     local focused = hs.window.focusedWindow()
---
---     if focused:id() ~= win:id() then
---         win = false
---     end
---
---     return win
--- end
 
 
 -- Get all open windows
@@ -279,10 +220,9 @@ local function get_open_windows(focused)
     -- All open windows
     windows.all = {
         idx      = 1,
-        swap_idx = 1,
         curr_win = focused,
+        border   = create_border(focused),
         wins     = {},
-        borders  = {},
     }
 
     for _, app in ipairs(running_apps) do
@@ -292,18 +232,13 @@ local function get_open_windows(focused)
             if win:isStandard() and win:isVisible() then
                 table.insert(windows.all.wins, win)
                 table.insert(app_wins, win)
-
-                local border = create_border(win)
-
-                table.insert(windows.all.borders, border)
             end
         end
 
         if #app_wins > 0 then
             windows[app:name()] = {
-                idx     = 1,
-                wins    = app_wins,
-                watcher = create_app_watcher(app),
+                idx  = 1,
+                wins = app_wins,
             }
         end
     end
@@ -371,7 +306,7 @@ end
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
-local function update_layout(layout, existing, win)
+local function update_layout(layout, existing_win, win)
     if is_fullscreen(win) then
         layout.maximized = win
 
@@ -394,11 +329,35 @@ local function update_layout(layout, existing, win)
 
     local side = get_side(win)
 
-    if existing and get_side(existing) == side then
+    if existing_win and get_side(existing_win) == side then
         side = (side == 'left') and 'right' or 'left'
     end
 
     layout[side] = win
+end
+
+
+-- Update window borders
+--------------------------------------------------------------------------------
+local function update_borders(win)
+    state.apps.all.border:hide()
+    state.apps.all.border:delete()
+    state.apps.all.border = create_border(win)
+    state.apps.all.border:show()
+end
+
+
+-- Update focused window state
+--------------------------------------------------------------------------------
+local function update_window_state(win, idx)
+    local apps     = state.apps.all
+    local app_name = win:application():name()
+    local curr_app = state.apps[app_name]
+
+    curr_app.idx = get_window_idx(curr_app.wins, win)
+
+    apps.idx      = idx
+    apps.curr_win = win
 end
 
 
@@ -435,6 +394,7 @@ function M.maximize()
         layout.maximized = win
 
         snap_layout()
+        update_borders(win)
 
         done()
     end
@@ -483,6 +443,7 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
+        update_borders(win)
 
         done()
     end
@@ -504,6 +465,7 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
+        update_borders(win)
 
         done()
     end
@@ -529,6 +491,7 @@ function M.move_to_screen()
         update_layout(new_layout, nil, win)
 
         snap_layout()
+        update_borders(win)
 
         done()
     end
@@ -552,6 +515,7 @@ function M.launch_or_focus(app)
                 update_layout(layout, existing, new)
 
                 snap_layout()
+                update_borders(new)
             end
 
             done()
@@ -602,8 +566,8 @@ function M.cycle_main_apps()
                 local idx    = get_window_idx(apps.wins, target_win)
 
                 update_layout(layout, win, target_win)
-                update_borders(apps.idx, idx)
                 update_window_state(target_win, idx)
+                update_borders(target_win)
 
                 done()
             end
@@ -638,8 +602,8 @@ function M.cycle_app_specific(direction)
             -- same app group.
             idx = get_window_idx(apps.wins, win)
 
-            update_borders(apps.idx, idx)
             update_window_state(win, idx)
+            update_borders(win)
         else
             -- Revert focus back to initial window
             focused:application():activate()
@@ -651,8 +615,8 @@ function M.cycle_app_specific(direction)
                 if win then
                     idx = get_window_idx(apps.wins, win)
 
-                    update_borders(apps.idx, idx)
                     update_window_state(win, idx)
+                    update_borders(win)
 
                     break
                 end
@@ -678,56 +642,35 @@ function M.cycle_open(direction)
             return
         end
 
-        local idx = iterate_window_idx('all', direction)
-        local win = get_new_window('all', idx)
+        local focused = hs.window.focusedWindow()
+        local idx     = iterate_window_idx('all', direction)
+        local win     = get_new_window('all', idx)
 
-        apps.swap_idx = idx
+        if win then
+            update_window_state(win, idx)
+            update_borders(win)
+        else
+            -- Revert focus back to initial window
+            focused:application():activate()
 
-        win:focus()
+            -- Wait for MacOS window server to refresh
+            for _ = 1, 100 do
+                win = get_new_window('all', idx)
+
+                if win then
+                    update_window_state(win, idx)
+                    update_borders(win)
+
+                    break
+                end
+
+                hs.timer.usleep(5000)
+            end
+        end
 
         done()
     end
 end
-
-
--- function M.cycle_open(direction)
---     return function(done)
---         local apps = state.apps.all
---
---         if #apps.wins < 2 then
---             done()
---             return
---         end
---
---         local focused = hs.window.focusedWindow()
---         local idx     = iterate_window_idx('all', direction)
---         local win     = get_new_window('all', idx)
---
---         if win then
---             update_borders(apps.idx, idx)
---             update_window_state(win, idx)
---         else
---             -- Revert focus back to initial window
---             focused:application():activate()
---
---             -- Wait for MacOS window server to refresh
---             for _ = 1, 100 do
---                 win = get_new_window('all', idx)
---
---                 if win then
---                     update_borders(apps.idx, idx)
---                     update_window_state(win, idx)
---
---                     break
---                 end
---
---                 hs.timer.usleep(5000)
---             end
---         end
---
---         done()
---     end
--- end
 
 
 --------------------------------------------------------------------------------
@@ -735,14 +678,7 @@ end
 --------------------------------------------------------------------------------
 function M.border(toggle)
     return function(done)
-        local apps = state.apps.all
-
-        apps.idx = get_window_idx(
-            apps.wins,
-            apps.curr_win
-        )
-
-        local border = apps.borders[apps.idx]
+        local border = state.apps.all.border
 
         if border then
             if toggle == 'show' then
@@ -785,10 +721,9 @@ function M.init()
     end
 
     -- Show window border
-    local init_fn = M.border('show')
-    init_fn(function()
-        -- Call done()
-    end)
+    if state.apps.all.border then
+        state.apps.all.border:show()
+    end
 end
 
 return M

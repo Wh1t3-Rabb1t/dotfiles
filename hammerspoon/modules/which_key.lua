@@ -199,6 +199,7 @@ function M.cycle_corner_pos()
         for i, c in ipairs(corners) do
             if c == current_corner then
                 current_index = i
+
                 break
             end
         end

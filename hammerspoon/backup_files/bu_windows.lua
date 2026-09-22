@@ -212,13 +212,14 @@ local function get_open_windows(focused)
 
         for _, win in ipairs(app:allWindows()) do
             if win:isStandard() and win:isVisible() then
-                table.insert(windows.all.running, app:name())
                 table.insert(windows.all.wins, win)
                 table.insert(app_wins, win)
             end
         end
 
         if #app_wins > 0 then
+            table.insert(windows.all.running, app:name())
+
             windows[app:name()] = {
                 idx  = 1,
                 wins = app_wins,
@@ -579,16 +580,10 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
-        local apps     = state.apps.all
-        local win      = apps.curr_win
+        local win      = state.apps.all.curr_win
         local curr_app = win:application():name()
         local count    = #state.apps.all.running
         local app_idx
-
-        -- -- DEBUG
-        -- for i, v in ipairs(state.apps.all.running) do
-        --     print(v)
-        -- end
 
         for i, v in ipairs(state.apps.all.running) do
             if v == curr_app then
@@ -612,7 +607,7 @@ function M.cycle_all_apps(direction)
                 wf:unsubscribeAll()
                 wf = nil
 
-                local idx = get_window_idx(apps.wins, target_win)
+                local idx = get_window_idx(state.apps.all.wins, target_win)
 
                 update_layout(target_win, win)
                 update_window_state(target_win, idx)
@@ -623,10 +618,6 @@ function M.cycle_all_apps(direction)
         )
 
         hs.application.launchOrFocus(target_app)
-
-        -- -- DEBUG
-        -- done()
-
     end
 end
 

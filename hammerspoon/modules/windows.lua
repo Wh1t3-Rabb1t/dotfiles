@@ -132,9 +132,12 @@ local function is_fullscreen(win)
 end
 
 
--- Remove windows from layout state
+-- Remove windows from the layout slot they occupy
 --------------------------------------------------------------------------------
-local function remove_window(layout, win)
+local function clear_slot(win)
+    local id     = win:screen():id()
+    local layout = state.screens[id].layout
+
     if layout.left      == win then layout.left      = false end
     if layout.right     == win then layout.right     = false end
     if layout.maximized == win then layout.maximized = false end
@@ -482,13 +485,9 @@ end
 function M.move_to_screen()
     return function(done)
         local win         = state.apps.all.curr_win
-        local curr_screen = win:screen()
-        local next_screen = curr_screen:next()
+        local next_screen = win:screen():next()
 
-        local old_layout = state.screens[curr_screen:id()].layout
-        -- local new_layout = state.screens[next_screen:id()].layout
-
-        remove_window(old_layout, win)
+        clear_slot(win)
 
         win:moveToScreen(next_screen)
 

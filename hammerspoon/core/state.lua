@@ -19,6 +19,7 @@ M.apps = {
     --     idx      = 1,
     --     curr_win = win,
     --     border   = obj,
+    --     running  = { ... },
     --     wins     = { ... },
     -- },
     -- ['Brave Browser'] = {

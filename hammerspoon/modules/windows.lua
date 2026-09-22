@@ -203,6 +203,7 @@ local function get_open_windows(focused)
     windows.all = {
         idx      = 1,
         curr_win = focused,
+        running  = {},
         wins     = {},
     }
 
@@ -211,6 +212,7 @@ local function get_open_windows(focused)
 
         for _, win in ipairs(app:allWindows()) do
             if win:isStandard() and win:isVisible() then
+                table.insert(windows.all.running, app:name())
                 table.insert(windows.all.wins, win)
                 table.insert(app_wins, win)
             end
@@ -287,7 +289,10 @@ end
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
-local function update_layout(layout, existing_win, win)
+local function update_layout(win, existing_win)
+    local id     = win:screen():id()
+    local layout = state.screens[id].layout
+
     if is_fullscreen(win) then
         layout.maximized = win
 
@@ -480,14 +485,13 @@ function M.move_to_screen()
         local next_screen = curr_screen:next()
 
         local old_layout = state.screens[curr_screen:id()].layout
-        local new_layout = state.screens[next_screen:id()].layout
+        -- local new_layout = state.screens[next_screen:id()].layout
 
         remove_window(old_layout, win)
 
         win:moveToScreen(next_screen)
 
-        update_layout(new_layout, nil, win)
-
+        update_layout(win)
         snap_layout()
         update_borders(win)
 
@@ -507,11 +511,7 @@ function M.launch_or_focus(app)
             state.apps.all.curr_win = new
 
             if existing and new and existing:id() ~= new:id() then
-                local id     = new:screen():id()
-                local layout = state.screens[id].layout
-
-                update_layout(layout, existing, new)
-
+                update_layout(new, existing)
                 snap_layout()
                 update_borders(new)
             end
@@ -559,11 +559,9 @@ function M.cycle_main_apps()
                 wf:unsubscribeAll()
                 wf = nil
 
-                local id     = target_win:screen():id()
-                local layout = state.screens[id].layout
-                local idx    = get_window_idx(apps.wins, target_win)
+                local idx = get_window_idx(apps.wins, target_win)
 
-                update_layout(layout, win, target_win)
+                update_layout(target_win, win)
                 update_window_state(target_win, idx)
                 update_borders(target_win)
 
@@ -572,6 +570,63 @@ function M.cycle_main_apps()
         )
 
         hs.application.launchOrFocus(target_app)
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Cycle between all running applications (i.e. cmd tab)
+--------------------------------------------------------------------------------
+function M.cycle_all_apps(direction)
+    return function(done)
+        local apps     = state.apps.all
+        local win      = apps.curr_win
+        local curr_app = win:application():name()
+        local count    = #state.apps.all.running
+        local app_idx
+
+        -- -- DEBUG
+        -- for i, v in ipairs(state.apps.all.running) do
+        --     print(v)
+        -- end
+
+        for i, v in ipairs(state.apps.all.running) do
+            if v == curr_app then
+                if direction == 'next' then
+                    app_idx = i % count + 1
+                elseif direction == 'prev' then
+                    app_idx = (i - 2) % count + 1
+                end
+
+                break
+            end
+        end
+
+        local target_app = state.apps.all.running[app_idx]
+
+        local wf = hs.window.filter.new(target_app)
+
+        wf:subscribe(
+            hs.window.filter.windowFocused,
+            function(target_win)
+                wf:unsubscribeAll()
+                wf = nil
+
+                local idx = get_window_idx(apps.wins, target_win)
+
+                update_layout(target_win, win)
+                update_window_state(target_win, idx)
+                update_borders(target_win)
+
+                done()
+            end
+        )
+
+        hs.application.launchOrFocus(target_app)
+
+        -- -- DEBUG
+        -- done()
+
     end
 end
 
@@ -646,15 +701,7 @@ function M.cycle_open(direction)
 
         if win then
             update_window_state(win, idx)
-
-
-            -- wip
-            local id     = win:screen():id()
-            local layout = state.screens[id].layout
-            update_layout(layout, focused, win)
-            -- wip
-
-
+            update_layout(win)
             update_borders(win)
         else
             -- Revert focus back to initial window
@@ -666,15 +713,7 @@ function M.cycle_open(direction)
 
                 if win then
                     update_window_state(win, idx)
-
-
-                    -- wip
-                    local id     = win:screen():id()
-                    local layout = state.screens[id].layout
-                    update_layout(layout, focused, win)
-                    -- wip
-
-
+                    update_layout(win)
                     update_borders(win)
 
                     break
@@ -728,17 +767,14 @@ function M.init()
         )
     end
 
-    -- Init layout if the focused window is compatible
-    if cache.assets[app_name] then
-        local id     = win:screen():id()
-        local layout = state.screens[id].layout
-
-        update_layout(layout, nil, win)
-    end
-
-    -- Show window border
     if win then
+        -- Show window border
         update_borders(win)
+
+        -- Init layout if the focused window is compatible
+        if cache.assets[app_name] then
+            update_layout(win)
+        end
     end
 end
 

@@ -2,6 +2,14 @@
 
 ## IMMEDIATE TASKS:
 
+- Finish 'cycle_all_apps()'. When registering 'state.apps.all.running' we need
+  to ensure duplicate entries are not registered.
+
+- In the full swift version:
+  Need to allow users to declare the indexes (essentially the layout) of
+  their monitors for congruent directional movement. Allow traversal of
+  splits (focus left then right split etc).
+
 - Register screen layouts on init if screen has windows.
 
 - Alter lookup/eventtap/registry to support 'leader' key.

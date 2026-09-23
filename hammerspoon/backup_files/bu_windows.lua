@@ -172,22 +172,6 @@ local function get_window_idx(wins, target)
 end
 
 
--- Find out which layout slot a window is assigned to, if any
---------------------------------------------------------------------------------
-local function get_window_slot(win)
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
-
-    local curr_slot = 'none'
-
-    if layout.left      == win then curr_slot = 'left'      end
-    if layout.right     == win then curr_slot = 'right'     end
-    if layout.maximized == win then curr_slot = 'maximized' end
-
-    return curr_slot
-end
-
-
 -- Iterate focus between open windows
 --------------------------------------------------------------------------------
 local function get_new_window(app_name, idx)
@@ -558,14 +542,76 @@ end
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)
-        local win       = state.apps.all.curr_win
-        local curr_slot = get_window_slot(win)
+        local reverse     = direction == 'left'
+        local screen_step = reverse and -1 or 1
+        local slot_order  = reverse
+            and { 'maximized', 'right', 'left' }
+            or  { 'maximized', 'left', 'right' }
 
-        if curr_slot ~= 'none' then
-            if curr_slot == 'maximized' then
-                -- move to first slot on the next screen
+        local function get_window_slot(win)
+            local layout = state.screens[win:screen():id()].layout
+
+            if layout.maximized == win then return 'maximized' end
+            if layout.left      == win then return 'left'      end
+            if layout.right     == win then return 'right'     end
+        end
+
+        local function get_next_screen_slot(id, skip)
+            for _ = 1, #state.screens do
+                id = (id - 1 + screen_step) % #state.screens + 1
+
+                local layout = state.screens[id].layout
+
+                for _, name in ipairs(slot_order) do
+                    local slot = layout[name]
+
+                    if slot and slot ~= skip then
+                        return slot
+                    end
+                end
             end
         end
+
+        local win       = state.apps.all.curr_win
+        local screen_id = win:screen():id()
+        local layout    = state.screens[screen_id].layout
+        local curr_slot = get_window_slot(win)
+
+        local slot
+
+        if curr_slot == 'maximized' then
+            slot = get_next_screen_slot(screen_id, win)
+
+        elseif curr_slot == 'left' then
+            slot = layout.right
+
+            if not slot then
+                slot = get_next_screen_slot(screen_id, win)
+            end
+
+        elseif curr_slot == 'right' then
+            if reverse then
+                slot = layout.left
+
+                if not slot then
+                    slot = get_next_screen_slot(screen_id, win)
+                end
+            else
+                slot = get_next_screen_slot(screen_id, win)
+            end
+        end
+
+        if not slot then
+            done()
+            return
+        end
+
+        local new_idx = iterate_window_idx('all')
+
+        update_window_state(slot, new_idx)
+        update_borders(slot)
+
+        slot:focus()
 
         done()
     end

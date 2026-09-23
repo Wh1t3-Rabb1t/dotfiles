@@ -161,19 +161,14 @@ M.apps = {
             category = 'Windows',
             bindings = bind(
                 { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()          },
-                { '-', 'Next slot',       wk.hide(), win.traverse_slots('next'), wk.show()     },
                 -- { '-', 'Next app',        wk.hide(), win.cycle_all_apps('next'), wk.show()     },
-                -- { '-', 'Next screen',     wk.hide(), win.move_to_screen(), wk.show()     },
-                { 'o', 'Next open',       wk.hide(), win.cycle_open('next'), wk.show()         },
-                { 'u', 'Prev open',       wk.hide(), win.cycle_open('prev'), wk.show()         },
-                { 'O', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
-                { 'U', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
-
-                -- new_win
-                -- { 'n', 'Open window',     wk.hide(), win.register_window() },
-                -- { 'n', 'Open window',     wk.hide(), win.register_window(), wk.show() },
-                -- { 'n', 'Open window',     wk.hide(), wk.send_keys({'cmd'}, 'n'), win.register_window() },
-
+                -- { '-', 'Next screen',     wk.hide(), win.move_to_screen(), wk.show()           },
+                { 'o', 'Next slot',       wk.hide(), win.traverse_slots('next'), wk.show()     },
+                { 'u', 'Prev slot',       wk.hide(), win.traverse_slots('prev'), wk.show()     },
+                { 'O', 'Next window',     wk.hide(), win.cycle_open('next'), wk.show()         },
+                { 'U', 'Prev window',     wk.hide(), win.cycle_open('prev'), wk.show()         },
+                -- { 'O', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
+                -- { 'U', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
 
                 { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n')                           },
 

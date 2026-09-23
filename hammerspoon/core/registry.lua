@@ -161,8 +161,8 @@ M.apps = {
             category = 'Windows',
             bindings = bind(
                 { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()          },
-                -- { '-', 'Next app',        wk.hide(), win.cycle_all_apps('next'), wk.show()     },
-                { '-', 'Next screen',     wk.hide(), win.move_to_screen(), wk.show()     },
+                { '-', 'Next app',        wk.hide(), win.cycle_all_apps('next'), wk.show()     },
+                -- { '-', 'Next screen',     wk.hide(), win.move_to_screen(), wk.show()     },
                 { 'o', 'Next open',       wk.hide(), win.cycle_open('next'), wk.show()         },
                 { 'u', 'Prev open',       wk.hide(), win.cycle_open('prev'), wk.show()         },
                 { 'O', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },

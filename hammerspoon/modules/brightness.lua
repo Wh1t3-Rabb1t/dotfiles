@@ -29,12 +29,12 @@ function M.adjust(direction)
             brightness = math.max(brightness - step, 5)
         end
 
-        -- Update state/cache
+        -- Update state
         state.screens[id].brightness = brightness
-        cache.screens[id].overlay[1].fillColor.alpha = 1 - brightness / 100
+        state.screens[id].overlay[1].fillColor.alpha = 1 - brightness / 100
 
         -- Show the overlay if not already 'visible'
-        local shader = cache.screens[id].overlay
+        local shader = state.screens[id].overlay
 
         if not shader:isShowing() then
             shader:show()

@@ -116,7 +116,7 @@ end
 local function get_coords(win, popups, corner, stack)
     local id           = win:screen():id()
     local app_frame    = win:frame()
-    local screen_frame = cache.screens[id].frame
+    local screen_frame = state.screens[id].frame
 
     local spacing = 25
 

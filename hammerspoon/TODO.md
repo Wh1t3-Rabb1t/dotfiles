@@ -2,6 +2,9 @@
 
 ## IMMEDIATE TASKS:
 
+- Create a 'traverse_slots' fn that moves from left/right and vice versa.
+  (also allow traversal across displays).
+
 - In the full swift version:
   Need to allow users to declare the indexes (essentially the layout) of
   their monitors for congruent directional movement. Allow traversal of

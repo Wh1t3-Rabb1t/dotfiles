@@ -1,7 +1,6 @@
 local M = {}
 
 local state = require('state')
-local cache = require('cache')
 
 
 -- Create overlay
@@ -49,18 +48,14 @@ end
 --------------------------------------------------------------------------------
 local function get_screen_data(screen)
     local data = {
-        cache = {
-            overlay = create_overlay(screen),
-            frame   = get_usable_frame(screen),
-        },
-        state = {
-            brightness = 100,
-            divider    = 0.35,
-            layout = {
-                maximized = false,
-                left      = false,
-                right     = false,
-            }
+        overlay    = create_overlay(screen),
+        frame      = get_usable_frame(screen),
+        brightness = 100,
+        divider    = 0.35,
+        layout = {
+            maximized = false,
+            left      = false,
+            right     = false,
         }
     }
 
@@ -74,11 +69,10 @@ end
 function M.init()
     -- Init screen data if required
     for _, screen in ipairs(hs.screen.allScreens()) do
-        local id          = screen:id()
-        local screen_data = get_screen_data(screen)
+        local id   = screen:id()
+        local data = get_screen_data(screen)
 
-        cache.screens[id] = screen_data.cache
-        state.screens[id] = screen_data.state
+        state.screens[id] = data
     end
 end
 

@@ -2,13 +2,14 @@
 
 ## IMMEDIATE TASKS:
 
-- Create a 'traverse_slots' fn that moves from left/right and vice versa.
-  (also allow traversal across displays).
+- Finish 'traverse_slots' fn when slept.
+  Traverse from left to right; also allow traversal across displays (this is
+  default when curr window is maximized).
 
 - In the full swift version:
-  Need to allow users to declare the indexes (essentially the layout) of
-  their monitors for congruent directional movement. Allow traversal of
-  splits (focus left then right split etc).
+  Need to allow users to declare the indexes (essentially the layout) of their
+  monitors for congruent directional movement. Allow traversal of splits
+  (focus left then right split etc).
 
 - Register screen layouts on init if screen has windows.
 

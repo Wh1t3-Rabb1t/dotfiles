@@ -23,18 +23,20 @@ M.apps = {
     --     wins     = { ... },
     -- },
     -- ['Brave Browser'] = {
-    --     idx     = 1,
-    --     wins    = { ... },
+    --     idx  = 1,
+    --     wins = { ... },
     -- },
     -- ['kitty'] = {
-    --     idx     = 1,
-    --     wins    = { ... },
+    --     idx  = 1,
+    --     wins = { ... },
     -- },
     -- ...
 }
 
 M.screens = {
     -- [id] = {
+    --     frame      = {},
+    --     overlay    = {},
     --     brightness = (1..100),
     --     divider    = .50,  (0.20 .. 0.80)
     --     layout = {

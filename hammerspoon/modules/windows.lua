@@ -172,22 +172,6 @@ local function get_window_idx(wins, target)
 end
 
 
--- Find out which layout slot a window is assigned to, if any
---------------------------------------------------------------------------------
-local function get_window_slot(win)
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
-
-    local curr_slot = 'none'
-
-    if layout.left      == win then curr_slot = 'left'      end
-    if layout.right     == win then curr_slot = 'right'     end
-    if layout.maximized == win then curr_slot = 'maximized' end
-
-    return curr_slot
-end
-
-
 -- Iterate focus between open windows
 --------------------------------------------------------------------------------
 local function get_new_window(app_name, idx)
@@ -558,12 +542,51 @@ end
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)
+        -- Find out which layout slot a window is assigned to, if any
+        local function get_window_slot(win)
+            local id     = win:screen():id()
+            local layout = state.screens[id].layout
+
+            local curr_slot = 'none'
+
+            if layout.left      == win then curr_slot = 'left'      end
+            if layout.right     == win then curr_slot = 'right'     end
+            if layout.maximized == win then curr_slot = 'maximized' end
+
+            return curr_slot
+        end
+
         local win       = state.apps.all.curr_win
         local curr_slot = get_window_slot(win)
 
         if curr_slot ~= 'none' then
+            -- Move to the first available slot on the next screen
             if curr_slot == 'maximized' then
-                -- move to first slot on the next screen
+                local idx   = win:screen():id()
+                local count = #state.screens
+
+                if direction == 'next' then
+                    idx = idx % count + 1
+                elseif direction == 'prev' then
+                    idx = (idx - 2) % count + 1
+                end
+
+                local next_layout = state.screens[idx].layout
+                local target_win
+
+                if next_layout.maximized then
+                    target_win = next_layout.maximized
+                elseif next_layout.left then
+                    target_win = next_layout.left
+                elseif next_layout.right then
+                    target_win = next_layout.right
+                end
+
+                local new_idx = iterate_window_idx('all')
+                update_window_state(target_win, new_idx)
+                update_borders(target_win)
+
+                target_win:focus()
             end
         end
 

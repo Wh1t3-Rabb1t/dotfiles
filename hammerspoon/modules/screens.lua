@@ -48,8 +48,8 @@ end
 --------------------------------------------------------------------------------
 local function get_screen_data(screen)
     local data = {
-        overlay    = create_overlay(screen),
         frame      = get_usable_frame(screen),
+        overlay    = create_overlay(screen),
         brightness = 100,
         divider    = 0.35,
         layout = {

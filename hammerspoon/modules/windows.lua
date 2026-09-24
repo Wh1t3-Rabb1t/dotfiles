@@ -101,8 +101,6 @@ local cache = require('cache')
 
 
 
-
-
 -- Compare the dimensions of two frame objects
 --------------------------------------------------------------------------------
 local function frames_equal(a, b, tolerance)
@@ -172,72 +170,6 @@ local function get_window_idx(wins, target)
 end
 
 
--- Iterate focus between open windows
---------------------------------------------------------------------------------
-local function get_new_window(app_name, idx)
-    local wins = state.apps[app_name].wins
-    local win  = wins[idx]
-
-    win:application():activate()
-
-    local ax = hs.axuielement.windowElement(win)
-
-    ax:performAction('AXRaise')
-    ax:setAttributeValue('AXMain', true)
-
-    local focused = hs.window.focusedWindow()
-
-    if focused:id() ~= win:id() then
-        win = false
-    end
-
-    return win
-end
-
-
--- Get all open windows
---------------------------------------------------------------------------------
-local function get_open_windows(focused)
-    local running_apps = hs.application.runningApplications()
-
-    local windows = {}
-
-    -- All open windows
-    windows.all = {
-        idx      = 1,
-        curr_win = focused,
-        running  = {},
-        wins     = {},
-    }
-
-    for _, app in ipairs(running_apps) do
-        local app_wins = {}
-
-        for _, win in ipairs(app:allWindows()) do
-            if win:isStandard() and win:isVisible() then
-                table.insert(windows.all.wins, win)
-                table.insert(app_wins, win)
-            end
-        end
-
-        if #app_wins > 0 then
-            table.insert(windows.all.running, app:name())
-
-            windows[app:name()] = {
-                idx  = 1,
-                wins = app_wins,
-            }
-        end
-    end
-
-    if #windows.all.wins > 0 then
-        return windows
-    else
-        return false
-    end
-end
-
-
 -- Is window aligned to the left or right of the screen
 --------------------------------------------------------------------------------
 local function get_side(win)
@@ -282,6 +214,49 @@ local function get_coords(id, border)
     }
 
     return frames
+end
+
+
+-- Get all open windows
+--------------------------------------------------------------------------------
+local function get_open_windows(focused)
+    local running_apps = hs.application.runningApplications()
+
+    local windows = {}
+
+    -- All open windows
+    windows.all = {
+        idx      = 1,
+        curr_win = focused,
+        running  = {},
+        wins     = {},
+    }
+
+    for _, app in ipairs(running_apps) do
+        local app_wins = {}
+
+        for _, win in ipairs(app:allWindows()) do
+            if win:isStandard() and win:isVisible() then
+                table.insert(windows.all.wins, win)
+                table.insert(app_wins, win)
+            end
+        end
+
+        if #app_wins > 0 then
+            table.insert(windows.all.running, app:name())
+
+            windows[app:name()] = {
+                idx  = 1,
+                wins = app_wins,
+            }
+        end
+    end
+
+    if #windows.all.wins > 0 then
+        return windows
+    else
+        return false
+    end
 end
 
 
@@ -386,6 +361,44 @@ local function snap_layout()
             layout.right:setFrame(frames.right, 0.02)
         end
     end
+end
+
+
+-- Force focus of target window (MacOS window server is a wild horse)
+--------------------------------------------------------------------------------
+local function focus_window(win)
+    local original = hs.window.focusedWindow()
+
+    local function attempt()
+        win:application():activate()
+
+        local ax = hs.axuielement.windowElement(win)
+
+        ax:performAction('AXRaise')
+        ax:setAttributeValue('AXMain', true)
+
+        if hs.window.focusedWindow():id() == win:id() then
+            return true
+        else
+            return false
+        end
+    end
+
+    if attempt() then
+        return win
+    end
+
+    original:application():activate()
+
+    for _ = 1, 100 do
+        if attempt() then
+            return win
+        end
+
+        hs.timer.usleep(5000)
+    end
+
+    return false
 end
 
 
@@ -542,7 +555,7 @@ end
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)
-        local reverse     = direction == 'left'
+        local reverse     = direction == 'prev'
         local screen_step = reverse and -1 or 1
         local slot_order  = reverse
             and { 'maximized', 'right', 'left' }
@@ -585,10 +598,9 @@ function M.traverse_slots(direction)
         elseif curr_slot == 'left' then
             slot = layout.right
 
-            if not slot then
+            if reverse or not slot then
                 slot = get_next_screen_slot(screen_id, win)
             end
-
         elseif curr_slot == 'right' then
             if reverse then
                 slot = layout.left
@@ -606,12 +618,13 @@ function M.traverse_slots(direction)
             return
         end
 
-        local new_idx = iterate_window_idx('all')
+        local idx     = iterate_window_idx('all')
+        local new_win = focus_window(slot)
 
-        update_window_state(slot, new_idx)
-        update_borders(slot)
-
-        slot:focus()
+        if new_win then
+            update_window_state(new_win, idx)
+            update_borders(new_win)
+        end
 
         done()
     end
@@ -716,9 +729,8 @@ function M.cycle_app_specific(direction)
             return
         end
 
-        local original = hs.window.focusedWindow()
-        local idx      = iterate_window_idx(app_name, direction)
-        local win      = get_new_window(app_name, idx)
+        local idx = iterate_window_idx(app_name, direction)
+        local win = focus_window(curr_app.wins[idx])
 
         if win then
             -- Need to set this to the index of the 'all' table because we use
@@ -728,25 +740,6 @@ function M.cycle_app_specific(direction)
 
             update_window_state(win, idx)
             update_borders(win)
-        else
-            -- Revert focus back to initial window
-            original:application():activate()
-
-            -- Wait for MacOS window server to refresh
-            for _ = 1, 100 do
-                win = get_new_window(app_name, idx)
-
-                if win then
-                    idx = get_window_idx(apps.wins, win)
-
-                    update_window_state(win, idx)
-                    update_borders(win)
-
-                    break
-                end
-
-                hs.timer.usleep(5000)
-            end
         end
 
         done()
@@ -766,32 +759,13 @@ function M.cycle_open(direction)
             return
         end
 
-        local original = hs.window.focusedWindow()
-        local idx      = iterate_window_idx('all', direction)
-        local win      = get_new_window('all', idx)
+        local idx = iterate_window_idx('all', direction)
+        local win = focus_window(apps.wins[idx])
 
         if win then
             update_window_state(win, idx)
             update_layout(win)
             update_borders(win)
-        else
-            -- Revert focus back to initial window
-            original:application():activate()
-
-            -- Wait for MacOS window server to refresh
-            for _ = 1, 100 do
-                win = get_new_window('all', idx)
-
-                if win then
-                    update_window_state(win, idx)
-                    update_layout(win)
-                    update_borders(win)
-
-                    break
-                end
-
-                hs.timer.usleep(5000)
-            end
         end
 
         done()

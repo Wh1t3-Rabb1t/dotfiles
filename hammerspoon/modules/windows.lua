@@ -563,14 +563,6 @@ function M.traverse_slots(direction)
             and { 'maximized', 'right', 'left' }
             or  { 'maximized', 'left', 'right' }
 
-        local function get_window_slot(win)
-            local layout = state.screens[win:screen():id()].layout
-
-            if layout.maximized == win then return 'maximized' end
-            if layout.left      == win then return 'left'      end
-            if layout.right     == win then return 'right'     end
-        end
-
         local function get_next_screen_slot(id, skip)
             for _ = 1, #state.screens do
                 id = (id - 1 + screen_step) % #state.screens + 1
@@ -590,41 +582,40 @@ function M.traverse_slots(direction)
         local win       = state.apps.all.curr_win
         local screen_id = win:screen():id()
         local layout    = state.screens[screen_id].layout
-        local curr_slot = get_window_slot(win)
 
-        local slot
+        local target_slot
 
-        if curr_slot == 'maximized' then
-            slot = get_next_screen_slot(screen_id, win)
+        -- Maximized
+        if layout.maximized == win then
+            target_slot = get_next_screen_slot(screen_id, win)
 
-        elseif curr_slot == 'left' then
-            slot = layout.right
+        -- Left
+        elseif layout.left == win then
+             target_slot = layout.right
 
-            if reverse or not slot then
-                slot = get_next_screen_slot(screen_id, win)
+            if reverse or not target_slot then
+                target_slot = get_next_screen_slot(screen_id, win)
             end
-        elseif curr_slot == 'right' then
-            if reverse then
-                slot = layout.left
 
-                if not slot then
-                    slot = get_next_screen_slot(screen_id, win)
-                end
-            else
-                slot = get_next_screen_slot(screen_id, win)
+        -- Right
+        elseif layout.right == win then
+            target_slot = layout.left
+
+            if not reverse or not target_slot then
+                target_slot = get_next_screen_slot(screen_id, win)
             end
         end
 
-        if not slot then
+        if not target_slot then
             done()
             return
         end
 
-        local idx     = iterate_window_idx('all')
-        local new_win = focus_window(slot)
+        local win_idx = iterate_window_idx('all')
+        local new_win = focus_window(target_slot)
 
         if new_win then
-            update_window_state(new_win, idx)
+            update_window_state(new_win, win_idx)
             update_borders(new_win)
         end
 

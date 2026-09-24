@@ -2,11 +2,14 @@
 
 ## IMMEDIATE TASKS:
 
+- Register screen layouts on init if screen has windows.
+
+- Set up window open/closed fns that update state.wins when windows are
+  opened, closed, focused (through either kb, or click).
+
 - In the full swift version:
   Need to allow users to declare the indexes (essentially the layout) of their
   monitors for congruent directional movement.
-
-- Register screen layouts on init if screen has windows.
 
 - Alter lookup/eventtap/registry to support 'leader' key.
 
@@ -70,28 +73,7 @@
       Toggle bluetooth
       Quit app
 
-- Consider expanding upon the state.open_apps.wins tables to contain window
-  specific data i.e. opacity, coords etc. (actually maybe not coords because
-  they'll need to sync with screen[id].layout coords).
-
-- Ensure window indexes are synced to focused window.
-
-- Set up window open/closed fns that update state.wins when windows are
-  opened, closed, focused (through either kb, or click).
-
-- Add action that dispays each open window with a number attached that can
-  be temporarily bound to jump to said window (i.e. press 2 to jump to win #2).
-
-- Look into creating a window watcher that updates state/cache when windows
-  are opened/closed.
-
 - Research automatically setting up 'brave://settings/system/shortcuts'.
-
-- Certain kitty actions are temporarily commented out in the registry.
-
-- Sync popups.show() with the current screen (i.e. showing a popup for an app
-  with windows on each screen is inconsistent, sometimes appears on the
-  unfocused window).
 
 - Consider binding 'escape' to temporary_insert() and (cancel|exit) to the same
   key as launch_menu().
@@ -147,10 +129,6 @@
   -- vs
   popup:hide()
   ```
-
-- Consider sending a singe 'escape' keystoke before launching which_key.
-  This would exit apps in fullscreen mode and set a semi consistent ui state
-  in broswers etc.
 
 - Re-incorporate bluetooth watcher.
 

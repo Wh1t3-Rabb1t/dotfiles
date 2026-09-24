@@ -367,8 +367,6 @@ end
 -- Force focus of target window (MacOS window server is a wild horse)
 --------------------------------------------------------------------------------
 local function focus_window(win)
-    local original = hs.window.focusedWindow()
-
     local function attempt()
         win:application():activate()
 
@@ -384,21 +382,25 @@ local function focus_window(win)
         end
     end
 
+    local status   = false
+    local original = hs.window.focusedWindow()
+
     if attempt() then
-        return win
-    end
+        status = win
+    else
+        original:application():activate()
 
-    original:application():activate()
+        for _ = 1, 100 do
+            if attempt() then
+                status = win
+                break
+            end
 
-    for _ = 1, 100 do
-        if attempt() then
-            return win
+            hs.timer.usleep(5000)
         end
-
-        hs.timer.usleep(5000)
     end
 
-    return false
+    return status
 end
 
 

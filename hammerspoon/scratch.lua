@@ -1,4 +1,343 @@
 
+-- 2026-09-25 20:32:25:
+-- 2026-09-25 20:32:25: [focus] ===== SYSTEM AX FOCUS =====
+-- 2026-09-25 20:32:25: [focus] app:    hs.axuielement: AXApplication (0x90fb694f8)
+-- 2026-09-25 20:32:25: [focus] app pid:    30067
+-- 2026-09-25 20:32:25: [focus] app role:   AXApplication
+-- 2026-09-25 20:32:25: [focus] app title:  Hammerspoon
+-- 2026-09-25 20:32:25: [focus] focused window: hs.axuielement: AXWindow (0x90fb6b1f8)
+-- 2026-09-25 20:32:25: [focus] window role:    AXWindow
+-- 2026-09-25 20:32:25: [focus] window title:   Hammerspoon Console
+-- 2026-09-25 20:32:25: [focus] window subrole: AXStandardWindow
+-- 2026-09-25 20:32:25: [focus] focused UI element: hs.axuielement: AXTextArea (0x90fb6bf38)
+-- 2026-09-25 20:32:25: [focus] element role:   AXTextArea
+-- 2026-09-25 20:32:25: [focus] element title:  nil
+-- 2026-09-25 20:32:25: [focus] element role description:   text entry area
+-- 2026-09-25 20:32:25: [focus] =============================
+
+-- 2026-09-25 19:40:50:
+-- 2026-09-25 19:40:50: [focus] ########################################
+-- 2026-09-25 19:40:50: [focus] focus_window START
+-- 2026-09-25 19:40:50: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:40:50: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:40:50: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:40:50: [focus] initial frontmost:  kitty(pid=30637)
+-- 2026-09-25 19:40:50:
+-- 2026-09-25 19:40:50: [focus] ===============================
+-- 2026-09-25 19:40:50: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:40:50: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:40:50: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:40:50: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:40:50: [focus] before frontmost:   kitty(pid=30637)
+-- 2026-09-25 19:40:50: -- Loading extension: axuielement
+-- 2026-09-25 19:40:50: [focus] AX element created
+-- 2026-09-25 19:40:50: [focus] AX valid:   true
+-- 2026-09-25 19:40:50: [focus] AXMain before:  true
+-- 2026-09-25 19:40:50: [focus] activate() returned:    true    | frontmost immediately:    kitty(pid=30637)
+-- 2026-09-25 19:40:50: [focus] WAIT direct        | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:40:50: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:40:50: -- Loading extension: timer
+-- 2026-09-25 19:40:50: [focus]   WAIT FAILED | target=Hammerspoon(pid=30067) | frontmost=kitty(pid=30637)
+-- 2026-09-25 19:40:50: [focus] ABORT:  direct  -> target app never became frontmost
+-- 2026-09-25 19:40:50:
+-- 2026-09-25 19:40:50: [focus] ---- BOUNCE THROUGH ORIGINAL APP ----
+-- 2026-09-25 19:40:50: [focus] activating: kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus] original_app:activate() ->  true    | frontmost:    kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus] WAIT original      | target=kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:40:51: [focus]   WAIT success after 2 polls
+-- 2026-09-25 19:40:51:
+-- 2026-09-25 19:40:51: [focus] ===============================
+-- 2026-09-25 19:40:51: [focus] ATTEMPT:    after bounce
+-- 2026-09-25 19:40:51: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:40:51: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:40:51: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus] before frontmost:   kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus] AX element created
+-- 2026-09-25 19:40:51: [focus] AX valid:   true
+-- 2026-09-25 19:40:51: [focus] AXMain before:  true
+-- 2026-09-25 19:40:51: [focus] activate() returned:    true    | frontmost immediately:    kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus] WAIT after bounce  | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:40:51: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:40:51: [focus]   WAIT FAILED | target=Hammerspoon(pid=30067) | frontmost=kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus] ABORT:  after bounce    -> target app never became frontmost
+-- 2026-09-25 19:40:51:
+-- 2026-09-25 19:40:51: [focus] ########################################
+-- 2026-09-25 19:40:51: [focus] FINAL FAILURE
+-- 2026-09-25 19:40:51: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:40:51: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:40:51: [focus] final frontmost:    kitty(pid=30637)
+-- 2026-09-25 19:40:51: [focus] ########################################
+
+-- 2026-09-25 19:41:31:
+-- 2026-09-25 19:41:31: [focus] ########################################
+-- 2026-09-25 19:41:31: [focus] focus_window START
+-- 2026-09-25 19:41:31: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:41:31: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:31: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:41:31: [focus] initial frontmost:  kitty(pid=30637)
+-- 2026-09-25 19:41:31:
+-- 2026-09-25 19:41:31: [focus] ===============================
+-- 2026-09-25 19:41:31: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:41:31: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:41:31: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:31: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:41:31: [focus] before frontmost:   kitty(pid=30637)
+-- 2026-09-25 19:41:31: -- Loading extension: axuielement
+-- 2026-09-25 19:41:31: [focus] AX element created
+-- 2026-09-25 19:41:31: [focus] AX valid:   true
+-- 2026-09-25 19:41:31: [focus] AXMain before:  true
+-- 2026-09-25 19:41:31: [focus] activate() returned:    true    | frontmost immediately:    kitty(pid=30637)
+-- 2026-09-25 19:41:31: [focus] WAIT direct        | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:31: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:41:31: -- Loading extension: timer
+-- 2026-09-25 19:41:31: [focus]   WAIT FAILED | target=Hammerspoon(pid=30067) | frontmost=kitty(pid=30637)
+-- 2026-09-25 19:41:31: [focus] ABORT:  direct  -> target app never became frontmost
+-- 2026-09-25 19:41:31:
+-- 2026-09-25 19:41:31: [focus] ---- BOUNCE THROUGH ORIGINAL APP ----
+-- 2026-09-25 19:41:31: [focus] activating: kitty(pid=30637)
+-- 2026-09-25 19:41:31: [focus] original_app:activate() ->  true    | frontmost:    kitty(pid=30637)
+-- 2026-09-25 19:41:31: [focus] WAIT original      | target=kitty(pid=30637)
+-- 2026-09-25 19:41:31: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:41:32: [focus]   WAIT success after 2 polls
+-- 2026-09-25 19:41:32:
+-- 2026-09-25 19:41:32: [focus] ===============================
+-- 2026-09-25 19:41:32: [focus] ATTEMPT:    after bounce
+-- 2026-09-25 19:41:32: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:41:32: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:32: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:41:32: [focus] before frontmost:   kitty(pid=30637)
+-- 2026-09-25 19:41:32: [focus] AX element created
+-- 2026-09-25 19:41:32: [focus] AX valid:   true
+-- 2026-09-25 19:41:32: [focus] AXMain before:  true
+-- 2026-09-25 19:41:32: [focus] activate() returned:    true    | frontmost immediately:    kitty(pid=30637)
+-- 2026-09-25 19:41:32: [focus] WAIT after bounce  | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:32: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:41:32: [focus]   WAIT FAILED | target=Hammerspoon(pid=30067) | frontmost=kitty(pid=30637)
+-- 2026-09-25 19:41:32: [focus] ABORT:  after bounce    -> target app never became frontmost
+-- 2026-09-25 19:41:32:
+-- 2026-09-25 19:41:32: [focus] ########################################
+-- 2026-09-25 19:41:32: [focus] FINAL FAILURE
+-- 2026-09-25 19:41:32: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:41:32: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:32: [focus] final frontmost:    kitty(pid=30637)
+-- 2026-09-25 19:41:32: [focus] ########################################
+-- 2026-09-25 19:41:38:
+-- 2026-09-25 19:41:38: [focus] ########################################
+-- 2026-09-25 19:41:38: [focus] focus_window START
+-- 2026-09-25 19:41:38: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:41:38: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38: [focus] original app:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38: [focus] initial frontmost:  Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38:
+-- 2026-09-25 19:41:38: [focus] ===============================
+-- 2026-09-25 19:41:38: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:41:38: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:41:38: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38: [focus] original app:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38: [focus] before frontmost:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38: [focus] AX element created
+-- 2026-09-25 19:41:38: [focus] AX valid:   true
+-- 2026-09-25 19:41:38: [focus] AXMain before:  true
+-- 2026-09-25 19:41:38: [focus] activate() returned:    true    | frontmost immediately:    Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38: [focus] WAIT direct        | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:38: [focus]   frontmost changed -> Hammerspoon(pid=30067) (poll 1/100)
+-- 2026-09-25 19:41:38: [focus]   WAIT success after 1 polls
+-- 2026-09-25 19:41:38: [focus] after app active   | frontmost=Hammerspoon(pid=30067) | target_frontmost=true | AXMain=true
+-- 2026-09-25 19:41:38: [focus] AXRaise:    accepted
+-- 2026-09-25 19:41:38: [focus] set AXMain=true:    accepted
+-- 2026-09-25 19:41:38: [focus] RESULT | app_frontmost= true    | AXMain=   true
+-- 2026-09-25 19:41:38: [focus] SUCCESS:    direct
+-- 2026-09-25 19:41:38: [focus] FINAL SUCCESS: direct
+-- 2026-09-25 19:41:39:
+-- 2026-09-25 19:41:39: [focus] ########################################
+-- 2026-09-25 19:41:39: [focus] focus_window START
+-- 2026-09-25 19:41:39: [focus] target: 61402   Determining Focused Windows - Brave - Music
+-- 2026-09-25 19:41:39: [focus] target app: Brave Browser(pid=4322)
+-- 2026-09-25 19:41:39: [focus] original app:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:39: [focus] initial frontmost:  Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:39:
+-- 2026-09-25 19:41:39: [focus] ===============================
+-- 2026-09-25 19:41:39: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:41:39: [focus] target window:  61402   Determining Focused Windows - Brave - Music
+-- 2026-09-25 19:41:39: [focus] target app: Brave Browser(pid=4322)
+-- 2026-09-25 19:41:39: [focus] original app:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:39: [focus] before frontmost:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:39: [focus] AX element created
+-- 2026-09-25 19:41:39: [focus] AX valid:   true
+-- 2026-09-25 19:41:39: [focus] AXMain before:  true
+-- 2026-09-25 19:41:39: [focus] activate() returned:    true    | frontmost immediately:    Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:39: [focus] WAIT direct        | target=Brave Browser(pid=4322)
+-- 2026-09-25 19:41:39: [focus]   frontmost changed -> Hammerspoon(pid=30067) (poll 1/100)
+-- 2026-09-25 19:41:39: [focus]   WAIT success after 1 polls
+-- 2026-09-25 19:41:39: [focus] after app active   | frontmost=Hammerspoon(pid=30067) | target_frontmost=true | AXMain=true
+-- 2026-09-25 19:41:39: [focus] AXRaise:    accepted
+-- 2026-09-25 19:41:39: [focus] set AXMain=true:    accepted
+-- 2026-09-25 19:41:39: [focus] RESULT | app_frontmost= true    | AXMain=   true
+-- 2026-09-25 19:41:39: [focus] SUCCESS:    direct
+-- 2026-09-25 19:41:39: [focus] FINAL SUCCESS: direct
+-- 2026-09-25 19:41:40:
+-- 2026-09-25 19:41:40: [focus] ########################################
+-- 2026-09-25 19:41:40: [focus] focus_window START
+-- 2026-09-25 19:41:40: [focus] target: 61491   (99+) Yunalescka - Twitch - Brave - Music
+-- 2026-09-25 19:41:40: [focus] target app: Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40: [focus] original app:   Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40: [focus] initial frontmost:  Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40:
+-- 2026-09-25 19:41:40: [focus] ===============================
+-- 2026-09-25 19:41:40: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:41:40: [focus] target window:  61491   (99+) Yunalescka - Twitch - Brave - Music
+-- 2026-09-25 19:41:40: [focus] target app: Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40: [focus] original app:   Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40: [focus] before frontmost:   Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40: [focus] AX element created
+-- 2026-09-25 19:41:40: [focus] AX valid:   true
+-- 2026-09-25 19:41:40: [focus] AXMain before:  false
+-- 2026-09-25 19:41:40: [focus] activate() returned:    true    | frontmost immediately:    Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40: [focus] WAIT direct        | target=Brave Browser(pid=4322)
+-- 2026-09-25 19:41:40: [focus]   frontmost changed -> Brave Browser(pid=4322) (poll 1/100)
+-- 2026-09-25 19:41:40: [focus]   WAIT success after 1 polls
+-- 2026-09-25 19:41:40: [focus] after app active   | frontmost=Brave Browser(pid=4322) | target_frontmost=true | AXMain=false
+-- 2026-09-25 19:41:40: [focus] AXRaise:    accepted
+-- 2026-09-25 19:41:40: [focus] set AXMain=true:    accepted
+-- 2026-09-25 19:41:40: [focus] RESULT | app_frontmost= true    | AXMain=   true
+-- 2026-09-25 19:41:40: [focus] SUCCESS:    direct
+-- 2026-09-25 19:41:40: [focus] FINAL SUCCESS: direct
+-- 2026-09-25 19:41:41:
+-- 2026-09-25 19:41:41: [focus] ########################################
+-- 2026-09-25 19:41:41: [focus] focus_window START
+-- 2026-09-25 19:41:41: [focus] target: 61458   
+-- 2026-09-25 19:41:41: [focus] target app: kitty(pid=30637)
+-- 2026-09-25 19:41:41: [focus] original app:   Brave Browser(pid=4322)
+-- 2026-09-25 19:41:41: [focus] initial frontmost:  Brave Browser(pid=4322)
+-- 2026-09-25 19:41:41:
+-- 2026-09-25 19:41:41: [focus] ===============================
+-- 2026-09-25 19:41:41: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:41:41: [focus] target window:  61458   
+-- 2026-09-25 19:41:41: [focus] target app: kitty(pid=30637)
+-- 2026-09-25 19:41:41: [focus] original app:   Brave Browser(pid=4322)
+-- 2026-09-25 19:41:41: [focus] before frontmost:   Brave Browser(pid=4322)
+-- 2026-09-25 19:41:41: [focus] AX element created
+-- 2026-09-25 19:41:41: [focus] AX valid:   true
+-- 2026-09-25 19:41:41: [focus] AXMain before:  true
+-- 2026-09-25 19:41:41: [focus] activate() returned:    true    | frontmost immediately:    Brave Browser(pid=4322)
+-- 2026-09-25 19:41:41: [focus] WAIT direct        | target=kitty(pid=30637)
+-- 2026-09-25 19:41:41: [focus]   frontmost changed -> Brave Browser(pid=4322) (poll 1/100)
+-- 2026-09-25 19:41:41: [focus]   WAIT success after 2 polls
+-- 2026-09-25 19:41:41: [focus] after app active   | frontmost=Brave Browser(pid=4322) | target_frontmost=true | AXMain=true
+-- 2026-09-25 19:41:41: [focus] AXRaise:    accepted
+-- 2026-09-25 19:41:41: [focus] set AXMain=true:    accepted
+-- 2026-09-25 19:41:41: [focus] RESULT | app_frontmost= true    | AXMain=   true
+-- 2026-09-25 19:41:41: [focus] SUCCESS:    direct
+-- 2026-09-25 19:41:41: [focus] FINAL SUCCESS: direct
+-- 2026-09-25 19:41:41:
+-- 2026-09-25 19:41:41: [focus] ########################################
+-- 2026-09-25 19:41:41: [focus] focus_window START
+-- 2026-09-25 19:41:41: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:41:41: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:41: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:41:41: [focus] initial frontmost:  kitty(pid=30637)
+-- 2026-09-25 19:41:41:
+-- 2026-09-25 19:41:41: [focus] ===============================
+-- 2026-09-25 19:41:41: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:41:41: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:41:41: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:41: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:41:41: [focus] before frontmost:   kitty(pid=30637)
+-- 2026-09-25 19:41:41: [focus] AX element created
+-- 2026-09-25 19:41:41: [focus] AX valid:   true
+-- 2026-09-25 19:41:41: [focus] AXMain before:  true
+-- 2026-09-25 19:41:41: [focus] activate() returned:    true    | frontmost immediately:    kitty(pid=30637)
+-- 2026-09-25 19:41:41: [focus] WAIT direct        | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:41: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:41:42: [focus]   WAIT FAILED | target=Hammerspoon(pid=30067) | frontmost=kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] ABORT:  direct  -> target app never became frontmost
+-- 2026-09-25 19:41:42:
+-- 2026-09-25 19:41:42: [focus] ---- BOUNCE THROUGH ORIGINAL APP ----
+-- 2026-09-25 19:41:42: [focus] activating: kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] original_app:activate() ->  true    | frontmost:    kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] WAIT original      | target=kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:41:42: [focus]   WAIT success after 2 polls
+-- 2026-09-25 19:41:42:
+-- 2026-09-25 19:41:42: [focus] ===============================
+-- 2026-09-25 19:41:42: [focus] ATTEMPT:    after bounce
+-- 2026-09-25 19:41:42: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:41:42: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:42: [focus] original app:   kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] before frontmost:   kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] AX element created
+-- 2026-09-25 19:41:42: [focus] AX valid:   true
+-- 2026-09-25 19:41:42: [focus] AXMain before:  true
+-- 2026-09-25 19:41:42: [focus] activate() returned:    true    | frontmost immediately:    kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] WAIT after bounce  | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:42: [focus]   frontmost changed -> kitty(pid=30637) (poll 1/100)
+-- 2026-09-25 19:41:42: [focus]   WAIT FAILED | target=Hammerspoon(pid=30067) | frontmost=kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] ABORT:  after bounce    -> target app never became frontmost
+-- 2026-09-25 19:41:42:
+-- 2026-09-25 19:41:42: [focus] ########################################
+-- 2026-09-25 19:41:42: [focus] FINAL FAILURE
+-- 2026-09-25 19:41:42: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:41:42: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:42: [focus] final frontmost:    kitty(pid=30637)
+-- 2026-09-25 19:41:42: [focus] ########################################
+-- 2026-09-25 19:41:46:
+-- 2026-09-25 19:41:46: [focus] ########################################
+-- 2026-09-25 19:41:46: [focus] focus_window START
+-- 2026-09-25 19:41:46: [focus] target: 55038   Hammerspoon Console
+-- 2026-09-25 19:41:46: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46: [focus] original app:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46: [focus] initial frontmost:  Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46:
+-- 2026-09-25 19:41:46: [focus] ===============================
+-- 2026-09-25 19:41:46: [focus] ATTEMPT:    direct
+-- 2026-09-25 19:41:46: [focus] target window:  55038   Hammerspoon Console
+-- 2026-09-25 19:41:46: [focus] target app: Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46: [focus] original app:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46: [focus] before frontmost:   Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46: [focus] AX element created
+-- 2026-09-25 19:41:46: [focus] AX valid:   true
+-- 2026-09-25 19:41:46: [focus] AXMain before:  true
+-- 2026-09-25 19:41:46: [focus] activate() returned:    true    | frontmost immediately:    Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46: [focus] WAIT direct        | target=Hammerspoon(pid=30067)
+-- 2026-09-25 19:41:46: [focus]   frontmost changed -> Hammerspoon(pid=30067) (poll 1/100)
+-- 2026-09-25 19:41:46: [focus]   WAIT success after 1 polls
+-- 2026-09-25 19:41:46: [focus] after app active   | frontmost=Hammerspoon(pid=30067) | target_frontmost=true | AXMain=true
+-- 2026-09-25 19:41:46: [focus] AXRaise:    accepted
+-- 2026-09-25 19:41:46: [focus] set AXMain=true:    accepted
+-- 2026-09-25 19:41:46: [focus] RESULT | app_frontmost= true    | AXMain=   true
+-- 2026-09-25 19:41:46: [focus] SUCCESS:    direct
+-- 2026-09-25 19:41:46: [focus] FINAL SUCCESS: direct
+
+
+-- 2026-09-25 18:24:17: ========== ORDER ==========
+-- 2026-09-25 18:24:17:  1 | id=61402    | app=Hammerspoon     | title=
+-- 2026-09-25 18:24:17:  2 | id=61402    | app=Hammerspoon     | title=
+-- 2026-09-25 18:24:17:  3 | id=61402    | app=Hammerspoon     | title=
+-- 2026-09-25 18:24:17:  4 | id=61402    | app=Brave Browser   | title=Determining Focused Windows - Brave - Music
+-- 2026-09-25 18:24:17:  5 | id=61402    | app=Hammerspoon     | title=Hammerspoon Console
+-- 2026-09-25 18:24:17:  6 | id=61402    | app=kitty           | title=
+-- 2026-09-25 18:24:17:  7 | id=61402    | app=Brave Browser   | title=(99+) Yunalescka - Twitch - Brave - Music
+-- 2026-09-25 18:24:17: ===========================
+
+
+-- 2026-09-25 18:18:56: ========== ORDER ==========
+-- 2026-09-25 18:18:56:  1 | id=61491    | app=Hammerspoon     | title=
+-- 2026-09-25 18:18:56:  2 | id=61491    | app=kitty           | title=
+-- 2026-09-25 18:18:56:  3 | id=61491    | app=Hammerspoon     | title=Hammerspoon Console
+-- 2026-09-25 18:18:56:  4 | id=61491    | app=Brave Browser   | title=Determining Focused Windows - Brave - Music
+-- 2026-09-25 18:18:56:  5 | id=61491    | app=Brave Browser   | title=(99+) Yunalescka - Twitch - Brave - Music
+-- 2026-09-25 18:18:56: ===========================
+
+-- 2026-09-25 18:21:19: ========== ORDER ==========
+-- 2026-09-25 18:21:19:  1 | id=61491    | app=Hammerspoon     | title=
+-- 2026-09-25 18:21:19:  2 | id=61491    | app=Brave Browser   | title=Determining Focused Windows - Brave - Music
+-- 2026-09-25 18:21:19:  3 | id=61491    | app=Brave Browser   | title=(99+) Yunalescka - Twitch - Brave - Music
+-- 2026-09-25 18:21:19:  4 | id=61491    | app=kitty           | title=
+-- 2026-09-25 18:21:19:  5 | id=61491    | app=Hammerspoon     | title=Hammerspoon Console
+-- 2026-09-25 18:21:19: ===========================
+
+
 -- Switching between brave windows (using mouse clicks):
 --------------------------------------------------------
 -- 2026-08-20 19:36:20: UI EVENT:   AXFocusedWindowChanged

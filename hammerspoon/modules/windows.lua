@@ -162,9 +162,9 @@ end
 -- Find a windows index in the state table
 --------------------------------------------------------------------------------
 local function get_window_idx(wins, target)
-    for i, win in ipairs(wins) do
+    for idx, win in ipairs(wins) do
         if win == target then
-            return i
+            return idx
         end
     end
 end
@@ -217,49 +217,6 @@ local function get_coords(id, border)
 end
 
 
--- Get all open windows
---------------------------------------------------------------------------------
-local function get_open_windows(focused)
-    local running_apps = hs.application.runningApplications()
-
-    local windows = {}
-
-    -- All open windows
-    windows.all = {
-        idx      = 1,
-        curr_win = focused,
-        running  = {},
-        wins     = {},
-    }
-
-    for _, app in ipairs(running_apps) do
-        local app_wins = {}
-
-        for _, win in ipairs(app:allWindows()) do
-            if win:isStandard() and win:isVisible() then
-                table.insert(windows.all.wins, win)
-                table.insert(app_wins, win)
-            end
-        end
-
-        if #app_wins > 0 then
-            table.insert(windows.all.running, app:name())
-
-            windows[app:name()] = {
-                idx  = 1,
-                wins = app_wins,
-            }
-        end
-    end
-
-    if #windows.all.wins > 0 then
-        return windows
-    else
-        return false
-    end
-end
-
-
 -- Assign windows to layout state.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
@@ -299,6 +256,57 @@ local function update_layout(win, existing_win)
     end
 
     layout[side] = win
+end
+
+
+-- Get all open windows
+--------------------------------------------------------------------------------
+local function get_open_windows(focused)
+    local running_apps = hs.application.runningApplications()
+
+    local windows = {}
+
+    -- All open windows
+    windows.all = {
+        idx      = 1,
+        curr_win = focused,
+        running  = {},
+        wins     = {},
+    }
+
+    for _, app in ipairs(running_apps) do
+        local app_wins = {}
+
+        for _, win in ipairs(app:allWindows()) do
+            if win:isStandard() and win:isVisible() then
+                table.insert(windows.all.wins, win)
+                table.insert(app_wins, win)
+
+                update_layout(win)
+
+                -- local layout = state.screens[win:screen():id()].layout
+                --
+                -- if not layout.maximized or not layout.left or not layout.right then
+                --     update_layout(win)
+                -- end
+            end
+        end
+
+        if #app_wins > 0 then
+            table.insert(windows.all.running, app:name())
+
+            windows[app:name()] = {
+                idx  = 1,
+                wins = app_wins,
+            }
+        end
+    end
+
+    if #windows.all.wins > 0 then
+        return windows
+    else
+        return false
+    end
 end
 
 
@@ -367,41 +375,90 @@ end
 -- Force focus of target window (MacOS window server is a wild horse)
 --------------------------------------------------------------------------------
 local function focus_window(win)
-    local function attempt()
-        win:application():activate()
+    local target_app = win:application()
+    local app        = hs.application.frontmostApplication()
 
+    local function verify()
         local ax = hs.axuielement.windowElement(win)
+
+        if not target_app:isFrontmost() then
+            return false
+        end
+
+        return ax:attributeValue('AXMain') == true
+    end
+
+    local function attempt()
+        local ax = hs.axuielement.windowElement(win)
+
+        target_app:activate()
 
         ax:performAction('AXRaise')
         ax:setAttributeValue('AXMain', true)
 
-        if hs.window.focusedWindow():id() == win:id() then
-            return true
-        else
-            return false
-        end
+        hs.timer.usleep(5000)
+
+        return verify()
     end
 
-    local status   = false
-    local original = hs.window.focusedWindow()
-
+    -- Attempt 1: Go directly to the target
     if attempt() then
-        status = win
-    else
-        original:application():activate()
+        return win
+    end
 
-        for _ = 1, 100 do
-            if attempt() then
-                status = win
-                break
-            end
+    -- Re-enter the original application to reset that state
+    if app and app:isRunning() and app:pid() ~= target_app:pid() then
+        app:activate()
 
-            hs.timer.usleep(5000)
+        hs.timer.usleep(5000)
+
+        -- Attempt 2: Enter the target application/window again
+        if attempt() then
+            return win
         end
     end
 
-    return status
+    return false
 end
+
+
+
+-- local function focus_window(win)
+--     local function attempt()
+--         win:application():activate()
+--
+--         local ax = hs.axuielement.windowElement(win)
+--
+--         ax:performAction('AXRaise')
+--         ax:setAttributeValue('AXMain', true)
+--
+--         if hs.window.focusedWindow():id() == win:id() then
+--             return true
+--         else
+--             return false
+--         end
+--     end
+--
+--     local status   = false
+--     local original = hs.window.focusedWindow()
+--
+--     if attempt() then
+--         status = win
+--     else
+--         original:application():activate()
+--
+--         for _ = 1, 100 do
+--             if attempt() then
+--                 status = win
+--                 break
+--             end
+--
+--             hs.timer.usleep(5000)
+--         end
+--     end
+--
+--     return status
+-- end
 
 
 --------------------------------------------------------------------------------
@@ -502,13 +559,15 @@ function M.move_to_screen()
         local win         = state.apps.all.curr_win
         local next_screen = win:screen():next()
 
-        clear_slot(win)
+        if next_screen then
+            clear_slot(win)
 
-        win:moveToScreen(next_screen)
+            win:moveToScreen(next_screen)
 
-        update_layout(win)
-        snap_layout()
-        update_borders(win)
+            update_layout(win)
+            snap_layout()
+            update_borders(win)
+        end
 
         done()
     end

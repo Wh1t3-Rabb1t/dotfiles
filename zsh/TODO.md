@@ -16,6 +16,8 @@ By default, binaries installed by gem wil be placed into:
 You may want to add this to your PATH.
 ```
 
+- Incorporate zsh-abbreviations into config.
+
 - Recreate MonitorControl in .zsh (can just target each display rather than
   worry about coord logic).
 

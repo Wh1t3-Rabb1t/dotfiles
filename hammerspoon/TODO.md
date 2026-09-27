@@ -2,8 +2,6 @@
 
 ## IMMEDIATE TASKS:
 
-- Register screen layouts on init if screen has windows.
-
 - Set up window open/closed fns that update state.wins when windows are
   opened, closed, focused (through either kb, or click).
 

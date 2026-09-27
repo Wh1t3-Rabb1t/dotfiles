@@ -217,6 +217,26 @@ local function get_coords(id, border)
 end
 
 
+-- Update empty window slots
+--------------------------------------------------------------------------------
+local function set_empty_slot(win)
+    local id     = win:screen():id()
+    local layout = state.screens[id].layout
+
+    if is_fullscreen(win) then
+        if not layout.maximized then
+            layout.maximized = win
+        end
+    else
+        local side = get_side(win)
+
+        if not layout[side] then
+            layout[side] = win
+        end
+    end
+end
+
+
 -- Assign windows to layout state.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
@@ -225,7 +245,7 @@ end
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
-local function update_layout(win, existing_win)
+local function set_existing_slot(win, existing_win)
     local id     = win:screen():id()
     local layout = state.screens[id].layout
 
@@ -259,60 +279,9 @@ local function update_layout(win, existing_win)
 end
 
 
--- Get all open windows
---------------------------------------------------------------------------------
-local function get_open_windows(focused)
-    local running_apps = hs.application.runningApplications()
-
-    local windows = {}
-
-    -- All open windows
-    windows.all = {
-        idx      = 1,
-        curr_win = focused,
-        running  = {},
-        wins     = {},
-    }
-
-    for _, app in ipairs(running_apps) do
-        local app_wins = {}
-
-        for _, win in ipairs(app:allWindows()) do
-            if win:isStandard() and win:isVisible() then
-                table.insert(windows.all.wins, win)
-                table.insert(app_wins, win)
-
-                update_layout(win)
-
-                -- local layout = state.screens[win:screen():id()].layout
-                --
-                -- if not layout.maximized or not layout.left or not layout.right then
-                --     update_layout(win)
-                -- end
-            end
-        end
-
-        if #app_wins > 0 then
-            table.insert(windows.all.running, app:name())
-
-            windows[app:name()] = {
-                idx  = 1,
-                wins = app_wins,
-            }
-        end
-    end
-
-    if #windows.all.wins > 0 then
-        return windows
-    else
-        return false
-    end
-end
-
-
 -- Create/update window borders
 --------------------------------------------------------------------------------
-local function update_borders(win)
+local function set_border(win)
     local border = state.apps.all.border
 
     if not border then
@@ -339,7 +308,7 @@ end
 
 -- Update focused window state
 --------------------------------------------------------------------------------
-local function update_window_state(win, idx)
+local function set_window_state(win, idx)
     local apps     = state.apps.all
     local app_name = win:application():name()
     local curr_app = state.apps[app_name]
@@ -422,43 +391,50 @@ local function focus_window(win)
 end
 
 
+-- Init window state table
+--------------------------------------------------------------------------------
+local function init_window_data(focused)
+    local running_apps = hs.application.runningApplications()
 
--- local function focus_window(win)
---     local function attempt()
---         win:application():activate()
---
---         local ax = hs.axuielement.windowElement(win)
---
---         ax:performAction('AXRaise')
---         ax:setAttributeValue('AXMain', true)
---
---         if hs.window.focusedWindow():id() == win:id() then
---             return true
---         else
---             return false
---         end
---     end
---
---     local status   = false
---     local original = hs.window.focusedWindow()
---
---     if attempt() then
---         status = win
---     else
---         original:application():activate()
---
---         for _ = 1, 100 do
---             if attempt() then
---                 status = win
---                 break
---             end
---
---             hs.timer.usleep(5000)
---         end
---     end
---
---     return status
--- end
+    local windows = {}
+
+    -- All open windows
+    windows.all = {
+        idx      = 1,
+        curr_win = focused,
+        running  = {},
+        wins     = {},
+    }
+
+    for _, app in ipairs(running_apps) do
+        local app_wins = {}
+
+        for _, win in ipairs(app:allWindows()) do
+            if win:isStandard() and win:isVisible() then
+                table.insert(windows.all.wins, win)
+                table.insert(app_wins, win)
+
+                -- Set applicable windows to empty layout slots
+                set_empty_slot(win)
+            end
+        end
+
+        if #app_wins > 0 then
+            table.insert(windows.all.running, app:name())
+
+            windows[app:name()] = {
+                idx  = 1,
+                wins = app_wins,
+            }
+        end
+    end
+
+    if #windows.all.wins > 0 then
+        return windows
+    else
+        return false
+    end
+end
 
 
 --------------------------------------------------------------------------------
@@ -473,7 +449,7 @@ function M.maximize()
         layout.maximized = win
 
         snap_layout()
-        update_borders(win)
+        set_border(win)
 
         done()
     end
@@ -522,7 +498,7 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
-        update_borders(win)
+        set_border(win)
 
         done()
     end
@@ -544,7 +520,7 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
-        update_borders(win)
+        set_border(win)
 
         done()
     end
@@ -564,9 +540,9 @@ function M.move_to_screen()
 
             win:moveToScreen(next_screen)
 
-            update_layout(win)
+            set_existing_slot(win)
             snap_layout()
-            update_borders(win)
+            set_border(win)
         end
 
         done()
@@ -585,9 +561,9 @@ function M.launch_or_focus(app)
             state.apps.all.curr_win = new
 
             if existing and new and existing:id() ~= new:id() then
-                update_layout(new, existing)
+                set_existing_slot(new, existing)
                 snap_layout()
-                update_borders(new)
+                set_border(new)
             end
 
             done()
@@ -674,8 +650,8 @@ function M.traverse_slots(direction)
         local new_win = focus_window(target_slot)
 
         if new_win then
-            update_window_state(new_win, win_idx)
-            update_borders(new_win)
+            set_window_state(new_win, win_idx)
+            set_border(new_win)
         end
 
         done()
@@ -707,9 +683,9 @@ function M.cycle_main_apps()
 
                 local idx = get_window_idx(apps.wins, target_win)
 
-                update_layout(target_win, win)
-                update_window_state(target_win, idx)
-                update_borders(target_win)
+                set_existing_slot(target_win, win)
+                set_window_state(target_win, idx)
+                set_border(target_win)
 
                 done()
             end
@@ -754,9 +730,9 @@ function M.cycle_all_apps(direction)
 
                 local idx = get_window_idx(apps.wins, target_win)
 
-                update_layout(target_win)
-                update_window_state(target_win, idx)
-                update_borders(target_win)
+                set_existing_slot(target_win)
+                set_window_state(target_win, idx)
+                set_border(target_win)
 
                 done()
             end
@@ -790,8 +766,8 @@ function M.cycle_app_specific(direction)
             -- same app group.
             idx = get_window_idx(apps.wins, win)
 
-            update_window_state(win, idx)
-            update_borders(win)
+            set_window_state(win, idx)
+            set_border(win)
         end
 
         done()
@@ -804,7 +780,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local apps = state.apps.all
+        local apps        = state.apps.all
+        local focused_app = hs.application.frontmostApplication()
 
         if #apps.wins < 2 then
             done()
@@ -815,9 +792,11 @@ function M.cycle_open(direction)
         local win = focus_window(apps.wins[idx])
 
         if win then
-            update_window_state(win, idx)
-            update_layout(win)
-            update_borders(win)
+            set_window_state(win, idx)
+            set_existing_slot(win)
+            set_border(win)
+        else
+            focused_app:activate()
         end
 
         done()
@@ -852,7 +831,7 @@ function M.init()
     local win      = hs.window.focusedWindow()
     local app_name = win:application():name()
 
-    local all_wins = get_open_windows(win)
+    local all_wins = init_window_data(win)
 
     if all_wins then
         state.apps = all_wins
@@ -866,11 +845,11 @@ function M.init()
 
     if win then
         -- Show window border
-        update_borders(win)
+        set_border(win)
 
         -- Init layout if the focused window is compatible
         if cache.assets[app_name] then
-            update_layout(win)
+            set_existing_slot(win)
         end
     end
 end

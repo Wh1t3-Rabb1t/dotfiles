@@ -95,6 +95,9 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 "{ena
 
 # MISC
 # ---------------------------------------------------------------------------- #
+# Greatly improves the behaviour of window focusing across different displays
+defaults write com.apple.spaces spans-displays -bool true
+
 # Hammerspoon XDG compliance
 defaults write org.hammerspoon.Hammerspoon MJConfigFile "${HOME}/.config/hammerspoon/init.lua"
 

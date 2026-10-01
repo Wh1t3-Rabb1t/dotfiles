@@ -78,28 +78,6 @@ local cache = require('cache')
 -- end
 
 
--- function M.debug_slots()
---     return function(done)
---         local screen = hs.mouse.getCurrentScreen()
---         local id     = screen:id()
---         local layout = state.screens[id].layout
---         if layout.left then
---             local lhs = layout.left:application():name()
---             hs.alert.show('id: ' .. id  .. '  lhs: ' .. lhs)
---         end
---         if layout.right then
---             local rhs = layout.right:application():name()
---             hs.alert.show('id: ' .. id  .. '  rhs: ' .. rhs)
---         end
---         if layout.maximized then
---             local max = layout.maximized:application():name()
---             hs.alert.show('id: ' .. id  .. '  max: ' .. max)
---         end
---         done()
---     end
--- end
-
-
 
 -- Compare the dimensions of two frame objects
 --------------------------------------------------------------------------------
@@ -341,53 +319,25 @@ local function snap_layout()
 end
 
 
--- Force focus of target window (MacOS window server is a wild horse)
+-- Force focus of target window
+--
+-- (MacOS window server is a wild horse):
+--   https://github.com/Hammerspoon/hammerspoon/issues/370
+--
+-- Comment (unconfirmed):
+--   Resolved by turning off the "Displays have separate Spaces" option for
+--   Mission Control. Note: you have to logout for this change to take effect.
 --------------------------------------------------------------------------------
 local function focus_window(win)
-    local target_app = win:application()
-    local app        = hs.application.frontmostApplication()
-
-    local function verify()
-        local ax = hs.axuielement.windowElement(win)
-
-        if not target_app:isFrontmost() then
-            return false
-        end
-
-        return ax:attributeValue('AXMain') == true
+    if not win then
+        return false
     end
 
-    local function attempt()
-        local ax = hs.axuielement.windowElement(win)
+    win:application():activate()
+    hs.timer.usleep(10000)
+    win:focus()
 
-        target_app:activate()
-
-        ax:performAction('AXRaise')
-        ax:setAttributeValue('AXMain', true)
-
-        hs.timer.usleep(5000)
-
-        return verify()
-    end
-
-    -- Attempt 1: Go directly to the target
-    if attempt() then
-        return win
-    end
-
-    -- Re-enter the original application to reset that state
-    if app and app:isRunning() and app:pid() ~= target_app:pid() then
-        app:activate()
-
-        hs.timer.usleep(5000)
-
-        -- Attempt 2: Enter the target application/window again
-        if attempt() then
-            return win
-        end
-    end
-
-    return false
+    return win
 end
 
 
@@ -780,8 +730,7 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local apps        = state.apps.all
-        local focused_app = hs.application.frontmostApplication()
+        local apps = state.apps.all
 
         if #apps.wins < 2 then
             done()
@@ -795,8 +744,6 @@ function M.cycle_open(direction)
             set_window_state(win, idx)
             set_existing_slot(win)
             set_border(win)
-        else
-            focused_app:activate()
         end
 
         done()

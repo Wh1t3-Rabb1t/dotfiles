@@ -1,4 +1,52 @@
 
+-- local function focus_window(win)
+--     local target_app = win:application()
+--     local app        = hs.application.frontmostApplication()
+--
+--     local function verify()
+--         local ax = hs.axuielement.windowElement(win)
+--
+--         if not target_app:isFrontmost() then
+--             return false
+--         end
+--
+--         return ax:attributeValue('AXMain') == true
+--     end
+--
+--     local function attempt()
+--         local ax = hs.axuielement.windowElement(win)
+--
+--         target_app:activate()
+--
+--         hs.timer.usleep(10000)
+--
+--         ax:performAction('AXRaise')
+--         ax:setAttributeValue('AXMain', true)
+--
+--         return verify()
+--     end
+--
+--     -- Attempt 1: Go directly to the target
+--     if attempt() then
+--         return win
+--     end
+--
+--     -- Re-enter the original application to reset that state
+--     if app and app:isRunning() and app:pid() ~= target_app:pid() then
+--         app:activate()
+--
+--         hs.timer.usleep(10000)
+--
+--         -- Attempt 2: Enter the target application/window again
+--         if attempt() then
+--             return win
+--         end
+--     end
+--
+--     return false
+-- end
+
+
 
         -- local movementKeyTable = {
         --     ['k'] = true,

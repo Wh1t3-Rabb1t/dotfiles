@@ -59,24 +59,71 @@ local cache = require('cache')
 --     return watcher
 -- end
 
+
 -- Watch window level events
 --------------------------------------------------------------------------------
 -- local function create_window_watcher(win)
 --     local id = win:id()
 --
 --     local watcher = win:newWatcher(function(element, event)
---         -- print('WINDOW:', id, event)
---         print('oioi')
+--         print('WINDOW:', id, event)
 --     end)
 --
 --     watcher:start({
 --         hs.uielement.watcher.elementDestroyed,
+--         hs.uielement.watcher.windowCreated,
 --     })
 --
 --     return watcher
---     -- cache.watchers.windows[id] = watcher
 -- end
 
+
+-- TODO: Add a debounce to ensure compensate for the same events
+-- firing multiple times per second.
+--
+-- Add 'applicationActivated' event to track/update running apps
+--
+-- hs.console.clearConsole()
+
+
+local function app_watcher(app)
+    if not app then return end
+
+    local watcher = app:newWatcher(function(element, event)
+        if event == 'AXFocusedWindowChanged' then
+            local apps  = hs.application.runningApplications()
+            local count = 0
+
+            for _, running_app in ipairs(apps) do
+                for _, win in ipairs(running_app:allWindows()) do
+                    if win:isStandard() and win:isVisible() then
+                        count = count + 1
+                    end
+                end
+            end
+
+            if count ~= #state.apps.all.wins then
+                -- dump win state and re-init
+            end
+        end
+    end)
+
+    watcher:start({
+        -- Winow level events
+        hs.uielement.watcher.focusedWindowChanged,
+    })
+
+    return watcher
+end
+
+-- -- if event == 'AXApplicationDeactivated' then
+-- -- end
+-- -- if event == 'AXApplicationActivated' then
+-- -- end
+-- --
+-- -- Application level events
+-- hs.uielement.watcher.applicationActivated,
+-- hs.uielement.watcher.applicationDeactivated,
 
 
 -- Compare the dimensions of two frame objects
@@ -319,14 +366,14 @@ local function snap_layout()
 end
 
 
--- Force focus of target window
+-- Focus target window.
 --
--- (MacOS window server is a wild horse):
---   https://github.com/Hammerspoon/hammerspoon/issues/370
+-- https://github.com/Hammerspoon/hammerspoon/issues/370
 --
--- Comment (unconfirmed):
---   Resolved by turning off the "Displays have separate Spaces" option for
---   Mission Control. Note: you have to logout for this change to take effect.
+-- Resolved incorrect window focus issue by turning off the "Displays have
+-- separate Spaces" option for Mission Control.
+--
+-- Note: You have to logout for this change to take effect.
 --------------------------------------------------------------------------------
 local function focus_window(win)
     if not win then
@@ -370,11 +417,14 @@ local function init_window_data(focused)
         end
 
         if #app_wins > 0 then
-            table.insert(windows.all.running, app:name())
+            local app_name = app:name()
 
-            windows[app:name()] = {
-                idx  = 1,
-                wins = app_wins,
+            table.insert(windows.all.running, app)
+
+            windows[app_name] = {
+                idx     = 1,
+                wins    = app_wins,
+                -- watcher = app_watcher(app),
             }
         end
     end
@@ -385,6 +435,49 @@ local function init_window_data(focused)
         return false
     end
 end
+
+-- local function init_window_data(focused)
+--     local running_apps = hs.application.runningApplications()
+--
+--     local windows = {}
+--
+--     -- All open windows
+--     windows.all = {
+--         idx      = 1,
+--         curr_win = focused,
+--         running  = {},
+--         wins     = {},
+--     }
+--
+--     for _, app in ipairs(running_apps) do
+--         local app_wins = {}
+--
+--         for _, win in ipairs(app:allWindows()) do
+--             if win:isStandard() and win:isVisible() then
+--                 table.insert(windows.all.wins, win)
+--                 table.insert(app_wins, win)
+--
+--                 -- Set applicable windows to empty layout slots
+--                 set_empty_slot(win)
+--             end
+--         end
+--
+--         if #app_wins > 0 then
+--             table.insert(windows.all.running, app)
+--
+--             windows[app:name()] = {
+--                 idx  = 1,
+--                 wins = app_wins,
+--             }
+--         end
+--     end
+--
+--     if #windows.all.wins > 0 then
+--         return windows
+--     else
+--         return false
+--     end
+-- end
 
 
 --------------------------------------------------------------------------------
@@ -651,12 +744,13 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
-        local apps     = state.apps.all
-        local curr_app = apps.curr_win:application():name()
-        local count    = #apps.running
+        local all_apps = state.apps.all
+        local curr_app = all_apps.curr_win:application()
+        local apps     = state.app_data.running
+        local count    = #apps
         local app_idx  = 0
 
-        for i, v in ipairs(apps.running) do
+        for i, v in ipairs(apps) do
             if v == curr_app then
                 if direction == 'next' then
                     app_idx = i % count + 1
@@ -668,27 +762,22 @@ function M.cycle_all_apps(direction)
             end
         end
 
-        local target_app = apps.running[app_idx]
+        local target_app = apps[app_idx]
 
-        local wf = hs.window.filter.new(target_app)
+        hs.application.launchOrFocus(target_app:name())
+        hs.timer.usleep(10000)
 
-        wf:subscribe(
-            hs.window.filter.windowFocused,
-            function(target_win)
-                wf:unsubscribeAll()
-                wf = nil
+        local win = target_app:focusedWindow()
 
-                local idx = get_window_idx(apps.wins, target_win)
+        if win then
+            local idx = get_window_idx(all_apps.wins, win)
 
-                set_existing_slot(target_win)
-                set_window_state(target_win, idx)
-                set_border(target_win)
+            set_window_state(win, idx)
+            set_existing_slot(win)
+            set_border(win)
+        end
 
-                done()
-            end
-        )
-
-        hs.application.launchOrFocus(target_app)
+        done()
     end
 end
 

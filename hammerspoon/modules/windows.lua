@@ -746,7 +746,7 @@ function M.cycle_all_apps(direction)
     return function(done)
         local all_apps = state.apps.all
         local curr_app = all_apps.curr_win:application()
-        local apps     = state.app_data.running
+        local apps     = state.app_data.list
         local count    = #apps
         local app_idx  = 0
 

@@ -1,12 +1,11 @@
 local M = {}
 
-local apps     = require('apps')
-
 local screens   = require('screens')
+local apps      = require('apps')
 local windows   = require('windows')
-local qt        = require('quit_timer')
 local wk_assets = require('which_key_assets')
 local wk        = require('which_key')
+local qt        = require('quit_timer')
 
 local keys = {
     {
@@ -27,9 +26,7 @@ local keys = {
         key    = 'space', mods = { 'cmd', 'ctrl', 'alt', 'shift' },
         action = function()
             screens.init()
-
             apps.init()
-
             windows.init()
             wk_assets.init()
             wk.launch()

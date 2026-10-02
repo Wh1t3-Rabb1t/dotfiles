@@ -1,3 +1,7 @@
+-- overhauling my init protocol. the new hierarchy of init is: screens, apps, windows, wk_assets.
+-- most modules are dependant on the previous one i.e. 'apps' must initialize before 'windows' so that
+-- 'windows' can read from the state object created by 'apps'.
+
 
 -- 2026-09-25 20:32:25:
 -- 2026-09-25 20:32:25: [focus] ===== SYSTEM AX FOCUS =====

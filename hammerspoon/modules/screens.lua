@@ -67,7 +67,6 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    -- Init screen data if required
     for _, screen in ipairs(hs.screen.allScreens()) do
         local id   = screen:id()
         local data = get_screen_data(screen)

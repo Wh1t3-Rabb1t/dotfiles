@@ -424,7 +424,7 @@ local function init_window_data(focused)
             windows[app_name] = {
                 idx     = 1,
                 wins    = app_wins,
-                watcher = app_watcher(app),
+                -- watcher = app_watcher(app),
             }
         end
     end
@@ -744,12 +744,13 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
-        local apps     = state.apps.all
-        local curr_app = apps.curr_win:application()
-        local count    = #apps.running
+        local all_apps = state.apps.all
+        local curr_app = all_apps.curr_win:application()
+        local apps     = state.app_data.list
+        local count    = #apps
         local app_idx  = 0
 
-        for i, v in ipairs(apps.running) do
+        for i, v in ipairs(apps) do
             if v == curr_app then
                 if direction == 'next' then
                     app_idx = i % count + 1
@@ -761,7 +762,7 @@ function M.cycle_all_apps(direction)
             end
         end
 
-        local target_app = apps.running[app_idx]
+        local target_app = apps[app_idx]
 
         hs.application.launchOrFocus(target_app:name())
         hs.timer.usleep(10000)
@@ -769,7 +770,7 @@ function M.cycle_all_apps(direction)
         local win = target_app:focusedWindow()
 
         if win then
-            local idx = get_window_idx(apps.wins, win)
+            local idx = get_window_idx(all_apps.wins, win)
 
             set_window_state(win, idx)
             set_existing_slot(win)

@@ -28,7 +28,6 @@ function M.init()
         screenshots.move_screenshots
     )
 
-    -- Start watchers
     for _, watcher in pairs(watchers) do
         watcher:start()
     end
@@ -62,7 +61,6 @@ return M
 --         screenshots.move_screenshots
 --     )
 --
---     -- Start watchers
 --     for _, watcher in pairs(watchers) do
 --         watcher:start()
 --     end

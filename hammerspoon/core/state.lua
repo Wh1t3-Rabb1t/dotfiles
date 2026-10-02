@@ -17,14 +17,14 @@ M.action_queue = {
 
 
 M.windows = {
-    -- idx      = 1,
-    -- curr_win = win,
-    -- border   = obj,
-    -- wins     = { ... },
+    -- idx    = 1,
+    -- border = obj,
+    -- curr_win   = win,
+    -- all    = { ... },
 }
 
 M.app_data = {
-    -- running = {},
+    -- list = {},
     -- ['Brave Browser'] = {
     --     idx  = 1,
     --     wins = { ... },
@@ -35,6 +35,8 @@ M.app_data = {
     -- },
 }
 
+
+-- NOTE: to be deprecated
 M.apps = {
     -- ['all'] = {
     --     idx      = 1,

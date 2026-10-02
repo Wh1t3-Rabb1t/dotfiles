@@ -14,13 +14,11 @@ M.action_queue = {
     running = false,
 }
 
-
-
 M.windows = {
     -- idx    = 1,
     -- border = obj,
     -- curr_win   = win,
-    -- all    = { ... },
+    -- wins   = { ... },  -- (previously named 'wins')
 }
 
 M.app_data = {
@@ -33,27 +31,6 @@ M.app_data = {
     --     idx  = 1,
     --     wins = { ... },
     -- },
-}
-
-
--- NOTE: to be deprecated
-M.apps = {
-    -- ['all'] = {
-    --     idx      = 1,
-    --     curr_win = win,
-    --     border   = obj,
-    --     running  = { ... },
-    --     wins     = { ... },
-    -- },
-    -- ['Brave Browser'] = {
-    --     idx  = 1,
-    --     wins = { ... },
-    -- },
-    -- ['kitty'] = {
-    --     idx  = 1,
-    --     wins = { ... },
-    -- },
-    -- ...
 }
 
 M.screens = {
@@ -70,5 +47,25 @@ M.screens = {
     -- }
     -- ...
 }
+
+-- -- NOTE: to be deprecated
+-- M.apps = {
+--     -- ['all'] = {
+--     --     idx      = 1,
+--     --     curr_win = win,
+--     --     border   = obj,
+--     --     running  = { ... },
+--     --     wins     = { ... },
+--     -- },
+--     -- ['Brave Browser'] = {
+--     --     idx  = 1,
+--     --     wins = { ... },
+--     -- },
+--     -- ['kitty'] = {
+--     --     idx  = 1,
+--     --     wins = { ... },
+--     -- },
+--     -- ...
+-- }
 
 return M

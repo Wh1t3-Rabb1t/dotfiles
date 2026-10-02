@@ -235,7 +235,7 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
-        local win     = state.apps.all.curr_win
+        local win     = state.windows.curr_win
         local app     = win:application():name()
         local opacity = state.menu.opacity
 
@@ -267,7 +267,7 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
-        local win     = state.apps.all.curr_win
+        local win     = state.windows.curr_win
         local frame   = win:frame()
         local opacity = state.menu.opacity
         local popup   = cache.assets.insert.popup
@@ -312,7 +312,7 @@ end
 --------------------------------------------------------------------------------
 function M.hide()
     return function(done)
-        local win = state.apps.all.curr_win
+        local win = state.windows.curr_win
         local app = win:application():name()
 
         -- Delete popup
@@ -332,7 +332,7 @@ end
 --------------------------------------------------------------------------------
 function M.show()
     return function(done)
-        local win     = state.apps.all.curr_win
+        local win     = state.windows.curr_win
         local corner  = state.menu.corner
         local stack   = state.menu.stack
         local opacity = state.menu.opacity

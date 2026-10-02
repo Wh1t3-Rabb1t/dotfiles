@@ -62,7 +62,7 @@ local function init_app_data()
         if #app_wins > 0 then
             table.insert(apps.list, app)
 
-            apps[app] = {
+            apps[app:name()] = {
                 idx     = 1,
                 wins    = app_wins,
                 -- watcher = app_watcher(app),

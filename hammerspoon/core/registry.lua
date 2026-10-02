@@ -164,12 +164,12 @@ M.apps = {
                 -- { '_', 'Prev app',        wk.hide(), win.cycle_all_apps('prev'), wk.show()     },
                 { '-', 'Next app',        wk.hide(), win.cycle_all_apps('next'), wk.show()     },
                 -- { '-', 'Move to next screen',     wk.hide(), win.move_to_screen(), wk.show()   },
-                -- { 'o', 'Next slot',       wk.hide(), win.traverse_slots('next'), wk.show()     },
-                -- { 'u', 'Prev slot',       wk.hide(), win.traverse_slots('prev'), wk.show()     },
+                { 'o', 'Next slot',       wk.hide(), win.traverse_slots('next'), wk.show()     },
+                { 'u', 'Prev slot',       wk.hide(), win.traverse_slots('prev'), wk.show()     },
                 { 'O', 'Next window',     wk.hide(), win.cycle_open('next'), wk.show()         },
                 { 'U', 'Prev window',     wk.hide(), win.cycle_open('prev'), wk.show()         },
-                { 'o', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
-                { 'u', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
+                -- { 'o', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
+                -- { 'u', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
 
                 { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n')                           },
 

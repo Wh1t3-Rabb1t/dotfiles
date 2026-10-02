@@ -169,9 +169,37 @@ end
 
 -- Iterate window index
 --------------------------------------------------------------------------------
+-- local function iterate_window_idx(app_name, direction)
+--     local data = state.app_data
+--
+--     if app_name == 'all' then
+--         data = state.windows
+--     end
+--
+--     local wins  = data[app_name].wins
+--     local idx   = data[app_name].idx
+--     local count = #wins
+--
+--     if direction == 'next' then
+--         idx = idx % count + 1
+--     elseif direction == 'prev' then
+--         idx = (idx - 2) % count + 1
+--     end
+--
+--     return idx
+-- end
+
 local function iterate_window_idx(app_name, direction)
-    local wins  = state.apps[app_name].wins
-    local idx   = state.apps[app_name].idx
+    local wins, idx
+
+    if app_name == 'all' then
+        wins = state.windows.wins
+        idx  = state.windows.idx
+    else
+        wins = state.app_data[app_name].wins
+        idx  = state.app_data[app_name].idx
+    end
+
     local count = #wins
 
     if direction == 'next' then
@@ -307,7 +335,7 @@ end
 -- Create/update window borders
 --------------------------------------------------------------------------------
 local function set_border(win)
-    local border = state.apps.all.border
+    local border = state.windows.border
 
     if not border then
         border = hs.canvas.new(win:frame())
@@ -322,7 +350,7 @@ local function set_border(win)
         border:level(hs.canvas.windowLevels.overlay)
         border:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
 
-        state.apps.all.border = border
+        state.windows.border = border
     else
         border:frame(win:frame())
     end
@@ -334,21 +362,32 @@ end
 -- Update focused window state
 --------------------------------------------------------------------------------
 local function set_window_state(win, idx)
-    local apps     = state.apps.all
+    local wins     = state.windows
     local app_name = win:application():name()
-    local curr_app = state.apps[app_name]
+    local curr_app = state.app_data[app_name]
 
     curr_app.idx = get_window_idx(curr_app.wins, win)
 
-    apps.idx      = idx
-    apps.curr_win = win
+    wins.idx      = idx
+    wins.curr_win = win
 end
+
+-- local function set_window_state(win, idx)
+--     local apps     = state.apps.all
+--     local app_name = win:application():name()
+--     local curr_app = state.apps[app_name]
+--
+--     curr_app.idx = get_window_idx(curr_app.wins, win)
+--
+--     apps.idx      = idx
+--     apps.curr_win = win
+-- end
 
 
 -- Snap windows into their respective slot coords
 --------------------------------------------------------------------------------
 local function snap_layout()
-    local win    = state.apps.all.curr_win
+    local win    = state.windows.curr_win
     local id     = win:screen():id()
     local layout = state.screens[id].layout
     local frames = get_coords(id)
@@ -391,93 +430,28 @@ end
 -- Init window state table
 --------------------------------------------------------------------------------
 local function init_window_data(focused)
-    local running_apps = hs.application.runningApplications()
+    local apps = state.app_data
 
-    local windows = {}
-
-    -- All open windows
-    windows.all = {
+    local windows = {
         idx      = 1,
         curr_win = focused,
-        running  = {},
         wins     = {},
     }
 
-    for _, app in ipairs(running_apps) do
-        local app_wins = {}
+    for _, app in ipairs(apps.list) do
+        for _, win in ipairs(apps[app:name()].wins) do
+            table.insert(windows.wins, win)
 
-        for _, win in ipairs(app:allWindows()) do
-            if win:isStandard() and win:isVisible() then
-                table.insert(windows.all.wins, win)
-                table.insert(app_wins, win)
-
-                -- Set applicable windows to empty layout slots
-                set_empty_slot(win)
-            end
-        end
-
-        if #app_wins > 0 then
-            local app_name = app:name()
-
-            table.insert(windows.all.running, app)
-
-            windows[app_name] = {
-                idx     = 1,
-                wins    = app_wins,
-                -- watcher = app_watcher(app),
-            }
+            set_empty_slot(win)
         end
     end
 
-    if #windows.all.wins > 0 then
+    if #windows.wins > 0 then
         return windows
-    else
-        return false
     end
-end
 
--- local function init_window_data(focused)
---     local running_apps = hs.application.runningApplications()
---
---     local windows = {}
---
---     -- All open windows
---     windows.all = {
---         idx      = 1,
---         curr_win = focused,
---         running  = {},
---         wins     = {},
---     }
---
---     for _, app in ipairs(running_apps) do
---         local app_wins = {}
---
---         for _, win in ipairs(app:allWindows()) do
---             if win:isStandard() and win:isVisible() then
---                 table.insert(windows.all.wins, win)
---                 table.insert(app_wins, win)
---
---                 -- Set applicable windows to empty layout slots
---                 set_empty_slot(win)
---             end
---         end
---
---         if #app_wins > 0 then
---             table.insert(windows.all.running, app)
---
---             windows[app:name()] = {
---                 idx  = 1,
---                 wins = app_wins,
---             }
---         end
---     end
---
---     if #windows.all.wins > 0 then
---         return windows
---     else
---         return false
---     end
--- end
+    return false
+end
 
 
 --------------------------------------------------------------------------------
@@ -485,7 +459,7 @@ end
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
-        local win    = state.apps.all.curr_win
+        local win    = state.windows.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
 
@@ -505,7 +479,7 @@ end
 function M.resize(direction, step_val)
     return function(done)
         local step    = step_val or 0.01
-        local win     = state.apps.all.curr_win
+        local win     = state.windows.curr_win
         local id      = win:screen():id()
         local screen  = state.screens[id]
         local divider = screen.divider
@@ -553,7 +527,7 @@ end
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
-        local win    = state.apps.all.curr_win
+        local win    = state.windows.curr_win
         local id     = win:screen():id()
         local layout = state.screens[id].layout
         local lhs    = layout.left
@@ -575,7 +549,7 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
-        local win         = state.apps.all.curr_win
+        local win         = state.windows.curr_win
         local next_screen = win:screen():next()
 
         if next_screen then
@@ -601,7 +575,7 @@ function M.launch_or_focus(app)
         local existing = hs.window.focusedWindow()
 
         local function finish(new)
-            state.apps.all.curr_win = new
+            state.windows.curr_win = new
 
             if existing and new and existing:id() ~= new:id() then
                 set_existing_slot(new, existing)
@@ -657,7 +631,7 @@ function M.traverse_slots(direction)
             end
         end
 
-        local win       = state.apps.all.curr_win
+        local win       = state.windows.curr_win
         local screen_id = win:screen():id()
         local layout    = state.screens[screen_id].layout
 
@@ -707,8 +681,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_main_apps()
     return function(done)
-        local apps = state.apps.all
-        local win  = apps.curr_win
+        local windows = state.windows
+        local win     = windows.curr_win
 
         local target_app = 'kitty'
 
@@ -724,7 +698,7 @@ function M.cycle_main_apps()
                 wf:unsubscribeAll()
                 wf = nil
 
-                local idx = get_window_idx(apps.wins, target_win)
+                local idx = get_window_idx(windows.wins, target_win)
 
                 set_existing_slot(target_win, win)
                 set_window_state(target_win, idx)
@@ -744,14 +718,14 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
-        local all_apps = state.apps.all
-        local curr_app = all_apps.curr_win:application()
+        local windows  = state.windows
+        local curr_app = windows.curr_win:application()
         local apps     = state.app_data.list
         local count    = #apps
         local app_idx  = 0
 
         for i, v in ipairs(apps) do
-            if v == curr_app then
+            if v:name() == curr_app:name() then
                 if direction == 'next' then
                     app_idx = i % count + 1
                 elseif direction == 'prev' then
@@ -770,7 +744,7 @@ function M.cycle_all_apps(direction)
         local win = target_app:focusedWindow()
 
         if win then
-            local idx = get_window_idx(all_apps.wins, win)
+            local idx = get_window_idx(windows.wins, win)
 
             set_window_state(win, idx)
             set_existing_slot(win)
@@ -787,9 +761,9 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
-        local apps     = state.apps.all
-        local app_name = apps.curr_win:application():name()
-        local curr_app = state.apps[app_name]
+        local windows  = state.windows
+        local app_name = windows.curr_win:application():name()
+        local curr_app = state.app_data[app_name]
 
         if not curr_app or #curr_app.wins < 2 then
             done()
@@ -800,10 +774,10 @@ function M.cycle_app_specific(direction)
         local win = focus_window(curr_app.wins[idx])
 
         if win then
-            -- Need to set this to the index of the 'all' table because we use
-            -- the app specific index table to iterate the window within the
-            -- same app group.
-            idx = get_window_idx(apps.wins, win)
+            -- Need to set this to the index of the 'windows' table because we
+            -- use the app specific index table to iterate the window within
+            -- the same app group.
+            idx = get_window_idx(windows.wins, win)
 
             set_window_state(win, idx)
             set_border(win)
@@ -819,15 +793,15 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local apps = state.apps.all
+        local wins = state.windows
 
-        if #apps.wins < 2 then
+        if #wins.wins < 2 then
             done()
             return
         end
 
         local idx = iterate_window_idx('all', direction)
-        local win = focus_window(apps.wins[idx])
+        local win = focus_window(wins.wins[idx])
 
         if win then
             set_window_state(win, idx)
@@ -845,7 +819,7 @@ end
 --------------------------------------------------------------------------------
 function M.border(toggle)
     return function(done)
-        local border = state.apps.all.border
+        local border = state.windows.border
 
         if border then
             if toggle == 'show' then
@@ -864,18 +838,21 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
+
+    -- TODO: add a check to ensure that 'screens', and 'apps', are initialized.
+
     local win      = hs.window.focusedWindow()
     local app_name = win:application():name()
 
     local all_wins = init_window_data(win)
 
     if all_wins then
-        state.apps = all_wins
+        state.windows = all_wins
 
         -- Establish 'all' idx from the focused window
-        state.apps.all.idx = get_window_idx(
-            state.apps.all.wins,
-            state.apps.all.curr_win
+        state.windows.idx = get_window_idx(
+            state.windows.wins,
+            state.windows.curr_win
         )
     end
 

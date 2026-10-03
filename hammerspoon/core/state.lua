@@ -24,12 +24,14 @@ M.windows = {
 M.apps = {
     -- list = { ... },
     -- ['Brave Browser'] = {
-    --     idx  = 1,
-    --     wins = { ... },
+    --     idx     = 1,
+    --     wins    = { ... },
+    --     watcher = {},
     -- },
     -- ['kitty'] = {
-    --     idx  = 1,
-    --     wins = { ... },
+    --     idx     = 1,
+    --     wins    = { ... },
+    --     watcher = {},
     -- },
     -- ...
 }

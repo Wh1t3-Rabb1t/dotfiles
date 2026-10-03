@@ -1,7 +1,6 @@
 local M = {}
 
 local registry = require('registry')
-local util     = require('util')
 local state    = require('state')
 local cache    = require('cache')
 
@@ -330,21 +329,18 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    -- Init bindings/assets if required
-    if not util.tbl(cache.assets) or not util.tbl(cache.lookup) then
-        -- Main eventtap bindings
-        for app, bindings in pairs(registry.apps) do
-            if app == 'insert' then
-                cache.assets[app] = fmt_binding_popups(app, bindings)
-            else
-                cache.lookup[app] = fmt_binding_tbl(bindings)
-                cache.assets[app] = fmt_binding_popups(app, bindings)
-            end
+    -- Main eventtap bindings
+    for app, bindings in pairs(registry.apps) do
+        if app == 'insert' then
+            cache.assets[app] = fmt_binding_popups(app, bindings)
+        else
+            cache.lookup[app] = fmt_binding_tbl(bindings)
+            cache.assets[app] = fmt_binding_popups(app, bindings)
         end
-
-        -- Create event tap
-        cache.assets.tap = create_event_tap()
     end
+
+    -- Create event tap
+    cache.assets.tap = create_event_tap()
 end
 
 return M

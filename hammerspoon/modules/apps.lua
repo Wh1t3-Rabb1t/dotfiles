@@ -22,7 +22,7 @@ local function app_watcher(app)
                 end
             end
 
-            if count ~= #state.windows.wins then
+            if not count == #state.windows.wins then
                 -- Dump win state and re-init
                 M.init()
             end
@@ -82,6 +82,8 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
+    if state.apps then state.apps = nil end
+
     local data = init_app_data()
 
     if data then

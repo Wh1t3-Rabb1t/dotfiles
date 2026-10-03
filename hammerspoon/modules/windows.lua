@@ -629,6 +629,8 @@ function M.traverse_slots(direction)
         end
 
         if not target_slot then
+            set_existing_slot(win)
+
             done()
             return
         end
@@ -644,6 +646,75 @@ function M.traverse_slots(direction)
         done()
     end
 end
+
+
+-- function M.traverse_slots(direction)
+--     return function(done)
+--         local reverse     = direction == 'prev'
+--         local screen_step = reverse and -1 or 1
+--         local slot_order  = reverse
+--             and { 'maximized', 'right', 'left' }
+--             or  { 'maximized', 'left', 'right' }
+--
+--         local function get_next_screen_slot(id, skip)
+--             for _ = 1, #state.screens do
+--                 id = (id - 1 + screen_step) % #state.screens + 1
+--
+--                 local layout = state.screens[id].layout
+--
+--                 for _, name in ipairs(slot_order) do
+--                     local slot = layout[name]
+--
+--                     if slot and slot ~= skip then
+--                         return slot
+--                     end
+--                 end
+--             end
+--         end
+--
+--         local win       = state.windows.curr_win
+--         local screen_id = win:screen():id()
+--         local layout    = state.screens[screen_id].layout
+--
+--         local target_slot
+--
+--         -- Maximized
+--         if layout.maximized == win then
+--             target_slot = get_next_screen_slot(screen_id, win)
+--
+--         -- Left
+--         elseif layout.left == win then
+--              target_slot = layout.right
+--
+--             if reverse or not target_slot then
+--                 target_slot = get_next_screen_slot(screen_id, win)
+--             end
+--
+--         -- Right
+--         elseif layout.right == win then
+--             target_slot = layout.left
+--
+--             if not reverse or not target_slot then
+--                 target_slot = get_next_screen_slot(screen_id, win)
+--             end
+--         end
+--
+--         if not target_slot then
+--             done()
+--             return
+--         end
+--
+--         local win_idx = iterate_window_idx('all')
+--         local new_win = focus_window(target_slot)
+--
+--         if new_win then
+--             set_window_state(new_win, win_idx)
+--             set_border(new_win)
+--         end
+--
+--         done()
+--     end
+-- end
 
 
 --------------------------------------------------------------------------------
@@ -744,9 +815,9 @@ function M.cycle_app_specific(direction)
         local win = focus_window(curr_app.wins[idx])
 
         if win then
-            -- Need to set this to the index of the 'windows' table because we
-            -- use the app specific index table to iterate the window within
-            -- the same app group.
+            -- Need to set this to the index of the 'windows' table because
+            -- we use the app specific index table to iterate the window
+            -- within the same app group.
             idx = get_window_idx(windows.wins, win)
 
             set_window_state(win, idx)
@@ -763,15 +834,15 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
-        local wins = state.windows
+        local wins = state.windows.wins
 
-        if #wins.wins < 2 then
+        if #wins < 2 then
             done()
             return
         end
 
         local idx = iterate_window_idx('all', direction)
-        local win = focus_window(wins.wins[idx])
+        local win = focus_window(wins[idx])
 
         if win then
             set_window_state(win, idx)
@@ -808,32 +879,28 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-
-    -- TODO: add a check to ensure that 'screens', and 'apps', are initialized.
-
     local win      = hs.window.focusedWindow()
     local app_name = win:application():name()
 
-    local all_wins = init_window_data(win)
+    local data = init_window_data(win)
 
-    if all_wins then
-        state.windows = all_wins
+    if data then
+        state.windows = data
 
         -- Establish 'all' idx from the focused window
         state.windows.idx = get_window_idx(
             state.windows.wins,
             state.windows.curr_win
         )
-    end
 
-    if win then
-        -- Show window border
-        set_border(win)
+        win = state.windows.curr_win
 
         -- Init layout if the focused window is compatible
         if cache.assets[app_name] then
             set_existing_slot(win)
         end
+
+        set_border(win)
     end
 end
 

@@ -114,9 +114,9 @@ end
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
 local function get_coords(win, popups, corner, stack)
-    local id           = win:screen():id()
+    local screen_id    = win:screen():id()
     local app_frame    = win:frame()
-    local screen_frame = state.screens[id].frame
+    local screen_frame = state.screens[screen_id].frame
 
     local spacing = 25
 

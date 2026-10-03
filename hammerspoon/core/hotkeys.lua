@@ -25,6 +25,7 @@ local keys = {
         -- Which key launcher
         key    = 'space', mods = { 'cmd', 'ctrl', 'alt', 'shift' },
         action = function()
+            -- Init fns must be called in the following order:
             screens.init()
             apps.init()
             windows.init()

@@ -2,19 +2,16 @@
 
 ## IMMEDIATE TASKS:
 
-- Hierarchy of init is: screens, apps, windows, wk_assets.
-
-- When resizing splits ensure that both affected windows are raised to
-  z-index 1 and 2.
+- Hierarchy of init is: screens, apps, windows, wk_assets. In each init fn add
+  a check to ensure that all preceding (required) modules have been initialized.
 
 - Set up window open/closed fns that update state.wins when windows are
   opened, closed, focused (through either kb, or click).
 
-- In the full swift version:
-  Need to allow users to declare the indexes (essentially the layout) of their
-  monitors for congruent directional movement.
-
 - Alter lookup/eventtap/registry to support 'leader' key.
+
+- Create an fzf popup launcher which takes the list of actions in and execs
+  the selected one.
 
 - Create a 'mouse_click_explosion()' fn that animates a series of circles
   ranging from small to large, that can be cached, then looped and displayed

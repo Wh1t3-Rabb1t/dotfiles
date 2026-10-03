@@ -2,6 +2,9 @@
 
 ## IMMEDIATE TASKS:
 
+- Add a return flag to all fns processed by the action queue, so we can repeat
+  the fn if it fails (or signals a repeat).
+
 - Hierarchy of init is: screens, apps, windows, wk_assets. In each init fn add
   a check to ensure that all preceding (required) modules have been initialized.
 

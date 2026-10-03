@@ -4,8 +4,8 @@
 
 - Hierarchy of init is: screens, apps, windows, wk_assets.
 
-- Restructure state.apps to (state.apps and state.windows) and change
-  cycle_all_apps to reference the new data structure.
+- When resizing splits ensure that both affected windows are raised to
+  z-index 1 and 2.
 
 - Set up window open/closed fns that update state.wins when windows are
   opened, closed, focused (through either kb, or click).

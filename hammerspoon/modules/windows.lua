@@ -86,35 +86,35 @@ local cache = require('cache')
 -- hs.console.clearConsole()
 
 
-local function app_watcher(app)
-    if not app then return end
-
-    local watcher = app:newWatcher(function(element, event)
-        if event == 'AXFocusedWindowChanged' then
-            local apps  = hs.application.runningApplications()
-            local count = 0
-
-            for _, running_app in ipairs(apps) do
-                for _, win in ipairs(running_app:allWindows()) do
-                    if win:isStandard() and win:isVisible() then
-                        count = count + 1
-                    end
-                end
-            end
-
-            if count ~= #state.apps.all.wins then
-                -- dump win state and re-init
-            end
-        end
-    end)
-
-    watcher:start({
-        -- Winow level events
-        hs.uielement.watcher.focusedWindowChanged,
-    })
-
-    return watcher
-end
+-- local function app_watcher(app)
+--     if not app then return end
+--
+--     local watcher = app:newWatcher(function(element, event)
+--         if event == 'AXFocusedWindowChanged' then
+--             local apps  = hs.application.runningApplications()
+--             local count = 0
+--
+--             for _, running_app in ipairs(apps) do
+--                 for _, win in ipairs(running_app:allWindows()) do
+--                     if win:isStandard() and win:isVisible() then
+--                         count = count + 1
+--                     end
+--                 end
+--             end
+--
+--             if count ~= #state.windows.wins then
+--                 -- dump win state and re-init
+--             end
+--         end
+--     end)
+--
+--     watcher:start({
+--         -- Winow level events
+--         hs.uielement.watcher.focusedWindowChanged,
+--     })
+--
+--     return watcher
+-- end
 
 -- -- if event == 'AXApplicationDeactivated' then
 -- -- end
@@ -143,8 +143,8 @@ end
 -- Determine whether or not a winodw is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
-    local id           = win:screen():id()
-    local cached_frame = state.screens[id].frame
+    local screen_id    = win:screen():id()
+    local cached_frame = state.screens[screen_id].frame
 
     local frames = frames_equal(
         win:frame(),
@@ -158,8 +158,8 @@ end
 -- Remove windows from the layout slot they occupy
 --------------------------------------------------------------------------------
 local function clear_slot(win)
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
+    local screen_id = win:screen():id()
+    local layout    = state.screens[screen_id].layout
 
     if layout.left      == win then layout.left      = false end
     if layout.right     == win then layout.right     = false end
@@ -169,35 +169,16 @@ end
 
 -- Iterate window index
 --------------------------------------------------------------------------------
--- local function iterate_window_idx(app_name, direction)
---     local data = state.app_data
---
---     if app_name == 'all' then
---         data = state.windows
---     end
---
---     local wins  = data[app_name].wins
---     local idx   = data[app_name].idx
---     local count = #wins
---
---     if direction == 'next' then
---         idx = idx % count + 1
---     elseif direction == 'prev' then
---         idx = (idx - 2) % count + 1
---     end
---
---     return idx
--- end
-
 local function iterate_window_idx(app_name, direction)
-    local wins, idx
+    local wins
+    local idx
 
     if app_name == 'all' then
         wins = state.windows.wins
         idx  = state.windows.idx
     else
-        wins = state.app_data[app_name].wins
-        idx  = state.app_data[app_name].idx
+        wins = state.apps[app_name].wins
+        idx  = state.apps[app_name].idx
     end
 
     local count = #wins
@@ -273,8 +254,8 @@ end
 -- Update empty window slots
 --------------------------------------------------------------------------------
 local function set_empty_slot(win)
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
+    local screen_id = win:screen():id()
+    local layout    = state.screens[screen_id].layout
 
     if is_fullscreen(win) then
         if not layout.maximized then
@@ -299,8 +280,8 @@ end
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
 local function set_existing_slot(win, existing_win)
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
+    local screen_id = win:screen():id()
+    local layout    = state.screens[screen_id].layout
 
     if is_fullscreen(win) then
         layout.maximized = win
@@ -364,7 +345,7 @@ end
 local function set_window_state(win, idx)
     local wins     = state.windows
     local app_name = win:application():name()
-    local curr_app = state.app_data[app_name]
+    local curr_app = state.apps[app_name]
 
     curr_app.idx = get_window_idx(curr_app.wins, win)
 
@@ -372,28 +353,17 @@ local function set_window_state(win, idx)
     wins.curr_win = win
 end
 
--- local function set_window_state(win, idx)
---     local apps     = state.apps.all
---     local app_name = win:application():name()
---     local curr_app = state.apps[app_name]
---
---     curr_app.idx = get_window_idx(curr_app.wins, win)
---
---     apps.idx      = idx
---     apps.curr_win = win
--- end
-
 
 -- Snap windows into their respective slot coords
 --------------------------------------------------------------------------------
 local function snap_layout()
-    local win    = state.windows.curr_win
-    local id     = win:screen():id()
-    local layout = state.screens[id].layout
-    local frames = get_coords(id)
+    local win       = state.windows.curr_win
+    local screen_id = win:screen():id()
+    local layout    = state.screens[screen_id].layout
+    local frames    = get_coords(screen_id)
 
     if layout.maximized then
-        layout.maximized:setFrame(state.screens[id].frame, 0.02)
+        layout.maximized:setFrame(state.screens[screen_id].frame, 0.02)
     else
         if layout.left then
             layout.left:setFrame(frames.left, 0.02)
@@ -430,7 +400,7 @@ end
 -- Init window state table
 --------------------------------------------------------------------------------
 local function init_window_data(focused)
-    local apps = state.app_data
+    local apps = state.apps
 
     local windows = {
         idx      = 1,
@@ -459,9 +429,9 @@ end
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
-        local win    = state.windows.curr_win
-        local id     = win:screen():id()
-        local layout = state.screens[id].layout
+        local win       = state.windows.curr_win
+        local screen_id = win:screen():id()
+        local layout    = state.screens[screen_id].layout
 
         layout.maximized = win
 
@@ -478,12 +448,12 @@ end
 --------------------------------------------------------------------------------
 function M.resize(direction, step_val)
     return function(done)
-        local step    = step_val or 0.01
-        local win     = state.windows.curr_win
-        local id      = win:screen():id()
-        local screen  = state.screens[id]
-        local divider = screen.divider
-        local layout  = screen.layout
+        local step      = step_val or 0.01
+        local win       = state.windows.curr_win
+        local screen_id = win:screen():id()
+        local screen    = state.screens[screen_id]
+        local divider   = screen.divider
+        local layout    = screen.layout
 
         if direction == 'left' then
             divider = divider - step
@@ -527,11 +497,11 @@ end
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
-        local win    = state.windows.curr_win
-        local id     = win:screen():id()
-        local layout = state.screens[id].layout
-        local lhs    = layout.left
-        local rhs    = layout.right
+        local win       = state.windows.curr_win
+        local screen_id = win:screen():id()
+        local layout    = state.screens[screen_id].layout
+        local lhs       = layout.left
+        local rhs       = layout.right
 
         layout.left  = rhs
         layout.right = lhs
@@ -720,7 +690,7 @@ function M.cycle_all_apps(direction)
     return function(done)
         local windows  = state.windows
         local curr_app = windows.curr_win:application()
-        local apps     = state.app_data.list
+        local apps     = state.apps.list
         local count    = #apps
         local app_idx  = 0
 
@@ -763,7 +733,7 @@ function M.cycle_app_specific(direction)
     return function(done)
         local windows  = state.windows
         local app_name = windows.curr_win:application():name()
-        local curr_app = state.app_data[app_name]
+        local curr_app = state.apps[app_name]
 
         if not curr_app or #curr_app.wins < 2 then
             done()

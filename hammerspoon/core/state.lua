@@ -2,6 +2,8 @@ local M = {}
 
 -- Commented out entries are populated on init
 
+M.invalid = false
+
 M.menu = {
     tap_active = false,  -- (true|false)
     corner     = 'bottom_right',
@@ -23,12 +25,7 @@ M.windows = {
 
 M.apps = {
     -- list = { ... },
-    -- ['Brave Browser'] = {
-    --     idx     = 1,
-    --     wins    = { ... },
-    --     watcher = {},
-    -- },
-    -- ['kitty'] = {
+    -- [application:name()] = {
     --     idx     = 1,
     --     wins    = { ... },
     --     watcher = {},
@@ -37,7 +34,7 @@ M.apps = {
 }
 
 M.screens = {
-    -- [id] = {
+    -- [screen:id()] = {
     --     frame      = {},
     --     overlay    = {},
     --     brightness = (1..100),

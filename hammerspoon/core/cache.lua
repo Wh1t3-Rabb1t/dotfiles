@@ -2,8 +2,6 @@ local M = {}
 
 -- Commented out entries are populated on init
 
-M.watchers = {}
-
 M.lookup = {
     -- [app_name] = {
     --     key = action,
@@ -12,6 +10,7 @@ M.lookup = {
 }
 
 M.assets = {
+    -- tap = {},
     -- [app_name] = {
     --     popup = popup,
     --     frame = frame,

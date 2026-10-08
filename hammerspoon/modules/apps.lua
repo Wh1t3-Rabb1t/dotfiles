@@ -4,7 +4,7 @@ local state = require('state')
 
 
 --------------------------------------------------------------------------------
-local function app_watcher(app)
+function app_watcher(app)
     if not app then
         return
     end
@@ -22,9 +22,11 @@ local function app_watcher(app)
                 end
             end
 
-            if not count == #state.windows.wins then
-                -- Dump win state and re-init
-                M.init()
+            if count ~= #state.windows.wins then
+                -- Signal to the eventtap that state needs to be re-built
+                state.invalid = true
+
+                print('state invalid')
             end
         end
     end)
@@ -65,7 +67,7 @@ local function init_app_data()
             apps[app:name()] = {
                 idx     = 1,
                 wins    = app_wins,
-                -- watcher = app_watcher(app),
+                watcher = app_watcher(app),
             }
         end
     end
@@ -82,8 +84,6 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    if state.apps then state.apps = nil end
-
     local data = init_app_data()
 
     if data then

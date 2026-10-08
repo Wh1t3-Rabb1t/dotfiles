@@ -2,6 +2,8 @@
 
 ## Priority: High
 
+- Create a 'milk' script to track when you opened a carton of milk.
+
 - Homebrew:
 ```txt
 ==> mpv

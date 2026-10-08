@@ -1,131 +1,10 @@
 local M = {}
 
 local brightness = require('brightness')
-local wk         = require('which_key')
+local wk         = require('wk')
 local win        = require('windows')
 local wifi       = require('wifi')
-
-
--- Add shift to the mod table
---------------------------------------------------------------------------------
-local function add_shift(mods)
-    local result = {}
-
-    if mods then
-        for i, mod in ipairs(mods) do
-            result[i] = mod
-        end
-    end
-
-    table.insert(result, 'shift')
-
-    return result
-end
-
-
--- Construct binding entry for temporary insert mode
---------------------------------------------------------------------------------
-local function insert_bind( ... )
-    local binding_field = {}
-
-    for _, args in ipairs({ ... }) do
-        table.insert(binding_field, {
-            key  = args[1],
-            desc = args[2],
-        })
-    end
-
-    return binding_field
-end
-
-
--- Construct binding entry
---------------------------------------------------------------------------------
-local function bind( ... )
-    local shift_chars = {
-        ['~'] = '`',
-        ['!'] = '1',
-        ['@'] = '2',
-        ['#'] = '3',
-        ['$'] = '4',
-        ['%'] = '5',
-        ['^'] = '6',
-        ['&'] = '7',
-        ['*'] = '8',
-        ['('] = '9',
-        [')'] = '0',
-        ['_'] = '-',
-        ['+'] = '=',
-        ['{'] = '[',
-        ['}'] = ']',
-        [':'] = ';',
-        ['"'] = "'",
-        ['<'] = ',',
-        ['>'] = '.',
-        ['?'] = '/',
-        ['|'] = '\\',
-    }
-
-    local binding_field = {}
-
-    for _, args in ipairs({ ... }) do
-        local key
-        local mods
-        local desc
-        local action_start
-
-        -- If a modifier was passed along with the key
-        if type(args[1]) == 'table' then
-            mods         = args[1]
-            key          = args[2]
-            desc         = args[3]
-            action_start = 4
-        else
-            key          = args[1]
-            desc         = args[2]
-            action_start = 3
-        end
-
-        -- Uppercase letters and shifted punctuation implicitly mean shift
-        if #key == 1 then
-            if key:match('%u') then
-                key  = key:lower()
-                mods = add_shift(mods)
-            elseif shift_chars[key] then
-                key  = shift_chars[key]
-                mods = add_shift(mods)
-            end
-        end
-
-        local action_count = #args - action_start + 1
-
-        local binding = {
-            key  = key,
-            desc = desc,
-        }
-
-        if mods then
-            binding.mods = mods
-        end
-
-        -- If one action is passed, store it as a function
-        if action_count == 1 then
-            binding.action = args[action_start]
-
-        -- If multiple actions are passed, store them as a table of functions
-        elseif action_count > 1 then
-            binding.action = {}
-
-            for i = action_start, #args do
-                table.insert(binding.action, args[i])
-            end
-        end
-
-        table.insert(binding_field, binding)
-    end
-
-    return binding_field
-end
+local util       = require('util')
 
 
 --------------------------------------------------------------------------------
@@ -140,7 +19,7 @@ M.apps = {
         -- don't have corresponding actions.
         {
             category = 'Bound until invoked',
-            bindings = insert_bind(
+            bindings = util.insert_bind(
                 { 'enter',  'Relaunch menu' },
                 { 'escape', 'Cancel'        }
             ),
@@ -159,7 +38,7 @@ M.apps = {
         -- },
         {
             category = 'Windows',
-            bindings = bind(
+            bindings = util.bind(
                 { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()          },
                 -- { '_', 'Prev app',        wk.hide(), win.cycle_all_apps('prev'), wk.show()     },
                 { '-', 'Next app',        wk.hide(), win.cycle_all_apps('next'), wk.show()     },
@@ -179,7 +58,7 @@ M.apps = {
         },
         {
             category = 'Layout',
-            bindings = bind(
+            bindings = util.bind(
                 { 'f', 'Resize right',   wk.hide(), win.resize('right'), wk.show()  },
                 { 's', 'Resize left',    wk.hide(), win.resize('left'), wk.show()   },
                 { 'g', 'Maximize',       wk.hide(), win.maximize(), wk.show()       },
@@ -189,7 +68,7 @@ M.apps = {
         },
         {
             category = 'Popups',
-            bindings = bind(
+            bindings = util.bind(
                 { 'R', 'Cycle positions',     wk.hide(), wk.cycle_corner_pos(), wk.show() },
                 { 'A', 'Cycle menu stacking', wk.hide(), wk.cycle_stacking(), wk.show()   },
                 { 'V', 'Opacity up',          wk.opacity('up')                            },
@@ -198,7 +77,7 @@ M.apps = {
         },
         {
             category = 'Clipboard',
-            bindings = bind(
+            bindings = util.bind(
                 { 'c', 'Copy',  wk.send_keys({'cmd'}, 'c') },
                 { 'x', 'Cut',   wk.send_keys({'cmd'}, 'x') },
                 { 'v', 'Paste', wk.send_keys({'cmd'}, 'v') }
@@ -206,7 +85,7 @@ M.apps = {
         },
         {
             category = 'Brightness',
-            bindings = bind(
+            bindings = util.bind(
                 { 'z', 'Up',    brightness.adjust('up')   },
                 { 'j', 'Down',  brightness.adjust('down') },
                 { 'P', 'Print', brightness.print_values() }
@@ -214,7 +93,7 @@ M.apps = {
         },
         {
             category = 'Misc',
-            bindings = bind(
+            bindings = util.bind(
                 { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=')                        },
                 { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')                        },
                 { 'X',      'Toggle wifi on/off', wifi.toggle_wifi()                                },
@@ -289,7 +168,7 @@ M.apps = {
         --   Toggle vertical tabs expanded
         {
             category = 'Page',
-            bindings = bind(
+            bindings = util.bind(
                 { 'e', 'Up',      wk.send_keys({}, 'pageup')                                             },
                 { 'd', 'Down',    wk.send_keys({}, 'pagedown')                                           },
                 { 'E', 'Top',     wk.send_keys({}, 'home')                                               },
@@ -303,7 +182,7 @@ M.apps = {
         },
         {
             category = 'Tabs',
-            bindings = bind(
+            bindings = util.bind(
                 { 'h', 'Left',            wk.send_keys({'ctrl'}, 'pageup')                                                },
                 { ';', 'Right',           wk.send_keys({'ctrl'}, 'pagedown')                                              },
                 { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup')                                       },
@@ -316,7 +195,7 @@ M.apps = {
         },
         {
             category = 'Navigation',
-            bindings = bind(
+            bindings = util.bind(
                 { 'i', 'Up arrow',    wk.send_keys({}, 'up')         },
                 { 'k', 'Down arrow',  wk.send_keys({}, 'down')       },
                 { 'l', 'Focus next',  wk.send_keys({}, 'tab')        },
@@ -325,7 +204,7 @@ M.apps = {
         },
         {
             category = 'Misc',
-            bindings = bind(
+            bindings = util.bind(
                 { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.turn_tap('off'), wk.hide(), wk.insert() },
                 { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd')                                             },
                 { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h')                                             },
@@ -339,14 +218,14 @@ M.apps = {
     ------------------+
         {
             category = 'Scrollback',
-            bindings = bind(
+            bindings = util.bind(
                 { 'e', 'Page up',   wk.send_keys({'shift'}, 'pageup')   },
                 { 'd', 'Page down', wk.send_keys({'shift'}, 'pagedown') }
             ),
         },
         {
             category = 'Splits',
-            bindings = bind(
+            bindings = util.bind(
                 { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')                },
                 { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')              },
                 { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')             },
@@ -366,16 +245,16 @@ M.apps = {
         },
         {
             category = 'Tabs',
-            bindings = bind(
+            bindings = util.bind(
                 { ';', 'Next',     wk.send_keys({'ctrl'}, 'end')  },
                 { 'h', 'Previous', wk.send_keys({'ctrl'}, 'home') }
 
-                -- bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
+                -- util.bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
             ),
         },
         {
             category = 'Layout',
-            bindings = bind(
+            bindings = util.bind(
                 { 'R', 'Rotate splits', wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')          },
                 { 'r', 'Next layout',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') }
             ),

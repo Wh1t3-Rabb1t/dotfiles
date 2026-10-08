@@ -312,12 +312,12 @@ end
 --------------------------------------------------------------------------------
 function M.hide()
     return function(done)
-        local win = state.windows.curr_win
-        local app = win:application():name()
+        local win      = state.windows.curr_win
+        local app_name = win:application():name()
 
         -- Delete popup
-        if cache.assets[app] then
-            cache.assets[app].popup:delete()
+        if cache.assets[app_name] then
+            cache.assets[app_name].popup:delete()
         end
 
         cache.assets.system.popup:delete()

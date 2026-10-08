@@ -2,8 +2,17 @@
 
 ## IMMEDIATE TASKS:
 
+- Considerations: If an app remains open, but all of its windows are closed
+  we should (possibly) still consider it an available window.
+
+- ? should we remove everything but the keystroke fns from the event queue.
+
 - Add a return flag to all fns processed by the action queue, so we can repeat
   the fn if it fails (or signals a repeat).
+
+- The eventtap could be the mechanism that checks cache_invalidation and
+  triggers a 'rebuild_cache' action. Also could bind 'rebuild_cache' to a
+  key so we could trigger it during runtime if something weird happens.
 
 - Hierarchy of init is: screens, apps, windows, wk_assets. In each init fn add
   a check to ensure that all preceding (required) modules have been initialized.

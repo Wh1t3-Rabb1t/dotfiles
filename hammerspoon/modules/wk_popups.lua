@@ -1,37 +1,9 @@
 local M = {}
 
-local registry = require('registry')
+local registry = require('wk_registry')
 local state    = require('state')
 local cache    = require('cache')
-
-
--- Normalize bindings with modifiers
---------------------------------------------------------------------------------
-local function binding_id(key, mods)
-    if not mods or #mods == 0 then
-        return key
-    end
-
-    table.sort(mods)
-
-    return table.concat(mods, '+') .. '+' .. key
-end
-
-
--- Format rgb table
---------------------------------------------------------------------------------
-local function rgb(r, g, b, opacity)
-    opacity = opacity or 1.0
-
-    local color_table = {
-        red   = r / 255,
-        green = g / 255,
-        blue  = b / 255,
-        alpha = opacity,
-    }
-
-    return color_table
-end
+local util     = require('util')
 
 
 -- Create popup
@@ -43,8 +15,8 @@ local function create_popup(content, frame)
         {
             type        = 'rectangle',
             action      = 'strokeAndFill',
-            fillColor   = rgb(1, 2, 3),        -- Black
-            strokeColor = rgb(255, 255, 255),  -- White
+            fillColor   = util.rgb(1, 2, 3),        -- Black
+            strokeColor = util.rgb(255, 255, 255),  -- White
             roundedRectRadii = {
                 xRadius = 8,
                 yRadius = 8,
@@ -165,11 +137,11 @@ local function fmt_menu_text(app, binding_tbl)
     local base_font  = { name = 'Menlo', size = 14 }
 
     local styles = {
-        title = { font = title_font, color = rgb(205, 205, 205) },
-        group = { font = base_font,  color = rgb(150, 200, 255) },
-        key   = { font = base_font,  color = rgb(0, 255, 0)     },
-        arrow = { font = base_font,  color = rgb(100, 100, 100) },
-        desc  = { font = base_font,  color = rgb(255, 255, 255) },
+        title = { font = title_font, color = util.rgb(205, 205, 205) },
+        group = { font = base_font,  color = util.rgb(150, 200, 255) },
+        key   = { font = base_font,  color = util.rgb(0, 255, 0)     },
+        arrow = { font = base_font,  color = util.rgb(100, 100, 100) },
+        desc  = { font = base_font,  color = util.rgb(255, 255, 255) },
     }
 
     local styled_text = require('hs.styledtext')
@@ -273,7 +245,7 @@ local function fmt_binding_tbl(bindings)
 
     for _, category in ipairs(bindings) do
         for _, binding in ipairs(category.bindings) do
-            local lookup_key = binding_id(
+            local lookup_key = util.binding_id(
                 binding.key,
                 binding.mods
             )
@@ -283,45 +255,6 @@ local function fmt_binding_tbl(bindings)
     end
 
     return lookup
-end
-
-
--- Create event tap
---------------------------------------------------------------------------------
-local function create_event_tap()
-    local event_types = {
-        hs.eventtap.event.types.keyDown,
-        hs.eventtap.event.types.flagsChanged
-    }
-
-    local tap = hs.eventtap.new(event_types, function(event)
-        local flags   = event:getFlags()
-        local keycode = event:getKeyCode()
-        local key     = hs.keycodes.map[keycode]
-
-        local win = hs.window.focusedWindow()
-        local app = win:application():name()
-
-        local mods = {}
-
-        if flags.cmd   then table.insert(mods, 'cmd') end
-        if flags.alt   then table.insert(mods, 'alt') end
-        if flags.ctrl  then table.insert(mods, 'ctrl') end
-        if flags.shift then table.insert(mods, 'shift') end
-
-        local lookup_key   = binding_id(key, mods)
-        local app_lookup   = cache.lookup[app] or {}
-        local bound_action = cache.lookup.system[lookup_key]
-                          or app_lookup[lookup_key]
-
-        if bound_action then
-            bound_action()
-        end
-
-        return true
-    end)
-
-    return tap
 end
 
 
@@ -338,9 +271,6 @@ function M.init()
             cache.assets[app] = fmt_binding_popups(app, bindings)
         end
     end
-
-    -- Create event tap
-    cache.assets.tap = create_event_tap()
 end
 
 return M

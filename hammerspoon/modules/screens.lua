@@ -71,7 +71,9 @@ function M.init()
         local id   = screen:id()
         local data = get_screen_data(screen)
 
-        state.screens[id] = data
+        if data then
+            state.screens[id] = data
+        end
     end
 end
 

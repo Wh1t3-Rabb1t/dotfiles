@@ -1,6 +1,6 @@
 local M = {}
 
-local tap = require('tap')
+local tap = require('wk_tap')
 local wk  = require('wk')
 local qt  = require('quit_timer')
 

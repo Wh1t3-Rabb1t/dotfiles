@@ -7,6 +7,7 @@
 -- https://learnhammerspoon.com/
 
 require('console').init()
-require('announcer').init()
 require('watchers').init()
 require('hotkeys').init()
+
+hs.alert.show('🔨🥄')

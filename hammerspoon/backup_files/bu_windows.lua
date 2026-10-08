@@ -140,7 +140,7 @@ local function frames_equal(a, b, tolerance)
 end
 
 
--- Determine whether or not a winodw is maximized
+-- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
     local screen_id    = win:screen():id()
@@ -827,7 +827,7 @@ function M.init()
         win = state.windows.curr_win
 
         -- Init layout if the focused window is compatible
-        if state.assets[app_name] then
+        if cache.assets[app_name] then
             set_existing_slot(win)
         end
 

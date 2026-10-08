@@ -38,20 +38,15 @@ local function create_event_tap()
 
 
                 -- Re-init modules
-                screens.init()
-                apps.init()
-                windows.init()
-                wk_popups.init()
-
-                state.invalid = false
+                M.init_modules()
 
 
-                -- Show popups
-                app_name = state.windows.curr_win:application():name()
-                if cache.assets[app_name] then
-                    cache.assets[app_name].popup:show()
-                end
-                cache.assets.system.popup:show()
+                -- -- Show popups
+                -- app_name = state.windows.curr_win:application():name()
+                -- if cache.assets[app_name] then
+                --     cache.assets[app_name].popup:show()
+                -- end
+                -- cache.assets.system.popup:show()
 
             end
         else
@@ -86,11 +81,17 @@ local function create_event_tap()
 end
 
 
-function M.init()
+function M.init_modules()
     screens.init()
     apps.init()
     windows.init()
     wk_popups.init()
+
+    state.invalid = false
+end
+
+function M.init()
+    M.init_modules()
 
     -- Create event tap
     cache.assets.tap = create_event_tap()

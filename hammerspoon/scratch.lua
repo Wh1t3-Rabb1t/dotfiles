@@ -1,7 +1,3 @@
--- overhauling my init protocol. the new hierarchy of init is: screens, apps, windows, wk_assets.
--- most modules are dependant on the previous one i.e. 'apps' must initialize before 'windows' so that
--- 'windows' can read from the state object created by 'apps'.
-
 
 -- 2026-09-25 20:32:25:
 -- 2026-09-25 20:32:25: [focus] ===== SYSTEM AX FOCUS =====
@@ -379,14 +375,14 @@
 
 --------------------------------------------------------------------------------
 
-print(hs.uielement)
-print(hs.uielement.watcher)
-print(hs.uielement.watcher.focusedWindowChanged)
-
-local el = hs.uielement.focusedElement()
-print(el)
-print(el and el:isApplication())
-print(el and el:isWindow())
+-- print(hs.uielement)
+-- print(hs.uielement.watcher)
+-- print(hs.uielement.watcher.focusedWindowChanged)
+--
+-- local el = hs.uielement.focusedElement()
+-- print(el)
+-- print(el and el:isApplication())
+-- print(el and el:isWindow())
 
 -- 2026-08-20 19:00:34: -- Loading extension: uielement
 -- 2026-08-20 19:00:34: table: 0x90815c100

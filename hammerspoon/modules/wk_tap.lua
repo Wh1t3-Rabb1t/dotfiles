@@ -83,7 +83,6 @@ end
 
 function M.init_modules()
     screens.init()
-
     apps.init()
     windows.init()
     wk_popups.init()

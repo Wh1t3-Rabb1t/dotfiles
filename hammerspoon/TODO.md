@@ -24,6 +24,10 @@
 - Create a 'mouse_click_explosion()' fn that animates a series of circles
   ranging from small to large, that can be cached, then looped and displayed
   for a short duration; each with a lower opacity until transparent.
+  Add a differently colored circle which will display if a 'double-click' was
+  invoked.
+  Also have it display dimmed on mouseDown and 'release' on mouseUp. (i.e.
+  display but only animate when the mouse releases).
 
 - Create a small debugging fn that prints all open windows along with their
   idx so we can sync focused win idx with state rather that falling back to 1.

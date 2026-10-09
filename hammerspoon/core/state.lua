@@ -23,15 +23,21 @@ M.windows = {
     -- wins     = { ... },
 }
 
+-- M.app_watchers = {
+--     -- [application:name()] = {},
+--     -- ...
+-- }
+
 M.apps = {
     -- list = { ... },
     -- [application:name()] = {
     --     idx     = 1,
     --     wins    = { ... },
-    --     watcher = {},
     -- },
     -- ...
 }
+
+M.screen_watcher = false
 
 M.screens = {
     -- [screen:id()] = {

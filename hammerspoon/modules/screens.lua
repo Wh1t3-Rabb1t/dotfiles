@@ -97,21 +97,10 @@ function M.init()
     end
 
     if not state.screen_watcher then
+        -- hs.alert.show('watching screens')
         state.screen_watcher = create_watcher()
         state.screen_watcher:start()
     end
 end
-
-
--- function M.init()
---     for _, screen in ipairs(hs.screen.allScreens()) do
---         local id   = screen:id()
---         local data = get_screen_data(screen)
---
---         if data then
---             state.screens[id] = data
---         end
---     end
--- end
 
 return M

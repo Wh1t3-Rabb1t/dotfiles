@@ -33,14 +33,6 @@ M.apps = {
     -- ...
 }
 
-
--- -- NOTE: this is only regenerated when a screen is connected/disconnected
--- M.screen_config = {
---     -- [screen:id()] = {
---     -- }
--- }
-
-
 M.screens = {
     -- [screen:id()] = {
     --     frame      = {},

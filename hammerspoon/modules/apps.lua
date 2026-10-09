@@ -4,7 +4,7 @@ local state = require('state')
 
 
 --------------------------------------------------------------------------------
-function app_watcher(app)
+local function app_watcher(app)
     if not app then
         return
     end

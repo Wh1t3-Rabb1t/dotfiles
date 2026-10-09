@@ -58,12 +58,10 @@ local function get_w_h(popups, spacing, layout)
         end
     end
 
-    local dimensions = {
+    return {
         w = width,
         h = height,
     }
-
-    return dimensions
 end
 
 

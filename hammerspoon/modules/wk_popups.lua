@@ -42,15 +42,13 @@ end
 --------------------------------------------------------------------------------
 local function fmt_popup_frame(text)
     local size          = hs.drawing.getTextDrawingSize(text)
-    local canvas_width  = math.max(size.w)
-    local canvas_height = math.max(size.h)
+    local width  = math.max(size.w)
+    local height = math.max(size.h)
 
-    local frame = {
-        w = (canvas_width + 10),
-        h = (canvas_height + 10),
+    return {
+        w = (width + 10),
+        h = (height + 10),
     }
-
-    return frame
 end
 
 
@@ -188,12 +186,10 @@ local function fmt_binding_popups(app, bindings)
     local frame   = fmt_popup_frame(content)
     local popup   = create_popup(content, frame)
 
-    local binding_data = {
+    return {
         popup = popup,
         frame = frame,
     }
-
-    return binding_data
 end
 
 

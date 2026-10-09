@@ -2,10 +2,7 @@
 
 ## IMMEDIATE TASKS:
 
-- Considerations: If an app remains open, but all of its windows are closed
-  we should (possibly) still consider it an available window.
-
-- ? should we remove everything but the keystroke fns from the event queue.
+- Find a unique static identifier for screens (not screen:id()).
 
 - Add a return flag to all fns processed by the action queue, so we can repeat
   the fn if it fails (or signals a repeat).
@@ -30,6 +27,22 @@
 
 - Create a small debugging fn that prints all open windows along with their
   idx so we can sync focused win idx with state rather that falling back to 1.
+
+---
+
+## CONSIDERATIONS:
+
+- Cleanup of state.screen_config[id] happens when a screen is disconnected.
+
+- If an app remains open, but all of its windows are closed we should
+  (possibly) still consider it an available window.
+
+- Could distinguish between mouse and keyboard actions when snapping windows
+  into slots (when resizing etc via the kb snapping occurs, with the mouse no
+  snapping such as to not interfere with base OS behaviour, both could be
+  toggled via an option).
+
+- Should we remove everything but the keystroke fns from the event queue.
 
 ---
 

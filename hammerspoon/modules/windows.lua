@@ -232,7 +232,7 @@ local function get_coords(id, border)
     local left_width  = frame.w * state.screens[id].divider
     local right_width = frame.w - left_width
 
-    local frames = {
+    return {
         left = {
             x = frame.x + border,
             y = frame.y + border,
@@ -246,8 +246,6 @@ local function get_coords(id, border)
             h = frame.h - (border * 2),
         }
     }
-
-    return frames
 end
 
 
@@ -450,8 +448,7 @@ function M.resize(direction, step_val)
     return function(done)
         local step      = step_val or 0.01
         local win       = state.windows.curr_win
-        local screen_id = win:screen():id()
-        local screen    = state.screens[screen_id]
+        local screen    = state.screens[win:screen():id()]
         local divider   = screen.divider
         local layout    = screen.layout
 
@@ -497,11 +494,10 @@ end
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
-        local win       = state.windows.curr_win
-        local screen_id = win:screen():id()
-        local layout    = state.screens[screen_id].layout
-        local lhs       = layout.left
-        local rhs       = layout.right
+        local win    = state.windows.curr_win
+        local layout = state.screens[win:screen():id()].layout
+        local lhs    = layout.left
+        local rhs    = layout.right
 
         layout.left  = rhs
         layout.right = lhs

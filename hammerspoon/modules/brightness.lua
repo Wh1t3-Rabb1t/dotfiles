@@ -1,7 +1,6 @@
 local M = {}
 
 local state = require('state')
-local cache = require('cache')
 
 local alert_fmt = {
     strokeWidth     = 5,

@@ -1,8 +1,7 @@
 local M = {}
 
-local tap = require('wk_tap')
-local wk  = require('wk')
-local qt  = require('quit_timer')
+local wk = require('wk')
+local qt = require('quit_timer')
 
 local keys = {
     {
@@ -22,8 +21,6 @@ local keys = {
         -- Which key launcher
         key    = 'space', mods = { 'cmd', 'ctrl', 'alt', 'shift' },
         action = function()
-            -- NOTE: The tap must be initialized before launching which key
-            tap.init()
             wk.launch()
         end,
     },

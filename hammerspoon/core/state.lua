@@ -3,6 +3,7 @@ local M = {}
 -- Commented out entries are populated on init
 
 M.invalid = false
+M.screen_watcher = false
 
 M.menu = {
     tap_active = false,  -- (true|false)
@@ -31,13 +32,11 @@ M.windows = {
 M.apps = {
     -- list = { ... },
     -- [application:name()] = {
-    --     idx     = 1,
-    --     wins    = { ... },
+    --     idx  = 1,
+    --     wins = { ... },
     -- },
     -- ...
 }
-
-M.screen_watcher = false
 
 M.screens = {
     -- [screen:id()] = {

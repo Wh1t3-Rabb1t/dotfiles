@@ -4,50 +4,48 @@ local state = require('state')
 local cache = require('cache')
 local util  = require('util')
 
-local screens   = require('screens')
-local apps      = require('apps')
-local windows   = require('windows')
-local wk_popups = require('wk_popups')
+local screens    = require('screens')
+local apps       = require('apps')
+local windows    = require('windows')
+local wk_popups  = require('wk_popups')
+local wk_actions = require('wk_actions')
 
 
+--------------------------------------------------------------------------------
+-- Create the main orchestrator event tap
+--------------------------------------------------------------------------------
 local function create_event_tap()
     local events = hs.eventtap.event
+
     local event_types = {
         events.types.keyUp,
-        -- events.types.leftMouseUp,
         events.types.keyDown,
         events.types.flagsChanged
+        -- events.types.leftMouseUp,
     }
 
     local tap = hs.eventtap.new(event_types, function(event)
         -- Check for state invalidation on keyUp/leftMouseUp
         if event:getType() == events.types.keyUp then
+            -- hs.timer.usleep(1000)
+
             if state.invalid == true then
-                print('re init triggered')
+                -- print('re init triggered')
 
-                -- Delete popups
-                local app_name = state.windows.curr_win:application():name()
-                if cache.assets[app_name] then
-                    cache.assets[app_name].popup:delete()
-                end
-                cache.assets.system.popup:delete()
-
-                -- Hide border
                 local border = state.windows.border
                 if border then border:hide() end
 
+                local wk_hide = wk_actions.hide()
+                wk_hide(function()
+                    -- Call done()
+                end)
 
-                -- Re-init modules
                 M.init_modules()
 
-
-                -- -- Show popups
-                -- app_name = state.windows.curr_win:application():name()
-                -- if cache.assets[app_name] then
-                --     cache.assets[app_name].popup:show()
-                -- end
-                -- cache.assets.system.popup:show()
-
+                local wk_show = wk_actions.show()
+                wk_show(function()
+                    -- Call done()
+                end)
             end
         else
             local flags   = event:getFlags()
@@ -81,6 +79,9 @@ local function create_event_tap()
 end
 
 
+--------------------------------------------------------------------------------
+-- Init required module data and validate state
+--------------------------------------------------------------------------------
 function M.init_modules()
     screens.init()
     apps.init()
@@ -90,11 +91,30 @@ function M.init_modules()
     state.invalid = false
 end
 
-function M.init()
+
+--------------------------------------------------------------------------------
+-- Launch which key
+--------------------------------------------------------------------------------
+function M.launch()
+    if state.menu.tap_active then
+        return
+    end
+
     M.init_modules()
 
     -- Create event tap
-    cache.assets.tap = create_event_tap()
+    cache.wk_tap = create_event_tap()
+
+    -- Start event tap
+    state.menu.tap_active = true
+    cache.wk_tap:start()
+
+    -- Show popup
+    local init_fn = wk_actions.show()
+    init_fn(function()
+        -- Call done()
+    end)
 end
 
 return M
+

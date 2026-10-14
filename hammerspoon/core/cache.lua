@@ -9,8 +9,9 @@ M.lookup = {
     -- ...
 }
 
+M.wk_tap = {}
+
 M.assets = {
-    -- tap = {},
     -- [app_name] = {
     --     popup = popup,
     --     frame = frame,

@@ -19,7 +19,7 @@ local M = {}
 --   Quit app
 
 local brightness = require('brightness')
-local wk         = require('wk')
+local wk         = require('wk_actions')
 local win        = require('windows')
 local wifi       = require('wifi')
 

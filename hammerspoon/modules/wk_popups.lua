@@ -41,7 +41,7 @@ end
 -- Get the width / height of the popup window
 --------------------------------------------------------------------------------
 local function fmt_popup_frame(text)
-    local size          = hs.drawing.getTextDrawingSize(text)
+    local size   = hs.drawing.getTextDrawingSize(text)
     local width  = math.max(size.w)
     local height = math.max(size.h)
 
@@ -258,14 +258,20 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    -- Main eventtap bindings
+    -- Temporary insert bindings
+    cache.assets.insert = fmt_binding_popups('insert', {
+        {
+            category = 'Bound until invoked',
+            bindings = {
+                { key = 'enter',  desc = 'Relaunch menu' },
+                { key = 'escape', desc = 'Cancel'        }
+            }
+        }
+    })
+
     for app, bindings in pairs(registry.apps) do
-        if app == 'insert' then
-            cache.assets[app] = fmt_binding_popups(app, bindings)
-        else
-            cache.lookup[app] = fmt_binding_tbl(bindings)
-            cache.assets[app] = fmt_binding_popups(app, bindings)
-        end
+        cache.lookup[app] = fmt_binding_tbl(bindings)
+        cache.assets[app] = fmt_binding_popups(app, bindings)
     end
 end
 

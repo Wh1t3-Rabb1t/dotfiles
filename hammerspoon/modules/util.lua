@@ -109,23 +109,6 @@ end
 
 
 --------------------------------------------------------------------------------
--- Construct binding entry for temporary insert mode
---------------------------------------------------------------------------------
-function M.insert_bind( ... )
-    local binding_field = {}
-
-    for _, args in ipairs({ ... }) do
-        table.insert(binding_field, {
-            key  = args[1],
-            desc = args[2],
-        })
-    end
-
-    return binding_field
-end
-
-
---------------------------------------------------------------------------------
 -- Normalize bindings with modifiers
 --------------------------------------------------------------------------------
 function M.binding_id(key, mods)

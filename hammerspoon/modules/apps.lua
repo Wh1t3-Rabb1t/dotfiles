@@ -5,7 +5,7 @@ local util  = require('util')
 
 
 --------------------------------------------------------------------------------
-function create_watcher(app)
+local function create_watcher(app)
     local watcher = app:newWatcher(function(element, event)
         if event == 'AXFocusedWindowChanged' then
             local apps  = hs.application.runningApplications()
@@ -28,10 +28,9 @@ function create_watcher(app)
         end
     end)
 
-    -- watcher:start({
-    --     -- Window level events
-    --     hs.uielement.watcher.focusedWindowChanged,
-    -- })
+    watcher:start({
+        hs.uielement.watcher.focusedWindowChanged,
+    })
 
     return watcher
 end
@@ -88,12 +87,12 @@ function M.init()
                 watcher = create_watcher(app),
             }
 
-            -- Init/start watchers
-            if util.tbl(state.apps[app:name()]) then
-                state.apps[app:name()].watcher:start({
-                    hs.uielement.watcher.focusedWindowChanged,
-                })
-            end
+            -- -- Init/start watchers
+            -- if util.tbl(state.apps[app:name()]) then
+            --     state.apps[app:name()].watcher:start({
+            --         hs.uielement.watcher.focusedWindowChanged,
+            --     })
+            -- end
 
         end
     end

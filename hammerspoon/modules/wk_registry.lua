@@ -1,8 +1,8 @@
 local M = {}
 
-local brightness = require('brightness')
-local wk         = require('wk')
+local wk         = require('wk_actions')
 local win        = require('windows')
+local brightness = require('brightness')
 local wifi       = require('wifi')
 local util       = require('util')
 
@@ -11,20 +11,9 @@ local util       = require('util')
 -- Bindings for each registered app
 --------------------------------------------------------------------------------
 M.apps = {
-    -------------------+
-    ['insert'] = {  -- |
-    -------------------+
-        -- These are temporarily bound to actions after the eventtap has been
-        -- stopped, then unbound once the eventtap is restarted. Therefor they
-        -- don't have corresponding actions.
-        {
-            category = 'Bound until invoked',
-            bindings = util.insert_bind(
-                { 'enter',  'Relaunch menu' },
-                { 'escape', 'Cancel'        }
-            ),
-        },
-    },
+    -- These are temporarily bound to actions after the eventtap has been
+    -- stopped, then unbound once the eventtap is restarted. Therefor they
+    -- don't have corresponding actions.
 
     -------------------+
     ['system'] = {  -- |

@@ -21,7 +21,7 @@ local function create_watcher(app)
 
             if count ~= #state.windows.wins then
                 -- Signal to the eventtap that state needs to be re-built
-                state.invalid = true
+                state.valid = false
 
                 print('state invalid')
             end

@@ -2,7 +2,7 @@ local M = {}
 
 -- Commented out entries are populated on init
 
-M.invalid = false
+M.valid = false
 M.screen_watcher = false
 
 M.menu = {

@@ -19,7 +19,7 @@ local function init_modules()
     windows.init()
     wk_popups.init()
 
-    state.invalid = false
+    state.valid = true
 end
 
 
@@ -39,9 +39,9 @@ local function create_event_tap()
     local tap = hs.eventtap.new(event_types, function(event)
         -- Check for state invalidation on keyUp/leftMouseUp
         if event:getType() == events.types.keyUp then
-            hs.timer.usleep(1000)
+            -- hs.timer.usleep(1000)
 
-            if state.invalid == true then
+            if state.valid == false then
                 -- print('re init triggered')
 
                 local border = state.windows.border

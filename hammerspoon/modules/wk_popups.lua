@@ -195,7 +195,7 @@ end
 
 -- Queue chained actions (i.e. launch window then display related popup)
 --------------------------------------------------------------------------------
-local function queue_actions(...)
+local function queue_actions( ... )
     local actions = { ... }
 
     return function()

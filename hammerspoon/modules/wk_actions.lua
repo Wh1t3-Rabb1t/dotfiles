@@ -265,6 +265,18 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
+
+
+        local tap_off = M.turn_tap('off')
+        tap_off(function()
+            -- Call done()
+        end)
+        local hide_popup = M.hide()
+        hide_popup(function()
+            -- Call done()
+        end)
+
+
         local win     = state.windows.curr_win
         local frame   = win:frame()
         local opacity = state.menu.opacity
@@ -293,7 +305,10 @@ function M.insert()
             end_insert_mode(hotkeys, popup)
 
             hs.eventtap.keyStroke({}, 'return')
-            M.launch()
+
+
+            hs.eventtap.keyStroke({ 'cmd', 'ctrl', 'alt', 'shift' }, 'space')
+            -- M.launch()
         end)
 
         hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
@@ -303,6 +318,47 @@ function M.insert()
         done()
     end
 end
+
+-- function M.insert()
+--     return function(done)
+--         local win     = state.windows.curr_win
+--         local frame   = win:frame()
+--         local opacity = state.menu.opacity
+--         local popup   = cache.assets.insert.popup
+--
+--         local function end_insert_mode(hotkeys, active_popup)
+--             for _, hk in ipairs(hotkeys) do
+--                 hk:disable()
+--             end
+--
+--             active_popup:hide()
+--         end
+--
+--         local pos = {
+--             x = frame.x + 10,
+--             y = frame.y + 10,
+--         }
+--
+--         popup:topLeft(pos)
+--         popup:alpha(opacity)
+--         popup:show(0.15)
+--
+--         local hotkeys = {}
+--
+--         hotkeys[1] = hs.hotkey.bind({}, 'return', function()
+--             end_insert_mode(hotkeys, popup)
+--
+--             hs.eventtap.keyStroke({}, 'return')
+--             M.launch()
+--         end)
+--
+--         hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
+--             end_insert_mode(hotkeys, popup)
+--         end)
+--
+--         done()
+--     end
+-- end
 
 
 --------------------------------------------------------------------------------

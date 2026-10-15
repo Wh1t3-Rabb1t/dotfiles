@@ -23,66 +23,65 @@ local function init_modules()
 end
 
 
---------------------------------------------------------------------------------
 -- Create the main orchestrator event tap
 --------------------------------------------------------------------------------
 local function create_event_tap()
     local events = hs.eventtap.event
 
     local event_types = {
-        events.types.keyUp,
+        -- events.types.keyUp,
         events.types.keyDown,
-        events.types.flagsChanged
+        events.types.flagsChanged,
         -- events.types.leftMouseUp,
     }
 
     local tap = hs.eventtap.new(event_types, function(event)
-        -- Check for state invalidation on keyUp/leftMouseUp
-        if event:getType() == events.types.keyUp then
-            -- hs.timer.usleep(1000)
+        -- hs.timer.usleep(1000)
 
-            if state.valid == false then
-                -- print('re init triggered')
+        local flags   = event:getFlags()
+        local keycode = event:getKeyCode()
+        local key     = hs.keycodes.map[keycode]
 
-                local border = state.windows.border
-                if border then border:hide() end
+        local win = hs.window.focusedWindow()
+        local app = win:application():name()
 
-                local wk_hide = wk_actions.hide()
-                wk_hide(function()
-                    -- Call done()
-                end)
+        local mods = {}
 
-                init_modules()
+        if flags.cmd   then table.insert(mods, 'cmd') end
+        if flags.alt   then table.insert(mods, 'alt') end
+        if flags.ctrl  then table.insert(mods, 'ctrl') end
+        if flags.shift then table.insert(mods, 'shift') end
 
-                local wk_show = wk_actions.show()
-                wk_show(function()
-                    -- Call done()
-                end)
-            end
-        else
-            local flags   = event:getFlags()
-            local keycode = event:getKeyCode()
-            local key     = hs.keycodes.map[keycode]
+        local lookup_key   = util.binding_id(key, mods)
+        local app_lookup   = cache.lookup[app] or {}
+        local bound_action = cache.lookup.system[lookup_key]
+                          or app_lookup[lookup_key]
 
-            local win = hs.window.focusedWindow()
-            local app = win:application():name()
-
-            local mods = {}
-
-            if flags.cmd   then table.insert(mods, 'cmd') end
-            if flags.alt   then table.insert(mods, 'alt') end
-            if flags.ctrl  then table.insert(mods, 'ctrl') end
-            if flags.shift then table.insert(mods, 'shift') end
-
-            local lookup_key   = util.binding_id(key, mods)
-            local app_lookup   = cache.lookup[app] or {}
-            local bound_action = cache.lookup.system[lookup_key]
-                              or app_lookup[lookup_key]
-
-            if bound_action then
-                bound_action()
-            end
+        if bound_action then
+            bound_action()
         end
+
+
+        -- -- hs.timer.usleep(1000)
+        -- if state.valid == false then
+        --     print('re init triggered')
+        --
+        --     local border = state.windows.border
+        --     if border then border:hide() end
+        --
+        --     local wk_hide = wk_actions.hide()
+        --     wk_hide(function()
+        --         -- Call done()
+        --     end)
+        --
+        --     init_modules()
+        --
+        --     local wk_show = wk_actions.show()
+        --     wk_show(function()
+        --         -- Call done()
+        --     end)
+        -- end
+
 
         return true
     end)

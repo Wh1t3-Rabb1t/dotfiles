@@ -3,6 +3,7 @@ local M = {}
 -- Commented out entries are populated on init
 
 M.valid = false
+
 M.screen_watcher = false
 
 M.menu = {
@@ -23,11 +24,6 @@ M.windows = {
     -- curr_win = win,
     -- wins     = { ... },
 }
-
--- M.app_watchers = {
---     -- [application:name()] = {},
---     -- ...
--- }
 
 M.apps = {
     -- list = { ... },

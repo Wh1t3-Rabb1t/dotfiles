@@ -1,8 +1,17 @@
 # TODO
 
+---
+
 ## IMMEDIATE TASKS:
 
+- Drop wk_asset regeneration on module init and only re-initialize if the
+  config changes to get rid of circular dependency issue.
+
+- wk.insert() fn will be broken because launch() moved.
+
 - Find a unique static identifier for screens (not screen:id()).
+
+- Create list of disallowed apps (i.e. 'hammerspoon' console).
 
 - Add a return flag to all fns processed by the action queue, so we can repeat
   the fn if it fails (or signals a repeat).

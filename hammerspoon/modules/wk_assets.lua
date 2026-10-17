@@ -254,6 +254,51 @@ local function fmt_binding_tbl(bindings)
 end
 
 
+-- Create the main orchestrator event tap
+--------------------------------------------------------------------------------
+local function create_event_tap()
+    local events = hs.eventtap.event
+
+    local event_types = {
+        -- events.types.leftMouseUp,
+        -- events.types.keyUp,
+        events.types.keyDown,
+        events.types.flagsChanged,
+    }
+
+    local tap = hs.eventtap.new(event_types, function(event)
+        -- hs.timer.usleep(10000)
+
+        local flags   = event:getFlags()
+        local keycode = event:getKeyCode()
+        local key     = hs.keycodes.map[keycode]
+
+        local win = hs.window.focusedWindow()
+        local app = win:application():name()
+
+        local mods = {}
+
+        if flags.cmd   then table.insert(mods, 'cmd') end
+        if flags.alt   then table.insert(mods, 'alt') end
+        if flags.ctrl  then table.insert(mods, 'ctrl') end
+        if flags.shift then table.insert(mods, 'shift') end
+
+        local lookup_key   = util.binding_id(key, mods)
+        local app_lookup   = cache.lookup[app] or {}
+        local bound_action = cache.lookup.system[lookup_key]
+                          or app_lookup[lookup_key]
+
+        if bound_action then
+            bound_action()
+        end
+
+        return true
+    end)
+
+    return tap
+end
+
+
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
@@ -273,6 +318,10 @@ function M.init()
         cache.lookup[app] = fmt_binding_tbl(bindings)
         cache.assets[app] = fmt_binding_popups(app, bindings)
     end
+
+    cache.wk_tap = create_event_tap()
+
+    state.wk_initialized = true
 end
 
 return M

@@ -1,7 +1,11 @@
 local M = {}
 
-local state = require('state')
-local cache = require('cache')
+local state   = require('state')
+local cache   = require('cache')
+local util    = require('util')
+local screens = require('screens')
+local apps    = require('apps')
+local windows = require('windows')
 
 
 -- Get popups x and y coords
@@ -161,6 +165,27 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Regenerate transient assets (screen, app, and window data)
+--------------------------------------------------------------------------------
+function M.state_regen()
+    return function(done)
+        util.run(M.hide())
+
+        local border = state.windows.border
+        if border then border:hide() end
+
+        screens.init()
+        apps.init()
+        windows.init()
+
+        util.run(M.show())
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
 -- Toggle event tap
 --------------------------------------------------------------------------------
 function M.turn_tap(set_to)
@@ -265,17 +290,8 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
-
-
-        local tap_off = M.turn_tap('off')
-        tap_off(function()
-            -- Call done()
-        end)
-        local hide_popup = M.hide()
-        hide_popup(function()
-            -- Call done()
-        end)
-
+        util.run(M.turn_tap('off'))
+        util.run(M.hide())
 
         local win     = state.windows.curr_win
         local frame   = win:frame()
@@ -399,6 +415,23 @@ function M.show()
             v.popup:alpha(opacity)
             v.popup:show(0.15)
         end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Quit wk
+--------------------------------------------------------------------------------
+function M.quit()
+    return function (done)
+        util.run(M.turn_tap('off'))
+        util.run(M.hide())
+        util.run(windows.border('hide'))
+
+        state.menu.tap_active = false
+        cache.wk_tap:stop()
 
         done()
     end

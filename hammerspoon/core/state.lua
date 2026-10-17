@@ -4,6 +4,8 @@ local M = {}
 
 M.valid = false
 
+M.wk_initialized = false
+
 M.screen_watcher = false
 
 M.menu = {

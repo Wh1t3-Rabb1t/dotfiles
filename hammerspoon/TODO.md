@@ -4,8 +4,8 @@
 
 ## IMMEDIATE TASKS:
 
-- Drop wk_asset regeneration on module init and only re-initialize if the
-  config changes to get rid of circular dependency issue.
+- Replace the wk.hide() wk.show() wrapping pattern with something similar to
+  state_regen() but lighter.
 
 - wk.insert() fn will be broken because launch() moved.
 

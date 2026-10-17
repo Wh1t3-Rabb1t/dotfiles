@@ -29,20 +29,20 @@ M.apps = {
             category = 'Windows',
             bindings = util.bind(
                 { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()          },
-                -- { '_', 'Prev app',        wk.hide(), win.cycle_all_apps('prev'), wk.show()     },
                 { '-', 'Next app',        wk.hide(), win.cycle_all_apps('next'), wk.show()     },
+                -- { '_', 'Prev app',        wk.hide(), win.cycle_all_apps('prev'), wk.show()     },
                 -- { '-', 'Move to next screen',     wk.hide(), win.move_to_screen(), wk.show()   },
                 { 'o', 'Next slot',       wk.hide(), win.traverse_slots('next'), wk.show()     },
                 { 'u', 'Prev slot',       wk.hide(), win.traverse_slots('prev'), wk.show()     },
                 { 'O', 'Next window',     wk.hide(), win.cycle_open('next'), wk.show()         },
                 { 'U', 'Prev window',     wk.hide(), win.cycle_open('prev'), wk.show()         },
+
                 -- { 'o', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
                 -- { 'u', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
 
-                { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n')                           },
-
-                { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't')                           },
-                { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w')                           }
+                { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n'), wk.state_regen()         },
+                { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't'), wk.state_regen()         },
+                { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w'), wk.state_regen()         }
             ),
         },
         {
@@ -51,8 +51,7 @@ M.apps = {
                 { 'f', 'Resize right',   wk.hide(), win.resize('right'), wk.show()  },
                 { 's', 'Resize left',    wk.hide(), win.resize('left'), wk.show()   },
                 { 'g', 'Maximize',       wk.hide(), win.maximize(), wk.show()       },
-                { 'G', 'Swap positions', wk.hide(), win.swap(), wk.show()           },
-                { 'p', 'To next screen', wk.hide(), win.move_to_screen(), wk.show() }
+                { 'G', 'Swap positions', wk.hide(), win.swap(), wk.show()           }
             ),
         },
         {
@@ -83,10 +82,12 @@ M.apps = {
         {
             category = 'Misc',
             bindings = util.bind(
-                { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=')                        },
-                { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-')                        },
-                { 'X',      'Toggle wifi on/off', wifi.toggle_wifi()                                },
-                { 'escape', 'Cancel',             wk.turn_tap('off'), win.border('hide'), wk.hide() }
+                { 'Z',      'Zoom in',            wk.send_keys({'cmd'}, '=') },
+                { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-') },
+                { 'X',      'Toggle wifi on/off', wifi.toggle_wifi()         },
+                { 'escape', 'Cancel',             wk.quit()                  }
+
+                -- { 'escape', 'Cancel',             wk.turn_tap('off'), win.border('hide'), wk.hide() }
             ),
         },
     },
@@ -225,7 +226,7 @@ M.apps = {
                 { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')     },
 
                 -- new_win
-                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w') }
+                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'), wk.state_regen() }
 
                 -- { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
                 -- { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }

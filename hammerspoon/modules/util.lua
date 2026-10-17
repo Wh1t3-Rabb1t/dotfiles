@@ -148,6 +148,16 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Run fn constructed with the 'action queue' pattern
+--------------------------------------------------------------------------------
+function M.run(action)
+    action(function()
+        -- call done()
+    end)
+end
+
+
+--------------------------------------------------------------------------------
 -- Benchmark function(s) execution time
 --
 -- Usage:

@@ -144,7 +144,7 @@ M.keys = {
     -- Grep
     { desc = " Grep",           "<Leader>g", function() Snacks.picker.grep() end },
     { desc = " Grep Selection", "<Leader>g", function() Snacks.picker.grep_word() end, mode = { "x" } },
-    { desc = " Grep Workspace", "<Leader>a", function() Snacks.picker.grep_buffers() end },
+    { desc = " Grep Workspace", "<Leader>G", function() Snacks.picker.grep_buffers() end },
 
     -- Git
     { desc = " Git Branches",     "<Leader>ib", function() Snacks.picker.git_branches() end },
@@ -157,8 +157,8 @@ M.keys = {
     { desc = " Git B[r]owse",     "<Leader>ir", function() Snacks.gitbrowse() end, mode = { "n", "v" } },
 
     -- Search
+    { desc = " Buffer Lines",          "<Leader>l",  function() Snacks.picker.lines() end },
     { desc = " Spelling Suggestions",  "<Leader>sp", function() Snacks.picker.spelling() end },
-    { desc = " Buffer Lines",          "<Leader>sl", function() Snacks.picker.lines() end },
     { desc = " Icons",                 "<Leader>si", function() Snacks.picker.icons() end },
     { desc = " Jumps",                 "<Leader>sj", function() Snacks.picker.jumps() end },
     { desc = " Commands",              "<Leader>sc", function() Snacks.picker.commands() end },
@@ -173,7 +173,7 @@ M.keys = {
     { desc = " Search Plugin Specs",   "<Leader>sP", function() Snacks.picker.lazy() end },
 
     -- LSP
-    { desc = " LSP Symbols",                "<Leader>ls", function() Snacks.picker.lsp_symbols() end },
+    { desc = " LSP Symbols",                "<Leader>a",  function() Snacks.picker.lsp_symbols() end },
     { desc = " LSP Workspace Symbols",      "<Leader>lw", function() Snacks.picker.lsp_workspace_symbols() end },
     { desc = " LSP References",             "<Leader>lr", function() Snacks.picker.lsp_references() end, nowait = true },
     { desc = " LSP Goto Definition",        "<Leader>ld", function() Snacks.picker.lsp_definitions() end },

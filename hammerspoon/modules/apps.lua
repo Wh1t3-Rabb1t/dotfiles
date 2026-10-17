@@ -93,7 +93,7 @@ function M.init()
             apps[app:name()] = {
                 idx     = 1,
                 wins    = app_wins,
-                watcher = create_watcher(app),
+                -- watcher = create_watcher(app),
             }
 
             -- -- Init/start watchers

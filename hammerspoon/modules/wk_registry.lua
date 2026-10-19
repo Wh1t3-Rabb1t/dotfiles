@@ -1,7 +1,6 @@
 local M = {}
 
-local wk         = require('wk_actions')
-local win        = require('windows')
+local wk         = require('windows')
 local brightness = require('brightness')
 local wifi       = require('wifi')
 local util       = require('util')
@@ -28,39 +27,38 @@ M.apps = {
         {
             category = 'Windows',
             bindings = util.bind(
-                { '_', 'Cycle cat apps',  wk.hide(), win.cycle_main_apps(), wk.show()          },
-                { '-', 'Next app',        wk.hide(), win.cycle_all_apps('next'), wk.show()     },
-                -- { '_', 'Prev app',        wk.hide(), win.cycle_all_apps('prev'), wk.show()     },
-                -- { '-', 'Move to next screen',     wk.hide(), win.move_to_screen(), wk.show()   },
-                { 'o', 'Next slot',       wk.hide(), win.traverse_slots('next'), wk.show()     },
-                { 'u', 'Prev slot',       wk.hide(), win.traverse_slots('prev'), wk.show()     },
-                { 'O', 'Next window',     wk.hide(), win.cycle_open('next'), wk.show()         },
-                { 'U', 'Prev window',     wk.hide(), win.cycle_open('prev'), wk.show()         },
+                -- { '_', 'Prev app',        wk.cycle_all_apps('prev'), wk.refresh('display')     },
+                -- { '-', 'To next screen',  wk.move_to_screen(), wk.refresh('display')           },
+                -- { 'o', 'Next app window', wk.cycle_app_specific('next'), wk.refresh('display') },
+                -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh('display') },
 
-                -- { 'o', 'Next app window', wk.hide(), win.cycle_app_specific('next'), wk.show() },
-                -- { 'u', 'Prev app window', wk.hide(), win.cycle_app_specific('prev'), wk.show() },
-
-                { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n'), wk.state_regen()         },
-                { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't'), wk.state_regen()         },
-                { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w'), wk.state_regen()         }
+                { '_', 'Cycle cat apps', wk.cycle_main_apps()                            },
+                { '-', 'Next app',       wk.cycle_all_apps('next')                       },
+                { 'o', 'Next slot',      wk.traverse_slots('next')                       },
+                { 'u', 'Prev slot',      wk.traverse_slots('prev')                       },
+                { 'O', 'Next window',    wk.cycle_open('next')                           },
+                { 'U', 'Prev window',    wk.cycle_open('prev')                           },
+                { 'n', 'Open window',    wk.send_keys({'cmd'}, 'n'), wk.refresh('state') },
+                { 'm', 'Open tab',       wk.send_keys({'cmd'}, 't'), wk.refresh('state') },
+                { 'W', 'Close tab',      wk.send_keys({'cmd'}, 'w'), wk.refresh('state') }
             ),
         },
         {
             category = 'Layout',
             bindings = util.bind(
-                { 'f', 'Resize right',   wk.hide(), win.resize('right'), wk.show()  },
-                { 's', 'Resize left',    wk.hide(), win.resize('left'), wk.show()   },
-                { 'g', 'Maximize',       wk.hide(), win.maximize(), wk.show()       },
-                { 'G', 'Swap positions', wk.hide(), win.swap(), wk.show()           }
+                { 'f', 'Resize right',   wk.resize('right') },
+                { 's', 'Resize left',    wk.resize('left')  },
+                { 'g', 'Maximize',       wk.maximize()      },
+                { 'G', 'Swap positions', wk.swap()          }
             ),
         },
         {
             category = 'Popups',
             bindings = util.bind(
-                { 'R', 'Cycle positions',     wk.hide(), wk.cycle_corner_pos(), wk.show() },
-                { 'A', 'Cycle menu stacking', wk.hide(), wk.cycle_stacking(), wk.show()   },
-                { 'V', 'Opacity up',          wk.opacity('up')                            },
-                { 'Y', 'Opacity down',        wk.opacity('down')                          }
+                { 'R', 'Cycle positions',     wk.cycle_corner_pos() },
+                { 'A', 'Cycle menu stacking', wk.cycle_stacking()   },
+                { 'V', 'Opacity up',          wk.opacity('up')      },
+                { 'Y', 'Opacity down',        wk.opacity('down')    }
             ),
         },
         {
@@ -86,8 +84,6 @@ M.apps = {
                 { 'J',      'Zoom out',           wk.send_keys({'cmd'}, '-') },
                 { 'X',      'Toggle wifi on/off', wifi.toggle_wifi()         },
                 { 'escape', 'Cancel',             wk.quit()                  }
-
-                -- { 'escape', 'Cancel',             wk.turn_tap('off'), win.border('hide'), wk.hide() }
             ),
         },
     },
@@ -226,7 +222,7 @@ M.apps = {
                 { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')     },
 
                 -- new_win
-                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'), wk.state_regen() }
+                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'), wk.refresh('state') }
 
                 -- { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
                 -- { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }

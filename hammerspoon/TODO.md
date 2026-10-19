@@ -4,10 +4,13 @@
 
 ## IMMEDIATE TASKS:
 
-- Replace the wk.hide() wk.show() wrapping pattern with something similar to
-  state_regen() but lighter.
+- Wrangle the internals of border show/hide when calling refresh('display')
+  from within the wk/windows module.
 
-- wk.insert() fn will be broken because launch() moved.
+- Ensure that popups etc are properly hidden/deleted in the appropriate places.
+
+- wk.insert() fn needs a better re-launch mechanism than manually invoking
+  the 'launch' key combination.
 
 - Find a unique static identifier for screens (not screen:id()).
 

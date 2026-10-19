@@ -2,128 +2,7 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
-
-
--- function M.window_watcher(win)
---     local app = win:application()
---
---     if not app then
---         return
---     end
---
---     local watcher = app:newWatcher(function(element, event)
---         local focused = hs.window.focusedWindow()
---
---         print(
---             'UI EVENT:',
---             event,
---             '\n',
---             'element = ', element,
---             'focused = ', focused and focused:id(),
---             '\n'
---         )
---     end)
---
---     watcher:start({
---         ------------------------------
---         -- APPLICATION LEVEL EVENTS --
---         ------------------------------
---         -- See hs.application.watcher for more events you can watch
---         hs.uielement.watcher.applicationActivated,
---         hs.uielement.watcher.applicationDeactivated,
---         hs.uielement.watcher.applicationHidden,
---         hs.uielement.watcher.applicationShown,
---
---         -- These events are watched on the application level, but send the relevant child element to the handler
---         hs.uielement.watcher.mainWindowChanged,
---         hs.uielement.watcher.focusedWindowChanged,  -- Note that the application may not be activated itself
---         hs.uielement.watcher.focusedElementChanged,
---
---         -------------------------
---         -- WINDOW LEVEL EVENTS --
---         -------------------------
---         hs.uielement.watcher.windowCreated,  -- You should watch for this event on the application, or the parent window
---         hs.uielement.watcher.windowMoved,
---         hs.uielement.watcher.windowResized,
---         hs.uielement.watcher.windowMinimized,
---         hs.uielement.watcher.windowUnminimized,
---
---         --------------------------
---         -- ELEMENT LEVEL EVENTS --
---         --------------------------
---         -- These work on all UI elements, including windows.
---         hs.uielement.watcher.elementDestroyed,  -- The element was destroyed
---         hs.uielement.watcher.titleChanged,      -- The element's title was changed
---     })
---
---     return watcher
--- end
-
-
--- Watch window level events
---------------------------------------------------------------------------------
--- local function create_window_watcher(win)
---     local id = win:id()
---
---     local watcher = win:newWatcher(function(element, event)
---         print('WINDOW:', id, event)
---     end)
---
---     watcher:start({
---         hs.uielement.watcher.elementDestroyed,
---         hs.uielement.watcher.windowCreated,
---     })
---
---     return watcher
--- end
-
-
--- TODO: Add a debounce to ensure compensate for the same events
--- firing multiple times per second.
---
--- Add 'applicationActivated' event to track/update running apps
---
--- hs.console.clearConsole()
-
-
--- local function app_watcher(app)
---     if not app then return end
---
---     local watcher = app:newWatcher(function(element, event)
---         if event == 'AXFocusedWindowChanged' then
---             local apps  = hs.application.runningApplications()
---             local count = 0
---
---             for _, running_app in ipairs(apps) do
---                 for _, win in ipairs(running_app:allWindows()) do
---                     if win:isStandard() and win:isVisible() then
---                         count = count + 1
---                     end
---                 end
---             end
---
---             if count ~= #state.windows.wins then
---                 -- dump win state and re-init
---             end
---         end
---     end)
---
---     watcher:start({
---         -- Winow level events
---         hs.uielement.watcher.focusedWindowChanged,
---     })
---
---     return watcher
--- end
-
--- -- if event == 'AXApplicationDeactivated' then
--- -- end
--- -- if event == 'AXApplicationActivated' then
--- -- end
--- --
--- -- Application level events
--- hs.uielement.watcher.applicationActivated,
--- hs.uielement.watcher.applicationDeactivated,
+local util  = require('util')
 
 
 -- Compare the dimensions of two frame objects
@@ -246,6 +125,144 @@ local function get_coords(id, border)
             h = frame.h - (border * 2),
         }
     }
+end
+
+
+-- Get popups x and y coords
+--------------------------------------------------------------------------------
+local function get_popup_x_y(popups, spacing, layout)
+    local x = 0
+    local y = 0
+
+    local coords = {}
+
+    for i, popup in ipairs(popups) do
+        if layout == 'horizontal' then
+            coords[i] = {
+                x = x,
+                y = 0,
+            }
+
+            x = x + popup.frame.w + spacing
+        elseif layout == 'vertical' then
+            coords[i] = {
+                x = 0,
+                y = y,
+            }
+
+            y = y + popup.frame.h + spacing
+        end
+    end
+
+    return coords
+end
+
+
+-- Get the current popups width and height
+--------------------------------------------------------------------------------
+local function get_popup_w_h(popups, spacing, layout)
+    local width  = 0
+    local height = 0
+
+    for i, popup in ipairs(popups) do
+        if layout == 'vertical' then
+            width  = math.max(width, popup.frame.w)
+            height = height + popup.frame.h
+
+            if i < #popups then
+                height = height + spacing
+            end
+        elseif layout == 'horizontal' then
+            width  = width + popup.frame.w
+            height = math.max(height, popup.frame.h)
+
+            if i < #popups then
+                width = width + spacing
+            end
+        end
+    end
+
+    return {
+        w = width,
+        h = height,
+    }
+end
+
+
+-- Get popup anchor position
+--------------------------------------------------------------------------------
+local function get_popup_anchor(frame, width, height, corner)
+    local padding = 25
+
+    local anchor = {}
+
+    if corner == 'top_left' then
+        anchor.x = frame.x + padding
+        anchor.y = frame.y + padding
+    elseif corner == 'top_right' then
+        anchor.x = frame.x + frame.w - width - padding
+        anchor.y = frame.y + padding
+    elseif corner == 'bottom_left' then
+        anchor.x = frame.x + padding
+        anchor.y = frame.y + frame.h - height - padding
+    elseif corner == 'bottom_right' then
+        anchor.x = frame.x + frame.w - width - padding
+        anchor.y = frame.y + frame.h - height - padding
+    end
+
+    return anchor
+end
+
+
+-- Get currently displayed popups
+--------------------------------------------------------------------------------
+local function get_popups(win)
+    local app_name = win:application():name()
+
+    local popups = {}
+
+    -- App specific popup (if supported)
+    if cache.assets[app_name] then
+        table.insert(popups, cache.assets[app_name])
+    end
+
+    -- System popup
+    table.insert(popups, cache.assets.system)
+
+    return popups
+end
+
+
+-- Calculate popup coordinates relative to the focused window
+--------------------------------------------------------------------------------
+local function get_popup_coords(win, popups, corner, stack)
+    local screen_id    = win:screen():id()
+    local app_frame    = win:frame()
+    local screen_frame = state.screens[screen_id].frame
+
+    local spacing = 25
+
+    local coords     = {}
+    local dimensions = {}
+
+    dimensions = get_popup_w_h(popups, spacing, stack)
+
+    -- Arrange popups side by side if the stack height exceeds the screen height
+    if dimensions.h > screen_frame.h then
+        dimensions = get_popup_w_h(popups, spacing, 'horizontal')
+        coords     = get_popup_x_y(popups, spacing, 'horizontal')
+    else
+        coords = get_popup_x_y(popups, spacing, stack)
+    end
+
+    local anchor = get_popup_anchor(app_frame, dimensions.w, dimensions.h, corner)
+
+    for _, coord in ipairs(coords) do
+        coord.x = coord.x + anchor.x
+        coord.y = coord.y + anchor.y
+    end
+
+    return coords
 end
 
 
@@ -436,6 +453,8 @@ function M.maximize()
         snap_layout()
         set_border(win)
 
+        util.run(M.refresh('display'))
+
         done()
     end
 end
@@ -446,11 +465,11 @@ end
 --------------------------------------------------------------------------------
 function M.resize(direction, step_val)
     return function(done)
-        local step      = step_val or 0.01
-        local win       = state.windows.curr_win
-        local screen    = state.screens[win:screen():id()]
-        local divider   = screen.divider
-        local layout    = screen.layout
+        local step    = step_val or 0.01
+        local win     = state.windows.curr_win
+        local screen  = state.screens[win:screen():id()]
+        local divider = screen.divider
+        local layout  = screen.layout
 
         if direction == 'left' then
             divider = divider - step
@@ -484,6 +503,8 @@ function M.resize(direction, step_val)
         snap_layout()
         set_border(win)
 
+        util.run(M.refresh('display'))
+
         done()
     end
 end
@@ -504,6 +525,8 @@ function M.swap()
 
         snap_layout()
         set_border(win)
+
+        util.run(M.refresh('display'))
 
         done()
     end
@@ -637,6 +660,8 @@ function M.traverse_slots(direction)
         if new_win then
             set_window_state(new_win, win_idx)
             set_border(new_win)
+
+            util.run(M.refresh('display'))
         end
 
         done()
@@ -671,6 +696,8 @@ function M.cycle_main_apps()
                 set_existing_slot(target_win, win)
                 set_window_state(target_win, idx)
                 set_border(target_win)
+
+                util.run(M.refresh('display'))
 
                 done()
             end
@@ -717,6 +744,8 @@ function M.cycle_all_apps(direction)
             set_window_state(win, idx)
             set_existing_slot(win)
             set_border(win)
+
+            util.run(M.refresh('display'))
         end
 
         done()
@@ -775,6 +804,8 @@ function M.cycle_open(direction)
             set_window_state(win, idx)
             set_existing_slot(win)
             set_border(win)
+
+            util.run(M.refresh('display'))
         end
 
         done()
@@ -796,6 +827,265 @@ function M.border(toggle)
                 border:hide()
             end
         end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Cycle menu corner positions
+--------------------------------------------------------------------------------
+function M.cycle_corner_pos()
+    return function(done)
+        local corners = {
+            'bottom_right',
+            'top_right',
+            'bottom_left',
+            'top_left',
+        }
+
+        local current_corner = state.menu.corner
+        local current_index  = 1
+
+        -- Find the index of the current corner
+        for i, c in ipairs(corners) do
+            if c == current_corner then
+                current_index = i
+
+                break
+            end
+        end
+
+        -- Calculate the next index, wrapping around using modulo arithmetic
+        local new_index  = (current_index % #corners) + 1
+        local new_corner = corners[new_index]
+
+        state.menu.corner = new_corner
+
+        util.run(M.hide_popups())
+        util.run(M.show_popups())
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Cycle menu layout (vertical/horizontal stacking)
+--------------------------------------------------------------------------------
+function M.cycle_stacking()
+    return function(done)
+        local stack     = state.menu.stack
+        local new_stack = (stack == 'vertical') and 'horizontal' or 'vertical'
+
+        state.menu.stack = new_stack
+
+        util.run(M.hide_popups())
+        util.run(M.show_popups())
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Set poppup opacity
+--------------------------------------------------------------------------------
+function M.opacity(direction)
+    return function(done)
+        local win     = state.windows.curr_win
+        local app     = win:application():name()
+        local opacity = state.menu.opacity
+
+        local step = 0.1
+
+        if direction == 'up' then
+            opacity = math.min(opacity + step, 1.0)
+        elseif direction == 'down' then
+            opacity = math.max(opacity - step, 0.1)
+        end
+
+        -- App specific popup (if supported)
+        if cache.assets[app] then
+            cache.assets[app].popup:alpha(opacity)
+        end
+
+        -- System popup
+        cache.assets.system.popup:alpha(opacity)
+
+        state.menu.opacity = opacity
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
+--------------------------------------------------------------------------------
+function M.insert()
+    return function(done)
+        util.run(M.turn_tap('off'))
+        util.run(M.hide_popups())
+
+        local win     = state.windows.curr_win
+        local frame   = win:frame()
+        local opacity = state.menu.opacity
+        local popup   = cache.assets.insert.popup
+
+        local function end_insert_mode(hotkeys, active_popup)
+            for _, hk in ipairs(hotkeys) do
+                hk:disable()
+            end
+
+            active_popup:hide()
+        end
+
+        local pos = {
+            x = frame.x + 10,
+            y = frame.y + 10,
+        }
+
+        popup:topLeft(pos)
+        popup:alpha(opacity)
+        popup:show(0.15)
+
+        local hotkeys = {}
+
+        hotkeys[1] = hs.hotkey.bind({}, 'return', function()
+            end_insert_mode(hotkeys, popup)
+
+            hs.eventtap.keyStroke({}, 'return')
+
+
+            hs.eventtap.keyStroke({ 'cmd', 'ctrl', 'alt', 'shift' }, 'space')
+            -- M.launch()
+        end)
+
+        hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
+            end_insert_mode(hotkeys, popup)
+        end)
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Send keystrokes (while bypassing active eventtap)
+--------------------------------------------------------------------------------
+function M.send_keys(mods, key)
+    return function(done)
+        state.menu.tap_active = false
+        cache.wk_tap:stop()
+
+        hs.eventtap.keyStroke(mods, key, 0)
+
+        state.menu.tap_active = true
+        cache.wk_tap:start()
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Toggle event tap
+--------------------------------------------------------------------------------
+function M.turn_tap(set_to)
+    return function (done)
+        if set_to == 'on' then
+            state.menu.tap_active = true
+            cache.wk_tap:start()
+        elseif set_to == 'off' then
+            state.menu.tap_active = false
+            cache.wk_tap:stop()
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Hide popups
+--------------------------------------------------------------------------------
+function M.hide_popups()
+    return function(done)
+        for _, v in pairs(cache.assets) do
+            if v.popup:isShowing() then
+                v.popup:hide()
+            end
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Show popups
+--------------------------------------------------------------------------------
+function M.show_popups()
+    return function(done)
+        local win     = state.windows.curr_win
+        local corner  = state.menu.corner
+        local stack   = state.menu.stack
+        local opacity = state.menu.opacity
+
+        local popups = get_popups(win)
+        local coords = get_popup_coords(win, popups, corner, stack)
+
+        for i, v in ipairs(popups) do
+            v.popup:topLeft(coords[i])
+            v.popup:alpha(opacity)
+            v.popup:show(0.15)
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Regenerate transient assets (screen, app, and window data)
+--------------------------------------------------------------------------------
+function M.refresh(arg)
+    return function(done)
+        if arg == 'state' then
+            util.run(M.hide_popups())
+            util.run(M.border('hide'))
+
+            require('screens').init()
+            require('apps').init()
+
+            M.init()
+
+            util.run(M.show_popups())
+        elseif arg == 'display' then
+            util.run(M.hide_popups())
+            util.run(M.border('hide'))
+            util.run(M.show_popups())
+            util.run(M.border('show'))
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Quit wk
+--------------------------------------------------------------------------------
+function M.quit()
+    return function(done)
+        util.run(M.turn_tap('off'))
+        util.run(M.hide_popups())
+        util.run(M.border('hide'))
+
+        state.menu.tap_active = false
+        cache.wk_tap:stop()
 
         done()
     end

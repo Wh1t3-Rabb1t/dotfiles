@@ -1,13 +1,12 @@
 local M = {}
 
-local state      = require('state')
-local cache      = require('cache')
-local util       = require('util')
-local screens    = require('screens')
-local apps       = require('apps')
-local windows    = require('windows')
-local wk_assets  = require('wk_assets')
-local wk_actions = require('wk_actions')
+local state     = require('state')
+local cache     = require('cache')
+local util      = require('util')
+local screens   = require('screens')
+local apps      = require('apps')
+local windows   = require('windows')
+local wk_assets = require('wk_assets')
 
 
 --------------------------------------------------------------------------------
@@ -32,7 +31,7 @@ function M.launch()
     cache.wk_tap:start()
 
     -- Show popup
-    util.run(wk_actions.show())
+    util.run(windows.show_popups())
 end
 
 return M

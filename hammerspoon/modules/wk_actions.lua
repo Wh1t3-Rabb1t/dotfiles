@@ -167,18 +167,23 @@ end
 --------------------------------------------------------------------------------
 -- Regenerate transient assets (screen, app, and window data)
 --------------------------------------------------------------------------------
-function M.state_regen()
+function M.refresh(arg)
     return function(done)
-        util.run(M.hide())
+        if arg == 'state' then
+            util.run(M.hide())
+            util.run(windows.border('hide'))
 
-        local border = state.windows.border
-        if border then border:hide() end
+            screens.init()
+            apps.init()
+            windows.init()
 
-        screens.init()
-        apps.init()
-        windows.init()
-
-        util.run(M.show())
+            util.run(M.show())
+        elseif arg == 'display' then
+            util.run(M.hide())
+            util.run(windows.border('hide'))
+            util.run(M.show())
+            util.run(windows.border('show'))
+        end
 
         done()
     end
@@ -382,15 +387,11 @@ end
 --------------------------------------------------------------------------------
 function M.hide()
     return function(done)
-        local win      = state.windows.curr_win
-        local app_name = win:application():name()
-
-        -- Delete popup
-        if cache.assets[app_name] then
-            cache.assets[app_name].popup:delete()
+        for _, v in pairs(cache.assets) do
+            if v.popup:isShowing() then
+                v.popup:hide()
+            end
         end
-
-        cache.assets.system.popup:delete()
 
         done()
     end

@@ -1,6 +1,6 @@
 local M = {}
 
-local wk         = require('windows')
+local wk         = require('wk')
 local brightness = require('brightness')
 local wifi       = require('wifi')
 local util       = require('util')
@@ -27,20 +27,20 @@ M.apps = {
         {
             category = 'Windows',
             bindings = util.bind(
-                -- { '_', 'Prev app',        wk.cycle_all_apps('prev'), wk.refresh('display')     },
-                -- { '-', 'To next screen',  wk.move_to_screen(), wk.refresh('display')           },
-                -- { 'o', 'Next app window', wk.cycle_app_specific('next'), wk.refresh('display') },
-                -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh('display') },
+                -- { '_', 'Prev app',        wk.cycle_all_apps('prev'),     wk.refresh_state() },
+                -- { '-', 'To next screen',  wk.move_to_screen(),           wk.refresh_state() },
+                -- { 'o', 'Next app window', wk.cycle_app_specific('next'), wk.refresh_state() },
+                -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh_state() },
 
-                { '_', 'Cycle cat apps', wk.cycle_main_apps()                            },
-                { '-', 'Next app',       wk.cycle_all_apps('next')                       },
-                { 'o', 'Next slot',      wk.traverse_slots('next')                       },
-                { 'u', 'Prev slot',      wk.traverse_slots('prev')                       },
-                { 'O', 'Next window',    wk.cycle_open('next')                           },
-                { 'U', 'Prev window',    wk.cycle_open('prev')                           },
-                { 'n', 'Open window',    wk.send_keys({'cmd'}, 'n'), wk.refresh('state') },
-                { 'm', 'Open tab',       wk.send_keys({'cmd'}, 't'), wk.refresh('state') },
-                { 'W', 'Close tab',      wk.send_keys({'cmd'}, 'w'), wk.refresh('state') }
+                { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
+                { '-', 'Next app',       wk.cycle_all_apps('next')                      },
+                { 'o', 'Next slot',      wk.traverse_slots('next')                      },
+                { 'u', 'Prev slot',      wk.traverse_slots('prev')                      },
+                { 'O', 'Next window',    wk.cycle_open('next')                          },
+                { 'U', 'Prev window',    wk.cycle_open('prev')                          },
+                { 'n', 'Open window',    wk.send_keys({'cmd'}, 'n'), wk.refresh_state() },
+                { 'm', 'Open tab',       wk.send_keys({'cmd'}, 't'), wk.refresh_state() },
+                { 'W', 'Close tab',      wk.send_keys({'cmd'}, 'w'), wk.refresh_state() }
             ),
         },
         {
@@ -212,17 +212,17 @@ M.apps = {
         {
             category = 'Splits',
             bindings = util.bind(
-                { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')                },
-                { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')              },
-                { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')             },
-                { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left')              },
-                { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')       },
-                { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')     },
-                { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right')    },
-                { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')     },
+                { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')             },
+                { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')           },
+                { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')          },
+                { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left')           },
+                { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')    },
+                { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')  },
+                { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right') },
+                { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')  },
 
                 -- new_win
-                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'), wk.refresh('state') }
+                { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'), wk.refresh_state() }
 
                 -- { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
                 -- { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }

@@ -5,7 +5,7 @@ local cache   = require('cache')
 local util    = require('util')
 local screens = require('screens')
 local apps    = require('apps')
-local windows = require('windows')
+local windows = require('wk')
 
 
 -- Get popups x and y coords

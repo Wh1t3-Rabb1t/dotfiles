@@ -20,7 +20,7 @@ local M = {}
 
 local brightness = require('brightness')
 local wk         = require('wk_actions')
-local win        = require('windows')
+local win        = require('wk')
 local wifi       = require('wifi')
 
 M.apps = {

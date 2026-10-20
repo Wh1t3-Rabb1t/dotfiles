@@ -32,6 +32,8 @@ M.apps = {
                 -- { 'o', 'Next app window', wk.cycle_app_specific('next'), wk.refresh_state() },
                 -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh_state() },
 
+                -- { '_', 'DEBUG LAYOUT', wk.debug_layout()                           },
+
                 { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
                 { '-', 'Next app',       wk.cycle_all_apps('next')                      },
                 { 'o', 'Next slot',      wk.traverse_slots('next')                      },

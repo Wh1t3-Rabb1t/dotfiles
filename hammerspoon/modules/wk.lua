@@ -5,6 +5,29 @@ local cache = require('cache')
 local util  = require('util')
 
 
+-- -- debug layout slots
+-- --------------------------------------------------------------------------------
+-- function M.debug_layout()
+--     return function(done)
+--         local screen = hs.mouse.getCurrentScreen()
+--         local layout = state.screens[screen:id()].layout
+--
+--         if layout.maximized then
+--             print('Max: ' .. layout.maximized:application():name())
+--         end
+--         if layout.left then
+--             print('Left: ' .. layout.left:application():name())
+--         end
+--         if layout.right then
+--             print('Right: ' .. layout.right:application():name())
+--         end
+--
+--         done()
+--     end
+-- end
+
+
+
 -- Compare the dimensions of two frame objects
 --------------------------------------------------------------------------------
 local function frames_equal(a, b, tolerance)
@@ -266,26 +289,6 @@ local function get_popups(win)
 end
 
 
--- Update empty window slots
---------------------------------------------------------------------------------
-local function set_empty_slot(win)
-    local screen_id = win:screen():id()
-    local layout    = state.screens[screen_id].layout
-
-    if is_fullscreen(win) then
-        if not layout.maximized then
-            layout.maximized = win
-        end
-    else
-        local side = get_side(win)
-
-        if not layout[side] then
-            layout[side] = win
-        end
-    end
-end
-
-
 -- Assign windows to layout state.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
@@ -294,7 +297,7 @@ end
 -- The 'left' and 'right' slots are retained until explicitly overwritten
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
-local function set_existing_slot(win, existing_win)
+local function set_layout(win, existing_win)
     local screen_id = win:screen():id()
     local layout    = state.screens[screen_id].layout
 
@@ -427,7 +430,16 @@ local function init_window_data(focused)
         for _, win in ipairs(apps[app:name()].wins) do
             table.insert(windows.wins, win)
 
-            set_empty_slot(win)
+            -- Assign windows to a layout slot for this screen
+            local layout = state.screens[win:screen():id()].layout
+
+            if is_fullscreen(win) then
+                layout.maximized = win
+            else
+                local side = get_side(win)
+
+                layout[side] = win
+            end
         end
     end
 
@@ -546,7 +558,7 @@ function M.move_to_screen()
 
             win:moveToScreen(next_screen)
 
-            set_existing_slot(win)
+            set_layout(win)
             snap_layout()
             set_border(win)
         end
@@ -567,7 +579,7 @@ function M.launch_or_focus(app)
             state.windows.curr_win = new
 
             if existing and new and existing:id() ~= new:id() then
-                set_existing_slot(new, existing)
+                set_layout(new, existing)
                 snap_layout()
                 set_border(new)
             end
@@ -648,7 +660,7 @@ function M.traverse_slots(direction)
         end
 
         if not target_slot then
-            set_existing_slot(win)
+            set_layout(win)
 
             done()
             return
@@ -693,7 +705,7 @@ function M.cycle_main_apps()
 
                 local idx = get_window_idx(windows.wins, target_win)
 
-                set_existing_slot(target_win, win)
+                set_layout(target_win, win)
                 set_window_state(target_win, idx)
                 set_border(target_win)
 
@@ -742,7 +754,7 @@ function M.cycle_all_apps(direction)
             local idx = get_window_idx(windows.wins, win)
 
             set_window_state(win, idx)
-            set_existing_slot(win)
+            set_layout(win)
             set_border(win)
 
             util.run(M.refresh_display())
@@ -802,7 +814,7 @@ function M.cycle_open(direction)
 
         if win then
             set_window_state(win, idx)
-            set_existing_slot(win)
+            set_layout(win)
             set_border(win)
 
             util.run(M.refresh_display())
@@ -845,21 +857,21 @@ function M.cycle_corner_pos()
             'top_left',
         }
 
-        local current_corner = state.menu.corner
-        local current_index  = 1
+        local curr_corner = state.menu.corner
+        local curr_idx    = 1
 
         -- Find the index of the current corner
         for i, c in ipairs(corners) do
-            if c == current_corner then
-                current_index = i
+            if c == curr_corner then
+                curr_idx = i
 
                 break
             end
         end
 
         -- Calculate the next index, wrapping around using modulo arithmetic
-        local new_index  = (current_index % #corners) + 1
-        local new_corner = corners[new_index]
+        local new_idx    = (curr_idx % #corners) + 1
+        local new_corner = corners[new_idx]
 
         state.menu.corner = new_corner
 
@@ -958,9 +970,7 @@ function M.insert()
 
             hs.eventtap.keyStroke({}, 'return')
 
-
-            hs.eventtap.keyStroke({ 'cmd', 'ctrl', 'alt', 'shift' }, 'space')
-            -- M.launch()
+            M.launch()
         end)
 
         hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
@@ -1153,9 +1163,10 @@ function M.init()
 
         -- Init layout if the focused window is compatible
         if cache.assets[app_name] then
-            set_existing_slot(win)
+            set_layout(win)
         end
 
+        snap_layout()
         set_border(win)
     end
 end

@@ -9,9 +9,6 @@
 
 - Ensure that popups etc are properly hidden/deleted in the appropriate places.
 
-- wk.insert() fn needs a better re-launch mechanism than manually invoking
-  the 'launch' key combination.
-
 - Find a unique static identifier for screens (not screen:id()).
 
 - Create list of disallowed apps (i.e. 'hammerspoon' console).

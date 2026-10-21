@@ -420,20 +420,21 @@ local function toggle_border( ... )
                 border:hide()
             end
         end
-
     end
 end
 
 
 -- Toggle event tap
 --------------------------------------------------------------------------------
-local function toggle_tap(set_to)
-    if set_to == 'on' then
-        state.menu.tap_active = true
-        cache.wk_tap:start()
-    elseif set_to == 'off' then
-        state.menu.tap_active = false
-        cache.wk_tap:stop()
+local function toggle_tap( ... )
+    for _, set_to in ipairs({ ... }) do
+        if set_to == 'on' then
+            state.menu.tap_active = true
+            cache.wk_tap:start()
+        elseif set_to == 'off' then
+            state.menu.tap_active = false
+            cache.wk_tap:stop()
+        end
     end
 end
 
@@ -447,6 +448,7 @@ local function snap_layout()
     local frames    = get_coords(screen_id)
 
     if layout.maximized then
+        layout.maximized:raise()
         layout.maximized:setFrame(state.screens[screen_id].frame, 0.02)
     else
         if layout.left then
@@ -988,8 +990,8 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
-        toggle_tap('off')
         toggle_popups('off')
+        toggle_tap('off')
 
         local win     = state.windows.curr_win
         local frame   = win:frame()
@@ -1015,14 +1017,14 @@ function M.insert()
 
         local hotkeys = {}
 
+        -- Send 'enter' key and re-launch wk
         hotkeys[1] = hs.hotkey.bind({}, 'return', function()
             end_insert_mode(hotkeys, popup)
-
             hs.eventtap.keyStroke({}, 'return')
-
             M.launch()
         end)
 
+        -- Send 'escape' key and cancel re-launching wk
         hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
             end_insert_mode(hotkeys, popup)
         end)
@@ -1037,13 +1039,11 @@ end
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     return function(done)
-        state.menu.tap_active = false
-        cache.wk_tap:stop()
+        toggle_tap('off')
 
         hs.eventtap.keyStroke(mods, key, 0)
 
-        state.menu.tap_active = true
-        cache.wk_tap:start()
+        toggle_tap('on')
 
         done()
     end
@@ -1057,6 +1057,7 @@ function M.refresh_state()
     return function(done)
         toggle_popups('off')
         toggle_border('off')
+        toggle_tap('off')
 
         require('screens').init()
         require('apps').init()
@@ -1064,23 +1065,7 @@ function M.refresh_state()
         M.init()
 
         toggle_popups('on')
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Quit wk
---------------------------------------------------------------------------------
-function M.quit()
-    return function(done)
-        toggle_tap('off')
-        toggle_popups('off')
-        toggle_border('off')
-
-        state.menu.tap_active = false
-        cache.wk_tap:stop()
+        toggle_tap('on')
 
         done()
     end
@@ -1091,30 +1076,36 @@ end
 -- Launch which key
 --------------------------------------------------------------------------------
 function M.launch()
-    local screen_module = require('screens')
-    local app_module    = require('apps')
-    local wk_assets     = require('wk_assets')
-
     if state.menu.tap_active then
         return
     end
 
-    screen_module.init()
-    app_module.init()
+    require('screens').init()
+    require('apps').init()
 
     M.init()
 
     -- Init wk_assets if not already initialized
     if not state.wk_initialized then
-        wk_assets.init()
+        require('wk_assets').init()
     end
 
-    -- Start event tap
-    state.menu.tap_active = true
-    cache.wk_tap:start()
-
-    -- Show popup
     toggle_popups('on')
+    toggle_tap('on')
+end
+
+
+--------------------------------------------------------------------------------
+-- Quit wk
+--------------------------------------------------------------------------------
+function M.quit()
+    return function(done)
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_tap('off')
+
+        done()
+    end
 end
 
 

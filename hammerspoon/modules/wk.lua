@@ -6,29 +6,22 @@ local cache = require('cache')
 
 
 
--- debug layout slots
---------------------------------------------------------------------------------
-function M.debug_layout()
-    return function(done)
-        local screen = hs.mouse.getCurrentScreen()
-        local layout = state.screens[screen:id()].layout
-
-        if layout.maximized then
-            -- print('Max: ' .. layout.maximized:application():name())
-            hs.alert.show('Max: ' .. layout.maximized:application():name())
-        end
-        if layout.left then
-            -- print('Left: ' .. layout.left:application():name())
-            hs.alert.show('Left: ' .. layout.left:application():name())
-        end
-        if layout.right then
-            -- print('Right: ' .. layout.right:application():name())
-            hs.alert.show('Right: ' .. layout.right:application():name())
-        end
-
-        done()
-    end
-end
+-- function M.debug_layout()
+--     return function(done)
+--         local screen = hs.mouse.getCurrentScreen()
+--         local layout = state.screens[screen:id()].layout
+--         if layout.maximized then
+--             print('Max: ' .. layout.maximized:application():name())
+--         end
+--         if layout.left then
+--             print('Left: ' .. layout.left:application():name())
+--         end
+--         if layout.right then
+--             print('Right: ' .. layout.right:application():name())
+--         end
+--         done()
+--     end
+-- end
 
 
 
@@ -50,8 +43,7 @@ end
 -- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
-    local screen_id    = win:screen():id()
-    local cached_frame = state.screens[screen_id].frame
+    local cached_frame = state.screens[win:screen():id()].frame
 
     local frames = frames_equal(
         win:frame(),
@@ -65,8 +57,7 @@ end
 -- Remove windows from the layout slot they occupy
 --------------------------------------------------------------------------------
 local function clear_slot(win)
-    local screen_id = win:screen():id()
-    local layout    = state.screens[screen_id].layout
+    local layout = state.screens[win:screen():id()].layout
 
     if layout.left      == win then layout.left      = false end
     if layout.right     == win then layout.right     = false end
@@ -131,11 +122,11 @@ end
 
 -- Calculate left/right slot frames
 --------------------------------------------------------------------------------
-local function get_coords(id, border)
-    border = border or 8
+local function get_coords(screen_id)
+    local border = 8
 
-    local frame       = state.screens[id].frame
-    local left_width  = frame.w * state.screens[id].divider
+    local frame       = state.screens[screen_id].frame
+    local left_width  = frame.w * state.screens[screen_id].divider
     local right_width = frame.w - left_width
 
     return {
@@ -218,7 +209,9 @@ end
 
 -- Get popup anchor position
 --------------------------------------------------------------------------------
-local function get_popup_anchor(frame, width, height, corner)
+local function get_popup_anchor(frame, width, height)
+    local corner = state.menu.corner
+
     local padding = 25
 
     local anchor = {}
@@ -243,17 +236,15 @@ end
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-local function get_popup_coords(win, popups, corner, stack)
-    local screen_id    = win:screen():id()
-    local app_frame    = win:frame()
-    local screen_frame = state.screens[screen_id].frame
+local function get_popup_coords(win, popups)
+    local stack        = state.menu.stack
+    local screen_frame = state.screens[win:screen():id()].frame
 
     local spacing = 25
 
-    local coords     = {}
-    local dimensions = {}
+    local coords = {}
 
-    dimensions = get_popup_w_h(popups, spacing, stack)
+    local dimensions = get_popup_w_h(popups, spacing, stack)
 
     -- Arrange popups side by side if the stack height exceeds the screen height
     if dimensions.h > screen_frame.h then
@@ -263,7 +254,7 @@ local function get_popup_coords(win, popups, corner, stack)
         coords = get_popup_x_y(popups, spacing, stack)
     end
 
-    local anchor = get_popup_anchor(app_frame, dimensions.w, dimensions.h, corner)
+    local anchor = get_popup_anchor(win:frame(), dimensions.w, dimensions.h)
 
     for _, coord in ipairs(coords) do
         coord.x = coord.x + anchor.x
@@ -302,8 +293,7 @@ end
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
 local function set_layout(win, existing_win)
-    local screen_id = win:screen():id()
-    local layout    = state.screens[screen_id].layout
+    local layout = state.screens[win:screen():id()].layout
 
     if is_fullscreen(win) then
         layout.maximized = win
@@ -339,8 +329,7 @@ end
 --------------------------------------------------------------------------------
 local function set_window_state(win, idx)
     local wins     = state.windows
-    local app_name = win:application():name()
-    local curr_app = state.apps[app_name]
+    local curr_app = state.apps[win:application():name()]
 
     curr_app.idx = get_window_idx(curr_app.wins, win)
 
@@ -382,12 +371,10 @@ local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
             local win     = state.windows.curr_win
-            local corner  = state.menu.corner
-            local stack   = state.menu.stack
             local opacity = state.menu.opacity
 
             local popups = get_popups(win)
-            local coords = get_popup_coords(win, popups, corner, stack)
+            local coords = get_popup_coords(win, popups)
 
             for i, v in ipairs(popups) do
                 v.popup:topLeft(coords[i])
@@ -480,7 +467,9 @@ local function focus_window(win)
     end
 
     win:application():activate()
+
     hs.timer.usleep(10000)
+
     win:focus()
 
     return win
@@ -538,7 +527,6 @@ function M.maximize()
 
         toggle_popups('off', 'on')
         toggle_border('off', 'on')
-
 
         done()
     end
@@ -959,9 +947,9 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
+        local opacity = state.menu.opacity
         local win     = state.windows.curr_win
         local app     = win:application():name()
-        local opacity = state.menu.opacity
 
         local step = 0.1
 
@@ -994,8 +982,7 @@ function M.insert()
         toggle_popups('off')
         toggle_tap('off')
 
-        local win     = state.windows.curr_win
-        local frame   = win:frame()
+        local frame   = state.windows.curr_win:frame()
         local opacity = state.menu.opacity
         local popup   = cache.assets.insert.popup
 

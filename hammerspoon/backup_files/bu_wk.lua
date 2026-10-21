@@ -6,29 +6,22 @@ local cache = require('cache')
 
 
 
--- debug layout slots
---------------------------------------------------------------------------------
-function M.debug_layout()
-    return function(done)
-        local screen = hs.mouse.getCurrentScreen()
-        local layout = state.screens[screen:id()].layout
-
-        if layout.maximized then
-            -- print('Max: ' .. layout.maximized:application():name())
-            hs.alert.show('Max: ' .. layout.maximized:application():name())
-        end
-        if layout.left then
-            -- print('Left: ' .. layout.left:application():name())
-            hs.alert.show('Left: ' .. layout.left:application():name())
-        end
-        if layout.right then
-            -- print('Right: ' .. layout.right:application():name())
-            hs.alert.show('Right: ' .. layout.right:application():name())
-        end
-
-        done()
-    end
-end
+-- function M.debug_layout()
+--     return function(done)
+--         local screen = hs.mouse.getCurrentScreen()
+--         local layout = state.screens[screen:id()].layout
+--         if layout.maximized then
+--             print('Max: ' .. layout.maximized:application():name())
+--         end
+--         if layout.left then
+--             print('Left: ' .. layout.left:application():name())
+--         end
+--         if layout.right then
+--             print('Right: ' .. layout.right:application():name())
+--         end
+--         done()
+--     end
+-- end
 
 
 
@@ -50,8 +43,7 @@ end
 -- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
-    local screen_id    = win:screen():id()
-    local cached_frame = state.screens[screen_id].frame
+    local cached_frame = state.screens[win:screen():id()].frame
 
     local frames = frames_equal(
         win:frame(),
@@ -65,8 +57,7 @@ end
 -- Remove windows from the layout slot they occupy
 --------------------------------------------------------------------------------
 local function clear_slot(win)
-    local screen_id = win:screen():id()
-    local layout    = state.screens[screen_id].layout
+    local layout = state.screens[win:screen():id()].layout
 
     if layout.left      == win then layout.left      = false end
     if layout.right     == win then layout.right     = false end
@@ -115,8 +106,7 @@ end
 --------------------------------------------------------------------------------
 local function get_side(win)
     local win_frame    = win:frame()
-    local screen       = win:screen()
-    local screen_frame = screen:fullFrame()
+    local screen_frame = win:screen():fullFrame()
     local screen_mid   = screen_frame.x + (screen_frame.w / 2)
     local win_mid      = win_frame.x + (win_frame.w / 2)
 
@@ -132,11 +122,11 @@ end
 
 -- Calculate left/right slot frames
 --------------------------------------------------------------------------------
-local function get_coords(id, border)
-    border = border or 8
+local function get_coords(screen_id)
+    local border = 8
 
-    local frame       = state.screens[id].frame
-    local left_width  = frame.w * state.screens[id].divider
+    local frame       = state.screens[screen_id].frame
+    local left_width  = frame.w * state.screens[screen_id].divider
     local right_width = frame.w - left_width
 
     return {
@@ -219,7 +209,9 @@ end
 
 -- Get popup anchor position
 --------------------------------------------------------------------------------
-local function get_popup_anchor(frame, width, height, corner)
+local function get_popup_anchor(frame, width, height)
+    local corner = state.menu.corner
+
     local padding = 25
 
     local anchor = {}
@@ -244,17 +236,15 @@ end
 
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
-local function get_popup_coords(win, popups, corner, stack)
-    local screen_id    = win:screen():id()
-    local app_frame    = win:frame()
-    local screen_frame = state.screens[screen_id].frame
+local function get_popup_coords(win, popups)
+    local stack        = state.menu.stack
+    local screen_frame = state.screens[win:screen():id()].frame
 
     local spacing = 25
 
-    local coords     = {}
-    local dimensions = {}
+    local coords = {}
 
-    dimensions = get_popup_w_h(popups, spacing, stack)
+    local dimensions = get_popup_w_h(popups, spacing, stack)
 
     -- Arrange popups side by side if the stack height exceeds the screen height
     if dimensions.h > screen_frame.h then
@@ -264,7 +254,7 @@ local function get_popup_coords(win, popups, corner, stack)
         coords = get_popup_x_y(popups, spacing, stack)
     end
 
-    local anchor = get_popup_anchor(app_frame, dimensions.w, dimensions.h, corner)
+    local anchor = get_popup_anchor(win:frame(), dimensions.w, dimensions.h)
 
     for _, coord in ipairs(coords) do
         coord.x = coord.x + anchor.x
@@ -303,8 +293,7 @@ end
 -- (i.e. they are unaffected by the 'fullscreen' slot).
 --------------------------------------------------------------------------------
 local function set_layout(win, existing_win)
-    local screen_id = win:screen():id()
-    local layout    = state.screens[screen_id].layout
+    local layout = state.screens[win:screen():id()].layout
 
     if is_fullscreen(win) then
         layout.maximized = win
@@ -340,8 +329,7 @@ end
 --------------------------------------------------------------------------------
 local function set_window_state(win, idx)
     local wins     = state.windows
-    local app_name = win:application():name()
-    local curr_app = state.apps[app_name]
+    local curr_app = state.apps[win:application():name()]
 
     curr_app.idx = get_window_idx(curr_app.wins, win)
 
@@ -383,12 +371,10 @@ local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
             local win     = state.windows.curr_win
-            local corner  = state.menu.corner
-            local stack   = state.menu.stack
             local opacity = state.menu.opacity
 
             local popups = get_popups(win)
-            local coords = get_popup_coords(win, popups, corner, stack)
+            local coords = get_popup_coords(win, popups)
 
             for i, v in ipairs(popups) do
                 v.popup:topLeft(coords[i])
@@ -420,20 +406,21 @@ local function toggle_border( ... )
                 border:hide()
             end
         end
-
     end
 end
 
 
 -- Toggle event tap
 --------------------------------------------------------------------------------
-local function toggle_tap(set_to)
-    if set_to == 'on' then
-        state.menu.tap_active = true
-        cache.wk_tap:start()
-    elseif set_to == 'off' then
-        state.menu.tap_active = false
-        cache.wk_tap:stop()
+local function toggle_tap( ... )
+    for _, set_to in ipairs({ ... }) do
+        if set_to == 'on' then
+            state.menu.tap_active = true
+            cache.wk_tap:start()
+        elseif set_to == 'off' then
+            state.menu.tap_active = false
+            cache.wk_tap:stop()
+        end
     end
 end
 
@@ -447,6 +434,7 @@ local function snap_layout()
     local frames    = get_coords(screen_id)
 
     if layout.maximized then
+        layout.maximized:raise()
         layout.maximized:setFrame(state.screens[screen_id].frame, 0.02)
     else
         if layout.left then
@@ -458,6 +446,8 @@ local function snap_layout()
             layout.right:setFrame(frames.right, 0.02)
         end
     end
+
+    win:raise()
 
     set_border(win)
 end
@@ -477,7 +467,9 @@ local function focus_window(win)
     end
 
     win:application():activate()
+
     hs.timer.usleep(10000)
+
     win:focus()
 
     return win
@@ -486,12 +478,12 @@ end
 
 -- Init window state table
 --------------------------------------------------------------------------------
-local function init_window_data(focused)
+local function init_window_data()
     local apps = state.apps
 
     local windows = {
         idx      = 1,
-        curr_win = focused,
+        curr_win = hs.window.focusedWindow(),
         wins     = {},
     }
 
@@ -533,10 +525,8 @@ function M.maximize()
 
         snap_layout()
 
-        -- refresh_display()
         toggle_popups('off', 'on')
         toggle_border('off', 'on')
-
 
         done()
     end
@@ -584,6 +574,7 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
+
         toggle_popups('off', 'on')
         toggle_border('off', 'on')
 
@@ -606,6 +597,7 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
+
         toggle_popups('off', 'on')
         toggle_border('off', 'on')
 
@@ -928,9 +920,6 @@ function M.cycle_corner_pos()
 
         toggle_popups('off', 'on')
 
-        -- toggle_popups('off')
-        -- toggle_popups('on')
-
         done()
     end
 end
@@ -948,9 +937,6 @@ function M.cycle_stacking()
 
         toggle_popups('off', 'on')
 
-        -- toggle_popups('off')
-        -- toggle_popups('on')
-
         done()
     end
 end
@@ -961,9 +947,9 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
+        local opacity = state.menu.opacity
         local win     = state.windows.curr_win
         local app     = win:application():name()
-        local opacity = state.menu.opacity
 
         local step = 0.1
 
@@ -993,11 +979,10 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
-        toggle_tap('off')
         toggle_popups('off')
+        toggle_tap('off')
 
-        local win     = state.windows.curr_win
-        local frame   = win:frame()
+        local frame   = state.windows.curr_win:frame()
         local opacity = state.menu.opacity
         local popup   = cache.assets.insert.popup
 
@@ -1020,14 +1005,14 @@ function M.insert()
 
         local hotkeys = {}
 
+        -- Send 'enter' key and re-launch wk
         hotkeys[1] = hs.hotkey.bind({}, 'return', function()
             end_insert_mode(hotkeys, popup)
-
             hs.eventtap.keyStroke({}, 'return')
-
             M.launch()
         end)
 
+        -- Send 'escape' key and cancel re-launching wk
         hotkeys[2] = hs.hotkey.bind({}, 'escape', function()
             end_insert_mode(hotkeys, popup)
         end)
@@ -1042,13 +1027,11 @@ end
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     return function(done)
-        state.menu.tap_active = false
-        cache.wk_tap:stop()
+        toggle_tap('off')
 
         hs.eventtap.keyStroke(mods, key, 0)
 
-        state.menu.tap_active = true
-        cache.wk_tap:start()
+        toggle_tap('on')
 
         done()
     end
@@ -1062,6 +1045,7 @@ function M.refresh_state()
     return function(done)
         toggle_popups('off')
         toggle_border('off')
+        toggle_tap('off')
 
         require('screens').init()
         require('apps').init()
@@ -1069,23 +1053,7 @@ function M.refresh_state()
         M.init()
 
         toggle_popups('on')
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Quit wk
---------------------------------------------------------------------------------
-function M.quit()
-    return function(done)
-        toggle_tap('off')
-        toggle_popups('off')
-        toggle_border('off')
-
-        state.menu.tap_active = false
-        cache.wk_tap:stop()
+        toggle_tap('on')
 
         done()
     end
@@ -1096,30 +1064,36 @@ end
 -- Launch which key
 --------------------------------------------------------------------------------
 function M.launch()
-    local screen_module = require('screens')
-    local app_module    = require('apps')
-    local wk_assets     = require('wk_assets')
-
     if state.menu.tap_active then
         return
     end
 
-    screen_module.init()
-    app_module.init()
+    require('screens').init()
+    require('apps').init()
 
     M.init()
 
     -- Init wk_assets if not already initialized
     if not state.wk_initialized then
-        wk_assets.init()
+        require('wk_assets').init()
     end
 
-    -- Start event tap
-    state.menu.tap_active = true
-    cache.wk_tap:start()
-
-    -- Show popup
     toggle_popups('on')
+    toggle_tap('on')
+end
+
+
+--------------------------------------------------------------------------------
+-- Quit wk
+--------------------------------------------------------------------------------
+function M.quit()
+    return function(done)
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_tap('off')
+
+        done()
+    end
 end
 
 
@@ -1127,10 +1101,7 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    local win      = hs.window.focusedWindow()
-    local app_name = win:application():name()
-
-    local data = init_window_data(win)
+    local data = init_window_data()
 
     if data then
         state.windows = data
@@ -1141,7 +1112,8 @@ function M.init()
             state.windows.curr_win
         )
 
-        win = state.windows.curr_win
+        local win      = state.windows.curr_win
+        local app_name = win:application():name()
 
         -- Init layout if the focused window is compatible
         if cache.assets[app_name] then

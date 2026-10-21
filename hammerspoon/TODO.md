@@ -4,6 +4,9 @@
 
 ## IMMEDIATE TASKS:
 
+- Need an action that sends the focused window to the adjacent slot (i.e. send
+  the window in left slot to the right slot).
+
 - Ensure that popups etc are properly hidden/deleted in the appropriate places.
 
 - Find a unique static identifier for screens (not screen:id()).

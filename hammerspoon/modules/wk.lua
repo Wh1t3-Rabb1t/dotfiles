@@ -533,7 +533,6 @@ function M.maximize()
 
         snap_layout()
 
-        -- refresh_display()
         toggle_popups('off', 'on')
         toggle_border('off', 'on')
 
@@ -584,6 +583,7 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
+
         toggle_popups('off', 'on')
         toggle_border('off', 'on')
 
@@ -606,6 +606,7 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
+
         toggle_popups('off', 'on')
         toggle_border('off', 'on')
 
@@ -928,9 +929,6 @@ function M.cycle_corner_pos()
 
         toggle_popups('off', 'on')
 
-        -- toggle_popups('off')
-        -- toggle_popups('on')
-
         done()
     end
 end
@@ -947,9 +945,6 @@ function M.cycle_stacking()
         state.menu.stack = new_stack
 
         toggle_popups('off', 'on')
-
-        -- toggle_popups('off')
-        -- toggle_popups('on')
 
         done()
     end

@@ -115,8 +115,7 @@ end
 --------------------------------------------------------------------------------
 local function get_side(win)
     local win_frame    = win:frame()
-    local screen       = win:screen()
-    local screen_frame = screen:fullFrame()
+    local screen_frame = win:screen():fullFrame()
     local screen_mid   = screen_frame.x + (screen_frame.w / 2)
     local win_mid      = win_frame.x + (win_frame.w / 2)
 
@@ -461,6 +460,8 @@ local function snap_layout()
         end
     end
 
+    win:raise()
+
     set_border(win)
 end
 
@@ -488,12 +489,12 @@ end
 
 -- Init window state table
 --------------------------------------------------------------------------------
-local function init_window_data(focused)
+local function init_window_data()
     local apps = state.apps
 
     local windows = {
         idx      = 1,
-        curr_win = focused,
+        curr_win = hs.window.focusedWindow(),
         wins     = {},
     }
 
@@ -1113,10 +1114,7 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    local win      = hs.window.focusedWindow()
-    local app_name = win:application():name()
-
-    local data = init_window_data(win)
+    local data = init_window_data()
 
     if data then
         state.windows = data
@@ -1127,7 +1125,8 @@ function M.init()
             state.windows.curr_win
         )
 
-        win = state.windows.curr_win
+        local win      = state.windows.curr_win
+        local app_name = win:application():name()
 
         -- Init layout if the focused window is compatible
         if cache.assets[app_name] then

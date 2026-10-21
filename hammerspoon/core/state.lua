@@ -2,11 +2,7 @@ local M = {}
 
 -- Commented out entries are populated on init
 
-M.valid = false
-
 M.wk_initialized = false
-
-M.screen_watcher = false
 
 M.menu = {
     tap_active = false,  -- (true|false)
@@ -49,6 +45,11 @@ M.screens = {
     --     }
     -- }
     -- ...
+}
+
+M.watchers = {
+    initialized = false,
+    screen      = {},
 }
 
 return M

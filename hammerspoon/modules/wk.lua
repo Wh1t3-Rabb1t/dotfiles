@@ -104,7 +104,7 @@ end
 
 -- Is window aligned to the left or right of the screen
 --------------------------------------------------------------------------------
-local function get_side(win)
+local function get_window_alignment(win)
     local win_frame    = win:frame()
     local screen_frame = win:screen():fullFrame()
     local screen_mid   = screen_frame.x + (screen_frame.w / 2)
@@ -120,13 +120,15 @@ local function get_side(win)
 end
 
 
--- Calculate left/right slot frames
+-- Calculate left/right slot coordinates
 --------------------------------------------------------------------------------
-local function get_coords(screen_id)
+local function get_slot_coords(screen_id)
     local border = 8
 
-    local frame       = state.screens[screen_id].frame
-    local left_width  = frame.w * state.screens[screen_id].divider
+    local frame   = state.screens[screen_id].frame
+    local divider = state.screens[screen_id].divider
+
+    local left_width  = frame.w * divider
     local right_width = frame.w - left_width
 
     return {
@@ -315,9 +317,9 @@ local function set_layout(win, existing_win)
 
     layout.maximized = false
 
-    local side = get_side(win)
+    local side = get_window_alignment(win)
 
-    if existing_win and get_side(existing_win) == side then
+    if existing_win and get_window_alignment(existing_win) == side then
         side = (side == 'left') and 'right' or 'left'
     end
 
@@ -431,7 +433,7 @@ local function snap_layout()
     local win       = state.windows.curr_win
     local screen_id = win:screen():id()
     local layout    = state.screens[screen_id].layout
-    local frames    = get_coords(screen_id)
+    local frames    = get_slot_coords(screen_id)
 
     if layout.maximized then
         layout.maximized:raise()
@@ -497,7 +499,7 @@ local function init_window_data()
             if is_fullscreen(win) then
                 layout.maximized = win
             else
-                local side = get_side(win)
+                local side = get_window_alignment(win)
 
                 layout[side] = win
             end

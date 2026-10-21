@@ -96,10 +96,11 @@ function M.init()
         end
     end
 
-    if not state.screen_watcher then
-        -- hs.alert.show('watching screens')
-        state.screen_watcher = create_watcher()
-        state.screen_watcher:start()
+    if not state.watchers.initialized then
+        state.watchers.screen = create_watcher()
+        state.watchers.screen:start()
+
+        state.watchers.initialized = true
     end
 end
 

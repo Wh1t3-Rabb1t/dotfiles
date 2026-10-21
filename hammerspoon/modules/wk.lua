@@ -5,26 +5,32 @@ local cache = require('cache')
 local util  = require('util')
 
 
--- -- debug layout slots
--- --------------------------------------------------------------------------------
--- function M.debug_layout()
---     return function(done)
---         local screen = hs.mouse.getCurrentScreen()
---         local layout = state.screens[screen:id()].layout
---
---         if layout.maximized then
---             print('Max: ' .. layout.maximized:application():name())
---         end
---         if layout.left then
---             print('Left: ' .. layout.left:application():name())
---         end
---         if layout.right then
---             print('Right: ' .. layout.right:application():name())
---         end
---
---         done()
---     end
--- end
+
+
+-- debug layout slots
+--------------------------------------------------------------------------------
+function M.debug_layout()
+    return function(done)
+        local screen = hs.mouse.getCurrentScreen()
+        local layout = state.screens[screen:id()].layout
+
+        if layout.maximized then
+            -- print('Max: ' .. layout.maximized:application():name())
+            hs.alert.show('Max: ' .. layout.maximized:application():name())
+        end
+        if layout.left then
+            -- print('Left: ' .. layout.left:application():name())
+            hs.alert.show('Left: ' .. layout.left:application():name())
+        end
+        if layout.right then
+            -- print('Right: ' .. layout.right:application():name())
+            hs.alert.show('Right: ' .. layout.right:application():name())
+        end
+
+        done()
+    end
+end
+
 
 
 
@@ -331,6 +337,20 @@ local function set_layout(win, existing_win)
 end
 
 
+-- Update focused window state
+--------------------------------------------------------------------------------
+local function set_window_state(win, idx)
+    local wins     = state.windows
+    local app_name = win:application():name()
+    local curr_app = state.apps[app_name]
+
+    curr_app.idx = get_window_idx(curr_app.wins, win)
+
+    wins.idx      = idx
+    wins.curr_win = win
+end
+
+
 -- Create/update window borders
 --------------------------------------------------------------------------------
 local function set_border(win)
@@ -358,17 +378,59 @@ local function set_border(win)
 end
 
 
--- Update focused window state
+-- Show/hide popups
 --------------------------------------------------------------------------------
-local function set_window_state(win, idx)
-    local wins     = state.windows
-    local app_name = win:application():name()
-    local curr_app = state.apps[app_name]
+local function toggle_popups(set_to)
+    if set_to == 'on' then
+        local win     = state.windows.curr_win
+        local corner  = state.menu.corner
+        local stack   = state.menu.stack
+        local opacity = state.menu.opacity
 
-    curr_app.idx = get_window_idx(curr_app.wins, win)
+        local popups = get_popups(win)
+        local coords = get_popup_coords(win, popups, corner, stack)
 
-    wins.idx      = idx
-    wins.curr_win = win
+        for i, v in ipairs(popups) do
+            v.popup:topLeft(coords[i])
+            v.popup:alpha(opacity)
+            v.popup:show(0.15)
+        end
+
+    elseif set_to == 'off' then
+        for _, v in pairs(cache.assets) do
+            if v.popup:isShowing() then
+                v.popup:hide()
+            end
+        end
+    end
+end
+
+
+-- Toggle border visibility
+--------------------------------------------------------------------------------
+local function toggle_border(set_to)
+    local border = state.windows.border
+
+    if border then
+        if set_to == 'on' then
+            border:show()
+        elseif set_to == 'off' then
+            border:hide()
+        end
+    end
+end
+
+
+-- Toggle event tap
+--------------------------------------------------------------------------------
+local function toggle_tap(set_to)
+    if set_to == 'on' then
+        state.menu.tap_active = true
+        cache.wk_tap:start()
+    elseif set_to == 'off' then
+        state.menu.tap_active = false
+        cache.wk_tap:stop()
+    end
 end
 
 
@@ -384,12 +446,16 @@ local function snap_layout()
         layout.maximized:setFrame(state.screens[screen_id].frame, 0.02)
     else
         if layout.left then
+            layout.left:raise()
             layout.left:setFrame(frames.left, 0.02)
         end
         if layout.right then
+            layout.right:raise()
             layout.right:setFrame(frames.right, 0.02)
         end
     end
+
+    set_border(win)
 end
 
 
@@ -397,10 +463,9 @@ end
 --
 -- https://github.com/Hammerspoon/hammerspoon/issues/370
 --
--- Resolved incorrect window focus issue by turning off the "Displays have
--- separate Spaces" option for Mission Control.
---
--- Note: You have to logout for this change to take effect.
+-- Resolved incorrect window focus issue by turning off the:
+--   'Displays have separate Spaces'
+-- option for Mission Control. (logout is required for it to take effect)
 --------------------------------------------------------------------------------
 local function focus_window(win)
     if not win then
@@ -463,7 +528,6 @@ function M.maximize()
         layout.maximized = win
 
         snap_layout()
-        set_border(win)
 
         util.run(M.refresh_display())
 
@@ -513,7 +577,6 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
-        set_border(win)
 
         util.run(M.refresh_display())
 
@@ -536,7 +599,6 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
-        set_border(win)
 
         util.run(M.refresh_display())
 
@@ -560,7 +622,6 @@ function M.move_to_screen()
 
             set_layout(win)
             snap_layout()
-            set_border(win)
         end
 
         done()
@@ -581,7 +642,6 @@ function M.launch_or_focus(app)
             if existing and new and existing:id() ~= new:id() then
                 set_layout(new, existing)
                 snap_layout()
-                set_border(new)
             end
 
             done()
@@ -826,26 +886,6 @@ end
 
 
 --------------------------------------------------------------------------------
--- Toggle border visibility
---------------------------------------------------------------------------------
-function M.border(toggle)
-    return function(done)
-        local border = state.windows.border
-
-        if border then
-            if toggle == 'show' then
-                border:show()
-            elseif toggle == 'hide' then
-                border:hide()
-            end
-        end
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
 -- Cycle menu corner positions
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
@@ -875,8 +915,8 @@ function M.cycle_corner_pos()
 
         state.menu.corner = new_corner
 
-        util.run(M.hide_popups())
-        util.run(M.show_popups())
+        toggle_popups('off')
+        toggle_popups('on')
 
         done()
     end
@@ -893,8 +933,8 @@ function M.cycle_stacking()
 
         state.menu.stack = new_stack
 
-        util.run(M.hide_popups())
-        util.run(M.show_popups())
+        toggle_popups('off')
+        toggle_popups('on')
 
         done()
     end
@@ -938,8 +978,8 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
-        util.run(M.turn_tap('off'))
-        util.run(M.hide_popups())
+        toggle_tap('off')
+        toggle_popups('off')
 
         local win     = state.windows.curr_win
         local frame   = win:frame()
@@ -1001,77 +1041,19 @@ end
 
 
 --------------------------------------------------------------------------------
--- Toggle event tap
---------------------------------------------------------------------------------
-function M.turn_tap(set_to)
-    return function (done)
-        if set_to == 'on' then
-            state.menu.tap_active = true
-            cache.wk_tap:start()
-        elseif set_to == 'off' then
-            state.menu.tap_active = false
-            cache.wk_tap:stop()
-        end
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Hide popups
---------------------------------------------------------------------------------
-function M.hide_popups()
-    return function(done)
-        for _, v in pairs(cache.assets) do
-            if v.popup:isShowing() then
-                v.popup:hide()
-            end
-        end
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Show popups
---------------------------------------------------------------------------------
-function M.show_popups()
-    return function(done)
-        local win     = state.windows.curr_win
-        local corner  = state.menu.corner
-        local stack   = state.menu.stack
-        local opacity = state.menu.opacity
-
-        local popups = get_popups(win)
-        local coords = get_popup_coords(win, popups, corner, stack)
-
-        for i, v in ipairs(popups) do
-            v.popup:topLeft(coords[i])
-            v.popup:alpha(opacity)
-            v.popup:show(0.15)
-        end
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
 -- Regenerate cache assets (screen, app, and window data)
 --------------------------------------------------------------------------------
 function M.refresh_state()
     return function(done)
-        util.run(M.hide_popups())
-        util.run(M.border('hide'))
+        toggle_popups('off')
+        toggle_border('off')
 
         require('screens').init()
         require('apps').init()
 
         M.init()
 
-        util.run(M.show_popups())
+        toggle_popups('on')
 
         done()
     end
@@ -1083,10 +1065,10 @@ end
 --------------------------------------------------------------------------------
 function M.refresh_display()
     return function(done)
-        util.run(M.hide_popups())
-        util.run(M.border('hide'))
-        util.run(M.show_popups())
-        util.run(M.border('show'))
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_popups('on')
+        toggle_border('on')
 
         done()
     end
@@ -1098,9 +1080,9 @@ end
 --------------------------------------------------------------------------------
 function M.quit()
     return function(done)
-        util.run(M.turn_tap('off'))
-        util.run(M.hide_popups())
-        util.run(M.border('hide'))
+        toggle_tap('off')
+        toggle_popups('off')
+        toggle_border('off')
 
         state.menu.tap_active = false
         cache.wk_tap:stop()
@@ -1137,7 +1119,7 @@ function M.launch()
     cache.wk_tap:start()
 
     -- Show popup
-    util.run(M.show_popups())
+    toggle_popups('on')
 end
 
 
@@ -1167,7 +1149,6 @@ function M.init()
         end
 
         snap_layout()
-        set_border(win)
     end
 end
 

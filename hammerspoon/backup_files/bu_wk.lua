@@ -2,7 +2,6 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
-local util  = require('util')
 
 
 
@@ -380,26 +379,28 @@ end
 
 -- Show/hide popups
 --------------------------------------------------------------------------------
-local function toggle_popups(set_to)
-    if set_to == 'on' then
-        local win     = state.windows.curr_win
-        local corner  = state.menu.corner
-        local stack   = state.menu.stack
-        local opacity = state.menu.opacity
+local function toggle_popups( ... )
+    for _, set_to in ipairs({ ... }) do
+        if set_to == 'on' then
+            local win     = state.windows.curr_win
+            local corner  = state.menu.corner
+            local stack   = state.menu.stack
+            local opacity = state.menu.opacity
 
-        local popups = get_popups(win)
-        local coords = get_popup_coords(win, popups, corner, stack)
+            local popups = get_popups(win)
+            local coords = get_popup_coords(win, popups, corner, stack)
 
-        for i, v in ipairs(popups) do
-            v.popup:topLeft(coords[i])
-            v.popup:alpha(opacity)
-            v.popup:show(0.15)
-        end
+            for i, v in ipairs(popups) do
+                v.popup:topLeft(coords[i])
+                v.popup:alpha(opacity)
+                v.popup:show(0.15)
+            end
 
-    elseif set_to == 'off' then
-        for _, v in pairs(cache.assets) do
-            if v.popup:isShowing() then
-                v.popup:hide()
+        elseif set_to == 'off' then
+            for _, v in pairs(cache.assets) do
+                if v.popup:isShowing() then
+                    v.popup:hide()
+                end
             end
         end
     end
@@ -408,15 +409,18 @@ end
 
 -- Toggle border visibility
 --------------------------------------------------------------------------------
-local function toggle_border(set_to)
-    local border = state.windows.border
+local function toggle_border( ... )
+    for _, set_to in ipairs({ ... }) do
+        local border = state.windows.border
 
-    if border then
-        if set_to == 'on' then
-            border:show()
-        elseif set_to == 'off' then
-            border:hide()
+        if border then
+            if set_to == 'on' then
+                border:show()
+            elseif set_to == 'off' then
+                border:hide()
+            end
         end
+
     end
 end
 
@@ -529,7 +533,10 @@ function M.maximize()
 
         snap_layout()
 
-        util.run(M.refresh_display())
+        -- refresh_display()
+        toggle_popups('off', 'on')
+        toggle_border('off', 'on')
+
 
         done()
     end
@@ -577,8 +584,8 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
-
-        util.run(M.refresh_display())
+        toggle_popups('off', 'on')
+        toggle_border('off', 'on')
 
         done()
     end
@@ -599,8 +606,8 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
-
-        util.run(M.refresh_display())
+        toggle_popups('off', 'on')
+        toggle_border('off', 'on')
 
         done()
     end
@@ -733,7 +740,8 @@ function M.traverse_slots(direction)
             set_window_state(new_win, win_idx)
             set_border(new_win)
 
-            util.run(M.refresh_display())
+            toggle_popups('off', 'on')
+            toggle_border('off', 'on')
         end
 
         done()
@@ -769,7 +777,8 @@ function M.cycle_main_apps()
                 set_window_state(target_win, idx)
                 set_border(target_win)
 
-                util.run(M.refresh_display())
+                toggle_popups('off', 'on')
+                toggle_border('off', 'on')
 
                 done()
             end
@@ -817,7 +826,8 @@ function M.cycle_all_apps(direction)
             set_layout(win)
             set_border(win)
 
-            util.run(M.refresh_display())
+            toggle_popups('off', 'on')
+            toggle_border('off', 'on')
         end
 
         done()
@@ -877,7 +887,8 @@ function M.cycle_open(direction)
             set_layout(win)
             set_border(win)
 
-            util.run(M.refresh_display())
+            toggle_popups('off', 'on')
+            toggle_border('off', 'on')
         end
 
         done()
@@ -915,8 +926,10 @@ function M.cycle_corner_pos()
 
         state.menu.corner = new_corner
 
-        toggle_popups('off')
-        toggle_popups('on')
+        toggle_popups('off', 'on')
+
+        -- toggle_popups('off')
+        -- toggle_popups('on')
 
         done()
     end
@@ -933,8 +946,10 @@ function M.cycle_stacking()
 
         state.menu.stack = new_stack
 
-        toggle_popups('off')
-        toggle_popups('on')
+        toggle_popups('off', 'on')
+
+        -- toggle_popups('off')
+        -- toggle_popups('on')
 
         done()
     end
@@ -1054,21 +1069,6 @@ function M.refresh_state()
         M.init()
 
         toggle_popups('on')
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Refresh window state (popups, borders etc.)
---------------------------------------------------------------------------------
-function M.refresh_display()
-    return function(done)
-        toggle_popups('off')
-        toggle_border('off')
-        toggle_popups('on')
-        toggle_border('on')
 
         done()
     end

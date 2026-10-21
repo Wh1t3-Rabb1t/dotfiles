@@ -4,9 +4,6 @@
 
 ## IMMEDIATE TASKS:
 
-- Wrangle the internals of border show/hide when calling refresh('display')
-  from within the wk/windows module.
-
 - Ensure that popups etc are properly hidden/deleted in the appropriate places.
 
 - Find a unique static identifier for screens (not screen:id()).

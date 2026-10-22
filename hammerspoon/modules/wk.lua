@@ -26,31 +26,18 @@ local cache = require('cache')
 
 
 
--- Compare the dimensions of two frame objects
+-- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
-local function frames_equal(a, b, tolerance)
-    -- MacOS occasionally returns coords off by one pixel due to scaling,
-    -- retina displays etc.
-    tolerance = tolerance or 1
+local function is_fullscreen(win)
+    local a = win:frame()
+    local b = state.screens[win:screen():id()].frame
+
+    local tolerance = 1
 
     return math.abs(a.x - b.x) <= tolerance
        and math.abs(a.y - b.y) <= tolerance
        and math.abs(a.w - b.w) <= tolerance
        and math.abs(a.h - b.h) <= tolerance
-end
-
-
--- Determine whether or not a window is maximized
---------------------------------------------------------------------------------
-local function is_fullscreen(win)
-    local cached_frame = state.screens[win:screen():id()].frame
-
-    local frames = frames_equal(
-        win:frame(),
-        cached_frame
-    )
-
-    return frames
 end
 
 
@@ -340,34 +327,43 @@ local function set_window_state(win, idx)
 end
 
 
--- Create/update window borders
+-- Toggle border visibility
 --------------------------------------------------------------------------------
-local function set_border(win)
-    local border = state.windows.border
+local function toggle_border( ... )
+    for _, set_to in ipairs({ ... }) do
+        local border = state.windows.border
+        local win    = state.windows.curr_win
 
-    if not border then
-        border = hs.canvas.new(win:frame())
+        if set_to == 'on' then
+            -- Create border if it doesn't already exist
+            if not border then
+                border = hs.canvas.new(win:frame())
 
-        border:appendElements({
-            type        = 'rectangle',
-            action      = 'stroke',
-            strokeColor = { white = 1, alpha = 1 },
-            strokeWidth = 3,
-        })
+                border:appendElements({
+                    type        = 'rectangle',
+                    action      = 'stroke',
+                    strokeColor = { white = 1, alpha = 1 },
+                    strokeWidth = 3,
+                })
 
-        border:level(hs.canvas.windowLevels.overlay)
-        border:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
+                border:level(hs.canvas.windowLevels.overlay)
+                border:behavior(hs.canvas.windowBehaviors.canJoinAllSpaces)
 
-        state.windows.border = border
-    else
-        border:frame(win:frame())
+                state.windows.border = border
+            else
+                border:frame(win:frame())
+            end
+
+            border:show()
+
+        elseif set_to == 'off' then
+            border:hide()
+        end
     end
-
-    border:show()
 end
 
 
--- Show/hide popups
+-- Toggle popup visibility
 --------------------------------------------------------------------------------
 local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
@@ -389,23 +385,6 @@ local function toggle_popups( ... )
                 if v.popup:isShowing() then
                     v.popup:hide()
                 end
-            end
-        end
-    end
-end
-
-
--- Toggle border visibility
---------------------------------------------------------------------------------
-local function toggle_border( ... )
-    for _, set_to in ipairs({ ... }) do
-        local border = state.windows.border
-
-        if border then
-            if set_to == 'on' then
-                border:show()
-            elseif set_to == 'off' then
-                border:hide()
             end
         end
     end
@@ -451,7 +430,7 @@ local function snap_layout()
 
     win:raise()
 
-    set_border(win)
+    toggle_border('on')
 end
 
 
@@ -732,8 +711,8 @@ function M.traverse_slots(direction)
 
         if new_win then
             set_window_state(new_win, win_idx)
-            set_border(new_win)
 
+            toggle_border('on')
             toggle_popups('off', 'on')
             toggle_border('off', 'on')
         end
@@ -769,7 +748,6 @@ function M.cycle_main_apps()
 
                 set_layout(target_win, win)
                 set_window_state(target_win, idx)
-                set_border(target_win)
 
                 toggle_popups('off', 'on')
                 toggle_border('off', 'on')
@@ -818,7 +796,6 @@ function M.cycle_all_apps(direction)
 
             set_window_state(win, idx)
             set_layout(win)
-            set_border(win)
 
             toggle_popups('off', 'on')
             toggle_border('off', 'on')
@@ -853,7 +830,7 @@ function M.cycle_app_specific(direction)
             idx = get_window_idx(windows.wins, win)
 
             set_window_state(win, idx)
-            set_border(win)
+            toggle_border('on')
         end
 
         done()
@@ -879,7 +856,6 @@ function M.cycle_open(direction)
         if win then
             set_window_state(win, idx)
             set_layout(win)
-            set_border(win)
 
             toggle_popups('off', 'on')
             toggle_border('off', 'on')

@@ -4,8 +4,6 @@
 
 ## IMMEDIATE TASKS:
 
-- Maybe combine 'set_border' and 'toggle_border'.
-
 - Need an action that sends the focused window to the adjacent slot (i.e. send
   the window in left slot to the right slot).
 

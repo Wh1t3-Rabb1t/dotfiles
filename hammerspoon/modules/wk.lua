@@ -471,7 +471,6 @@ function M.maximize()
         snap_layout()
 
         toggle_popups('off', 'on')
-        toggle_border('off', 'on')
 
         done()
     end
@@ -521,7 +520,6 @@ function M.resize(direction, step_val)
         snap_layout()
 
         toggle_popups('off', 'on')
-        toggle_border('off', 'on')
 
         done()
     end
@@ -544,7 +542,6 @@ function M.swap()
         snap_layout()
 
         toggle_popups('off', 'on')
-        toggle_border('off', 'on')
 
         done()
     end

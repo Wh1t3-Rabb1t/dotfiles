@@ -457,42 +457,6 @@ local function focus_window(win)
 end
 
 
--- Init window state table
---------------------------------------------------------------------------------
-local function init_window_data()
-    local apps = state.apps
-
-    local windows = {
-        idx      = 1,
-        curr_win = hs.window.focusedWindow(),
-        wins     = {},
-    }
-
-    for _, app in ipairs(apps.list) do
-        for _, win in ipairs(apps[app:name()].wins) do
-            table.insert(windows.wins, win)
-
-            -- Assign windows to a layout slot for this screen
-            local layout = state.screens[win:screen():id()].layout
-
-            if is_fullscreen(win) then
-                layout.maximized = win
-            else
-                local side = get_window_alignment(win)
-
-                layout[side] = win
-            end
-        end
-    end
-
-    if #windows.wins > 0 then
-        return windows
-    end
-
-    return false
-end
-
-
 --------------------------------------------------------------------------------
 -- Maximize focused window
 --------------------------------------------------------------------------------
@@ -1079,10 +1043,31 @@ end
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
-    local data = init_window_data()
+    local windows = {
+        curr_win = hs.window.focusedWindow(),
+        idx      = 1,
+        wins     = {},
+    }
 
-    if data then
-        state.windows = data
+    for _, app in ipairs(state.apps.list) do
+        for _, win in ipairs(state.apps[app:name()].wins) do
+            table.insert(windows.wins, win)
+
+            -- Assign windows to a layout slot for the current screen
+            local layout = state.screens[win:screen():id()].layout
+
+            if is_fullscreen(win) then
+                layout.maximized = win
+            else
+                local side = get_window_alignment(win)
+
+                layout[side] = win
+            end
+        end
+    end
+
+    if #windows.wins > 0 then
+        state.windows = windows
 
         -- Establish 'all' idx from the focused window
         state.windows.idx = get_window_idx(

@@ -321,7 +321,7 @@ function M.init()
 
     cache.wk_tap = create_event_tap()
 
-    state.wk_initialized = true
+    state.wk.initialized = true
 end
 
 return M

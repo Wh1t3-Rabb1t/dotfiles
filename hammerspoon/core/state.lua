@@ -2,25 +2,17 @@ local M = {}
 
 -- Commented out entries are populated on init
 
-M.wk_initialized = false
-
-M.menu = {
-    tap_active = false,  -- (true|false)
-    corner     = 'bottom_right',
-    stack      = 'horizontal',
-    opacity    = 1,
+M.wk = {
+    initialized = false,
+    tap_active  = false,
+    corner      = 'bottom_right',
+    stack       = 'horizontal',
+    opacity     = 1,
 }
 
 M.action_queue = {
-    items   = {},
     running = false,
-}
-
-M.windows = {
-    -- idx      = 1,
-    -- border   = obj,
-    -- curr_win = win,
-    -- wins     = { ... },
+    items   = {},
 }
 
 M.apps = {
@@ -30,6 +22,13 @@ M.apps = {
     --     wins = { ... },
     -- },
     -- ...
+}
+
+M.windows = {
+    -- idx      = 1,
+    -- border   = obj,
+    -- curr_win = win,
+    -- wins     = { ... },
 }
 
 M.screens = {
@@ -43,7 +42,7 @@ M.screens = {
     --         left      = (win|false),
     --         right     = (win|false),
     --     }
-    -- }
+    -- },
     -- ...
 }
 

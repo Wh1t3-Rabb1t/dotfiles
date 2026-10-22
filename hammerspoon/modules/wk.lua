@@ -212,7 +212,7 @@ end
 -- Get popup anchor position
 --------------------------------------------------------------------------------
 local function get_popup_anchor(frame, width, height)
-    local corner = state.menu.corner
+    local corner = state.wk.corner
 
     local padding = 25
 
@@ -239,7 +239,7 @@ end
 -- Calculate popup coordinates relative to the focused window
 --------------------------------------------------------------------------------
 local function get_popup_coords(win, popups)
-    local stack        = state.menu.stack
+    local stack        = state.wk.stack
     local screen_frame = state.screens[win:screen():id()].frame
 
     local spacing = 25
@@ -373,7 +373,7 @@ local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
             local win     = state.windows.curr_win
-            local opacity = state.menu.opacity
+            local opacity = state.wk.opacity
 
             local popups = get_popups(win)
             local coords = get_popup_coords(win, popups)
@@ -417,10 +417,10 @@ end
 local function toggle_tap( ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
-            state.menu.tap_active = true
+            state.wk.tap_active = true
             cache.wk_tap:start()
         elseif set_to == 'off' then
-            state.menu.tap_active = false
+            state.wk.tap_active = false
             cache.wk_tap:stop()
         end
     end
@@ -902,7 +902,7 @@ function M.cycle_corner_pos()
             'top_left',
         }
 
-        local curr_corner = state.menu.corner
+        local curr_corner = state.wk.corner
         local curr_idx    = 1
 
         -- Find the index of the current corner
@@ -918,7 +918,7 @@ function M.cycle_corner_pos()
         local new_idx    = (curr_idx % #corners) + 1
         local new_corner = corners[new_idx]
 
-        state.menu.corner = new_corner
+        state.wk.corner = new_corner
 
         toggle_popups('off', 'on')
 
@@ -932,10 +932,10 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_stacking()
     return function(done)
-        local stack     = state.menu.stack
+        local stack     = state.wk.stack
         local new_stack = (stack == 'vertical') and 'horizontal' or 'vertical'
 
-        state.menu.stack = new_stack
+        state.wk.stack = new_stack
 
         toggle_popups('off', 'on')
 
@@ -949,7 +949,7 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
-        local opacity = state.menu.opacity
+        local opacity = state.wk.opacity
         local win     = state.windows.curr_win
         local app     = win:application():name()
 
@@ -969,7 +969,7 @@ function M.opacity(direction)
         -- System popup
         cache.assets.system.popup:alpha(opacity)
 
-        state.menu.opacity = opacity
+        state.wk.opacity = opacity
 
         done()
     end
@@ -985,7 +985,7 @@ function M.insert()
         toggle_tap('off')
 
         local frame   = state.windows.curr_win:frame()
-        local opacity = state.menu.opacity
+        local opacity = state.wk.opacity
         local popup   = cache.assets.insert.popup
 
         local function end_insert_mode(hotkeys, active_popup)
@@ -1066,7 +1066,7 @@ end
 -- Launch which key
 --------------------------------------------------------------------------------
 function M.launch()
-    if state.menu.tap_active then
+    if state.wk.tap_active then
         return
     end
 
@@ -1076,7 +1076,7 @@ function M.launch()
     M.init()
 
     -- Init wk_assets if not already initialized
-    if not state.wk_initialized then
+    if not state.wk.initialized then
         require('wk_assets').init()
     end
 

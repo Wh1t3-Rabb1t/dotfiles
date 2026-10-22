@@ -23,7 +23,7 @@ local util  = require('util')
 --
 --             if count ~= #state.windows.wins then
 --                 -- Signal to the eventtap that state needs to be re-built
---                 state.wk_initialized = false
+--                 state.menu.initialized = false
 --
 --                 print('state invalid')
 --             end

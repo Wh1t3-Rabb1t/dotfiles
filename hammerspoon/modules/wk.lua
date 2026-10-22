@@ -4,28 +4,6 @@ local state = require('state')
 local cache = require('cache')
 
 
-
-
--- function M.debug_layout()
---     return function(done)
---         local screen = hs.mouse.getCurrentScreen()
---         local layout = state.screens[screen:id()].layout
---         if layout.maximized then
---             print('Max: ' .. layout.maximized:application():name())
---         end
---         if layout.left then
---             print('Left: ' .. layout.left:application():name())
---         end
---         if layout.right then
---             print('Right: ' .. layout.right:application():name())
---         end
---         done()
---     end
--- end
-
-
-
-
 -- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
@@ -38,17 +16,6 @@ local function is_fullscreen(win)
        and math.abs(a.y - b.y) <= tolerance
        and math.abs(a.w - b.w) <= tolerance
        and math.abs(a.h - b.h) <= tolerance
-end
-
-
--- Remove windows from the layout slot they occupy
---------------------------------------------------------------------------------
-local function clear_slot(win)
-    local layout = state.screens[win:screen():id()].layout
-
-    if layout.left      == win then layout.left      = false end
-    if layout.right     == win then layout.right     = false end
-    if layout.maximized == win then layout.maximized = false end
 end
 
 
@@ -557,7 +524,11 @@ function M.move_to_screen()
         local next_screen = win:screen():next()
 
         if next_screen then
-            clear_slot(win)
+            local layout = state.screens[win:screen():id()].layout
+
+            if layout.left      == win then layout.left      = false end
+            if layout.right     == win then layout.right     = false end
+            if layout.maximized == win then layout.maximized = false end
 
             win:moveToScreen(next_screen)
 
@@ -673,7 +644,6 @@ function M.traverse_slots(direction)
         if new_win then
             set_window_state(new_win, win_idx)
 
-            toggle_border('on')
             toggle_popups('off', 'on')
             toggle_border('off', 'on')
         end
@@ -1066,14 +1036,11 @@ function M.init()
     if #windows.wins > 0 then
         state.windows = windows
 
-        -- Establish 'all' idx from the focused window
-        state.windows.idx = get_window_idx(
-            state.windows.wins,
-            state.windows.curr_win
-        )
-
         local win      = state.windows.curr_win
         local app_name = win:application():name()
+
+        -- Establish 'all' idx from the currently focused window
+        state.windows.idx = get_window_idx(state.windows.wins, win)
 
         -- Init layout if the focused window is compatible
         if cache.assets[app_name] then

@@ -881,9 +881,8 @@ function M.insert()
         toggle_popups('off')
         toggle_tap('off')
 
-        local frame   = state.windows.curr_win:frame()
-        local opacity = state.wk.opacity
-        local popup   = cache.assets.insert.popup
+        local frame = state.windows.curr_win:frame()
+        local popup = cache.assets.insert.popup
 
         local function end_insert_mode(hotkeys, active_popup)
             for _, hk in ipairs(hotkeys) do
@@ -899,7 +898,7 @@ function M.insert()
         }
 
         popup:topLeft(pos)
-        popup:alpha(opacity)
+        popup:alpha(state.wk.opacity)
         popup:show(0.15)
 
         local hotkeys = {}

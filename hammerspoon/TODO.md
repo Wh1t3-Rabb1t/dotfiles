@@ -4,6 +4,9 @@
 
 ## IMMEDIATE TASKS:
 
+- Setup globals for values like 'step' when resizing windows etc. (make it easy
+  to customize values like this in a central file).
+
 - Need an action that sends the focused window to the adjacent slot (i.e. send
   the window in left slot to the right slot).
 

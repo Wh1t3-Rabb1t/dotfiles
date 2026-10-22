@@ -7,15 +7,15 @@ local cache = require('cache')
 -- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
-    local a = win:frame()
-    local b = state.screens[win:screen():id()].frame
+    local win_frame    = win:frame()
+    local screen_frame = state.screens[win:screen():id()].frame
 
     local tolerance = 1
 
-    return math.abs(a.x - b.x) <= tolerance
-       and math.abs(a.y - b.y) <= tolerance
-       and math.abs(a.w - b.w) <= tolerance
-       and math.abs(a.h - b.h) <= tolerance
+    return math.abs(win_frame.x - screen_frame.x) <= tolerance
+       and math.abs(win_frame.y - screen_frame.y) <= tolerance
+       and math.abs(win_frame.w - screen_frame.w) <= tolerance
+       and math.abs(win_frame.h - screen_frame.h) <= tolerance
 end
 
 
@@ -221,25 +221,6 @@ local function get_popup_coords(win, popups)
 end
 
 
--- Get currently displayed popups
---------------------------------------------------------------------------------
-local function get_popups(win)
-    local app_name = win:application():name()
-
-    local popups = {}
-
-    -- App specific popup (if supported)
-    if cache.assets[app_name] then
-        table.insert(popups, cache.assets[app_name])
-    end
-
-    -- System popup
-    table.insert(popups, cache.assets.system)
-
-    return popups
-end
-
-
 -- Assign windows to layout state.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
@@ -335,15 +316,24 @@ end
 local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
-            local win     = state.windows.curr_win
-            local opacity = state.wk.opacity
+            local win      = state.windows.curr_win
+            local app_name = win:application():name()
 
-            local popups = get_popups(win)
+            local popups = {}
+
+            -- App specific popup
+            if cache.assets[app_name] then
+                table.insert(popups, cache.assets[app_name])
+            end
+
+            -- System popup
+            table.insert(popups, cache.assets.system)
+
             local coords = get_popup_coords(win, popups)
 
             for i, v in ipairs(popups) do
                 v.popup:topLeft(coords[i])
-                v.popup:alpha(opacity)
+                v.popup:alpha(state.wk.opacity)
                 v.popup:show(0.15)
             end
 

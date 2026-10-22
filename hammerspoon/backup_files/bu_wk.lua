@@ -7,15 +7,15 @@ local cache = require('cache')
 -- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
-    local a = win:frame()
-    local b = state.screens[win:screen():id()].frame
+    local win_frame    = win:frame()
+    local screen_frame = state.screens[win:screen():id()].frame
 
     local tolerance = 1
 
-    return math.abs(a.x - b.x) <= tolerance
-       and math.abs(a.y - b.y) <= tolerance
-       and math.abs(a.w - b.w) <= tolerance
-       and math.abs(a.h - b.h) <= tolerance
+    return math.abs(win_frame.x - screen_frame.x) <= tolerance
+       and math.abs(win_frame.y - screen_frame.y) <= tolerance
+       and math.abs(win_frame.w - screen_frame.w) <= tolerance
+       and math.abs(win_frame.h - screen_frame.h) <= tolerance
 end
 
 

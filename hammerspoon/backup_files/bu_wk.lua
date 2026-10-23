@@ -221,25 +221,6 @@ local function get_popup_coords(win, popups)
 end
 
 
--- Get currently displayed popups
---------------------------------------------------------------------------------
-local function get_popups(win)
-    local app_name = win:application():name()
-
-    local popups = {}
-
-    -- App specific popup (if supported)
-    if cache.assets[app_name] then
-        table.insert(popups, cache.assets[app_name])
-    end
-
-    -- System popup
-    table.insert(popups, cache.assets.system)
-
-    return popups
-end
-
-
 -- Assign windows to layout state.
 --
 -- If a window is fullscreen at the forefront and a new window that is NOT
@@ -335,15 +316,24 @@ end
 local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
-            local win     = state.windows.curr_win
-            local opacity = state.wk.opacity
+            local win      = state.windows.curr_win
+            local app_name = win:application():name()
 
-            local popups = get_popups(win)
+            local popups = {}
+
+            -- App specific popup
+            if cache.assets[app_name] then
+                table.insert(popups, cache.assets[app_name])
+            end
+
+            -- System popup
+            table.insert(popups, cache.assets.system)
+
             local coords = get_popup_coords(win, popups)
 
             for i, v in ipairs(popups) do
                 v.popup:topLeft(coords[i])
-                v.popup:alpha(opacity)
+                v.popup:alpha(state.wk.opacity)
                 v.popup:show(0.15)
             end
 
@@ -891,9 +881,8 @@ function M.insert()
         toggle_popups('off')
         toggle_tap('off')
 
-        local frame   = state.windows.curr_win:frame()
-        local opacity = state.wk.opacity
-        local popup   = cache.assets.insert.popup
+        local frame = state.windows.curr_win:frame()
+        local popup = cache.assets.insert.popup
 
         local function end_insert_mode(hotkeys, active_popup)
             for _, hk in ipairs(hotkeys) do
@@ -909,7 +898,7 @@ function M.insert()
         }
 
         popup:topLeft(pos)
-        popup:alpha(opacity)
+        popup:alpha(state.wk.opacity)
         popup:show(0.15)
 
         local hotkeys = {}

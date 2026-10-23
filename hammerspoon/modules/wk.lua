@@ -996,6 +996,43 @@ end
 
 
 --------------------------------------------------------------------------------
+-- WIP
+--
+-- Move focused window to the adjacent layout slot
+--------------------------------------------------------------------------------
+function M.move_to_slot(direction)  -- (left|right)
+    return function(done)
+        local win       = state.windows.curr_win
+        local screen_id = win:screen():id()
+        local layout    = state.screens[screen_id].layout
+
+        layout[direction] = win
+
+        snap_layout()
+        toggle_popups('off', 'on')
+
+        for _, app in ipairs(state.apps.list) do
+            for _, window in ipairs(state.apps[app:name()].wins) do
+                if window:screen():id() == screen_id then
+                    if not is_fullscreen(window) then
+                        local side = get_window_alignment(window)
+
+                        if side ~= direction then
+                            layout[side] = window
+
+                            break
+                        end
+                    end
+                end
+            end
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 function M.init()

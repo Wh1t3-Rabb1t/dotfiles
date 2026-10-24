@@ -38,6 +38,26 @@ local cache = require('cache')
 -- end
 
 
+-- local function debug_slots(screen_id)
+--     local layout = state.screens[screen_id].layout
+--
+--     if layout.left      then print('left: ' .. layout.left:title())     end
+--     if layout.right     then print('right: ' .. layout.right:title())   end
+--     if layout.maximized then print('max: ' .. layout.maximized:title()) end
+-- end
+
+
+
+-- Remove a window from the layout slot it occupies (if any)
+--------------------------------------------------------------------------------
+local function clear_slot(win)
+    local layout = state.screens[win:screen():id()].layout
+
+    if layout.left      == win then layout.left      = false end
+    if layout.right     == win then layout.right     = false end
+    if layout.maximized == win then layout.maximized = false end
+end
+
 
 -- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
@@ -294,6 +314,29 @@ local function set_layout(win, existing_win)
     end
 
     layout[side] = win
+end
+
+
+-- Populate all empty slot on the target screen
+--------------------------------------------------------------------------------
+local function set_screen_layout(screen_id)
+    for _, win in ipairs(hs.window.orderedWindows()) do
+        local layout = state.screens[screen_id].layout
+
+        if win:isStandard() and win:isVisible() then
+            if is_fullscreen(win) then
+                if not layout.maximized then
+                    layout.maximized = win
+                end
+            else
+                local side = get_window_alignment(win)
+
+                if not layout[side] then
+                    layout[side] = win
+                end
+            end
+        end
+    end
 end
 
 
@@ -559,6 +602,30 @@ function M.move_to_screen()
             set_layout(win)
             snap_layout()
         end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Move focused window to the adjacent layout slot
+--------------------------------------------------------------------------------
+function M.move_to_slot(direction)  -- (left|right)
+    return function(done)
+        local curr_win  = state.windows.curr_win
+        local screen_id = curr_win:screen():id()
+        local layout    = state.screens[screen_id].layout
+
+        clear_slot(curr_win)
+
+        layout[direction] = curr_win
+
+        snap_layout()
+
+        toggle_popups('off', 'on')
+
+        set_screen_layout(screen_id)
 
         done()
     end
@@ -844,9 +911,9 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
-        local opacity = state.wk.opacity
-        local win     = state.windows.curr_win
-        local app     = win:application():name()
+        local opacity  = state.wk.opacity
+        local win      = state.windows.curr_win
+        local app_name = win:application():name()
 
         local step = 0.1
 
@@ -857,8 +924,8 @@ function M.opacity(direction)
         end
 
         -- App specific popup (if supported)
-        if cache.assets[app] then
-            cache.assets[app].popup:alpha(opacity)
+        if cache.assets[app_name] then
+            cache.assets[app_name].popup:alpha(opacity)
         end
 
         -- System popup
@@ -993,111 +1060,6 @@ function M.quit()
 end
 
 
-
-
-
-
-
-
-
-
---------------------------------------------------------------------------------
--- WIP
---------------------------------------------------------------------------------
-
--- function M.debug_wins()
---     return function(done)
---         for i, win in ipairs(hs.window.orderedWindows()) do
---             if win:isStandard() and win:isVisible() then
---                 print(i .. ' title: ' .. win:title())
---             end
---         end
---         done()
---     end
--- end
-
-
-function M.init_screen_layout(screen_id)
-    for _, win in ipairs(hs.window.orderedWindows()) do
-        local layout = state.screens[screen_id].layout
-
-        if win:isStandard() and win:isVisible() then
-            if is_fullscreen(win) then
-                if not layout.maximized then
-                    layout.maximized = win
-                end
-            else
-                local side = get_window_alignment(win)
-
-                if not layout[side] then
-                    layout[side] = win
-                end
-            end
-        end
-    end
-end
-
-function M.empty_slots(screen_id)
-    local layout = state.screens[screen_id].layout
-
-    if layout.left      then layout.left      = false end
-    if layout.right     then layout.right     = false end
-    if layout.maximized then layout.maximized = false end
-end
-
-
-local function debug_slots(screen_id)
-    local layout = state.screens[screen_id].layout
-
-    if layout.left      then print('left: ' .. layout.left:title())     end
-    if layout.right     then print('right: ' .. layout.right:title())   end
-    if layout.maximized then print('max: ' .. layout.maximized:title()) end
-end
-
-
-
-
-
-
-local function clear_slot(win)
-    local layout = state.screens[win:screen():id()].layout
-
-    if layout.left      == win then layout.left      = false end
-    if layout.right     == win then layout.right     = false end
-    if layout.maximized == win then layout.maximized = false end
-end
-
-
---------------------------------------------------------------------------------
--- Move focused window to the adjacent layout slot
---------------------------------------------------------------------------------
-function M.move_to_slot(direction)  -- (left|right)
-    return function(done)
-        local curr_win  = state.windows.curr_win
-        local screen_id = curr_win:screen():id()
-        local layout    = state.screens[screen_id].layout
-
-        -- M.empty_slots(screen_id)
-
-        clear_slot(curr_win)
-
-        layout[direction] = curr_win
-
-
-        debug_slots(screen_id)
-
-        M.init_screen_layout(screen_id)
-
-
-        snap_layout()
-
-        toggle_popups('off', 'on')
-
-        done()
-    end
-end
-
-
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
@@ -1121,54 +1083,11 @@ function M.init()
         state.windows.idx = get_window_idx(state.windows.wins, state.windows.curr_win)
 
         for _, screen in ipairs(hs.screen.allScreens()) do
-            M.init_screen_layout(screen:id())
+            set_screen_layout(screen:id())
         end
 
         snap_layout()
     end
 end
-
-
--- function M.init()
---     local windows = {
---         curr_win = hs.window.focusedWindow(),
---         idx      = 1,
---         wins     = {},
---     }
---
---     for _, app in ipairs(state.apps.list) do
---         for _, win in ipairs(state.apps[app:name()].wins) do
---             table.insert(windows.wins, win)
---
---             -- Assign windows to a layout slot for the current screen
---             local layout = state.screens[win:screen():id()].layout
---
---             if is_fullscreen(win) then
---                 layout.maximized = win
---             else
---                 local side = get_window_alignment(win)
---
---                 layout[side] = win
---             end
---         end
---     end
---
---     if #windows.wins > 0 then
---         state.windows = windows
---
---         local win      = state.windows.curr_win
---         local app_name = win:application():name()
---
---         -- Establish 'all' idx from the currently focused window
---         state.windows.idx = get_window_idx(state.windows.wins, win)
---
---         -- Init layout if the focused window is compatible
---         if cache.assets[app_name] then
---             set_layout(win)
---         end
---
---         snap_layout()
---     end
--- end
 
 return M

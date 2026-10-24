@@ -213,7 +213,7 @@ verbs: [
     # Delete selection
     ############################################################
     {
-        invocation: "d"
+        invocation: "del"
         cmd: ":mv ~/.Trash"
     }
 

@@ -33,10 +33,12 @@ M.apps = {
                 -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh_state() },
 
 
-                -- { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
-                { '_', 'Move to slot',   wk.move_to_slot('left')                        },
+                { '_', 'To left slot',   wk.move_to_slot('left')                        },
+                { '-', 'To right slot',  wk.move_to_slot('right')                       },
+                -- { '-', 'db',  wk.debug_wins()                       },
 
-                { '-', 'Next app',       wk.cycle_all_apps('next')                      },
+                -- { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
+                -- { '-', 'Next app',       wk.cycle_all_apps('next')                      },
                 { 'o', 'Next slot',      wk.traverse_slots('next')                      },
                 { 'u', 'Prev slot',      wk.traverse_slots('prev')                      },
                 { 'O', 'Next window',    wk.cycle_open('next')                          },

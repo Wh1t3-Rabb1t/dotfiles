@@ -683,7 +683,7 @@ function M.traverse_slots(direction)
             and { 'maximized', 'right', 'left' }
             or  { 'maximized', 'left', 'right' }
 
-        local function get_next_screen_slot(start_id, skip)
+        local function next_layout(start_id, skip)
             local screens = hs.screen.allScreens()
             local start_idx
 
@@ -725,25 +725,23 @@ function M.traverse_slots(direction)
 
         -- Maximized (always traverse to another screen)
         if layout.maximized == win then
-            target_slot = get_next_screen_slot(screen_id, win)
+            target_slot = next_layout(screen_id, win)
 
         -- Left
         elseif layout.left == win then
             if reverse then
-                target_slot = get_next_screen_slot(screen_id, win)
+                target_slot = next_layout(screen_id, win) or layout.right
+            else
+                target_slot = layout.right or next_layout(screen_id, win)
             end
-
-            -- Fall back to the adjacent slot if no other screen has one
-            target_slot = target_slot or layout.right
 
         -- Right
         elseif layout.right == win then
             if not reverse then
-                target_slot = get_next_screen_slot(screen_id, win)
+                target_slot = next_layout(screen_id, win) or layout.left
+            else
+                target_slot = layout.left or next_layout(screen_id, win)
             end
-
-            -- Fall back to the adjacent slot if no other screen has one
-            target_slot = target_slot or layout.left
         end
 
         if not target_slot then

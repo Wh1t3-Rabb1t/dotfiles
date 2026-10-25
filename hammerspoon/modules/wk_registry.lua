@@ -34,8 +34,9 @@ M.apps = {
 
 
                 { '_', 'To left slot',   wk.move_to_slot('left')                        },
-                { '-', 'To right slot',  wk.move_to_slot('right')                       },
+                -- { '-', 'To right slot',  wk.move_to_slot('right')                       },
                 -- { '-', 'db',  wk.debug_wins()                       },
+                { '-', 'db',  wk.debug_screens()                       },
 
                 -- { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
                 -- { '-', 'Next app',       wk.cycle_all_apps('next')                      },

@@ -4,6 +4,61 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- -- Launch or focus target app
+-- function M.launch_or_focus(app)
+--     return function(done)
+--         local existing = hs.window.focusedWindow()
+--
+--         local function finish(new)
+--             state.windows.curr_win = new
+--
+--             if existing and new and existing:id() ~= new:id() then
+--                 set_layout(new, existing)
+--                 snap_layout()
+--             end
+--
+--             done()
+--         end
+--
+--         if existing and existing:application():name() == app then
+--             finish(existing)
+--
+--             return
+--         end
+--
+--         local wf = hs.window.filter.new(app)
+--
+--         wf:subscribe(hs.window.filter.windowFocused, function(new)
+--             wf:unsubscribeAll()
+--             finish(new)
+--         end)
+--
+--         hs.application.launchOrFocus(app)
+--     end
+-- end
+
+
+-- local function debug_slots(screen_id)
+--     local layout = state.screens[screen_id].layout
+--
+--     if layout.left      then print('left: ' .. layout.left:title())     end
+--     if layout.right     then print('right: ' .. layout.right:title())   end
+--     if layout.maximized then print('max: ' .. layout.maximized:title()) end
+-- end
+
+
+
+-- Remove a window from the layout slot it occupies (if any)
+--------------------------------------------------------------------------------
+local function clear_slot(win)
+    local layout = state.screens[win:screen():id()].layout
+
+    if layout.left      == win then layout.left      = false end
+    if layout.right     == win then layout.right     = false end
+    if layout.maximized == win then layout.maximized = false end
+end
+
+
 -- Determine whether or not a window is maximized
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
@@ -262,6 +317,29 @@ local function set_layout(win, existing_win)
 end
 
 
+-- Populate all empty slot on the target screen
+--------------------------------------------------------------------------------
+local function set_screen_layout(screen_id)
+    for _, win in ipairs(hs.window.orderedWindows()) do
+        local layout = state.screens[screen_id].layout
+
+        if win:isStandard() and win:isVisible() then
+            if is_fullscreen(win) then
+                if not layout.maximized then
+                    layout.maximized = win
+                end
+            else
+                local side = get_window_alignment(win)
+
+                if not layout[side] then
+                    layout[side] = win
+                end
+            end
+        end
+    end
+end
+
+
 -- Update focused window state
 --------------------------------------------------------------------------------
 local function set_window_state(win, idx)
@@ -279,8 +357,8 @@ end
 --------------------------------------------------------------------------------
 local function toggle_border( ... )
     for _, set_to in ipairs({ ... }) do
-        local border = state.windows.border
         local win    = state.windows.curr_win
+        local border = state.windows.border
 
         if set_to == 'on' then
             -- Create border if it doesn't already exist
@@ -419,9 +497,8 @@ end
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
-        local win       = state.windows.curr_win
-        local screen_id = win:screen():id()
-        local layout    = state.screens[screen_id].layout
+        local win    = state.windows.curr_win
+        local layout = state.screens[win:screen():id()].layout
 
         layout.maximized = win
 
@@ -457,6 +534,8 @@ function M.resize(direction, step_val)
 
         -- If window is maximized, snap back to splits layout
         if layout.maximized then
+            layout.maximized = false
+
             if direction == 'left' then
                 if layout.right == win then
                     layout.right = layout.left
@@ -470,8 +549,6 @@ function M.resize(direction, step_val)
 
                 layout.right = win
             end
-
-            layout.maximized = false
         end
 
         snap_layout()
@@ -532,37 +609,25 @@ end
 
 
 --------------------------------------------------------------------------------
--- Launch or focus target app
+-- Move focused window to the adjacent layout slot
 --------------------------------------------------------------------------------
-function M.launch_or_focus(app)
+function M.move_to_slot(direction)  -- (left|right)
     return function(done)
-        local existing = hs.window.focusedWindow()
+        local curr_win  = state.windows.curr_win
+        local screen_id = curr_win:screen():id()
+        local layout    = state.screens[screen_id].layout
 
-        local function finish(new)
-            state.windows.curr_win = new
+        clear_slot(curr_win)
 
-            if existing and new and existing:id() ~= new:id() then
-                set_layout(new, existing)
-                snap_layout()
-            end
+        layout[direction] = curr_win
 
-            done()
-        end
+        snap_layout()
 
-        if existing and existing:application():name() == app then
-            finish(existing)
+        toggle_popups('off', 'on')
 
-            return
-        end
+        set_screen_layout(screen_id)
 
-        local wf = hs.window.filter.new(app)
-
-        wf:subscribe(hs.window.filter.windowFocused, function(new)
-            wf:unsubscribeAll()
-            finish(new)
-        end)
-
-        hs.application.launchOrFocus(app)
+        done()
     end
 end
 
@@ -846,9 +911,9 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
-        local opacity = state.wk.opacity
-        local win     = state.windows.curr_win
-        local app     = win:application():name()
+        local opacity  = state.wk.opacity
+        local win      = state.windows.curr_win
+        local app_name = win:application():name()
 
         local step = 0.1
 
@@ -859,8 +924,8 @@ function M.opacity(direction)
         end
 
         -- App specific popup (if supported)
-        if cache.assets[app] then
-            cache.assets[app].popup:alpha(opacity)
+        if cache.assets[app_name] then
+            cache.assets[app_name].popup:alpha(opacity)
         end
 
         -- System popup
@@ -1008,32 +1073,17 @@ function M.init()
     for _, app in ipairs(state.apps.list) do
         for _, win in ipairs(state.apps[app:name()].wins) do
             table.insert(windows.wins, win)
-
-            -- Assign windows to a layout slot for the current screen
-            local layout = state.screens[win:screen():id()].layout
-
-            if is_fullscreen(win) then
-                layout.maximized = win
-            else
-                local side = get_window_alignment(win)
-
-                layout[side] = win
-            end
         end
     end
 
     if #windows.wins > 0 then
         state.windows = windows
 
-        local win      = state.windows.curr_win
-        local app_name = win:application():name()
-
         -- Establish 'all' idx from the currently focused window
-        state.windows.idx = get_window_idx(state.windows.wins, win)
+        state.windows.idx = get_window_idx(state.windows.wins, state.windows.curr_win)
 
-        -- Init layout if the focused window is compatible
-        if cache.assets[app_name] then
-            set_layout(win)
+        for _, screen in ipairs(hs.screen.allScreens()) do
+            set_screen_layout(screen:id())
         end
 
         snap_layout()

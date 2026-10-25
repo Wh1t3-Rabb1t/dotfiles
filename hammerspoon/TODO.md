@@ -4,8 +4,7 @@
 
 ## IMMEDIATE TASKS:
 
-- Create a fn responsible for finding an appropriate window to fill an empty
-  slot on the current screen.
+- On layout init windows are pulled from one screen to another to fill slots.
 
 - Need to ensure that the curr_win is always registered in a slot (the use of
   raise() in snap_layout() might be causing problems).

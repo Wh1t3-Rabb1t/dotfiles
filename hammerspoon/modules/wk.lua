@@ -719,28 +719,28 @@ function M.traverse_slots(direction)
 
         local win       = state.windows.curr_win
         local screen_id = win:screen():id()
-        local layout    = state.screens[screen_id].layout
+        local slot      = state.screens[screen_id].layout
 
         local target_slot
 
         -- Maximized (always traverse to another screen)
-        if layout.maximized == win then
+        if slot.maximized == win then
             target_slot = next_layout(screen_id, win)
 
         -- Left
-        elseif layout.left == win then
+        elseif slot.left == win then
             if reverse then
-                target_slot = next_layout(screen_id, win) or layout.right
+                target_slot = next_layout(screen_id, win) or slot.right
             else
-                target_slot = layout.right or next_layout(screen_id, win)
+                target_slot = slot.right or next_layout(screen_id, win)
             end
 
         -- Right
-        elseif layout.right == win then
+        elseif slot.right == win then
             if not reverse then
-                target_slot = next_layout(screen_id, win) or layout.left
+                target_slot = next_layout(screen_id, win) or slot.left
             else
-                target_slot = layout.left or next_layout(screen_id, win)
+                target_slot = slot.left or next_layout(screen_id, win)
             end
         end
 

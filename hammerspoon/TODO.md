@@ -4,16 +4,11 @@
 
 ## IMMEDIATE TASKS:
 
-- On layout init windows are pulled from one screen to another to fill slots.
-
 - Need to ensure that the curr_win is always registered in a slot (the use of
   raise() in snap_layout() might be causing problems).
 
 - Setup globals for values like 'step' when resizing windows etc. (make it easy
   to customize values like this in a central file).
-
-- Need an action that sends the focused window to the adjacent slot (i.e. send
-  the window in left slot to the right slot).
 
 - Ensure that popups etc are either hidden/deleted in the appropriate places.
 

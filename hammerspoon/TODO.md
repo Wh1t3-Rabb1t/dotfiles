@@ -4,8 +4,6 @@
 
 ## IMMEDIATE TASKS:
 
-- Properly test the new 'set_layout' fn.
-
 - Need to ensure that the curr_win is always registered in a slot (the use of
   raise() in snap_layout() might be causing problems).
 

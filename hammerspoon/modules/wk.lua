@@ -13,7 +13,7 @@ local cache = require('cache')
 --             state.windows.curr_win = new
 --
 --             if existing and new and existing:id() ~= new:id() then
---                 set_layout(new, existing)
+--                 set_slots(new, existing)
 --                 snap_layout()
 --             end
 --
@@ -61,7 +61,7 @@ local cache = require('cache')
 
 -- Remove one, or all windows from the screens layout
 --
--- Args:  (win|screen_id)
+-- Args:  ( hs.window | hs.screen:id() )
 --------------------------------------------------------------------------------
 local function clear_slots(target)
     local is_screen = type(target) == 'number'
@@ -297,41 +297,38 @@ end
 
 -- Assign windows to layout state
 --------------------------------------------------------------------------------
-local function set_layout(win)
+local function set_slots(win)
     local layout = state.screens[win:screen():id()].layout
 
     if is_fullscreen(win) then
-        if layout.maximized ~= win then
-            layout.maximized = win
-        end
+        layout.maximized = win
     else
-        local side = get_window_alignment(win)
-
-        if layout[side] ~= win then
-            layout[side] = win
-        end
+        layout[get_window_alignment(win)] = win
     end
 end
 
 
 -- Populate all empty slot on the target screen
 --------------------------------------------------------------------------------
-local function set_screen_layout(id)
+local function set_empty_slots(screen_id)
+    local layout = state.screens[screen_id].layout
+
     for _, win in ipairs(hs.window.orderedWindows()) do
-        local layout = state.screens[id].layout
+        local win_is_std     = win:isStandard() and win:isVisible()
+        local on_same_screen = win:screen():id() == screen_id
 
-        if win:isStandard() and win:isVisible() and win:screen():id() == id then
+        local slot
+
+        if win_is_std and on_same_screen then
             if is_fullscreen(win) then
-                if not layout.maximized then
-                    layout.maximized = win
-                end
+                slot = 'maximized'
             else
-                local side = get_window_alignment(win)
-
-                if not layout[side] then
-                    layout[side] = win
-                end
+                slot = get_window_alignment(win)
             end
+        end
+
+        if slot and not layout[slot] then
+            layout[slot] = win
         end
     end
 end
@@ -591,7 +588,7 @@ function M.move_to_screen()
 
             win:moveToScreen(next_screen)
 
-            set_layout(win)
+            set_slots(win)
             snap_layout()
         end
 
@@ -617,7 +614,7 @@ function M.move_to_slot(direction)  -- (left|right)
 
         toggle_popups('off', 'on')
 
-        set_screen_layout(screen_id)
+        set_empty_slots(screen_id)
 
         done()
     end
@@ -756,7 +753,7 @@ function M.cycle_main_apps()
                 local idx = get_window_idx(windows.wins, target_win)
 
                 set_window_state(target_win, idx)
-                set_layout(target_win)
+                set_slots(target_win)
 
                 toggle_popups('off', 'on')
                 toggle_border('off', 'on')
@@ -804,7 +801,7 @@ function M.cycle_all_apps(direction)
             local idx = get_window_idx(windows.wins, win)
 
             set_window_state(win, idx)
-            set_layout(win)
+            set_slots(win)
 
             toggle_popups('off', 'on')
             toggle_border('off', 'on')
@@ -864,7 +861,7 @@ function M.cycle_open(direction)
 
         if win then
             set_window_state(win, idx)
-            set_layout(win)
+            set_slots(win)
 
             toggle_popups('off', 'on')
             toggle_border('off', 'on')
@@ -1108,10 +1105,9 @@ function M.init()
             state.windows.curr_win
         )
 
-
         for _, screen in ipairs(hs.screen.allScreens()) do
             clear_slots(screen:id())
-            set_screen_layout(screen:id())
+            set_empty_slots(screen:id())
         end
 
         snap_layout()

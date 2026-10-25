@@ -38,38 +38,43 @@ local cache = require('cache')
 -- end
 
 
-local function debug_slots(screen_id)
-    local layout = state.screens[screen_id].layout
+-- local function debug_slots(screen_id)
+--     local layout = state.screens[screen_id].layout
+--     if layout.left      then print('left: ' .. layout.left:title())     end
+--     if layout.right     then print('right: ' .. layout.right:title())   end
+--     if layout.maximized then print('max: ' .. layout.maximized:title()) end
+-- end
 
-    if layout.left      then print('left: ' .. layout.left:title())     end
-    if layout.right     then print('right: ' .. layout.right:title())   end
-    if layout.maximized then print('max: ' .. layout.maximized:title()) end
-end
 
-
-function M.debug_screens()
-    return function(done)
-        local pos  = hs.mouse.getCurrentScreen()
-        local id   = pos:id()
-        local uuid = pos:getUUID()
-
-        print('id: ' .. id)
-        print('UUID: ' .. uuid)
-
-        done()
-    end
-end
+-- function M.debug_screens()
+--     return function(done)
+--         local pos  = hs.mouse.getCurrentScreen()
+--         local id   = pos:id()
+--         local uuid = pos:getUUID()
+--         print('id: ' .. id)
+--         print('UUID: ' .. uuid)
+--         done()
+--     end
+-- end
 
 
 
--- Remove a window from the layout slot it occupies (if any)
+-- Remove one, or all windows from the screens layout
+--
+-- Args:  (win|screen_id)
 --------------------------------------------------------------------------------
-local function clear_slot(win)
-    local layout = state.screens[win:screen():id()].layout
+local function clear_slots(target)
+    local is_screen = type(target) == 'number'
+    local screen_id = is_screen and target or target:screen():id()
+    local layout    = state.screens[screen_id].layout
 
-    if layout.left      == win then layout.left      = false end
-    if layout.right     == win then layout.right     = false end
-    if layout.maximized == win then layout.maximized = false end
+    local slot_names = { 'left', 'right', 'maximized' }
+
+    for _, name in ipairs(slot_names) do
+        if is_screen or layout[name] == target then
+            layout[name] = false
+        end
+    end
 end
 
 
@@ -290,46 +295,8 @@ local function get_popup_coords(win, popups)
 end
 
 
--- Assign windows to layout state.
---
--- If a window is fullscreen at the forefront and a new window that is NOT
--- fullscreen is focused on the same screen, fullscreen the new window.
---
--- The 'left' and 'right' slots are retained until explicitly overwritten
--- (i.e. they are unaffected by the 'fullscreen' slot).
+-- Assign windows to layout state
 --------------------------------------------------------------------------------
--- local function set_layout(win, existing_win)
---     local layout = state.screens[win:screen():id()].layout
---
---     if is_fullscreen(win) then
---         layout.maximized = win
---
---         return  -- Exit early
---     end
---
---     if layout.maximized then
---         if layout.right == win then
---             layout.left = layout.maximized
---         elseif layout.left == win then
---             layout.right = layout.maximized
---         end
---
---         layout.maximized = win
---
---         return  -- Exit early
---     end
---
---     layout.maximized = false
---
---     local side = get_window_alignment(win)
---
---     if existing_win and get_window_alignment(existing_win) == side then
---         side = (side == 'left') and 'right' or 'left'
---     end
---
---     layout[side] = win
--- end
-
 local function set_layout(win)
     local layout = state.screens[win:screen():id()].layout
 
@@ -620,7 +587,7 @@ function M.move_to_screen()
         local next_screen = win:screen():next()
 
         if next_screen then
-            clear_slot(win)
+            clear_slots(win)
 
             win:moveToScreen(next_screen)
 
@@ -642,7 +609,7 @@ function M.move_to_slot(direction)  -- (left|right)
         local screen_id = win:screen():id()
         local layout    = state.screens[screen_id].layout
 
-        clear_slot(win)
+        clear_slots(win)
 
         layout[direction] = win
 
@@ -924,8 +891,8 @@ function M.cycle_corner_pos()
         local curr_idx    = 1
 
         -- Find the index of the current corner
-        for i, c in ipairs(corners) do
-            if c == curr_corner then
+        for i, v in ipairs(corners) do
+            if v == curr_corner then
                 curr_idx = i
 
                 break
@@ -1058,28 +1025,6 @@ end
 
 
 --------------------------------------------------------------------------------
--- Regenerate cache assets (screen, app, and window data)
---------------------------------------------------------------------------------
-function M.refresh_state()
-    return function(done)
-        toggle_popups('off')
-        toggle_border('off')
-        toggle_tap('off')
-
-        require('screens').init()
-        require('apps').init()
-
-        M.init()
-
-        toggle_popups('on')
-        toggle_tap('on')
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
 -- Launch which key
 --------------------------------------------------------------------------------
 function M.launch()
@@ -1117,6 +1062,28 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Regenerate cache assets (screen, app, and window data)
+--------------------------------------------------------------------------------
+function M.refresh_state()
+    return function(done)
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_tap('off')
+
+        require('screens').init()
+        require('apps').init()
+
+        M.init()
+
+        toggle_popups('on')
+        toggle_tap('on')
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 function M.init()
@@ -1141,7 +1108,9 @@ function M.init()
             state.windows.curr_win
         )
 
+
         for _, screen in ipairs(hs.screen.allScreens()) do
+            clear_slots(screen:id())
             set_screen_layout(screen:id())
         end
 

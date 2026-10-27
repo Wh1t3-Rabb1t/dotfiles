@@ -46,39 +46,70 @@ local cache = require('cache')
 -- end
 
 
--- function M.debug_screens()
---     return function(done)
---         local pos  = hs.mouse.getCurrentScreen()
---         local id   = pos:id()
---         local uuid = pos:getUUID()
---         print('id: ' .. id)
---         print('UUID: ' .. uuid)
---         done()
---     end
--- end
 
 
-
--- Remove one, or all windows from the screens layout
+-- DESCRIPTION
 --
--- Args:  ( hs.window | hs.screen:id() )
+-- Notes:
+--   Empty slots are represented by false, not nil
+--
+-- Parameters:
+--   target (table | number):
+--     hs.window      (table):   Clear the slot assigned to this window
+--     hs.screen:id() (number):  Clear every slot on the screen with this ID
+--
+-- Calls:
+--   clear_slots(target)
+--
+-- State changes:
+--   state.screens[id].layout.left
+--   state.screens[id].layout.right
+--   state.screens[id].layout.maximized
+--
+-- Errors:
+--   Assumes the target window's screen ID exists in state.screens
+--
+-- Returns:
+--   true  (bool):  win:frame() is equal to the usable screen frame
+--   false (bool):  win:frame() is NOT equal to the usable screen frame
+--------------------------------------------------------------------------------
+
+
+
+
+-- Clear window assignments from the screen layout.
+--
+-- Parameters:
+--   target (table | number):
+--     hs.window      (table):   Clear the slot assigned to this window
+--     hs.screen:id() (number):  Clear every slot on the screen with this ID
+--
+-- State changes:
+--   state.screens[id].layout.left
+--   state.screens[id].layout.right
+--   state.screens[id].layout.maximized
 --------------------------------------------------------------------------------
 local function clear_slots(target)
-    local is_screen = type(target) == 'number'
-    local screen_id = is_screen and target or target:screen():id()
+    local clear_all = type(target) == 'number'
+    local screen_id = clear_all and target or target:screen():id()
     local layout    = state.screens[screen_id].layout
 
-    local slot_names = { 'left', 'right', 'maximized' }
-
-    for _, name in ipairs(slot_names) do
-        if is_screen or layout[name] == target then
+    for _, name in ipairs({ 'left', 'right', 'maximized' }) do
+        if clear_all or layout[name] == target then
             layout[name] = false
         end
     end
 end
 
 
--- Determine whether or not a window is maximized
+-- Determine whether or not a window is maximized.
+--
+-- Parameters:
+--   win (table):  hs.window object
+--
+-- Returns:
+--   true  (bool):  win:frame() is equal to the usable screen frame
+--   false (bool):  win:frame() is NOT equal to the usable screen frame
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
     local win_frame    = win:frame()
@@ -93,7 +124,14 @@ local function is_fullscreen(win)
 end
 
 
--- Iterate window index
+-- Iterate window index.
+--
+-- Parameters:
+--   app_name  (string):  'kitty', 'Brave Browser' etc.
+--   direction (string):  'next' or 'prev'
+--
+-- Returns:
+--   idx (number):  Index of the next/prev window in the state table
 --------------------------------------------------------------------------------
 local function iterate_window_idx(app_name, direction)
     local wins
@@ -119,18 +157,31 @@ local function iterate_window_idx(app_name, direction)
 end
 
 
--- Find a windows index in the state table
+-- Find a windows index in the state table.
+--
+-- Parameters:
+--   wins (table):  An array of hs.window objects
+--   win  (table):  hs.window object
+--
+-- Returns:
+--   idx (number):  Index of the target window if it exists in the state table
 --------------------------------------------------------------------------------
-local function get_window_idx(wins, target)
-    for idx, win in ipairs(wins) do
-        if win == target then
+local function get_window_idx(wins, win)
+    for idx, window in ipairs(wins) do
+        if window == win then
             return idx
         end
     end
 end
 
 
--- Is window aligned to the left or right of the screen
+-- Determine which side of the screen the target window is aligned to.
+--
+-- Parameters:
+--   win (table):  hs.window object
+--
+-- Returns:
+--   side (string):  'left' or 'right'
 --------------------------------------------------------------------------------
 local function get_window_alignment(win)
     local win_frame    = win:frame()
@@ -148,7 +199,13 @@ local function get_window_alignment(win)
 end
 
 
--- Calculate left/right slot coordinates
+-- Calculate left/right slot coordinates of the target screen.
+--
+-- Parameters:
+--   screen_id (table):  hs.screen:id()
+--
+-- Returns:
+--   (table):  x, y, width, and height data for each slot on the screen
 --------------------------------------------------------------------------------
 local function get_slot_coords(screen_id)
     local border = 8
@@ -176,23 +233,31 @@ local function get_slot_coords(screen_id)
 end
 
 
--- Get popups x and y coords
+-- Get popups x and y coords.
+--
+-- Parameters:
+--   popups   (table):   hs.canvas objects
+--   spacing  (number):  Number of pixels to use as spacing
+--   stacking (string):  'horizontal' or 'vertical'
+--
+-- Returns:
+--   coords (table):  x and y coordinates of each popup
 --------------------------------------------------------------------------------
-local function get_popup_x_y(popups, spacing, layout)
+local function get_popup_x_y(popups, spacing, stacking)
     local x = 0
     local y = 0
 
     local coords = {}
 
     for i, popup in ipairs(popups) do
-        if layout == 'horizontal' then
+        if stacking == 'horizontal' then
             coords[i] = {
                 x = x,
                 y = 0,
             }
 
             x = x + popup.frame.w + spacing
-        elseif layout == 'vertical' then
+        elseif stacking == 'vertical' then
             coords[i] = {
                 x = 0,
                 y = y,
@@ -206,21 +271,29 @@ local function get_popup_x_y(popups, spacing, layout)
 end
 
 
--- Get the current popups width and height
+-- Get popups width and height.
+--
+-- Parameters:
+--   popups   (table):   hs.canvas objects
+--   spacing  (number):  Number of pixels to use as spacing
+--   stacking (string):  'horizontal' or 'vertical'
+--
+-- Returns:
+--   (table): Width and height of each popup.
 --------------------------------------------------------------------------------
-local function get_popup_w_h(popups, spacing, layout)
+local function get_popup_w_h(popups, spacing, stacking)
     local width  = 0
     local height = 0
 
     for i, popup in ipairs(popups) do
-        if layout == 'vertical' then
+        if stacking == 'vertical' then
             width  = math.max(width, popup.frame.w)
             height = height + popup.frame.h
 
             if i < #popups then
                 height = height + spacing
             end
-        elseif layout == 'horizontal' then
+        elseif stacking == 'horizontal' then
             width  = width + popup.frame.w
             height = math.max(height, popup.frame.h)
 
@@ -232,12 +305,20 @@ local function get_popup_w_h(popups, spacing, layout)
 
     return {
         w = width,
-        h = height,
+        h = height
     }
 end
 
 
--- Get popup anchor position
+-- Get popup anchor position.
+--
+-- Parameters:
+--   frame  (table):   hs.window:frame()
+--   width  (number):  Width of the canvas object
+--   height (number):  Height of the canvas object
+--
+-- Returns:
+--   anchor (table):  Width and height of each popup
 --------------------------------------------------------------------------------
 local function get_popup_anchor(frame, width, height)
     local corner = state.wk.corner
@@ -264,7 +345,15 @@ local function get_popup_anchor(frame, width, height)
 end
 
 
--- Calculate popup coordinates relative to the focused window
+-- Calculate popup coordinates relative to the focused window.
+--
+-- Parameters:
+--   popups   (table):   Popups containing frame dimensions
+--   spacing  (number):  Space between adjacent popups
+--   stacking (string):  'horizontal' or 'vertical'
+--
+-- Returns:
+--   coords (table):  x and y coordinates for each popup
 --------------------------------------------------------------------------------
 local function get_popup_coords(win, popups)
     local stack        = state.wk.stack

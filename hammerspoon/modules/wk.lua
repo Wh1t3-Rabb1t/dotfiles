@@ -46,8 +46,6 @@ local cache = require('cache')
 -- end
 
 
-
-
 -- DESCRIPTION
 --
 -- Notes:
@@ -73,6 +71,8 @@ local cache = require('cache')
 --   true  (bool):  win:frame() is equal to the usable screen frame
 --   false (bool):  win:frame() is NOT equal to the usable screen frame
 --------------------------------------------------------------------------------
+
+
 
 
 
@@ -929,7 +929,14 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle focus between main apps (the twin cats)
+-- Cycle focus between main apps (kitty and Brave).
+--
+-- Calls:
+--   get_window_idx(windows.wins, target_win)
+--   set_window_state(target_win, idx)
+--   set_slots(target_win)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.cycle_main_apps()
     return function(done)
@@ -968,7 +975,17 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between all running applications (i.e. cmd tab)
+-- Cycle between all running applications (i.e. cmd tab).
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   get_window_idx(windows.wins, win)
+--   set_window_state(win, idx)
+--   set_slots(win)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
@@ -1013,7 +1030,17 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between the currently focused apps open windows
+-- Cycle between the currently focused apps open windows.
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   iterate_window_idx(app_name, direction)
+--   focus_window(curr_app.wins[idx])
+--   get_window_idx(windows.wins, win)
+--   set_window_state(win, idx)
+--   toggle_border('on')
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
@@ -1045,7 +1072,18 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between all open windows
+-- Cycle between all open windows.
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   iterate_window_idx('all', direction)
+--   focus_window(wins[idx])
+--   set_window_state(win, idx)
+--   set_slots(win)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
@@ -1073,7 +1111,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle menu corner positions
+-- Cycle menu corner positions.
+--
+-- Calls:
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.wk.corner
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
     return function(done)
@@ -1110,7 +1154,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle menu layout (vertical/horizontal stacking)
+-- Cycle menu layout (vertical/horizontal stacking).
+--
+-- Calls:
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.wk.stack
 --------------------------------------------------------------------------------
 function M.cycle_stacking()
     return function(done)
@@ -1127,7 +1177,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Set poppup opacity
+-- Set poppup opacity.
+--
+-- Parameters:
+--   direction (string):  'up' or 'down'
+--
+-- State changes:
+--   state.wk.opacity
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
@@ -1159,7 +1215,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
+-- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch.
+--
+-- Calls:
+--   toggle_popups('off')
+--   toggle_tap('off')
+--   end_insert_mode(hotkeys, active_popup)
+--   M.launch()
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
@@ -1206,7 +1268,15 @@ end
 
 
 --------------------------------------------------------------------------------
--- Send keystrokes (while bypassing active eventtap)
+-- Send keystrokes (while bypassing active eventtap).
+--
+-- Parameters:
+--   mods (table):   Containing valid modifier strings i.e. 'cmd'
+--   key  (string):  Containing valid key strings i.e. 't', 'space'
+--
+-- Calls:
+--   toggle_tap('off')
+--   toggle_tap('on')
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     return function(done)
@@ -1222,7 +1292,15 @@ end
 
 
 --------------------------------------------------------------------------------
--- Launch which key
+-- Launch which key.
+--
+-- Calls:
+--   screens.init()
+--   apps.init()
+--   M.init()
+--   wk_assets.init()
+--   toggle_popups('on')
+--   toggle_tap('on')
 --------------------------------------------------------------------------------
 function M.launch()
     if state.wk.tap_active then
@@ -1245,7 +1323,12 @@ end
 
 
 --------------------------------------------------------------------------------
--- Quit wk
+-- Quit wk.
+--
+-- Calls:
+--   toggle_popups('off')
+--   toggle_border('off')
+--   toggle_tap('off')
 --------------------------------------------------------------------------------
 function M.quit()
     return function(done)
@@ -1259,7 +1342,17 @@ end
 
 
 --------------------------------------------------------------------------------
--- Regenerate cache assets (screen, app, and window data)
+-- Regenerate cache assets (screen, app, and window data).
+--
+-- Calls:
+--   toggle_popups('off')
+--   toggle_border('off')
+--   toggle_tap('off')
+--   screens.init()
+--   apps.init()
+--   M.init()
+--   toggle_popups('on')
+--   toggle_tap('on')
 --------------------------------------------------------------------------------
 function M.refresh_state()
     return function(done)
@@ -1281,7 +1374,16 @@ end
 
 
 --------------------------------------------------------------------------------
--- Init
+-- Init.
+--
+-- Calls:
+--   get_window_idx(state.windows.wins, state.windows.curr_win)
+--   clear_slots(screen:id())
+--   set_empty_slots(screen:id())
+--   snap_layout()
+--
+-- State changes:
+--   state.windows
 --------------------------------------------------------------------------------
 function M.init()
     local windows = {

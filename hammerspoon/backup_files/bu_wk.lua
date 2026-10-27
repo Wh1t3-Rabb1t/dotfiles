@@ -46,39 +46,70 @@ local cache = require('cache')
 -- end
 
 
--- function M.debug_screens()
---     return function(done)
---         local pos  = hs.mouse.getCurrentScreen()
---         local id   = pos:id()
---         local uuid = pos:getUUID()
---         print('id: ' .. id)
---         print('UUID: ' .. uuid)
---         done()
---     end
--- end
-
-
-
--- Remove one, or all windows from the screens layout
+-- DESCRIPTION
 --
--- Args:  ( hs.window | hs.screen:id() )
+-- Notes:
+--   Empty slots are represented by false, not nil
+--
+-- Parameters:
+--   target (table | number):
+--     hs.window      (table):   Clear the slot assigned to this window
+--     hs.screen:id() (number):  Clear every slot on the screen with this ID
+--
+-- Calls:
+--   clear_slots(target)
+--
+-- State changes:
+--   state.screens[id].layout.left
+--   state.screens[id].layout.right
+--   state.screens[id].layout.maximized
+--
+-- Errors:
+--   Assumes the target window's screen ID exists in state.screens
+--
+-- Returns:
+--   true  (bool):  win:frame() is equal to the usable screen frame
+--   false (bool):  win:frame() is NOT equal to the usable screen frame
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+-- Clear window assignments from the screen layout.
+--
+-- Parameters:
+--   target (table | number):
+--     hs.window      (table):   Clear the slot assigned to this window
+--     hs.screen:id() (number):  Clear every slot on the screen with this ID
+--
+-- State changes:
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 local function clear_slots(target)
-    local is_screen = type(target) == 'number'
-    local screen_id = is_screen and target or target:screen():id()
+    local clear_all = type(target) == 'number'
+    local screen_id = clear_all and target or target:screen():id()
     local layout    = state.screens[screen_id].layout
 
-    local slot_names = { 'left', 'right', 'maximized' }
-
-    for _, name in ipairs(slot_names) do
-        if is_screen or layout[name] == target then
+    for _, name in ipairs({ 'left', 'right', 'maximized' }) do
+        if clear_all or layout[name] == target then
             layout[name] = false
         end
     end
 end
 
 
--- Determine whether or not a window is maximized
+-- Determine whether or not a window is maximized.
+--
+-- Parameters:
+--   win (table):  hs.window object
+--
+-- Returns:
+--   true  (bool):  win:frame() is equal to the usable screen frame
+--   false (bool):  win:frame() is NOT equal to the usable screen frame
 --------------------------------------------------------------------------------
 local function is_fullscreen(win)
     local win_frame    = win:frame()
@@ -93,7 +124,14 @@ local function is_fullscreen(win)
 end
 
 
--- Iterate window index
+-- Iterate window index.
+--
+-- Parameters:
+--   app_name  (string):  'kitty', 'Brave Browser' etc.
+--   direction (string):  'next' or 'prev'
+--
+-- Returns:
+--   idx (number):  Index of the next/prev window in the state table
 --------------------------------------------------------------------------------
 local function iterate_window_idx(app_name, direction)
     local wins
@@ -119,18 +157,31 @@ local function iterate_window_idx(app_name, direction)
 end
 
 
--- Find a windows index in the state table
+-- Find a windows index in the state table.
+--
+-- Parameters:
+--   wins (table):  An array of hs.window objects
+--   win  (table):  hs.window object
+--
+-- Returns:
+--   idx (number):  Index of the target window if it exists in the state table
 --------------------------------------------------------------------------------
-local function get_window_idx(wins, target)
-    for idx, win in ipairs(wins) do
-        if win == target then
+local function get_window_idx(wins, win)
+    for idx, window in ipairs(wins) do
+        if window == win then
             return idx
         end
     end
 end
 
 
--- Is window aligned to the left or right of the screen
+-- Determine which side of the screen the target window is aligned to.
+--
+-- Parameters:
+--   win (table):  hs.window object
+--
+-- Returns:
+--   side (string):  'left' or 'right'
 --------------------------------------------------------------------------------
 local function get_window_alignment(win)
     local win_frame    = win:frame()
@@ -148,7 +199,13 @@ local function get_window_alignment(win)
 end
 
 
--- Calculate left/right slot coordinates
+-- Calculate left/right slot coordinates of the target screen.
+--
+-- Parameters:
+--   screen_id (number):  hs.screen:id()
+--
+-- Returns:
+--   (table):  x, y, width, and height data for each slot on the screen
 --------------------------------------------------------------------------------
 local function get_slot_coords(screen_id)
     local border = 8
@@ -176,23 +233,31 @@ local function get_slot_coords(screen_id)
 end
 
 
--- Get popups x and y coords
+-- Get popups x and y coords.
+--
+-- Parameters:
+--   popups   (table):   hs.canvas objects
+--   spacing  (number):  Number of pixels to use as spacing
+--   stacking (string):  'horizontal' or 'vertical'
+--
+-- Returns:
+--   coords (table):  x and y coordinates of each popup
 --------------------------------------------------------------------------------
-local function get_popup_x_y(popups, spacing, layout)
+local function get_popup_x_y(popups, spacing, stacking)
     local x = 0
     local y = 0
 
     local coords = {}
 
     for i, popup in ipairs(popups) do
-        if layout == 'horizontal' then
+        if stacking == 'horizontal' then
             coords[i] = {
                 x = x,
                 y = 0,
             }
 
             x = x + popup.frame.w + spacing
-        elseif layout == 'vertical' then
+        elseif stacking == 'vertical' then
             coords[i] = {
                 x = 0,
                 y = y,
@@ -206,21 +271,29 @@ local function get_popup_x_y(popups, spacing, layout)
 end
 
 
--- Get the current popups width and height
+-- Get popups width and height.
+--
+-- Parameters:
+--   popups   (table):   hs.canvas objects
+--   spacing  (number):  Number of pixels to use as spacing
+--   stacking (string):  'horizontal' or 'vertical'
+--
+-- Returns:
+--   (table): Width and height of each popup.
 --------------------------------------------------------------------------------
-local function get_popup_w_h(popups, spacing, layout)
+local function get_popup_w_h(popups, spacing, stacking)
     local width  = 0
     local height = 0
 
     for i, popup in ipairs(popups) do
-        if layout == 'vertical' then
+        if stacking == 'vertical' then
             width  = math.max(width, popup.frame.w)
             height = height + popup.frame.h
 
             if i < #popups then
                 height = height + spacing
             end
-        elseif layout == 'horizontal' then
+        elseif stacking == 'horizontal' then
             width  = width + popup.frame.w
             height = math.max(height, popup.frame.h)
 
@@ -232,12 +305,20 @@ local function get_popup_w_h(popups, spacing, layout)
 
     return {
         w = width,
-        h = height,
+        h = height
     }
 end
 
 
--- Get popup anchor position
+-- Get popup anchor position.
+--
+-- Parameters:
+--   frame  (table):   hs.window:frame()
+--   width  (number):  Width of the canvas object
+--   height (number):  Height of the canvas object
+--
+-- Returns:
+--   anchor (table):  Width and height of each popup
 --------------------------------------------------------------------------------
 local function get_popup_anchor(frame, width, height)
     local corner = state.wk.corner
@@ -264,7 +345,15 @@ local function get_popup_anchor(frame, width, height)
 end
 
 
--- Calculate popup coordinates relative to the focused window
+-- Calculate popup coordinates relative to the focused window.
+--
+-- Parameters:
+--   popups   (table):   Popups containing frame dimensions
+--   spacing  (number):  Space between adjacent popups
+--   stacking (string):  'horizontal' or 'vertical'
+--
+-- Returns:
+--   coords (table):  x and y coordinates for each popup
 --------------------------------------------------------------------------------
 local function get_popup_coords(win, popups)
     local stack        = state.wk.stack
@@ -295,7 +384,19 @@ local function get_popup_coords(win, popups)
 end
 
 
--- Assign windows to layout state
+-- Assign windows to layout state.
+--
+-- Parameters:
+--   win (table):  hs.window object
+--
+-- Calls:
+--   is_fullscreen(win)
+--   get_window_alignment(win)
+--
+-- State changes:
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 local function set_slots(win)
     local layout = state.screens[win:screen():id()].layout
@@ -308,7 +409,19 @@ local function set_slots(win)
 end
 
 
--- Populate all empty slot on the target screen
+-- Populate all empty slot on the target screen.
+--
+-- Parameters:
+--   screen_id (number):  hs.screen:id()
+--
+-- Calls:
+--   is_fullscreen(win)
+--   get_window_alignment(win)
+--
+-- State changes:
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 local function set_empty_slots(screen_id)
     local layout = state.screens[screen_id].layout
@@ -334,7 +447,19 @@ local function set_empty_slots(screen_id)
 end
 
 
--- Update focused window state
+-- Update focused window state.
+--
+-- Parameters:
+--   win (table):   hs.window object
+--   idx (number):  Index of a window stored in the state table
+--
+-- Calls:
+--   get_window_idx(curr_app.wins, win)
+--
+-- State changes:
+--   state.apps[app_name].idx
+--   state.windows.idx
+--   state.windows.curr_win
 --------------------------------------------------------------------------------
 local function set_window_state(win, idx)
     local wins     = state.windows
@@ -347,7 +472,13 @@ local function set_window_state(win, idx)
 end
 
 
--- Toggle border visibility
+-- Toggle border visibility.
+--
+-- Parameters:
+--   (table):  Contains strings, either 'on' or 'off'
+--
+-- State changes:
+--   state.windows.border
 --------------------------------------------------------------------------------
 local function toggle_border( ... )
     for _, set_to in ipairs({ ... }) do
@@ -383,7 +514,13 @@ local function toggle_border( ... )
 end
 
 
--- Toggle popup visibility
+-- Toggle popup visibility.
+--
+-- Parameters:
+--   (table):  Contains strings, either 'on' or 'off'
+--
+-- Calls:
+--   get_popup_coords(win, popups)
 --------------------------------------------------------------------------------
 local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
@@ -420,7 +557,13 @@ local function toggle_popups( ... )
 end
 
 
--- Toggle event tap
+-- Toggle event tap.
+--
+-- Parameters:
+--   (table):  Contains strings, either 'on' or 'off'
+--
+-- State changes:
+--   state.wk.tap_active
 --------------------------------------------------------------------------------
 local function toggle_tap( ... )
     for _, set_to in ipairs({ ... }) do
@@ -435,7 +578,11 @@ local function toggle_tap( ... )
 end
 
 
--- Snap windows into their respective slot coords
+-- Snap windows into their respective slot positions.
+--
+-- Calls:
+--   get_slot_coords(screen_id)
+--   toggle_border('on')
 --------------------------------------------------------------------------------
 local function snap_layout()
     local win       = state.windows.curr_win
@@ -464,17 +611,17 @@ end
 
 -- Focus target window.
 --
--- https://github.com/Hammerspoon/hammerspoon/issues/370
+-- Notes:
+--   https://github.com/Hammerspoon/hammerspoon/issues/370
 --
--- Resolved incorrect window focus issue by turning off the:
+--   Resolved incorrect window focus issue by turning off the:
 --   'Displays have separate Spaces'
--- option for Mission Control. (logout is required for it to take effect)
+--   option for Mission Control. (logout is required for it to take effect)
+--
+-- Returns:
+--   win (table):  hs.window object
 --------------------------------------------------------------------------------
 local function focus_window(win)
-    if not win then
-        return false
-    end
-
     win:application():activate()
 
     hs.timer.usleep(10000)
@@ -486,7 +633,14 @@ end
 
 
 --------------------------------------------------------------------------------
--- Maximize focused window
+-- Maximize focused window.
+--
+-- Calls:
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.screens[screen_id].layout.maximized
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
@@ -496,7 +650,6 @@ function M.maximize()
         layout.maximized = win
 
         snap_layout()
-
         toggle_popups('off', 'on')
 
         done()
@@ -505,11 +658,24 @@ end
 
 
 --------------------------------------------------------------------------------
--- Re-align window divider
+-- Re-align window divider.
+--
+-- Parameters:
+--   direction (string):  'left' or 'right'
+--
+-- Calls:
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.screens[screen_id].divider
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
-function M.resize(direction, step_val)
+function M.resize(direction)
     return function(done)
-        local step    = step_val or 0.01
+        local step    = 0.01
         local win     = state.windows.curr_win
         local screen  = state.screens[win:screen():id()]
         local divider = screen.divider
@@ -545,7 +711,6 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
-
         toggle_popups('off', 'on')
 
         done()
@@ -554,7 +719,15 @@ end
 
 
 --------------------------------------------------------------------------------
--- Swap left/right window slots
+-- Swap left/right window slots.
+--
+-- Calls:
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
@@ -567,7 +740,6 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
-
         toggle_popups('off', 'on')
 
         done()
@@ -576,7 +748,12 @@ end
 
 
 --------------------------------------------------------------------------------
--- Move window to the next/previous connected screen
+-- Move window to the next/previous connected screen.
+--
+-- Calls:
+--   clear_slots(win)
+--   set_slots(win)
+--   snap_layout()
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
@@ -598,9 +775,22 @@ end
 
 
 --------------------------------------------------------------------------------
--- Move focused window to the adjacent layout slot
+-- Move focused window to the adjacent layout slot.
+--
+-- Parameters:
+--   direction (string):  'left' or 'right'
+--
+-- Calls:
+--   clear_slots(win)
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--   set_empty_slots(screen_id)
+--
+-- State changes:
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
-function M.move_to_slot(direction)  -- (left|right)
+function M.move_to_slot(direction)
     return function(done)
         local win       = state.windows.curr_win
         local screen_id = win:screen():id()
@@ -611,9 +801,7 @@ function M.move_to_slot(direction)  -- (left|right)
         layout[direction] = win
 
         snap_layout()
-
         toggle_popups('off', 'on')
-
         set_empty_slots(screen_id)
 
         done()
@@ -622,22 +810,34 @@ end
 
 
 --------------------------------------------------------------------------------
--- Traverse layout slots
+-- Traverse layout slots.
 --
--- If current window is in the:
---   MAXIMIZED slot, then look for the first available slot on the next screen.
---   Maximized is always prioritized first, (if a window is maximized, the
---   left/right slot windows won't be visible).
+-- Notes:
+--   If current window is in the:
+--     MAXIMIZED slot, then look for the first available slot on the next
+--     screen. Maximized is always prioritized first, (if a window is maximized,
+--     the left/right slot windows won't be visible).
 --
---   RIGHT slot, and direction == 'right' then look for the first available
---   slot on the next screen.
+--     RIGHT slot, and direction == 'right' then look for the first available
+--     slot on the next screen.
 --
---   LEFT slot, and direction == 'left' then look for the first available
---   slot on the next screen.
+--     LEFT slot, and direction == 'left' then look for the first available
+--     slot on the next screen.
 --
---   LEFT or RIGHT slot, and there are no slots available on the next screen
---   then focus the adjacent slot on the same screen
---   (i.e. cycle between left/right).
+--     LEFT or RIGHT slot, and there are no slots available on the next screen
+--     then focus the adjacent slot on the same screen
+--     (i.e. cycle between left/right).
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   next_layout(start_id, skip)
+--   iterate_window_idx('all')
+--   focus_window(target_slot)
+--   set_window_state(new_win, win_idx)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)
@@ -729,7 +929,14 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle focus between main apps (the twin cats)
+-- Cycle focus between main apps (kitty and Brave).
+--
+-- Calls:
+--   get_window_idx(windows.wins, target_win)
+--   set_window_state(target_win, idx)
+--   set_slots(target_win)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.cycle_main_apps()
     return function(done)
@@ -768,7 +975,17 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between all running applications (i.e. cmd tab)
+-- Cycle between all running applications (i.e. cmd tab).
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   get_window_idx(windows.wins, win)
+--   set_window_state(win, idx)
+--   set_slots(win)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
@@ -813,7 +1030,17 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between the currently focused apps open windows
+-- Cycle between the currently focused apps open windows.
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   iterate_window_idx(app_name, direction)
+--   focus_window(curr_app.wins[idx])
+--   get_window_idx(windows.wins, win)
+--   set_window_state(win, idx)
+--   toggle_border('on')
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
@@ -845,7 +1072,18 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between all open windows
+-- Cycle between all open windows.
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   iterate_window_idx('all', direction)
+--   focus_window(wins[idx])
+--   set_window_state(win, idx)
+--   set_slots(win)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
@@ -873,7 +1111,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle menu corner positions
+-- Cycle menu corner positions.
+--
+-- Calls:
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.wk.corner
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
     return function(done)
@@ -910,7 +1154,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle menu layout (vertical/horizontal stacking)
+-- Cycle menu layout (vertical/horizontal stacking).
+--
+-- Calls:
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.wk.stack
 --------------------------------------------------------------------------------
 function M.cycle_stacking()
     return function(done)
@@ -927,7 +1177,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Set poppup opacity
+-- Set poppup opacity.
+--
+-- Parameters:
+--   direction (string):  'up' or 'down'
+--
+-- State changes:
+--   state.wk.opacity
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
@@ -959,7 +1215,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch
+-- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch.
+--
+-- Calls:
+--   toggle_popups('off')
+--   toggle_tap('off')
+--   end_insert_mode(hotkeys, active_popup)
+--   M.launch()
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
@@ -1006,7 +1268,15 @@ end
 
 
 --------------------------------------------------------------------------------
--- Send keystrokes (while bypassing active eventtap)
+-- Send keystrokes (while bypassing active eventtap).
+--
+-- Parameters:
+--   mods (table):   Containing valid modifier strings i.e. 'cmd'
+--   key  (string):  Containing valid key strings i.e. 't', 'space'
+--
+-- Calls:
+--   toggle_tap('off')
+--   toggle_tap('on')
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     return function(done)
@@ -1022,7 +1292,15 @@ end
 
 
 --------------------------------------------------------------------------------
--- Launch which key
+-- Launch which key.
+--
+-- Calls:
+--   screens.init()
+--   apps.init()
+--   M.init()
+--   wk_assets.init()
+--   toggle_popups('on')
+--   toggle_tap('on')
 --------------------------------------------------------------------------------
 function M.launch()
     if state.wk.tap_active then
@@ -1045,7 +1323,12 @@ end
 
 
 --------------------------------------------------------------------------------
--- Quit wk
+-- Quit wk.
+--
+-- Calls:
+--   toggle_popups('off')
+--   toggle_border('off')
+--   toggle_tap('off')
 --------------------------------------------------------------------------------
 function M.quit()
     return function(done)
@@ -1059,7 +1342,17 @@ end
 
 
 --------------------------------------------------------------------------------
--- Regenerate cache assets (screen, app, and window data)
+-- Regenerate cache assets (screen, app, and window data).
+--
+-- Calls:
+--   toggle_popups('off')
+--   toggle_border('off')
+--   toggle_tap('off')
+--   screens.init()
+--   apps.init()
+--   M.init()
+--   toggle_popups('on')
+--   toggle_tap('on')
 --------------------------------------------------------------------------------
 function M.refresh_state()
     return function(done)
@@ -1081,7 +1374,16 @@ end
 
 
 --------------------------------------------------------------------------------
--- Init
+-- Init.
+--
+-- Calls:
+--   get_window_idx(state.windows.wins, state.windows.curr_win)
+--   clear_slots(screen:id())
+--   set_empty_slots(screen:id())
+--   snap_layout()
+--
+-- State changes:
+--   state.windows
 --------------------------------------------------------------------------------
 function M.init()
     local windows = {

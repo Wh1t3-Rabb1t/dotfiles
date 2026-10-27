@@ -85,9 +85,9 @@ local cache = require('cache')
 --     hs.screen:id() (number):  Clear every slot on the screen with this ID
 --
 -- State changes:
---   state.screens[id].layout.left
---   state.screens[id].layout.right
---   state.screens[id].layout.maximized
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 local function clear_slots(target)
     local clear_all = type(target) == 'number'
@@ -650,7 +650,6 @@ function M.maximize()
         layout.maximized = win
 
         snap_layout()
-
         toggle_popups('off', 'on')
 
         done()
@@ -659,11 +658,24 @@ end
 
 
 --------------------------------------------------------------------------------
--- Re-align window divider
+-- Re-align window divider.
+--
+-- Parameters:
+--   direction (string):  'left' or 'right'
+--
+-- Calls:
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.screens[screen_id].divider
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
-function M.resize(direction, step_val)
+function M.resize(direction)
     return function(done)
-        local step    = step_val or 0.01
+        local step    = 0.01
         local win     = state.windows.curr_win
         local screen  = state.screens[win:screen():id()]
         local divider = screen.divider
@@ -699,7 +711,6 @@ function M.resize(direction, step_val)
         end
 
         snap_layout()
-
         toggle_popups('off', 'on')
 
         done()
@@ -708,7 +719,15 @@ end
 
 
 --------------------------------------------------------------------------------
--- Swap left/right window slots
+-- Swap left/right window slots.
+--
+-- Calls:
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
@@ -721,7 +740,6 @@ function M.swap()
         layout.right = lhs
 
         snap_layout()
-
         toggle_popups('off', 'on')
 
         done()
@@ -730,7 +748,12 @@ end
 
 
 --------------------------------------------------------------------------------
--- Move window to the next/previous connected screen
+-- Move window to the next/previous connected screen.
+--
+-- Calls:
+--   clear_slots(win)
+--   set_slots(win)
+--   snap_layout()
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
@@ -752,9 +775,22 @@ end
 
 
 --------------------------------------------------------------------------------
--- Move focused window to the adjacent layout slot
+-- Move focused window to the adjacent layout slot.
+--
+-- Parameters:
+--   direction (string):  'left' or 'right'
+--
+-- Calls:
+--   clear_slots(win)
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--   set_empty_slots(screen_id)
+--
+-- State changes:
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
-function M.move_to_slot(direction)  -- (left|right)
+function M.move_to_slot(direction)
     return function(done)
         local win       = state.windows.curr_win
         local screen_id = win:screen():id()
@@ -765,9 +801,7 @@ function M.move_to_slot(direction)  -- (left|right)
         layout[direction] = win
 
         snap_layout()
-
         toggle_popups('off', 'on')
-
         set_empty_slots(screen_id)
 
         done()
@@ -776,22 +810,34 @@ end
 
 
 --------------------------------------------------------------------------------
--- Traverse layout slots
+-- Traverse layout slots.
 --
--- If current window is in the:
---   MAXIMIZED slot, then look for the first available slot on the next screen.
---   Maximized is always prioritized first, (if a window is maximized, the
---   left/right slot windows won't be visible).
+-- Notes:
+--   If current window is in the:
+--     MAXIMIZED slot, then look for the first available slot on the next
+--     screen. Maximized is always prioritized first, (if a window is maximized,
+--     the left/right slot windows won't be visible).
 --
---   RIGHT slot, and direction == 'right' then look for the first available
---   slot on the next screen.
+--     RIGHT slot, and direction == 'right' then look for the first available
+--     slot on the next screen.
 --
---   LEFT slot, and direction == 'left' then look for the first available
---   slot on the next screen.
+--     LEFT slot, and direction == 'left' then look for the first available
+--     slot on the next screen.
 --
---   LEFT or RIGHT slot, and there are no slots available on the next screen
---   then focus the adjacent slot on the same screen
---   (i.e. cycle between left/right).
+--     LEFT or RIGHT slot, and there are no slots available on the next screen
+--     then focus the adjacent slot on the same screen
+--     (i.e. cycle between left/right).
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   next_layout(start_id, skip)
+--   iterate_window_idx('all')
+--   focus_window(target_slot)
+--   set_window_state(new_win, win_idx)
+--   toggle_popups('off', 'on')
+--   toggle_border('off', 'on')
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)

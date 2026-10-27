@@ -202,7 +202,7 @@ end
 -- Calculate left/right slot coordinates of the target screen.
 --
 -- Parameters:
---   screen_id (table):  hs.screen:id()
+--   screen_id (number):  hs.screen:id()
 --
 -- Returns:
 --   (table):  x, y, width, and height data for each slot on the screen
@@ -384,7 +384,19 @@ local function get_popup_coords(win, popups)
 end
 
 
--- Assign windows to layout state
+-- Assign windows to layout state.
+--
+-- Parameters:
+--   win (table):  hs.window object
+--
+-- Calls:
+--   is_fullscreen(win)
+--   get_window_alignment(win)
+--
+-- State changes:
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 local function set_slots(win)
     local layout = state.screens[win:screen():id()].layout
@@ -397,7 +409,19 @@ local function set_slots(win)
 end
 
 
--- Populate all empty slot on the target screen
+-- Populate all empty slot on the target screen.
+--
+-- Parameters:
+--   screen_id (number):  hs.screen:id()
+--
+-- Calls:
+--   is_fullscreen(win)
+--   get_window_alignment(win)
+--
+-- State changes:
+--   state.screens[screen_id].layout.maximized
+--   state.screens[screen_id].layout.left
+--   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 local function set_empty_slots(screen_id)
     local layout = state.screens[screen_id].layout
@@ -423,7 +447,19 @@ local function set_empty_slots(screen_id)
 end
 
 
--- Update focused window state
+-- Update focused window state.
+--
+-- Parameters:
+--   win (table):   hs.window object
+--   idx (number):  Index of a window stored in the state table
+--
+-- Calls:
+--   get_window_idx(curr_app.wins, win)
+--
+-- State changes:
+--   state.apps[app_name].idx
+--   state.windows.idx
+--   state.windows.curr_win
 --------------------------------------------------------------------------------
 local function set_window_state(win, idx)
     local wins     = state.windows
@@ -436,7 +472,13 @@ local function set_window_state(win, idx)
 end
 
 
--- Toggle border visibility
+-- Toggle border visibility.
+--
+-- Parameters:
+--   (table):  Contains strings, either 'on' or 'off'
+--
+-- State changes:
+--   state.windows.border
 --------------------------------------------------------------------------------
 local function toggle_border( ... )
     for _, set_to in ipairs({ ... }) do
@@ -472,7 +514,13 @@ local function toggle_border( ... )
 end
 
 
--- Toggle popup visibility
+-- Toggle popup visibility.
+--
+-- Parameters:
+--   (table):  Contains strings, either 'on' or 'off'
+--
+-- Calls:
+--   get_popup_coords(win, popups)
 --------------------------------------------------------------------------------
 local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
@@ -509,7 +557,13 @@ local function toggle_popups( ... )
 end
 
 
--- Toggle event tap
+-- Toggle event tap.
+--
+-- Parameters:
+--   (table):  Contains strings, either 'on' or 'off'
+--
+-- State changes:
+--   state.wk.tap_active
 --------------------------------------------------------------------------------
 local function toggle_tap( ... )
     for _, set_to in ipairs({ ... }) do
@@ -524,7 +578,11 @@ local function toggle_tap( ... )
 end
 
 
--- Snap windows into their respective slot coords
+-- Snap windows into their respective slot positions.
+--
+-- Calls:
+--   get_slot_coords(screen_id)
+--   toggle_border('on')
 --------------------------------------------------------------------------------
 local function snap_layout()
     local win       = state.windows.curr_win
@@ -553,17 +611,17 @@ end
 
 -- Focus target window.
 --
--- https://github.com/Hammerspoon/hammerspoon/issues/370
+-- Notes:
+--   https://github.com/Hammerspoon/hammerspoon/issues/370
 --
--- Resolved incorrect window focus issue by turning off the:
+--   Resolved incorrect window focus issue by turning off the:
 --   'Displays have separate Spaces'
--- option for Mission Control. (logout is required for it to take effect)
+--   option for Mission Control. (logout is required for it to take effect)
+--
+-- Returns:
+--   win (table):  hs.window object
 --------------------------------------------------------------------------------
 local function focus_window(win)
-    if not win then
-        return false
-    end
-
     win:application():activate()
 
     hs.timer.usleep(10000)
@@ -575,7 +633,14 @@ end
 
 
 --------------------------------------------------------------------------------
--- Maximize focused window
+-- Maximize focused window.
+--
+-- Calls:
+--   snap_layout()
+--   toggle_popups('off', 'on')
+--
+-- State changes:
+--   state.screens[screen_id].layout.maximized
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)

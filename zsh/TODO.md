@@ -2,6 +2,10 @@
 
 ## Priority: High
 
+- Ensure that all keystrokes (aside from ctrl+c etc are consumed while
+  scripts are mid execution to avoid another script launching
+  immediately once the current one finishes).
+
 - Create a 'milk' script to track when you opened a carton of milk.
 
 - Homebrew:

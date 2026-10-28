@@ -57,7 +57,7 @@ local cache = require('cache')
 --     hs.screen:id() (number):  Clear every slot on the screen with this ID
 --
 -- Calls:
---   clear_slots(target)
+--   clear_slots()
 --
 -- State changes:
 --   state.screens[id].layout.left
@@ -390,8 +390,8 @@ end
 --   win (table):  hs.window object
 --
 -- Calls:
---   is_fullscreen(win)
---   get_window_alignment(win)
+--   is_fullscreen()
+--   get_window_alignment()
 --
 -- State changes:
 --   state.screens[screen_id].layout.maximized
@@ -415,8 +415,8 @@ end
 --   screen_id (number):  hs.screen:id()
 --
 -- Calls:
---   is_fullscreen(win)
---   get_window_alignment(win)
+--   is_fullscreen()
+--   get_window_alignment()
 --
 -- State changes:
 --   state.screens[screen_id].layout.maximized
@@ -454,7 +454,7 @@ end
 --   idx (number):  Index of a window stored in the state table
 --
 -- Calls:
---   get_window_idx(curr_app.wins, win)
+--   get_window_idx()
 --
 -- State changes:
 --   state.apps[app_name].idx
@@ -520,7 +520,7 @@ end
 --   (table):  Contains strings, either 'on' or 'off'
 --
 -- Calls:
---   get_popup_coords(win, popups)
+--   get_popup_coords()
 --------------------------------------------------------------------------------
 local function toggle_popups( ... )
     for _, set_to in ipairs({ ... }) do
@@ -581,8 +581,8 @@ end
 -- Snap windows into their respective slot positions.
 --
 -- Calls:
---   get_slot_coords(screen_id)
---   toggle_border('on')
+--   get_slot_coords()
+--   toggle_border()
 --------------------------------------------------------------------------------
 local function snap_layout()
     local win       = state.windows.curr_win
@@ -637,7 +637,7 @@ end
 --
 -- Calls:
 --   snap_layout()
---   toggle_popups('off', 'on')
+--   toggle_popups()
 --
 -- State changes:
 --   state.screens[screen_id].layout.maximized
@@ -665,7 +665,7 @@ end
 --
 -- Calls:
 --   snap_layout()
---   toggle_popups('off', 'on')
+--   toggle_popups()
 --
 -- State changes:
 --   state.screens[screen_id].divider
@@ -723,7 +723,7 @@ end
 --
 -- Calls:
 --   snap_layout()
---   toggle_popups('off', 'on')
+--   toggle_popups()
 --
 -- State changes:
 --   state.screens[screen_id].layout.left
@@ -751,8 +751,8 @@ end
 -- Move window to the next/previous connected screen.
 --
 -- Calls:
---   clear_slots(win)
---   set_slots(win)
+--   clear_slots()
+--   set_slots()
 --   snap_layout()
 --------------------------------------------------------------------------------
 function M.move_to_screen()
@@ -781,10 +781,10 @@ end
 --   direction (string):  'left' or 'right'
 --
 -- Calls:
---   clear_slots(win)
+--   clear_slots()
 --   snap_layout()
---   toggle_popups('off', 'on')
---   set_empty_slots(screen_id)
+--   toggle_popups()
+--   set_empty_slots()
 --
 -- State changes:
 --   state.screens[screen_id].layout.left
@@ -832,12 +832,12 @@ end
 --   direction (string):  'next' or 'prev'
 --
 -- Calls:
---   next_layout(start_id, skip)
---   iterate_window_idx('all')
---   focus_window(target_slot)
---   set_window_state(new_win, win_idx)
---   toggle_popups('off', 'on')
---   toggle_border('off', 'on')
+--   next_layout()
+--   iterate_window_idx()
+--   focus_window()
+--   set_window_state()
+--   toggle_popups()
+--   toggle_border()
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)
@@ -932,11 +932,11 @@ end
 -- Cycle focus between main apps (kitty and Brave).
 --
 -- Calls:
---   get_window_idx(windows.wins, target_win)
---   set_window_state(target_win, idx)
---   set_slots(target_win)
---   toggle_popups('off', 'on')
---   toggle_border('off', 'on')
+--   get_window_idx()
+--   set_window_state()
+--   set_slots()
+--   toggle_popups()
+--   toggle_border()
 --------------------------------------------------------------------------------
 function M.cycle_main_apps()
     return function(done)
@@ -981,11 +981,11 @@ end
 --   direction (string):  'next' or 'prev'
 --
 -- Calls:
---   get_window_idx(windows.wins, win)
---   set_window_state(win, idx)
---   set_slots(win)
---   toggle_popups('off', 'on')
---   toggle_border('off', 'on')
+--   get_window_idx()
+--   set_window_state()
+--   set_slots()
+--   toggle_popups()
+--   toggle_border()
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
@@ -1036,11 +1036,11 @@ end
 --   direction (string):  'next' or 'prev'
 --
 -- Calls:
---   iterate_window_idx(app_name, direction)
---   focus_window(curr_app.wins[idx])
---   get_window_idx(windows.wins, win)
---   set_window_state(win, idx)
---   toggle_border('on')
+--   iterate_window_idx()
+--   focus_window()
+--   get_window_idx()
+--   set_window_state()
+--   toggle_border()
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
@@ -1078,12 +1078,12 @@ end
 --   direction (string):  'next' or 'prev'
 --
 -- Calls:
---   iterate_window_idx('all', direction)
---   focus_window(wins[idx])
---   set_window_state(win, idx)
---   set_slots(win)
---   toggle_popups('off', 'on')
---   toggle_border('off', 'on')
+--   iterate_window_idx()
+--   focus_window()
+--   set_window_state()
+--   set_slots()
+--   toggle_popups()
+--   toggle_border()
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
@@ -1114,7 +1114,7 @@ end
 -- Cycle menu corner positions.
 --
 -- Calls:
---   toggle_popups('off', 'on')
+--   toggle_popups()
 --
 -- State changes:
 --   state.wk.corner
@@ -1157,7 +1157,7 @@ end
 -- Cycle menu layout (vertical/horizontal stacking).
 --
 -- Calls:
---   toggle_popups('off', 'on')
+--   toggle_popups()
 --
 -- State changes:
 --   state.wk.stack
@@ -1218,9 +1218,9 @@ end
 -- Temporarily bind 'enter' to relaunch menu, 'escape' to cancel auto relaunch.
 --
 -- Calls:
---   toggle_popups('off')
---   toggle_tap('off')
---   end_insert_mode(hotkeys, active_popup)
+--   toggle_popups()
+--   toggle_tap()
+--   end_insert_mode()
 --   M.launch()
 --------------------------------------------------------------------------------
 function M.insert()
@@ -1275,8 +1275,8 @@ end
 --   key  (string):  Containing valid key strings i.e. 't', 'space'
 --
 -- Calls:
---   toggle_tap('off')
---   toggle_tap('on')
+--   toggle_tap()
+--   toggle_tap()
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     return function(done)
@@ -1299,8 +1299,8 @@ end
 --   apps.init()
 --   M.init()
 --   wk_assets.init()
---   toggle_popups('on')
---   toggle_tap('on')
+--   toggle_popups()
+--   toggle_tap()
 --------------------------------------------------------------------------------
 function M.launch()
     if state.wk.tap_active then
@@ -1326,9 +1326,9 @@ end
 -- Quit wk.
 --
 -- Calls:
---   toggle_popups('off')
---   toggle_border('off')
---   toggle_tap('off')
+--   toggle_popups()
+--   toggle_border()
+--   toggle_tap()
 --------------------------------------------------------------------------------
 function M.quit()
     return function(done)
@@ -1345,14 +1345,12 @@ end
 -- Regenerate cache assets (screen, app, and window data).
 --
 -- Calls:
---   toggle_popups('off')
---   toggle_border('off')
---   toggle_tap('off')
+--   toggle_popups()
+--   toggle_border()
+--   toggle_tap()
 --   screens.init()
 --   apps.init()
 --   M.init()
---   toggle_popups('on')
---   toggle_tap('on')
 --------------------------------------------------------------------------------
 function M.refresh_state()
     return function(done)
@@ -1374,12 +1372,12 @@ end
 
 
 --------------------------------------------------------------------------------
--- Init.
+-- Init module.
 --
 -- Calls:
---   get_window_idx(state.windows.wins, state.windows.curr_win)
---   clear_slots(screen:id())
---   set_empty_slots(screen:id())
+--   get_window_idx()
+--   clear_slots()
+--   set_empty_slots()
 --   snap_layout()
 --
 -- State changes:

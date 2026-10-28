@@ -4,12 +4,6 @@
 
 ## IMMEDIATE TASKS:
 
-- Currenly invoking traverse_slots(), cycle_open(), traverse_slots(), cycle_open()
-  etc. one after another (direction doesn't matter) causes the focused window to
-  remain the same after attempted iteration. Note it only fails when calling
-  cycle_open() not traverse_slots(). It only fails on the first call, calling
-  cycle_open() immediately on the follow up fixes it.
-
 - Need to ensure that the curr_win is always registered in a slot (the use of
   raise() in snap_layout() might be causing problems).
 

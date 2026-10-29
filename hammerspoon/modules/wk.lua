@@ -640,6 +640,8 @@ end
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
+        done = done or function() end
+
         local win    = state.windows.curr_win
         local layout = state.screens[win:screen():id()].layout
 
@@ -648,7 +650,7 @@ function M.maximize()
         snap_layout()
         toggle_popups('off', 'on')
 
-        if done then done() end
+        done()
     end
 end
 
@@ -671,6 +673,8 @@ end
 --------------------------------------------------------------------------------
 function M.resize(direction)
     return function(done)
+        done = done or function() end
+
         local step    = 0.01
         local win     = state.windows.curr_win
         local screen  = state.screens[win:screen():id()]
@@ -709,7 +713,7 @@ function M.resize(direction)
         snap_layout()
         toggle_popups('off', 'on')
 
-        if done then done() end
+        done()
     end
 end
 
@@ -727,6 +731,8 @@ end
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
+        done = done or function() end
+
         local win    = state.windows.curr_win
         local layout = state.screens[win:screen():id()].layout
         local lhs    = layout.left
@@ -738,7 +744,7 @@ function M.swap()
         snap_layout()
         toggle_popups('off', 'on')
 
-        if done then done() end
+        done()
     end
 end
 
@@ -753,6 +759,8 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
+        done = done or function() end
+
         local win         = state.windows.curr_win
         local next_screen = win:screen():next()
 
@@ -765,7 +773,7 @@ function M.move_to_screen()
             snap_layout()
         end
 
-        if done then done() end
+        done()
     end
 end
 
@@ -788,6 +796,8 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_slot(direction)
     return function(done)
+        done = done or function() end
+
         local win       = state.windows.curr_win
         local screen_id = win:screen():id()
         local layout    = state.screens[screen_id].layout
@@ -800,7 +810,7 @@ function M.move_to_slot(direction)
         toggle_popups('off', 'on')
         set_empty_slots(screen_id)
 
-        if done then done() end
+        done()
     end
 end
 
@@ -837,6 +847,8 @@ end
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)
+        done = done or function() end
+
         local reverse     = direction == 'prev'
         local screen_step = reverse and -1 or 1
         local slot_order  = reverse
@@ -905,7 +917,7 @@ function M.traverse_slots(direction)
         end
 
         if not target_slot then
-            if done then done() end
+            done()
             return
         end
 
@@ -919,7 +931,7 @@ function M.traverse_slots(direction)
             toggle_border('off', 'on')
         end
 
-        if done then done() end
+        done()
     end
 end
 
@@ -940,10 +952,12 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
     return function(done)
+        done = done or function() end
+
         local wins = state.windows.wins
 
         if #wins < 2 then
-            if done then done() end
+            done()
             return
         end
 
@@ -958,7 +972,7 @@ function M.cycle_open(direction)
             toggle_border('off', 'on')
         end
 
-        if done then done() end
+        done()
     end
 end
 
@@ -978,12 +992,14 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
     return function(done)
+        done = done or function() end
+
         local windows  = state.windows
         local app_name = windows.curr_win:application():name()
         local curr_app = state.apps[app_name]
 
         if not curr_app or #curr_app.wins < 2 then
-            if done then done() end
+            done()
             return
         end
 
@@ -1000,7 +1016,7 @@ function M.cycle_app_specific(direction)
             toggle_border('on')
         end
 
-        if done then done() end
+        done()
     end
 end
 
@@ -1020,6 +1036,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
+        done = done or function() end
+
         local windows  = state.windows
         local curr_app = windows.curr_win:application()
         local apps     = state.apps.list
@@ -1055,7 +1073,7 @@ function M.cycle_all_apps(direction)
             toggle_border('off', 'on')
         end
 
-        if done then done() end
+        done()
     end
 end
 
@@ -1072,6 +1090,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_main_apps()
     return function(done)
+        done = done or function() end
+
         local windows = state.windows
         local win     = windows.curr_win
 
@@ -1097,7 +1117,7 @@ function M.cycle_main_apps()
                 toggle_popups('off', 'on')
                 toggle_border('off', 'on')
 
-                if done then done() end
+                done()
             end
         )
 
@@ -1117,6 +1137,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
     return function(done)
+        done = done or function() end
+
         local corners = {
             'bottom_right',
             'top_right',
@@ -1144,7 +1166,7 @@ function M.cycle_corner_pos()
 
         toggle_popups('off', 'on')
 
-        if done then done() end
+        done()
     end
 end
 
@@ -1160,6 +1182,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_stacking()
     return function(done)
+        done = done or function() end
+
         local stack     = state.wk.stack
         local new_stack = (stack == 'vertical') and 'horizontal' or 'vertical'
 
@@ -1167,7 +1191,7 @@ function M.cycle_stacking()
 
         toggle_popups('off', 'on')
 
-        if done then done() end
+        done()
     end
 end
 
@@ -1183,6 +1207,8 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
+        done = done or function() end
+
         local opacity  = state.wk.opacity
         local win      = state.windows.curr_win
         local app_name = win:application():name()
@@ -1205,7 +1231,7 @@ function M.opacity(direction)
 
         state.wk.opacity = opacity
 
-        if done then done() end
+        done()
     end
 end
 
@@ -1221,6 +1247,8 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
+        done = done or function() end
+
         toggle_popups('off')
         toggle_tap('off')
 
@@ -1258,7 +1286,7 @@ function M.insert()
             end_insert_mode(hotkeys, popup)
         end)
 
-        if done then done() end
+        done()
     end
 end
 
@@ -1276,13 +1304,68 @@ end
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     return function(done)
+        done = done or function() end
+
         toggle_tap('off')
 
         hs.eventtap.keyStroke(mods, key, 0)
 
         toggle_tap('on')
 
-        if done then done() end
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Quit wk.
+--
+-- Calls:
+--   toggle_popups()
+--   toggle_border()
+--   toggle_tap()
+--------------------------------------------------------------------------------
+function M.quit()
+    return function(done)
+        done = done or function() end
+
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_tap('off')
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Regenerate cache assets (screen, app, and window data).
+--
+-- Calls:
+--   toggle_popups()
+--   toggle_border()
+--   toggle_tap()
+--   screens.init()
+--   apps.init()
+--   M.init()
+--------------------------------------------------------------------------------
+function M.refresh_state()
+    return function(done)
+        done = done or function() end
+
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_tap('off')
+
+        require('screens').init()
+        require('apps').init()
+
+        M.init()
+
+        toggle_popups('on')
+        toggle_tap('on')
+
+        done()
     end
 end
 
@@ -1315,55 +1398,6 @@ function M.launch()
 
     toggle_popups('on')
     toggle_tap('on')
-end
-
-
---------------------------------------------------------------------------------
--- Quit wk.
---
--- Calls:
---   toggle_popups()
---   toggle_border()
---   toggle_tap()
---------------------------------------------------------------------------------
-function M.quit()
-    return function(done)
-        toggle_popups('off')
-        toggle_border('off')
-        toggle_tap('off')
-
-        if done then done() end
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Regenerate cache assets (screen, app, and window data).
---
--- Calls:
---   toggle_popups()
---   toggle_border()
---   toggle_tap()
---   screens.init()
---   apps.init()
---   M.init()
---------------------------------------------------------------------------------
-function M.refresh_state()
-    return function(done)
-        toggle_popups('off')
-        toggle_border('off')
-        toggle_tap('off')
-
-        require('screens').init()
-        require('apps').init()
-
-        M.init()
-
-        toggle_popups('on')
-        toggle_tap('on')
-
-        if done then done() end
-    end
 end
 
 

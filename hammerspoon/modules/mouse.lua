@@ -118,8 +118,6 @@ function M.release()
     end)
 
     animation_timer = timer
-
-    -- require('wk').refresh_state()
 end
 
 return M

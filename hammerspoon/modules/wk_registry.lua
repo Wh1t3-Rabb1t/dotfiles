@@ -33,6 +33,8 @@ M.apps = {
                 -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh_state() },
 
 
+                { '_', 'db slots', wk.db_slots()                           },
+
 
                 -- { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
                 -- { '-', 'Next app',       wk.cycle_all_apps('next')                      },
@@ -46,8 +48,8 @@ M.apps = {
         {
             category = 'Layout',
             bindings = util.bind(
-                { '_', 'To left slot',   wk.move_to_slot('left')   },
-                { '-', 'To right slot',  wk.move_to_slot('right')  },
+                -- { '_', 'To left slot',   wk.move_to_slot('left')   },
+                -- { '-', 'To right slot',  wk.move_to_slot('right')  },
                 { 'o', 'Next slot',      wk.traverse_slots('next') },
                 { 'u', 'Prev slot',      wk.traverse_slots('prev') },
                 { 'f', 'Resize right',   wk.resize('right')        },

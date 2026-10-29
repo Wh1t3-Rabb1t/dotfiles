@@ -1,9 +1,10 @@
 local M = {}
 
-local registry = require('wk_registry')
 local state    = require('state')
 local cache    = require('cache')
 local util     = require('util')
+local registry = require('wk_registry')
+local wk       = require('wk')
 local mouse    = require('mouse')
 
 
@@ -277,6 +278,7 @@ local function create_event_tap()
             mouse.press()
         elseif event:getType() == events.types.leftMouseUp then
             mouse.release()
+            wk.refresh_state()()
         else
             local flags   = event:getFlags()
             local keycode = event:getKeyCode()

@@ -4,8 +4,6 @@
 
 ## IMMEDIATE TASKS:
 
-- Add state refresh to mouseUp events in mouse click fn.
-
 - For the mouse.press / mouse.release fns:
   Add a differently colored circle which will display if a 'double-click' was
   invoked.

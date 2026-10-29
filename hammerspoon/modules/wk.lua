@@ -2,6 +2,7 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
+-- local G     = require('globals')
 
 
 -- -- Launch or focus target app
@@ -38,12 +39,22 @@ local cache = require('cache')
 -- end
 
 
--- local function debug_slots(screen_id)
---     local layout = state.screens[screen_id].layout
---     if layout.left      then print('left: ' .. layout.left:title())     end
---     if layout.right     then print('right: ' .. layout.right:title())   end
---     if layout.maximized then print('max: ' .. layout.maximized:title()) end
+-- function M.db_slots()
+--     return function(done)
+--         local function debug_slots(screen_id)
+--             local layout = state.screens[screen_id].layout
+--             if layout.left      then print('left: ' .. layout.left:title())     end
+--             if layout.right     then print('right: ' .. layout.right:title())   end
+--             if layout.maximized then print('max: ' .. layout.maximized:title()) end
+--         end
+--         for _, screen in ipairs(hs.screen.allScreens()) do
+--             local id = screen:id()
+--             debug_slots(id)
+--         end
+--         done()
+--     end
 -- end
+
 
 
 -- DESCRIPTION
@@ -429,10 +440,11 @@ local function set_empty_slots(screen_id)
     for _, win in ipairs(hs.window.orderedWindows()) do
         local win_is_std     = win:isStandard() and win:isVisible()
         local on_same_screen = win:screen():id() == screen_id
+        local disallowed     = win:application():name() == 'Hammerspoon'
 
         local slot
 
-        if win_is_std and on_same_screen then
+        if win_is_std and on_same_screen and not disallowed then
             if is_fullscreen(win) then
                 slot = 'maximized'
             else
@@ -652,7 +664,7 @@ function M.maximize()
         snap_layout()
         toggle_popups('off', 'on')
 
-        done()
+        if done then done() end
     end
 end
 
@@ -713,7 +725,7 @@ function M.resize(direction)
         snap_layout()
         toggle_popups('off', 'on')
 
-        done()
+        if done then done() end
     end
 end
 
@@ -742,7 +754,7 @@ function M.swap()
         snap_layout()
         toggle_popups('off', 'on')
 
-        done()
+        if done then done() end
     end
 end
 
@@ -769,7 +781,7 @@ function M.move_to_screen()
             snap_layout()
         end
 
-        done()
+        if done then done() end
     end
 end
 
@@ -804,7 +816,7 @@ function M.move_to_slot(direction)
         toggle_popups('off', 'on')
         set_empty_slots(screen_id)
 
-        done()
+        if done then done() end
     end
 end
 
@@ -865,16 +877,15 @@ function M.traverse_slots(direction)
 
             -- Search every other screen, starting with the adjacent one
             for step = 1, #screens - 1 do
-                local idx         = (start_idx - 1 + step * screen_step) % #screens + 1
-                local screen_id   = screens[idx]:id()
-                local screen_data = state.screens[screen_id]
-                local layout      = screen_data and screen_data.layout
+                local idx       = (start_idx - 1 + step * screen_step) % #screens + 1
+                local screen_id = screens[idx]:id()
+                local layout    = state.screens[screen_id].layout
 
-                if layout then
-                    for _, name in ipairs(slot_order) do
+                for _, name in ipairs(slot_order) do
+                    if layout[name] then
                         local slot = layout[name]
 
-                        if slot and slot ~= skip and slot:screen():id() == screen_id then
+                        if slot ~= skip and slot:screen():id() == screen_id then
                             return slot
                         end
                     end
@@ -948,7 +959,7 @@ function M.cycle_open(direction)
         local wins = state.windows.wins
 
         if #wins < 2 then
-            done()
+            if done then done() end
             return
         end
 
@@ -963,7 +974,7 @@ function M.cycle_open(direction)
             toggle_border('off', 'on')
         end
 
-        done()
+        if done then done() end
     end
 end
 
@@ -988,7 +999,7 @@ function M.cycle_app_specific(direction)
         local curr_app = state.apps[app_name]
 
         if not curr_app or #curr_app.wins < 2 then
-            done()
+            if done then done() end
             return
         end
 
@@ -1005,7 +1016,7 @@ function M.cycle_app_specific(direction)
             toggle_border('on')
         end
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1060,7 +1071,7 @@ function M.cycle_all_apps(direction)
             toggle_border('off', 'on')
         end
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1102,7 +1113,7 @@ function M.cycle_main_apps()
                 toggle_popups('off', 'on')
                 toggle_border('off', 'on')
 
-                done()
+                if done then done() end
             end
         )
 
@@ -1149,7 +1160,7 @@ function M.cycle_corner_pos()
 
         toggle_popups('off', 'on')
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1172,7 +1183,7 @@ function M.cycle_stacking()
 
         toggle_popups('off', 'on')
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1210,7 +1221,7 @@ function M.opacity(direction)
 
         state.wk.opacity = opacity
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1263,7 +1274,7 @@ function M.insert()
             end_insert_mode(hotkeys, popup)
         end)
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1287,7 +1298,7 @@ function M.send_keys(mods, key)
 
         toggle_tap('on')
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1337,7 +1348,7 @@ function M.quit()
         toggle_border('off')
         toggle_tap('off')
 
-        done()
+        if done then done() end
     end
 end
 
@@ -1367,7 +1378,7 @@ function M.refresh_state()
         toggle_popups('on')
         toggle_tap('on')
 
-        done()
+        if done then done() end
     end
 end
 

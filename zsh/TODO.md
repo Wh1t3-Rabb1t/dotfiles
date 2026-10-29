@@ -2,6 +2,9 @@
 
 ## Priority: High
 
+- Figure out why invoking broot 'quit' keybinding gets passed through to the
+  shell after exiting broot.
+
 - Ensure that all keystrokes (aside from ctrl+c etc are consumed while
   scripts are mid execution to avoid another script launching
   immediately once the current one finishes).

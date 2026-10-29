@@ -1,5 +1,7 @@
 local M = {}
 
+local state = require('state')
+
 local shift_chars = {
     ['~'] = '`',
     ['!'] = '1',
@@ -39,6 +41,23 @@ local function add_shift(mods)
     table.insert(result, 'shift')
 
     return result
+end
+
+
+--------------------------------------------------------------------------------
+-- Debug currently filled layout slots for each screen
+--------------------------------------------------------------------------------
+function M.debug_slots()
+    local function print_slot_data(screen_id)
+        local layout = state.screens[screen_id].layout
+        if layout.left      then print('left: ' .. layout.left:title())     end
+        if layout.right     then print('right: ' .. layout.right:title())   end
+        if layout.maximized then print('max: ' .. layout.maximized:title()) end
+    end
+
+    for _, screen in ipairs(hs.screen.allScreens()) do
+        print_slot_data(screen:id())
+    end
 end
 
 

@@ -2,7 +2,7 @@ local M = {}
 
 local state = require('state')
 local cache = require('cache')
--- local G     = require('globals')
+local G     = require('globals')
 
 
 -- -- Launch or focus target app
@@ -38,22 +38,6 @@ local cache = require('cache')
 --     end
 -- end
 
-
--- function M.db_slots()
---     return function(done)
---         local function debug_slots(screen_id)
---             local layout = state.screens[screen_id].layout
---             if layout.left      then print('left: ' .. layout.left:title())     end
---             if layout.right     then print('right: ' .. layout.right:title())   end
---             if layout.maximized then print('max: ' .. layout.maximized:title()) end
---         end
---         for _, screen in ipairs(hs.screen.allScreens()) do
---             local id = screen:id()
---             debug_slots(id)
---         end
---         done()
---     end
--- end
 
 
 
@@ -440,7 +424,7 @@ local function set_empty_slots(screen_id)
     for _, win in ipairs(hs.window.orderedWindows()) do
         local win_is_std     = win:isStandard() and win:isVisible()
         local on_same_screen = win:screen():id() == screen_id
-        local disallowed     = win:application():name() == 'Hammerspoon'
+        local disallowed     = G.disallowed_apps[win:application():name()]
 
         local slot
 
@@ -921,7 +905,7 @@ function M.traverse_slots(direction)
         end
 
         if not target_slot then
-            done()
+            if done then done() end
             return
         end
 
@@ -935,7 +919,7 @@ function M.traverse_slots(direction)
             toggle_border('off', 'on')
         end
 
-        done()
+        if done then done() end
     end
 end
 

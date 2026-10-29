@@ -33,7 +33,6 @@ M.apps = {
                 -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh_state() },
 
 
-                { '_', 'db slots', wk.db_slots()                           },
 
 
                 -- { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },

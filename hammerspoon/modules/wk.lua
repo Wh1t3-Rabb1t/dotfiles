@@ -854,6 +854,7 @@ function M.traverse_slots(direction)
             for i, screen in ipairs(screens) do
                 if screen:id() == start_id then
                     start_idx = i
+
                     break
                 end
             end

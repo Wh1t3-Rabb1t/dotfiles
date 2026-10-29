@@ -4,6 +4,12 @@
 
 ## IMMEDIATE TASKS:
 
+- Add state refresh to mouseUp events in mouse click fn.
+
+- For the mouse.press / mouse.release fns:
+  Add a differently colored circle which will display if a 'double-click' was
+  invoked.
+
 - Need to ensure that the curr_win is always registered in a slot (the use of
   raise() in snap_layout() might be causing problems).
 
@@ -14,8 +20,6 @@
   to customize values like this in a central file).
 
 - Ensure that popups etc are either hidden/deleted in the appropriate places.
-
-- Find a unique static identifier for screens (not screen:id()).
 
 - Create list of disallowed apps (i.e. 'hammerspoon' console).
 
@@ -35,14 +39,6 @@
 
 - Create an fzf popup launcher which takes the list of actions in and execs
   the selected one.
-
-- Create a 'mouse_click_explosion()' fn that animates a series of circles
-  ranging from small to large, that can be cached, then looped and displayed
-  for a short duration; each with a lower opacity until transparent.
-  Add a differently colored circle which will display if a 'double-click' was
-  invoked.
-  Also have it display dimmed on mouseDown and 'release' on mouseUp. (i.e.
-  display but only animate when the mouse releases).
 
 - Create a small debugging fn that prints all open windows along with their
   idx so we can sync focused win idx with state rather that falling back to 1.

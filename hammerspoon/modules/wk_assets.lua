@@ -4,6 +4,7 @@ local registry = require('wk_registry')
 local state    = require('state')
 local cache    = require('cache')
 local util     = require('util')
+local mouse    = require('mouse')
 
 
 -- Create popup
@@ -260,7 +261,8 @@ local function create_event_tap()
     local events = hs.eventtap.event
 
     local event_types = {
-        -- events.types.leftMouseUp,
+        events.types.leftMouseUp,
+        events.types.leftMouseDown,
         -- events.types.keyUp,
         events.types.keyDown,
         events.types.flagsChanged,
@@ -269,30 +271,39 @@ local function create_event_tap()
     local tap = hs.eventtap.new(event_types, function(event)
         -- hs.timer.usleep(10000)
 
-        local flags   = event:getFlags()
-        local keycode = event:getKeyCode()
-        local key     = hs.keycodes.map[keycode]
+        -- NOTE: Do not consume mouse click events unless manually invoking
+        --       them within the 'mouse' fns otherwise clicks won't work.
+        if event:getType() == events.types.leftMouseDown then
+            mouse.press()
+        elseif event:getType() == events.types.leftMouseUp then
+            mouse.release()
+        else
+            local flags   = event:getFlags()
+            local keycode = event:getKeyCode()
+            local key     = hs.keycodes.map[keycode]
 
-        local win = hs.window.focusedWindow()
-        local app = win:application():name()
+            local win = hs.window.focusedWindow()
+            local app = win:application():name()
 
-        local mods = {}
+            local mods = {}
 
-        if flags.cmd   then table.insert(mods, 'cmd') end
-        if flags.alt   then table.insert(mods, 'alt') end
-        if flags.ctrl  then table.insert(mods, 'ctrl') end
-        if flags.shift then table.insert(mods, 'shift') end
+            if flags.cmd   then table.insert(mods, 'cmd') end
+            if flags.alt   then table.insert(mods, 'alt') end
+            if flags.ctrl  then table.insert(mods, 'ctrl') end
+            if flags.shift then table.insert(mods, 'shift') end
 
-        local lookup_key   = util.binding_id(key, mods)
-        local app_lookup   = cache.lookup[app] or {}
-        local bound_action = cache.lookup.system[lookup_key]
-                          or app_lookup[lookup_key]
+            local lookup_key   = util.binding_id(key, mods)
+            local app_lookup   = cache.lookup[app] or {}
+            local bound_action = cache.lookup.system[lookup_key]
+            or app_lookup[lookup_key]
 
-        if bound_action then
-            bound_action()
+            if bound_action then
+                bound_action()
+            end
+
+            return true
         end
 
-        return true
     end)
 
     return tap

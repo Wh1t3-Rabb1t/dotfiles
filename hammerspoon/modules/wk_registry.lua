@@ -33,13 +33,9 @@ M.apps = {
                 -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh_state() },
 
 
-                { '_', 'To left slot',   wk.move_to_slot('left')                        },
-                { '-', 'To right slot',  wk.move_to_slot('right')                       },
 
                 -- { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
                 -- { '-', 'Next app',       wk.cycle_all_apps('next')                      },
-                { 'o', 'Next slot',      wk.traverse_slots('next')                      },
-                { 'u', 'Prev slot',      wk.traverse_slots('prev')                      },
                 { 'O', 'Next window',    wk.cycle_open('next')                          },
                 { 'U', 'Prev window',    wk.cycle_open('prev')                          },
                 { 'n', 'Open window',    wk.send_keys({'cmd'}, 'n'), wk.refresh_state() },
@@ -50,10 +46,14 @@ M.apps = {
         {
             category = 'Layout',
             bindings = util.bind(
-                { 'f', 'Resize right',   wk.resize('right') },
-                { 's', 'Resize left',    wk.resize('left')  },
-                { 'g', 'Maximize',       wk.maximize()      },
-                { 'G', 'Swap positions', wk.swap()          }
+                { '_', 'To left slot',   wk.move_to_slot('left')   },
+                { '-', 'To right slot',  wk.move_to_slot('right')  },
+                { 'o', 'Next slot',      wk.traverse_slots('next') },
+                { 'u', 'Prev slot',      wk.traverse_slots('prev') },
+                { 'f', 'Resize right',   wk.resize('right')        },
+                { 's', 'Resize left',    wk.resize('left')         },
+                { 'g', 'Maximize',       wk.maximize()             },
+                { 'G', 'Swap positions', wk.swap()                 }
             ),
         },
         {

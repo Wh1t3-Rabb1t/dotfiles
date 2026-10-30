@@ -2,14 +2,14 @@ local M = {}
 
 -- Commented out entries are populated on init
 
+M.wk_tap = {}
+
 M.lookup = {
     -- [app_name] = {
     --     key = action,
     -- }
     -- ...
 }
-
-M.wk_tap = {}
 
 M.assets = {
     -- [app_name] = {

@@ -8,7 +8,13 @@ local wk       = require('wk')
 local mouse    = require('mouse')
 
 
--- Create popup
+-- Create popup.
+--
+-- Calls:
+--   util.rgb()
+--
+-- Returns:
+--   popup (table):  hs.canvas object
 --------------------------------------------------------------------------------
 local function create_popup(content, frame)
     local popup = hs.canvas.new(frame)
@@ -40,7 +46,10 @@ local function create_popup(content, frame)
 end
 
 
--- Get the width / height of the popup window
+-- Get the width / height of the popup window.
+--
+-- Returns:
+--   (table):  Frame data corresponding to the 'size' of the text block passed
 --------------------------------------------------------------------------------
 local function fmt_popup_frame(text)
     local size   = hs.drawing.getTextDrawingSize(text)
@@ -54,7 +63,10 @@ local function fmt_popup_frame(text)
 end
 
 
--- Format bindings with mods
+-- Format bindings with mods.
+--
+-- Returns:
+--   parts (table):  The formatted string representation of each binding
 --------------------------------------------------------------------------------
 local function fmt_key_combinations(binding)
     local mods = binding.mods or {}
@@ -120,7 +132,14 @@ local function fmt_key_combinations(binding)
 end
 
 
--- Format menu contents
+-- Format menu contents.
+--
+-- Calls:
+--   fmt_key_combinations()
+--   util.rgb()
+--
+-- Returns:
+--   text (string):  Text portion of the popup menus
 --------------------------------------------------------------------------------
 local function fmt_menu_text(app, binding_tbl)
     local len = 0
@@ -181,7 +200,15 @@ local function fmt_menu_text(app, binding_tbl)
 end
 
 
--- Create binding popup menus
+-- Create binding popup menus.
+--
+-- Calls:
+--   fmt_menu_text()
+--   fmt_popup_frame()
+--   create_popup()
+--
+-- Returns:
+--   (table):  Popup contents and frame data
 --------------------------------------------------------------------------------
 local function fmt_binding_popups(app, bindings)
     local content = fmt_menu_text(app, bindings)
@@ -195,7 +222,10 @@ local function fmt_binding_popups(app, bindings)
 end
 
 
--- Queue chained actions (i.e. launch window then display related popup)
+-- Queue chained actions (i.e. launch window then display related popup).
+--
+-- State changes:
+--   state.action.queue
 --------------------------------------------------------------------------------
 local function queue_actions( ... )
     local actions = { ... }
@@ -236,7 +266,14 @@ local function queue_actions( ... )
 end
 
 
--- Pack binding lookup table
+-- Pack binding lookup table.
+--
+-- Calls:
+--   util.binding_id()
+--   queue_actions()
+--
+-- Returns:
+--   lookup (table):  Key/fn pairs to be executed by the eventtap at runtime
 --------------------------------------------------------------------------------
 local function fmt_binding_tbl(bindings)
     local lookup = {}
@@ -256,7 +293,16 @@ local function fmt_binding_tbl(bindings)
 end
 
 
--- Create the main orchestrator event tap
+-- Create the main orchestrator event tap.
+--
+-- Calls:
+--   util.binding_id()
+--   mouse.press()
+--   mouse.release()
+--   wk.refresh_state()()
+--
+-- Return:
+--   tap (table):  hs.eventtap object
 --------------------------------------------------------------------------------
 local function create_event_tap()
     local events = hs.eventtap.event
@@ -264,7 +310,6 @@ local function create_event_tap()
     local event_types = {
         events.types.leftMouseUp,
         events.types.leftMouseDown,
-        -- events.types.keyUp,
         events.types.keyDown,
         events.types.flagsChanged,
     }
@@ -297,7 +342,7 @@ local function create_event_tap()
             local lookup_key   = util.binding_id(key, mods)
             local app_lookup   = cache.lookup[app] or {}
             local bound_action = cache.lookup.system[lookup_key]
-            or app_lookup[lookup_key]
+                              or app_lookup[lookup_key]
 
             if bound_action then
                 bound_action()
@@ -313,7 +358,18 @@ end
 
 
 --------------------------------------------------------------------------------
--- Init
+-- Init module.
+--
+-- Calls:
+--   fmt_binding_popups()
+--   fmt_binding_tbl()
+--   create_event_tap()
+--
+-- State changes:
+--   cache.lookup
+--   cache.assets
+--   cache.wk_tap
+--   state.wk.initialized
 --------------------------------------------------------------------------------
 function M.init()
     -- Temporary insert bindings

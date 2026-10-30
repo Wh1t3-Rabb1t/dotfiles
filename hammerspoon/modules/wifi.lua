@@ -5,6 +5,8 @@ local M = {}
 --------------------------------------------------------------------------------
 function M.toggle_wifi()
     return function(done)
+        done = done or function() end
+
         local details = hs.wifi.interfaceDetails().power
         local power   = (details == false) and true  or false
         local status  = (power == false)   and 'off' or 'on'

@@ -1,7 +1,7 @@
 local M = {}
 
 local state = require('state')
-local util  = require('util')
+local G     = require('globals')
 
 
 -- --------------------------------------------------------------------------------
@@ -53,8 +53,7 @@ end
 
 --------------------------------------------------------------------------------
 local function get_app_wins(app)
-    -- Focusing the hammerspoon console is buggy as hell
-    if not app or app:name() == 'Hammerspoon' then
+    if not app or G.disallowed_apps[app:name()] then
         return false
     end
 

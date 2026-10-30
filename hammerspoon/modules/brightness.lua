@@ -16,6 +16,8 @@ local alert_fmt = {
 --------------------------------------------------------------------------------
 function M.adjust(direction)
     return function(done)
+        done = done or function() end
+
         local screen = hs.mouse.getCurrentScreen()
         local id     = screen:id()
 
@@ -56,6 +58,8 @@ end
 --------------------------------------------------------------------------------
 function M.print_values()
     return function(done)
+        done = done or function() end
+
         for _, screen in ipairs(hs.screen.allScreens()) do
             local id         = screen:id()
             local brightness = state.screens[id].brightness or 100

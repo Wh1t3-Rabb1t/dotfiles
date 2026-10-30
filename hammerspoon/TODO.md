@@ -8,18 +8,16 @@
   Add a differently colored circle which will display if a 'double-click' was
   invoked.
 
-- Need to ensure that the curr_win is always registered in a slot (the use of
-  raise() in snap_layout() might be causing problems).
+- Setup globals for values like 'step' when resizing windows etc. (make it easy
+  to customize values like this in a central file).
 
 - Add asserts to the top of each function call/relevant code section to check
   values passed etc are correct.
 
-- Setup globals for values like 'step' when resizing windows etc. (make it easy
-  to customize values like this in a central file).
+- Need to ensure that the curr_win is always registered in a slot (the use of
+  raise() in snap_layout() might be causing problems).
 
 - Ensure that popups etc are either hidden/deleted in the appropriate places.
-
-- Create list of disallowed apps (i.e. 'hammerspoon' console).
 
 - Add a return flag to all fns processed by the action queue, so we can repeat
   the fn if it fails (or signals a repeat).

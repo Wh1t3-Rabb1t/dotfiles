@@ -4,7 +4,16 @@ local state = require('state')
 local util  = require('util')
 
 
--- Create screen watcher
+-- Create screen watcher.
+--
+-- Calls:
+--   util.tbl()
+--
+-- State changes:
+--   state.screens
+--
+-- Returns:
+--   watcher (fn):  Preserves screen state tables if they already exist
 --------------------------------------------------------------------------------
 local function create_watcher()
     local watcher = hs.screen.watcher.new(function()
@@ -25,7 +34,10 @@ local function create_watcher()
 end
 
 
--- Create overlay
+-- Create overlay.
+--
+-- Returns:
+--   overlay (table):  An overlay to be used as a shader for the screen
 --------------------------------------------------------------------------------
 local function create_overlay(screen)
     local overlay = hs.canvas.new(screen:fullFrame())
@@ -48,7 +60,10 @@ local function create_overlay(screen)
 end
 
 
--- Calculate the available screen (total screen frame minus the dock)
+-- Calculate the available screen (total screen frame minus the dock).
+--
+-- Returns:
+--   (table):  Frame data for the screen
 --------------------------------------------------------------------------------
 local function get_usable_frame(screen)
     local full   = screen:fullFrame()
@@ -63,7 +78,14 @@ local function get_usable_frame(screen)
 end
 
 
--- Init data for all connected screens
+-- Get data for all connected screens.
+--
+-- Calls:
+--   get_usable_frame()
+--   create_overlay()
+--
+-- Returns:
+--   (table):  State data for the screen
 --------------------------------------------------------------------------------
 local function get_screen_data(screen)
     return {
@@ -81,7 +103,16 @@ end
 
 
 --------------------------------------------------------------------------------
--- Init
+-- Init module.
+--
+-- Calls:
+--   util.tbl()
+--   get_screen_data()
+--   create_watcher()
+--
+-- State changes:
+--   state.watchers
+--   state.screens
 --------------------------------------------------------------------------------
 function M.init()
     for _, screen in ipairs(hs.screen.allScreens()) do

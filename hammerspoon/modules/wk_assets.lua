@@ -141,7 +141,7 @@ end
 -- Returns:
 --   text (string):  Text portion of the popup menus
 --------------------------------------------------------------------------------
-local function fmt_menu_text(app, binding_tbl)
+local function fmt_menu_text(app_name, binding_tbl)
     local len = 0
 
     -- Find longest key across all categories
@@ -165,7 +165,7 @@ local function fmt_menu_text(app, binding_tbl)
 
     local styled_text = require('hs.styledtext')
     local fmt         = ' %' .. len .. 's '
-    local title       = ('* %s'):format(app)
+    local title       = ('* %s'):format(app_name)
     local text        = styled_text.new(title, styles.title)
                      .. styled_text.new('\n\n', styles.title)
 
@@ -210,8 +210,8 @@ end
 -- Returns:
 --   (table):  Popup contents and frame data
 --------------------------------------------------------------------------------
-local function fmt_binding_popups(app, bindings)
-    local content = fmt_menu_text(app, bindings)
+local function fmt_binding_popups(app_name, bindings)
+    local content = fmt_menu_text(app_name, bindings)
     local frame   = fmt_popup_frame(content)
     local popup   = create_popup(content, frame)
 
@@ -329,8 +329,8 @@ local function create_event_tap()
             local keycode = event:getKeyCode()
             local key     = hs.keycodes.map[keycode]
 
-            local win = hs.window.focusedWindow()
-            local app = win:application():name()
+            local win      = hs.window.focusedWindow()
+            local app_name = win:application():name()
 
             local mods = {}
 
@@ -340,7 +340,7 @@ local function create_event_tap()
             if flags.shift then table.insert(mods, 'shift') end
 
             local lookup_key   = util.binding_id(key, mods)
-            local app_lookup   = cache.lookup[app] or {}
+            local app_lookup   = cache.lookup[app_name] or {}
             local bound_action = cache.lookup.system[lookup_key]
                               or app_lookup[lookup_key]
 
@@ -383,9 +383,9 @@ function M.init()
         }
     })
 
-    for app, bindings in pairs(registry.apps) do
-        cache.lookup[app] = fmt_binding_tbl(bindings)
-        cache.assets[app] = fmt_binding_popups(app, bindings)
+    for app_name, bindings in pairs(registry.apps) do
+        cache.lookup[app_name] = fmt_binding_tbl(bindings)
+        cache.assets[app_name] = fmt_binding_popups(app_name, bindings)
     end
 
     cache.wk_tap = create_event_tap()

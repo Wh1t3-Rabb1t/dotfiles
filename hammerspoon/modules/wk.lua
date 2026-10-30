@@ -5,6 +5,33 @@ local cache = require('cache')
 local G     = require('globals')
 
 
+-- DESCRIPTION
+--
+-- Notes:
+--   Empty slots are represented by false, not nil
+--
+-- Parameters:
+--   target (table | number):
+--     hs.window      (table):   Clear the slot assigned to this window
+--     hs.screen:id() (number):  Clear every slot on the screen with this ID
+--
+-- Calls:
+--   clear_slots()
+--
+-- State changes:
+--   state.screens[id].layout.left
+--   state.screens[id].layout.right
+--   state.screens[id].layout.maximized
+--
+-- Errors:
+--   Assumes the target window's screen ID exists in state.screens
+--
+-- Returns:
+--   true  (bool):  win:frame() is equal to the usable screen frame
+--   false (bool):  win:frame() is NOT equal to the usable screen frame
+--------------------------------------------------------------------------------
+
+
 -- -- Launch or focus target app
 -- function M.launch_or_focus(app)
 --     return function(done)
@@ -41,31 +68,6 @@ local G     = require('globals')
 
 
 
--- DESCRIPTION
---
--- Notes:
---   Empty slots are represented by false, not nil
---
--- Parameters:
---   target (table | number):
---     hs.window      (table):   Clear the slot assigned to this window
---     hs.screen:id() (number):  Clear every slot on the screen with this ID
---
--- Calls:
---   clear_slots()
---
--- State changes:
---   state.screens[id].layout.left
---   state.screens[id].layout.right
---   state.screens[id].layout.maximized
---
--- Errors:
---   Assumes the target window's screen ID exists in state.screens
---
--- Returns:
---   true  (bool):  win:frame() is equal to the usable screen frame
---   false (bool):  win:frame() is NOT equal to the usable screen frame
---------------------------------------------------------------------------------
 
 
 
@@ -89,7 +91,7 @@ local function clear_slots(target)
     local screen_id = clear_all and target or target:screen():id()
     local layout    = state.screens[screen_id].layout
 
-    for _, name in ipairs({ 'left', 'right', 'maximized' }) do
+    for _, name in ipairs({ 'maximized', 'left', 'right' }) do
         if clear_all or layout[name] == target then
             layout[name] = false
         end

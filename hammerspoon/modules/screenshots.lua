@@ -20,7 +20,11 @@ end
 
 
 --------------------------------------------------------------------------------
--- Move screenshots to target directory
+-- Move screenshots to target directory.
+--
+-- Calls:
+--   sanitize_name()
+--   rename_screenshot()
 --------------------------------------------------------------------------------
 function M.move_screenshots(files)
     for _, file in ipairs(files) do

@@ -1,77 +1,8 @@
 local M = {}
 
+local G     = require('globals')
 local state = require('state')
 local cache = require('cache')
-local G     = require('globals')
-
-
--- DESCRIPTION
---
--- Notes:
---   Empty slots are represented by false, not nil
---
--- Parameters:
---   target (table | number):
---     hs.window      (table):   Clear the slot assigned to this window
---     hs.screen:id() (number):  Clear every slot on the screen with this ID
---
--- Calls:
---   clear_slots()
---
--- State changes:
---   state.screens[id].layout.left
---   state.screens[id].layout.right
---   state.screens[id].layout.maximized
---
--- Errors:
---   Assumes the target window's screen ID exists in state.screens
---
--- Returns:
---   true  (bool):  win:frame() is equal to the usable screen frame
---   false (bool):  win:frame() is NOT equal to the usable screen frame
---------------------------------------------------------------------------------
-
-
--- -- Launch or focus target app
--- function M.launch_or_focus(app)
---     return function(done)
---         local existing = hs.window.focusedWindow()
---
---         local function finish(new)
---             state.windows.curr_win = new
---
---             if existing and new and existing:id() ~= new:id() then
---                 set_slots(new, existing)
---                 snap_layout()
---             end
---
---             done()
---         end
---
---         if existing and existing:application():name() == app then
---             finish(existing)
---
---             return
---         end
---
---         local wf = hs.window.filter.new(app)
---
---         wf:subscribe(hs.window.filter.windowFocused, function(new)
---             wf:unsubscribeAll()
---             finish(new)
---         end)
---
---         hs.application.launchOrFocus(app)
---     end
--- end
-
-
-
-
-
-
-
-
 
 
 -- Clear window assignments from the screen layout.

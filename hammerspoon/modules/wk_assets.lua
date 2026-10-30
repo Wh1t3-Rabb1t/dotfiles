@@ -302,7 +302,7 @@ end
 --   wk.refresh_state()()
 --
 -- Return:
---   tap (table):  hs.eventtap object
+--   tap (fn):  hs.eventtap function
 --------------------------------------------------------------------------------
 local function create_event_tap()
     local events = hs.eventtap.event
@@ -369,7 +369,7 @@ end
 --   cache.lookup
 --   cache.assets
 --   cache.wk_tap
---   state.wk.initialized
+--   state.wk
 --------------------------------------------------------------------------------
 function M.init()
     -- Temporary insert bindings

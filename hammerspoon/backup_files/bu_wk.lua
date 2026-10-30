@@ -1,80 +1,8 @@
 local M = {}
 
+local G     = require('globals')
 local state = require('state')
 local cache = require('cache')
-
-
--- -- Launch or focus target app
--- function M.launch_or_focus(app)
---     return function(done)
---         local existing = hs.window.focusedWindow()
---
---         local function finish(new)
---             state.windows.curr_win = new
---
---             if existing and new and existing:id() ~= new:id() then
---                 set_slots(new, existing)
---                 snap_layout()
---             end
---
---             done()
---         end
---
---         if existing and existing:application():name() == app then
---             finish(existing)
---
---             return
---         end
---
---         local wf = hs.window.filter.new(app)
---
---         wf:subscribe(hs.window.filter.windowFocused, function(new)
---             wf:unsubscribeAll()
---             finish(new)
---         end)
---
---         hs.application.launchOrFocus(app)
---     end
--- end
-
-
--- local function debug_slots(screen_id)
---     local layout = state.screens[screen_id].layout
---     if layout.left      then print('left: ' .. layout.left:title())     end
---     if layout.right     then print('right: ' .. layout.right:title())   end
---     if layout.maximized then print('max: ' .. layout.maximized:title()) end
--- end
-
-
--- DESCRIPTION
---
--- Notes:
---   Empty slots are represented by false, not nil
---
--- Parameters:
---   target (table | number):
---     hs.window      (table):   Clear the slot assigned to this window
---     hs.screen:id() (number):  Clear every slot on the screen with this ID
---
--- Calls:
---   clear_slots()
---
--- State changes:
---   state.screens[id].layout.left
---   state.screens[id].layout.right
---   state.screens[id].layout.maximized
---
--- Errors:
---   Assumes the target window's screen ID exists in state.screens
---
--- Returns:
---   true  (bool):  win:frame() is equal to the usable screen frame
---   false (bool):  win:frame() is NOT equal to the usable screen frame
---------------------------------------------------------------------------------
-
-
-
-
 
 
 -- Clear window assignments from the screen layout.
@@ -94,7 +22,7 @@ local function clear_slots(target)
     local screen_id = clear_all and target or target:screen():id()
     local layout    = state.screens[screen_id].layout
 
-    for _, name in ipairs({ 'left', 'right', 'maximized' }) do
+    for _, name in ipairs({ 'maximized', 'left', 'right' }) do
         if clear_all or layout[name] == target then
             layout[name] = false
         end
@@ -429,10 +357,11 @@ local function set_empty_slots(screen_id)
     for _, win in ipairs(hs.window.orderedWindows()) do
         local win_is_std     = win:isStandard() and win:isVisible()
         local on_same_screen = win:screen():id() == screen_id
+        local disallowed     = G.disallowed_apps[win:application():name()]
 
         local slot
 
-        if win_is_std and on_same_screen then
+        if win_is_std and on_same_screen and not disallowed then
             if is_fullscreen(win) then
                 slot = 'maximized'
             else
@@ -644,6 +573,8 @@ end
 --------------------------------------------------------------------------------
 function M.maximize()
     return function(done)
+        done = done or function() end
+
         local win    = state.windows.curr_win
         local layout = state.screens[win:screen():id()].layout
 
@@ -675,6 +606,8 @@ end
 --------------------------------------------------------------------------------
 function M.resize(direction)
     return function(done)
+        done = done or function() end
+
         local step    = 0.01
         local win     = state.windows.curr_win
         local screen  = state.screens[win:screen():id()]
@@ -731,6 +664,8 @@ end
 --------------------------------------------------------------------------------
 function M.swap()
     return function(done)
+        done = done or function() end
+
         local win    = state.windows.curr_win
         local layout = state.screens[win:screen():id()].layout
         local lhs    = layout.left
@@ -757,6 +692,8 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_screen()
     return function(done)
+        done = done or function() end
+
         local win         = state.windows.curr_win
         local next_screen = win:screen():next()
 
@@ -792,6 +729,8 @@ end
 --------------------------------------------------------------------------------
 function M.move_to_slot(direction)
     return function(done)
+        done = done or function() end
+
         local win       = state.windows.curr_win
         local screen_id = win:screen():id()
         local layout    = state.screens[screen_id].layout
@@ -818,10 +757,10 @@ end
 --     screen. Maximized is always prioritized first, (if a window is maximized,
 --     the left/right slot windows won't be visible).
 --
---     RIGHT slot, and direction == 'right' then look for the first available
+--     RIGHT slot, and direction == 'next' then look for the first available
 --     slot on the next screen.
 --
---     LEFT slot, and direction == 'left' then look for the first available
+--     LEFT slot, and direction == 'prev' then look for the first available
 --     slot on the next screen.
 --
 --     LEFT or RIGHT slot, and there are no slots available on the next screen
@@ -833,7 +772,7 @@ end
 --
 -- Calls:
 --   next_layout()
---   iterate_window_idx()
+--   get_window_idx()
 --   focus_window()
 --   set_window_state()
 --   toggle_popups()
@@ -841,6 +780,8 @@ end
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
     return function(done)
+        done = done or function() end
+
         local reverse     = direction == 'prev'
         local screen_step = reverse and -1 or 1
         local slot_order  = reverse
@@ -854,6 +795,7 @@ function M.traverse_slots(direction)
             for i, screen in ipairs(screens) do
                 if screen:id() == start_id then
                     start_idx = i
+
                     break
                 end
             end
@@ -864,16 +806,15 @@ function M.traverse_slots(direction)
 
             -- Search every other screen, starting with the adjacent one
             for step = 1, #screens - 1 do
-                local idx         = (start_idx - 1 + step * screen_step) % #screens + 1
-                local screen_id   = screens[idx]:id()
-                local screen_data = state.screens[screen_id]
-                local layout      = screen_data and screen_data.layout
+                local idx       = (start_idx - 1 + step * screen_step) % #screens + 1
+                local screen_id = screens[idx]:id()
+                local layout    = state.screens[screen_id].layout
 
-                if layout then
-                    for _, name in ipairs(slot_order) do
+                for _, name in ipairs(slot_order) do
+                    if layout[name] then
                         local slot = layout[name]
 
-                        if slot and slot ~= skip and slot:screen():id() == screen_id then
+                        if slot ~= skip and slot:screen():id() == screen_id then
                             return slot
                         end
                     end
@@ -913,7 +854,7 @@ function M.traverse_slots(direction)
             return
         end
 
-        local win_idx = iterate_window_idx('all')
+        local win_idx = get_window_idx(state.windows.wins, target_slot)
         local new_win = focus_window(target_slot)
 
         if new_win then
@@ -929,47 +870,86 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle focus between main apps (kitty and Brave).
+-- Cycle between all open windows.
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
 --
 -- Calls:
---   get_window_idx()
+--   iterate_window_idx()
+--   focus_window()
 --   set_window_state()
 --   set_slots()
 --   toggle_popups()
 --   toggle_border()
 --------------------------------------------------------------------------------
-function M.cycle_main_apps()
+function M.cycle_open(direction)
     return function(done)
-        local windows = state.windows
-        local win     = windows.curr_win
+        done = done or function() end
 
-        local target_app = 'kitty'
+        local wins = state.windows.wins
 
-        if win and win:application():name() == 'kitty' then
-            target_app = 'Brave Browser'
+        if #wins < 2 then
+            done()
+            return
         end
 
-        local wf = hs.window.filter.new(target_app)
+        local idx = iterate_window_idx('all', direction)
+        local win = focus_window(wins[idx])
 
-        wf:subscribe(
-            hs.window.filter.windowFocused,
-            function(target_win)
-                wf:unsubscribeAll()
-                wf = nil
+        if win then
+            set_window_state(win, idx)
+            set_slots(win)
 
-                local idx = get_window_idx(windows.wins, target_win)
+            toggle_popups('off', 'on')
+            toggle_border('off', 'on')
+        end
 
-                set_window_state(target_win, idx)
-                set_slots(target_win)
+        done()
+    end
+end
 
-                toggle_popups('off', 'on')
-                toggle_border('off', 'on')
 
-                done()
-            end
-        )
+--------------------------------------------------------------------------------
+-- Cycle between the currently focused apps open windows.
+--
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
+-- Calls:
+--   iterate_window_idx()
+--   focus_window()
+--   get_window_idx()
+--   set_window_state()
+--   toggle_border()
+--------------------------------------------------------------------------------
+function M.cycle_app_specific(direction)
+    return function(done)
+        done = done or function() end
 
-        hs.application.launchOrFocus(target_app)
+        local windows  = state.windows
+        local app_name = windows.curr_win:application():name()
+        local curr_app = state.apps[app_name]
+
+        if not curr_app or #curr_app.wins < 2 then
+            done()
+            return
+        end
+
+        local idx = iterate_window_idx(app_name, direction)
+        local win = focus_window(curr_app.wins[idx])
+
+        if win then
+            -- Need to set this to the index of the 'windows' table because
+            -- we use the app specific index table to iterate the window
+            -- within the same app group.
+            idx = get_window_idx(windows.wins, win)
+
+            set_window_state(win, idx)
+            toggle_border('on')
+        end
+
+        done()
     end
 end
 
@@ -989,6 +969,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
     return function(done)
+        done = done or function() end
+
         local windows  = state.windows
         local curr_app = windows.curr_win:application()
         local apps     = state.apps.list
@@ -1030,82 +1012,49 @@ end
 
 
 --------------------------------------------------------------------------------
--- Cycle between the currently focused apps open windows.
---
--- Parameters:
---   direction (string):  'next' or 'prev'
+-- Cycle focus between main apps (kitty and Brave).
 --
 -- Calls:
---   iterate_window_idx()
---   focus_window()
 --   get_window_idx()
---   set_window_state()
---   toggle_border()
---------------------------------------------------------------------------------
-function M.cycle_app_specific(direction)
-    return function(done)
-        local windows  = state.windows
-        local app_name = windows.curr_win:application():name()
-        local curr_app = state.apps[app_name]
-
-        if not curr_app or #curr_app.wins < 2 then
-            done()
-            return
-        end
-
-        local idx = iterate_window_idx(app_name, direction)
-        local win = focus_window(curr_app.wins[idx])
-
-        if win then
-            -- Need to set this to the index of the 'windows' table because
-            -- we use the app specific index table to iterate the window
-            -- within the same app group.
-            idx = get_window_idx(windows.wins, win)
-
-            set_window_state(win, idx)
-            toggle_border('on')
-        end
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Cycle between all open windows.
---
--- Parameters:
---   direction (string):  'next' or 'prev'
---
--- Calls:
---   iterate_window_idx()
---   focus_window()
 --   set_window_state()
 --   set_slots()
 --   toggle_popups()
 --   toggle_border()
 --------------------------------------------------------------------------------
-function M.cycle_open(direction)
+function M.cycle_main_apps()
     return function(done)
-        local wins = state.windows.wins
+        done = done or function() end
 
-        if #wins < 2 then
-            done()
-            return
+        local windows = state.windows
+        local win     = windows.curr_win
+
+        local target_app = 'kitty'
+
+        if win and win:application():name() == 'kitty' then
+            target_app = 'Brave Browser'
         end
 
-        local idx = iterate_window_idx('all', direction)
-        local win = focus_window(wins[idx])
+        local wf = hs.window.filter.new(target_app)
 
-        if win then
-            set_window_state(win, idx)
-            set_slots(win)
+        wf:subscribe(
+            hs.window.filter.windowFocused,
+            function(target_win)
+                wf:unsubscribeAll()
+                wf = nil
 
-            toggle_popups('off', 'on')
-            toggle_border('off', 'on')
-        end
+                local idx = get_window_idx(windows.wins, target_win)
 
-        done()
+                set_window_state(target_win, idx)
+                set_slots(target_win)
+
+                toggle_popups('off', 'on')
+                toggle_border('off', 'on')
+
+                done()
+            end
+        )
+
+        hs.application.launchOrFocus(target_app)
     end
 end
 
@@ -1121,6 +1070,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
     return function(done)
+        done = done or function() end
+
         local corners = {
             'bottom_right',
             'top_right',
@@ -1164,6 +1115,8 @@ end
 --------------------------------------------------------------------------------
 function M.cycle_stacking()
     return function(done)
+        done = done or function() end
+
         local stack     = state.wk.stack
         local new_stack = (stack == 'vertical') and 'horizontal' or 'vertical'
 
@@ -1187,6 +1140,8 @@ end
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
+        done = done or function() end
+
         local opacity  = state.wk.opacity
         local win      = state.windows.curr_win
         local app_name = win:application():name()
@@ -1225,6 +1180,8 @@ end
 --------------------------------------------------------------------------------
 function M.insert()
     return function(done)
+        done = done or function() end
+
         toggle_popups('off')
         toggle_tap('off')
 
@@ -1280,10 +1237,65 @@ end
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)
     return function(done)
+        done = done or function() end
+
         toggle_tap('off')
 
         hs.eventtap.keyStroke(mods, key, 0)
 
+        toggle_tap('on')
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Quit wk.
+--
+-- Calls:
+--   toggle_popups()
+--   toggle_border()
+--   toggle_tap()
+--------------------------------------------------------------------------------
+function M.quit()
+    return function(done)
+        done = done or function() end
+
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_tap('off')
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Regenerate cache assets (screen, app, and window data).
+--
+-- Calls:
+--   toggle_popups()
+--   toggle_border()
+--   toggle_tap()
+--   screens.init()
+--   apps.init()
+--   M.init()
+--------------------------------------------------------------------------------
+function M.refresh_state()
+    return function(done)
+        done = done or function() end
+
+        toggle_popups('off')
+        toggle_border('off')
+        toggle_tap('off')
+
+        require('screens').init()
+        require('apps').init()
+
+        M.init()
+
+        toggle_popups('on')
         toggle_tap('on')
 
         done()
@@ -1319,55 +1331,6 @@ function M.launch()
 
     toggle_popups('on')
     toggle_tap('on')
-end
-
-
---------------------------------------------------------------------------------
--- Quit wk.
---
--- Calls:
---   toggle_popups()
---   toggle_border()
---   toggle_tap()
---------------------------------------------------------------------------------
-function M.quit()
-    return function(done)
-        toggle_popups('off')
-        toggle_border('off')
-        toggle_tap('off')
-
-        done()
-    end
-end
-
-
---------------------------------------------------------------------------------
--- Regenerate cache assets (screen, app, and window data).
---
--- Calls:
---   toggle_popups()
---   toggle_border()
---   toggle_tap()
---   screens.init()
---   apps.init()
---   M.init()
---------------------------------------------------------------------------------
-function M.refresh_state()
-    return function(done)
-        toggle_popups('off')
-        toggle_border('off')
-        toggle_tap('off')
-
-        require('screens').init()
-        require('apps').init()
-
-        M.init()
-
-        toggle_popups('on')
-        toggle_tap('on')
-
-        done()
-    end
 end
 
 

@@ -1328,8 +1328,8 @@ function M.launch()
 
     M.init()
 
-    -- Init wk_assets if not already
-    if not state.initialized then
+    -- Init wk_assets if not already existing
+    if not cache.initialized then
         require('wk_assets').init()
     end
 

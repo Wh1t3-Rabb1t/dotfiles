@@ -2,6 +2,8 @@ local M = {}
 
 -- Commented out entries are populated on init
 
+M.initialized = false
+
 M.wk_tap = {}
 
 M.lookup = {

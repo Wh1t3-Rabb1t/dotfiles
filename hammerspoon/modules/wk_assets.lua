@@ -380,7 +380,7 @@ end
 --   cache.lookup
 --   cache.assets
 --   cache.wk_tap
---   state.initialized
+--   cache.initialized
 --------------------------------------------------------------------------------
 function M.init()
     -- Temporary insert bindings
@@ -401,7 +401,7 @@ function M.init()
 
     cache.wk_tap = create_event_tap()
 
-    state.initialized = true
+    cache.initialized = true
 end
 
 return M

@@ -2,15 +2,6 @@ local M = {}
 
 -- Commented out entries are populated on init
 
-M.initialized = false
-
-M.windows = {
-    -- idx      = 1,
-    -- border   = obj,
-    -- curr_win = win,
-    -- wins     = { ... },
-}
-
 M.screens = {
     -- [screen:id()] = {
     --     frame      = {},
@@ -33,6 +24,13 @@ M.apps = {
     --     wins = { ... },
     -- },
     -- ...
+}
+
+M.windows = {
+    -- idx      = 1,
+    -- border   = obj,
+    -- curr_win = win,
+    -- wins     = { ... },
 }
 
 return M

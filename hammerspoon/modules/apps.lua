@@ -39,6 +39,10 @@ local state = require('state')
 -- end
 
 
+-- Sort list of running apps.
+--
+-- Returns:
+--   running_apps (table):  Sorted array containing all running apps
 --------------------------------------------------------------------------------
 local function sort_apps()
     local running_apps = hs.application.runningApplications()
@@ -51,6 +55,11 @@ local function sort_apps()
 end
 
 
+-- Get all open windows of each running app.
+--
+-- Returns:
+--   app_wins (table):  Array containing all open windows
+--   false    (bool):   No windows are open
 --------------------------------------------------------------------------------
 local function get_app_wins(app)
     if not app or G.disallowed_apps[app:name()] then
@@ -74,7 +83,14 @@ end
 
 
 --------------------------------------------------------------------------------
--- Init
+-- Init module.
+--
+-- Calls:
+--   sort_apps()
+--   get_app_wins()
+--
+-- State changes:
+--   state.apps
 --------------------------------------------------------------------------------
 function M.init()
     local apps = {

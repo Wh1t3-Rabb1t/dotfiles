@@ -308,28 +308,38 @@ local function create_event_tap()
     local events = hs.eventtap.event
 
     local event_types = {
-        events.types.leftMouseUp,
-        events.types.leftMouseDown,
         events.types.keyDown,
         events.types.flagsChanged,
+        events.types.leftMouseUp,
+        events.types.leftMouseDown,
+        events.types.leftMouseDragged,
+        -- events.types.mouseMoved,
     }
 
     local tap = hs.eventtap.new(event_types, function(event)
         -- hs.timer.usleep(10000)
 
+        -- Mouse events
+        --
         -- NOTE: Do not consume mouse click events unless manually invoking
         --       them within the 'mouse' fns otherwise clicks won't work.
         if event:getType() == events.types.leftMouseDown then
             mouse.press()
+
+        elseif event:getType() == events.types.leftMouseDragged then
+            mouse.drag(event:location())
+
         elseif event:getType() == events.types.leftMouseUp then
-            mouse.release()
+            mouse.release(event:location())
             wk.refresh_state()()
+
+        -- Keyboard events
         else
             local flags   = event:getFlags()
             local keycode = event:getKeyCode()
             local key     = hs.keycodes.map[keycode]
 
-            local win      = hs.window.focusedWindow()
+            local win      = state.windows.curr_win
             local app_name = win:application():name()
 
             local mods = {}
@@ -350,7 +360,6 @@ local function create_event_tap()
 
             return true
         end
-
     end)
 
     return tap

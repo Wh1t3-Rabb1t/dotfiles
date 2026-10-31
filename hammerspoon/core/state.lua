@@ -2,6 +2,10 @@ local M = {}
 
 -- Commented out entries are populated on init
 
+-- M.mouse = {
+--     is_pressed = false
+-- }
+
 M.wk = {
     initialized = false,
     tap_active  = false,

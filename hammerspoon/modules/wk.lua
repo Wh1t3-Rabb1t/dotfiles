@@ -1275,28 +1275,26 @@ end
 -- Regenerate cache assets (screen, app, and window data).
 --
 -- Calls:
---   toggle_popups()
 --   toggle_border()
---   toggle_tap()
---   screens.init()
 --   apps.init()
 --   M.init()
+--   toggle_popups()
 --------------------------------------------------------------------------------
 function M.refresh_state()
     return function(done)
         done = done or function() end
 
-        toggle_popups('off')
-        toggle_border('off')
-        toggle_tap('off')
+        local start_win = state.windows.curr_win
 
-        require('screens').init()
+        toggle_border('off')  -- Border is toggled back on during M.init()
+
         require('apps').init()
 
         M.init()
 
-        toggle_popups('on')
-        toggle_tap('on')
+        if start_win ~= state.windows.curr_win then
+            toggle_popups('off', 'on')
+        end
 
         done()
     end

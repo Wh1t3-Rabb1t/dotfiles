@@ -1,7 +1,8 @@
 local M = {}
 
 
--- Configuration ---------------------------------------------------------------
+-- Configuration
+--------------------------------------------------------------------------------
 local START_RADIUS   = 14
 local END_RADIUS     = 44
 local STROKE_WIDTH   = 3
@@ -20,13 +21,15 @@ local HALF_SIZE   = END_RADIUS + PADDING
 local CANVAS_SIZE = HALF_SIZE * 2
 
 
--- State -----------------------------------------------------------------------
+-- State
+--------------------------------------------------------------------------------
 local mouse_circle
 local animation_timer
 local is_pressed = false
 
 
--- Mouse Down ------------------------------------------------------------------
+-- Mouse Down
+--------------------------------------------------------------------------------
 function M.press()
     -- Cancel an animation left over from the previous click
     if animation_timer then
@@ -68,7 +71,7 @@ function M.press()
         })
 
         -- Reset the previous animation's final state
-        mouse_circle[1].radius = START_RADIUS
+        mouse_circle[1].radius            = START_RADIUS
         mouse_circle[1].strokeColor.alpha = 1
     end
 
@@ -77,12 +80,42 @@ function M.press()
 end
 
 
--- Mouse Up --------------------------------------------------------------------
-function M.release()
+-- Mouse movement
+--------------------------------------------------------------------------------
+local function move_circle(point)
+    if not mouse_circle then
+        return
+    end
+
+    mouse_circle:frame({
+        x = point.x - HALF_SIZE,
+        y = point.y - HALF_SIZE,
+        w = CANVAS_SIZE,
+        h = CANVAS_SIZE,
+    })
+end
+
+function M.drag(point)
+    if not is_pressed or not mouse_circle or not mouse_circle:isVisible() then
+        return
+    end
+
+    move_circle(point)
+end
+
+
+-- Mouse Up
+--------------------------------------------------------------------------------
+function M.release(point)
     -- Ignore stray mouse-up events or presses without a visible starting
     -- circle. Also prevents repeated mouse-up events restarting the animation.
     if not is_pressed then
         return
+    end
+
+    -- Capture the final position before starting the animation
+    if point then
+        move_circle(point)
     end
 
     is_pressed = false

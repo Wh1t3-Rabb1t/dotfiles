@@ -7,6 +7,42 @@ local registry = require('wk_registry')
 local wk       = require('wk')
 local mouse    = require('mouse')
 
+local shift_chars = {
+    ['`'] = '~',
+    ['1'] = '!',
+    ['2'] = '@',
+    ['3'] = '#',
+    ['4'] = '$',
+    ['5'] = '%',
+    ['6'] = '^',
+    ['7'] = '&',
+    ['8'] = '*',
+    ['9'] = '(',
+    ['0'] = ')',
+    ['-'] = '_',
+    ['='] = '+',
+    ['['] = '{',
+    [']'] = '}',
+    [';'] = ':',
+    ["'"] = '"',
+    [','] = '<',
+    ['.'] = '>',
+    ['/'] = '?',
+    ['\\'] = '|',
+}
+
+local mod_names = {
+    cmd   = 'cmd',
+    ctrl  = 'ctrl',
+    alt   = 'alt',
+    shift = 'shift',
+}
+
+local queue = {
+    running = false,
+    items   = {},
+}
+
 
 -- Create popup.
 --
@@ -71,37 +107,6 @@ end
 local function fmt_key_combinations(binding)
     local mods = binding.mods or {}
     local key  = binding.key
-
-    local shift_chars = {
-        ['`'] = '~',
-        ['1'] = '!',
-        ['2'] = '@',
-        ['3'] = '#',
-        ['4'] = '$',
-        ['5'] = '%',
-        ['6'] = '^',
-        ['7'] = '&',
-        ['8'] = '*',
-        ['9'] = '(',
-        ['0'] = ')',
-        ['-'] = '_',
-        ['='] = '+',
-        ['['] = '{',
-        [']'] = '}',
-        [';'] = ':',
-        ["'"] = '"',
-        [','] = '<',
-        ['.'] = '>',
-        ['/'] = '?',
-        ['\\'] = '|',
-    }
-
-    local mod_names = {
-        cmd   = 'cmd',
-        ctrl  = 'ctrl',
-        alt   = 'alt',
-        shift = 'shift',
-    }
 
     local consume_shift = false
 
@@ -225,36 +230,34 @@ end
 -- Queue chained actions (i.e. launch window then display related popup).
 --
 -- State changes:
---   state.action.queue
+--   queue
 --------------------------------------------------------------------------------
 local function queue_actions( ... )
     local actions = { ... }
 
     return function()
-        local aq = state.action_queue
-
         for _, action in ipairs(actions) do
             if type(action) == 'function' then
-                table.insert(aq.items, action)
+                table.insert(queue.items, action)
 
             elseif type(action) == 'table' then
                 for _, job in ipairs(action) do
-                    table.insert(aq.items, job)
+                    table.insert(queue.items, job)
                 end
             end
         end
 
-        if aq.running then
+        if queue.running then
             return
         end
 
-        aq.running = true
+        queue.running = true
 
         local function next_job()
-            local job = table.remove(aq.items, 1)
+            local job = table.remove(queue.items, 1)
 
             if not job then
-                aq.running = false
+                queue.running = false
                 return
             end
 
@@ -335,11 +338,10 @@ local function create_event_tap()
 
         -- Keyboard events
         else
-            local flags   = event:getFlags()
-            local keycode = event:getKeyCode()
-            local key     = hs.keycodes.map[keycode]
-
-            local win      = state.windows.curr_win
+            local flags    = event:getFlags()
+            local keycode  = event:getKeyCode()
+            local key      = hs.keycodes.map[keycode]
+            local win      = state.windows.curr_win or hs.window.focusedWindow()
             local app_name = win:application():name()
 
             local mods = {}

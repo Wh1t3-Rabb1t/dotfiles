@@ -1,7 +1,7 @@
 local M = {}
 
-local state = require('state')
 local G     = require('globals')
+local state = require('state')
 
 
 -- --------------------------------------------------------------------------------

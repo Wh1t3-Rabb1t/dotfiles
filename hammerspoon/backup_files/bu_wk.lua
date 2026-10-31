@@ -5,6 +5,23 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- State
+--------------------------------------------------------------------------------
+-- local windows = {
+--     -- idx      = 1,
+--     -- border   = obj,
+--     -- curr_win = win,
+--     -- wins     = { ... },
+-- }
+--
+-- local wk = {
+--     tap_active = false,
+--     corner     = 'bottom_right',
+--     stack      = 'horizontal',
+--     opacity    = 1,
+-- }
+
+
 -- Clear window assignments from the screen layout.
 --
 -- Parameters:
@@ -1322,8 +1339,8 @@ function M.launch()
 
     M.init()
 
-    -- Init wk_assets if not already initialized
-    if not state.wk.initialized then
+    -- Init wk_assets if not already
+    if not state.initialized then
         require('wk_assets').init()
     end
 

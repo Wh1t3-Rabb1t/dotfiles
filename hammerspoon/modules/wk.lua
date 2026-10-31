@@ -5,6 +5,16 @@ local state = require('state')
 local cache = require('cache')
 
 
+-- Local state.
+--------------------------------------------------------------------------------
+local wk = {
+    tap_active = false,
+    corner     = 'bottom_right',
+    stack      = 'horizontal',
+    opacity    = 1,
+}
+
+
 -- Clear window assignments from the screen layout.
 --
 -- Parameters:
@@ -249,7 +259,7 @@ end
 --   anchor (table):  Width and height of each popup
 --------------------------------------------------------------------------------
 local function get_popup_anchor(frame, width, height)
-    local corner = state.wk.corner
+    local corner = wk.corner
 
     local padding = 25
 
@@ -284,7 +294,7 @@ end
 --   coords (table):  x and y coordinates for each popup
 --------------------------------------------------------------------------------
 local function get_popup_coords(win, popups)
-    local stack        = state.wk.stack
+    local stack        = wk.stack
     local screen_frame = state.screens[win:screen():id()].frame
 
     local spacing = 25
@@ -391,13 +401,12 @@ end
 --   state.windows.curr_win
 --------------------------------------------------------------------------------
 local function set_window_state(win, idx)
-    local wins     = state.windows
     local curr_app = state.apps[win:application():name()]
 
     curr_app.idx = get_window_idx(curr_app.wins, win)
 
-    wins.idx      = idx
-    wins.curr_win = win
+    state.windows.idx      = idx
+    state.windows.curr_win = win
 end
 
 
@@ -407,7 +416,7 @@ end
 --   (table):  Contains strings, either 'on' or 'off'
 --
 -- State changes:
---   state.windows.border
+--   windows.border
 --------------------------------------------------------------------------------
 local function toggle_border( ... )
     for _, set_to in ipairs({ ... }) do
@@ -471,7 +480,7 @@ local function toggle_popups( ... )
 
             for i, v in ipairs(popups) do
                 v.popup:topLeft(coords[i])
-                v.popup:alpha(state.wk.opacity)
+                v.popup:alpha(wk.opacity)
                 v.popup:show(0.15)
             end
 
@@ -492,15 +501,15 @@ end
 --   (table):  Contains strings, either 'on' or 'off'
 --
 -- State changes:
---   state.wk.tap_active
+--   wk.tap_active
 --------------------------------------------------------------------------------
 local function toggle_tap( ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
-            state.wk.tap_active = true
+            wk.tap_active = true
             cache.wk_tap:start()
         elseif set_to == 'off' then
-            state.wk.tap_active = false
+            wk.tap_active = false
             cache.wk_tap:stop()
         end
     end
@@ -927,8 +936,7 @@ function M.cycle_app_specific(direction)
     return function(done)
         done = done or function() end
 
-        local windows  = state.windows
-        local app_name = windows.curr_win:application():name()
+        local app_name = state.windows.curr_win:application():name()
         local curr_app = state.apps[app_name]
 
         if not curr_app or #curr_app.wins < 2 then
@@ -943,7 +951,7 @@ function M.cycle_app_specific(direction)
             -- Need to set this to the index of the 'windows' table because
             -- we use the app specific index table to iterate the window
             -- within the same app group.
-            idx = get_window_idx(windows.wins, win)
+            idx = get_window_idx(state.windows.wins, win)
 
             set_window_state(win, idx)
             toggle_border('on')
@@ -971,8 +979,7 @@ function M.cycle_all_apps(direction)
     return function(done)
         done = done or function() end
 
-        local windows  = state.windows
-        local curr_app = windows.curr_win:application()
+        local curr_app = state.windows.curr_win:application()
         local apps     = state.apps.list
         local count    = #apps
         local app_idx  = 0
@@ -997,7 +1004,7 @@ function M.cycle_all_apps(direction)
         local win = target_app:focusedWindow()
 
         if win then
-            local idx = get_window_idx(windows.wins, win)
+            local idx = get_window_idx(state.windows.wins, win)
 
             set_window_state(win, idx)
             set_slots(win)
@@ -1025,8 +1032,7 @@ function M.cycle_main_apps()
     return function(done)
         done = done or function() end
 
-        local windows = state.windows
-        local win     = windows.curr_win
+        local win = state.windows.curr_win
 
         local target_app = 'kitty'
 
@@ -1042,7 +1048,7 @@ function M.cycle_main_apps()
                 wf:unsubscribeAll()
                 wf = nil
 
-                local idx = get_window_idx(windows.wins, target_win)
+                local idx = get_window_idx(state.windows.wins, target_win)
 
                 set_window_state(target_win, idx)
                 set_slots(target_win)
@@ -1066,7 +1072,7 @@ end
 --   toggle_popups()
 --
 -- State changes:
---   state.wk.corner
+--   wk.corner
 --------------------------------------------------------------------------------
 function M.cycle_corner_pos()
     return function(done)
@@ -1079,7 +1085,7 @@ function M.cycle_corner_pos()
             'top_left',
         }
 
-        local curr_corner = state.wk.corner
+        local curr_corner = wk.corner
         local curr_idx    = 1
 
         -- Find the index of the current corner
@@ -1095,7 +1101,7 @@ function M.cycle_corner_pos()
         local new_idx    = (curr_idx % #corners) + 1
         local new_corner = corners[new_idx]
 
-        state.wk.corner = new_corner
+        wk.corner = new_corner
 
         toggle_popups('off', 'on')
 
@@ -1111,16 +1117,16 @@ end
 --   toggle_popups()
 --
 -- State changes:
---   state.wk.stack
+--   wk.stack
 --------------------------------------------------------------------------------
 function M.cycle_stacking()
     return function(done)
         done = done or function() end
 
-        local stack     = state.wk.stack
+        local stack     = wk.stack
         local new_stack = (stack == 'vertical') and 'horizontal' or 'vertical'
 
-        state.wk.stack = new_stack
+        wk.stack = new_stack
 
         toggle_popups('off', 'on')
 
@@ -1136,13 +1142,13 @@ end
 --   direction (string):  'up' or 'down'
 --
 -- State changes:
---   state.wk.opacity
+--   wk.opacity
 --------------------------------------------------------------------------------
 function M.opacity(direction)
     return function(done)
         done = done or function() end
 
-        local opacity  = state.wk.opacity
+        local opacity  = wk.opacity
         local win      = state.windows.curr_win
         local app_name = win:application():name()
 
@@ -1162,7 +1168,7 @@ function M.opacity(direction)
         -- System popup
         cache.assets.system.popup:alpha(opacity)
 
-        state.wk.opacity = opacity
+        wk.opacity = opacity
 
         done()
     end
@@ -1202,7 +1208,7 @@ function M.insert()
         }
 
         popup:topLeft(pos)
-        popup:alpha(state.wk.opacity)
+        popup:alpha(wk.opacity)
         popup:show(0.15)
 
         local hotkeys = {}
@@ -1313,7 +1319,7 @@ end
 --   toggle_tap()
 --------------------------------------------------------------------------------
 function M.launch()
-    if state.wk.tap_active then
+    if wk.tap_active then
         return
     end
 
@@ -1345,7 +1351,7 @@ end
 --   state.windows
 --------------------------------------------------------------------------------
 function M.init()
-    local windows = {
+    local window_data = {
         curr_win = hs.window.focusedWindow(),
         idx      = 1,
         wins     = {},
@@ -1353,12 +1359,12 @@ function M.init()
 
     for _, app in ipairs(state.apps.list) do
         for _, win in ipairs(state.apps[app:name()].wins) do
-            table.insert(windows.wins, win)
+            table.insert(window_data.wins, win)
         end
     end
 
-    if #windows.wins > 0 then
-        state.windows = windows
+    if #window_data.wins > 0 then
+        state.windows = window_data
 
         -- Establish 'all' idx from the currently focused window
         state.windows.idx = get_window_idx(

@@ -4,6 +4,8 @@
 
 ## IMMEDIATE TASKS:
 
+- When using close tab to close the last app window it causes a crash.
+
 - Set up scrolling keyboard events.
 
 - For the mouse.press / mouse.release fns:

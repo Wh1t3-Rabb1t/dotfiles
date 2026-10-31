@@ -4,35 +4,12 @@ local M = {}
 
 M.initialized = false
 
--- Move to wk_assets.lua
-M.action_queue = {
-    running = false,
-    items   = {},
-}
-
--- Move to wk.lua
 M.windows = {
     -- idx      = 1,
     -- border   = obj,
     -- curr_win = win,
     -- wins     = { ... },
 }
-
-M.wk = {
-    tap_active  = false,
-    corner      = 'bottom_right',
-    stack       = 'horizontal',
-    opacity     = 1,
-}
-
--- Move to screen.lua
-M.watchers = {
-    initialized = false,
-    screen      = {},
-}
-
-
--- Needs to be retained in central state:
 
 M.screens = {
     -- [screen:id()] = {

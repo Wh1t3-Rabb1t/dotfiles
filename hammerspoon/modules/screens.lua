@@ -4,6 +4,14 @@ local state = require('state')
 local util  = require('util')
 
 
+-- Local state.
+--------------------------------------------------------------------------------
+local watchers = {
+    initialized = false,
+    screen      = {},
+}
+
+
 -- Create screen watcher.
 --
 -- Calls:
@@ -127,11 +135,11 @@ function M.init()
         end
     end
 
-    if not state.watchers.initialized then
-        state.watchers.screen = create_watcher()
-        state.watchers.screen:start()
+    if not watchers.initialized then
+        watchers.screen = create_watcher()
+        watchers.screen:start()
 
-        state.watchers.initialized = true
+        watchers.initialized = true
     end
 end
 

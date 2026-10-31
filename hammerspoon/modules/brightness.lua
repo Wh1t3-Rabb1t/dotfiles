@@ -61,8 +61,7 @@ function M.print_values()
         done = done or function() end
 
         for _, screen in ipairs(hs.screen.allScreens()) do
-            local id         = screen:id()
-            local brightness = state.screens[id].brightness or 100
+            local brightness = state.screens[screen:id()].brightness or 100
 
             -- Display brightness value in popup
             hs.alert.show('Brightness: ' .. brightness,

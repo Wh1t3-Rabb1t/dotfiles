@@ -4,6 +4,8 @@
 
 ## IMMEDIATE TASKS:
 
+- Set up scrolling keyboard events.
+
 - For the mouse.press / mouse.release fns:
   Add a differently colored circle which will display if a 'double-click' was
   invoked.

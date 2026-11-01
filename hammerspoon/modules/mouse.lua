@@ -153,4 +153,27 @@ function M.release(point)
     animation_timer = timer
 end
 
+
+-- Send a scroll event at the current mouse location.
+--
+-- Parameters:
+--   direction (string):  'up' or 'down'
+--------------------------------------------------------------------------------
+function M.scroll(direction)
+    assert(
+        direction == 'up' or direction == 'down',
+        "direction must be 'up' or 'down'"
+    )
+
+    local delta = direction == 'up' and 1 or -1
+
+    -- wk.tap_active = true
+    -- cache.wk_tap:start()
+    -- wk.tap_active = false
+    -- cache.wk_tap:stop()
+
+
+    hs.eventtap.scrollWheel({0, delta}, {}, 'line')
+end
+
 return M

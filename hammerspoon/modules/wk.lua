@@ -1,6 +1,6 @@
 local M = {}
 
-local G     = require('globals')
+local G     = require('core.config')
 local state = require('state')
 local cache = require('cache')
 
@@ -217,7 +217,7 @@ end
 --   stacking (string):  'horizontal' or 'vertical'
 --
 -- Returns:
---   (table): Width and height of each popup.
+--   (table): Width and height of each popup
 --------------------------------------------------------------------------------
 local function get_popup_w_h(popups, spacing, stacking)
     local width  = 0
@@ -1238,7 +1238,6 @@ end
 --   key  (string):  Containing valid key strings i.e. 't', 'space'
 --
 -- Calls:
---   toggle_tap()
 --   toggle_tap()
 --------------------------------------------------------------------------------
 function M.send_keys(mods, key)

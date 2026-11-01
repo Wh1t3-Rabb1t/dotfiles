@@ -1,42 +1,7 @@
 local M = {}
 
-local G     = require('globals')
+local G     = require('core.config')
 local state = require('state')
-
-
--- --------------------------------------------------------------------------------
--- local function create_watcher(app)
---     local watcher = app:newWatcher(function(element, event)
---         if event == 'AXFocusedWindowChanged' then
---             -- hs.timer.usleep(1000)
---
---             local apps  = hs.application.runningApplications()
---             local count = 0
---
---             for _, running_app in ipairs(apps) do
---                 for _, win in ipairs(running_app:allWindows()) do
---                     if win:isStandard() and win:isVisible() then
---                         count = count + 1
---                     end
---                 end
---             end
---
---             if count ~= #state.windows.wins then
---                 -- Signal to the eventtap that state needs to be re-built
---                 state.menu.initialized = false
---
---                 print('state invalid')
---             end
---
---         end
---     end)
---
---     watcher:start({
---         hs.uielement.watcher.focusedWindowChanged,
---     })
---
---     return watcher
--- end
 
 
 -- Sort list of running apps.
@@ -127,3 +92,38 @@ function M.init()
 end
 
 return M
+
+
+-- --------------------------------------------------------------------------------
+-- local function create_watcher(app)
+--     local watcher = app:newWatcher(function(element, event)
+--         if event == 'AXFocusedWindowChanged' then
+--             -- hs.timer.usleep(1000)
+--
+--             local apps  = hs.application.runningApplications()
+--             local count = 0
+--
+--             for _, running_app in ipairs(apps) do
+--                 for _, win in ipairs(running_app:allWindows()) do
+--                     if win:isStandard() and win:isVisible() then
+--                         count = count + 1
+--                     end
+--                 end
+--             end
+--
+--             if count ~= #state.windows.wins then
+--                 -- Signal to the eventtap that state needs to be re-built
+--                 state.menu.initialized = false
+--
+--                 print('state invalid')
+--             end
+--
+--         end
+--     end)
+--
+--     watcher:start({
+--         hs.uielement.watcher.focusedWindowChanged,
+--     })
+--
+--     return watcher
+-- end

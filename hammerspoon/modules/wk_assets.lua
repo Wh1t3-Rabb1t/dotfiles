@@ -2,10 +2,17 @@ local M = {}
 
 local state    = require('state')
 local cache    = require('cache')
-local util     = require('util')
 local registry = require('wk_registry')
 local wk       = require('wk')
 local mouse    = require('mouse')
+
+
+-- Local state.
+--------------------------------------------------------------------------------
+local queue = {
+    running = false,
+    items   = {},
+}
 
 local shift_chars = {
     ['`'] = '~',
@@ -38,16 +45,38 @@ local mod_names = {
     shift = 'shift',
 }
 
-local queue = {
-    running = false,
-    items   = {},
-}
+
+-- Normalize bindings with modifiers.
+--------------------------------------------------------------------------------
+local function binding_id(key, mods)
+    if not mods or #mods == 0 then
+        return key
+    end
+
+    table.sort(mods)
+
+    return table.concat(mods, '+') .. '+' .. key
+end
+
+
+-- Format rgb table.
+--------------------------------------------------------------------------------
+local function rgb(r, g, b, opacity)
+    opacity = opacity or 1.0
+
+    return {
+        red   = r / 255,
+        green = g / 255,
+        blue  = b / 255,
+        alpha = opacity,
+    }
+end
 
 
 -- Create popup.
 --
 -- Calls:
---   util.rgb()
+--   rgb()
 --
 -- Returns:
 --   popup (table):  hs.canvas object
@@ -59,8 +88,8 @@ local function create_popup(content, frame)
         {
             type        = 'rectangle',
             action      = 'strokeAndFill',
-            fillColor   = util.rgb(1, 2, 3),        -- Black
-            strokeColor = util.rgb(255, 255, 255),  -- White
+            fillColor   = rgb(1, 2, 3),        -- Black
+            strokeColor = rgb(255, 255, 255),  -- White
             roundedRectRadii = {
                 xRadius = 8,
                 yRadius = 8,
@@ -141,7 +170,7 @@ end
 --
 -- Calls:
 --   fmt_key_combinations()
---   util.rgb()
+--   rgb()
 --
 -- Returns:
 --   text (string):  Text portion of the popup menus
@@ -161,11 +190,11 @@ local function fmt_menu_text(app_name, binding_tbl)
     local base_font  = { name = 'Menlo', size = 14 }
 
     local styles = {
-        title = { font = title_font, color = util.rgb(205, 205, 205) },
-        group = { font = base_font,  color = util.rgb(150, 200, 255) },
-        key   = { font = base_font,  color = util.rgb(0, 255, 0)     },
-        arrow = { font = base_font,  color = util.rgb(100, 100, 100) },
-        desc  = { font = base_font,  color = util.rgb(255, 255, 255) },
+        title = { font = title_font, color = rgb(205, 205, 205) },
+        group = { font = base_font,  color = rgb(150, 200, 255) },
+        key   = { font = base_font,  color = rgb(0, 255, 0)     },
+        arrow = { font = base_font,  color = rgb(100, 100, 100) },
+        desc  = { font = base_font,  color = rgb(255, 255, 255) },
     }
 
     local styled_text = require('hs.styledtext')
@@ -230,7 +259,8 @@ end
 -- Queue chained actions (i.e. launch window then display related popup).
 --
 -- State changes:
---   queue
+--   queue.items
+--   queue.running
 --------------------------------------------------------------------------------
 local function queue_actions( ... )
     local actions = { ... }
@@ -272,7 +302,7 @@ end
 -- Pack binding lookup table.
 --
 -- Calls:
---   util.binding_id()
+--   binding_id()
 --   queue_actions()
 --
 -- Returns:
@@ -283,7 +313,7 @@ local function fmt_binding_tbl(bindings)
 
     for _, category in ipairs(bindings) do
         for _, binding in ipairs(category.bindings) do
-            local lookup_key = util.binding_id(
+            local lookup_key = binding_id(
                 binding.key,
                 binding.mods
             )
@@ -299,7 +329,7 @@ end
 -- Create the main orchestrator event tap.
 --
 -- Calls:
---   util.binding_id()
+--   binding_id()
 --   mouse.press()
 --   mouse.release()
 --   wk.refresh_state()()
@@ -351,7 +381,7 @@ local function create_event_tap()
             if flags.ctrl  then table.insert(mods, 'ctrl') end
             if flags.shift then table.insert(mods, 'shift') end
 
-            local lookup_key   = util.binding_id(key, mods)
+            local lookup_key   = binding_id(key, mods)
             local app_lookup   = cache.lookup[app_name] or {}
             local bound_action = cache.lookup.system[lookup_key]
                               or app_lookup[lookup_key]

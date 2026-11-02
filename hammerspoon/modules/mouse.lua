@@ -199,6 +199,9 @@ function M.release(point)
 end
 
 
+-- add acceleration to the scrolling fn. we may need to add a state variable
+-- etc to track the
+
 -- Send a scroll event at the current mouse location.
 --
 -- Parameters:

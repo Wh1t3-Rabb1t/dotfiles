@@ -1,6 +1,5 @@
 local M = {}
 
--- local G     = require('core.config')
 local state = require('state')
 local cache = require('cache')
 local util  = require('util')

@@ -4,8 +4,7 @@ local wk         = require('wk')
 local win        = require('windows')
 local brightness = require('brightness')
 local wifi       = require('wifi')
-
--- local mouse      = require('mouse')
+local mouse      = require('mouse')
 
 
 M.apps = {}
@@ -15,6 +14,13 @@ M.apps = {}
 M.apps.system = {
     -- MacOS default keybindings:  https://support.apple.com/en-ca/102650
     {
+        category = 'Mouse',
+        bindings = {
+            { '_', 'Scroll up',   mouse.scroll('up')   },
+            { '-', 'Scroll down', mouse.scroll('down') },
+        },
+    },
+    {
         category = 'Windows',
         bindings = {
             -- { '_', 'Prev app',        win.cycle_all_apps('prev'),     wk.refresh_state() },
@@ -22,20 +28,12 @@ M.apps.system = {
             -- { 'o', 'Next app window', win.cycle_app_specific('next'), wk.refresh_state() },
             -- { 'u', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh_state() },
 
-
-            { '_', 'Scroll up',   wk.scroll('up')   },
-            { '-', 'Scroll down', wk.scroll('down') },
-
-            -- { '_', 'Scroll up',   mouse.scroll('up')   },
-            -- { '-', 'Scroll down', mouse.scroll('down') },
-
-
             -- { '_', 'Cycle cat apps', win.cycle_main_apps()                           },
             -- { '_', 'Next app',       win.cycle_all_apps('next')                      },
             -- { '-', 'Prev app',       win.cycle_all_apps('prev')                      },
 
-            { 'O', 'Next window',    win.cycle_open('next')                          },
-            { 'U', 'Prev window',    win.cycle_open('prev')                          },
+            { ':', 'Next window',    win.cycle_open('next')                         },
+            { 'H', 'Prev window',    win.cycle_open('prev')                         },
             { 'n', 'Open window',    wk.send_keys({'cmd'}, 'n'), wk.refresh_state() },
             { 'm', 'Open tab',       wk.send_keys({'cmd'}, 't'), wk.refresh_state() },
             { 'W', 'Close tab',      wk.send_keys({'cmd'}, 'w'), wk.refresh_state() }
@@ -44,8 +42,8 @@ M.apps.system = {
     {
         category = 'Layout',
         bindings = {
-            -- { '_', 'To left slot',   win.move_to_slot('left')   },
-            -- { '-', 'To right slot',  win.move_to_slot('right')  },
+            { 'O', 'To left slot',   win.move_to_slot('left')   },
+            { 'U', 'To right slot',  win.move_to_slot('right')  },
             { 'o', 'Next slot',      win.traverse_slots('next') },
             { 'u', 'Prev slot',      win.traverse_slots('prev') },
             { 'f', 'Resize right',   win.resize('right')        },
@@ -91,7 +89,7 @@ M.apps.system = {
 }
 
 
--- Brave Browser bindings.
+-- Brave bindings.
 --------------------------------------------------------------------------------
 M.apps['Brave Browser'] = {
     -- brave://settings/system/shortcuts
@@ -160,8 +158,8 @@ M.apps['Brave Browser'] = {
         bindings = {
             { 'e', 'Up',      wk.send_keys({}, 'pageup')              },
             { 'd', 'Down',    wk.send_keys({}, 'pagedown')            },
-            { 'E', 'Top',     wk.send_keys({}, 'home')                },
-            { 'D', 'Bottom',  wk.send_keys({}, 'end')                 },
+            -- { 'E', 'Top',     wk.send_keys({}, 'home')                },
+            -- { 'D', 'Bottom',  wk.send_keys({}, 'end')                 },
             { 'F', 'Search',  wk.send_keys({'cmd'}, 'f'), wk.insert() },
             { 'R', 'Reload',  wk.send_keys({'cmd'}, 'r')              }
 
@@ -358,7 +356,7 @@ local function bind( ... )
 end
 
 
--- Construct binding entries.
+-- Pass each binding table in apps.* to the bind() fn for processing.
 --------------------------------------------------------------------------------
 for _, categories in pairs(M.apps) do
     for _, category in ipairs(categories) do

@@ -6,7 +6,19 @@
 
 - When using close tab to close the last app window it causes a crash.
 
-- Set up scrolling keyboard events.
+- Need to track all keys currently bound and which are available for all
+  (realistic) layers.
+
+- Leader could function as a toggle between sending system and app specific
+  keys. Also could do something like change the border color of say: 'kitty'
+  when toggling between system and kitty binding layer.
+
+- Create a command palette (fuzzy searchable). Track the number of executions
+  for each action over time, then assign them a index that corresponds to keys
+  ranked by easiest to hardest to hit (i.e. homerow keys are easier to hit
+  than super + some_key etc).
+  This would also paint a clear picture of which actions should be grouped
+  together.
 
 - Set up a path watcher for 'config.lua' (when its location is finalized)
   which will be responsible for dumping and re-initing assets.

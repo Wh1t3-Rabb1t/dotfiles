@@ -149,7 +149,7 @@ local function get_popup_coords(win, popups)
 
     local dimensions = get_popup_w_h(popups, spacing, stack)
 
-    -- Arrange popups side by side if the stack height exceeds the screen height
+    -- Arrange popups side by side if stack height exceeds the screen height
     if dimensions.h > screen_frame.h then
         dimensions = get_popup_w_h(popups, spacing, 'horizontal')
         coords     = get_popup_x_y(popups, spacing, 'horizontal')

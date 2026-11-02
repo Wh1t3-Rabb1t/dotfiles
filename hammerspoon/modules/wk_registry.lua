@@ -1,8 +1,10 @@
 local M = {}
 
 local wk         = require('wk')
+local win        = require('windows')
 local brightness = require('brightness')
 local wifi       = require('wifi')
+
 -- local mouse      = require('mouse')
 
 M.apps = {}
@@ -14,22 +16,23 @@ M.apps.system = {
     {
         category = 'Windows',
         bindings = {
-            -- { '_', 'Prev app',        wk.cycle_all_apps('prev'),     wk.refresh_state() },
-            -- { '-', 'To next screen',  wk.move_to_screen(),           wk.refresh_state() },
-            -- { 'o', 'Next app window', wk.cycle_app_specific('next'), wk.refresh_state() },
-            -- { 'u', 'Prev app window', wk.cycle_app_specific('prev'), wk.refresh_state() },
+            -- { '_', 'Prev app',        win.cycle_all_apps('prev'),     wk.refresh_state() },
+            -- { '-', 'To next screen',  win.move_to_screen(),           wk.refresh_state() },
+            -- { 'o', 'Next app window', win.cycle_app_specific('next'), wk.refresh_state() },
+            -- { 'u', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh_state() },
 
 
             -- { '_', 'Scroll up',   mouse.scroll('up')   },
             -- { '-', 'Scroll down', mouse.scroll('down') },
 
 
-            -- { '_', 'Cycle cat apps', wk.cycle_main_apps()                           },
-            -- { '_', 'Next app',       wk.cycle_all_apps('next')                      },
-            -- { '-', 'Prev app',       wk.cycle_all_apps('prev')                      },
+            -- { '_', 'Cycle cat apps', win.cycle_main_apps()                           },
+            -- { '_', 'Next app',       win.cycle_all_apps('next')                      },
+            -- { '-', 'Prev app',       win.cycle_all_apps('prev')                      },
 
-            { 'O', 'Next window',    wk.cycle_open('next')                          },
-            { 'U', 'Prev window',    wk.cycle_open('prev')                          },
+            { 'O', 'Next window',    win.cycle_open('next')                          },
+            { 'U', 'Prev window',    win.cycle_open('prev')                          },
+
             { 'n', 'Open window',    wk.send_keys({'cmd'}, 'n'), wk.refresh_state() },
             { 'm', 'Open tab',       wk.send_keys({'cmd'}, 't'), wk.refresh_state() },
             { 'W', 'Close tab',      wk.send_keys({'cmd'}, 'w'), wk.refresh_state() }
@@ -38,14 +41,14 @@ M.apps.system = {
     {
         category = 'Layout',
         bindings = {
-            -- { '_', 'To left slot',   wk.move_to_slot('left')   },
-            -- { '-', 'To right slot',  wk.move_to_slot('right')  },
-            { 'o', 'Next slot',      wk.traverse_slots('next') },
-            { 'u', 'Prev slot',      wk.traverse_slots('prev') },
-            { 'f', 'Resize right',   wk.resize('right')        },
-            { 's', 'Resize left',    wk.resize('left')         },
-            { 'g', 'Maximize',       wk.maximize()             },
-            { 'G', 'Swap positions', wk.swap()                 }
+            -- { '_', 'To left slot',   win.move_to_slot('left')   },
+            -- { '-', 'To right slot',  win.move_to_slot('right')  },
+            { 'o', 'Next slot',      win.traverse_slots('next') },
+            { 'u', 'Prev slot',      win.traverse_slots('prev') },
+            { 'f', 'Resize right',   win.resize('right')        },
+            { 's', 'Resize left',    win.resize('left')         },
+            { 'g', 'Maximize',       win.maximize()             },
+            { 'G', 'Swap positions', win.swap()                 }
         },
     },
     {

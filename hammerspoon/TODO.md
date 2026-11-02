@@ -8,6 +8,9 @@
 
 - Set up scrolling keyboard events.
 
+- Set up a path watcher for 'config.lua' (when its location is finalized)
+  which will be responsible for dumping and re-initing assets.
+
 - For the mouse.press / mouse.release fns:
   Add a differently colored circle which will display if a 'double-click' was
   invoked.

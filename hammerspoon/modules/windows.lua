@@ -4,9 +4,6 @@ local G     = require('core.config')
 local state = require('state')
 local util  = require('util')
 
-local cache = require('cache')
-
-
 
 -- Clear window assignments from the screen layout.
 --

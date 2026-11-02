@@ -223,7 +223,7 @@ end
 -- Calls:
 --   util.toggle_border()
 --   apps.init()
---   M.init()
+--   windows.init()
 --   util.toggle_popups()
 --------------------------------------------------------------------------------
 function M.refresh_state()
@@ -253,7 +253,7 @@ end
 -- Calls:
 --   screens.init()
 --   apps.init()
---   M.init()
+--   windows.init()
 --   wk_assets.init()
 --   util.toggle_popups()
 --   util.toggle_tap()
@@ -266,8 +266,6 @@ function M.launch()
     require('screens').init()
     require('apps').init()
     require('windows').init()
-
-    -- M.init()
 
     -- Init wk_assets if not already existing
     if not cache.initialized then

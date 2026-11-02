@@ -1,7 +1,9 @@
 local M = {}
 
+local util = require('util')
 
--- Configuration
+
+-- Configuration.
 --------------------------------------------------------------------------------
 local START_RADIUS   = 14
 local END_RADIUS     = 44
@@ -21,14 +23,47 @@ local HALF_SIZE   = END_RADIUS + PADDING
 local CANVAS_SIZE = HALF_SIZE * 2
 
 
--- State
+-- State.
 --------------------------------------------------------------------------------
+local is_pressed = false
 local mouse_circle
 local animation_timer
-local is_pressed = false
 
 
--- Mouse Down
+-- Move the mouse indicator.
+--
+-- Parameters:
+--   point (table):  Mouse position containing x and y coordinates
+--
+-- State changes:
+--   mouse_circle
+--------------------------------------------------------------------------------
+local function move_circle(point)
+    if not mouse_circle then
+        return
+    end
+
+    mouse_circle:frame({
+        x = point.x - HALF_SIZE,
+        y = point.y - HALF_SIZE,
+        w = CANVAS_SIZE,
+        h = CANVAS_SIZE,
+    })
+end
+
+
+-- Mouse down.
+--
+-- Notes:
+--   Creates the mouse indicator canvas on its first invocation and reuses it
+--   for subsequent clicks.
+--   Cancels any previously running release animation.
+--   The indicator is positioned at the current mouse location.
+--
+-- State changes:
+--   is_pressed
+--   animation_timer
+--   mouse_circle
 --------------------------------------------------------------------------------
 function M.press()
     -- Cancel an animation left over from the previous click
@@ -80,21 +115,15 @@ function M.press()
 end
 
 
--- Mouse movement
+-- Mouse drag.
+--
+-- Parameters:
+--   point (table):
+--     Mouse position containing x and y coordinates.
+--
+-- Calls:
+--   move_circle()
 --------------------------------------------------------------------------------
-local function move_circle(point)
-    if not mouse_circle then
-        return
-    end
-
-    mouse_circle:frame({
-        x = point.x - HALF_SIZE,
-        y = point.y - HALF_SIZE,
-        w = CANVAS_SIZE,
-        h = CANVAS_SIZE,
-    })
-end
-
 function M.drag(point)
     if not is_pressed or not mouse_circle or not mouse_circle:isVisible() then
         return
@@ -104,7 +133,23 @@ function M.drag(point)
 end
 
 
--- Mouse Up
+-- Mouse up.
+--
+-- Notes:
+--   Ignores mouse-up events that do not correspond to an active press.
+--   Starts an animation that expands and fades the mouse indicator.
+--   Hides the indicator when the animation completes.
+--
+-- Parameters:
+--   point (table | nil):  Optional final mouse x and y coordinates
+--
+-- Calls:
+--   move_circle()
+--
+-- State changes:
+--   is_pressed
+--   animation_timer
+--   mouse_circle
 --------------------------------------------------------------------------------
 function M.release(point)
     -- Ignore stray mouse-up events or presses without a visible starting
@@ -158,22 +203,29 @@ end
 --
 -- Parameters:
 --   direction (string):  'up' or 'down'
+--
+-- Calls:
+--   util.toggle_tap()
 --------------------------------------------------------------------------------
 function M.scroll(direction)
-    assert(
-        direction == 'up' or direction == 'down',
-        "direction must be 'up' or 'down'"
-    )
+    return function(done)
+        done = done or function() end
 
-    local delta = direction == 'up' and 1 or -1
+        assert(
+            direction == 'up' or direction == 'down',
+            "direction must be 'up' or 'down'"
+        )
 
-    -- wk.tap_active = true
-    -- cache.wk_tap:start()
-    -- wk.tap_active = false
-    -- cache.wk_tap:stop()
+        local delta = direction == 'up' and 1 or -1
 
+        util.toggle_tap('off')
 
-    hs.eventtap.scrollWheel({0, delta}, {}, 'line')
+        hs.eventtap.scrollWheel({0, delta}, {}, 'line')
+
+        util.toggle_tap('on')
+
+        done()
+    end
 end
 
 return M

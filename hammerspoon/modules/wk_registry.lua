@@ -7,6 +7,7 @@ local wifi       = require('wifi')
 
 -- local mouse      = require('mouse')
 
+
 M.apps = {}
 
 -- Universal bindings.
@@ -22,6 +23,9 @@ M.apps.system = {
             -- { 'u', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh_state() },
 
 
+            { '_', 'Scroll up',   wk.scroll('up')   },
+            { '-', 'Scroll down', wk.scroll('down') },
+
             -- { '_', 'Scroll up',   mouse.scroll('up')   },
             -- { '-', 'Scroll down', mouse.scroll('down') },
 
@@ -32,7 +36,6 @@ M.apps.system = {
 
             { 'O', 'Next window',    win.cycle_open('next')                          },
             { 'U', 'Prev window',    win.cycle_open('prev')                          },
-
             { 'n', 'Open window',    wk.send_keys({'cmd'}, 'n'), wk.refresh_state() },
             { 'm', 'Open tab',       wk.send_keys({'cmd'}, 't'), wk.refresh_state() },
             { 'W', 'Close tab',      wk.send_keys({'cmd'}, 'w'), wk.refresh_state() }

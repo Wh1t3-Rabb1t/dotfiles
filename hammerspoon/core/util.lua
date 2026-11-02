@@ -4,19 +4,6 @@ local state = require('state')
 local cache = require('cache')
 
 
--- Check if tables have been initialized.
---------------------------------------------------------------------------------
-function M.tbl(obj)
-    if type(obj) == 'table' and next(obj) ~= nil then
-        return true
-    end
-end
-
-
-
-
-
-
 -- Get popups width and height.
 --
 -- Parameters:
@@ -273,6 +260,23 @@ function M.toggle_tap( ... )
             state.wk.tap_active = false
             cache.wk_tap:stop()
         end
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Check if tables have been initialized.
+--
+-- Parameters:
+--   (table):  Either with or without entries
+--
+-- Returns:
+--   true (bool):   Table is not empty (has entries)
+--   false (bool):  Table is empty (has no entries)
+--------------------------------------------------------------------------------
+function M.tbl(obj)
+    if type(obj) == 'table' and next(obj) ~= nil then
+        return true
     end
 end
 

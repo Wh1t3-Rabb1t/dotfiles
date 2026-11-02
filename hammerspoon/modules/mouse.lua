@@ -5,6 +5,7 @@ local util = require('util')
 
 -- Configuration.
 --------------------------------------------------------------------------------
+-- Mouse circle
 local START_RADIUS   = 14
 local END_RADIUS     = 44
 local STROKE_WIDTH   = 3
@@ -22,12 +23,23 @@ local PADDING     = STROKE_WIDTH + 2
 local HALF_SIZE   = END_RADIUS + PADDING
 local CANVAS_SIZE = HALF_SIZE * 2
 
+-- Scrolling
+local SCROLL_ACCELERATION = 0.5
+local SCROLL_MAX_SPEED    = 6
+local SCROLL_RESET_DELAY  = 0.25
+
 
 -- State.
 --------------------------------------------------------------------------------
 local is_pressed = false
 local mouse_circle
 local animation_timer
+
+local scroll_state = {
+    direction   = false,
+    delta       = 1,
+    last_scroll = 0,
+}
 
 
 -- Move the mouse indicator.
@@ -199,27 +211,52 @@ function M.release(point)
 end
 
 
--- add acceleration to the scrolling fn. we may need to add a state variable
--- etc to track the
-
--- Send a scroll event at the current mouse location.
+-- Send an accelerated scroll event at the current mouse location.
 --
 -- Parameters:
 --   direction (string):  'up' or 'down'
 --
+-- Notes:
+--   Acceleration is driven by repeated keyDown invocations.
+--   Changing direction resets acceleration.
+--   Inactivity resets acceleration after SCROLL_RESET_DELAY seconds.
+--
 -- Calls:
 --   util.toggle_tap()
+--
+-- State changes:
+--   scroll_state.direction
+--   scroll_state.delta
+--   scroll_state.last_scroll
 --------------------------------------------------------------------------------
 function M.scroll(direction)
+    assert(
+        direction == 'up' or direction == 'down',
+        "direction must be 'up' or 'down'"
+    )
+
     return function(done)
         done = done or function() end
 
-        assert(
-            direction == 'up' or direction == 'down',
-            "direction must be 'up' or 'down'"
-        )
+        local now = hs.timer.secondsSinceEpoch()
 
-        local delta = direction == 'up' and 1 or -1
+        -- Reset acceleration after inactivity or direction change
+        if scroll_state.direction ~= direction
+        or now - scroll_state.last_scroll > SCROLL_RESET_DELAY then
+            scroll_state.delta = 1
+        else
+            scroll_state.delta = math.min(
+                scroll_state.delta + SCROLL_ACCELERATION,
+                SCROLL_MAX_SPEED
+            )
+        end
+
+        scroll_state.direction   = direction
+        scroll_state.last_scroll = now
+
+        local delta = direction == 'up'
+            and scroll_state.delta
+            or -scroll_state.delta
 
         util.toggle_tap('off')
 

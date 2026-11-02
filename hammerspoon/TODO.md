@@ -4,8 +4,6 @@
 
 ## IMMEDIATE TASKS:
 
-- When using close tab to close the last app window it causes a crash.
-
 - Need to track all keys currently bound and which are available for all
   (realistic) layers.
 
@@ -62,13 +60,13 @@
   ```lua
   -- DESCRIPTION
   --
-  -- Notes:
-  --   Empty slots are represented by false, not nil
-  --
   -- Parameters:
   --   target (table | number):
   --     hs.window      (table):   Clear the slot assigned to this window
   --     hs.screen:id() (number):  Clear every slot on the screen with this ID
+  --
+  -- Notes:
+  --   Empty slots are represented by false, not nil
   --
   -- Calls:
   --   clear_slots()

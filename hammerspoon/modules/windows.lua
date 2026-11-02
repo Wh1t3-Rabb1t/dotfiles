@@ -494,6 +494,9 @@ end
 --------------------------------------------------------------------------------
 -- Traverse layout slots.
 --
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
 -- Notes:
 --   If current window is in the:
 --     MAXIMIZED slot, then look for the first available slot on the next
@@ -509,9 +512,6 @@ end
 --     LEFT or RIGHT slot, and there are no slots available on the next screen
 --     then focus the adjacent slot on the same screen
 --     (i.e. cycle between left/right).
---
--- Parameters:
---   direction (string):  'next' or 'prev'
 --
 -- Calls:
 --   next_layout()
@@ -812,8 +812,23 @@ end
 --   state.windows
 --------------------------------------------------------------------------------
 function M.init()
+    local focused_win = hs.window.focusedWindow()
+
+    if not focused_win then
+        for _, app in ipairs(state.apps.list) do
+            for _, win in ipairs(state.apps[app:name()].wins) do
+                if win then
+                    win:application():activate()
+                    focused_win = win
+
+                    break
+                end
+            end
+        end
+    end
+
     local window_data = {
-        curr_win = hs.window.focusedWindow(),
+        curr_win = focused_win,
         idx      = 1,
         wins     = {},
     }
@@ -841,5 +856,37 @@ function M.init()
         snap_layout()
     end
 end
+
+
+-- function M.init()
+--     local window_data = {
+--         curr_win = hs.window.focusedWindow(),
+--         idx      = 1,
+--         wins     = {},
+--     }
+--
+--     for _, app in ipairs(state.apps.list) do
+--         for _, win in ipairs(state.apps[app:name()].wins) do
+--             table.insert(window_data.wins, win)
+--         end
+--     end
+--
+--     if #window_data.wins > 0 then
+--         state.windows = window_data
+--
+--         -- Establish 'all' idx from the currently focused window
+--         state.windows.idx = get_window_idx(
+--             state.windows.wins,
+--             state.windows.curr_win
+--         )
+--
+--         for _, screen in ipairs(hs.screen.allScreens()) do
+--             clear_slots(screen:id())
+--             set_empty_slots(screen:id())
+--         end
+--
+--         snap_layout()
+--     end
+-- end
 
 return M

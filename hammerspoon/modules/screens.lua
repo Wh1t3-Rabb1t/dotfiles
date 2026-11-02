@@ -126,12 +126,10 @@ function M.init()
     for _, screen in ipairs(hs.screen.allScreens()) do
         local id = screen:id()
 
-        if not util.tbl(state.screens[id]) then
-            local data = get_screen_data(screen)
+        local data = get_screen_data(screen)
 
-            if data then
-                state.screens[id] = data
-            end
+        if data then
+            state.screens[id] = data
         end
     end
 
@@ -142,5 +140,26 @@ function M.init()
         watchers.initialized = true
     end
 end
+
+-- function M.init()
+--     for _, screen in ipairs(hs.screen.allScreens()) do
+--         local id = screen:id()
+--
+--         if not util.tbl(state.screens[id]) then
+--             local data = get_screen_data(screen)
+--
+--             if data then
+--                 state.screens[id] = data
+--             end
+--         end
+--     end
+--
+--     if not watchers.initialized then
+--         watchers.screen = create_watcher()
+--         watchers.screen:start()
+--
+--         watchers.initialized = true
+--     end
+-- end
 
 return M

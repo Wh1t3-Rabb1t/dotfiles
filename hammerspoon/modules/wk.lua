@@ -221,6 +221,7 @@ end
 --
 -- Calls:
 --   util.toggle_border()
+--   screens.init()
 --   apps.init()
 --   windows.init()
 --   util.toggle_popups()
@@ -234,6 +235,7 @@ function M.refresh_state()
         -- Border is toggled back on during windows.init()
         util.toggle_border('off')
 
+        require('screens').init()
         require('apps').init()
         require('windows').init()
 

@@ -147,13 +147,13 @@ end
 
 -- Mouse up.
 --
+-- Parameters:
+--   point (table | nil):  Optional final mouse x and y coordinates
+--
 -- Notes:
 --   Ignores mouse-up events that do not correspond to an active press.
 --   Starts an animation that expands and fades the mouse indicator.
 --   Hides the indicator when the animation completes.
---
--- Parameters:
---   point (table | nil):  Optional final mouse x and y coordinates
 --
 -- Calls:
 --   move_circle()

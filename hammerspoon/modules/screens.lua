@@ -1,6 +1,7 @@
 local M = {}
 
 local state = require('state')
+local conf  = require('config')
 local util  = require('util')
 
 
@@ -111,6 +112,78 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Adjust brightness (shader opacity values).
+--
+-- Parameters:
+--   direction (string):  'up' or 'down'
+--
+-- State changes:
+--   state.screens[id].brightness
+--   state.screens[id].overlay
+--------------------------------------------------------------------------------
+function M.brightness(direction)
+    assert(
+        direction == 'up' or direction == 'down',
+        "direction must be 'up' or 'down'"
+    )
+
+    return function(done)
+        done = done or function() end
+
+        local screen     = hs.mouse.getCurrentScreen()
+        local id         = screen:id()
+        local brightness = state.screens[id].brightness
+        local step       = 5
+
+        if direction == 'up' then
+            brightness = math.min(brightness + step, 100)
+        elseif direction == 'down' then
+            brightness = math.max(brightness - step, 5)
+        end
+
+        state.screens[id].brightness                 = brightness
+        state.screens[id].overlay[1].fillColor.alpha = 1 - brightness / 100
+
+        local shader = state.screens[id].overlay
+
+        if not shader:isShowing() then
+            shader:show()
+        end
+
+        hs.alert.show('Brightness: ' .. brightness,
+            conf.alert_fmt,
+            screen,
+            0.25
+        )
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Print brightness values on each connected screen.
+--------------------------------------------------------------------------------
+function M.print_brightness()
+    return function(done)
+        done = done or function() end
+
+        for _, screen in ipairs(hs.screen.allScreens()) do
+            local brightness = state.screens[screen:id()].brightness or 100
+
+            hs.alert.show('Brightness: ' .. brightness,
+                conf.alert_fmt,
+                screen,
+                0.5
+            )
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
 -- Init module.
 --
 -- Calls:
@@ -119,17 +192,18 @@ end
 --   create_watcher()
 --
 -- State changes:
---   state.watchers
---   state.screens
+--   watchers.initialized
 --------------------------------------------------------------------------------
 function M.init()
     for _, screen in ipairs(hs.screen.allScreens()) do
         local id = screen:id()
 
-        local data = get_screen_data(screen)
+        if not util.tbl(state.screens[id]) then
+            local data = get_screen_data(screen)
 
-        if data then
-            state.screens[id] = data
+            if data then
+                state.screens[id] = data
+            end
         end
     end
 
@@ -140,26 +214,5 @@ function M.init()
         watchers.initialized = true
     end
 end
-
--- function M.init()
---     for _, screen in ipairs(hs.screen.allScreens()) do
---         local id = screen:id()
---
---         if not util.tbl(state.screens[id]) then
---             local data = get_screen_data(screen)
---
---             if data then
---                 state.screens[id] = data
---             end
---         end
---     end
---
---     if not watchers.initialized then
---         watchers.screen = create_watcher()
---         watchers.screen:start()
---
---         watchers.initialized = true
---     end
--- end
 
 return M

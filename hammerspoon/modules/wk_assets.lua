@@ -47,6 +47,9 @@ local mod_names = {
 
 
 -- Normalize bindings with modifiers.
+--
+-- Returns:
+--   (table):  Formatted key/mod declaration strings
 --------------------------------------------------------------------------------
 local function binding_id(key, mods)
     if not mods or #mods == 0 then
@@ -60,6 +63,9 @@ end
 
 
 -- Format rgb table.
+--
+-- Returns:
+--   (table):  An rbg table compatible with hs.canvas fields
 --------------------------------------------------------------------------------
 local function rgb(r, g, b, opacity)
     opacity = opacity or 1.0

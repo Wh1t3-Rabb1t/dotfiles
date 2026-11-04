@@ -1,10 +1,10 @@
 local M = {}
 
-local wk         = require('wk')
-local win        = require('windows')
-local brightness = require('brightness')
-local wifi       = require('wifi')
-local mouse      = require('mouse')
+local wk      = require('wk')
+local screens = require('screens')
+local win     = require('windows')
+local wifi    = require('wifi')
+local mouse   = require('mouse')
 
 
 M.apps = {}
@@ -23,7 +23,6 @@ M.apps.system = {
     {
         category = 'Windows',
         bindings = {
-            -- { '_', 'Prev app',        win.cycle_all_apps('prev'),     wk.refresh_state() },
             -- { '-', 'To next screen',  win.move_to_screen(),           wk.refresh_state() },
             -- { 'o', 'Next app window', win.cycle_app_specific('next'), wk.refresh_state() },
             -- { 'u', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh_state() },
@@ -72,9 +71,9 @@ M.apps.system = {
     {
         category = 'Brightness',
         bindings = {
-            { 'z', 'Up',    brightness.adjust('up')   },
-            { 'j', 'Down',  brightness.adjust('down') },
-            { 'P', 'Print', brightness.print_values() }
+            { 'z', 'Up',    screens.brightness('up')   },
+            { 'j', 'Down',  screens.brightness('down') },
+            { 'P', 'Print', screens.print_brightness() }
         },
     },
     {

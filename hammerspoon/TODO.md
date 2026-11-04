@@ -4,12 +4,21 @@
 
 ## IMMEDIATE TASKS:
 
-- Need to track all keys currently bound and which are available for all
+- Add an 'Apple spotlight' send_keys binding that temporarily enters insert
+  mode as a defacto means of launching 'any' app.
+
+- Polish the 'cycle_main_apps' fn to drop the window filter (maybe just poll
+  a launching application to wait for it's initial window to open).
+
+- Sync Brave and kitty (and other relevant apps) tab navigation bindings so we
+  can set up universal tab navigation bindings in the system category.
+
+- Track all keys currently bound and which are available for all
   (realistic) layers.
 
-- Leader could function as a toggle between sending system and app specific
-  keys. Also could do something like change the border color of say: 'kitty'
-  when toggling between system and kitty binding layer.
+- Add 'leader' key support. Leader could function as a toggle between sending
+  system and app specific keys. Also could do something like change the border
+  color of say: 'kitty' when toggling between system and kitty binding layer.
 
 - Create a command palette (fuzzy searchable). Track the number of executions
   for each action over time, then assign them a index that corresponds to keys
@@ -31,24 +40,16 @@
 - Add asserts to the top of each function call/relevant code section to check
   values passed etc are correct.
 
-- Need to ensure that the curr_win is always registered in a slot (the use of
-  raise() in snap_layout() might be causing problems).
-
 - Ensure that popups etc are either hidden/deleted in the appropriate places.
 
 - Add a return flag to all fns processed by the action queue, so we can repeat
   the fn if it fails (or signals a repeat).
 
-- Bind 'rebuild_cache' to a key so we could trigger it during runtime if
+- Bind 'refresh_state' to a key so we could trigger it during runtime if
   something weird happens.
 
 - In each init fn add a check to ensure that all preceding (required) modules
   have been initialized.
-
-- Set up window open/closed fns that update state.wins when windows are
-  opened, closed, focused (through either kb, or click).
-
-- Alter lookup/eventtap/registry to support 'leader' key.
 
 - Create an fzf popup launcher which takes the list of actions in and execs
   the selected one.

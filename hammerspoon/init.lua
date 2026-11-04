@@ -6,7 +6,6 @@
 -- https://www.hammerspoon.org/docs/hs.html
 -- https://learnhammerspoon.com/
 
-require('console').init()
 require('watchers').init()
 require('hotkeys').init()
 

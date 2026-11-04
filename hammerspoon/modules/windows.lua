@@ -1,7 +1,7 @@
 local M = {}
 
-local G     = require('core.config')
 local state = require('state')
+local conf  = require('config')
 local util  = require('util')
 
 
@@ -206,7 +206,7 @@ local function set_empty_slots(screen_id)
     for _, win in ipairs(hs.window.orderedWindows()) do
         local win_is_std     = win:isStandard() and win:isVisible()
         local on_same_screen = win:screen():id() == screen_id
-        local disallowed     = G.disallowed_apps[win:application():name()]
+        local disallowed     = conf.disallowed_apps[win:application():name()]
 
         local slot
 
@@ -281,7 +281,7 @@ local function snap_layout()
 end
 
 
--- Focus target window.
+-- Focus target window and set the mouse at the center of its frame.
 --
 -- Notes:
 --   https://github.com/Hammerspoon/hammerspoon/issues/370
@@ -294,11 +294,22 @@ end
 --   win (table):  hs.window object
 --------------------------------------------------------------------------------
 local function focus_window(win)
+    if not win then
+        return false
+    end
+
     win:application():activate()
 
     hs.timer.usleep(10000)
 
     win:focus()
+
+    local frame = win:frame()
+
+    hs.mouse.absolutePosition({
+        x = frame.x + (frame.w / 2),
+        y = frame.y + (frame.h / 2)
+    })
 
     return win
 end
@@ -814,6 +825,8 @@ end
 function M.init()
     local focused_win = hs.window.focusedWindow()
 
+    -- Kind of a hack. This prevents breakage when closing the last open window
+    -- of an application without quitting the app.
     if not focused_win then
         for _, app in ipairs(state.apps.list) do
             for _, win in ipairs(state.apps[app:name()].wins) do
@@ -856,37 +869,5 @@ function M.init()
         snap_layout()
     end
 end
-
-
--- function M.init()
---     local window_data = {
---         curr_win = hs.window.focusedWindow(),
---         idx      = 1,
---         wins     = {},
---     }
---
---     for _, app in ipairs(state.apps.list) do
---         for _, win in ipairs(state.apps[app:name()].wins) do
---             table.insert(window_data.wins, win)
---         end
---     end
---
---     if #window_data.wins > 0 then
---         state.windows = window_data
---
---         -- Establish 'all' idx from the currently focused window
---         state.windows.idx = get_window_idx(
---             state.windows.wins,
---             state.windows.curr_win
---         )
---
---         for _, screen in ipairs(hs.screen.allScreens()) do
---             clear_slots(screen:id())
---             set_empty_slots(screen:id())
---         end
---
---         snap_layout()
---     end
--- end
 
 return M

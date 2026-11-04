@@ -7,7 +7,7 @@ M.watchers = {}
 
 
 --------------------------------------------------------------------------------
--- Init
+-- Init module.
 --------------------------------------------------------------------------------
 function M.init()
     local watchers = M.watchers
@@ -19,12 +19,6 @@ function M.init()
 
     -- Move screenshots automatically when taken
     watchers.screenshots = hs.pathwatcher.new(
-        os.getenv('HOME') .. '/Desktop/',
-        screenshots.move_screenshots
-    )
-
-    -- Move screenshots automatically when taken
-    watchers.apps = hs.pathwatcher.new(
         os.getenv('HOME') .. '/Desktop/',
         screenshots.move_screenshots
     )

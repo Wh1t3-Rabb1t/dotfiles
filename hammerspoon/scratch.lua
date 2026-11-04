@@ -1,4 +1,126 @@
 
+----------------------------------
+-- REGISTRY KEY MAPPING OUTLINE --
+----------------------------------
+
+-- Grouped by same finger on opposing hands (all representing left/right):
+--
+-- q  p
+-- w  o
+-- e  i
+-- r  u
+-- j  z
+-- a  ;
+-- s  l
+-- d  k
+-- f  t
+-- y  /
+-- x  .
+-- c  ,
+-- n  b
+-- m  v
+
+
+-- Less orthodox groupings:
+--
+-- i  k  (up/down)
+-- t  l  (left/right)
+-- o  u  (left/right)
+-- h  ;  (left/right)
+-- ,  .  (left/right)
+-- m  /  (left/right)
+-- z  p  (left/right)
+--
+-- e  d  (up/down)
+-- w  r  (left/right)
+-- s  f  (left/right)
+-- a  g  (left/right)
+-- x  c  (left/right)
+-- y  v  (left/right)
+-- q  j  (left/right)
+
+
+-- Up/down fns:
+--
+-- Universal:
+--   mouse scrolling
+--   page up/down
+--   brightness
+--   opacity
+--   arrow up/down
+--
+-- App specific:
+--   splits up/down
+--   resize splits up/down
+
+
+
+-- RHS
+-------------------------------------
+-- (up/down):
+--   i k
+--
+-- (left/right):
+--   t l
+--   o u
+--   h ;
+--   , .
+--   m /
+--   z p
+
+-- LHS
+-------------------------------------
+-- (up/down):
+--   e d    mouse.scroll
+--
+-- (left/right):
+--   s f
+--   w r
+--   a g
+--   x c
+--   y v
+--   q j
+
+
+-- Essential actions:
+-------------------------------------
+-- PAIRS
+--   win.traverse_slots
+--   win.cycle_open
+--   win.cycle_all_apps
+--   win.move_to_screen
+--   win.resize
+--   wk.send_keys  (tab navigation left/right)
+--
+-- SINGLE
+--   wk.send_keys  (open window)
+--   wk.send_keys  (open tab)
+--   wk.send_keys  (close window/tab)
+--   win.maximize
+--   win.swap
+--   wk.quit
+
+
+-- Less essential actions:
+-------------------------------------
+-- PAIRS
+--   win.cycle_app_specific
+--   win.move_to_slot
+--   wk.opacity
+--   screens.brightness
+--
+-- SINGLE
+--   wk.cycle_corner_pos
+--   wk.cycle_stacking
+--   screens.print_brightness
+--   wifi.toggle_wifi
+
+
+
+--------------------------------------------------------------------------------
+
+
+
 -- 2026-09-25 20:32:25:
 -- 2026-09-25 20:32:25: [focus] ===== SYSTEM AX FOCUS =====
 -- 2026-09-25 20:32:25: [focus] app:    hs.axuielement: AXApplication (0x90fb694f8)

@@ -1,7 +1,7 @@
 local M = {}
 
-local G     = require('core.config')
 local state = require('state')
+local conf  = require('config')
 
 
 -- Sort list of running apps.
@@ -27,7 +27,7 @@ end
 --   false    (bool):   No windows are open
 --------------------------------------------------------------------------------
 local function get_app_wins(app)
-    if not app or G.disallowed_apps[app:name()] then
+    if not app or conf.disallowed_apps[app:name()] then
         return false
     end
 

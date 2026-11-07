@@ -62,6 +62,11 @@ end
 --   idx (number):  Index of the next/prev window in the state table
 --------------------------------------------------------------------------------
 local function iterate_window_idx(app_name, direction)
+    assert(
+        direction == 'next' or direction == 'prev',
+        "direction must be 'next' or 'prev'"
+    )
+
     local wins
     local idx
 
@@ -359,6 +364,11 @@ end
 --   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 function M.resize(direction)
+    assert(
+        direction == 'left' or direction == 'right',
+        "direction must be 'left' or 'right'"
+    )
+
     return function(done)
         done = done or function() end
 
@@ -439,22 +449,37 @@ end
 --------------------------------------------------------------------------------
 -- Move window to the next/previous connected screen.
 --
+-- Parameters:
+--   direction (string):  'next' or 'prev'
+--
 -- Calls:
 --   clear_slots()
 --   set_slots()
 --   snap_layout()
 --------------------------------------------------------------------------------
-function M.move_to_screen()
+function M.move_to_screen(direction)
+    assert(
+        direction == 'next' or direction == 'prev',
+        "direction must be 'next' or 'prev'"
+    )
+
     return function(done)
         done = done or function() end
 
-        local win         = state.windows.curr_win
-        local next_screen = win:screen():next()
+        local win = state.windows.curr_win
 
-        if next_screen then
+        local target_screen
+
+        if direction == 'next' then
+            target_screen = win:screen():next()
+        elseif direction == 'prev' then
+            target_screen = win:screen():previous()
+        end
+
+        if target_screen then
             clear_slots(win)
 
-            win:moveToScreen(next_screen)
+            win:moveToScreen(target_screen)
 
             set_slots(win)
             snap_layout()
@@ -482,6 +507,11 @@ end
 --   state.screens[screen_id].layout.right
 --------------------------------------------------------------------------------
 function M.move_to_slot(direction)
+    assert(
+        direction == 'left' or direction == 'right',
+        "direction must be 'left' or 'right'"
+    )
+
     return function(done)
         done = done or function() end
 
@@ -533,6 +563,11 @@ end
 --   util.toggle_border()
 --------------------------------------------------------------------------------
 function M.traverse_slots(direction)
+    assert(
+        direction == 'next' or direction == 'prev',
+        "direction must be 'next' or 'prev'"
+    )
+
     return function(done)
         done = done or function() end
 
@@ -638,6 +673,11 @@ end
 --   util.toggle_border()
 --------------------------------------------------------------------------------
 function M.cycle_open(direction)
+    assert(
+        direction == 'next' or direction == 'prev',
+        "direction must be 'next' or 'prev'"
+    )
+
     return function(done)
         done = done or function() end
 
@@ -678,6 +718,11 @@ end
 --   util.toggle_border()
 --------------------------------------------------------------------------------
 function M.cycle_app_specific(direction)
+    assert(
+        direction == 'next' or direction == 'prev',
+        "direction must be 'next' or 'prev'"
+    )
+
     return function(done)
         done = done or function() end
 
@@ -721,6 +766,11 @@ end
 --   util.toggle_border()
 --------------------------------------------------------------------------------
 function M.cycle_all_apps(direction)
+    assert(
+        direction == 'next' or direction == 'prev',
+        "direction must be 'next' or 'prev'"
+    )
+
     return function(done)
         done = done or function() end
 

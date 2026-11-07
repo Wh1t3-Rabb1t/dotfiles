@@ -1,43 +1,280 @@
 
+local wk      = require('wk')
+local screens = require('screens')
+local win     = require('windows')
+local wifi    = require('wifi')
+local mouse   = require('mouse')
+
+
+M.apps.system = {
+-- MacOS default keybindings:  https://support.apple.com/en-ca/102650
+{
+    category = 'Mouse',
+    bindings = {
+        { 'up',   'Scroll up',   mouse.scroll('up')   },
+        { 'down', 'Scroll down', mouse.scroll('down') },
+    },
+},
+{
+    category = 'Windows',
+    bindings = {
+
+        -- { '-', 'To next screen',  win.move_to_screen(),           wk.refresh() },
+        -- { '_', 'Cycle cat apps', win.cycle_main_apps()                       },
+
+        { 'g', 'Next window',     win.cycle_open('next')                       },
+        { 'a', 'Prev window',     win.cycle_open('prev')                       },
+        { 'G', 'Next app window', win.cycle_app_specific('next'), wk.refresh() },
+        { 'A', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh() },
+        { 'c', 'Next app',        win.cycle_all_apps('next')                   },
+        { 'x', 'Prev app',        win.cycle_all_apps('prev')                   },
+        { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n'), wk.refresh()     },
+        { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't'), wk.refresh()     },
+        { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w'), wk.refresh()     }
+    },
+},
+{
+    category = 'Layout',
+    bindings = {
+        { 'f', 'Next slot',     win.traverse_slots('next') },
+        { 's', 'Prev slot',     win.traverse_slots('prev') },
+        { 'F', 'Resize right',  win.resize('right')        },
+        { 'S', 'Resize left',   win.resize('left')         },
+        { 'v', 'To right slot', win.move_to_slot('right')  },
+        { 'y', 'To left slot',  win.move_to_slot('left')   },
+        { 'w', 'Maximize',      win.maximize()             },
+        { 'r', 'Swap slots',    win.swap()                 }
+    },
+},
+{
+    category = 'Popups',
+    bindings = {
+        { 'P', 'Cycle positions',     wk.cycle_corner_pos() },
+        { 'B', 'Cycle menu stacking', wk.cycle_stacking()   },
+        { 'Z', 'Opacity up',          wk.opacity('up')      },
+        { 'J', 'Opacity down',        wk.opacity('down')    }
+    },
+},
+{
+    category = 'Brightness',
+    bindings = {
+        { 'z', 'Up',    screens.brightness('up')   },
+        { 'j', 'Down',  screens.brightness('down') },
+        { 'p', 'Print', screens.print_brightness() }
+    },
+},
+{
+    category = 'Misc',
+    bindings = {
+        { '<',      'Zoom in',     wk.send_keys({'cmd'}, '=') },
+        { '>',      'Zoom out',    wk.send_keys({'cmd'}, '-') },
+        { 'q',      'Wifi on/off', wifi.toggle_wifi()         },
+        { 'escape', 'Cancel',      wk.quit()                  }
+    },
+},
+}
+
+
+
+-- Brave bindings.
+--------------------------------------------------------------------------------
+M.apps['Brave Browser'] = {
+-- brave://settings/system/shortcuts
+--
+-- Test these:
+--   Dev tools inspect                (Command Shift c|Command Alt c)
+--   Dev tools toggle                 F12
+--   Move Tab to New Window
+--   New Split View with Current Tab  Command Alt n
+--   Find next                        Command g
+--   Find previous                    Command Shift g
+--   Stop                             Command .
+--   New Private Window               Command Shift n
+--   Reopen Closed Tab                Command Shift t
+--   New Split View with Current Tab  Command Alt n
+--   Collapse Tabs                    Command Shift l
+--   Add new tab to group             Command Control c
+--   Create new tab group             Command Control p
+--   Focus next tab group             Command Control x
+--   Focus previous tab group         Command Control z
+--   Close tab group                  Command Control w
+--   View Source                      Command Alt u
+--   Focus next pane                  Command Alt ArrowDown
+--   Focus previous pane              Command Alt ArrowUp
+--   Developer Tools                  Command Alt i
+--   JavaScript Console               Command Alt j
+--   Show Bookmarks Bar               Command Shift b
+--   Show history                     Command y
+--   Show bookmark manager            Command Alt b
+--   Options                          Command ,
+--   Reading Mode                     Command Alt r
+--   New Private Window with Tor      Command Alt n
+--   Toggle tab mute                  Control m
+--   Toggle sidebar                   Command b
+--   Quick Commands                   Command Shift p
+--   Remove tab from current group
+--   Unsplit Tabs
+--   Swap Tab Positions
+--   Toggle sidebar position
+--   Focus web contents pane
+--   Take Screenshot
+--   Focus bookmarks
+--   Show all windows
+--   Name Window
+--   Open in PWA window
+--   Move Tab to New Window
+--   Mute site
+--   Pin tab
+--   Group tab
+--   Open Guest Profile
+--   Toggle Focus Mode
+--   Focus toolbar
+--   Focus menu bar
+--   Inspect Devices
+--   Show performance settings
+--   Task Manager
+--   Open all bookmarks
+--   Open Bookmarks Manager
+--   Bookmark bar add to bookmarks bar
+--   Bookmark bar remove from bookmarks bar
+--   Toggle JavaScript
+--   Move group to new window
+--   Toggle vertical tabs expanded
+{
+    category = 'Page',
+    bindings = {
+        -- { 'e', 'Up',      wk.send_keys({}, 'pageup')              },
+        -- { 'd', 'Down',    wk.send_keys({}, 'pagedown')            },
+        -- { 'E', 'Top',     wk.send_keys({}, 'home')                },
+        -- { 'D', 'Bottom',  wk.send_keys({}, 'end')                 },
+        { 'F', 'Search',  wk.send_keys({'cmd'}, 'f'), wk.insert() },
+        { 'R', 'Reload',  wk.send_keys({'cmd'}, 'r')              }
+
+        -- { '', 'Forward', wk.send_keys({'cmd'}, ']') },
+        -- { '', 'Back',    wk.send_keys({'cmd'}, '[') },
+    },
+},
+{
+    category = 'Tabs',
+    bindings = {
+        { 'h', 'Left',            wk.send_keys({'ctrl'}, 'pageup')                 },
+        { ';', 'Right',           wk.send_keys({'ctrl'}, 'pagedown')               },
+        { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup')        },
+        { ':', 'Swap with right', wk.send_keys({'ctrl', 'shift'}, 'pagedown')      },
+        { '/', 'Search tabs',     wk.send_keys({'cmd', 'shift'}, 'a'), wk.insert() },
+        { 'M', 'Re-open closed',  wk.send_keys({'cmd', 'shift'}, 't')              }
+
+        -- { 'm', 'Open',            wk.send_keys({'cmd'}, 't')                       },
+    },
+},
+-- {
+--     category = 'Navigation',
+--     bindings = {
+--         { 'i', 'Up arrow',    wk.send_keys({}, 'up')         },
+--         { 'k', 'Down arrow',  wk.send_keys({}, 'down')       },
+--         { 'l', 'Focus next',  wk.send_keys({}, 'tab')        },
+--         { 't', 'Focus prev',  wk.send_keys({'shift'}, 'tab') }
+--     },
+-- },
+{
+    category = 'Misc',
+    bindings = {
+        { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.insert() },
+        { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd')              },
+        { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h')              },
+        { 'return', 'Confirm',         wk.send_keys({}, 'return')              }
+    },
+},
+}
+
+
+-- Kitty bindings.
+--------------------------------------------------------------------------------
+M.apps.kitty = {
+{
+    category = 'Scrollback',
+    bindings = {
+        { 'e', 'Page up',   wk.send_keys({'shift'}, 'pageup')   },
+        { 'd', 'Page down', wk.send_keys({'shift'}, 'pagedown') }
+    },
+},
+{
+    category = 'Splits',
+    bindings = {
+        -- { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')             },
+        -- { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')           },
+        -- { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')          },
+        -- { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left')           },
+        -- { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')    },
+        -- { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')  },
+        -- { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right') },
+        -- { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')  },
+
+        -- new_win
+        { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'), wk.refresh() }
+
+        -- { 'm', 'New split',    wk.send_keys({'cmd', 'ctrl', 'alt'}, 'm')          },
+        -- { 'W', 'Close',        wk.send_keys({'cmd', 'shift'}, 'd')                }
+        -- { '', 'New window',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'm') },
+    },
+},
+{
+    category = 'Tabs',
+    bindings = {
+        { ';', 'Next',     wk.send_keys({'ctrl'}, 'end')  },
+        { 'h', 'Previous', wk.send_keys({'ctrl'}, 'home') }
+
+        -- M.bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
+    },
+},
+{
+    category = 'Layout',
+    bindings = {
+        { 'R', 'Rotate splits', wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')          },
+        { 'r', 'Next layout',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') }
+    },
+},
+}
+
 ----------------------------------
 -- REGISTRY KEY MAPPING OUTLINE --
 ----------------------------------
 
 -- Grouped by same finger on opposing hands (all representing left/right):
 --
--- q  p
--- w  o
--- e  i
--- r  u
--- j  z
--- a  ;
--- s  l
--- d  k
--- f  t
--- y  /
--- x  .
--- c  ,
--- n  b
--- m  v
+-- q p
+-- w o
+-- e i
+-- r u
+-- j z
+-- a ;
+-- s l
+-- d k
+-- f t
+-- y /
+-- x .
+-- c ,
+-- n b
+-- m v
 
 
 -- Less orthodox groupings:
 --
--- i  k  (up/down)
--- t  l  (left/right)
--- o  u  (left/right)
--- h  ;  (left/right)
--- ,  .  (left/right)
--- m  /  (left/right)
--- z  p  (left/right)
+-- i k  (up/down)
+-- t l  (left/right)
+-- o u  (left/right)
+-- h ;  (left/right)
+-- , .  (left/right)
+-- m /  (left/right)
+-- z p  (left/right)
 --
--- e  d  (up/down)
--- w  r  (left/right)
--- s  f  (left/right)
--- a  g  (left/right)
--- x  c  (left/right)
--- y  v  (left/right)
--- q  j  (left/right)
+-- e d  (up/down)
+-- w r  (left/right)
+-- s f  (left/right)
+-- a g  (left/right)
+-- x c  (left/right)
+-- y v  (left/right)
+-- q j  (left/right)
 
 
 -- Up/down fns:
@@ -58,28 +295,65 @@
 -- RHS
 -------------------------------------
 -- (up/down):
---   i k
+--   i k    mouse.scroll
 --
 -- (left/right):
 --   t l
 --   o u
---   h ;
+--   h ;    tabs left/right
 --   , .
---   m /
---   z p
+--   m      wk.send_keys  (open tab)
+--   n      wk.send_keys  (open window)
+--   /      apple spotlight
+--
+--   _ '    wk.send_keys  (tab/btab)
 
 -- LHS
 -------------------------------------
 -- (up/down):
---   e d    mouse.scroll
+--   e d    win.traverse_slots    win.resize
 --
 -- (left/right):
---   s f
+--   s f    win.traverse_slots    win.resize
 --   w r
---   a g
---   x c
---   y v
---   q j
+--   a g    win.cycle_open        win.cycle_app_specific
+--   x c    win.cycle_all_apps
+--   y v    win.move_to_slot      win.move_to_screen
+--
+--   _ '
+
+
+--
+
+
+
+-- SHIFT LAYER
+
+-- RHS
+-------------------------------------
+-- (up/down):
+--   I K
+--
+-- (left/right):
+--   T L
+--   O U
+--   H :    win.cycle_open
+--   < >
+--   M ?
+--   Z P
+
+-- LHS
+-------------------------------------
+-- (up/down):
+--   E D    mouse.scroll
+--
+-- (left/right):
+--   S F    win.resize
+--   W R
+--   A G
+--   X C
+--   Y V
+--   Q J
 
 
 -- Essential actions:
@@ -87,10 +361,11 @@
 -- PAIRS
 --   win.traverse_slots
 --   win.cycle_open
---   win.cycle_all_apps
---   win.move_to_screen
 --   win.resize
 --   wk.send_keys  (tab navigation left/right)
+--   mouse.scroll
+--   win.cycle_all_apps
+--   win.move_to_screen
 --
 -- SINGLE
 --   wk.send_keys  (open window)
@@ -115,6 +390,80 @@
 --   screens.print_brightness
 --   wifi.toggle_wifi
 
+
+
+
+--------------------------------------------------------------------------------
+
+-- These could possibly be left reserved for app specific bindings.
+--
+-- i
+-- k
+-- t
+-- l
+-- o
+-- u
+-- ,
+-- .
+-- b
+-- q
+
+-- up      mouse.scroll('up')
+-- down    mouse.scroll('down')
+-- left    mouse.scroll('left')
+-- right   mouse.scroll('right')
+
+-- RHS:
+-------
+-- p    screens.print_brightness()
+-- z    screens.brightness('up')
+-- Z    wk.opacity('down')
+
+-- n    wk.send_keys({'cmd'}, 'n')  new window
+-- m    wk.send_keys({'cmd'}, 't')  new tab
+
+-- h    wk.send_keys(tabs left)
+-- ;    wk.send_keys(tabs right)
+-- /    apple spotlight (and enter insert)
+-- '    wk.send_keys('tab')
+
+-- LHS:
+-------
+-- e    win.traverse_slots('up')
+-- d    win.traverse_slots('down')
+-- s    win.traverse_slots('left')
+-- f    win.traverse_slots('right')
+-- w    win.maximize
+-- r    win.swap
+
+-- y    win.move_to_slot('left')
+-- v    win.move_to_slot('right')
+-- c    win.cycle_all_apps('next')
+-- x    win.cycle_all_apps('prev')
+-- b
+-- j    screens.brightness('down')
+-- q
+
+-- a    win.cycle_open('prev')
+-- g    win.cycle_open('next')
+-- _    wk.send_keys('btab')
+
+
+-- E    win.resize('up')
+-- D    win.resize('down')
+-- S    win.resize('left')
+-- F    win.resize('right')
+
+-- A    win.cycle_app_specific('prev')
+-- G    win.cycle_app_specific('next')
+-- W    wk.send_keys({'cmd'}, 'w'})  close tab
+
+-- Y    win.move_to_screen('prev')
+-- V    win.move_to_screen('next')
+
+-- J    wk.opacity('up')
+-- R    wk.cycle_corner_pos()
+-- A    wk.cycle_stacking()
 
 
 --------------------------------------------------------------------------------

@@ -338,7 +338,7 @@ end
 --   binding_id()
 --   mouse.press()
 --   mouse.release()
---   wk.refresh_state()()
+--   wk.refresh()()
 --
 -- Return:
 --   tap (fn):  hs.eventtap function
@@ -370,7 +370,7 @@ local function create_event_tap()
 
         elseif event:getType() == events.types.leftMouseUp then
             mouse.release(event:location())
-            wk.refresh_state()()
+            wk.refresh()()
 
         -- Keyboard events
         else

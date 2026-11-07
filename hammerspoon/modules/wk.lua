@@ -226,7 +226,7 @@ end
 --   windows.init()
 --   util.toggle_popups()
 --------------------------------------------------------------------------------
-function M.refresh_state()
+function M.refresh()
     return function(done)
         done = done or function() end
 

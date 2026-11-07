@@ -18,16 +18,14 @@ M.apps.system = {
 {
     category = 'Windows',
     bindings = {
-
-        -- { '-', 'To next screen',  win.move_to_screen(),           wk.refresh() },
-        -- { '_', 'Cycle cat apps', win.cycle_main_apps()                       },
-
+        { 'c', 'Next app',        win.cycle_all_apps('next')                   },
+        { 'x', 'Prev app',        win.cycle_all_apps('prev')                   },
         { 'g', 'Next window',     win.cycle_open('next')                       },
         { 'a', 'Prev window',     win.cycle_open('prev')                       },
         { 'G', 'Next app window', win.cycle_app_specific('next'), wk.refresh() },
         { 'A', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh() },
-        { 'c', 'Next app',        win.cycle_all_apps('next')                   },
-        { 'x', 'Prev app',        win.cycle_all_apps('prev')                   },
+        -- { 'Y', 'To prev screen',  win.move_to_screen('prev'), wk.refresh()     },
+        -- { 'V', 'To next screen',  win.move_to_screen('next'), wk.refresh()     },
         { 'n', 'Open window',     wk.send_keys({'cmd'}, 'n'), wk.refresh()     },
         { 'm', 'Open tab',        wk.send_keys({'cmd'}, 't'), wk.refresh()     },
         { 'W', 'Close tab',       wk.send_keys({'cmd'}, 'w'), wk.refresh()     }
@@ -143,13 +141,13 @@ M.apps['Brave Browser'] = {
 {
     category = 'Page',
     bindings = {
+        { '?', 'Search',  wk.send_keys({'cmd'}, 'f'), wk.insert() },
+        { 'R', 'Reload',  wk.send_keys({'cmd'}, 'r')              }
+
         -- { 'e', 'Up',      wk.send_keys({}, 'pageup')              },
         -- { 'd', 'Down',    wk.send_keys({}, 'pagedown')            },
         -- { 'E', 'Top',     wk.send_keys({}, 'home')                },
         -- { 'D', 'Bottom',  wk.send_keys({}, 'end')                 },
-        { 'F', 'Search',  wk.send_keys({'cmd'}, 'f'), wk.insert() },
-        { 'R', 'Reload',  wk.send_keys({'cmd'}, 'r')              }
-
         -- { '', 'Forward', wk.send_keys({'cmd'}, ']') },
         -- { '', 'Back',    wk.send_keys({'cmd'}, '[') },
     },
@@ -161,25 +159,24 @@ M.apps['Brave Browser'] = {
         { ';', 'Right',           wk.send_keys({'ctrl'}, 'pagedown')               },
         { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup')        },
         { ':', 'Swap with right', wk.send_keys({'ctrl', 'shift'}, 'pagedown')      },
-        { '/', 'Search tabs',     wk.send_keys({'cmd', 'shift'}, 'a'), wk.insert() },
+        { 'u', 'Search tabs',     wk.send_keys({'cmd', 'shift'}, 'a'), wk.insert() },
         { 'M', 'Re-open closed',  wk.send_keys({'cmd', 'shift'}, 't')              }
-
         -- { 'm', 'Open',            wk.send_keys({'cmd'}, 't')                       },
     },
 },
--- {
---     category = 'Navigation',
---     bindings = {
---         { 'i', 'Up arrow',    wk.send_keys({}, 'up')         },
---         { 'k', 'Down arrow',  wk.send_keys({}, 'down')       },
---         { 'l', 'Focus next',  wk.send_keys({}, 'tab')        },
---         { 't', 'Focus prev',  wk.send_keys({'shift'}, 'tab') }
---     },
--- },
+{
+    category = 'Navigation',
+    bindings = {
+        { 'i', 'Up arrow',    wk.send_keys({}, 'up')         },
+        { 'k', 'Down arrow',  wk.send_keys({}, 'down')       },
+        { 'l', 'Focus next',  wk.send_keys({}, 'tab')        },
+        { 't', 'Focus prev',  wk.send_keys({'shift'}, 'tab') }
+    },
+},
 {
     category = 'Misc',
     bindings = {
-        { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.insert() },
+        { 'o',      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.insert() },
         { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd')              },
         { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h')              },
         { 'return', 'Confirm',         wk.send_keys({}, 'return')              }
@@ -201,14 +198,14 @@ M.apps.kitty = {
 {
     category = 'Splits',
     bindings = {
-        -- { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')             },
-        -- { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')           },
-        -- { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')          },
-        -- { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left')           },
-        -- { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')    },
-        -- { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')  },
-        -- { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right') },
-        -- { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')  },
+        { 'i', 'Up',           wk.send_keys({'ctrl', 'alt'}, 'up')             },
+        { 'k', 'Down',         wk.send_keys({'ctrl', 'alt'}, 'down')           },
+        { 'l', 'Right',        wk.send_keys({'ctrl', 'alt'}, 'right')          },
+        { 't', 'Left',         wk.send_keys({'ctrl', 'alt'}, 'left')           },
+        { 'I', 'Resize up',    wk.send_keys({'ctrl', 'alt', 'shift'}, 'up')    },
+        { 'K', 'Resize down',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'down')  },
+        { 'L', 'Resize right', wk.send_keys({'ctrl', 'alt', 'shift'}, 'right') },
+        { 'T', 'Resize left',  wk.send_keys({'ctrl', 'alt', 'shift'}, 'left')  },
 
         -- new_win
         { 'M', 'Detach split', wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'w'), wk.refresh() }
@@ -227,13 +224,13 @@ M.apps.kitty = {
         -- M.bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
     },
 },
-{
-    category = 'Layout',
-    bindings = {
-        { 'R', 'Rotate splits', wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')          },
-        { 'r', 'Next layout',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') }
-    },
-},
+-- {
+--     category = 'Layout',
+--     bindings = {
+--         { 'R', 'Rotate splits', wk.send_keys({'cmd', 'ctrl', 'alt'}, 'p')          },
+--         { 'r', 'Next layout',   wk.send_keys({'cmd', 'ctrl', 'alt', 'shift'}, 'p') }
+--     },
+-- },
 }
 
 ----------------------------------

@@ -85,6 +85,11 @@ end
 --   state.wk.opacity
 --------------------------------------------------------------------------------
 function M.opacity(direction)
+    assert(
+        direction == 'up' or direction == 'down',
+        "direction must be 'up' or 'down'"
+    )
+
     return function(done)
         done = done or function() end
 

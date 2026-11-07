@@ -4,6 +4,9 @@
 
 ## IMMEDIATE TASKS:
 
+- See if I can consolidate the tab left/right bindings into a single key
+  combo across apps without remapping browsers.
+
 - Refactor the menus to support shift layer (when shift is pressed illuminate
   the shift bindings, when it is released illuminate the base layer etc).
 

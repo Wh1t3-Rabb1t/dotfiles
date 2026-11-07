@@ -171,6 +171,8 @@ M.apps['Brave Browser'] = {
     {
         category = 'Tabs',
         bindings = {
+            -- { 'h', 'Left',            wk.send_keys({'ctrl'}, 'end')                 },
+            -- { ';', 'Right',           wk.send_keys({'ctrl'}, 'home')               },
             { 'h', 'Left',            wk.send_keys({'ctrl'}, 'pageup')                 },
             { ';', 'Right',           wk.send_keys({'ctrl'}, 'pagedown')               },
             { 'H', 'Swap with left',  wk.send_keys({'ctrl', 'shift'}, 'pageup')        },
@@ -235,8 +237,10 @@ M.apps.kitty = {
     {
         category = 'Tabs',
         bindings = {
-            { ';', 'Next',     wk.send_keys({'ctrl'}, 'end')  },
-            { 'h', 'Previous', wk.send_keys({'ctrl'}, 'home') }
+            { ';', 'Next',     wk.send_keys({'ctrl'}, 'pageup')   },
+            { 'h', 'Previous', wk.send_keys({'ctrl'}, 'pagedown') }
+            -- { ';', 'Next',     wk.send_keys({'ctrl'}, 'end')  },
+            -- { 'h', 'Previous', wk.send_keys({'ctrl'}, 'home') }
 
             -- M.bind('', 'Open',     wk.send_keys({'ctrl'}, 'home'))
         },

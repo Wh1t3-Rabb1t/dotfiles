@@ -309,12 +309,14 @@ local function focus_window(win)
 
     win:focus()
 
-    local frame = win:frame()
+    if conf.mouse.follow_window_focus == true then
+        local frame = win:frame()
 
-    hs.mouse.absolutePosition({
-        x = frame.x + (frame.w / 2),
-        y = frame.y + (frame.h / 2)
-    })
+        hs.mouse.absolutePosition({
+            x = frame.x + (frame.w / 2),
+            y = frame.y + (frame.h / 2)
+        })
+    end
 
     return win
 end

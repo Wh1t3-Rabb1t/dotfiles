@@ -10,9 +10,6 @@
 - Refactor the menus to support shift layer (when shift is pressed illuminate
   the shift bindings, when it is released illuminate the base layer etc).
 
-- Add option to center mouse point in win:frame() to config.lua (the
-  functionality in windows.lua 'focus_window' fn).
-
 - Upgrade 'move_to_slot' fn to move window to the next screen if moving say;
   right from the right slot.
 

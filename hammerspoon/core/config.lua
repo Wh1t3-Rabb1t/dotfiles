@@ -1,5 +1,9 @@
 local M = {}
 
+M.mouse = {
+    follow_window_focus = true,
+}
+
 M.disallowed_apps = {
     ['Hammerspoon'] = true,
 }

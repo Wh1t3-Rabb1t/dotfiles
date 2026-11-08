@@ -8,5 +8,7 @@
 
 require('watchers').init()
 require('hotkeys').init()
+require('console').init()
 
+-- Init complete
 hs.alert.show('🔨🥄')

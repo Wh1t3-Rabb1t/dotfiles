@@ -4,14 +4,14 @@
 
 ## IMMEDIATE TASKS:
 
+- Upgrade 'move_to_slot' fn to move window to the next screen if moving say;
+  right from the right slot.
+
 - See if I can consolidate the tab left/right bindings into a single key
   combo across apps without remapping browsers.
 
 - Refactor the menus to support shift layer (when shift is pressed illuminate
   the shift bindings, when it is released illuminate the base layer etc).
-
-- Upgrade 'move_to_slot' fn to move window to the next screen if moving say;
-  right from the right slot.
 
 - Add an 'Apple spotlight' send_keys binding that temporarily enters insert
   mode as a defacto means of launching 'any' app.

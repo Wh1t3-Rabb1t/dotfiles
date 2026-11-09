@@ -164,20 +164,17 @@ end
 --   mouse_circle
 --------------------------------------------------------------------------------
 function M.release(point)
-    -- Ignore stray mouse-up events or presses without a visible starting
-    -- circle. Also prevents repeated mouse-up events restarting the animation.
     if not is_pressed then
         return
     end
 
-    -- Capture the final position before starting the animation
     if point then
         move_circle(point)
     end
 
     is_pressed = false
 
-    if not mouse_circle or not mouse_circle:isVisible() then
+    if not mouse_circle then
         return
     end
 

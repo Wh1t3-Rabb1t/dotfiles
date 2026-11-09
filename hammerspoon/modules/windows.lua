@@ -309,6 +309,7 @@ local function focus_window(win)
 
     win:focus()
 
+    -- Place mouse at the center of focused window
     if conf.mouse.follow_window_focus == true then
         local frame = win:frame()
 
@@ -581,6 +582,7 @@ function M.traverse_slots(direction)
 
         local function next_layout(start_id, skip)
             local screens = hs.screen.allScreens()
+
             local start_idx
 
             for i, screen in ipairs(screens) do

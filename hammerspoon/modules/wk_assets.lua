@@ -352,28 +352,12 @@ local function create_event_tap()
         events.types.leftMouseUp,
         events.types.leftMouseDown,
         events.types.leftMouseDragged,
-        -- events.types.mouseMoved,
     }
 
     local tap = hs.eventtap.new(event_types, function(event)
-        -- hs.timer.usleep(10000)
 
-        -- Mouse events
-        --
-        -- NOTE: Do not consume mouse click events unless manually invoking
-        --       them within the 'mouse' fns otherwise clicks won't work.
-        if event:getType() == events.types.leftMouseDown then
-            mouse.press()
-
-        elseif event:getType() == events.types.leftMouseDragged then
-            mouse.drag(event:location())
-
-        elseif event:getType() == events.types.leftMouseUp then
-            mouse.release(event:location())
-            wk.refresh()()
-
-        -- Keyboard events
-        else
+        -- Key events
+        if event:getType() == events.types.keyDown then
             local flags    = event:getFlags()
             local keycode  = event:getKeyCode()
             local key      = hs.keycodes.map[keycode]
@@ -397,6 +381,25 @@ local function create_event_tap()
             end
 
             return true
+
+        -- Mouse events
+        --
+        -- NOTE: Do not consume mouse click events unless manually invoking
+        --       them within the 'mouse' fns otherwise clicks won't work.
+        else
+            local types    = hs.eventtap.event.types
+            local evt_type = event:getType(true)
+
+            if evt_type == types.leftMouseDown then
+                mouse.press()
+
+            elseif evt_type == types.leftMouseDragged then
+                mouse.drag(event:location())
+
+            elseif evt_type == types.leftMouseUp then
+                mouse.release(event:location())
+                wk.refresh()()
+            end
         end
     end)
 

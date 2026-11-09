@@ -19,9 +19,6 @@
 - Polish the 'cycle_main_apps' fn to drop the window filter (maybe just poll
   a launching application to wait for it's initial window to open).
 
-- Sync Brave and kitty (and other relevant apps) tab navigation bindings so we
-  can set up universal tab navigation bindings in the system category.
-
 - Track all keys currently bound and which are available for all
   (realistic) layers.
 

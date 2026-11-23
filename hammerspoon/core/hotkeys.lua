@@ -2,8 +2,18 @@ local M = {}
 
 local wk = require('wk')
 local qt = require('quit_timer')
+local jg = require('jump_grids')
 
 local keys = {
+
+    ----------------------------------------------------------------------------
+    {   -- Jump grid testing
+        key       = 'a', mods = { 'ctrl' },
+        action    = jg.show,
+        on_key_up = jg.hide,
+    },
+    ----------------------------------------------------------------------------
+
     {
         -- Hot reload hammerspoon
         key    = 'r', mods = { 'ctrl', 'shift' },

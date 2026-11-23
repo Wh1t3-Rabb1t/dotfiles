@@ -166,6 +166,61 @@ local function get_slot_coords(screen_id)
 end
 
 
+-- Get the first available slot on the next or previous display.
+--
+-- Parameters:
+--   start_id (number):  Number tied to a connected display
+--   win      (table):   hs.window object
+--   reverse  (bool):    Determine which direction to iterate
+--
+-- Returns:
+--   win (table):  hs.window object
+--------------------------------------------------------------------------------
+local function get_slot(start_id, win, reverse)
+    -- TODO: add assert to the start of this fn
+
+    local screen_step = reverse and -1 or 1
+    local slot_order  = reverse
+        and { 'maximized', 'right', 'left' }
+        or  { 'maximized', 'left', 'right' }
+
+    local screens = hs.screen.allScreens()
+
+    local start_idx
+
+    for i, screen in ipairs(screens) do
+        if screen:id() == start_id then
+            start_idx = i
+
+            break
+        end
+    end
+
+    if not start_idx then
+        return
+    end
+
+    -- Search every other screen, starting with the adjacent one
+    for step = 1, #screens - 1 do
+        local idx       = (start_idx - 1 + step * screen_step) % #screens + 1
+        local screen_id = screens[idx]:id()
+        local layout    = state.screens[screen_id].layout
+
+        for _, name in ipairs(slot_order) do
+            if layout[name] then
+                local slot = layout[name]
+
+                if slot ~= win and slot:screen():id() == screen_id then
+                    print(name)
+
+                    return slot
+                end
+            end
+        end
+    end
+end
+
+
 -- Assign windows to layout state.
 --
 -- Parameters:
@@ -254,18 +309,18 @@ local function set_window_state(win, idx)
 end
 
 
-
 -- Snap windows into their respective slot positions.
+--
+-- Parameters:
+--    screen_id (number):   Index of a window stored in the state table
 --
 -- Calls:
 --   get_slot_coords()
 --   util.toggle_border()
 --------------------------------------------------------------------------------
-local function snap_layout()
-    local win       = state.windows.curr_win
-    local screen_id = win:screen():id()
-    local layout    = state.screens[screen_id].layout
-    local frames    = get_slot_coords(screen_id)
+local function snap_layout(screen_id)
+    local layout = state.screens[screen_id].layout
+    local frames = get_slot_coords(screen_id)
 
     if layout.maximized then
         layout.maximized:setFrame(state.screens[screen_id].frame, 0.02)
@@ -279,8 +334,6 @@ local function snap_layout()
             layout.right:setFrame(frames.right, 0.02)
         end
     end
-
-    win:raise()
 
     util.toggle_border('on')
 end
@@ -337,12 +390,13 @@ function M.maximize()
     return function(done)
         done = done or function() end
 
-        local win    = state.windows.curr_win
-        local layout = state.screens[win:screen():id()].layout
+        local win       = state.windows.curr_win
+        local screen_id = win:screen():id()
+        local layout    = state.screens[screen_id].layout
 
         layout.maximized = win
 
-        snap_layout()
+        snap_layout(screen_id)
         util.toggle_popups('off', 'on')
 
         done()
@@ -375,11 +429,12 @@ function M.resize(direction)
     return function(done)
         done = done or function() end
 
-        local step    = 0.01
-        local win     = state.windows.curr_win
-        local screen  = state.screens[win:screen():id()]
-        local divider = screen.divider
-        local layout  = screen.layout
+        local step      = 0.01
+        local win       = state.windows.curr_win
+        local screen_id = win:screen():id()
+        local screen    = state.screens[screen_id]
+        local divider   = screen.divider
+        local layout    = screen.layout
 
         if direction == 'left' then
             divider = divider - step
@@ -410,7 +465,7 @@ function M.resize(direction)
             end
         end
 
-        snap_layout()
+        snap_layout(screen_id)
         util.toggle_popups('off', 'on')
 
         done()
@@ -433,15 +488,16 @@ function M.swap()
     return function(done)
         done = done or function() end
 
-        local win    = state.windows.curr_win
-        local layout = state.screens[win:screen():id()].layout
-        local lhs    = layout.left
-        local rhs    = layout.right
+        local win       = state.windows.curr_win
+        local screen_id = win:screen():id()
+        local layout    = state.screens[screen_id].layout
+        local lhs       = layout.left
+        local rhs       = layout.right
 
         layout.left  = rhs
         layout.right = lhs
 
-        snap_layout()
+        snap_layout(screen_id)
         util.toggle_popups('off', 'on')
 
         done()
@@ -485,7 +541,7 @@ function M.move_to_screen(direction)
             win:moveToScreen(target_screen)
 
             set_slots(win)
-            snap_layout()
+            snap_layout(target_screen:id())
         end
 
         done()
@@ -500,15 +556,18 @@ end
 --   direction (string):  'left' or 'right'
 --
 -- Calls:
+--   get_slot()
 --   clear_slots()
 --   snap_layout()
 --   util.toggle_popups()
 --   set_empty_slots()
 --
 -- State changes:
---   state.screens[screen_id].layout.left
---   state.screens[screen_id].layout.right
+--   state.screens[id].layout.maximized
+--   state.screens[id].layout.left
+--   state.screens[id].layout.right
 --------------------------------------------------------------------------------
+
 function M.move_to_slot(direction)
     assert(
         direction == 'left' or direction == 'right',
@@ -518,65 +577,98 @@ function M.move_to_slot(direction)
     return function(done)
         done = done or function() end
 
-        local win       = state.windows.curr_win
-        local screen_id = win:screen():id()
-        local layout    = state.screens[screen_id].layout
+        local win  = state.windows.curr_win
+        local id   = win:screen():id()
+        local slot = state.screens[id].layout
+
+        if slot.maximized == win
+            or slot.left == win and direction == 'left'
+            or slot.right == win and direction == 'right'
+        then
+            local screens = hs.screen.allScreens()
+
+            for i, screen in ipairs(screens) do
+                if screen:id() == id then
+                    local next_screen = screens[i % #screens + 1]
+
+                    slot = state.screens[next_screen:id()].layout
+                    id   = next_screen:id()
+
+                    direction = (direction == 'left') and 'right' or 'left'
+
+                    break
+                end
+            end
+        end
 
         clear_slots(win)
 
-        layout[direction] = win
+        slot[direction] = win
 
-        snap_layout()
+        for _, v in ipairs(hs.screen.allScreens()) do
+            set_empty_slots(v:id())
+            snap_layout(v:id())
+        end
+
         util.toggle_popups('off', 'on')
-        set_empty_slots(screen_id)
 
         done()
     end
 end
 
 
+-- function M.move_to_slot(direction)
+--     assert(
+--         direction == 'left' or direction == 'right',
+--         "direction must be 'left' or 'right'"
+--     )
+--
+--     return function(done)
+--         done = done or function() end
+--
+--         local win  = state.windows.curr_win
+--         local id   = win:screen():id()
+--         local slot = state.screens[id].layout
+--
+--         local target_next_screen = false
+--
+--         if slot.maximized == win then
+--             target_next_screen = true
+--         elseif slot.left == win and direction == 'left' then
+--             target_next_screen = true
+--         elseif slot.right == win and direction == 'right' then
+--             target_next_screen = true
+--         end
+--
+--         if target_next_screen then
+--             local screens = hs.screen.allScreens()
+--
+--             for i, screen in ipairs(screens) do
+--                 if screen:id() == id then
+--                     local next_screen = screens[i % #screens + 1]
+--
+--                     slot = state.screens[next_screen:id()].layout
+--                     id   = next_screen:id()
+--
+--                     break
+--                 end
+--             end
+--         end
+--
+--         clear_slots(win)
+--
+--         slot[direction] = win
+--
+--         snap_layout(id)
+--         util.toggle_popups('off', 'on')
+--         set_empty_slots(id)
+--
+--         done()
+--     end
+-- end
 
 
 
-local function next_layout(start_id, skip, reverse)
-    local screen_step = reverse and -1 or 1
-    local slot_order  = reverse
-        and { 'maximized', 'right', 'left' }
-        or  { 'maximized', 'left', 'right' }
-
-    local screens = hs.screen.allScreens()
-
-    local start_idx
-
-    for i, screen in ipairs(screens) do
-        if screen:id() == start_id then
-            start_idx = i
-
-            break
-        end
-    end
-
-    if not start_idx then
-        return
-    end
-
-    -- Search every other screen, starting with the adjacent one
-    for step = 1, #screens - 1 do
-        local idx       = (start_idx - 1 + step * screen_step) % #screens + 1
-        local screen_id = screens[idx]:id()
-        local layout    = state.screens[screen_id].layout
-
-        for _, name in ipairs(slot_order) do
-            if layout[name] then
-                local slot = layout[name]
-
-                if slot ~= skip and slot:screen():id() == screen_id then
-                    return slot
-                end
-            end
-        end
-    end
-end
 
 --------------------------------------------------------------------------------
 -- Traverse layout slots.
@@ -601,7 +693,7 @@ end
 --     (i.e. cycle between left/right).
 --
 -- Calls:
---   next_layout()
+--   get_slot()
 --   get_window_idx()
 --   focus_window()
 --   set_window_state()
@@ -626,27 +718,28 @@ function M.traverse_slots(direction)
 
         -- Maximized (always traverse to another screen)
         if slot.maximized == win then
-            target_slot = next_layout(id, win, reverse)
+            target_slot = get_slot(id, win, reverse)
 
         -- Left
         elseif slot.left == win then
             if reverse then
-                target_slot = next_layout(id, win, reverse) or slot.right
+                target_slot = get_slot(id, win, reverse) or slot.right
             else
-                target_slot = slot.right or next_layout(id, win, reverse)
+                target_slot = slot.right or get_slot(id, win, reverse)
             end
 
         -- Right
         elseif slot.right == win then
             if not reverse then
-                target_slot = next_layout(id, win, reverse) or slot.left
+                target_slot = get_slot(id, win, reverse) or slot.left
             else
-                target_slot = slot.left or next_layout(id, win, reverse)
+                target_slot = slot.left or get_slot(id, win, reverse)
             end
         end
 
         if not target_slot then
             done()
+
             return
         end
 
@@ -663,103 +756,6 @@ function M.traverse_slots(direction)
         done()
     end
 end
-
-
--- function M.traverse_slots(direction)
---     assert(
---         direction == 'next' or direction == 'prev',
---         "direction must be 'next' or 'prev'"
---     )
---
---     return function(done)
---         done = done or function() end
---
---         local reverse     = direction == 'prev'
---         local screen_step = reverse and -1 or 1
---         local slot_order  = reverse
---             and { 'maximized', 'right', 'left' }
---             or  { 'maximized', 'left', 'right' }
---
---         local function next_layout(start_id, skip)
---             local screens = hs.screen.allScreens()
---
---             local start_idx
---
---             for i, screen in ipairs(screens) do
---                 if screen:id() == start_id then
---                     start_idx = i
---
---                     break
---                 end
---             end
---
---             if not start_idx then
---                 return
---             end
---
---             -- Search every other screen, starting with the adjacent one
---             for step = 1, #screens - 1 do
---                 local idx       = (start_idx - 1 + step * screen_step) % #screens + 1
---                 local screen_id = screens[idx]:id()
---                 local layout    = state.screens[screen_id].layout
---
---                 for _, name in ipairs(slot_order) do
---                     if layout[name] then
---                         local slot = layout[name]
---
---                         if slot ~= skip and slot:screen():id() == screen_id then
---                             return slot
---                         end
---                     end
---                 end
---             end
---         end
---
---         local win       = state.windows.curr_win
---         local screen_id = win:screen():id()
---         local slot      = state.screens[screen_id].layout
---
---         local target_slot
---
---         -- Maximized (always traverse to another screen)
---         if slot.maximized == win then
---             target_slot = next_layout(screen_id, win)
---
---         -- Left
---         elseif slot.left == win then
---             if reverse then
---                 target_slot = next_layout(screen_id, win) or slot.right
---             else
---                 target_slot = slot.right or next_layout(screen_id, win)
---             end
---
---         -- Right
---         elseif slot.right == win then
---             if not reverse then
---                 target_slot = next_layout(screen_id, win) or slot.left
---             else
---                 target_slot = slot.left or next_layout(screen_id, win)
---             end
---         end
---
---         if not target_slot then
---             done()
---             return
---         end
---
---         local win_idx = get_window_idx(state.windows.wins, target_slot)
---         local new_win = focus_window(target_slot)
---
---         if new_win then
---             set_window_state(new_win, win_idx)
---
---             util.toggle_popups('off', 'on')
---             util.toggle_border('off', 'on')
---         end
---
---         done()
---     end
--- end
 
 
 --------------------------------------------------------------------------------
@@ -1018,9 +1014,8 @@ function M.init()
         for _, screen in ipairs(hs.screen.allScreens()) do
             clear_slots(screen:id())
             set_empty_slots(screen:id())
+            snap_layout(screen:id())
         end
-
-        snap_layout()
     end
 end
 

@@ -17,10 +17,17 @@ M.alert_fmt = {
 }
 
 M.grid = {
-    size     = 60,
-    textSize = 30,
-    font     = 'Courier',
-    color    = { white = 1 },
+    textSize    = 30,
+    textBoxSize = 60,
+    font        = 'Courier',
+
+    ringRadius  = 24,
+    ringStroke  = 2,
+    ringColor   = { red = 1, green = 0, blue = 0, alpha = 1 },
+
+    gridStroke  = 2,
+    gridColor   = { white = 1, alpha = 0.5 },
+
 
     -- Grid jump invocation key bindings
     topLeft      = 'w',  -- Top left

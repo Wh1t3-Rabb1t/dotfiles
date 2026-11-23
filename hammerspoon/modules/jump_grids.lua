@@ -1,44 +1,95 @@
 
-local conf = require('config')
+local state = require('state')
+local conf  = require('config').grid
 
 local M = {
     isDisplayed = false,
 }
 
 local positions = {
-    { key = conf.grid.topLeft,      x = 1 / 6, y = 1 / 6 },
-    { key = conf.grid.topCenter,    x = 1 / 2, y = 1 / 6 },
-    { key = conf.grid.topRight,     x = 5 / 6, y = 1 / 6 },
-    { key = conf.grid.centerLeft,   x = 1 / 6, y = 1 / 2 },
-    { key = conf.grid.center,       x = 1 / 2, y = 1 / 2 },
-    { key = conf.grid.centerRight,  x = 5 / 6, y = 1 / 2 },
-    { key = conf.grid.bottomLeft,   x = 1 / 6, y = 5 / 6 },
-    { key = conf.grid.bottomCenter, x = 1 / 2, y = 5 / 6 },
-    { key = conf.grid.bottomRight,  x = 5 / 6, y = 5 / 6 },
+    { key = conf.topLeft,      x = 1 / 6, y = 1 / 6 },
+    { key = conf.topCenter,    x = 1 / 2, y = 1 / 6 },
+    { key = conf.topRight,     x = 5 / 6, y = 1 / 6 },
+    { key = conf.centerLeft,   x = 1 / 6, y = 1 / 2 },
+    { key = conf.center,       x = 1 / 2, y = 1 / 2 },
+    { key = conf.centerRight,  x = 5 / 6, y = 1 / 2 },
+    { key = conf.bottomLeft,   x = 1 / 6, y = 5 / 6 },
+    { key = conf.bottomCenter, x = 1 / 2, y = 5 / 6 },
+    { key = conf.bottomRight,  x = 5 / 6, y = 5 / 6 },
 }
 
 local canvas
+
+local function add_element(element)
+    canvas[canvas:elementCount() + 1] = element
+end
 
 local function create_canvas()
     local screen = hs.screen.mainScreen():frame()
 
     canvas = hs.canvas.new(screen)
 
-    for i, position in ipairs(positions) do
-        canvas[i] = {
-            type          = 'text',
-            text          = position.key,
-            textColor     = conf.grid.color,
-            textSize      = conf.grid.textSize,
-            textFont      = conf.grid.font,
-            textAlignment = 'center',
-            frame = {
+    -- Grid lines
+    local gridLines = {
+        {
+            { x = '33.33%', y = '0%'   },
+            { x = '33.33%', y = '100%' },
+        },
+        {
+            { x = '66.67%', y = '0%'   },
+            { x = '66.67%', y = '100%' },
+        },
+        {
+            { x = '0%',   y = '33.33%' },
+            { x = '100%', y = '33.33%' },
+        },
+        {
+            { x = '0%',   y = '66.67%' },
+            { x = '100%', y = '66.67%' },
+        },
+    }
+
+    for _, coordinates in ipairs(gridLines) do
+        add_element({
+            type        = 'segments',
+            action      = 'stroke',
+            coordinates = coordinates,
+            strokeWidth = conf.gridStroke,
+            strokeColor = conf.gridColor,
+        })
+    end
+
+    -- Position rings
+    for _, position in ipairs(positions) do
+        add_element({
+            type        = 'circle',
+            action      = 'stroke',
+            center      = {
                 x = string.format('%.2f%%', position.x * 100),
                 y = string.format('%.2f%%', position.y * 100),
-                w = conf.grid.size,
-                h = conf.grid.size,
             },
-        }
+            radius      = conf.ringRadius,
+            strokeWidth = conf.ringStroke,
+            strokeColor = conf.ringColor,
+        })
+    end
+
+    -- Position letters
+    for _, position in ipairs(positions) do
+        add_element({
+            type          = 'text',
+            text          = position.key,
+            textColor     = { white = 1 },
+            textSize      = conf.textSize,
+            textFont      = conf.font,
+            textAlignment = 'center',
+            frame         = {
+                x = position.x * screen.w - conf.textBoxSize / 2,
+                y = position.y * screen.h - conf.textBoxSize / 2,
+                w = conf.textBoxSize,
+                h = conf.textBoxSize,
+            }
+        })
     end
 
     return canvas
@@ -50,12 +101,14 @@ function M.show()
     end
 
     canvas:show(0)
+
     M.isDisplayed = true
 end
 
 function M.hide()
     if canvas and M.isDisplayed then
         canvas:hide(0)
+
         M.isDisplayed = false
     end
 end

@@ -14,14 +14,9 @@ local keys = {
     },
     {   -- Jump grid testing
         key       = 's', mods = { 'ctrl' },
-        action    = function() jg.show('r') end,
+        action    = function() jg.show('w') end,
         on_key_up = jg.hide,
     },
-    -- {
-    --     key       = 's', mods = { 'ctrl' },
-    --     action    = function() jg.showSubGrid('w') end,
-    --     on_key_up = jg.hide,
-    -- },
     ----------------------------------------------------------------------------
 
     {

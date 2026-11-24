@@ -40,7 +40,6 @@ local gridLines = {
 }
 
 local canvas
-local curr_text_size  = conf.textSize
 local letter_elements = {}
 local ring_elements   = {}
 
@@ -83,30 +82,42 @@ local function get_position(key)
 end
 
 
--- Update the font size and corresponding ring radius.
+-- Update letter geometry and corresponding ring radius.
 --
 -- Parameters:
---   text_size (number): Desired font size.
+--   text_size (number):  Desired font size
+--   frame     (table):   Current canvas frame
 --
 -- State changes:
---   Updates canvas textSize and circle radius attributes.
+--   Updates canvas textSize, text frames and circle radii.
 --------------------------------------------------------------------------------
-local function set_visual_size(text_size)
-    local scale = text_size / conf.textSize
+local function set_visual_size(text_size, frame)
+    local scale         = text_size / conf.textSize
+    local text_box_size = conf.textBoxSize * scale
 
-    for _, index in ipairs(letter_elements) do
-        canvas[index].textSize = text_size
+    for _, element in ipairs(letter_elements) do
+        local position = element.position
+
+        canvas[element.index].textSize = text_size
+
+        canvas[element.index].frame = {
+            x = position.x * frame.w - text_box_size / 2,
+            y = position.y * frame.h - text_box_size / 2 + conf.textOffsetY * scale,
+            w = text_box_size,
+            h = text_box_size,
+        }
     end
 
-    for _, index in ipairs(ring_elements) do
-        canvas[index].radius = conf.ringRadius * scale
+    for _, element in ipairs(ring_elements) do
+        canvas[element].radius = conf.ringRadius * scale
     end
-
-    curr_text_size = text_size
 end
 
 
 -- Add an element to the canvas table.
+--
+-- Parameters:
+--   element (table):  hs.canvas compatible config tables
 --
 -- Returns:
 --   idx (number):  Index of the canvas element in its parent table
@@ -151,12 +162,11 @@ local function create_canvas(win_frame)
     if conf.ringVisible then
         for _, position in ipairs(positions) do
             local idx = add_element({
-                type         = 'circle',
-                action       = 'stroke',
-                absoluteSize = false,
-                radius       = conf.ringRadius,
-                strokeWidth  = conf.ringStroke,
-                strokeColor  = conf.ringColor,
+                type        = 'circle',
+                action      = 'stroke',
+                radius      = conf.ringRadius,
+                strokeWidth = conf.ringStroke,
+                strokeColor = conf.ringColor,
                 center = {
                     x = string.format('%.2f%%', position.x * 100),
                     y = string.format('%.2f%%', position.y * 100),
@@ -170,17 +180,11 @@ local function create_canvas(win_frame)
     -- Position letters
     for _, position in ipairs(positions) do
         local idx = add_element({
-            type = 'text',
-
-            -- Both absolute size and position need to be false for dynamic
-            -- resizing of text elements i.e. letters within each jump ring.
-            absolutePosition = false,
-            absoluteSize     = false,
-
+            type          = 'text',
+            textAlignment = 'center',
             text          = position.key,
             textSize      = conf.textSize,
             textFont      = conf.font,
-            textAlignment = 'center',
             textColor     = { white = 1 },
             frame = {
                 x = position.x * win_frame.w - conf.textBoxSize / 2,
@@ -190,14 +194,17 @@ local function create_canvas(win_frame)
             }
         })
 
-        letter_elements[#letter_elements + 1] = idx
+        letter_elements[#letter_elements + 1] = {
+            index    = idx,
+            position = position,
+        }
     end
 
     return canvas
 end
 
 
--- Show the jump grid letters.
+-- Show the jump grid.
 --
 -- Parameters:
 --   jump_key (string):  The letter associated with the target position
@@ -212,24 +219,25 @@ end
 --   M.isDisplayed
 --------------------------------------------------------------------------------
 function M.show(jump_key)
-    local window      = state.windows.curr_win or hs.window.focusedWindow()
-    local letter_size = conf.textSize
+    local window = state.windows.curr_win or hs.window.focusedWindow()
 
     if not window then
         return
     end
 
-    local frame = window:frame()
+    local window_frame = window:frame()
 
     if not canvas then
-        create_canvas(frame)
+        create_canvas(window_frame)
     end
 
     if not canvas then
         return
     end
 
-    -- Display sub grid
+    local frame       = window_frame
+    local letter_size = conf.textSize
+
     if jump_key then
         local position = get_position(jump_key)
 
@@ -237,19 +245,17 @@ function M.show(jump_key)
             return
         end
 
-        frame = get_subgrid_frame(frame, position)
+        frame = get_subgrid_frame(window_frame, position)
 
-        letter_size = curr_text_size / 3
-
-        -- Do not create a grid that would require text smaller than the minimum
-        if letter_size < conf.minTextSize then
-            letter_size = conf.minTextSize
-        end
+        letter_size = math.max(
+            conf.textSize / 3,
+            conf.minTextSize
+        )
     end
 
     canvas:frame(frame)
 
-    set_visual_size(letter_size)
+    set_visual_size(letter_size, frame)
 
     canvas:show(0)
 
@@ -257,7 +263,7 @@ function M.show(jump_key)
 end
 
 
--- Hide the jump grid letters.
+-- Hide the jump grid.
 --
 -- State changes:
 --   M.isDisplayed

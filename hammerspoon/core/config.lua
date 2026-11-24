@@ -27,9 +27,8 @@ M.grid = {
     ringColor   = { red = 1, green = 0, blue = 0, alpha = 1 },
     lineStroke  = 2,
     lineColor   = { white = 1, alpha = 0.5 },
-
     ringVisible = true,
-    lineVisible = false,
+    lineVisible = true,
 
     -- Grid jump invocation key bindings
     topLeft      = 'w',  -- Top left

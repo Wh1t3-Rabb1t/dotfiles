@@ -153,8 +153,7 @@ local function create_canvas(win_frame)
             local idx = add_element({
                 type         = 'circle',
                 action       = 'stroke',
-                absoluteSize = true,
-                absolutePosition = true,
+                absoluteSize = false,
                 radius       = conf.ringRadius,
                 strokeWidth  = conf.ringStroke,
                 strokeColor  = conf.ringColor,

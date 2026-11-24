@@ -20,12 +20,13 @@ M.grid = {
     textSize    = 30,
     textBoxSize = 60,
     font        = 'Courier',
+    ringVisible = true,
     ringRadius  = 24,
     ringStroke  = 2,
     ringColor   = { red = 1, green = 0, blue = 0, alpha = 1 },
-    gridStroke  = 2,
-    gridColor   = { white = 1, alpha = 0.5 },
-
+    lineStroke  = 2,
+    lineColor   = { white = 1, alpha = 0.5 },
+    lineVisible = true,
 
     -- Grid jump invocation key bindings
     topLeft      = 'w',  -- Top left

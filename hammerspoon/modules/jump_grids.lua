@@ -51,21 +51,17 @@ end
 
 -- Format and create the jump grid canvas.
 --
+-- Parameters:
+--   win_frame (table):  hs.window:frame() object
+--
 -- Calls:
 --   add_element()
 --
 -- Returns:
 --   canvas (table):  hs.canvas object
 --------------------------------------------------------------------------------
-local function create_canvas()
-    local window = state.windows.curr_win or hs.window.focusedWindow()
-
-    if not window then
-        return
-    end
-
-    window = window:frame()
-    canvas = hs.canvas.new(window)
+local function create_canvas(win_frame)
+    canvas = hs.canvas.new(win_frame)
 
     -- Grid lines
     if conf.lineVisible then
@@ -84,15 +80,15 @@ local function create_canvas()
     if conf.ringVisible then
         for _, position in ipairs(positions) do
             add_element({
-                type        = 'circle',
-                action      = 'stroke',
-                center      = {
-                    x = string.format('%.2f%%', position.x * 100),
-                    y = string.format('%.2f%%', position.y * 100),
-                },
+                type   = 'circle',
+                action = 'stroke',
                 radius      = conf.ringRadius,
                 strokeWidth = conf.ringStroke,
                 strokeColor = conf.ringColor,
+                center = {
+                    x = string.format('%.2f%%', position.x * 100),
+                    y = string.format('%.2f%%', position.y * 100),
+                }
             })
         end
     end
@@ -100,15 +96,21 @@ local function create_canvas()
     -- Position letters
     for _, position in ipairs(positions) do
         add_element({
-            type          = 'text',
+            type = 'text',
+
+            -- Both absolute size and position need to be false for dynamic
+            -- resizing of text elements i.e. letters within each jump ring.
+            absolutePosition = false,
+            absoluteSize     = false,
+
             text          = position.key,
             textColor     = { white = 1 },
             textSize      = conf.textSize,
             textFont      = conf.font,
             textAlignment = 'center',
-            frame         = {
-                x = position.x * window.w - conf.textBoxSize / 2,
-                y = position.y * window.h - conf.textBoxSize / 2 + 8,
+            frame = {
+                x = position.x * win_frame.w - conf.textBoxSize / 2,
+                y = position.y * win_frame.h - conf.textBoxSize / 2 + conf.textOffsetY,
                 w = conf.textBoxSize,
                 h = conf.textBoxSize,
             }
@@ -128,10 +130,18 @@ end
 --   M.isDisplayed
 --------------------------------------------------------------------------------
 function M.show()
-    if not canvas then
-        create_canvas()
+    -- local window = state.windows.curr_win or hs.window.focusedWindow()
+    local window = hs.window.focusedWindow()
+
+    if not window then
+        return
     end
 
+    if not canvas then
+        create_canvas(window:frame())
+    end
+
+    canvas:frame(window:frame())
     canvas:show(0)
 
     M.isDisplayed = true

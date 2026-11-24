@@ -19,6 +19,7 @@ M.alert_fmt = {
 M.grid = {
     textSize    = 30,
     textBoxSize = 60,
+    textOffsetY = 8,
     font        = 'Courier',
     ringVisible = true,
     ringRadius  = 24,

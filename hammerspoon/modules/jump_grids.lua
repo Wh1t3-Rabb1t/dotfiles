@@ -25,9 +25,14 @@ local function add_element(element)
 end
 
 local function create_canvas()
-    local screen = hs.screen.mainScreen():frame()
+    local window = state.windows.curr_win or hs.window.focusedWindow()
 
-    canvas = hs.canvas.new(screen)
+    if not window then
+        return
+    end
+
+    window = window:frame()
+    canvas = hs.canvas.new(window)
 
     -- Grid lines
     local gridLines = {
@@ -84,8 +89,8 @@ local function create_canvas()
             textFont      = conf.font,
             textAlignment = 'center',
             frame         = {
-                x = position.x * screen.w - conf.textBoxSize / 2,
-                y = position.y * screen.h - conf.textBoxSize / 2,
+                x = position.x * window.w - conf.textBoxSize / 2,
+                y = position.y * window.h - conf.textBoxSize / 2,
                 w = conf.textBoxSize,
                 h = conf.textBoxSize,
             }

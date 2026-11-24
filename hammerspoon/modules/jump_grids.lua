@@ -207,7 +207,7 @@ end
 -- Show the jump grid.
 --
 -- Parameters:
---   jump_key (string):  The letter associated with the target position
+--   jump_key (string):  If passed display the sub grid associated with this key
 --
 -- Calls:
 --   create_canvas()
@@ -219,47 +219,53 @@ end
 --   M.isDisplayed
 --------------------------------------------------------------------------------
 function M.show(jump_key)
-    local window = state.windows.curr_win or hs.window.focusedWindow()
+    return function(done)
+        done = done or function() end
 
-    if not window then
-        return
-    end
+        local window = state.windows.curr_win or hs.window.focusedWindow()
 
-    local window_frame = window:frame()
-
-    if not canvas then
-        create_canvas(window_frame)
-    end
-
-    if not canvas then
-        return
-    end
-
-    local frame       = window_frame
-    local letter_size = conf.textSize
-
-    if jump_key then
-        local position = get_position(jump_key)
-
-        if not position then
+        if not window then
             return
         end
 
-        frame = get_subgrid_frame(window_frame, position)
+        local window_frame = window:frame()
 
-        letter_size = math.max(
-            conf.textSize / 3,
-            conf.minTextSize
-        )
+        if not canvas then
+            create_canvas(window_frame)
+        end
+
+        if not canvas then
+            return
+        end
+
+        local frame       = window_frame
+        local letter_size = conf.textSize
+
+        if jump_key then
+            local position = get_position(jump_key)
+
+            if not position then
+                return
+            end
+
+            frame = get_subgrid_frame(window_frame, position)
+
+            letter_size = math.max(
+                conf.textSize / 3,
+                conf.minTextSize
+            )
+        end
+
+        canvas:frame(frame)
+
+        set_visual_size(letter_size, frame)
+
+        canvas:show(0)
+
+        M.isDisplayed = true
+
+        done()
     end
-
-    canvas:frame(frame)
-
-    set_visual_size(letter_size, frame)
-
-    canvas:show(0)
-
-    M.isDisplayed = true
 end
 
 
@@ -269,10 +275,16 @@ end
 --   M.isDisplayed
 --------------------------------------------------------------------------------
 function M.hide()
-    if canvas and M.isDisplayed then
-        canvas:hide(0)
+    return function(done)
+        done = done or function() end
 
-        M.isDisplayed = false
+        if canvas and M.isDisplayed then
+            canvas:hide(0)
+
+            M.isDisplayed = false
+        end
+
+        done()
     end
 end
 

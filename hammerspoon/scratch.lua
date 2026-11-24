@@ -1,3 +1,11 @@
+-- Notes on wk vs mouse/grid modules:
+--
+-- mouse and wk should be independent of each other. Activating one while the
+-- other is active switches focus (i.e. wk to mouse, mouse to wk etc)
+--
+-- Can bind hide/show to either a toggle or hold key (need to really think
+-- about potential issues caused by having one on a toggle the other on a
+-- hold/release trigger)
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

@@ -5,6 +5,7 @@ local screens = require('screens')
 local win     = require('windows')
 local wifi    = require('wifi')
 local mouse   = require('mouse')
+local jg      = require('jump_grids')
 
 
 M.apps = {}
@@ -24,17 +25,23 @@ M.apps.system = {
         category = 'Windows',
         bindings = {
 
-            -- { '-', 'To prev screen',  win.move_to_screen('prev'), wk.refresh() },
-            -- { '_', 'To next screen',  win.move_to_screen('next'), wk.refresh() },
+            -- { '-', 'To prev screen',  win.move_to_screen('prev'), wk.refresh()     },
+            -- { '_', 'To next screen',  win.move_to_screen('next'), wk.refresh()     },
             -- { 'o', 'Next app window', win.cycle_app_specific('next'), wk.refresh() },
             -- { 'u', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh() },
+            --
+            -- { '_', 'Cycle cat apps', win.cycle_main_apps()                         },
+            -- { '_', 'Next app',       win.cycle_all_apps('next')                    },
+            -- { '-', 'Prev app',       win.cycle_all_apps('prev')                    },
 
-            -- { '_', 'Cycle cat apps', win.cycle_main_apps()                       },
-            -- { '_', 'Next app',       win.cycle_all_apps('next')                  },
-            -- { '-', 'Prev app',       win.cycle_all_apps('prev')                  },
 
-            { ':', 'Next window', win.cycle_open('next')                         },
-            { 'H', 'Prev window', win.cycle_open('prev')                         },
+            -- -- WIP
+            -- { '_', 'Show grid', jg.show()                   },
+            -- { "'", 'Hide grid', jg.hide()                   },
+
+
+            { ':', 'Next window', win.cycle_open('next')                   },
+            { 'H', 'Prev window', win.cycle_open('prev')                   },
             { 'n', 'Open window', wk.send_keys({'cmd'}, 'n'), wk.refresh() },
             { 'm', 'Open tab',    wk.send_keys({'cmd'}, 't'), wk.refresh() },
             { 'W', 'Close tab',   wk.send_keys({'cmd'}, 'w'), wk.refresh() }
@@ -195,7 +202,7 @@ M.apps['Brave Browser'] = {
     {
         category = 'Misc',
         bindings = {
-            { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.insert() },
+            -- { "'",      'Focus searchbar', wk.send_keys({'cmd'}, 'l'), wk.insert() },
             { 'b',      'Add bookmark',    wk.send_keys({'cmd'}, 'd')              },
             { 'P',      'Open history',    wk.send_keys({'cmd'}, 'h')              },
             { 'return', 'Confirm',         wk.send_keys({}, 'return')              }

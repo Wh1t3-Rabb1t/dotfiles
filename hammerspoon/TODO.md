@@ -4,6 +4,15 @@
 
 ## IMMEDIATE TASKS:
 
+- jump_grid show needs to bind each of the jump keys to jump to the
+  associated location.
+
+- Refactor wk_registry to account for key_up/key_down actions so we can
+  implement hold specific actions in the event tap. (i.e. hold ';' to
+  show the jump grid, release it to hide).
+
+- wk.insert() need to be overhauled (escape doesn't hide the border etc).
+
 - Upgrade 'move_to_slot' fn to move window to the next screen if moving say;
   right from the right slot.
 

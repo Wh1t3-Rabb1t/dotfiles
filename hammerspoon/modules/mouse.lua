@@ -257,11 +257,7 @@ function M.scroll(direction)
             and scroll_state.delta
             or -scroll_state.delta
 
-        util.toggle_tap('off')
-
         hs.eventtap.scrollWheel({0, delta}, {}, 'line')
-
-        util.toggle_tap('on')
 
         done()
     end
@@ -296,7 +292,7 @@ function M.quit()
 
         util.toggle_mouse_popups('off')
         util.toggle_border('off')
-        util.toggle_mouse_tap('off')
+        util.toggle_tap('mouse', 'off')
 
         done()
     end
@@ -311,13 +307,13 @@ function M.launch()
     require('apps').init()
     require('windows').init()
 
-    -- Init wk_assets if not already existing
-    if not cache.mouse_initialized then
-        require('mouse_assets').init()
+    -- Init runtime_assets if not already existing
+    if not cache.initialized then
+        require('runtime_assets').init()
     end
 
     util.toggle_mouse_popups('on')
-    util.toggle_mouse_tap('on')
+    util.toggle_tap('mouse', 'on')
 end
 
 return M

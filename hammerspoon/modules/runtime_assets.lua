@@ -2,7 +2,11 @@ local M = {}
 
 local state    = require('state')
 local cache    = require('cache')
-local registry = require('mouse_registry')
+local wk       = require('wk')
+local mouse    = require('mouse')
+
+local wk_registry = require('wk_registry')
+local mouse_registry = require('mouse_registry')
 
 
 -- Local state.
@@ -346,6 +350,81 @@ local function create_event_tap()
 
     local event_types = {
         events.types.keyDown,
+        events.types.flagsChanged,
+        events.types.leftMouseUp,
+        events.types.leftMouseDown,
+        events.types.leftMouseDragged,
+    }
+
+    local tap = hs.eventtap.new(event_types, function(event)
+
+        -- Key events
+        if event:getType() == events.types.keyDown then
+            local flags    = event:getFlags()
+            local keycode  = event:getKeyCode()
+            local key      = hs.keycodes.map[keycode]
+            local win      = state.windows.curr_win or hs.window.focusedWindow()
+            local app_name = win:application():name()
+
+            local mods = {}
+
+            if flags.cmd   then table.insert(mods, 'cmd') end
+            if flags.alt   then table.insert(mods, 'alt') end
+            if flags.ctrl  then table.insert(mods, 'ctrl') end
+            if flags.shift then table.insert(mods, 'shift') end
+
+            local lookup_key   = binding_id(key, mods)
+            local app_lookup   = cache.lookup[app_name] or {}
+            local bound_action = cache.lookup.system[lookup_key]
+                              or app_lookup[lookup_key]
+
+            if bound_action then
+                bound_action()
+            end
+
+            return true
+
+        -- Mouse events
+        --
+        -- NOTE: Do not consume mouse click events unless manually invoking
+        --       them within the 'mouse' fns otherwise clicks won't work.
+        else
+            local types    = hs.eventtap.event.types
+            local evt_type = event:getType(true)
+
+            if evt_type == types.leftMouseDown then
+                mouse.press()
+
+            elseif evt_type == types.leftMouseDragged then
+                mouse.drag(event:location())
+
+            elseif evt_type == types.leftMouseUp then
+                mouse.release(event:location())
+                wk.refresh()()
+            end
+        end
+    end)
+
+    return tap
+end
+
+
+-- Create the main orchestrator mouse tap.
+--
+-- Calls:
+--   binding_id()
+--   mouse.press()
+--   mouse.release()
+--   wk.refresh()()
+--
+-- Return:
+--   tap (fn):  hs.eventtap function
+--------------------------------------------------------------------------------
+local function create_mouse_tap()
+    local events = hs.eventtap.event
+
+    local event_types = {
+        events.types.keyDown,
         events.types.keyUp,
         events.types.flagsChanged,
         -- events.types.leftMouseUp,
@@ -370,7 +449,7 @@ local function create_event_tap()
             if flags.shift then table.insert(mods, 'shift') end
 
             local lookup_key   = binding_id(key, mods)
-            local bound_action = cache.mouse_lookup[lookup_key]
+            local bound_action = cache.mouse_keys[lookup_key]
 
             if bound_action then
                 bound_action()
@@ -393,21 +472,40 @@ end
 --   create_event_tap()
 --
 -- State changes:
---   cache.mouse_lookup
---   cache.mouse_assets
---   cache.mouse_tap
---   cache.mouse_initialized
+--   cache.lookup
+--   cache.assets
+--   cache.wk_tap
+--   cache.initialized
 --------------------------------------------------------------------------------
 function M.init()
-    for app_name, bindings in pairs(registry.mouse_bindings) do
-        cache.mouse_lookup = fmt_binding_tbl(bindings)
-        cache.mouse_assets = fmt_binding_popups(app_name, bindings)
+    -- Temporary insert bindings
+    cache.assets.insert = fmt_binding_popups('insert', {
+        {
+            category = 'Bound until invoked',
+            bindings = {
+                { key = 'enter',  desc = 'Relaunch menu' },
+                { key = 'escape', desc = 'Cancel'        }
+            }
+        }
+    })
+
+    -- Which key assets
+    for app_name, bindings in pairs(wk_registry.apps) do
+        cache.lookup[app_name] = fmt_binding_tbl(bindings)
+        cache.assets[app_name] = fmt_binding_popups(app_name, bindings)
     end
 
-    cache.mouse_tap = create_event_tap()
+    -- Mouse assets
+    for category, mouse_bindings in pairs(mouse_registry.mouse_control) do
+        cache.mouse_keys   = fmt_binding_tbl(mouse_bindings)
+        cache.mouse_assets = fmt_binding_popups(category, mouse_bindings)
+    end
 
-    cache.mouse_initialized = true
+    -- Create taps
+    cache.taps.wk    = create_event_tap()
+    cache.taps.mouse = create_mouse_tap()
+
+    cache.initialized = true
 end
 
 return M
-

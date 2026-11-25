@@ -134,7 +134,7 @@ function M.insert()
         done = done or function() end
 
         util.toggle_popups('off')
-        util.toggle_tap('off')
+        util.toggle_tap('wk', 'off')
 
         local frame = state.windows.curr_win:frame()
         local popup = cache.assets.insert.popup
@@ -189,11 +189,11 @@ function M.send_keys(mods, key)
     return function(done)
         done = done or function() end
 
-        util.toggle_tap('off')
+        util.toggle_tap('wk', 'off')
 
         hs.eventtap.keyStroke(mods, key, 0)
 
-        util.toggle_tap('on')
+        util.toggle_tap('wk', 'on')
 
         done()
     end
@@ -214,7 +214,7 @@ function M.quit()
 
         util.toggle_popups('off')
         util.toggle_border('off')
-        util.toggle_tap('off')
+        util.toggle_tap('wk', 'off')
 
         done()
     end
@@ -260,7 +260,7 @@ end
 --   screens.init()
 --   apps.init()
 --   windows.init()
---   wk_assets.init()
+--   runtime_assets.init()
 --   util.toggle_popups()
 --   util.toggle_tap()
 --------------------------------------------------------------------------------
@@ -273,13 +273,13 @@ function M.launch()
     require('apps').init()
     require('windows').init()
 
-    -- Init wk_assets if not already existing
+    -- Init runtime_assets if not already existing
     if not cache.initialized then
-        require('wk_assets').init()
+        require('runtime_assets').init()
     end
 
     util.toggle_popups('on')
-    util.toggle_tap('on')
+    util.toggle_tap('wk', 'on')
 end
 
 return M

@@ -2,13 +2,14 @@ local M = {}
 
 -- Commented out entries are populated on init
 
-M.initialized       = false
-M.mouse_initialized = false
+M.initialized = false
 
-M.wk_tap    = {}
-M.mouse_tap = {}
+M.taps = {
+    -- wk    = {},
+    -- mouse = {},
+}
 
-M.mouse_lookup = {
+M.mouse_keys = {
     -- key = action,
     -- ...
 }

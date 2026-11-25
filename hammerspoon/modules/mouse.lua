@@ -268,10 +268,18 @@ function M.scroll(direction)
 end
 
 function M.move(direction)
+    assert(
+        direction == 'up'
+            or direction == 'down'
+            or direction == 'left'
+            or direction == 'right',
+        "direction must be one of: 'up', 'down', 'left', 'right'"
+    )
+
     return function(done)
         done = done or function() end
 
-        local step         = 5
+        local step         = 10
         local starting_pos = hs.mouse.absolutePosition()
 
         if direction == 'up' then

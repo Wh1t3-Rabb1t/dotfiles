@@ -4,7 +4,8 @@
 
 ## IMMEDIATE TASKS:
 
-- Consider consolidating wk/mouse assets into a single table (registry also).
+- Consider breaking app specific modules out of which key so they are
+  accessible from either the wk or mouse module.
 
 - In the mouse module we need to have 'smart' popup placement. i.e. popups
   automatically move away from the cursor when it hovers over.

@@ -9,16 +9,6 @@ M.taps = {
     -- mouse = {},
 }
 
-M.mouse_keys = {
-    -- key = action,
-    -- ...
-}
-
-M.mouse_assets = {
-    -- popup = popup,
-    -- frame = frame,
-}
-
 M.lookup = {
     -- [app_name] = {
     --     key = action,

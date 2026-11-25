@@ -1,17 +1,45 @@
 local M = {}
 
 local wk      = require('wk')
+local mouse   = require('mouse')
 local screens = require('screens')
 local win     = require('windows')
 local wifi    = require('wifi')
-local util    = require('util')
-
 
 M.apps = {}
 
--- Universal bindings.
+
+-- Mouse controll bindings.
 --------------------------------------------------------------------------------
-M.apps.system = {
+M.apps.mouse = {
+    {
+        category = 'Move',
+        bindings = {
+            { 'i', 'Up',    mouse.move('up')    },
+            { 'k', 'Down',  mouse.move('down')  },
+            { 't', 'Left',  mouse.move('left')  },
+            { 'l', 'Right', mouse.move('right') },
+        },
+    },
+    {
+        category = 'Scroll',
+        bindings = {
+            { 'up',   'Up',   mouse.scroll('up')   },
+            { 'down', 'Down', mouse.scroll('down') },
+        },
+    },
+    {
+        category = 'Misc',
+        bindings = {
+            { 'escape', 'Cancel', mouse.quit() }
+        },
+    },
+}
+
+
+-- Which key bindings.
+--------------------------------------------------------------------------------
+M.apps.wk = {
     -- MacOS default keybindings:  https://support.apple.com/en-ca/102650
     {
         category = 'Windows',
@@ -254,11 +282,135 @@ M.apps.kitty = {
 }
 
 
+-- Characters resulting from pressing the key with the shift mod.
+--------------------------------------------------------------------------------
+local shift_chars = {
+    ['`'] = '~',
+    ['1'] = '!',
+    ['2'] = '@',
+    ['3'] = '#',
+    ['4'] = '$',
+    ['5'] = '%',
+    ['6'] = '^',
+    ['7'] = '&',
+    ['8'] = '*',
+    ['9'] = '(',
+    ['0'] = ')',
+    ['-'] = '_',
+    ['='] = '+',
+    ['['] = '{',
+    [']'] = '}',
+    [';'] = ':',
+    ["'"] = '"',
+    [','] = '<',
+    ['.'] = '>',
+    ['/'] = '?',
+    ['\\'] = '|',
+}
+
+
+-- Add shift modifier to a binding declaration using an uppercase letter.
+--
+-- Parameters:
+--   mods (string):  hs compatible mod name string i.e. 'ctrl'
+--
+-- Returns:
+--   result (table):  A list of hs compatible mod name strings
+--------------------------------------------------------------------------------
+local function add_shift(mods)
+    local result = {}
+
+    if mods then
+        for i, mod in ipairs(mods) do
+            result[i] = mod
+        end
+    end
+
+    table.insert(result, 'shift')
+
+    return result
+end
+
+
+-- Construct a hs compatible binding field.
+--
+-- Parameters:
+--   (table):  Binding table declared in its respective registry
+--
+-- Calls:
+--   add_shift()
+--
+-- Returns:
+--   binding_field (table):
+--------------------------------------------------------------------------------
+local function bind( ... )
+    local binding_field = {}
+
+    for _, args in ipairs({ ... }) do
+        local key
+        local mods
+        local desc
+        local action_start
+
+        -- If a modifier was passed along with the key
+        if type(args[1]) == 'table' then
+            mods         = args[1]
+            key          = args[2]
+            desc         = args[3]
+            action_start = 4
+        else
+            key          = args[1]
+            desc         = args[2]
+            action_start = 3
+        end
+
+        -- Uppercase letters and shifted punctuation implicitly mean shift
+        if #key == 1 then
+            if key:match('%u') then
+                key  = key:lower()
+                mods = add_shift(mods)
+            elseif shift_chars[key] then
+                key  = shift_chars[key]
+                mods = add_shift(mods)
+            end
+        end
+
+        local action_count = #args - action_start + 1
+
+        local binding = {
+            key  = key,
+            desc = desc,
+        }
+
+        if mods then
+            binding.mods = mods
+        end
+
+        -- If one action is passed, store it as a function
+        if action_count == 1 then
+            binding.action = args[action_start]
+
+        -- If multiple actions are passed, store them as a table of functions
+        elseif action_count > 1 then
+            binding.action = {}
+
+            for i = action_start, #args do
+                table.insert(binding.action, args[i])
+            end
+        end
+
+        table.insert(binding_field, binding)
+    end
+
+    return binding_field
+end
+
+
 -- Pass each binding table in apps.* to the bind() fn for processing.
 --------------------------------------------------------------------------------
 for _, categories in pairs(M.apps) do
     for _, category in ipairs(categories) do
-        category.bindings = util.bind(table.unpack(category.bindings))
+        category.bindings = bind(table.unpack(category.bindings))
     end
 end
 

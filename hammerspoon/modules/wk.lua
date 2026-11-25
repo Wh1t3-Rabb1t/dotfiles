@@ -110,8 +110,8 @@ function M.opacity(direction)
             cache.assets[app_name].popup:alpha(opacity)
         end
 
-        -- System popup
-        cache.assets.system.popup:alpha(opacity)
+        -- Which key popup
+        cache.assets.wk.popup:alpha(opacity)
 
         state.wk.opacity = opacity
 

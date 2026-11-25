@@ -1,12 +1,10 @@
 local M = {}
 
-local state    = require('state')
-local cache    = require('cache')
-local wk       = require('wk')
-local mouse    = require('mouse')
-
-local wk_registry    = require('wk_registry')
-local mouse_registry = require('mouse_registry')
+local state   = require('state')
+local cache   = require('cache')
+local wk      = require('wk')
+local mouse   = require('mouse')
+local keymaps = require('runtime_keymaps')
 
 
 -- Local state.
@@ -375,8 +373,7 @@ local function create_event_tap()
 
             local lookup_key   = binding_id(key, mods)
             local app_lookup   = cache.lookup[app_name] or {}
-            local bound_action = cache.lookup.system[lookup_key]
-                              or app_lookup[lookup_key]
+            local bound_action = cache.lookup.wk[lookup_key] or app_lookup[lookup_key]
 
             if bound_action then
                 bound_action()
@@ -449,7 +446,7 @@ local function create_mouse_tap()
             if flags.shift then table.insert(mods, 'shift') end
 
             local lookup_key   = binding_id(key, mods)
-            local bound_action = cache.mouse_keys[lookup_key]
+            local bound_action = cache.lookup.mouse[lookup_key]
 
             if bound_action then
                 bound_action()
@@ -472,9 +469,6 @@ end
 --   create_event_tap()
 --
 -- State changes:
---   cache.lookup
---   cache.assets
---   cache.wk_tap
 --   cache.initialized
 --------------------------------------------------------------------------------
 function M.init()
@@ -489,16 +483,10 @@ function M.init()
         }
     })
 
-    -- Which key assets
-    for app_name, bindings in pairs(wk_registry.apps) do
+    -- Runtime bindings/assets
+    for app_name, bindings in pairs(keymaps.apps) do
         cache.lookup[app_name] = fmt_binding_tbl(bindings)
         cache.assets[app_name] = fmt_binding_popups(app_name, bindings)
-    end
-
-    -- Mouse assets
-    for category, mouse_bindings in pairs(mouse_registry.mouse_control) do
-        cache.mouse_keys   = fmt_binding_tbl(mouse_bindings)
-        cache.mouse_assets = fmt_binding_popups(category, mouse_bindings)
     end
 
     -- Create taps

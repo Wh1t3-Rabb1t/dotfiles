@@ -4,6 +4,9 @@
 
 ## IMMEDIATE TASKS:
 
+- In the mouse module we need to have 'smart' popup placement. i.e. popups
+  automatically move away from the cursor when it hovers over.
+
 - jump_grid show needs to bind each of the jump keys to jump to the
   associated location.
 

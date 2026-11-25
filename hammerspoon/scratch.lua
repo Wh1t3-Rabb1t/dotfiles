@@ -7,13 +7,13 @@
 -- about potential issues caused by having one on a toggle the other on a
 -- hold/release trigger)
 --
--- Each has it's own key that is responsible for launching / exiting the module.
+-- Each has it's own key that is responsible for launching/exiting the module.
 --
 -- The key switches between the modules when the other is active, or disables
 -- the module if hitting the key for that module while its active.
 --
--- (only consideration is the jump grid key if bound to the same key as the
--- mouse module).
+-- (only consideration IF USING PRESS/RELEASE KEYS is the jump grid key if
+-- bound to the same key as the mouse module).
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

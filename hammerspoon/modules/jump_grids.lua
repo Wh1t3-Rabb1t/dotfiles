@@ -8,15 +8,15 @@ local M = {
 
 -- Position coords
 local positions = {
-    { key = conf.topLeft,      x = 1 / 6, y = 1 / 6 },
-    { key = conf.topCenter,    x = 1 / 2, y = 1 / 6 },
-    { key = conf.topRight,     x = 5 / 6, y = 1 / 6 },
-    { key = conf.centerLeft,   x = 1 / 6, y = 1 / 2 },
-    { key = conf.center,       x = 1 / 2, y = 1 / 2 },
-    { key = conf.centerRight,  x = 5 / 6, y = 1 / 2 },
-    { key = conf.bottomLeft,   x = 1 / 6, y = 5 / 6 },
-    { key = conf.bottomCenter, x = 1 / 2, y = 5 / 6 },
-    { key = conf.bottomRight,  x = 5 / 6, y = 5 / 6 },
+    { key = conf.topLeft,      x = 1 / 6, y = 1 / 6 },  -- Top left
+    { key = conf.topCenter,    x = 1 / 2, y = 1 / 6 },  -- Top center
+    { key = conf.topRight,     x = 5 / 6, y = 1 / 6 },  -- Top right
+    { key = conf.centerLeft,   x = 1 / 6, y = 1 / 2 },  -- Center left
+    { key = conf.center,       x = 1 / 2, y = 1 / 2 },  -- Center center
+    { key = conf.centerRight,  x = 5 / 6, y = 1 / 2 },  -- Center right
+    { key = conf.bottomLeft,   x = 1 / 6, y = 5 / 6 },  -- Bottom left
+    { key = conf.bottomCenter, x = 1 / 2, y = 5 / 6 },  -- Bottom center
+    { key = conf.bottomRight,  x = 5 / 6, y = 5 / 6 },  -- Bottom right
 }
 
 -- Grid lines

@@ -1,6 +1,8 @@
 local M = {}
 
-local util = require('util')
+local util  = require('util')
+local state = require('state')
+local cache = require('cache')
 
 
 -- Configuration.
@@ -263,6 +265,59 @@ function M.scroll(direction)
 
         done()
     end
+end
+
+function M.move(direction)
+    return function(done)
+        done = done or function() end
+
+        local step         = 5
+        local starting_pos = hs.mouse.absolutePosition()
+
+        if direction == 'up' then
+            starting_pos.y = starting_pos.y - step
+        elseif direction == 'down' then
+            starting_pos.y = starting_pos.y + step
+        elseif direction == 'left' then
+            starting_pos.x = starting_pos.x - step
+        elseif direction == 'right' then
+            starting_pos.x = starting_pos.x + step
+        end
+
+        hs.mouse.absolutePosition(starting_pos)
+
+        done()
+    end
+end
+
+function M.quit()
+    return function(done)
+        done = done or function() end
+
+        util.toggle_mouse_popups('off')
+        util.toggle_border('off')
+        util.toggle_mouse_tap('off')
+
+        done()
+    end
+end
+
+function M.launch()
+    if state.mouse.tap_active then
+        return
+    end
+
+    require('screens').init()
+    require('apps').init()
+    require('windows').init()
+
+    -- Init wk_assets if not already existing
+    if not cache.mouse_initialized then
+        require('mouse_assets').init()
+    end
+
+    util.toggle_mouse_popups('on')
+    util.toggle_mouse_tap('on')
 end
 
 return M

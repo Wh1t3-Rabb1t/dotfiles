@@ -2,22 +2,11 @@ local M = {}
 
 local wk = require('wk')
 local qt = require('quit_timer')
+local mouse = require('mouse')
 local jg = require('jump_grids')
 
 local keys = {
 
-    -- ----------------------------------------------------------------------------
-    -- {   -- Jump grid testing
-    --     key       = 'a', mods = { 'ctrl' },
-    --     action    = function() jg.show()() end,
-    --     on_key_up = function() jg.hide()() end,
-    -- },
-    -- {   -- Jump grid testing
-    --     key       = 's', mods = { 'ctrl' },
-    --     action    = function() jg.show('w')() end,
-    --     on_key_up = function() jg.hide()() end,
-    -- },
-    -- ----------------------------------------------------------------------------
 
     {
         -- Hot reload hammerspoon
@@ -47,6 +36,28 @@ local keys = {
             wk.launch()
         end,
     },
+
+    {
+        -- Which key launcher
+        key    = 'a', mods = { 'ctrl' },
+        action = function()
+            mouse.launch()
+        end,
+    },
+
+
+    -- ----------------------------------------------------------------------------
+    -- {   -- Jump grid testing
+    --     key       = 'a', mods = { 'ctrl' },
+    --     action    = function() jg.show()() end,
+    --     on_key_up = function() jg.hide()() end,
+    -- },
+    -- {   -- Jump grid testing
+    --     key       = 's', mods = { 'ctrl' },
+    --     action    = function() jg.show('w')() end,
+    --     on_key_up = function() jg.hide()() end,
+    -- },
+    -- ----------------------------------------------------------------------------
 
 }
 

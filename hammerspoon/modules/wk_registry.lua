@@ -5,7 +5,7 @@ local screens = require('screens')
 local win     = require('windows')
 local wifi    = require('wifi')
 local mouse   = require('mouse')
-local jg      = require('jump_grids')
+-- local jg      = require('jump_grids')
 
 
 M.apps = {}
@@ -17,7 +17,7 @@ M.apps.system = {
     {
         category = 'Mouse',
         bindings = {
-            { 'up', 'Scroll up',   mouse.scroll('up')   },
+            { 'up',   'Scroll up',   mouse.scroll('up')   },
             { 'down', 'Scroll down', mouse.scroll('down') },
         },
     },
@@ -29,7 +29,7 @@ M.apps.system = {
             -- { '_', 'To next screen',  win.move_to_screen('next'), wk.refresh()     },
             -- { 'o', 'Next app window', win.cycle_app_specific('next'), wk.refresh() },
             -- { 'u', 'Prev app window', win.cycle_app_specific('prev'), wk.refresh() },
-            --
+
             -- { '_', 'Cycle cat apps', win.cycle_main_apps()                         },
             -- { '_', 'Next app',       win.cycle_all_apps('next')                    },
             -- { '-', 'Prev app',       win.cycle_all_apps('prev')                    },

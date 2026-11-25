@@ -200,6 +200,39 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Toggle mouse popup visibility.
+--
+-- Parameters:
+--   (table):  Contains strings, either 'on' or 'off'
+--
+-- Calls:
+--   get_popup_coords()
+--------------------------------------------------------------------------------
+function M.toggle_mouse_popups( ... )
+    for _, set_to in ipairs({ ... }) do
+        if set_to == 'on' then
+            local win = state.windows.curr_win
+
+            local mouse_popup = cache.mouse_assets
+
+            local coords = get_popup_coords(win, mouse_popup)
+
+            mouse_popup.popup:topLeft(coords)
+            mouse_popup.popup:alpha(state.mouse.opacity)
+            mouse_popup.popup:show(0.15)
+
+        elseif set_to == 'off' then
+            local mouse_popup = cache.mouse_assets.popup
+
+            if mouse_popup:isShowing() then
+                mouse_popup:hide()
+            end
+        end
+    end
+end
+
+
+--------------------------------------------------------------------------------
 -- Toggle border visibility.
 --
 -- Parameters:
@@ -246,7 +279,7 @@ end
 -- Toggle event tap.
 --
 -- Parameters:
---   (table):  Contains strings, either 'on' or 'off'
+--   (string):  Either 'on' or 'off'
 --
 -- State changes:
 --   state.wk.tap_active
@@ -259,6 +292,28 @@ function M.toggle_tap( ... )
         elseif set_to == 'off' then
             state.wk.tap_active = false
             cache.wk_tap:stop()
+        end
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Toggle mouse tap.
+--
+-- Parameters:
+--   (string):  Either 'on' or 'off'
+--
+-- State changes:
+--   state.mouse.tap_active
+--------------------------------------------------------------------------------
+function M.toggle_mouse_tap( ... )
+    for _, set_to in ipairs({ ... }) do
+        if set_to == 'on' then
+            state.mouse.tap_active = true
+            cache.mouse_tap:start()
+        elseif set_to == 'off' then
+            state.mouse.tap_active = false
+            cache.mouse_tap:stop()
         end
     end
 end

@@ -32,19 +32,22 @@ local keys = {
         action    = qt.start_cmd_q,
         on_key_up = qt.stop_cmd_q,
     },
-    {
-        -- Which key launcher
-        key       = 'a', mods = { 'ctrl' },
-        action    = function() wk.launch() end,
-        on_key_up = function() wk.quit()() end,
-    },
+
     -- {
     --     -- Which key launcher
-    --     key    = 'space', mods = { 'cmd', 'ctrl', 'alt', 'shift' },
-    --     action = function()
-    --         wk.launch()
-    --     end,
+    --     key       = 'a', mods = { 'ctrl' },
+    --     action    = function() wk.launch() end,
+    --     on_key_up = function() wk.quit()() end,
     -- },
+
+    {
+        -- Which key launcher
+        key    = 'space', mods = { 'cmd', 'ctrl', 'alt', 'shift' },
+        action = function()
+            wk.launch()
+        end,
+    },
+
 }
 
 

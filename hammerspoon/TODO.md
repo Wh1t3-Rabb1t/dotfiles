@@ -4,6 +4,8 @@
 
 ## IMMEDIATE TASKS:
 
+- Consider consolidating wk/mouse assets into a single table (registry also).
+
 - In the mouse module we need to have 'smart' popup placement. i.e. popups
   automatically move away from the cursor when it hovers over.
 

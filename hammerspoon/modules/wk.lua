@@ -43,7 +43,7 @@ function M.cycle_corner_pos()
 
         state.wk.corner = new_corner
 
-        util.toggle_popups('off', 'on')
+        util.toggle_popups('wk', 'off', 'on')
 
         done()
     end
@@ -68,7 +68,7 @@ function M.cycle_stacking()
 
         state.wk.stack = new_stack
 
-        util.toggle_popups('off', 'on')
+        util.toggle_popups('wk', 'off', 'on')
 
         done()
     end
@@ -133,7 +133,7 @@ function M.insert()
     return function(done)
         done = done or function() end
 
-        util.toggle_popups('off')
+        util.toggle_popups('wk', 'off')
         util.toggle_tap('wk', 'off')
 
         local frame = state.windows.curr_win:frame()
@@ -212,7 +212,7 @@ function M.quit()
     return function(done)
         done = done or function() end
 
-        util.toggle_popups('off')
+        util.toggle_popups('wk', 'off')
         util.toggle_border('off')
         util.toggle_tap('wk', 'off')
 
@@ -245,7 +245,7 @@ function M.refresh()
         require('windows').init()
 
         if start_win ~= state.windows.curr_win then
-            util.toggle_popups('off', 'on')
+            util.toggle_popups('wk', 'off', 'on')
         end
 
         done()
@@ -278,7 +278,7 @@ function M.launch()
         require('runtime_assets').init()
     end
 
-    util.toggle_popups('on')
+    util.toggle_popups('wk', 'on')
     util.toggle_tap('wk', 'on')
 end
 

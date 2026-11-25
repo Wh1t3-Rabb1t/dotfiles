@@ -5,7 +5,7 @@ local M = {}
 M.mouse = {
     tap_active = false,
     corner     = 'bottom_right',
-    stack      = 'horizontal',
+    -- stack      = 'horizontal',
     opacity    = 1,
 }
 

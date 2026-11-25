@@ -214,7 +214,7 @@ end
 -- Calls:
 --   get_popup_coords()
 --------------------------------------------------------------------------------
-function M.toggle_popups( ... )
+function M.toggle_popups(target, ... )
     for _, set_to in ipairs({ ... }) do
         if set_to == 'on' then
             local win      = state.windows.curr_win
@@ -222,59 +222,41 @@ function M.toggle_popups( ... )
 
             local popups = {}
 
-            -- App specific popup
-            if cache.assets[app_name] then
-                table.insert(popups, cache.assets[app_name])
-            end
+            if target == 'wk' then
+                -- System popup
+                table.insert(popups, cache.assets.system)
 
-            -- System popup
-            table.insert(popups, cache.assets.system)
+                -- App specific popup
+                if cache.assets[app_name] then
+                    table.insert(popups, cache.assets[app_name])
+                end
+
+            elseif target == 'mouse' then
+                table.insert(popups, cache.mouse_assets)
+            end
 
             local coords = get_popup_coords(win, popups)
 
             for i, v in ipairs(popups) do
                 v.popup:topLeft(coords[i])
-                v.popup:alpha(state.wk.opacity)
+                v.popup:alpha(state[target].opacity)
                 v.popup:show(0.15)
             end
 
         elseif set_to == 'off' then
-            for _, v in pairs(cache.assets) do
-                if v.popup:isShowing() then
-                    v.popup:hide()
+            if target == 'wk' then
+                for _, v in pairs(cache.assets) do
+                    if v.popup:isShowing() then
+                        v.popup:hide()
+                    end
                 end
-            end
-        end
-    end
-end
 
+            elseif target == 'mouse' then
+                local mouse_popup = cache.mouse_assets.popup
 
---------------------------------------------------------------------------------
--- Toggle mouse popup visibility.
---
--- Parameters:
---   (table):  Contains strings, either 'on' or 'off'
---
--- Calls:
---   get_popup_coords()
---------------------------------------------------------------------------------
-function M.toggle_mouse_popups( ... )
-    for _, set_to in ipairs({ ... }) do
-        if set_to == 'on' then
-            local win         = state.windows.curr_win
-            local mouse_popup = cache.mouse_assets
-
-            local coords = get_popup_coords(win, mouse_popup)
-
-            mouse_popup.popup:topLeft(coords)
-            mouse_popup.popup:alpha(state.mouse.opacity)
-            mouse_popup.popup:show(0.15)
-
-        elseif set_to == 'off' then
-            local mouse_popup = cache.mouse_assets.popup
-
-            if mouse_popup:isShowing() then
-                mouse_popup:hide()
+                if mouse_popup:isShowing() then
+                    mouse_popup:hide()
+                end
             end
         end
     end
@@ -347,7 +329,7 @@ end
 
 
 --------------------------------------------------------------------------------
---
+-- Construct a hs compatible binding field.
 --
 -- Parameters:
 --   (table):  Binding table declared in its respective registry

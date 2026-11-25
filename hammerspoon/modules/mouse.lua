@@ -66,6 +66,7 @@ local function move_circle(point)
 end
 
 
+--------------------------------------------------------------------------------
 -- Mouse down.
 --
 -- Notes:
@@ -129,6 +130,7 @@ function M.press()
 end
 
 
+--------------------------------------------------------------------------------
 -- Mouse drag.
 --
 -- Parameters:
@@ -147,6 +149,7 @@ function M.drag(point)
 end
 
 
+--------------------------------------------------------------------------------
 -- Mouse up.
 --
 -- Parameters:
@@ -210,6 +213,7 @@ function M.release(point)
 end
 
 
+--------------------------------------------------------------------------------
 -- Send an accelerated scroll event at the current mouse location.
 --
 -- Parameters:
@@ -290,7 +294,7 @@ function M.quit()
     return function(done)
         done = done or function() end
 
-        util.toggle_mouse_popups('off')
+        util.toggle_popups('mouse', 'off')
         util.toggle_border('off')
         util.toggle_tap('mouse', 'off')
 
@@ -312,7 +316,7 @@ function M.launch()
         require('runtime_assets').init()
     end
 
-    util.toggle_mouse_popups('on')
+    util.toggle_popups('mouse', 'on')
     util.toggle_tap('mouse', 'on')
 end
 

@@ -397,7 +397,7 @@ function M.maximize()
         layout.maximized = win
 
         snap_layout(screen_id)
-        util.toggle_popups('off', 'on')
+        util.toggle_popups('wk', 'off', 'on')
 
         done()
     end
@@ -466,7 +466,7 @@ function M.resize(direction)
         end
 
         snap_layout(screen_id)
-        util.toggle_popups('off', 'on')
+        util.toggle_popups('wk', 'off', 'on')
 
         done()
     end
@@ -498,7 +498,7 @@ function M.swap()
         layout.right = lhs
 
         snap_layout(screen_id)
-        util.toggle_popups('off', 'on')
+        util.toggle_popups('wk', 'off', 'on')
 
         done()
     end
@@ -610,7 +610,7 @@ function M.move_to_slot(direction)
             snap_layout(v:id())
         end
 
-        util.toggle_popups('off', 'on')
+        util.toggle_popups('wk', 'off', 'on')
 
         done()
     end
@@ -749,7 +749,7 @@ function M.traverse_slots(direction)
         if new_win then
             set_window_state(new_win, win_idx)
 
-            util.toggle_popups('off', 'on')
+            util.toggle_popups('wk', 'off', 'on')
             util.toggle_border('off', 'on')
         end
 
@@ -795,7 +795,7 @@ function M.cycle_open(direction)
             set_window_state(win, idx)
             set_slots(win)
 
-            util.toggle_popups('off', 'on')
+            util.toggle_popups('wk', 'off', 'on')
             util.toggle_border('off', 'on')
         end
 
@@ -904,7 +904,7 @@ function M.cycle_all_apps(direction)
             set_window_state(win, idx)
             set_slots(win)
 
-            util.toggle_popups('off', 'on')
+            util.toggle_popups('wk', 'off', 'on')
             util.toggle_border('off', 'on')
         end
 
@@ -948,7 +948,7 @@ function M.cycle_main_apps()
                 set_window_state(target_win, idx)
                 set_slots(target_win)
 
-                util.toggle_popups('off', 'on')
+                util.toggle_popups('wk', 'off', 'on')
                 util.toggle_border('off', 'on')
 
                 done()

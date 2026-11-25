@@ -5,7 +5,7 @@ local cache    = require('cache')
 local wk       = require('wk')
 local mouse    = require('mouse')
 
-local wk_registry = require('wk_registry')
+local wk_registry    = require('wk_registry')
 local mouse_registry = require('mouse_registry')
 
 

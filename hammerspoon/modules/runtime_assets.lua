@@ -562,7 +562,6 @@ local function create_mouse_tap()
     local event_types = {
         events.types.keyUp,
         events.types.keyDown,
-        -- events.types.flagsChanged,
     }
 
     local consumed = {}
@@ -593,11 +592,19 @@ local function create_mouse_tap()
                 consumed[keycode] = true
 
                 if binding.direction then
-                    state.mouse.active_directions[keycode] = binding.direction
+                    -- Ignore autorepeat for an already-held key.
+                    if not state.mouse.active_directions[keycode] then
+                        state.mouse.active_directions[keycode] =
+                            binding.direction
+
+                        binding.action()
+                    end
+                else
+                    binding.action()
                 end
 
-                binding.action()
-
+                return true
+            elseif consumed[keycode] then
                 return true
             end
 
@@ -608,6 +615,11 @@ local function create_mouse_tap()
             local was_consumed = consumed[keycode]
 
             consumed[keycode] = nil
+
+            -- Stop only when every movement key has been released
+            if next(state.mouse.active_directions) == nil then
+                mouse.stop_move()
+            end
 
             return was_consumed == true
         end

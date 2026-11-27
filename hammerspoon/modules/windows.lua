@@ -739,7 +739,6 @@ function M.traverse_slots(direction)
 
         if not target_slot then
             done()
-
             return
         end
 

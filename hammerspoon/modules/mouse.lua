@@ -7,6 +7,15 @@ local cache = require('cache')
 
 -- Configuration.
 --------------------------------------------------------------------------------
+-- Movement interval/distance
+local MOVE_INTERVAL = 0.03
+local MOVE_STEP     = 10
+
+-- Scrolling
+local SCROLL_ACCELERATION = 0.5
+local SCROLL_MAX_SPEED    = 6
+local SCROLL_RESET_DELAY  = 0.25
+
 -- Mouse circle
 local START_RADIUS   = 14
 local END_RADIUS     = 44
@@ -25,23 +34,86 @@ local PADDING     = STROKE_WIDTH + 2
 local HALF_SIZE   = END_RADIUS + PADDING
 local CANVAS_SIZE = HALF_SIZE * 2
 
--- Scrolling
-local SCROLL_ACCELERATION = 0.5
-local SCROLL_MAX_SPEED    = 6
-local SCROLL_RESET_DELAY  = 0.25
-
 
 -- State.
 --------------------------------------------------------------------------------
-local is_pressed = false
 local mouse_circle
+local movement_timer
 local animation_timer
+
+local is_pressed   = false
+local move_actions = setmetatable({}, { __mode = 'k' })
 
 local scroll_state = {
     direction   = false,
     delta       = 1,
     last_scroll = 0,
 }
+
+
+-- Move the mouse location.
+--------------------------------------------------------------------------------
+local function move_mouse()
+    local dx, dy = 0, 0
+
+    for _, direction in pairs(state.mouse.active_directions) do
+        if direction == 'left' then
+            dx = dx - 1
+        elseif direction == 'right' then
+            dx = dx + 1
+        elseif direction == 'up' then
+            dy = dy - 1
+        elseif direction == 'down' then
+            dy = dy + 1
+        end
+    end
+
+    -- Nothing to move
+    if dx == 0 and dy == 0 then
+        return
+    end
+
+    -- Normalize movement, including diagonals
+    local magnitude = math.sqrt(dx * dx + dy * dy)
+
+    dx = dx / magnitude
+    dy = dy / magnitude
+
+    local pos = hs.mouse.absolutePosition()
+
+    pos.x = pos.x + dx * MOVE_STEP
+    pos.y = pos.y + dy * MOVE_STEP
+
+    hs.mouse.absolutePosition(pos)
+end
+
+
+-- Start the movement loop if it isn't already running.
+--
+-- Calls:
+--   move_mouse()
+--
+-- State changes:
+--   movement_timer
+--------------------------------------------------------------------------------
+local function start_movement()
+    if next(state.mouse.active_directions) == nil then
+        return
+    end
+
+    if movement_timer and movement_timer:running() then
+        return
+    end
+
+    -- Move immediately rather than waiting for the first timer tick
+    move_mouse()
+
+    if not movement_timer then
+        movement_timer = hs.timer.new(MOVE_INTERVAL, move_mouse)
+    end
+
+    movement_timer:start()
+end
 
 
 -- Move the mouse indicator.
@@ -134,8 +206,7 @@ end
 -- Mouse drag.
 --
 -- Parameters:
---   point (table):
---     Mouse position containing x and y coordinates.
+--   point (table):  Mouse position containing x and y coordinates
 --
 -- Calls:
 --   move_circle()
@@ -269,13 +340,27 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Stop the movement loop.
+--------------------------------------------------------------------------------
+function M.stop_move()
+    if movement_timer and movement_timer:running() then
+        movement_timer:stop()
+    end
+end
+
+
+--------------------------------------------------------------------------------
+-- Move the mouse position.
+--
+-- Calls:
+--   start_movement()
 --
 -- Parameters:
---   direction (string):  'up' or 'down'
+--   direction (string):  One of: 'up', 'down', 'left', 'right'
+--
+-- Returns:
+--   action (function):  Directional movement fn
 --------------------------------------------------------------------------------
-
-local move_actions = setmetatable({}, { __mode = 'k' })
-
 function M.move(direction)
     assert(
         direction == 'up'
@@ -288,40 +373,7 @@ function M.move(direction)
     local function action(done)
         done = done or function() end
 
-        local dx, dy = 0, 0
-
-        for _, dir in pairs(state.mouse.active_directions) do
-            if dir == 'left' then
-                dx = dx - 1
-            elseif dir == 'right' then
-                dx = dx + 1
-            elseif dir == 'up' then
-                dy = dy - 1
-            elseif dir == 'down' then
-                dy = dy + 1
-            end
-        end
-
-        dx = math.max(-1, math.min(1, dx))
-        dy = math.max(-1, math.min(1, dy))
-
-        if dx == 0 and dy == 0 then
-            done()
-            return
-        end
-
-        local step = 10
-
-        if dx ~= 0 and dy ~= 0 then
-            step = step / math.sqrt(2)
-        end
-
-        local pos = hs.mouse.absolutePosition()
-
-        pos.x = pos.x + dx * step
-        pos.y = pos.y + dy * step
-
-        hs.mouse.absolutePosition(pos)
+        start_movement()
 
         done()
     end
@@ -333,7 +385,7 @@ end
 
 
 --------------------------------------------------------------------------------
--- Retrieve the direction associated with a movement action
+-- Retrieve the direction associated with a movement action.
 --------------------------------------------------------------------------------
 function M.get_move_direction(action)
     return move_actions[action]
@@ -341,6 +393,12 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Quit the mouse control module.
+--
+-- Calls:
+--   util.toggle_popups()
+--   util.toggle_border()
+--   util.toggle_tap()
 --------------------------------------------------------------------------------
 function M.quit()
     return function(done)
@@ -356,6 +414,15 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Start the mouse control module.
+--
+-- Calls:
+--   screens.init()
+--   apps.init()
+--   windows.init()
+--   runtime_assets.init()
+--   util.toggle_popups()
+--   util.toggle_tap()
 --------------------------------------------------------------------------------
 function M.launch()
     if state.mouse.tap_active then

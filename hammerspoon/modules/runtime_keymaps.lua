@@ -15,10 +15,10 @@ M.apps.mouse = {
     {
         category = 'Move',
         bindings = {
-            { 'i', 'Up',    mouse.move('up')    },
-            { 'k', 'Down',  mouse.move('down')  },
-            { 't', 'Left',  mouse.move('left')  },
-            { 'l', 'Right', mouse.move('right') },
+            { 'i', 'Mouse up',    mouse.move('up')    },
+            { 'k', 'Mouse down',  mouse.move('down')  },
+            { 't', 'Mouse left',  mouse.move('left')  },
+            { 'l', 'Mouse right', mouse.move('right') },
         },
     },
     {

@@ -49,10 +49,10 @@ local mod_names = {
 -- Add shift modifier to a binding declaration using an uppercase letter.
 --
 -- Parameters:
---   mods (string):  hs compatible mod name string i.e. 'ctrl'
+--   mods (string):  mod name string i.e. 'ctrl'
 --
 -- Returns:
---   result (table):  A list of hs compatible mod name strings
+--   result (table):  A list of mod name strings
 --------------------------------------------------------------------------------
 local function add_shift(mods)
     local result = {}
@@ -69,7 +69,7 @@ local function add_shift(mods)
 end
 
 
--- Construct a hs compatible binding field.
+-- Construct a binding field.
 --
 -- Parameters:
 --   (table):  Binding table declared in its respective registry
@@ -78,7 +78,7 @@ end
 --   add_shift()
 --
 -- Returns:
---   binding_field (table):
+--   binding_field (table):  key, desc, and action data
 --------------------------------------------------------------------------------
 local function bind( ... )
     local binding_field = {}
@@ -145,8 +145,12 @@ end
 
 -- Normalize bindings with modifiers.
 --
+-- Parameters:
+--   key  (string):  key name string i.e. 'space'
+--   mods (table):   mod name strings i.e. 'ctrl'
+--
 -- Returns:
---   (table):  Formatted key/mod declaration strings
+--   (table):  Formatted key / mod declaration strings
 --------------------------------------------------------------------------------
 local function binding_id(key, mods)
     if not mods or #mods == 0 then
@@ -160,6 +164,12 @@ end
 
 
 -- Format rgb table.
+--
+-- Parameters:
+--   r       (number): Between 0 and 255
+--   g       (number): Between 0 and 255
+--   b       (number): Between 0 and 255
+--   opacity (number): Between 0 and 1
 --
 -- Returns:
 --   (table):  An rbg table compatible with hs.canvas fields
@@ -177,6 +187,10 @@ end
 
 
 -- Create popup.
+--
+-- Parameters:
+--   content (string):  Formatted key / action bindings list
+--   frame   (table):   hs.window:frame()
 --
 -- Calls:
 --   rgb()
@@ -216,11 +230,14 @@ end
 
 -- Get the width / height of the popup window.
 --
+-- Parameters:
+--   content (string):  Formatted key / action bindings list
+--
 -- Returns:
 --   (table):  Frame data corresponding to the 'size' of the text block passed
 --------------------------------------------------------------------------------
-local function fmt_popup_frame(text)
-    local size   = hs.drawing.getTextDrawingSize(text)
+local function fmt_popup_frame(content)
+    local size   = hs.drawing.getTextDrawingSize(content)
     local width  = math.max(size.w)
     local height = math.max(size.h)
 
@@ -233,12 +250,15 @@ end
 
 -- Format bindings with mods.
 --
+-- Parameters:
+--   binding_tbl (table):  key, desc, and action data
+--
 -- Returns:
 --   parts (table):  The formatted string representation of each binding
 --------------------------------------------------------------------------------
-local function fmt_key_combinations(binding)
-    local mods = binding.mods or {}
-    local key  = binding.key
+local function fmt_key_combinations(binding_tbl)
+    local mods = binding_tbl.mods or {}
+    local key  = binding_tbl.key
 
     local consume_shift = false
 
@@ -251,6 +271,7 @@ local function fmt_key_combinations(binding)
                 key           = shift_chars[key]
                 consume_shift = true
             end
+
             break
         end
     end
@@ -270,6 +291,10 @@ end
 
 
 -- Format menu contents.
+--
+-- Parameters:
+--   app_name    (string):  hs.application:name()
+--   binding_tbl (table):   All bindings for each declared app/module
 --
 -- Calls:
 --   fmt_key_combinations()
@@ -339,6 +364,10 @@ end
 
 -- Create binding popup menus.
 --
+-- Parameters:
+--   app_name    (string):  hs.application:name()
+--   binding_tbl (table):   All bindings for each declared app/module
+--
 -- Calls:
 --   fmt_menu_text()
 --   fmt_popup_frame()
@@ -347,8 +376,8 @@ end
 -- Returns:
 --   (table):  Popup contents and frame data
 --------------------------------------------------------------------------------
-local function fmt_binding_popups(app_name, bindings)
-    local content = fmt_menu_text(app_name, bindings)
+local function fmt_binding_popups(app_name, binding_tbl)
+    local content = fmt_menu_text(app_name, binding_tbl)
     local frame   = fmt_popup_frame(content)
     local popup   = create_popup(content, frame)
 
@@ -360,6 +389,9 @@ end
 
 
 -- Queue chained actions (i.e. launch window then display related popup).
+--
+-- Parameters:
+--   (table):  Action(s) to be queued for execution at runtime
 --
 -- State changes:
 --   queue.items
@@ -404,6 +436,9 @@ end
 
 -- Pack binding lookup table.
 --
+-- Parameters:
+--   binding_tbl (table):
+--
 -- Calls:
 --   binding_id()
 --   queue_actions()
@@ -411,17 +446,23 @@ end
 -- Returns:
 --   lookup (table):  Key/fn pairs to be executed by the eventtap at runtime
 --------------------------------------------------------------------------------
-local function fmt_binding_tbl(bindings)
+local function fmt_binding_tbl(binding_tbl)
     local lookup = {}
 
-    for _, category in ipairs(bindings) do
+    for _, category in ipairs(binding_tbl) do
         for _, binding in ipairs(category.bindings) do
+            local action    = binding.action
+            local direction = mouse.get_move_direction(action)
+
             local lookup_key = binding_id(
                 binding.key,
                 binding.mods
             )
 
-            lookup[lookup_key] = queue_actions(binding.action)
+            lookup[lookup_key] = {
+                action    = queue_actions(action),
+                direction = direction,
+            }
         end
     end
 
@@ -468,12 +509,12 @@ local function create_event_tap()
             if flags.ctrl  then table.insert(mods, 'ctrl') end
             if flags.shift then table.insert(mods, 'shift') end
 
-            local lookup_key   = binding_id(key, mods)
-            local app_lookup   = cache.lookup[app_name] or {}
-            local bound_action = cache.lookup.wk[lookup_key] or app_lookup[lookup_key]
+            local lookup_key = binding_id(key, mods)
+            local app_lookup = cache.lookup[app_name] or {}
+            local binding    = cache.lookup.wk[lookup_key] or app_lookup[lookup_key]
 
-            if bound_action then
-                bound_action()
+            if binding then
+                binding.action()
             end
 
             return true
@@ -516,41 +557,62 @@ end
 --------------------------------------------------------------------------------
 local function create_mouse_tap()
     local events = hs.eventtap.event
+    local types  = events.types
 
     local event_types = {
-        events.types.keyDown,
         events.types.keyUp,
-        events.types.flagsChanged,
-        -- events.types.leftMouseUp,
-        -- events.types.leftMouseDown,
-        -- events.types.leftMouseDragged,
+        events.types.keyDown,
+        -- events.types.flagsChanged,
     }
 
+    local consumed = {}
+
     local tap = hs.eventtap.new(event_types, function(event)
+        local event_type = event:getType()
+        local keycode    = event:getKeyCode()
+        local key        = hs.keycodes.map[keycode]
 
-        -- Key events
-        if event:getType() == events.types.keyDown then
-            local flags   = event:getFlags()
-            local keycode = event:getKeyCode()
-            local key     = hs.keycodes.map[keycode]
-            -- local win     = state.windows.curr_win or hs.window.focusedWindow()
+        if not key then
+            return false
+        end
 
-            local mods = {}
+        -- Key down
+        if event_type == types.keyDown then
+            local flags = event:getFlags()
+            local mods  = {}
 
             if flags.cmd   then table.insert(mods, 'cmd') end
             if flags.alt   then table.insert(mods, 'alt') end
             if flags.ctrl  then table.insert(mods, 'ctrl') end
             if flags.shift then table.insert(mods, 'shift') end
 
-            local lookup_key   = binding_id(key, mods)
-            local bound_action = cache.lookup.mouse[lookup_key]
+            local lookup_key = binding_id(key, mods)
+            local binding    = cache.lookup.mouse[lookup_key]
 
-            if bound_action then
-                bound_action()
+            if binding then
+                consumed[keycode] = true
+
+                if binding.direction then
+                    state.mouse.active_directions[keycode] = binding.direction
+                end
+
+                binding.action()
+
+                return true
             end
 
-            return true
+        -- Key up
+        elseif event_type == types.keyUp then
+            state.mouse.active_directions[keycode] = nil
+
+            local was_consumed = consumed[keycode]
+
+            consumed[keycode] = nil
+
+            return was_consumed == true
         end
+
+        return false
     end)
 
     return tap

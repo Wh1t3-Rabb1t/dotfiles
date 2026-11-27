@@ -1,12 +1,12 @@
 
 local ModuleRoutes = {
-    MouseEvt = require('../vivi_modules/mouse_event'),
-    Scrolling = require('../vivi_modules/scrolling'),
-    ScreenWatcher = require('../vivi_modules/screen_watcher'),
-    AppGrid = require('../vivi_modules/app_grid'),
-    ScreenGrid = require('../vivi_modules/screen_grid'),
+    MouseEvt        = require('../vivi_modules/mouse_event'),
+    Scrolling       = require('../vivi_modules/scrolling'),
+    ScreenWatcher   = require('../vivi_modules/screen_watcher'),
+    AppGrid         = require('../vivi_modules/app_grid'),
+    ScreenGrid      = require('../vivi_modules/screen_grid'),
     EnabledBindings = require('../vivi_modules/enabled_bindings'),
-    Var = require('../vivi_modules/global_variables'),
+    Var             = require('../vivi_modules/global_variables'),
 }
 
 return ModuleRoutes

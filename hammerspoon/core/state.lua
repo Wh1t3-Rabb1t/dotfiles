@@ -3,10 +3,11 @@ local M = {}
 -- Commented out entries are populated on init
 
 M.mouse = {
-    tap_active = false,
-    corner     = 'bottom_right',
-    -- stack      = 'horizontal',
-    opacity    = 1,
+    tap_active        = false,
+    corner            = 'bottom_right',
+    -- stack             = 'horizontal',
+    opacity           = 1,
+    active_directions = {},
 }
 
 M.wk = {

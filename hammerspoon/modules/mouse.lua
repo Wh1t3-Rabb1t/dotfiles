@@ -259,13 +259,22 @@ function M.scroll(direction)
 
         local delta = direction == 'up'
             and scroll_state.delta
-            or -scroll_state.delta
+            or - scroll_state.delta
 
         hs.eventtap.scrollWheel({0, delta}, {}, 'line')
 
         done()
     end
 end
+
+
+--------------------------------------------------------------------------------
+--
+-- Parameters:
+--   direction (string):  'up' or 'down'
+--------------------------------------------------------------------------------
+
+local move_actions = setmetatable({}, { __mode = 'k' })
 
 function M.move(direction)
     assert(
@@ -276,28 +285,63 @@ function M.move(direction)
         "direction must be one of: 'up', 'down', 'left', 'right'"
     )
 
-    return function(done)
+    local function action(done)
         done = done or function() end
 
-        local step         = 10
-        local starting_pos = hs.mouse.absolutePosition()
+        local dx, dy = 0, 0
 
-        if direction == 'up' then
-            starting_pos.y = starting_pos.y - step
-        elseif direction == 'down' then
-            starting_pos.y = starting_pos.y + step
-        elseif direction == 'left' then
-            starting_pos.x = starting_pos.x - step
-        elseif direction == 'right' then
-            starting_pos.x = starting_pos.x + step
+        for _, dir in pairs(state.mouse.active_directions) do
+            if dir == 'left' then
+                dx = dx - 1
+            elseif dir == 'right' then
+                dx = dx + 1
+            elseif dir == 'up' then
+                dy = dy - 1
+            elseif dir == 'down' then
+                dy = dy + 1
+            end
         end
 
-        hs.mouse.absolutePosition(starting_pos)
+        dx = math.max(-1, math.min(1, dx))
+        dy = math.max(-1, math.min(1, dy))
+
+        if dx == 0 and dy == 0 then
+            done()
+            return
+        end
+
+        local step = 10
+
+        if dx ~= 0 and dy ~= 0 then
+            step = step / math.sqrt(2)
+        end
+
+        local pos = hs.mouse.absolutePosition()
+
+        pos.x = pos.x + dx * step
+        pos.y = pos.y + dy * step
+
+        hs.mouse.absolutePosition(pos)
 
         done()
     end
+
+    move_actions[action] = direction
+
+    return action
 end
 
+
+--------------------------------------------------------------------------------
+-- Retrieve the direction associated with a movement action
+--------------------------------------------------------------------------------
+function M.get_move_direction(action)
+    return move_actions[action]
+end
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 function M.quit()
     return function(done)
         done = done or function() end
@@ -310,6 +354,9 @@ function M.quit()
     end
 end
 
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 function M.launch()
     if state.mouse.tap_active then
         return

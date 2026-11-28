@@ -42,7 +42,6 @@ local movement_timer
 local animation_timer
 
 local is_pressed   = false
-local move_actions = setmetatable({}, { __mode = 'k' })
 
 local scroll_state = {
     direction   = false,
@@ -288,7 +287,8 @@ function M.scroll(direction)
 
         -- Reset acceleration after inactivity or direction change
         if scroll_state.direction ~= direction
-        or now - scroll_state.last_scroll > SCROLL_RESET_DELAY then
+            or now - scroll_state.last_scroll > SCROLL_RESET_DELAY
+        then
             scroll_state.delta = 1
         else
             scroll_state.delta = math.min(
@@ -319,6 +319,10 @@ end
 --
 -- Calls:
 --   move_mouse()
+--
+-- State changes:
+--   state.mouse.move_actions
+--   state.mouse.active_directions
 --
 -- Returns:
 --   action (function):  Directional movement fn
@@ -357,17 +361,9 @@ function M.move(direction)
         done()
     end
 
-    move_actions[action] = direction
+    state.mouse.move_actions[action] = direction
 
     return action
-end
-
-
---------------------------------------------------------------------------------
--- Retrieve the direction associated with a movement action.
---------------------------------------------------------------------------------
-function M.get_move_direction(action)
-    return move_actions[action]
 end
 
 
@@ -398,6 +394,10 @@ end
 --   util.toggle_border()
 --   util.toggle_tap()
 --   M.stop_movement_timer()()
+--
+-- State changes:
+--   state.mouse.active_directions
+--   state.mouse.consumed
 --------------------------------------------------------------------------------
 function M.quit()
     return function(done)
@@ -409,14 +409,12 @@ function M.quit()
 
         M.stop_movement_timer()()
 
-        local mouse = state.mouse
-
-        for key in pairs(mouse.active_directions) do
-            mouse.active_directions[key] = nil
+        for key in pairs(state.mouse.active_directions) do
+            state.mouse.active_directions[key] = nil
         end
 
-        for key in pairs(mouse.consumed) do
-            mouse.consumed[key] = nil
+        for key in pairs(state.mouse.consumed) do
+            state.mouse.consumed[key] = nil
         end
 
         done()

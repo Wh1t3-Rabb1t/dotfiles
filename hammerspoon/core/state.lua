@@ -9,6 +9,7 @@ M.mouse = {
     opacity           = 1,
     active_directions = {},
     consumed          = {},
+    move_actions      = setmetatable({}, { __mode = 'k' })
 }
 
 M.wk = {

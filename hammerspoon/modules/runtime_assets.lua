@@ -450,18 +450,12 @@ local function fmt_binding_tbl(binding_tbl)
     local lookup = {}
 
     for _, category in ipairs(binding_tbl) do
-        for _, binding in ipairs(category.bindings) do
-            local action    = binding.action
-            local direction = mouse.get_move_direction(action)
-
-            local lookup_key = binding_id(
-                binding.key,
-                binding.mods
-            )
+        for _, v in ipairs(category.bindings) do
+            local lookup_key = binding_id(v.key, v.mods)
 
             lookup[lookup_key] = {
-                action    = queue_actions(action),
-                direction = direction,
+                action    = queue_actions(v.action),
+                direction = state.mouse.move_actions[v.action],
             }
         end
     end
@@ -552,6 +546,10 @@ end
 --   mouse.release()
 --   wk.refresh()()
 --
+-- State changes:
+--   state.mouse.consumed
+--   state.mouse.directions
+--
 -- Return:
 --   tap (fn):  hs.eventtap function
 --------------------------------------------------------------------------------
@@ -564,12 +562,12 @@ local function create_mouse_tap()
         events.types.keyDown,
     }
 
-    local consumed = state.mouse.consumed
 
     local tap = hs.eventtap.new(event_types, function(event)
         local event_type = event:getType()
         local keycode    = event:getKeyCode()
         local key        = hs.keycodes.map[keycode]
+        local consumed   = state.mouse.consumed
         local directions = state.mouse.active_directions
 
         if not key then

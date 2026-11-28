@@ -8,6 +8,7 @@ M.mouse = {
     -- stack             = 'horizontal',
     opacity           = 1,
     active_directions = {},
+    consumed          = {},
 }
 
 M.wk = {

@@ -564,12 +564,13 @@ local function create_mouse_tap()
         events.types.keyDown,
     }
 
-    local consumed = {}
+    local consumed = state.mouse.consumed
 
     local tap = hs.eventtap.new(event_types, function(event)
         local event_type = event:getType()
         local keycode    = event:getKeyCode()
         local key        = hs.keycodes.map[keycode]
+        local directions = state.mouse.active_directions
 
         if not key then
             return false
@@ -592,10 +593,9 @@ local function create_mouse_tap()
                 consumed[keycode] = true
 
                 if binding.direction then
-                    -- Ignore autorepeat for an already-held key.
-                    if not state.mouse.active_directions[keycode] then
-                        state.mouse.active_directions[keycode] =
-                            binding.direction
+                    -- Ignore autorepeat for an already-held key
+                    if not directions[keycode] then
+                        directions[keycode] = binding.direction
 
                         binding.action()
                     end
@@ -610,15 +610,14 @@ local function create_mouse_tap()
 
         -- Key up
         elseif event_type == types.keyUp then
-            state.mouse.active_directions[keycode] = nil
-
             local was_consumed = consumed[keycode]
 
-            consumed[keycode] = nil
+            consumed[keycode]   = nil
+            directions[keycode] = nil
 
             -- Stop only when every movement key has been released
-            if next(state.mouse.active_directions) == nil then
-                mouse.stop_move()
+            if next(directions) == nil then
+                mouse.stop_movement_timer()()
             end
 
             return was_consumed == true
@@ -635,8 +634,8 @@ end
 -- Init module.
 --
 -- Calls:
---   fmt_binding_popups()
 --   fmt_binding_tbl()
+--   fmt_binding_popups()
 --   create_event_tap()
 --
 -- State changes:

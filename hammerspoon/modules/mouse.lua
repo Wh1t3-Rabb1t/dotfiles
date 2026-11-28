@@ -88,34 +88,6 @@ local function move_mouse()
 end
 
 
--- Start the movement loop if it isn't already running.
---
--- Calls:
---   move_mouse()
---
--- State changes:
---   movement_timer
---------------------------------------------------------------------------------
-local function start_movement()
-    if next(state.mouse.active_directions) == nil then
-        return
-    end
-
-    if movement_timer and movement_timer:running() then
-        return
-    end
-
-    -- Move immediately rather than waiting for the first timer tick
-    move_mouse()
-
-    if not movement_timer then
-        movement_timer = hs.timer.new(MOVE_INTERVAL, move_mouse)
-    end
-
-    movement_timer:start()
-end
-
-
 -- Move the mouse indicator.
 --
 -- Parameters:
@@ -173,7 +145,7 @@ function M.press()
         })
 
         mouse_circle:clickActivating(false)
-        mouse_circle:level("floating")
+        mouse_circle:level('floating')
 
         mouse_circle[1] = {
             type        = 'circle',
@@ -340,23 +312,13 @@ end
 
 
 --------------------------------------------------------------------------------
--- Stop the movement loop.
---------------------------------------------------------------------------------
-function M.stop_move()
-    if movement_timer and movement_timer:running() then
-        movement_timer:stop()
-    end
-end
-
-
---------------------------------------------------------------------------------
 -- Move the mouse position.
---
--- Calls:
---   start_movement()
 --
 -- Parameters:
 --   direction (string):  One of: 'up', 'down', 'left', 'right'
+--
+-- Calls:
+--   move_mouse()
 --
 -- Returns:
 --   action (function):  Directional movement fn
@@ -373,7 +335,24 @@ function M.move(direction)
     local function action(done)
         done = done or function() end
 
-        start_movement()
+        if next(state.mouse.active_directions) == nil then
+            return
+            done()
+        end
+
+        if movement_timer and movement_timer:running() then
+            return
+            done()
+        end
+
+        -- Move immediately rather than waiting for the first timer tick
+        move_mouse()
+
+        if not movement_timer then
+            movement_timer = hs.timer.new(MOVE_INTERVAL, move_mouse)
+        end
+
+        movement_timer:start()
 
         done()
     end
@@ -393,12 +372,32 @@ end
 
 
 --------------------------------------------------------------------------------
+-- Stop the movement timer.
+--
+-- State changes:
+--   movement_timer
+--------------------------------------------------------------------------------
+function M.stop_movement_timer()
+    return function(done)
+        done = done or function() end
+
+        if movement_timer and movement_timer:running() then
+            movement_timer:stop()
+        end
+
+        done()
+    end
+end
+
+
+--------------------------------------------------------------------------------
 -- Quit the mouse control module.
 --
 -- Calls:
 --   util.toggle_popups()
 --   util.toggle_border()
 --   util.toggle_tap()
+--   M.stop_movement_timer()()
 --------------------------------------------------------------------------------
 function M.quit()
     return function(done)
@@ -407,6 +406,18 @@ function M.quit()
         util.toggle_popups('mouse', 'off')
         util.toggle_border('off')
         util.toggle_tap('mouse', 'off')
+
+        M.stop_movement_timer()()
+
+        local mouse = state.mouse
+
+        for key in pairs(mouse.active_directions) do
+            mouse.active_directions[key] = nil
+        end
+
+        for key in pairs(mouse.consumed) do
+            mouse.consumed[key] = nil
+        end
 
         done()
     end
